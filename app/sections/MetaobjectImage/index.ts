@@ -1,0 +1,1 @@
+export {MetaobjectImage} from './MetaobjectImage';

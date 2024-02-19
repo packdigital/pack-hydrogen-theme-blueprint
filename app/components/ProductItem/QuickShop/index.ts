@@ -1,0 +1,1 @@
+export {QuickShop} from './QuickShop';

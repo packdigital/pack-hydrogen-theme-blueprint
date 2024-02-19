@@ -1,0 +1,8 @@
+/* Example @font-face */
+/* @font-face {
+  font-family:"Some Font Family";
+  src: url('../../public/fonts/Some-Font-Family.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+  font-style: normal;
+} */

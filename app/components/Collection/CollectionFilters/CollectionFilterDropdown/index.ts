@@ -1,0 +1,1 @@
+export {CollectionFilterDropdown} from './CollectionFilterDropdown';

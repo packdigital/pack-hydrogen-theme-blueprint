@@ -1,0 +1,1 @@
+export {MetaobjectTextBlock} from './MetaobjectTextBlock';

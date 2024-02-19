@@ -1,0 +1,1 @@
+export {ProductMedia} from './ProductMedia';

@@ -1,0 +1,5 @@
+.vscode
+/.cache
+/build
+/dist
+/public/build

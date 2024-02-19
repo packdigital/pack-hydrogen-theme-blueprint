@@ -1,0 +1,1 @@
+export {TwoTiles} from './TwoTiles';
