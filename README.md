@@ -4,6 +4,8 @@
 
 <img width="1840" alt="image" src="https://github.com/packdigital/pack-hydrogen-starter/assets/5673039/df082c77-d0d8-409c-ae81-8101628de7e6">
 
+<p align="center"><b><a href="https://hydrogen.packdigital.com/" target="_blank">Check out the demo store</a></b></p>
+
 ## Table of Contents  
 * [Our Philosophy](#our-philosophy)
 * [Starter Features](#starter-features)
@@ -21,7 +23,9 @@
 
 ## Our Philosophy
 React is the future of ecommerce, but 99% of all Shopify brands are still using Liquid themes (great for starting out, less optimal for advanced interactivity, flexibility and performance). 
-Historically, the only way to build on Hydrogen was to stitch together a CMS / hosting / data orchestrator / middleware, then build a custom storefront. It generally required a full technical team to build + manage it. 
+
+Historically, the only way to build a React storefront was to stitch together a headless CMS / hosting / data orchestrator / middleware, then build a custom storefront. It generally required a full technical team to build + manage it.
+
 We’re building open source starter storefront repos to make it easy for a single developer to get a Hydrogen storefront up and running in minutes, and build out an entire storefront in just a few weeks—without having to worry about the back end. Use these repos as examples / inspo, or build right on top of them.
 
 ## Starter Features
