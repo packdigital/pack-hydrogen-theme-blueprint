@@ -12,7 +12,7 @@ import {
   getShop,
   getSiteSettings,
 } from '~/lib/utils';
-import type {Group} from '~/lib/types';
+import type {Group, ProductWithGrouping} from '~/lib/types';
 import {
   GROUPING_PRODUCT_QUERY,
   PRODUCT_GROUPINGS_QUERY,
@@ -93,7 +93,6 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
       ...grouping.subgroups.flatMap(({products}) => products),
     ];
     const groupingProductsPromises = productsToQuery.map(async (product) => {
-      if (product.handle === handle) return null;
       const data = await storefront.query(GROUPING_PRODUCT_QUERY, {
         variables: {
           handle: product.handle,
@@ -119,16 +118,32 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
       getProductByHandle: (handle) => groupingProductsByHandle[handle],
     });
 
+    const groupingProductsByOptionValue = groupingProducts.reduce(
+      (acc, groupProduct: ProductWithGrouping) => {
+        groupProduct.options.forEach((option) => {
+          const {name, values} = option;
+          if (!values) return;
+          values.forEach((value) => {
+            if (!acc[name]) acc[name] = {};
+            acc[name][value] = [...(acc[name][value] || []), groupProduct];
+          });
+        });
+        return acc;
+      },
+      {},
+    );
+
     grouping = {
       ...groupingWithOptions,
-      productsMap: groupingProductsByHandle,
+      productsByHandle: groupingProductsByHandle,
+      productsByOptionValue: groupingProductsByOptionValue,
     } as Group;
   }
 
   const product = {
     ...queriedProduct,
     ...(grouping?.products.length || grouping?.subgroups.length
-      ? {grouping, isGrouped: true}
+      ? {grouping}
       : null),
   };
 

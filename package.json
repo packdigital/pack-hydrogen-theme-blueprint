@@ -40,9 +40,9 @@
     "react-markdown": "^9.0.1",
     "remark-breaks": "^4.0.0",
     "remark-gfm": "^4.0.0",
-    "schema-dts": "^1.1.0",
+    "schema-dts": "^1.1.2",
     "snakecase-keys": "^6.0.0",
-    "swiper": "^11.0.5",
+    "swiper": "^11.0.7",
     "tiny-invariant": "^1.2.0",
     "uuid": "^9.0.1"
   },
@@ -72,7 +72,7 @@
     "prettier": "^2.8.8",
     "prettier-plugin-tailwindcss": "^0.4.1",
     "shopify-gid": "^1.0.1",
-    "tailwindcss": "^3.3.6",
+    "tailwindcss": "^3.4.1",
     "typescript": "^5.2.2"
   },
   "engines": {

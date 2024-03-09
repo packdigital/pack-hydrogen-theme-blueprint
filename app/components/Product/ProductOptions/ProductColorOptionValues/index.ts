@@ -1,1 +1,0 @@
-export {ProductColorOptionValues} from './ProductColorOptionValues';

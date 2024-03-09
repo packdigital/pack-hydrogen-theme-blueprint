@@ -30,7 +30,7 @@ export function useProductMedia({
   }, [product.id]);
 
   const hasMultiColorsNotFromGroup =
-    !product.isGrouped && colorOptions && colorOptions.length > 1;
+    !product.grouping && colorOptions && colorOptions.length > 1;
 
   // if multi color variants from same product, create table pairing color w/ any media matching alt tag
   const mediaMapByAltText = useMemo((): Record<string, Media[]> | null => {

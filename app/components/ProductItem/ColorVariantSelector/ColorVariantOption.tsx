@@ -18,10 +18,6 @@ export function ColorVariantOption({
   const isActive = color === selectedVariantColor;
   const swatch = swatchesMap?.[color?.toLowerCase().trim()];
   const hasImage = swatch?.startsWith('http');
-  const backgroundColor =
-    isActive && swatch === '#FFFFFF'
-      ? 'var(--off-white)'
-      : swatch || 'var(--off-white)';
 
   return (
     <div className="group/color relative">
@@ -31,7 +27,7 @@ export function ColorVariantOption({
           isActive ? 'border-text' : ''
         }`}
         onClick={onClick}
-        style={{backgroundColor}}
+        style={{backgroundColor: swatch}}
         type="button"
       >
         {hasImage && (

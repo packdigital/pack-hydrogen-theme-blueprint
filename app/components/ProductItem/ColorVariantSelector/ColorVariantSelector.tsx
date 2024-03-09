@@ -32,6 +32,7 @@ export function ColorVariantSelector({
     );
   }, [initialProduct]);
 
+  // determine if there are multiple colors to select from
   const hasMultipleColorsFromProduct =
     !grouping && initialProductColorOptions?.length > 1;
   const hasMultipleColorsFromGrouping =

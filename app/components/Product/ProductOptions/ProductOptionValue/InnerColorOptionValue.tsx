@@ -3,31 +3,32 @@ import {useMemo} from 'react';
 import {Image} from '~/components';
 import {isLightHexColor} from '~/lib/utils';
 
-import type {Swatch} from './ProductColorOptionValue';
+import type {Swatch} from './useProductOptionValue';
 
-interface ColorOptionIconProps {
-  disabled: boolean;
-  isUnavailable: boolean;
+interface InnerColorOptionValueProps {
+  isAvailable: boolean;
+  isDisabled: boolean;
   isSelected: boolean;
-  swatch: Swatch | null;
+  swatch?: Swatch | null;
   value: string;
 }
 
-export function ColorOptionIcon({
-  disabled,
-  isUnavailable,
+export function InnerColorOptionValue({
+  isAvailable,
+  isDisabled,
   isSelected,
   swatch,
   value,
-}: ColorOptionIconProps) {
+}: InnerColorOptionValueProps) {
   const isLightColor = useMemo(() => {
     return isLightHexColor(swatch?.color);
   }, [swatch?.color]);
-  const validClass = !disabled
+
+  const validClass = !isDisabled
     ? 'md:group-hover/color:border-text'
     : 'cursor-not-allowed';
   const selectedClass = isSelected ? 'border-text' : '';
-  const unavailableClass = isUnavailable
+  const unavailableClass = !isAvailable
     ? `after:h-px after:w-[150%] after:rotate-[135deg] after:absolute after:top-1/2 after:left-1/2 after:-translate-x-1/2 after:-translate-y-1/2 overflow-hidden ${
         isLightColor ? 'after:bg-black' : 'after:bg-white'
       }`
@@ -36,12 +37,7 @@ export function ColorOptionIcon({
   return (
     <div
       className={`relative flex h-8 w-8 items-center justify-center overflow-hidden rounded-[50%] border border-border transition ${validClass} ${unavailableClass} ${selectedClass}`}
-      style={{
-        backgroundColor:
-          isSelected && swatch?.color === '#FFFFFF'
-            ? 'var(--off-white)'
-            : swatch?.color,
-      }}
+      style={{backgroundColor: swatch?.color}}
     >
       {swatch?.image?.src && (
         <Image
@@ -67,4 +63,4 @@ export function ColorOptionIcon({
   );
 }
 
-ColorOptionIcon.displayName = 'ColorOptionIcon';
+InnerColorOptionValue.displayName = 'InnerColorOptionValue';
