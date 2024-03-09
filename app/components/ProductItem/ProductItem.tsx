@@ -166,7 +166,6 @@ export function ProductItem({
       {enabledQuickShop && (
         <QuickShop
           enabledColorSelector={enabledColorSelector}
-          grouping={grouping}
           selectedProduct={selectedProduct}
           selectedVariant={selectedVariant}
         />
