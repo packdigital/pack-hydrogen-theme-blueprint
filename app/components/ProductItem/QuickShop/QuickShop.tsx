@@ -7,20 +7,18 @@ import type {
 
 import {AddToCart} from '~/components';
 import {COLOR_OPTION_NAME} from '~/lib/constants';
-import type {Group, SiteSettings} from '~/lib/types';
+import type {SiteSettings} from '~/lib/types';
 
 import {QuickShopOptions} from './QuickShopOptions';
 
 interface QuickShopProps {
   enabledColorSelector?: boolean;
-  grouping?: Group | null;
   selectedProduct: Product | null | undefined;
   selectedVariant: ProductVariant | null | undefined;
 }
 
 export function QuickShop({
   enabledColorSelector,
-  grouping,
   selectedProduct,
   selectedVariant,
 }: QuickShopProps) {
@@ -32,9 +30,7 @@ export function QuickShop({
   const qualifiesForQuickShop = useMemo(() => {
     if (!selectedProduct) return false;
 
-    const initialOptions = grouping?.isReady
-      ? grouping?.options
-      : selectedProduct.options;
+    const initialOptions = selectedProduct.options;
     const options = enabledColorSelector
       ? initialOptions?.filter((option) => option.name !== COLOR_OPTION_NAME)
       : initialOptions;
@@ -47,15 +43,9 @@ export function QuickShop({
       options?.reduce((acc, option) => {
         return acc + (option.values.length > 1 ? 1 : 0);
       }, 0) === 1 || false;
-    const hasColorOptionWithMultipleValues = enabledColorSelector
-      ? false
-      : (grouping?.optionsMap?.[COLOR_OPTION_NAME] || []).length > 1 || false;
 
-    return (
-      (hasOnlySingleValueOptions || hasOnlyOneOptionWithMultipleValues) &&
-      !hasColorOptionWithMultipleValues
-    );
-  }, [enabledColorSelector, grouping, selectedProduct?.id]);
+    return hasOnlySingleValueOptions || hasOnlyOneOptionWithMultipleValues;
+  }, [enabledColorSelector, selectedProduct?.id]);
 
   const hasOneVariant = selectedProduct?.variants?.nodes?.length === 1;
 
@@ -71,7 +61,6 @@ export function QuickShop({
 
       {selectedProduct && !hasOneVariant && (
         <QuickShopOptions
-          grouping={grouping}
           quickShopMultiText={quickShopMultiText}
           selectedProduct={selectedProduct}
           selectedVariant={selectedVariant}

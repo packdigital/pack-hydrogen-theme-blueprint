@@ -1,9 +1,7 @@
 import {useProduct} from '@shopify/hydrogen-react';
 
-import {COLOR_OPTION_NAME} from '~/lib/constants';
 import type {ProductWithGrouping, SelectedVariant} from '~/lib/types';
 
-import {ProductColorOptionValues} from './ProductColorOptionValues';
 import {ProductOptionValues} from './ProductOptionValues';
 
 interface ProductOptionsProps {
@@ -18,28 +16,18 @@ export function ProductOptions({product}: ProductOptionsProps) {
 
   return (
     <div className="flex flex-col">
-      {product.options?.map(({name, values}, index) => {
+      {product.options?.map((option, index) => {
         return (
           <div
             key={index}
             className="border-b border-b-border py-4 first:border-t first:border-t-border"
           >
-            {name === COLOR_OPTION_NAME ? (
-              <ProductColorOptionValues
-                product={product}
-                name={name}
-                selectedOptionsMap={selectedOptionsMap}
-                setSelectedOption={setSelectedOption}
-              />
-            ) : (
-              <ProductOptionValues
-                product={product}
-                name={name}
-                selectedOptionsMap={selectedOptionsMap}
-                setSelectedOption={setSelectedOption}
-                values={values}
-              />
-            )}
+            <ProductOptionValues
+              option={option}
+              product={product}
+              selectedOptionsMap={selectedOptionsMap}
+              setSelectedOption={setSelectedOption}
+            />
           </div>
         );
       })}

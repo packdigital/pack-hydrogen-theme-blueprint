@@ -68,11 +68,15 @@ export const formatGroupingWithOptions = ({
     },
   );
 
+  let hasColorOption = false;
+
   let parentGroupOptionsMap: Record<string, string[]> = {};
   if (hasParentGroupWithProducts) {
     parentGroupOptionsMap = parentGroupProducts.reduce(
       (acc: Record<string, string[]>, {options}) => {
         options?.forEach(({name, values}) => {
+          if (name === COLOR_OPTION_NAME && !hasColorOption)
+            hasColorOption = true;
           if (!acc[name]) {
             acc[name] = values;
           } else {
@@ -92,6 +96,8 @@ export const formatGroupingWithOptions = ({
         const subGroupOptions = sgProducts.reduce(
           (sgAcc: Record<string, string[]>, {options}) => {
             options?.forEach(({name, values}) => {
+              if (name === COLOR_OPTION_NAME && !hasColorOption)
+                hasColorOption = true;
               if (!sgAcc[name]) {
                 sgAcc[name] = values;
               } else {
@@ -112,14 +118,28 @@ export const formatGroupingWithOptions = ({
     );
   }
 
+  // by default break up subgroups based on color option
+  let groupingOptionName: string = COLOR_OPTION_NAME;
+  // if there are no color options, use the first option from the first product
+  if (!hasColorOption) {
+    const parentProductFirstOptionName =
+      parentGroupProducts[0]?.options?.[0]?.name;
+    const subGroupFirstProductFirstOptionName =
+      subGroupProductsByIndex?.['0']?.[0]?.options?.[0]?.name;
+    groupingOptionName =
+      parentProductFirstOptionName ||
+      subGroupFirstProductFirstOptionName ||
+      COLOR_OPTION_NAME;
+  }
+
   const combinedGroupOptionsInitialMap: Record<string, OptionWithGroups> = {};
   if (hasParentGroupWithProducts) {
     Object.entries(parentGroupOptionsMap).forEach(([name, values]) => {
       combinedGroupOptionsInitialMap[name] = {values} as OptionWithGroups;
-      if (name === COLOR_OPTION_NAME && hasSubgroupsWithProducts) {
+      if (name === groupingOptionName && hasSubgroupsWithProducts) {
         combinedGroupOptionsInitialMap[name].groups = [
           {
-            name: 'Primary',
+            name, // customize parent option name if desired, e.g. "Primary"
             values,
           },
         ];
@@ -140,7 +160,7 @@ export const formatGroupingWithOptions = ({
               ]),
             ];
           }
-          if (name === COLOR_OPTION_NAME) {
+          if (name === groupingOptionName) {
             combinedGroupOptionsInitialMap[name].groups = [
               ...(combinedGroupOptionsInitialMap[name].groups || []),
               {

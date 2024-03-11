@@ -30,13 +30,13 @@ export interface Group {
   options?: OptionWithGroups[];
   optionsMap?: Record<string, string[]>;
   allProducts?: {handle: string}[];
-  productsMap?: Record<string, Product>;
+  productsByHandle?: Record<string, Product>;
+  productsByOptionValue?: Record<string, Record<string, Product[]>>;
   isReady?: boolean;
 }
 
 export interface ProductWithGrouping extends Product {
   grouping?: Group;
-  isGrouped?: boolean;
 }
 
 export type ProductGroupings = Group[];

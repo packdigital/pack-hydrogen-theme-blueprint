@@ -3,7 +3,7 @@ import type {ActionFunctionArgs} from '@shopify/remix-oxygen';
 
 import {PRODUCT_RECOMMENDATIONS_QUERY} from '~/data/queries';
 
-// docs: https://shopify.dev/docs/api/storefront/2023-10/queries/productRecommendations
+// docs: https://shopify.dev/docs/api/storefront/latest/queries/productRecommendations
 
 export async function action({request, context}: ActionFunctionArgs) {
   const {storefront} = context;

@@ -62,8 +62,8 @@ export function useProductGroupingByHandle(
 
   useEffect(() => {
     if (!grouping || !fetcher.data?.products) return;
-    const productsMap = fetcher.data.products.reduce(
-      (acc: Record<string, any>, product: Product) => {
+    const productsByHandle = fetcher.data.products.reduce(
+      (acc: Record<string, Product>, product: Product) => {
         if (!product) return acc;
         return {...acc, [product.handle]: product};
       },
@@ -71,13 +71,13 @@ export function useProductGroupingByHandle(
     );
     const groupingWithOptions = formatGroupingWithOptions({
       grouping,
-      getProductByHandle: (handle: string) => productsMap[handle],
+      getProductByHandle: (handle: string) => productsByHandle[handle],
     });
     const readyGrouping = {
       ...groupingWithOptions,
-      productsMap,
+      productsByHandle,
       isReady: true,
-    };
+    } as Group;
     const updatedGroupings = groupings;
     updatedGroupings[groupingIndex] = readyGrouping;
     setGrouping(readyGrouping);
