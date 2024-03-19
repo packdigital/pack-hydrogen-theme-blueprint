@@ -29,13 +29,6 @@ export function Scripts() {
         />
       )}
 
-      {/* **Pack only** */}
-      <Script
-        id="warmly-script-loader"
-        src="https://opps-widget.getwarmly.com/warmly.js?clientId=9813acb22c9471794c5700cfb732ad82"
-        defer
-      />
-
       {/* other third-party scripts */}
     </>
   );
