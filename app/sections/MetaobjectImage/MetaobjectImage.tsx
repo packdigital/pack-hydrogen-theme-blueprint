@@ -3,13 +3,7 @@ import {Image, Link, Markdown} from '~/components';
 import {Schema} from './MetaobjectImage.schema';
 
 export function MetaobjectImage({cms}: {cms: Record<string, any>}) {
-  const dataSourceReference = cms?.dataSource?.reference;
-  const fields: Record<string, any> = {};
-  dataSourceReference?.fields?.forEach((field: Record<string, any>) => {
-    fields[field.key] = field.reference || field.value;
-  });
-
-  const {alt, link, caption, enable_padding, image} = fields;
+  const {alt, link, caption, enable_padding, image} = cms;
   const imageDetails = image?.image;
 
   const maxWidth = 'max-w-[90rem]';
