@@ -62,7 +62,7 @@ export async function action({request, context}: ActionFunctionArgs) {
   const reverse = Boolean(
     body?.get('reverse') || searchParams.get('reverse') || false,
   );
-  const count = Number(body?.get('count') || searchParams.get('count') || 10);
+  const count = Number(body?.get('count') || searchParams.get('count')) || 10;
 
   const {products} = await queryProducts({
     context,

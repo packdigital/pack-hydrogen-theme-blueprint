@@ -16,7 +16,8 @@ import {Analytics, DataLayer, Layout} from '~/components';
 import {useLocale, useRootLoaderData} from '~/hooks';
 
 import {Favicon} from './Favicon';
-import {Scripts as RootScripts} from './Scripts';
+import {BodyScripts} from './BodyScripts';
+import {HeadScripts} from './HeadScripts';
 
 interface DocumentProps {
   children: ReactNode;
@@ -57,6 +58,7 @@ export function Document({children, title}: DocumentProps) {
                 />
                 <meta name="keywords" content={keywords} />
                 <Favicon />
+                <HeadScripts />
                 <Seo />
                 <Meta />
                 <Links />
@@ -74,7 +76,7 @@ export function Document({children, title}: DocumentProps) {
                 </PreviewProvider>
                 <Analytics />
                 <DataLayer />
-                <RootScripts />
+                <BodyScripts />
                 <ScrollRestoration
                   getKey={(location) => {
                     const isPdp = location.pathname.startsWith('/products/');

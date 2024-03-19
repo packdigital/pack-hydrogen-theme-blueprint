@@ -1,21 +1,30 @@
+import type {
+  Attribute,
+  SellingPlan,
+} from '@shopify/hydrogen/storefront-api-types';
+
 import {BackInStockModal, LoadingDots} from '~/components';
 import {useAddToCart} from '~/hooks';
 import type {SelectedVariant} from '~/lib/types';
 
 interface AddToCartProps {
   addToCartText?: string;
+  attributes?: Attribute[];
   className?: string;
   isPdp?: boolean;
   quantity?: number;
   selectedVariant: SelectedVariant;
+  sellingPlanId?: SellingPlan['id'];
 }
 
 export function AddToCart({
   addToCartText = '',
+  attributes,
   className = '',
   isPdp = false,
   quantity = 1,
   selectedVariant,
+  sellingPlanId,
 }: AddToCartProps) {
   const {
     buttonText,
@@ -29,8 +38,10 @@ export function AddToCart({
     handleNotifyMe,
   } = useAddToCart({
     addToCartText,
+    attributes,
     quantity,
     selectedVariant,
+    sellingPlanId,
   });
 
   const isUpdatingClass = isAdding || cartIsUpdating ? 'cursor-default' : '';

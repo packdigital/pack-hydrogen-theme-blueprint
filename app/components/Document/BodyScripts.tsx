@@ -1,10 +1,9 @@
 import {Script} from '@shopify/hydrogen';
 
-import {useIsHydrated, useRootLoaderData} from '~/hooks';
+import {useRootLoaderData} from '~/hooks';
 
-export function Scripts() {
+export function BodyScripts() {
   const {ENV} = useRootLoaderData();
-  const isHydrated = useIsHydrated();
 
   return (
     <>
@@ -15,7 +14,7 @@ export function Scripts() {
         }}
       />
 
-      {isHydrated && ENV?.PUBLIC_GTM_CONTAINER_ID && (
+      {ENV?.PUBLIC_GTM_CONTAINER_ID && (
         <Script
           id="gtm-script"
           type="text/javascript"
@@ -34,4 +33,4 @@ export function Scripts() {
   );
 }
 
-Scripts.displayName = 'Scripts';
+BodyScripts.displayName = 'BodyScripts';

@@ -43,8 +43,8 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
   const resultsPerPage = Math.floor(
     Number(
       siteSettings?.data?.siteSettings?.settings?.collection?.pagination
-        ?.resultsPerPage || '24',
-    ),
+        ?.resultsPerPage,
+    ) || 24,
   );
 
   const paginationVariables = getPaginationVariables(request, {
