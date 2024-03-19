@@ -39,7 +39,7 @@ export async function action({request, context}: ActionFunctionArgs) {
       searchTypes: ['PRODUCT'],
     });
 
-  const count = Number(body?.get('count') || searchParams.get('count') || 10);
+  const count = Number(body?.get('count') || searchParams.get('count')) || 10;
 
   const {search} = await storefront.query(PRODUCTS_SEARCH_QUERY, {
     variables: {

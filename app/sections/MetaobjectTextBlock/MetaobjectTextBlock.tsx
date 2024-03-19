@@ -3,12 +3,6 @@ import {Link, Markdown} from '~/components';
 import {Schema} from './MetaobjectTextBlock.schema';
 
 export function MetaobjectTextBlock({cms}: {cms: Record<string, any>}) {
-  const dataSourceReference = cms?.dataSource?.reference;
-  const fields: Record<string, any> = {};
-  dataSourceReference?.fields?.forEach((field: Record<string, any>) => {
-    fields[field.key] = field.reference || field.value;
-  });
-
   const {
     button_link,
     button_link_text,
@@ -16,7 +10,7 @@ export function MetaobjectTextBlock({cms}: {cms: Record<string, any>}) {
     above_the_fold,
     subtext,
     full_width,
-  } = fields;
+  } = cms;
   const maxWidthClass = full_width
     ? 'max-w-none'
     : 'max-w-[var(--content-max-width)]';

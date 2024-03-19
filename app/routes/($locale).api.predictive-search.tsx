@@ -54,7 +54,7 @@ async function fetchPredictiveSearchResults({
     body = await request.formData();
   } catch (error) {}
   const searchTerm = String(body?.get('q') || searchParams.get('q') || '');
-  const limit = Number(body?.get('limit') || searchParams.get('limit') || 10);
+  const limit = Number(body?.get('limit') || searchParams.get('limit')) || 10;
   const rawTypes = String(
     body?.get('type') || searchParams.get('type') || 'ANY',
   );

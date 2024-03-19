@@ -36,7 +36,7 @@ export function HalfHeroMedia({
             }}
             aspectRatio={getAspectRatioFromPercentage(aspectMobile)}
             crop={image?.cropMobile}
-            className={`media-fill`}
+            className="media-fill"
             loading={aboveTheFold ? 'eager' : 'lazy'}
             sizes="100vw"
           />
@@ -64,7 +64,7 @@ export function HalfHeroMedia({
             }}
             aspectRatio={getAspectRatioFromPercentage(aspectDesktop)}
             crop={image?.cropDesktop}
-            className={`media-fill`}
+            className="media-fill"
             loading={aboveTheFold ? 'eager' : 'lazy'}
             sizes="50vw"
           />
