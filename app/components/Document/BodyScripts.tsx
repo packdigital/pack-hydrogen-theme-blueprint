@@ -28,12 +28,14 @@ export function BodyScripts() {
         />
       )}
 
-      {/* **Pack only** */}
-      <Script
-        id="warmly-script-loader"
-        src="https://opps-widget.getwarmly.com/warmly.js?clientId=9813acb22c9471794c5700cfb732ad82"
-        defer
-      />
+      {/* **Pack demo store only. Do not merge into base repo** */}
+      {process.env.NODE_ENV === 'production' && (
+        <Script
+          id="warmly-script-loader"
+          src="https://opps-widget.getwarmly.com/warmly.js?clientId=9813acb22c9471794c5700cfb732ad82"
+          defer
+        />
+      )}
 
       {/* other third-party scripts */}
     </>
