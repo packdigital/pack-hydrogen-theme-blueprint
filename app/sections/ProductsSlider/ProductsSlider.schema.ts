@@ -6,7 +6,7 @@ export function Schema() {
     label: 'Products Slider',
     key: 'products-slider',
     previewSrc:
-      'https://cdn.shopify.com/s/files/1/0671/5074/1778/files/products-slider-preview.jpg?v=1675730335',
+      'https://cdn.shopify.com/s/files/1/0629/5519/2520/files/products-slider-preview.jpg?v=1710957354',
     fields: [
       {
         label: 'Heading',

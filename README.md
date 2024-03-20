@@ -1,14 +1,14 @@
 <p align="center"><a href="https://www.packdigital.com"><img src="https://cdn.shopify.com/s/files/1/0830/5750/8663/files/pack_green_logo.png?v=1708374426" width="40px" alt="Pack Digital - gives growing brands every tool they need to build and manage their Shopify Hydrogen storefront" /></a></p>
 
-<p align="center"><b>Pack's Open Source Hydrogen Storefront Starter Repo</b></p>
+<p align="center"><b>Pack's Open-Source Hydrogen Storefront Starter Repo</b></p>
 
 <img width="1840" alt="image" src="https://github.com/packdigital/pack-hydrogen-starter/assets/5673039/df082c77-d0d8-409c-ae81-8101628de7e6">
 
 <p align="center"><b><a href="https://hydrogen.packdigital.com/" target="_blank">Check out the demo store</a></b></p>
 
-## Table of Contents  
+## Table of Contents
 * [Our Philosophy](#our-philosophy)
-* [Starter Features](#starter-features)
+* [Major Features](#major-features)
 * [Pack Features](#pack-features)
 * [Get Started](#get-started)
   * [Environment Variables](#environment-variables)
@@ -22,21 +22,79 @@
 * [Contributors](#contributors)
 
 ## Our Philosophy
-React is the future of ecommerce, but 99% of all Shopify brands are still using Liquid themes (great for starting out, less optimal for advanced interactivity, flexibility and performance). 
+React is the future of ecommerce, but 99% of all Shopify brands are still using Liquid themes (great for starting out, less optimal for advanced interactivity, flexibility and performance).
 
 Historically, the only way to build a React storefront was to stitch together a headless CMS / hosting / data orchestrator / middleware, then build a custom storefront. It generally required a full technical team to build + manage it.
 
-We’re building open source starter storefront repos to make it easy for a single developer to get a Hydrogen storefront up and running in minutes, and build out an entire storefront in just a few weeks—without having to worry about the back end. Use these repos as examples / inspo, or build right on top of them.
+We’re building open-source starter storefront repos to make it easy for a single developer to get a Hydrogen storefront up and running in minutes, and build out an entire storefront in just a few weeks—without having to worry about the back end. Use these repos as examples / inspo, or build right on top of them.
 
-## Starter Features
-- Open source Hydrogen storefront starter repo that’s opinionated to Pack, a visual frontend for Hydrogen. 
-  - Hero image
-  - 50/50 tile
-  - Product slider
-  - Reviews slider
-  - SEO fields
-  - Data layer
-  - A Pack-agnostic Hydrogen starter repo for a performant, React-based frontend <b>(coming soon)</b>.
+### Pack’s starter storefront vs Shopify’s out-of-the-box Hydrogen storefront:
+
+We took Hydrogen’s out-of-the-box starter storefront and spent 3 months adding components, features, animations, styling, and connecting it to Pack—a visual frontend for Shopify Hydrogen—to make it easier to spin up a fully-featured storefront.
+
+Connect your Shopify and Github repo to Pack, and you’ll get access to a real-time visual preview of your storefront as you build. Work in 100% code or a mix of visual editing and code.
+
+Instead of hard-coding the whole experience and having to stay on top of every site change, Pack’s platform makes it easy to hand your finished storefront off to non-technical stakeholders so they can make edits on their own. It’s as easy to use as Shopify.
+
+
+## Major Features
+- CSS Framework: Tailwind
+- Framework: Remix
+- Open-source Hydrogen storefront starter repo that’s opinionated to Pack, a visual frontend for Hydrogen.
+  - Responsive components
+    - Heros — multiple slides and configurations
+    - 50/50 Hero
+    - Product tiles
+    - Products slider
+    - Product recommendations slider
+    - Form builder
+    - Tiles row
+    - Tiles grid
+    - Image tiles
+    - Text/markdown block
+    - Image block
+    - Video/video embed block
+    - Html block
+    - Reviews slider
+    - Press slider
+    - Testimonials slider
+    - Accordions
+    - Icon row
+    - Social images grid
+  - Site settings, menus and modals
+    - Promobar
+    - Modal
+    - Mobile sidebar menu
+    - Footer
+      - Email newsletter sign up
+      - Country selector (change currency, UI/UX for language change)
+    - Header
+      - Dropdown menus
+      - Mobile drawer menu
+  - Search, data & analytics
+    - Search drawer
+    - Search page
+    - Leverages Shopify's API
+    - SEO and schema markup fields
+  - Side cart
+    - Free shipping meter
+    - Cart upsell products slider
+    - Discount code field
+  - Shopify analytics (Page views, add to carts)
+  - Data layer logic through GA4 (QA’d by Elevar + Fueled)
+    - Triggers placed throughout site
+      - Page view
+      - PDP view
+      - Collection view
+      - Add to cart
+      - Remove from cart
+      - View cart
+      - Product item click
+      - Search results view
+      - Login
+      - Register
+      - Email/phone subscribe
+  - Automatic frontend product grouping based on groupings set in Pack admin
 
 Note: Pack is free if you’re only looking to spin up a few landing pages, with pay-as-you-go / custom pricing for large storefronts.
 
@@ -50,7 +108,7 @@ Note: Pack is free if you’re only looking to spin up a few landing pages, with
 - Support for Remix and Oxygen
 - A/B testing <b>(coming soon)</b>
 
-## Get started 
+## Get started
 Create a free Pack account to get started, or check out our documentation.
 ### Requirements
 
