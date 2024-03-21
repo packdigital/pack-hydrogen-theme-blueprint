@@ -121,13 +121,20 @@ npm install
 
 ### Environment Variables
 
-Before you can run your application locally, you will need a `.env` file at the root of your project. You can automate creating a `.env` file by pulling your variables directly from your Shopify Hydrogen storefront using the Hydrogen CLI. Run the command below and follow its prompts.
+To run your application locally, you can use Shopify's mock.shop API to simulate a Shopify storefront. You can set the `PUBLIC_STORE_DOMAIN` environment variable to `mock.shop` to use the mock.shop API.
+```dotenv
+SESSION_SECRET="foobar"
+PUBLIC_STORE_DOMAIN="mock.shop"
+PUBLIC_STOREFRONT_API_TOKEN="foobar"
+```
+
+You can automate pull in your Shopify environment variables directly from your Shopify Hydrogen storefront using the Hydrogen CLI. Run the command below and follow its prompts.
 ```
 npx shopify hydrogen env pull
 ```
 
 Alternatively, you can create a `.env` file and manually copy these values from your Shopify Hydrogen storefront. You can find the variables by going to the Hydrogen storefront > Storefront Settings > Environments & Variables. These are the required variables needed:
-```
+```dotenv
 SESSION_SECRET="XXX"
 PUBLIC_STOREFRONT_API_TOKEN="XXX"
 PUBLIC_STORE_DOMAIN="XXX"

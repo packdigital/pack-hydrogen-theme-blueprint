@@ -31,15 +31,18 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
       },
       cache: context.storefront.CacheShort(),
     });
+    if (!data?.blog) throw new Response(null, {status: 404});
+
     const queriedBlog = data.blog;
-    const {endCursor, hasNextPage} = queriedBlog.articles.pageInfo;
+    const queriedBlogArticles = queriedBlog.articles;
+
+    const queriedBlogArticlesNodes = queriedBlogArticles?.nodes || [];
+    const {endCursor, hasNextPage} = queriedBlogArticles?.pageInfo || {};
+
     const compiledBlog = {
       ...queriedBlog,
       articles: {
-        nodes: [
-          ...(blog?.articles?.nodes || []),
-          ...queriedBlog.articles.nodes,
-        ],
+        nodes: [...(blog?.articles?.nodes || []), ...queriedBlogArticlesNodes],
         pageInfo: {endCursor, hasNextPage},
       },
     };
