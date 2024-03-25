@@ -39,7 +39,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     cache: context.storefront.CacheShort(),
   });
 
-  if (!pageData.data?.productPage) throw new Response(null, {status: 404});
+  const productPage = pageData?.data?.productPage;
 
   const storeDomain = storefront.getShopifyDomain();
   const searchParams = new URL(request.url).searchParams;
@@ -75,7 +75,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     cache: context.storefront.CacheShort(),
   });
 
-  let grouping: Group = groupingsData.data.groups.edges.find(
+  let grouping: Group = groupingsData?.data?.groups?.edges?.find(
     ({node}: {node: Group}) => {
       const groupingProducts = [
         ...node.products,
@@ -170,7 +170,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
   const seo = seoPayload.product({
     product,
     selectedVariant,
-    page: pageData.data.productPage,
+    page: productPage,
     shop,
     siteSettings,
     url: request.url,
@@ -179,7 +179,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
   return json({
     analytics,
     product,
-    productPage: pageData.data.productPage,
+    productPage,
     selectedVariant,
     seo,
     storeDomain,
@@ -198,7 +198,7 @@ export default function ProductRoute() {
       <div data-comp={ProductRoute.displayName}>
         <Product product={product} />
 
-        <RenderSections content={productPage} />
+        {productPage && <RenderSections content={productPage} />}
       </div>
     </ProductProvider>
   );

@@ -23,7 +23,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     cache: storefront.CacheShort(),
   });
 
-  if (!pageData.data?.collectionPage) throw new Response(null, {status: 404});
+  const collectionPage = pageData.data?.collectionPage;
 
   const searchParams = new URL(request.url).searchParams;
   const siteSettings = await getSiteSettings(context);
@@ -74,7 +74,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
   };
   const seo = seoPayload.collection({
     collection,
-    page: pageData.data.collectionPage,
+    page: collectionPage,
     shop,
     siteSettings,
     url: request.url,
@@ -84,7 +84,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     activeFilterValues,
     analytics,
     collection,
-    collectionPage: pageData.data.collectionPage,
+    collectionPage,
     seo,
   });
 }

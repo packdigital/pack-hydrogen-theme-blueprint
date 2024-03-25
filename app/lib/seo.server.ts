@@ -25,13 +25,15 @@ import type {
   Seo,
 } from '~/lib/types';
 
+type SeoMedia = SeoConfig['media'];
+
 const getMeta = ({
   page,
   resource,
   shop,
   siteSettings,
 }: {
-  page: Page;
+  page?: Page;
   resource?: Record<string, any>;
   shop: Shop;
   siteSettings: RootSiteSettings;
@@ -40,7 +42,7 @@ const getMeta = ({
   description: string;
   pageTitle: string;
   pageDescription: string;
-  media: {type: 'image'; url: string};
+  media: SeoMedia;
   robots: {noIndex: boolean; noFollow: boolean};
 } => {
   const {title: seoSiteTitle, description: seoSiteDescription} = {
@@ -69,7 +71,7 @@ const getMeta = ({
   const description = truncate(
     pageDescription || seoSiteDescription || shop?.description || '',
   );
-  const media = {
+  const media: SeoMedia = {
     type: 'image',
     url: page?.seo?.image || resource?.seo?.image || '',
   };
@@ -126,7 +128,7 @@ function home({
   shop,
   siteSettings,
 }: {
-  page: Page;
+  page?: Page;
   shop: Shop;
   siteSettings: RootSiteSettings;
 }): SeoConfig<WebPage> {
@@ -335,7 +337,7 @@ function collection({
   url,
 }: {
   collection: CollectionRequiredFields;
-  page: Page;
+  page?: Page;
   shop: Shop;
   siteSettings: RootSiteSettings;
   url: Request['url'];

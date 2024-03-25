@@ -5,18 +5,19 @@ import {AnalyticsPageType} from '@shopify/hydrogen';
 import {RenderSections} from '@pack/react';
 
 import {getShop, getSiteSettings} from '~/lib/utils';
-import {HOME_PAGE_QUERY} from '~/data/queries';
+import {PAGE_QUERY} from '~/data/queries';
 import {routeHeaders} from '~/data/cache';
 import {seoPayload} from '~/lib/seo.server';
 
 export const headers = routeHeaders;
 
 export async function loader({context}: LoaderFunctionArgs) {
-  const {data} = await context.pack.query(HOME_PAGE_QUERY, {
+  const {data} = await context.pack.query(PAGE_QUERY, {
+    variables: {handle: '/'},
     cache: context.storefront.CacheShort(),
   });
 
-  if (!data.page) throw new Response(null, {status: 404});
+  if (!data?.page) throw new Response(null, {status: 404});
 
   const shop = await getShop(context);
   const siteSettings = await getSiteSettings(context);
