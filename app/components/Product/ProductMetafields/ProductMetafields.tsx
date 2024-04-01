@@ -9,13 +9,13 @@ const EXAMPLE_METAFIELDS_MAP: Record<string, Metafield> = {
     id: 'gid://shopify/Metafield/1234567890',
     key: 'sizing',
     value:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n\n*Example details. Data sourced from product metafields. See code for customization.*',
   } as Metafield,
   'custom.care': {
     namespace: 'custom',
     id: 'gid://shopify/Metafield/0987654321',
     key: 'care',
-    value: `* Lorem ipsum dolor sit amet\n* Consectetur adipiscing elit\n* Sed do eiusmod tempor`,
+    value: `* Lorem ipsum dolor sit amet\n* Consectetur adipiscing elit\n* Sed do eiusmod tempor\n\n*Example details. Data sourced from product metafields. See code for customization.*`,
   } as Metafield,
 };
 

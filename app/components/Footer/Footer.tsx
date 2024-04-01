@@ -42,7 +42,7 @@ export function Footer() {
           <EmailSignup settings={footer} />
         </div>
 
-        <div className="max-md:px-contained order-4 col-span-1 flex w-full flex-col gap-4 pt-8 md:col-span-2 md:gap-6 xl:col-span-3">
+        <div className="max-md:px-contained order-4 col-span-1 flex w-full flex-col gap-4 max-md:pt-8 md:col-span-2 md:gap-6 xl:col-span-3">
           {localization?.enabled && <CountrySelector />}
 
           <FooterLegal settings={footer} />

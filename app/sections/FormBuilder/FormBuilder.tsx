@@ -1,7 +1,7 @@
 import {Fragment, useEffect, useRef, useState, useCallback} from 'react';
-import {useLoadScript} from '@shopify/hydrogen';
 
 import {Container} from '~/components';
+import {useLoadScript} from '~/hooks';
 
 import {FormField} from './FormField';
 import type {FormBuilderCms} from './FormBuilder.types';
@@ -19,7 +19,7 @@ export function FormBuilder({cms}: {cms: FormBuilderCms}) {
   const [captchaLoaded, setCaptchaLoaded] = useState(false);
 
   const renderCaptcha =
-    typeof window !== 'undefined' && window.grecaptcha?.render;
+    typeof document !== 'undefined' && window.grecaptcha?.render;
   const captchaReady = typeof renderCaptcha === 'function';
   const recaptchaEnabled =
     cms.recaptchaEnabled && !!window.ENV?.PUBLIC_RECAPTCHA_SITE_KEY;
@@ -77,7 +77,10 @@ export function FormBuilder({cms}: {cms: FormBuilderCms}) {
     };
   }, [recaptchaEnabled]);
 
-  useLoadScript('https://www.google.com/recaptcha/api.js', {in: 'head'});
+  useLoadScript(
+    {id: 'recaptcha-script', src: 'https://www.google.com/recaptcha/api.js'},
+    'head',
+  );
 
   return (
     <Container container={cms.container}>

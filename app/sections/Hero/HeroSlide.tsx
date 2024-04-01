@@ -35,7 +35,7 @@ export function HeroSlide({
         {image?.imageMobile?.src && !video?.srcMobile && (
           <Image
             data={{
-              altText: image.alt,
+              altText: image.imageMobile.altText || image.alt,
               url: image.imageMobile.src,
             }}
             className={`media-fill ${image.positionMobile}`}
@@ -57,7 +57,7 @@ export function HeroSlide({
         {image?.imageDesktop?.src && !video?.srcDesktop && (
           <Image
             data={{
-              altText: image.alt,
+              altText: image.imageDesktop.altText || image.alt,
               url: image.imageDesktop.src,
             }}
             className={`media-fill ${image.positionDesktop}`}

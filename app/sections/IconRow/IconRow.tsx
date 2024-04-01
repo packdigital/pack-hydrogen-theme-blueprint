@@ -39,7 +39,7 @@ export function IconRow({cms}: {cms: IconRowCms}) {
                     {image?.src && (
                       <Image
                         data={{
-                          altText: alt || label || image.altText,
+                          altText: image.altText || alt || label,
                           url: image.src,
                           width: image.width,
                           height: image.height,

@@ -1,39 +1,35 @@
+import {useEffect} from 'react';
+
 import {LoadingDots} from '~/components';
-import type {Settings} from '~/lib/types';
 import {useMarketingListSubscribe} from '~/hooks';
 
-/*
- * Env PRIVATE_KLAVIYO_API_KEY must be set locally and through the Hydrogen app
- * Key should have full access to lists
- */
+import type {MarketingEmailSignupProps} from './MarketingSignup.types';
 
-export function EmailSignup({settings}: {settings: Settings['footer']}) {
-  const {
-    enabled,
-    listId,
-    heading,
-    subtext,
-    placeholder,
-    buttonText,
-    thankYouText,
-  } = {
-    ...settings?.marketing,
-  };
-
+export function MarketingEmailSignup({
+  listId,
+  heading,
+  subtext,
+  placeholder,
+  buttonText = 'Sign Up',
+  thankYouText,
+  onSuccess,
+}: MarketingEmailSignupProps) {
   const {formRef, handleSubmit, message, isSubmitting, submitted} =
     useMarketingListSubscribe({listId});
 
-  return enabled ? (
+  useEffect(() => {
+    if (submitted && typeof onSuccess === 'function') onSuccess();
+  }, [submitted]);
+
+  return (
     <form
-      className="border-b border-b-gray px-4 py-8 md:border-none md:p-0"
+      className=" mx-auto w-full max-w-[38rem] text-center"
       onSubmit={handleSubmit}
       ref={formRef}
     >
-      <h3 className="text-nav text-current">{heading}</h3>
+      {heading && <h3 className="text-title-h4 text-current">{heading}</h3>}
 
-      {subtext && (
-        <p className="mt-2 text-base text-current md:text-sm">{subtext}</p>
-      )}
+      {subtext && <p className="mt-2 text-base">{subtext}</p>}
 
       <input
         className="input-text mt-6 text-text"
@@ -46,6 +42,7 @@ export function EmailSignup({settings}: {settings: Settings['footer']}) {
       <button
         aria-label={buttonText}
         className="btn-primary mt-3 w-full"
+        disabled={!listId}
         type="submit"
       >
         {!isSubmitting && buttonText}
@@ -57,15 +54,15 @@ export function EmailSignup({settings}: {settings: Settings['footer']}) {
         )}
       </button>
 
-      <div className="pointer-events-none mt-3 min-h-5">
+      <div className="pointer-events-none mt-6 min-h-6">
         {message && (
-          <p className="pointer-events-auto text-sm">
+          <p className="pointer-events-auto text-base">
             {submitted ? thankYouText : message}
           </p>
         )}
       </div>
     </form>
-  ) : null;
+  );
 }
 
-EmailSignup.displayName = 'EmailSignup';
+MarketingEmailSignup.displayName = 'MarketingEmailSignup';

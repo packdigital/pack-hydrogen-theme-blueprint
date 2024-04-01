@@ -26,10 +26,8 @@ export function ProductRecommendationsSlider({
 
   const products = useMemo(() => {
     if (!productRecommendations) return [];
-    return productRecommendations.slice(0, limit).map(({handle}) => {
-      return {product: {handle}};
-    });
-  }, [productRecommendations]);
+    return productRecommendations.slice(0, limit);
+  }, [limit, productRecommendations]);
 
   return (
     <Container container={cms.container}>
