@@ -1,7 +1,7 @@
 import type {ReactNode} from 'react';
 
 import type {ContainerSettings} from '~/settings/container';
-import type {LinkCms} from '~/lib/types';
+import type {ImageCms, LinkCms} from '~/lib/types';
 
 interface Section {
   aboveTheFold: boolean;
@@ -57,14 +57,8 @@ interface Button {
 
 interface Image {
   alt: string;
-  imageDesktop: {
-    src: string;
-    aspectRatio: string;
-  };
-  imageMobile: {
-    src: string;
-    aspectRatio: string;
-  };
+  imageDesktop: ImageCms;
+  imageMobile: ImageCms;
   positionDesktop: string;
   positionMobile: string;
 }

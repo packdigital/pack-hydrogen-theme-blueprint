@@ -6,12 +6,12 @@ import type {ActionFunctionArgs} from '@shopify/remix-oxygen';
  */
 const getProductReviewAggregate = async ({
   productId,
-  PLATFORM_KEY,
+  platformKey,
 }: {
   productId: string;
-  PLATFORM_KEY: string;
+  platformKey: string;
 }) => {
-  const endpoint = `https://api.example-platform.com/products/${PLATFORM_KEY}/${encodeURIComponent(
+  const endpoint = `https://api.example-platform.com/products/${platformKey}/${encodeURIComponent(
     productId,
   )}/review_aggregate`;
   const options = {
@@ -42,7 +42,7 @@ export async function action({request, context}: ActionFunctionArgs) {
 
   const productId = String(body?.get('productId') || '');
   const env = context.env as Record<string, any>;
-  const PLATFORM_KEY = env.EXAMPLE_PLATFORM_KEY;
+  const platformKey = env.PRIVATE_EXAMPLE_PLATFORM_KEY; // replace with actual env key
 
   if (!productId) {
     return json(
@@ -51,7 +51,7 @@ export async function action({request, context}: ActionFunctionArgs) {
     );
   }
 
-  const data = await reviewsAction({productId, PLATFORM_KEY, body});
+  const data = await reviewsAction({productId, platformKey, body});
 
   if (!data || data.error) {
     return json(

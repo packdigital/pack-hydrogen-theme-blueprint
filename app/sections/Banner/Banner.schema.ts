@@ -11,7 +11,7 @@ const image = {
       label: 'Image Alt',
       name: 'alt',
       component: 'text',
-      description: 'Brief description of image',
+      description: `Alt text set in the media manager for the selected image(s) will take priority. Note: if alt text is set in the media manager after image(s) have already been selected, the image(s) will need to be re-added.`,
     },
     {
       label: 'Image (tablet/desktop)',

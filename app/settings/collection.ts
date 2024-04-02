@@ -297,7 +297,8 @@ export default {
                       label: 'Image Alt',
                       name: 'alt',
                       component: 'text',
-                      description: 'Brief description of image',
+                      description:
+                        'Alt text set in media manager for selected image(s) will take priority. Re-add image(s) if alt text was set in media manager after selection.',
                     },
                     {
                       label: 'Image',

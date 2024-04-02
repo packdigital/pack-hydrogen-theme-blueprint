@@ -5,7 +5,7 @@ import type {
 } from '@shopify/hydrogen/storefront-api-types';
 
 const STOREFRONT_NAME =
-  (typeof window !== 'undefined' && window.ENV?.SITE_TITLE) || 'Storefront';
+  (typeof document !== 'undefined' && window.ENV?.SITE_TITLE) || 'Storefront';
 
 export const mapProductItemProduct =
   (list = '') =>

@@ -126,7 +126,7 @@
   /* text specific */
   .text-title-h1 {
     @apply overflow-anywhere
-      font-sans
+      font-heading
       text-4xl
       font-bold
       md:text-5xl
@@ -134,7 +134,7 @@
   }
   .text-title-h2 {
     @apply overflow-anywhere
-      font-sans
+      font-heading
       text-3xl
       font-bold
       md:text-4xl
@@ -142,7 +142,7 @@
   }
   .text-title-h3 {
     @apply overflow-anywhere
-      font-sans
+      font-heading
       text-2xl
       font-bold
       md:text-3xl
@@ -150,7 +150,7 @@
   }
   .text-title-h4 {
     @apply overflow-anywhere
-      font-sans
+      font-heading
       text-xl
       font-bold
       md:text-2xl
@@ -158,14 +158,14 @@
   }
   .text-title-h5 {
     @apply overflow-anywhere
-      font-sans
+      font-heading
       text-base
       font-bold
       md:text-lg;
   }
   .text-title-h6 {
     @apply overflow-anywhere
-      font-sans
+      font-heading
       text-sm
       font-bold;
   }
