@@ -18,7 +18,7 @@ export async function loader({context, params}: LoaderFunctionArgs) {
     cache: context.storefront.CacheShort(),
   });
 
-  if (!data.page) throw new Response(null, {status: 404});
+  if (!data?.page) throw new Response(null, {status: 404});
 
   const shop = await getShop(context);
   const siteSettings = await getSiteSettings(context);

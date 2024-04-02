@@ -1,0 +1,1570 @@
+{
+  "data": {
+    "siteSettings": {
+      "settings": {
+        "cart": {
+          "totals": {
+            "subtext": "Shipping & taxes calculated at checkout",
+            "checkoutText": "Checkout",
+            "subtotalText": "Total"
+          },
+          "upsell": {
+            "enabled": false,
+            "message": "Don't miss out on these items!"
+          },
+          "heading": "My Cart",
+          "discounts": {
+            "enabled": true
+          },
+          "emptyCart": {
+            "links": [
+              {
+                "link": {
+                  "url": "/collections/men",
+                  "text": "Continue Shopping"
+                }
+              }
+            ],
+            "message": "Your cart is empty"
+          },
+          "freeShipping": {
+            "enabled": true,
+            "minCartSpend": 100,
+            "progressMessage": "You're only {{amount}} away from free shipping!",
+            "progressBarColor": "var(--primary)",
+            "qualifiedMessage": "You've qualified for free shipping!"
+          }
+        },
+        "theme": {
+          "colors": {
+            "gray": "#C0C0C0",
+            "text": "#000000",
+            "black": "#000000",
+            "white": "#FFFFFF",
+            "border": "#E8E8E8",
+            "accent1": "#189CC5",
+            "accent2": "#4A69D4",
+            "primary": "#008464",
+            "darkGray": "#484848",
+            "offBlack": "#101010",
+            "offWhite": "#F9F9F9",
+            "lightGray": "#E8E8E8",
+            "secondary": "#8164BF",
+            "background": "#FFFFFF",
+            "mediumGray": "#989898",
+            "mediumDarkGray": "#707070"
+          }
+        },
+        "footer": {
+          "menu": {
+            "title": "",
+            "menuItems": [
+              {
+                "links": [
+                  {
+                    "link": {
+                      "url": "/collections/men",
+                      "text": "New Arrivals",
+                      "type": "isExternal"
+                    }
+                  },
+                  {
+                    "link": {
+                      "url": "/collections/men",
+                      "text": "All",
+                      "type": "isExternal"
+                    }
+                  }
+                ],
+                "title": "Shop"
+              },
+              {
+                "links": [
+                  {
+                    "link": {
+                      "url": "/pages/about-us",
+                      "text": "About Us",
+                      "type": "isPage"
+                    }
+                  },
+                  {
+                    "link": {
+                      "url": "/blogs/blog",
+                      "text": "Blog",
+                      "type": "isPage"
+                    }
+                  }
+                ],
+                "title": "Brand"
+              }
+            ]
+          },
+          "legal": {
+            "links": [
+              {
+                "link": {
+                  "url": "/pages/privacy",
+                  "text": "Privacy Policy",
+                  "type": "isPage"
+                }
+              },
+              {
+                "link": {
+                  "url": "/pages/terms",
+                  "text": "Terms & Conditions",
+                  "type": "isPage"
+                }
+              }
+            ],
+            "copyrightNotice": "All Rights Reserved"
+          },
+          "social": {
+            "links": [
+              {
+                "url": "https://www.instagram.com/",
+                "platform": "instagram"
+              },
+              {
+                "url": "https://www.facebook.com/",
+                "platform": "facebook"
+              },
+              {
+                "url": "https://www.twitter.com/",
+                "platform": "twitter"
+              },
+              {
+                "url": "https://www.tiktok.com/",
+                "platform": "tiktok"
+              }
+            ],
+            "heading": "Stay Connected"
+          },
+          "bgColor": "var(--black)",
+          "marketing": {
+            "enabled": true,
+            "heading": "Stay In Touch",
+            "subtext": "Get the latest news and updates sent straight to your inbox.",
+            "buttonText": "Sign Up",
+            "placeholder": "Enter your email..."
+          },
+          "textColor": "var(--white)"
+        },
+        "header": {
+          "menu": {
+            "menuItems": [
+              {
+                "links": [
+                  {
+                    "link": {
+                      "url": "/collections/men",
+                      "text": "Best Sellers",
+                      "type": "isExternal"
+                    }
+                  },
+                  {
+                    "link": {
+                      "url": "/collections/men",
+                      "text": "New Arrivals",
+                      "type": "isExternal"
+                    }
+                  }
+                ],
+                "mainLink": {
+                  "url": "/collections/men",
+                  "text": "Shop All",
+                  "type": "isExternal"
+                },
+                "menuItem": {
+                  "url": "/collections/men",
+                  "text": "Shop",
+                  "type": "isExternal"
+                },
+                "imageLinks": [
+                  {
+                    "alt": "Alt",
+                    "link": {
+                      "url": "/blogs/blog",
+                      "text": "Blog",
+                      "type": "isPage"
+                    },
+                    "image": {
+                      "id": "gid://shopify/MediaImage/27033190039752",
+                      "src": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/man-with-shoes-up-front.jpg?v=1700370673",
+                      "size": 547636,
+                      "type": "file",
+                      "width": 3000,
+                      "format": "image/jpeg",
+                      "height": 2000,
+                      "altText": "",
+                      "filename": "man-with-shoes-up-front.jpg?v=1700370673",
+                      "directory": "/",
+                      "previewSrc": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/man-with-shoes-up-front.jpg?v=1700370673"
+                    },
+                    "caption": "Fashion and Lifestyle Blog"
+                  },
+                  {
+                    "alt": "jacket",
+                    "link": {
+                      "url": "/collections/men",
+                      "type": "isExternal"
+                    },
+                    "image": {
+                      "id": "gid://shopify/MediaImage/27033190105288",
+                      "src": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/rack-of-button-ups.jpg?v=1700370678",
+                      "size": 587381,
+                      "type": "file",
+                      "width": 3000,
+                      "format": "image/jpeg",
+                      "height": 2034,
+                      "altText": "",
+                      "filename": "rack-of-button-ups.jpg?v=1700370678",
+                      "directory": "/",
+                      "previewSrc": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/rack-of-button-ups.jpg?v=1700370678"
+                    },
+                    "caption": "New shirts this season"
+                  }
+                ]
+              },
+              {
+                "menuItem": {
+                  "url": "/pages/about-us",
+                  "text": "About Us",
+                  "type": "isPage"
+                }
+              },
+              {
+                "menuItem": {
+                  "url": "/blogs/blog",
+                  "text": "Blog",
+                  "type": "isPage"
+                }
+              }
+            ],
+            "logoPositionDesktop": "left"
+          },
+          "links": [
+            {
+              "link": {
+                "url": "/collections/men",
+                "text": "Shop All"
+              }
+            },
+            {
+              "link": {
+                "url": "/pages/demo-info",
+                "text": "About this demo"
+              }
+            }
+          ],
+          "promobar": {
+            "color": "var(--white)",
+            "delay": 5000,
+            "speed": 500,
+            "effect": "fade",
+            "bgColor": "var(--primary)",
+            "enabled": true,
+            "autohide": true,
+            "messages": [
+              {
+                "link": {
+                  "url": "/",
+                  "text": ""
+                },
+                "message": "Free shipping on orders over $100. Shop Now"
+              }
+            ]
+          }
+        },
+        "search": {
+          "results": {
+            "noResultsText": "No results found.",
+            "productsEnabled": true,
+            "collectionsEnabled": true
+          },
+          "suggestions": {
+            "terms": ["Jogger", "Tee", "Polo"],
+            "enabled": true,
+            "heading": "Top Searches"
+          },
+          "autocomplete": {
+            "limit": 5,
+            "enabled": true,
+            "heading": "Suggestions"
+          }
+        },
+        "account": {
+          "menu": {
+            "helpItems": [
+              {
+                "link": {
+                  "url": "mailto:support@storefront.com",
+                  "text": "support@storefront.com"
+                }
+              }
+            ],
+            "menuItems": [
+              {
+                "link": {
+                  "url": "/account/orders",
+                  "text": "Order History"
+                }
+              },
+              {
+                "link": {
+                  "url": "/account/addresses",
+                  "text": "Addresses",
+                  "type": "isExternal"
+                }
+              },
+              {
+                "link": {
+                  "url": "/account/profile",
+                  "text": "Profile",
+                  "type": "isExternal"
+                }
+              }
+            ],
+            "helpHeading": "Need Help?"
+          },
+          "login": {
+            "heading": "Sign In",
+            "createText": "Don't have an account?",
+            "forgotText": "Forgot Password",
+            "pageHeading": "Welcome!",
+            "createLinkText": "Create Account",
+            "unidentifiedCustomerText": "The email and password do not match"
+          },
+          "reset": {
+            "heading": "Reset Password",
+            "subtext": "Please enter your new password."
+          },
+          "forgot": {
+            "heading": "Forgot Password",
+            "subtext": "We will send you an email to reset your password.",
+            "postSubmissionText": "If account exists, an email will be sent shortly"
+          },
+          "orders": {
+            "buttonStyle": "btn-primary",
+            "ordersPerPage": 10,
+            "emptyOrdersText": "You don't have any orders yet",
+            "emptyOrdersButton": {
+              "url": "/",
+              "text": "Start Shopping"
+            }
+          },
+          "noIndex": true,
+          "activate": {
+            "heading": "Activate Account",
+            "subtext": "Create your password to activate your account."
+          },
+          "noFollow": true,
+          "register": {
+            "heading": "Create Account",
+            "loginText": "Already have an account?",
+            "pageHeading": "Welcome!",
+            "loginLinkText": "Sign In"
+          }
+        },
+        "product": {
+          "colors": {
+            "swatches": [
+              {
+                "name": "Black",
+                "color": "#000000"
+              },
+              {
+                "name": "White",
+                "color": "#FFFFFF"
+              },
+              {
+                "name": "Sage",
+                "color": "#9EA790"
+              },
+              {
+                "name": "Sky",
+                "color": "#E0EEF2"
+              },
+              {
+                "name": "Twilight",
+                "color": "#EFDBD2"
+              },
+              {
+                "name": "Adobe",
+                "color": "#E9A93F"
+              },
+              {
+                "name": "Concrete",
+                "color": "#E8E5EE"
+              },
+              {
+                "name": "Granite",
+                "color": "#D1D0D0"
+              },
+              {
+                "name": "Pacific Blue",
+                "color": "#29415D"
+              },
+              {
+                "name": "Cast Iron",
+                "color": "#626262"
+              },
+              {
+                "name": "Canyon",
+                "color": "#897E73"
+              },
+              {
+                "name": "Coast",
+                "color": "#E2CAA7"
+              },
+              {
+                "name": "Dark Pine",
+                "color": "#757C73"
+              },
+              {
+                "name": "Heather Grey",
+                "color": "#A7A7A7"
+              },
+              {
+                "name": "Ivory",
+                "color": "#FBFAEC"
+              },
+              {
+                "name": "River",
+                "color": "#BBCCEB"
+              },
+              {
+                "name": "Heather Twilight",
+                "color": "#E5D3C7"
+              },
+              {
+                "name": "Heather Sage",
+                "color": "#B0B6B0"
+              },
+              {
+                "name": "Heather Pacific Blue",
+                "color": "#B7C0C2"
+              },
+              {
+                "name": "Heather Black",
+                "color": "#949494"
+              },
+              {
+                "name": "Agave",
+                "color": "#B6C5A6"
+              },
+              {
+                "name": "Teakwood",
+                "color": "#956333"
+              },
+              {
+                "name": "Breeze",
+                "color": "#C9DFE6"
+              },
+              {
+                "name": "Blue",
+                "color": "#1A5498"
+              },
+              {
+                "name": "Brown",
+                "color": "#9A7350"
+              },
+              {
+                "name": "Green",
+                "color": "#417505"
+              },
+              {
+                "name": "Grey",
+                "color": "#9B9B9B"
+              },
+              {
+                "name": "Purple",
+                "color": "#765595"
+              },
+              {
+                "name": "Red",
+                "color": "#BF3542"
+              }
+            ]
+          },
+          "reviews": {
+            "enabledStarRating": true
+          },
+          "addToCart": {
+            "subtext": "",
+            "soldOutText": "Sold Out",
+            "preorderText": "Preorder",
+            "addToCartText": "Add To Cart"
+          },
+          "backInStock": {
+            "enabled": false,
+            "heading": "Notify Me When Available",
+            "subtext": "Enter your email below and we'll notify you when this product is back in stock.",
+            "submitText": "Submit",
+            "notifyMeText": "Notify Me When Available"
+          },
+          "quantitySelector": {
+            "enabled": false
+          }
+        },
+        "notFound": {
+          "text": {
+            "color": "var(--white)",
+            "buttons": [
+              {
+                "link": {
+                  "url": "/",
+                  "text": "Continue Shopping"
+                },
+                "style": "btn-primary"
+              }
+            ],
+            "heading": "Page Not Found"
+          },
+          "image": {
+            "alt": "Rack of green t-shirts",
+            "imageMobile": {
+              "src": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/keagan-henman-xPJYL0l5Ii8-unsplash_20_281_29.jpg?v=1672349016"
+            },
+            "imageDesktop": {
+              "src": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/keagan-henman-xPJYL0l5Ii8-unsplash_20_281_29.jpg?v=1672349016"
+            },
+            "positionMobile": "object-center",
+            "positionDesktop": "md:object-center"
+          },
+          "content": {
+            "darkOverlay": false,
+            "maxWidthMobile": "max-w-[22.5rem]",
+            "positionMobile": "justify-center items-center",
+            "alignmentMobile": "text-center items-center",
+            "maxWidthDesktop": "md:max-w-[30rem] lg:max-w-[38rem]",
+            "positionDesktop": "md:justify-center md:items-center",
+            "alignmentDesktop": "md:text-center md:items-center"
+          },
+          "section": {
+            "mobile": {
+              "maxHeight": "",
+              "minHeight": "",
+              "heightType": "static",
+              "aspectRatio": "max-md:aspect-[3/1]",
+              "staticHeight": "max-md:h-[31.25rem]"
+            },
+            "bgColor": "var(--off-white)",
+            "desktop": {
+              "maxHeight": "",
+              "minHeight": "",
+              "heightType": "static",
+              "aspectRatio": "md:aspect-[4/1]",
+              "staticHeight": "md:h-[50rem]"
+            },
+            "fullBleed": true,
+            "fullWidth": true,
+            "aboveTheFold": true
+          }
+        },
+        "analytics": {
+          "enabled": true
+        },
+        "not-found": {
+          "text": {
+            "color": "var(--white)",
+            "buttons": [
+              {
+                "link": {
+                  "url": "/",
+                  "text": "Continue Shopping"
+                },
+                "style": "btn-primary"
+              }
+            ],
+            "heading": "Page Not Found"
+          },
+          "image": {
+            "alt": "Rack of green t-shirts",
+            "imageMobile": {
+              "src": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/keagan-henman-xPJYL0l5Ii8-unsplash_20_281_29.jpg?v=1672349016"
+            },
+            "imageDesktop": {
+              "src": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/keagan-henman-xPJYL0l5Ii8-unsplash_20_281_29.jpg?v=1672349016"
+            },
+            "positionMobile": "object-center",
+            "positionDesktop": "md:object-center"
+          },
+          "content": {
+            "darkOverlay": false,
+            "maxWidthMobile": "max-w-[22.5rem]",
+            "positionMobile": "justify-center items-center",
+            "alignmentMobile": "text-center items-center",
+            "maxWidthDesktop": "md:max-w-[30rem] lg:max-w-[38rem]",
+            "positionDesktop": "md:justify-center md:items-center",
+            "alignmentDesktop": "md:text-center md:items-center"
+          },
+          "section": {
+            "mobile": {
+              "maxHeight": "",
+              "minHeight": "",
+              "heightType": "static",
+              "aspectRatio": "max-md:aspect-[3/1]",
+              "staticHeight": "max-md:h-[31.25rem]"
+            },
+            "bgColor": "var(--off-white)",
+            "desktop": {
+              "maxHeight": "",
+              "minHeight": "",
+              "heightType": "static",
+              "aspectRatio": "md:aspect-[4/1]",
+              "staticHeight": "md:h-[50rem]"
+            },
+            "fullBleed": true,
+            "fullWidth": true,
+            "aboveTheFold": true
+          }
+        },
+        "collection": {
+          "sort": {
+            "enabled": true,
+            "aToZLabel": "A - Z",
+            "zToALabel": "Z - A",
+            "newestLabel": "Newest",
+            "oldestLabel": "Oldest",
+            "defaultLabel": "Featured",
+            "highToLowLabel": "High to Low",
+            "lowToHighLabel": "Low to High",
+            "bestSellingLabel": "Best Selling"
+          },
+          "filters": {
+            "sticky": true,
+            "enabled": true,
+            "filters": [
+              {
+                "name": "",
+                "label": "Product Type",
+                "isColor": false,
+                "_template": "productType",
+                "orderValuesBy": "alphabet",
+                "defaultOpenMobile": false,
+                "defaultOpenDesktop": false
+              },
+              {
+                "name": "colorfilter",
+                "label": "Color",
+                "isColor": true,
+                "_template": "tag",
+                "orderValuesBy": "alphabet",
+                "defaultOpenMobile": false,
+                "defaultOpenDesktop": false
+              },
+              {
+                "name": "Size",
+                "label": "Size",
+                "isColor": false,
+                "_template": "option",
+                "customOrder": [
+                  "One Size",
+                  "OS",
+                  "O S",
+                  "O/S",
+                  "XXS",
+                  "XX-Small",
+                  "2XS",
+                  "XS",
+                  "X-Small",
+                  "XS/S",
+                  "XS/SM",
+                  "S",
+                  "SM",
+                  "Small",
+                  "S/M",
+                  "SM/MD",
+                  "M",
+                  "MD",
+                  "Medium",
+                  "M/L",
+                  "MD/LG",
+                  "L",
+                  "Large",
+                  "LG",
+                  "L/XL",
+                  "LG/XL",
+                  "XL",
+                  "X-Large",
+                  "XXL",
+                  "XX-Large",
+                  "2XL",
+                  "XXXL",
+                  "XXX-Large",
+                  "3XL"
+                ],
+                "orderValuesBy": "custom",
+                "defaultOpenMobile": false,
+                "defaultOpenDesktop": false
+              },
+              {
+                "label": "Price",
+                "ranges": [
+                  {
+                    "max": 50,
+                    "min": 0,
+                    "label": "Under $50"
+                  },
+                  {
+                    "max": 100,
+                    "min": 50,
+                    "label": "$50 to $100"
+                  },
+                  {
+                    "min": 100,
+                    "label": "$100 and over"
+                  }
+                ],
+                "_template": "price",
+                "defaultOpenMobile": false,
+                "defaultOpenDesktop": false
+              }
+            ],
+            "showCount": true,
+            "optionsMaxCount": 6,
+            "disabledByHandle": []
+          },
+          "pagination": {
+            "enabled": true,
+            "loadText": "Load More",
+            "loadType": "button",
+            "buttonStyle": "btn-inverse-dark",
+            "loadMoreText": "Load More ↓",
+            "resultsPerPage": 24,
+            "progressMessage": "Showing 1-{{loaded}} of {{total}} total",
+            "loadPreviousText": "↑ Load Previous"
+          },
+          "productItem": {
+            "enabledQuickShop": true,
+            "enabledStarRating": true,
+            "quickShopMultiText": "+ Quick Add {{option}}",
+            "quickShopSingleText": "+ Quick Add",
+            "enabledColorSelector": true,
+            "enabledColorNameOnHover": false
+          },
+          "inStockFilter": {
+            "label": "Show in stock results only",
+            "enabled": true
+          }
+        },
+        "storefront": {
+          "title": "Pack Hydrogen Storefront",
+          "favicon": "",
+          "keywords": ["Hydrogen", "Headless"],
+          "description": "Pack is the only Digital Experience Platform (DXP) that gives growing brands every tool they need to build and manage their Shopify Hydrogen storefront.",
+          "storefrontTitle": "Pack Hydrogen Storefront"
+        },
+        "localization": {
+          "enabled": true
+        }
+      }
+    },
+    "page": {
+      "/": {
+        "title": "Home",
+        "description": "This is the home page",
+        "sections": [
+          {
+            "data": {
+              "_template": "hero",
+              "slider": {
+                "delay": 8000,
+                "effect": "fade",
+                "autoplay": false,
+                "pagination": true,
+                "activeBulletColor": "var(--gray)"
+              },
+              "slides": [
+                {
+                  "text": {
+                    "heading": "All new products\nthis season",
+                    "subheading": "New styles and new fits",
+                    "colorMobile": "max-md:text-[var(--white)]",
+                    "colorDesktop": "md:text-[var(--white)]",
+                    "superheading": "New Collection",
+                    "hideHeadingMobile": false,
+                    "hideHeadingDesktop": false
+                  },
+                  "image": {
+                    "alt": "Three men outside wearing outerwear",
+                    "imageMobile": {
+                      "id": "gid://shopify/MediaImage/27076979032264",
+                      "src": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/men-posing-in-outerwear.jpg?v=1701459236",
+                      "size": 550781,
+                      "type": "file",
+                      "width": 3000,
+                      "format": "image/jpeg",
+                      "height": 1989,
+                      "altText": "",
+                      "filename": "men-posing-in-outerwear.jpg?v=1701459236",
+                      "directory": "",
+                      "previewSrc": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/men-posing-in-outerwear.jpg?v=1701459236",
+                      "aspectRatio": 1.508295625942685
+                    },
+                    "imageDesktop": {
+                      "id": "gid://shopify/MediaImage/27076979032264",
+                      "src": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/men-posing-in-outerwear.jpg?v=1701459236",
+                      "size": 550781,
+                      "type": "file",
+                      "width": 3000,
+                      "format": "image/jpeg",
+                      "height": 1989,
+                      "altText": "",
+                      "filename": "men-posing-in-outerwear.jpg?v=1701459236",
+                      "directory": "",
+                      "previewSrc": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/men-posing-in-outerwear.jpg?v=1701459236",
+                      "aspectRatio": 1.508295625942685
+                    },
+                    "positionMobile": "object-center",
+                    "positionDesktop": "md:object-center"
+                  },
+                  "button": {
+                    "buttons": [
+                      {
+                        "link": {
+                          "url": "/collections/men",
+                          "text": "Shop Now",
+                          "type": "isExternal"
+                        },
+                        "style": "btn-primary"
+                      }
+                    ],
+                    "clickableSlide": false,
+                    "hideButtonsMobile": false,
+                    "hideButtonsDesktop": false
+                  },
+                  "content": {
+                    "darkOverlay": false,
+                    "maxWidthMobile": "max-w-[22.5rem]",
+                    "positionMobile": "justify-start items-center",
+                    "alignmentMobile": "text-left items-start",
+                    "maxWidthDesktop": "md:max-w-[30rem] lg:max-w-[38rem]",
+                    "positionDesktop": "md:justify-start items-center",
+                    "alignmentDesktop": "md:text-left md:items-start"
+                  }
+                }
+              ],
+              "section": {
+                "mobile": {
+                  "maxHeight": "",
+                  "minHeight": "",
+                  "heightType": "aspect-ratio",
+                  "aspectRatio": "max-md:aspect-[4/5]",
+                  "staticHeight": "max-md:h-[31.25rem]"
+                },
+                "desktop": {
+                  "maxHeight": "",
+                  "minHeight": "",
+                  "heightType": "aspect-ratio",
+                  "aspectRatio": "md:aspect-[16/9]",
+                  "staticHeight": "md:h-[43.75rem]"
+                },
+                "fullBleed": true,
+                "fullWidth": true,
+                "aboveTheFold": true
+              },
+              "sectionName": "Homepage Homepage Hero",
+              "sectionType": "local",
+              "resourceType": "page",
+              "hasReferences": false,
+              "parentContentType": "page",
+              "sectionVisibility": "visible"
+            }
+          },
+          {
+            "data": {
+              "tabs": [
+                {
+                  "tiles": [
+                    {
+                      "alt": "Man in white and light tan outfit",
+                      "link": {
+                        "url": "/collections/men",
+                        "type": "isExternal"
+                      },
+                      "image": {
+                        "src": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/man-in-white-and-light-tan-outfit.jpg?v=1672348139"
+                      },
+                      "heading": "Headline",
+                      "position": "object-center",
+                      "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+                    },
+                    {
+                      "alt": "Man in brown coat sitting down",
+                      "link": {
+                        "url": "/collections/men",
+                        "type": "isExternal"
+                      },
+                      "image": {
+                        "src": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/austin-wade-d2s8NQ6WD24-unsplash.jpg?v=1672348122"
+                      },
+                      "heading": "Headline",
+                      "position": "object-center",
+                      "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+                    },
+                    {
+                      "alt": "Man in gray sweater and tan coat",
+                      "link": {
+                        "url": "/collections/men",
+                        "type": "isExternal"
+                      },
+                      "image": {
+                        "src": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/man-poses-in-light-colored-overcoat.jpg?v=1672348143"
+                      },
+                      "heading": "Headline",
+                      "position": "object-center",
+                      "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+                    }
+                  ],
+                  "tabName": "Tab Name"
+                },
+                {
+                  "tiles": [
+                    {
+                      "alt": "Man in brown coat sitting down",
+                      "image": {
+                        "src": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/austin-wade-d2s8NQ6WD24-unsplash.jpg?v=1672348122"
+                      },
+                      "heading": "Headline",
+                      "position": "object-center",
+                      "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+                    },
+                    {
+                      "alt": "Man in gray sweater and tan coat",
+                      "image": {
+                        "src": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/man-poses-in-light-colored-overcoat.jpg?v=1672348143"
+                      },
+                      "heading": "Headline",
+                      "position": "object-center",
+                      "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+                    },
+                    {
+                      "alt": "Man in white and light tan outfit",
+                      "image": {
+                        "src": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/man-in-white-and-light-tan-outfit.jpg?v=1672348139"
+                      },
+                      "heading": "Headline",
+                      "position": "object-center",
+                      "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+                    }
+                  ],
+                  "tabName": "Tab Name"
+                }
+              ],
+              "heading": "New Collections",
+              "section": {
+                "bgColor": "var(--background)",
+                "fullWidth": false,
+                "textColor": "var(--text)",
+                "aspectRatio": "aspect-[3/4]",
+                "buttonStyle": "btn-primary"
+              },
+              "_template": "tabbed-three-tiles",
+              "sectionName": "Homepage Homepage Tabbed Three Tiles",
+              "sectionType": "local",
+              "resourceType": "page",
+              "hasReferences": false,
+              "parentContentType": "page",
+              "sectionVisibility": "visible"
+            }
+          },
+          {
+            "data": {
+              "slider": {
+                "sliderStyle": "contained",
+                "slidesPerViewMobile": 1.4,
+                "slidesPerViewTablet": 3.4,
+                "slidesPerViewDesktop": 4
+              },
+              "heading": "Best Sellers",
+              "section": {
+                "fullWidth": false,
+                "buttonStyle": "btn-primary"
+              },
+              "products": [
+                {
+                  "handle": "",
+                  "product": null
+                },
+                {
+                  "handle": "",
+                  "product": null
+                },
+                {
+                  "handle": "",
+                  "product": null
+                },
+                {
+                  "handle": "",
+                  "product": null
+                }
+              ],
+              "_template": "products-slider",
+              "productItem": {
+                "enabledQuickShop": true,
+                "enabledStarRating": true,
+                "enabledColorSelector": true,
+                "enabledColorNameOnHover": false
+              },
+              "sectionName": "Homepage Homepage Products Slider",
+              "sectionType": "local",
+              "resourceType": "page",
+              "hasReferences": false,
+              "parentContentType": "page",
+              "sectionVisibility": "visible"
+            }
+          },
+          {
+            "data": {
+              "media": {
+                "fill": true,
+                "image": {
+                  "alt": "Man with backpack crossing the street",
+                  "imageMobile": {
+                    "src": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/mad-rabbit-tattoo-tn1yJqxNj-8-unsplash.jpg?v=1672787927"
+                  },
+                  "imageDesktop": {
+                    "src": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/mad-rabbit-tattoo-tn1yJqxNj-8-unsplash.jpg?v=1672787927"
+                  },
+                  "positionMobile": "object-center",
+                  "positionDesktop": "md:object-center"
+                },
+                "video": {
+                  "sound": false,
+                  "autoplay": true
+                },
+                "aspectMobile": "max-md:before:pb-[100%]",
+                "aspectTablet": "md:before:pb-[100%]",
+                "aspectDesktop": "md:before:pb-[100%]",
+                "mediaOrderMobile": "1",
+                "mediaOrderDesktop": "1"
+              },
+              "content": {
+                "color": "var(--text)",
+                "buttons": [
+                  {
+                    "link": {
+                      "url": "/collections/men",
+                      "text": "Shop Now",
+                      "type": "isExternal"
+                    },
+                    "style": "btn-primary"
+                  }
+                ],
+                "heading": "All New Product Colors",
+                "subtext": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                "superheading": "",
+                "alignmentMobile": "text-left items-start",
+                "maxWidthDesktop": "md:max-w-[30rem] lg:max-w-[38rem]",
+                "alignmentDesktop": "md:text-left md:items-start"
+              },
+              "section": {
+                "bgColor": "var(--background)",
+                "fullBleed": true,
+                "fullWidth": true,
+                "aboveTheFold": false,
+                "verticalPadding": false
+              },
+              "_template": "half-hero",
+              "sectionName": "Homepage Homepage Half Hero",
+              "sectionType": "local",
+              "resourceType": "page",
+              "hasReferences": false,
+              "parentContentType": "page",
+              "sectionVisibility": "visible"
+            }
+          },
+          {
+            "data": {
+              "media": {
+                "fill": true,
+                "image": {
+                  "alt": "Man with backpack crossing the street",
+                  "imageMobile": {
+                    "src": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/mad-rabbit-tattoo-tn1yJqxNj-8-unsplash.jpg?v=1672787927"
+                  },
+                  "imageDesktop": {
+                    "src": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/mad-rabbit-tattoo-tn1yJqxNj-8-unsplash.jpg?v=1672787927"
+                  },
+                  "positionMobile": "object-center",
+                  "positionDesktop": "md:object-center"
+                },
+                "video": {
+                  "sound": false,
+                  "autoplay": true
+                },
+                "aspectMobile": "max-md:before:pb-[100%]",
+                "aspectTablet": "md:before:pb-[100%]",
+                "aspectDesktop": "md:before:pb-[100%]",
+                "mediaOrderMobile": "1",
+                "mediaOrderDesktop": "2"
+              },
+              "content": {
+                "color": "var(--text)",
+                "buttons": [
+                  {
+                    "link": {
+                      "url": "/collections/men",
+                      "text": "Shop Now",
+                      "type": "isExternal"
+                    },
+                    "style": "btn-primary"
+                  }
+                ],
+                "heading": "Fresh New Arrivals",
+                "subtext": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                "superheading": "",
+                "alignmentMobile": "text-left items-start",
+                "maxWidthDesktop": "md:max-w-[30rem] lg:max-w-[38rem]",
+                "alignmentDesktop": "md:text-left md:items-start"
+              },
+              "section": {
+                "bgColor": "var(--background)",
+                "fullBleed": true,
+                "fullWidth": true,
+                "aboveTheFold": false,
+                "verticalPadding": false
+              },
+              "_template": "half-hero",
+              "sectionName": "Homepage Homepage Half Hero",
+              "sectionType": "local",
+              "resourceType": "page",
+              "hasReferences": false,
+              "parentContentType": "page",
+              "sectionVisibility": "visible"
+            }
+          },
+          {
+            "data": {
+              "slides": [
+                {
+                  "alt": "Press logo",
+                  "image": {
+                    "src": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/forbes-logo-small.png?v=1702422887",
+                    "aspectRatio": 3.8
+                  },
+                  "quote": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt."
+                },
+                {
+                  "alt": "Press logo",
+                  "image": {
+                    "src": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/vanity-fair-logo-small.png?v=1702422889",
+                    "aspectRatio": 4.3
+                  },
+                  "quote": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."
+                },
+                {
+                  "alt": "Press logo",
+                  "image": {
+                    "src": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/forbes-logo-small.png?v=1702422887",
+                    "aspectRatio": 3.8
+                  },
+                  "quote": "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore."
+                },
+                {
+                  "alt": "Press logo",
+                  "image": {
+                    "src": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/vanity-fair-logo-small.png?v=1702422889",
+                    "aspectRatio": 4.3
+                  },
+                  "quote": "Excepteur sint occaecat cupidatat non proident, sunt in culpa."
+                },
+                {
+                  "alt": "Press logo",
+                  "image": {
+                    "src": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/forbes-logo-small.png?v=1702422887",
+                    "aspectRatio": 3.8
+                  },
+                  "quote": "Sed ut perspiciatis unde omnis iste natus error sit voluptatem."
+                },
+                {
+                  "alt": "Press logo",
+                  "image": {
+                    "src": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/vanity-fair-logo-small.png?v=1702422889",
+                    "aspectRatio": 4.3
+                  },
+                  "quote": "Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit."
+                }
+              ],
+              "section": {
+                "bgColor": "var(--background)",
+                "fullWidth": false,
+                "textColor": "var(--text)"
+              },
+              "_template": "press-slider",
+              "sectionName": "Pack Hydrogen Storefront Homepage Press Slider",
+              "sectionType": "local",
+              "resourceType": "page",
+              "sectionVisibility": "visible"
+            }
+          },
+          {
+            "data": {
+              "tiles": [
+                {
+                  "alt": "Rack of green t-shirts",
+                  "crop": "center",
+                  "image": {
+                    "src": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/keagan-henman-xPJYL0l5Ii8-unsplash_20_281_29.jpg?v=1672349016"
+                  },
+                  "heading": "Headline",
+                  "description": "Nulla vitae elit libero, a pharetra augue."
+                },
+                {
+                  "alt": "Dark orange jacket on a hanger",
+                  "crop": "center",
+                  "image": {
+                    "src": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/tobias-tullius-Fg15LdqpWrs-unsplash.jpg?v=1672348152"
+                  },
+                  "heading": "Headline",
+                  "description": "Nulla vitae elit libero, a pharetra augue."
+                }
+              ],
+              "section": {
+                "fullWidth": false,
+                "aspectRatio": "aspect-[5/4]"
+              },
+              "_template": "two-tiles",
+              "sectionName": "Pack Hydrogen Storefront Homepage Two Tiles",
+              "sectionType": "local",
+              "resourceType": "page",
+              "hasReferences": false,
+              "parentContentType": "page",
+              "sectionVisibility": "visible"
+            }
+          },
+          {
+            "data": {
+              "heading": "Customer Reviews",
+              "section": {
+                "bgColor": "var(--black)",
+                "fullWidth": false,
+                "textColor": "var(--white)",
+                "reviewStarColor": "var(--accent1)",
+                "sliderPaginationBulletColor": "var(--white)"
+              },
+              "_template": "testimonial-slider",
+              "sectionName": "Homepage Homepage Testimonial Slider",
+              "sectionType": "local",
+              "resourceType": "page",
+              "hasReferences": false,
+              "parentContentType": "page",
+              "sectionVisibility": "visible",
+              "testimonialSlides": [
+                {
+                  "body": "Praesent commodo cursus magna, vel scelerisque nisl consectetur et.",
+                  "title": "Fermentum fusce",
+                  "author": "– John Doe",
+                  "rating": "5"
+                },
+                {
+                  "body": "Praesent commodo cursus magna, vel scelerisque nisl consectetur et.",
+                  "title": "Lorem ipsum dolor",
+                  "author": "– John Doe",
+                  "rating": "5"
+                },
+                {
+                  "body": "Praesent commodo cursus magna, vel scelerisque nisl consectetur et.",
+                  "title": "Sed ut perspiciatis",
+                  "author": "– John Doe",
+                  "rating": "5"
+                }
+              ]
+            }
+          },
+          {
+            "data": {
+              "tiles": [
+                {
+                  "alt": "Man in white and light tan outfit",
+                  "image": {
+                    "src": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/man-in-white-and-light-tan-outfit.jpg?v=1672348139"
+                  },
+                  "buttons": [
+                    {
+                      "link": {
+                        "url": "",
+                        "text": "Shop Now"
+                      }
+                    }
+                  ],
+                  "heading": "Headline",
+                  "position": "object-center"
+                },
+                {
+                  "alt": "Man in brown coat sitting down",
+                  "image": {
+                    "src": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/austin-wade-d2s8NQ6WD24-unsplash.jpg?v=1672348122"
+                  },
+                  "buttons": [
+                    {
+                      "link": {
+                        "url": "",
+                        "text": "Shop Now"
+                      }
+                    }
+                  ],
+                  "heading": "Headline",
+                  "position": "object-center"
+                },
+                {
+                  "alt": "Man in gray sweater and tan coat",
+                  "image": {
+                    "src": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/man-poses-in-light-colored-overcoat.jpg?v=1672348143"
+                  },
+                  "buttons": [
+                    {
+                      "link": {
+                        "url": "",
+                        "text": "Shop Now"
+                      }
+                    }
+                  ],
+                  "heading": "Headline",
+                  "position": "object-center"
+                }
+              ],
+              "content": {
+                "darkOverlay": true,
+                "hideButtons": false,
+                "clickableImage": true,
+                "contentPosition": "justify-center items-end",
+                "primaryButtonStyle": "btn-inverse-light",
+                "secondaryButtonStyle": "btn-inverse-light"
+              },
+              "section": {
+                "fullWidth": false,
+                "aspectRatio": "aspect-[3/4]"
+              },
+              "_template": "image-tiles",
+              "sectionName": "Homepage Homepage Image Tiles",
+              "sectionType": "local",
+              "resourceType": "page",
+              "hasReferences": false,
+              "parentContentType": "page",
+              "sectionVisibility": "visible"
+            }
+          }
+        ]
+      },
+      "about-us": {
+        "title": "About Us",
+        "handle": "about-us",
+        "description": "About Us",
+        "seo": {
+          "title": "About Us",
+          "description": "About Us",
+          "image": null,
+          "keywords": null,
+          "noFollow": null,
+          "noIndex": null
+        },
+        "sections": [
+          {
+            "data": {
+              "content": "# About Us\n\n**Lorem ipsum dolor sit amet**, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea _commodo consequat_. Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea _commodo consequat_.\n\n**Lorem ipsum dolor sit amet**, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea _commodo consequat_. Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea _commodo consequat_.",
+              "section": {
+                "maxWidth": "max-w-[60rem]"
+              },
+              "_template": "markdown",
+              "sectionName": "About Us Page Markdown",
+              "sectionType": "local",
+              "resourceType": "page",
+              "centerAllText": false,
+              "sectionVisibility": "visible"
+            }
+          }
+        ]
+      },
+      "privacy": {
+        "title": "Privacy Policy",
+        "handle": "privacy",
+        "description": "Privacy Policy Page",
+        "seo": {
+          "title": "Privacy Policy",
+          "description": "Privacy Policy Page",
+          "image": null,
+          "keywords": null,
+          "noFollow": null,
+          "noIndex": null
+        },
+        "sections": [
+          {
+            "data": {
+              "content": "# Privacy Policy\n\n**Lorem ipsum dolor sit amet**, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea _commodo consequat_. Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea _commodo consequat_.\n\n**Lorem ipsum dolor sit amet**, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea _commodo consequat_. Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea _commodo consequat_.",
+              "section": {
+                "maxWidth": "max-w-[60rem]"
+              },
+              "_template": "markdown",
+              "sectionName": "Privacy Policy Page Markdown",
+              "sectionType": "local",
+              "resourceType": "page",
+              "centerAllText": false,
+              "sectionVisibility": "visible"
+            }
+          }
+        ]
+      },
+      "terms": {
+        "title": "Terms & Conditions",
+        "handle": "terms",
+        "description": "Terms & Conditions",
+        "seo": {
+          "title": "Terms & Conditions",
+          "description": "Terms & Conditions",
+          "image": null,
+          "keywords": null,
+          "noFollow": null,
+          "noIndex": null
+        },
+        "sections": [
+          {
+            "data": {
+              "content": "# Terms & Conditions\n\n**Lorem ipsum dolor sit amet**, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea _commodo consequat_. Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea _commodo consequat_.\n\n**Lorem ipsum dolor sit amet**, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea _commodo consequat_. Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea _commodo consequat_.",
+              "section": {
+                "maxWidth": "max-w-[60rem]"
+              },
+              "_template": "markdown",
+              "sectionName": "Terms & Conditions Page Markdown",
+              "sectionType": "local",
+              "resourceType": "page",
+              "centerAllText": false,
+              "sectionVisibility": "visible"
+            }
+          }
+        ]
+      }
+    },
+    "blog": {
+      "blog": {
+        "title": "Blog",
+        "handle": "blog",
+        "description": "",
+        "seo": {
+          "title": "Blog",
+          "description": null,
+          "image": null,
+          "keywords": null,
+          "noFollow": null,
+          "noIndex": null
+        },
+        "sections": [
+          {
+            "data": {
+              "slider": {
+                "delay": 8000,
+                "effect": "fade",
+                "autoplay": true,
+                "pagination": true,
+                "activeBulletColor": "var(--white)"
+              },
+              "slides": [
+                {
+                  "text": {
+                    "heading": "Blog",
+                    "subheading": "",
+                    "colorMobile": "max-md:text-[var(--white)]",
+                    "colorDesktop": "md:text-[var(--white)]",
+                    "superheading": "",
+                    "hideHeadingMobile": false,
+                    "hideHeadingDesktop": false
+                  },
+                  "image": {
+                    "alt": "Three men outside wearing outerwear",
+                    "imageMobile": {
+                      "id": "gid://shopify/MediaImage/27033190072520",
+                      "src": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/outfit-flatlay.webp?v=1700370675",
+                      "size": 183848,
+                      "type": "file",
+                      "width": 3000,
+                      "format": "image/webp",
+                      "height": 2013,
+                      "altText": "",
+                      "filename": "outfit-flatlay.webp?v=1700370675",
+                      "directory": "Menswear",
+                      "previewSrc": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/outfit-flatlay.webp?v=1700370675",
+                      "aspectRatio": 1.490312965722802
+                    },
+                    "imageDesktop": {
+                      "id": "gid://shopify/MediaImage/27033190072520",
+                      "src": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/outfit-flatlay.webp?v=1700370675",
+                      "size": 183848,
+                      "type": "file",
+                      "width": 3000,
+                      "format": "image/webp",
+                      "height": 2013,
+                      "altText": "",
+                      "filename": "outfit-flatlay.webp?v=1700370675",
+                      "directory": "Menswear",
+                      "previewSrc": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/outfit-flatlay.webp?v=1700370675",
+                      "aspectRatio": 1.490312965722802
+                    },
+                    "positionMobile": "object-center",
+                    "positionDesktop": "md:object-center"
+                  },
+                  "button": {
+                    "buttons": [],
+                    "clickableSlide": false,
+                    "hideButtonsMobile": false,
+                    "hideButtonsDesktop": false
+                  },
+                  "content": {
+                    "darkOverlay": true,
+                    "maxWidthMobile": "max-w-[22.5rem]",
+                    "positionMobile": "justify-center items-center",
+                    "alignmentMobile": "text-center items-center",
+                    "maxWidthDesktop": "md:max-w-[30rem] lg:max-w-[38rem]",
+                    "positionDesktop": "md:justify-center md:items-center",
+                    "alignmentDesktop": "md:text-center md:items-center"
+                  }
+                }
+              ],
+              "section": {
+                "mobile": {
+                  "heightType": "static",
+                  "staticHeight": "max-md:h-[12.5rem]"
+                },
+                "desktop": {
+                  "heightType": "static",
+                  "staticHeight": "md:h-[12.5rem]"
+                },
+                "fullBleed": true,
+                "fullWidth": true,
+                "aboveTheFold": true
+              },
+              "_template": "hero",
+              "sectionName": "Blog Blog Hero",
+              "sectionType": "local",
+              "resourceType": "blog",
+              "sectionVisibility": "visible"
+            }
+          },
+          {
+            "data": {
+              "_template": "blog-categories",
+              "categories": ["News"],
+              "sectionName": "Blog Blog Blog Categories",
+              "sectionType": "local",
+              "resourceType": "blog",
+              "hasReferences": false,
+              "parentContentType": "blog",
+              "sectionVisibility": "visible"
+            }
+          },
+          {
+            "data": {
+              "_template": "blog-grid",
+              "sectionName": "Blog Blog Blog Grid",
+              "sectionType": "local",
+              "resourceType": "blog",
+              "hasReferences": false,
+              "parentContentType": "blog",
+              "sectionVisibility": "visible"
+            }
+          }
+        ]
+      }
+    }
+  }
+}
