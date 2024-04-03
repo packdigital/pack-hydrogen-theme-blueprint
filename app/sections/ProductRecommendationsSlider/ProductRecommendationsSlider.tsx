@@ -24,14 +24,13 @@ export function ProductRecommendationsSlider({
     'RELATED',
   );
 
-  const products = useMemo(() => {
-    if (!productRecommendations) return [];
-    return productRecommendations.slice(0, limit);
-  }, [limit, productRecommendations]);
+  const products = productRecommendations
+    ? productRecommendations.slice(0, limit)
+    : [];
 
   return (
     <Container container={cms.container}>
-      <ProductsSliderComponent cms={{...cms, products}} />
+      <ProductsSliderComponent cms={cms} products={products} />
     </Container>
   );
 }
