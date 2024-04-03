@@ -1,4 +1,3 @@
-import {useMemo} from 'react';
 import {useProduct} from '@shopify/hydrogen-react';
 
 import {
