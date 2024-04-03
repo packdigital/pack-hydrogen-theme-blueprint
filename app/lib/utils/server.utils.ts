@@ -5,7 +5,6 @@ import type {
   ProductFilter,
   Metafield,
 } from '@shopify/hydrogen/storefront-api-types';
-import {add} from 'lodash';
 
 import {
   COLLECTION_FILTERS_QUERY,
