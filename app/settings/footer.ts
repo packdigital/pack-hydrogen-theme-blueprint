@@ -83,11 +83,6 @@ export default {
           component: 'text',
         },
         {
-          label: 'Heading',
-          name: 'heading',
-          component: 'text',
-        },
-        {
           label: 'Subtext',
           name: 'subtext',
           component: 'textarea',
