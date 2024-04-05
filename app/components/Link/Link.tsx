@@ -47,7 +47,7 @@ type LinkProps = {
   isExternal?: boolean;
   newTab?: boolean;
   onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void;
-  prefetch?: RemixLinkProps['prefetch'];
+  prefetch?: RemixLinkProps['prefetch']; // 'none' | 'intent' | 'viewport' | 'render'
   preventScrollReset?: RemixLinkProps['preventScrollReset'];
   relative?: RemixLinkProps['relative'];
   reloadDocument?: RemixLinkProps['reloadDocument'];
@@ -69,7 +69,7 @@ export const Link = forwardRef(
       href = '', // html property
       isExternal = false, // cms property
       newTab = false,
-      prefetch = 'intent', // remix property
+      prefetch = 'viewport', // remix property
       preventScrollReset = false, // remix property
       relative, // remix property
       reloadDocument = false, // remix property

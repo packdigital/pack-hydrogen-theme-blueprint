@@ -34,6 +34,7 @@ export const useDataLayerClickEvents = () => {
         product: {
           ..._selectedVariant.product,
           vendor: product?.vendor,
+          collections: product?.collections,
         },
         list: windowPathname.startsWith('/collections') ? windowPathname : '',
         ...(searchTerm ? {searchTerm} : null),

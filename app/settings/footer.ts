@@ -7,10 +7,12 @@ export interface FooterSettings {
   textColor: string;
   marketing: {
     enabled: boolean;
+    listId: string;
     heading: string;
     subtext: string;
     placeholder: string;
     buttonText: string;
+    thankYouText: string;
   };
   legal: {
     links: {
@@ -59,7 +61,7 @@ export default {
       label: 'Email Marketing',
       name: 'marketing',
       component: 'group',
-      description: 'Enable, heading, text',
+      description: 'Enable, list id, heading, text',
       fields: [
         {
           label: 'Enabled',
@@ -69,6 +71,11 @@ export default {
             true: 'On',
             false: 'Off',
           },
+        },
+        {
+          label: 'List ID',
+          name: 'listId',
+          component: 'text',
         },
         {
           label: 'Heading',
@@ -90,6 +97,11 @@ export default {
           name: 'buttonText',
           component: 'text',
         },
+        {
+          label: 'Thank You Text',
+          name: 'thankYouText',
+          component: 'text',
+        },
       ],
       defaultValue: {
         enabled: true,
@@ -97,6 +109,7 @@ export default {
         subtext: 'Get the latest news and updates sent straight to your inbox.',
         placeholder: 'Enter your email...',
         buttonText: 'Sign Up',
+        thankYouText: 'Thank you for signing up!',
       },
     },
     {

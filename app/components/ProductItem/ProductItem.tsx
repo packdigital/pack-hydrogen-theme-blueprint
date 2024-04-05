@@ -28,7 +28,7 @@ interface ProductItemProps {
   isSearchResults?: boolean;
   onClick?: () => void;
   priority?: boolean;
-  product?: Product;
+  product?: Product | null;
   searchTerm?: string;
   swatchesMap?: Record<string, string>;
 }

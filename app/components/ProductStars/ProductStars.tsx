@@ -25,7 +25,7 @@ export function ProductStars({id}: {id: string}) {
     if (!id) return;
     // ↓ comment back in once proper third party api call is implemented in `/api/reviews`
     // fetcher.submit(
-    //   {productId: id, action: 'getProductReviewAggregate'},
+    //   {productId: id.split('/').pop(), action: 'getProductReviewAggregate'},
     //   {method: 'POST', action: `${pathPrefix}/api/reviews`},
     // );
   }, [id]);

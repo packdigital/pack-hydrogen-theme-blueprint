@@ -21,7 +21,7 @@ export function useDataLayerViewProduct({
       selectedVariant: _selectedVariant,
     }: {
       product: Product;
-      selectedVariant?: ProductVariant;
+      selectedVariant?: ProductVariant | null;
     }) => {
       if (!product) return;
       let selectedVariant = _selectedVariant;
@@ -37,6 +37,7 @@ export function useDataLayerViewProduct({
         product: {
           ...selectedVariant.product,
           vendor: product.vendor,
+          collections: product.collections,
         },
       };
 

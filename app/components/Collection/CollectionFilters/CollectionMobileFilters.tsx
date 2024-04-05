@@ -25,7 +25,7 @@ export function CollectionMobileFilters({
   return (
     <Drawer
       ariaName="cart drawer"
-      className="sm:hidden"
+      className="md:hidden"
       heading="Filters"
       onClose={() => setMobileFiltersOpen(false)}
       open={mobileFiltersOpen}

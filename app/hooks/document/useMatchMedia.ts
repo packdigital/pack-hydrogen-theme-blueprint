@@ -19,7 +19,7 @@ import {useCallback, useEffect, useState} from 'react';
 
 function fallbackMatchMedia(query: string) {
   if (
-    typeof window === 'undefined' ||
+    typeof document === 'undefined' ||
     typeof window.matchMedia !== 'function'
   ) {
     return undefined;

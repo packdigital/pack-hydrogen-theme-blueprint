@@ -1,3 +1,4 @@
+import {flattenConnection} from '@shopify/hydrogen';
 import type {
   CartLine,
   Product,
@@ -5,7 +6,9 @@ import type {
 } from '@shopify/hydrogen/storefront-api-types';
 
 const STOREFRONT_NAME =
-  (typeof window !== 'undefined' && window.ENV?.SITE_TITLE) || 'Storefront';
+  (typeof document !== 'undefined' && window.ENV?.SITE_TITLE) || 'Storefront';
+const isElevar =
+  typeof document !== 'undefined' && !!window.ENV?.PUBLIC_ELEVAR_SIGNING_KEY;
 
 export const mapProductItemProduct =
   (list = '') =>
@@ -15,7 +18,7 @@ export const mapProductItemProduct =
       const firstVariant = product.variants?.nodes?.[0];
 
       return {
-        sku: firstVariant?.sku || '',
+        [isElevar ? 'id' : 'sku']: firstVariant?.sku || '',
         name: product.title || '',
         brand: product.vendor || STOREFRONT_NAME,
         category: product.productType || '',
@@ -25,8 +28,10 @@ export const mapProductItemProduct =
         product_id: product.id?.split('/').pop() || '',
         variant_id: firstVariant?.id?.split('/').pop() || '',
         compare_at_price: firstVariant?.compareAtPrice?.amount || '',
+        collections: flattenConnection(product.collections),
         image: product.featuredImage?.url || '',
         position: index + 1,
+        url: `/products/${product.handle}`,
       };
     } catch (error) {
       const message = error instanceof Error ? error.message : error;
@@ -43,7 +48,7 @@ export const mapProductItemVariant =
       if (!variant) return null;
 
       return {
-        sku: variant.sku || '',
+        [isElevar ? 'id' : 'sku']: variant.sku || '',
         name: variant.product.title || '',
         brand: variant.product.vendor || STOREFRONT_NAME,
         category: variant.product.productType || '',
@@ -53,8 +58,12 @@ export const mapProductItemVariant =
         product_id: variant.product.id?.split('/').pop() || '',
         variant_id: variant.id?.split('/').pop() || '',
         compare_at_price: `${variant.compareAtPrice?.amount || ''}`,
+        collections: variant.product.collections
+          ? flattenConnection(variant.product.collections)
+          : [],
         image: variant.image?.url || '',
         position: (variant.index ?? index) + 1,
+        url: `/products/${variant.product.handle}`,
       };
     } catch (error) {
       const message = error instanceof Error ? error.message : error;
@@ -70,8 +79,13 @@ export const mapProductPageVariant =
     try {
       if (!variant) return null;
 
+      const params = new URLSearchParams('');
+      variant.selectedOptions?.forEach(({name, value}) => {
+        params.set(name, value);
+      });
+
       return {
-        sku: variant.sku || '',
+        [isElevar ? 'id' : 'sku']: variant.sku || '',
         name: variant.product.title || '',
         brand: variant.product.vendor || STOREFRONT_NAME,
         category: variant.product.productType || '',
@@ -81,7 +95,11 @@ export const mapProductPageVariant =
         product_id: variant.product.id?.split('/').pop() || '',
         variant_id: variant.id?.split('/').pop() || '',
         compare_at_price: `${variant.compareAtPrice?.amount || ''}`,
+        collections: variant.product.collections
+          ? flattenConnection(variant.product.collections)
+          : [],
         image: variant.image?.url || '',
+        url: `/products/${variant.product.handle}?${params}`,
       };
     } catch (error) {
       const message = error instanceof Error ? error.message : error;
@@ -99,7 +117,7 @@ export const mapCartLine =
       if (!merchandise) return null;
 
       return {
-        sku: merchandise.sku || '',
+        [isElevar ? 'id' : 'sku']: merchandise.sku || '',
         name: merchandise.product?.title || '',
         brand: merchandise.product?.vendor || STOREFRONT_NAME,
         category: merchandise.product?.productType || '',
@@ -110,6 +128,9 @@ export const mapCartLine =
         product_id: merchandise.product?.id?.split('/').pop() || '',
         variant_id: merchandise.id?.split('/').pop() || '',
         compare_at_price: merchandise.compareAtPrice?.amount || '',
+        collections: merchandise.product?.collections
+          ? flattenConnection(merchandise.product.collections)
+          : [],
         image: merchandise.image?.url || '',
         position: (line.index || index) + 1,
       };
