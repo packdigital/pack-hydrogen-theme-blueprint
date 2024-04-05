@@ -57,7 +57,7 @@ export function CartPage() {
           </div>
 
           {hasCartLines && (
-            <div className="flex flex-col md:gap-4">
+            <div className="flex flex-col overflow-hidden md:gap-4">
               <div className="[&>div]:max-md:border-t-0 [&>div]:md:rounded [&>div]:md:border [&>div]:md:border-border">
                 <CartTotals settings={settings} />
               </div>

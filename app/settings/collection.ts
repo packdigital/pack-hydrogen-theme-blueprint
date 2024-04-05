@@ -193,7 +193,7 @@ export default {
           name: 'enabledQuickShop',
           component: 'toggle',
           description:
-            'Note: Quick shop is hidden on mobile and will only show if the product item has only one variant or multiple variants through a single option, e.g. "Size"',
+            'Quick shop is hidden on mobile and will only show if the product item has only one variant or multiple variants through a single option, e.g. "Size"',
           toggleLabels: {
             true: 'On',
             false: 'Off',

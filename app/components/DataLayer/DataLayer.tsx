@@ -7,6 +7,7 @@ import {
   useDataLayerCart,
   useDataLayerCollection,
   useDataLayerCustomer,
+  useDataLayerEvent,
   useDataLayerInit,
   useDataLayerProduct,
   useDataLayerSearch,
@@ -21,85 +22,109 @@ const DEBUG = true;
 export function DataLayer() {
   const {ENV} = useRootLoaderData();
   const {currency: currencyCode} = useLocale();
+  const {handleDataLayerEvent} = useDataLayerEvent({DEBUG, ENV});
 
   const {generateUserProperties, userProperties} = useDataLayerInit({
-    DEBUG,
+    handleDataLayerEvent,
   });
 
   const {userDataEvent, userDataEventTriggered} = useDataLayerCustomer({
     currencyCode,
-    DEBUG,
+    handleDataLayerEvent,
     userProperties,
   });
 
   useDataLayerAccount({
     currencyCode,
-    DEBUG,
     generateUserProperties,
+    handleDataLayerEvent,
     userDataEvent,
     userDataEventTriggered,
   });
 
   useDataLayerCart({
     currencyCode,
-    DEBUG,
+    handleDataLayerEvent,
     userDataEvent,
     userDataEventTriggered,
     userProperties,
   });
 
   useDataLayerProduct({
-    DEBUG,
+    handleDataLayerEvent,
     userDataEvent,
     userProperties,
   });
 
   useDataLayerCollection({
-    DEBUG,
+    handleDataLayerEvent,
     userDataEvent,
     userDataEventTriggered,
     userProperties,
   });
 
   useDataLayerSearch({
-    DEBUG,
+    handleDataLayerEvent,
     userDataEvent,
     userDataEventTriggered,
     userProperties,
   });
 
   useDataLayerSubscribe({
-    DEBUG,
+    handleDataLayerEvent,
     userDataEventTriggered,
   });
 
-  return (
-    <>
-      {ENV.PUBLIC_GA4_TAG_ID && (
+  if (ENV?.PUBLIC_ELEVAR_SIGNING_KEY) {
+    return (
+      <Script
+        type="module"
+        id="elevar-script"
+        dangerouslySetInnerHTML={{
+          __html: `try {
+            const response = await fetch("${`https://shopify-gtm-suite.getelevar.com/configs/${ENV?.PUBLIC_ELEVAR_SIGNING_KEY}/config.json`}");
+            const config = await response.json();
+            const scriptUrl = config.script_src_custom_pages;
+
+            if (scriptUrl) {
+              const { handler } = await import(scriptUrl);
+              await handler(config);
+            }
+          } catch (error) {
+            console.error("Elevar Error:", error);
+        }`,
+        }}
+      />
+    );
+  }
+
+  if (ENV?.PUBLIC_GA4_TAG_ID) {
+    return (
+      <>
         <Script
           id="gtag-script"
           type="text/javascript"
           async
           src={`https://www.googletagmanager.com/gtag/js?id=${ENV.PUBLIC_GA4_TAG_ID}`}
         />
-      )}
 
-      <Script
-        id="gtag-config"
-        type="text/javascript"
-        dangerouslySetInnerHTML={{
-          __html: `
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            if (${!!ENV.PUBLIC_GA4_TAG_ID}) {
+        <Script
+          id="gtag-config"
+          type="text/javascript"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
               gtag('config', '${ENV.PUBLIC_GA4_TAG_ID}');
-            }
-          `,
-        }}
-      />
-    </>
-  );
+            `,
+          }}
+        />
+      </>
+    );
+  }
+
+  return null;
 }
 
 DataLayer.displayName = 'DataLayer';

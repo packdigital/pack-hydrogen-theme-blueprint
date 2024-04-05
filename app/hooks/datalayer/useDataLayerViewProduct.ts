@@ -37,6 +37,7 @@ export function useDataLayerViewProduct({
         product: {
           ...selectedVariant.product,
           vendor: product.vendor,
+          collections: product.collections,
         },
       };
 

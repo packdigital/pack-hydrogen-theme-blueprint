@@ -1,8 +1,13 @@
 import {useMemo, useState} from 'react';
 import {useSiteSettings} from '@pack/react';
+import {flattenConnection} from '@shopify/hydrogen';
 
 import type {SiteSettings} from '~/lib/types';
-import {useColorSwatches, useDataLayerViewCollection} from '~/hooks';
+import {
+  useColorSwatches,
+  useDataLayerViewCollection,
+  useDataLayerViewSearchResults,
+} from '~/hooks';
 
 import {
   CollectionDesktopFilters,
@@ -47,6 +52,11 @@ export function Collection({
 
   useDataLayerViewCollection({
     collection: isSearchResults ? null : collection,
+  });
+  useDataLayerViewSearchResults({
+    isSearchPage: isSearchResults,
+    products: flattenConnection(products),
+    searchTerm,
   });
 
   return (
