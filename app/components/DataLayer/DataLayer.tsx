@@ -14,8 +14,12 @@ import {
   useDataLayerSubscribe,
 } from './hooks';
 
-// Envs to set:
-// * PUBLIC_GA4_TAG_ID // enables GA4 analytics, e.g. G-XXXXXXXXXX
+/*
+ * Env to set, only if applicable:
+ * PUBLIC_ELEVAR_SIGNING_KEY // enables Elevar data layer, e.g. 1234567890
+ * --> from the url within the `fetch()` call in the script, take the unique string of characters in between `/configs/` and `/config.json`
+ * PUBLIC_GA4_TAG_ID // enables GA4 analytics, e.g. G-XXXXXXXXXX
+ */
 
 const DEBUG = true;
 
