@@ -1,6 +1,5 @@
 import {useCallback, useEffect, useRef, useState} from 'react';
 import {useLocation} from '@remix-run/react';
-import {v4 as uuidv4} from 'uuid';
 import type {Customer} from '@shopify/hydrogen/storefront-api-types';
 
 import {pathWithoutLocalePrefix} from '~/lib/utils';
@@ -59,7 +58,11 @@ const PAGE_TYPES: Record<string, string> = {
   '/search': 'search',
 };
 
-export function useDataLayerInit({DEBUG}: {DEBUG: boolean}) {
+export function useDataLayerInit({
+  handleDataLayerEvent,
+}: {
+  handleDataLayerEvent: (event: Record<string, any>) => void;
+}) {
   const pathnameRef = useRef<string | undefined>(undefined);
   const location = useLocation();
   const pathname = pathWithoutLocalePrefix(location.pathname);
@@ -79,7 +82,7 @@ export function useDataLayerInit({DEBUG}: {DEBUG: boolean}) {
           customer_address_2: _customer.defaultAddress?.address2 || '',
           customer_city: _customer.defaultAddress?.city || '',
           customer_country: _customer.defaultAddress?.country || '',
-          customer_country_code: _customer.defaultAddress?.countryCode || '',
+          customer_country_code: _customer.defaultAddress?.countryCodeV2 || '',
           customer_email: _customer.email || '',
           customer_first_name: _customer.firstName || '',
           customer_id: _customer.id?.split('/').pop() || '',
@@ -108,7 +111,7 @@ export function useDataLayerInit({DEBUG}: {DEBUG: boolean}) {
     [],
   );
 
-  // Set user id on customer ready
+  // GA4 event only
   useEffect(() => {
     if (!customer || !window.ENV?.PUBLIC_GA4_TAG_ID) return;
     if (window.gtag) {
@@ -126,9 +129,7 @@ export function useDataLayerInit({DEBUG}: {DEBUG: boolean}) {
         PAGE_TYPES[pathname.split('/').slice(0, -1).join('/')] ||
         '';
     const event = {
-      event: 'route_update',
-      event_id: uuidv4(),
-      event_time: new Date().toISOString(),
+      event: 'dl_route_update',
       page: {
         pathname,
         title: document.title,
@@ -136,9 +137,7 @@ export function useDataLayerInit({DEBUG}: {DEBUG: boolean}) {
         search: window.location.search,
       },
     };
-
-    if (window.gtag) window.gtag('event', event.event, event);
-    if (DEBUG) console.log(`DataLayer:gtag:${event.event}`, event);
+    handleDataLayerEvent(event);
   }, [pathname]);
 
   // Set previous paths and current path in session storage

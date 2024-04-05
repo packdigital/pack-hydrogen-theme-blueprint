@@ -1,6 +1,6 @@
 import {useCallback, useEffect, useRef, useState} from 'react';
 import {useLocation} from '@remix-run/react';
-import {v4 as uuidv4} from 'uuid';
+import {useCart} from '@shopify/hydrogen-react';
 import type {
   Product,
   ProductVariant,
@@ -14,13 +14,16 @@ import type {UserProperties} from './useDataLayerInit';
 
 type SearchProduct = Product & {searchTerm: string};
 
+const isElevar =
+  typeof document !== 'undefined' && !!window.ENV?.PUBLIC_ELEVAR_SIGNING_KEY;
+
 export function useDataLayerSearch({
-  DEBUG,
+  handleDataLayerEvent,
   userDataEvent,
   userDataEventTriggered,
   userProperties,
 }: {
-  DEBUG?: boolean;
+  handleDataLayerEvent: (event: Record<string, any>) => void;
   userDataEvent: (arg0: any) => void;
   userDataEventTriggered: boolean;
   userProperties: UserProperties;
@@ -29,6 +32,7 @@ export function useDataLayerSearch({
   const location = useLocation();
   const pathname = pathWithoutLocalePrefix(location.pathname);
   const {emitter} = useGlobal();
+  const {status} = useCart();
 
   const [searchPageResults, setSearchPageResults] = useState<
     SearchProduct[] | null | undefined
@@ -40,6 +44,8 @@ export function useDataLayerSearch({
     ProductVariant | null | undefined
   >(null);
 
+  const cartReady = status === 'idle';
+
   const viewSearchResultsEvent = useCallback(
     ({
       results,
@@ -50,22 +56,20 @@ export function useDataLayerSearch({
     }) => {
       if (!results?.length) return;
       const event = {
-        event: 'view_search_results',
-        event_id: uuidv4(),
-        event_time: new Date().toISOString(),
+        event: 'dl_view_search_results',
         user_properties: _userProperties,
         ecommerce: {
           currencyCode: results[0].variants?.nodes?.[0]?.price?.currencyCode,
           actionField: {
             list: 'search results',
-            search_term: results[0].searchTerm,
+            ...(isElevar ? null : {search_term: results[0].searchTerm}),
           },
-          impressions: results.slice(0, 12).map(mapProductItemProduct()),
+          [isElevar ? 'impressions' : 'products']: results
+            .slice(0, 12)
+            .map(mapProductItemProduct()),
         },
       };
-
-      if (window.gtag) window.gtag('event', event.event, event);
-      if (DEBUG) console.log(`DataLayer:gtag:${event.event}`, event);
+      handleDataLayerEvent(event);
     },
     [],
   );
@@ -76,25 +80,25 @@ export function useDataLayerSearch({
       variant,
     }: {
       userProperties: UserProperties;
-      variant?: ProductVariant;
+      variant?: ProductVariant & {searchTerm?: string};
     }) => {
       if (!variant) return;
       const event = {
-        event: 'select_item',
-        event_id: uuidv4(),
-        event_time: new Date().toISOString(),
+        event: 'dl_select_item',
         user_properties: _userProperties,
         ecommerce: {
           currencyCode: variant.price?.currencyCode,
           click: {
-            actionField: {list: 'search results', action: 'click'},
+            actionField: {
+              list: 'search results',
+              action: 'click',
+              ...(isElevar ? null : {search_term: variant.searchTerm}),
+            },
             products: [variant].map(mapProductItemVariant()),
           },
         },
       };
-
-      if (window.gtag) window.gtag('event', event.event, event);
-      if (DEBUG) console.log(`DataLayer:gtag:${event.event}`, event);
+      handleDataLayerEvent(event);
     },
     [],
   );
@@ -124,11 +128,12 @@ export function useDataLayerSearch({
   }, []);
 
   // Trigger 'user_data' and 'view_search_results' events after
-  // new drawer search results and base data is ready
+  // new search page results and base data is ready
   useEffect(() => {
     if (
-      !pathname.startsWith('/pages/search') ||
-      !pathname.startsWith('/search') ||
+      !cartReady ||
+      (!pathname.startsWith('/pages/search') &&
+        !pathname.startsWith('/search')) ||
       !searchPageResults?.length ||
       !userProperties ||
       pathname === pathnameRef.current
@@ -141,17 +146,18 @@ export function useDataLayerSearch({
       pathnameRef.current = null;
     };
   }, [
+    cartReady,
     pathname,
     searchPageResults?.map((p) => p?.handle).join(''),
     !!userProperties,
   ]);
 
-  // Trigger 'user_data' and 'view_search_results' events after
-  // new search page results and base data is ready
+  // Trigger 'view_search_results' events after
+  // new search drawer results and base data is ready
   useEffect(() => {
     if (!searchResults || !userDataEventTriggered) return;
     viewSearchResultsEvent({results: searchResults, userProperties});
-  }, [searchResults, userDataEventTriggered]);
+  }, [searchPageResults, userDataEventTriggered]);
 
   // Trigger 'select_item' after clicked search item and user event
   useEffect(() => {

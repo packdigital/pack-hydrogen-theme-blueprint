@@ -26,7 +26,7 @@ export function SocialImagesGrid({cms}: {cms: SocialImagesGridCms}) {
                   <div className="relative aspect-square bg-offWhite">
                     <Image
                       data={{
-                        altText: item.alt,
+                        altText: item.image?.altText || item.alt,
                         url: item.image?.src,
                         width: item.image?.width,
                         height: item.image?.height,

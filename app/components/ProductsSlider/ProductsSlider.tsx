@@ -2,15 +2,21 @@ import {useState} from 'react';
 import {Navigation} from 'swiper/modules';
 import type {SwiperClass} from 'swiper/react';
 import {Swiper, SwiperSlide} from 'swiper/react';
+import type {Product} from '@shopify/hydrogen/storefront-api-types';
 
 import {Link, ProductItem, Spinner, Svg} from '~/components';
 import {useColorSwatches} from '~/hooks';
 
 import type {ProductsSliderCms} from './ProductsSlider.types';
 
-export function ProductsSlider({cms}: {cms: ProductsSliderCms}) {
-  const {button, heading, productItem, products, section, slider, textColor} =
-    cms;
+export function ProductsSlider({
+  cms,
+  products,
+}: {
+  cms: ProductsSliderCms;
+  products: Product[];
+}) {
+  const {button, heading, productItem, section, slider, textColor} = cms;
   const swatchesMap = useColorSwatches();
 
   const [swiper, setSwiper] = useState<SwiperClass | null>(null);
@@ -88,7 +94,8 @@ export function ProductsSlider({cms}: {cms: ProductsSliderCms}) {
             }}
           >
             {swiper &&
-              products.map(({product}, index) => {
+              products.map((product, index) => {
+                const hasFullProduct = !!product?.variants;
                 return (
                   <SwiperSlide key={index}>
                     <ProductItem
@@ -100,6 +107,7 @@ export function ProductsSlider({cms}: {cms: ProductsSliderCms}) {
                       enabledStarRating={productItem?.enabledStarRating}
                       handle={product?.handle}
                       index={index}
+                      product={hasFullProduct ? product : null}
                       swatchesMap={swatchesMap}
                     />
                   </SwiperSlide>

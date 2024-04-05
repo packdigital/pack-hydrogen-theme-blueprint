@@ -15,7 +15,7 @@ export function Banner({cms}: {cms: BannerCms}) {
           {image?.imageMobile?.src && (
             <Image
               data={{
-                altText: image.alt,
+                altText: image.imageMobile.altText || image.alt,
                 url: image.imageMobile.src,
                 width: image.imageMobile.width,
                 height: image.imageMobile.height,
@@ -31,7 +31,7 @@ export function Banner({cms}: {cms: BannerCms}) {
           {image?.imageDesktop?.src && (
             <Image
               data={{
-                altText: image.alt,
+                altText: image.imageDesktop.altText || image.alt,
                 url: image.imageDesktop.src,
                 width: image.imageDesktop.width,
                 height: image.imageDesktop.height,

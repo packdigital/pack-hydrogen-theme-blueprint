@@ -32,6 +32,7 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: ['Poppins', 'sans-serif'],
+        heading: ['Poppins', 'sans-serif'],
       },
       colors: {
         primary: 'var(--primary)',

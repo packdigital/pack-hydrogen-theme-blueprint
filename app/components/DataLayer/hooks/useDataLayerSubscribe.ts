@@ -1,13 +1,12 @@
 import {useCallback, useEffect, useState} from 'react';
-import {v4 as uuidv4} from 'uuid';
 
 import {useGlobal} from '~/hooks';
 
 export function useDataLayerSubscribe({
-  DEBUG,
+  handleDataLayerEvent,
   userDataEventTriggered,
 }: {
-  DEBUG?: boolean;
+  handleDataLayerEvent: (event: Record<string, any>) => void;
   userDataEventTriggered: boolean;
 }) {
   const {emitter} = useGlobal();
@@ -18,29 +17,21 @@ export function useDataLayerSubscribe({
   const subscribeEmailEvent = useCallback(({email}: {email: string}) => {
     if (!email) return;
     const event = {
-      event: 'subscribe',
-      event_id: uuidv4(),
-      event_time: new Date().toISOString(),
+      event: 'dl_subscribe',
       lead_type: 'email',
       user_properties: {customer_email: email},
     };
-
-    if (window.gtag) window.gtag('event', event.event, event);
-    if (DEBUG) console.log(`DataLayer:gtag:${event.event}`, event);
+    handleDataLayerEvent(event);
   }, []);
 
   const subscribePhoneEvent = useCallback(({phone}: {phone: string}) => {
     if (!phone) return;
     const event = {
-      event: 'subscribe',
-      event_id: uuidv4(),
-      event_time: new Date().toISOString(),
+      event: 'dl_subscribe',
       lead_type: 'phone',
       user_properties: {customer_phone: phone},
     };
-
-    if (window.gtag) window.gtag('event', event.event, event);
-    if (DEBUG) console.log(`DataLayer:gtag:${event.event}`, event);
+    handleDataLayerEvent(event);
   }, []);
 
   // Subscribe to EventEmitter topic for 'subscribe' event

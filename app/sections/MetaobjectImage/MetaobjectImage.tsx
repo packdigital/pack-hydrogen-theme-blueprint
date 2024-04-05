@@ -18,7 +18,7 @@ export function MetaobjectImage({cms}: {cms: Record<string, any>}) {
         <Image
           data={{
             ...imageDetails,
-            altText: alt || image.altText,
+            altText: image.altText || alt,
           }}
           aspectRatio="16/9"
           className="max-md:hidden"

@@ -10,7 +10,7 @@ export function useDataLayerViewSearchResults({
 }: {
   isSearchPage?: boolean;
   products: Product[];
-  searchTerm: string;
+  searchTerm?: string;
 }) {
   const {emitter} = useGlobal();
 
@@ -20,10 +20,10 @@ export function useDataLayerViewSearchResults({
 
   useEffect(() => {
     if (!emitter?._events[SEARCH_EVENT]) return;
-    if (!products?.length) return;
+    if (!products?.length || !searchTerm) return;
     const results = products.slice(0, 12).map((product) => {
       return {...product, searchTerm};
     });
     emitter?.emit(SEARCH_EVENT, results);
-  }, [emitter?._eventsCount, products]);
+  }, [emitter?._eventsCount, products, searchTerm]);
 }

@@ -1,7 +1,6 @@
 import {useCallback, useEffect, useRef, useState} from 'react';
 import {useCart} from '@shopify/hydrogen-react';
 import {useLocation} from '@remix-run/react';
-import {v4 as uuidv4} from 'uuid';
 import type {CurrencyCode} from '@shopify/hydrogen-react/storefront-api-types';
 
 import {pathWithoutLocalePrefix} from '~/lib/utils';
@@ -17,13 +16,16 @@ const LOGGED_OUT_ACCOUNT_PATHS = [
   '/account/activate',
 ];
 
+const isElevar =
+  typeof document !== 'undefined' && !!window.ENV?.PUBLIC_ELEVAR_SIGNING_KEY;
+
 export function useDataLayerCustomer({
   currencyCode,
-  DEBUG,
+  handleDataLayerEvent,
   userProperties,
 }: {
   currencyCode?: CurrencyCode | undefined;
-  DEBUG?: boolean;
+  handleDataLayerEvent: (event: Record<string, any>) => void;
   userProperties: UserProperties;
 }) {
   const pathnameRef = useRef<string | undefined>(undefined);
@@ -32,6 +34,8 @@ export function useDataLayerCustomer({
   const pathname = pathWithoutLocalePrefix(location.pathname);
 
   const [userDataEventTriggered, setUserDataEventTriggered] = useState(false);
+
+  const cartReady = status === 'idle';
 
   const userDataEvent = useCallback(
     ({
@@ -48,10 +52,8 @@ export function useDataLayerCustomer({
         (previousPath?.startsWith('/collections') && previousPath) ||
         '';
       const event = {
-        event: 'user_data',
-        event_id: uuidv4(),
-        event_time: new Date().toISOString(),
-        cart_total: cost?.totalAmount?.amount || '0.0',
+        event: 'dl_user_data',
+        ...(isElevar ? {cart_total: cost?.totalAmount?.amount || '0.0'} : null),
         user_properties: _userProperties,
         ecommerce: {
           currencyCode:
@@ -61,14 +63,15 @@ export function useDataLayerCustomer({
           cart_contents: {
             products: lines?.map(mapCartLine(list)) || [],
           },
+          ...(isElevar
+            ? null
+            : {cart_total: cost?.totalAmount?.amount || '0.0'}),
         },
       };
-
-      if (window.gtag) window.gtag('event', event.event, event);
-      if (DEBUG) console.log(`DataLayer:gtag:${event.event}`, event);
+      handleDataLayerEvent(event);
       setUserDataEventTriggered(true);
     },
-    [status === 'idle', currencyCode],
+    [cartReady, currencyCode],
   );
 
   // Trigger 'user_data' event on path change after base data is ready,
@@ -76,6 +79,7 @@ export function useDataLayerCustomer({
   useEffect(() => {
     if (
       !userProperties ||
+      !cartReady ||
       IGNORED_PATHS.includes(pathname.split('/')[1]) ||
       pathname.startsWith('/pages/search') ||
       pathname === pathnameRef.current
@@ -88,13 +92,14 @@ export function useDataLayerCustomer({
     return () => {
       pathnameRef.current = undefined;
     };
-  }, [pathname, !!userProperties]);
+  }, [cartReady, pathname, !!userProperties]);
 
   // Trigger 'user_data' event on account pages after base data is ready,
   // excluding after login/register events
   useEffect(() => {
     if (
       !userProperties ||
+      !cartReady ||
       !pathname.startsWith('/account') ||
       pathname === pathnameRef.current
     )
@@ -134,7 +139,7 @@ export function useDataLayerCustomer({
     return () => {
       pathnameRef.current = undefined;
     };
-  }, [pathname, !!userProperties]);
+  }, [cartReady, pathname, !!userProperties]);
 
   return {userDataEvent, userDataEventTriggered};
 }

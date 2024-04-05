@@ -132,6 +132,9 @@ export const getFilters = async ({
       (acc: any[], [_paramKey, _paramValue]) => {
         const paramKey = _paramKey.toLowerCase();
         const paramValue = _paramValue.toLowerCase();
+
+        if (acc.some(({id}) => id === `${paramKey}.${paramValue}`)) return acc;
+
         const filter = defaultFilters?.find(
           (defaultFilter: Filter) => defaultFilter.id === paramKey,
         );
@@ -157,8 +160,9 @@ export const getFilters = async ({
           return acc;
         }
         const paramValues = paramValue.split(',').filter(Boolean);
-        paramValues.forEach((paramValue) => {
-          const paramValueId = `${paramKey}.${paramValue}`;
+        paramValues.forEach((__paramValue) => {
+          if (acc.some(({id}) => id === `${paramKey}.${__paramValue}`)) return;
+          const paramValueId = `${paramKey}.${__paramValue}`;
           const value = filter.values.find(
             (filterValue: FilterValue) => filterValue.id === paramValueId,
           ) as FilterValue;

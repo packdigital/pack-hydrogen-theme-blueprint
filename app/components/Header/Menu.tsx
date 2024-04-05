@@ -82,7 +82,7 @@ export function Menu({
                   >
                     <Image
                       data={{
-                        altText: alt || image?.altText,
+                        altText: image?.altText || alt,
                         url: image?.src,
                         width: image?.width,
                         height: image?.height,

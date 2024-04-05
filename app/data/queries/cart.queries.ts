@@ -87,6 +87,11 @@ export const CART_LINE_FRAGMENT = `#graphql
           productType
           title
           vendor
+          collections(first: 10) {
+            nodes {
+              handle
+            }
+          }
           options {
             name
             values

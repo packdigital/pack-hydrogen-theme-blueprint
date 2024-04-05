@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useRef, useState} from 'react';
-import {v4 as uuidv4} from 'uuid';
+import {useCart} from '@shopify/hydrogen-react';
 import type {ProductVariant} from '@shopify/hydrogen-react/storefront-api-types';
 
 import {pathWithoutLocalePrefix} from '~/lib/utils';
@@ -9,19 +9,22 @@ import {mapProductPageVariant} from './utils';
 import type {UserProperties} from './useDataLayerInit';
 
 export function useDataLayerProduct({
-  DEBUG,
+  handleDataLayerEvent,
   userDataEvent,
   userProperties,
 }: {
-  DEBUG?: boolean;
+  handleDataLayerEvent: (event: Record<string, any>) => void;
   userDataEvent: (arg0: any) => void;
   userProperties: UserProperties;
 }) {
   const productHandleRef = useRef<string | null>(null);
   const {emitter} = useGlobal();
+  const {status} = useCart();
 
   const [viewedProductVariant, setViewedProductVariant] =
     useState<ProductVariant | null>(null);
+
+  const cartReady = status === 'idle';
 
   const viewProductEvent = useCallback(
     ({
@@ -35,9 +38,7 @@ export function useDataLayerProduct({
       const previousPath = sessionStorage.getItem('PREVIOUS_PATH');
       const list = previousPath?.startsWith('/collections') ? previousPath : '';
       const event = {
-        event: 'view_item',
-        event_id: uuidv4(),
-        event_time: new Date().toISOString(),
+        event: 'dl_view_item',
         user_properties: _userProperties,
         ecommerce: {
           currencyCode: variant.price?.currencyCode,
@@ -47,9 +48,7 @@ export function useDataLayerProduct({
           },
         },
       };
-
-      if (window.gtag) window.gtag('event', event.event, event);
-      if (DEBUG) console.log(`DataLayer:gtag:${event.event}`, event);
+      handleDataLayerEvent(event);
     },
     [],
   );
@@ -72,6 +71,7 @@ export function useDataLayerProduct({
       .split('/')
       .pop();
     if (
+      !cartReady ||
       !userProperties ||
       !viewedProductVariant ||
       productHandleRef.current === pageHandle
@@ -80,5 +80,5 @@ export function useDataLayerProduct({
     userDataEvent({userProperties});
     viewProductEvent({variant: viewedProductVariant, userProperties});
     productHandleRef.current = pageHandle || null;
-  }, [viewedProductVariant?.product?.id, !!userProperties]);
+  }, [cartReady, viewedProductVariant?.product?.id, !!userProperties]);
 }

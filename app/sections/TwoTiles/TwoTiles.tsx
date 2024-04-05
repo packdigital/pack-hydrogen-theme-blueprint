@@ -29,7 +29,7 @@ export function TwoTiles({cms}: {cms: TwoTilesCms}) {
                 >
                   <Image
                     data={{
-                      altText: item.alt,
+                      altText: item.image?.altText || item.alt,
                       url: item.image?.src,
                       width: item.image?.width,
                       height: item.image?.height,

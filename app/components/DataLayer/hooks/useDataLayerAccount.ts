@@ -1,5 +1,4 @@
 import {useCallback, useEffect, useState} from 'react';
-import {v4 as uuidv4} from 'uuid';
 import type {
   CurrencyCode,
   Customer,
@@ -9,14 +8,14 @@ import {useCustomer, useGlobal} from '~/hooks';
 
 export function useDataLayerAccount({
   currencyCode,
-  DEBUG,
   generateUserProperties,
+  handleDataLayerEvent,
   userDataEvent,
   userDataEventTriggered,
 }: {
   currencyCode?: CurrencyCode | undefined;
-  DEBUG?: boolean;
   generateUserProperties: (arg0: any) => any;
+  handleDataLayerEvent: (event: Record<string, any>) => void;
   userDataEvent: (arg0: any) => void;
   userDataEventTriggered: boolean;
 }) {
@@ -28,27 +27,19 @@ export function useDataLayerAccount({
 
   const loggedInEvent = useCallback(({userProperties}: any) => {
     const event = {
-      event: 'login',
-      event_id: uuidv4(),
-      event_time: new Date().toISOString(),
+      event: 'dl_login',
       user_properties: userProperties,
     };
-
-    if (window.gtag) window.gtag('event', event.event, event);
-    if (DEBUG) console.log(`DataLayer:gtag:${event.event}`, event);
+    handleDataLayerEvent(event);
     setLoggedIn(false);
   }, []);
 
   const registeredEvent = useCallback(({userProperties}: any) => {
     const event = {
-      event: 'sign_up',
-      event_id: uuidv4(),
-      event_time: new Date().toISOString(),
+      event: 'dl_sign_up',
       user_properties: userProperties,
     };
-
-    if (window.gtag) window.gtag('event', event.event, event);
-    if (DEBUG) console.log(`DataLayer:gtag:${event.event}`, event);
+    handleDataLayerEvent(event);
     setRegistered(false);
   }, []);
 
