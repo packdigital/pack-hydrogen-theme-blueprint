@@ -192,7 +192,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
 
 The `data` object will contain all the Pack Section Setting content provided by CMS Authors in the Customizer. This data will be define per each Section's Setting schema. While the `product` object will contain any Shopify speficic data provided by the Storefront API.
 
-See https://docs.packdigital.com/for-developers/section-api/schema.
+See [Section Schema API](https://docs.packdigital.com/section-schema-api).
 
 ### Caching
 
