@@ -1,8 +1,8 @@
-<p align="center"><a href="https://www.packdigital.com"><img src="https://cdn.shopify.com/s/files/1/0830/5750/8663/files/pack_green_logo.png?v=1708374426" width="40px" alt="Pack Digital - gives growing brands every tool they need to build and manage their Shopify Hydrogen storefront" /></a></p>
+<p align="center"><a href="https://www.packdigital.com"><img src="https://cdn.shopify.com/s/files/1/0830/5750/8663/files/pack-blueprint-hydrogen-logo.png?v=1713300323" width="40px" alt="Pack Digital - gives growing brands every tool they need to build and manage their Shopify Hydrogen storefront" /></a></p>
 
 <p align="center"><b>Meet Blueprint: Pack's Open-Source Hydrogen Theme</b></p>
 
-<img width="1840" alt="image" src="https://github.com/packdigital/pack-hydrogen-starter/assets/5673039/df082c77-d0d8-409c-ae81-8101628de7e6">
+<img width="1840" alt="image" src="https://cdn.shopify.com/s/files/1/0830/5750/8663/files/pack-blueprint_8c148ab2-ae8b-41c5-a769-f13d281d9671.png?v=1713300972">
 
 <p align="center"><b><a href="https://hydrogen.packdigital.com/" target="_blank">Check out the demo store</a></b></p>
 
