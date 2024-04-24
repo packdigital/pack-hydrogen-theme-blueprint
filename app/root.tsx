@@ -13,13 +13,7 @@ import {
   getShopAnalytics,
 } from '@shopify/hydrogen';
 
-import {
-  ApplicationError,
-  CustomAnalytics,
-  Document,
-  NotFound,
-  ServerError,
-} from '~/components';
+import {ApplicationError, Document, NotFound, ServerError} from '~/components';
 import {customerGetAction, validateCustomerAccessToken} from '~/lib/customer';
 import {
   getEnvs,

@@ -6,7 +6,11 @@ import {
   Scripts,
   ScrollRestoration,
 } from '@remix-run/react';
-import {Seo, UNSTABLE_Analytics as Analytics} from '@shopify/hydrogen';
+import {
+  Seo,
+  UNSTABLE_Analytics as Analytics,
+  useNonce,
+} from '@shopify/hydrogen';
 import {CartProvider, ShopifyProvider} from '@shopify/hydrogen-react';
 import {PreviewProvider} from '@pack/react';
 
@@ -29,6 +33,7 @@ interface DocumentProps {
 }
 
 export function Document({children, title}: DocumentProps) {
+  const nonce = useNonce();
   const {
     customizerMeta,
     ENV,
@@ -94,8 +99,9 @@ export function Document({children, title}: DocumentProps) {
                       const isPdp = location.pathname.startsWith('/products/');
                       return isPdp ? location.key : location.pathname;
                     }}
+                    nonce={nonce}
                   />
-                  <Scripts />
+                  <Scripts nonce={nonce} />
                   <LiveReload />
                 </body>
               </html>
