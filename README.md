@@ -1,8 +1,8 @@
-<p align="center"><a href="https://www.packdigital.com"><img src="https://cdn.shopify.com/s/files/1/0830/5750/8663/files/pack_green_logo.png?v=1708374426" width="40px" alt="Pack Digital - gives growing brands every tool they need to build and manage their Shopify Hydrogen storefront" /></a></p>
+<p align="center"><a href="https://www.packdigital.com"><img src="https://cdn.shopify.com/s/files/1/0830/5750/8663/files/pack-blueprint-hydrogen-logo.png?v=1713300323" width="40px" alt="Pack Digital - gives growing brands every tool they need to build and manage their Shopify Hydrogen storefront" /></a></p>
 
-<p align="center"><b>Pack's Open-Source Hydrogen Storefront Starter Repo</b></p>
+<p align="center"><b>Meet Blueprint: Pack's Open-Source Hydrogen Theme</b></p>
 
-<img width="1840" alt="image" src="https://github.com/packdigital/pack-hydrogen-starter/assets/5673039/df082c77-d0d8-409c-ae81-8101628de7e6">
+<img width="1840" alt="image" src="https://cdn.shopify.com/s/files/1/0830/5750/8663/files/pack-blueprint_8c148ab2-ae8b-41c5-a769-f13d281d9671.png?v=1713300972">
 
 <p align="center"><b><a href="https://hydrogen.packdigital.com/" target="_blank">Check out the demo store</a></b></p>
 
@@ -26,11 +26,11 @@ React is the future of ecommerce, but 99% of all Shopify brands are still using 
 
 Historically, the only way to build a React storefront was to stitch together a headless CMS / hosting / data orchestrator / middleware, then build a custom storefront. It generally required a full technical team to build + manage it.
 
-We’re building open-source starter storefront repos to make it easy for a single developer to get a Hydrogen storefront up and running in minutes, and build out an entire storefront in just a few weeks—without having to worry about the back end. Use these repos as examples / inspo, or build right on top of them.
+We’re building component-based, open-source Hydrogen themes to make it easy for a single developer to get a Hydrogen storefront up and running in minutes, and build out an entire storefront in just a few weeks—without having to worry about the back end. Use this theme as examples / inspo, or build right on top of them.
 
-### Pack’s starter storefront vs Shopify’s out-of-the-box Hydrogen storefront:
+### Pack’s Hydrogen theme vs Shopify’s out-of-the-box Hydrogen templates:
 
-We took Hydrogen’s out-of-the-box starter storefront and spent 3 months adding components, features, animations, styling, and connecting it to Pack—a visual frontend for Shopify Hydrogen—to make it easier to spin up a fully-featured storefront.
+We took Hydrogen’s out-of-the-box starter storefront template and spent 3 months adding components, features, animations, styling, and connecting it to Pack—a visual frontend for Shopify Hydrogen—to make it easier to spin up a fully-featured storefront.
 
 Connect your Shopify and Github repo to Pack, and you’ll get access to a real-time visual preview of your storefront as you build. Work in 100% code or a mix of visual editing and code.
 
@@ -40,7 +40,7 @@ Instead of hard-coding the whole experience and having to stay on top of every s
 ## Major Features
 - CSS Framework: Tailwind
 - Framework: Remix
-- Open-source Hydrogen storefront starter repo that’s opinionated to Pack, a visual frontend for Hydrogen.
+- Open-source Hydrogen theme that’s opinionated to Pack, a visual frontend for Hydrogen.
   - Responsive components
     - Heros — multiple slides and configurations
     - 50/50 Hero
@@ -61,6 +61,42 @@ Instead of hard-coding the whole experience and having to stay on top of every s
     - Accordions
     - Icon row
     - Social images grid
+  - Marketing & Conversion
+    - Back-in-stock alert
+    - Blogs
+    - Customizable contact form
+    - FAQ accordions
+    - Press coverage
+    - Product badges
+    - Product reviews
+    - Recommended products
+    - Modal
+    - In-menu promos
+    - Press coverage
+    - Promo banners
+    - Cross-selling 
+    - Country selector (change currency, UI/UX for language change)
+  - Merchandising
+    - Color swatches
+    - Image galleries
+    - Product options
+    - Product tabs
+    - Product videos
+    - Slideshow
+    - Animation
+    - Size chart
+    - High-resolution images
+  - Product discovery
+    - Collection page navigation
+    - Shopify’s semantic search
+    - Search drawer
+    - Search page
+    - Mega menu
+    - Mobile drawer menu
+    - Product filtering and sorting
+    - Recommended products
+    - Sticky header
+    - SEO and schema markup fields
   - Site settings, menus and modals
     - Promobar
     - Modal
@@ -76,10 +112,13 @@ Instead of hard-coding the whole experience and having to stay on top of every s
     - Search page
     - Leverages Shopify's API
     - SEO and schema markup fields
-  - Side cart
+  - Cart & checkout
+    - Slide-out cart
     - Free shipping meter
-    - Cart upsell products slider
+    - Product upsell slider
     - Discount code field
+    - Quickbuy
+    - Cart notes & attributes
   - Shopify analytics (Page views, add to carts)
   - Data layer logic through GA4 (QA’d by Elevar + Fueled)
     - Triggers placed throughout site
@@ -109,7 +148,14 @@ Note: Pack is free if you’re only looking to spin up a few landing pages, with
 - A/B testing <b>(coming soon)</b>
 
 ## Get started
-Create a free Pack account to get started, or check out our documentation.
+Use our CLI tool to get started quickly.
+```
+npx @pack/create-hydrogen@latest
+```
+
+You can also create a free Pack account, or check out our documentation.
+
+Want a quick demo of Pack? Check out this <a href="https://hydrogen.packdigital.com/pages/demo" target="_blank">video overview</a> (7 min).
 ### Requirements
 
 - Node.js version 16.14.0 or higher
@@ -192,7 +238,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
 
 The `data` object will contain all the Pack Section Setting content provided by CMS Authors in the Customizer. This data will be define per each Section's Setting schema. While the `product` object will contain any Shopify speficic data provided by the Storefront API.
 
-See https://docs.packdigital.com/for-developers/section-api/schema.
+See [Section Schema API](https://docs.packdigital.com/section-schema-api).
 
 ### Caching
 

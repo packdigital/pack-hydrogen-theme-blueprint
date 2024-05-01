@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useRef, useState} from 'react';
-import {v4 as uuidv4} from 'uuid';
+import {useCart} from '@shopify/hydrogen-react';
 import type {
   Product,
   ProductVariant,
@@ -13,25 +13,31 @@ import type {UserProperties} from './useDataLayerInit';
 
 type DlProductVariant = ProductVariant & {index: number; list?: string};
 
+const isElevar =
+  typeof document !== 'undefined' && !!window.ENV?.PUBLIC_ELEVAR_SIGNING_KEY;
+
 export function useDataLayerCollection({
-  DEBUG,
+  handleDataLayerEvent,
   userDataEvent,
   userDataEventTriggered,
   userProperties,
 }: {
-  DEBUG?: boolean;
+  handleDataLayerEvent: (event: Record<string, any>) => void;
   userDataEvent: (arg0: any) => void;
   userDataEventTriggered: boolean;
   userProperties: UserProperties;
 }) {
   const collectionHandleRef = useRef<string | undefined>(undefined);
   const {emitter} = useGlobal();
+  const {status} = useCart();
 
   const [collectionProducts, setCollectionProducts] = useState<
     Product[] | null
   >(null);
   const [clickedCollectionItem, setClickedCollectionItem] =
     useState<DlProductVariant | null>(null);
+
+  const cartReady = status === 'idle';
 
   const viewCollectionEvent = useCallback(
     ({
@@ -47,18 +53,16 @@ export function useDataLayerCollection({
         ? windowPathname
         : '';
       const event = {
-        event: 'view_item_list',
-        event_id: uuidv4(),
-        event_time: new Date().toISOString(),
+        event: 'dl_view_item_list',
         user_properties: _userProperties,
         ecommerce: {
           currencyCode: products[0].variants?.nodes?.[0]?.price?.currencyCode,
-          impressions: products.slice(0, 12).map(mapProductItemProduct(list)),
+          [isElevar ? 'impressions' : 'products']: products
+            .slice(0, 12)
+            .map(mapProductItemProduct(list)),
         },
       };
-
-      if (window.gtag) window.gtag('event', event.event, event);
-      if (DEBUG) console.log(`DataLayer:gtag:${event.event}`, event);
+      handleDataLayerEvent(event);
     },
     [],
   );
@@ -68,9 +72,7 @@ export function useDataLayerCollection({
       if (!variant) return;
       const list = variant.list || '';
       const event = {
-        event: 'select_item',
-        event_id: uuidv4(),
-        event_time: new Date().toISOString(),
+        event: 'dl_select_item',
         user_properties: userProperties,
         ecommerce: {
           currencyCode: variant.price?.currencyCode,
@@ -83,9 +85,7 @@ export function useDataLayerCollection({
           },
         },
       };
-
-      if (window.gtag) window.gtag('event', event.event, event);
-      if (DEBUG) console.log(`DataLayer:gtag:${event.event}`, event);
+      handleDataLayerEvent(event);
     },
     [userProperties],
   );
@@ -115,6 +115,7 @@ export function useDataLayerCollection({
       .split('/')
       .pop();
     if (
+      !cartReady ||
       !collectionProducts?.length ||
       !userProperties ||
       collectionHandleRef.current === pageHandle
@@ -123,7 +124,7 @@ export function useDataLayerCollection({
     userDataEvent({userProperties});
     viewCollectionEvent({products: collectionProducts, userProperties});
     collectionHandleRef.current = pageHandle;
-  }, [collectionProducts, !!userProperties]);
+  }, [cartReady, collectionProducts, !!userProperties]);
 
   // Trigger 'select_item' event on clicked collection
   // item and after user event

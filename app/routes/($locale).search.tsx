@@ -15,6 +15,7 @@ import {PRODUCTS_SEARCH_QUERY} from '~/data/queries';
 import {getFilters, getShop, getSiteSettings} from '~/lib/utils';
 import type {Page} from '~/lib/types';
 import {seoPayload} from '~/lib/seo.server';
+import type {ActiveFilterValue} from '~/components/Collection/CollectionFilters/CollectionFilters.types';
 
 export async function action({request, context}: ActionFunctionArgs) {
   const {storefront} = context;
@@ -146,13 +147,15 @@ export async function loader({request, context}: LoaderFunctionArgs) {
 }
 
 export default function SearchRoute() {
-  const {activeFilterValues, collection} = useLoaderData<typeof loader>();
+  const {activeFilterValues, collection, searchTerm} =
+    useLoaderData<typeof loader>();
 
   return (
     <section data-comp="search-page" className="[&_h1]:text-title-h3">
       <Collection
-        activeFilterValues={activeFilterValues}
+        activeFilterValues={activeFilterValues as ActiveFilterValue[]}
         collection={collection}
+        searchTerm={searchTerm}
         showHeading
       />
     </section>

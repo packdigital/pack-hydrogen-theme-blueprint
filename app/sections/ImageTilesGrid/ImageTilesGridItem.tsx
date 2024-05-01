@@ -23,7 +23,7 @@ export function ImageTilesGridItem({
     >
       <Image
         data={{
-          altText: tile.alt,
+          altText: tile.image?.altText || tile.alt,
           url: tile.image?.src,
           width: tile.image?.width,
           height: tile.image?.height,

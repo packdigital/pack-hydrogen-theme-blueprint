@@ -214,6 +214,11 @@ export const PRODUCT_ITEM_FRAGMENT = `#graphql
     createdAt
     publishedAt
     tags
+    collections(first: 10) {
+      nodes {
+        handle
+      }
+    }
     featuredImage {
       altText
       height

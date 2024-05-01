@@ -3,7 +3,6 @@ import {useCart} from '@shopify/hydrogen-react';
 import type {CartWithActions} from '@shopify/hydrogen-react';
 import {useLocation} from '@remix-run/react';
 import equal from 'fast-deep-equal';
-import {v4 as uuidv4} from 'uuid';
 import type {
   CurrencyCode,
   CartLine,
@@ -17,15 +16,18 @@ import type {UserProperties} from './useDataLayerInit';
 
 type DlCartLine = CartLine & {index?: number; list?: string};
 
+const isElevar =
+  typeof document !== 'undefined' && !!window.ENV?.PUBLIC_ELEVAR_SIGNING_KEY;
+
 export function useDataLayerCart({
   currencyCode,
-  DEBUG,
+  handleDataLayerEvent,
   userDataEvent,
   userDataEventTriggered,
   userProperties,
 }: {
   currencyCode?: CurrencyCode | undefined;
-  DEBUG?: boolean;
+  handleDataLayerEvent: (event: Record<string, any>) => void;
   userDataEvent: (arg0: any) => void;
   userDataEventTriggered: boolean;
   userProperties: UserProperties;
@@ -50,6 +52,8 @@ export function useDataLayerCart({
     CartLine[]
   > | null>(null);
 
+  const cartReady = status === 'idle';
+
   const addToCartEvent = useCallback(
     ({
       cart: _cart,
@@ -68,24 +72,25 @@ export function useDataLayerCart({
         (previousPath?.startsWith('/collections') && previousPath) ||
         '';
       const event = {
-        event: 'add_to_cart',
-        event_id: uuidv4(),
-        event_time: new Date().toISOString(),
+        event: 'dl_add_to_cart',
         user_properties: _userProperties,
         ecommerce: {
           currencyCode: lines[0].cost?.totalAmount?.currencyCode,
-          cart_id: _cart.id?.split('/').pop(),
-          cart_total: _cart.cost?.totalAmount?.amount,
-          cart_count: lines.reduce((acc, line) => acc + line.quantity, 0) || 0,
           add: {
             actionField: {list},
             products: lines.map(mapCartLine(list)),
           },
+          ...(!isElevar
+            ? {
+                cart_id: _cart.id?.split('/').pop(),
+                cart_total: _cart.cost?.totalAmount?.amount,
+                cart_count:
+                  lines.reduce((acc, line) => acc + line.quantity, 0) || 0,
+              }
+            : null),
         },
       };
-
-      if (window.gtag) window.gtag('event', event.event, event);
-      if (DEBUG) console.log(`DataLayer:gtag:${event.event}`, event);
+      handleDataLayerEvent(event);
     },
     [],
   );
@@ -108,24 +113,25 @@ export function useDataLayerCart({
         (previousPath?.startsWith('/collections') && previousPath) ||
         '';
       const event = {
-        event: 'remove_from_cart',
-        event_id: uuidv4(),
-        event_time: new Date().toISOString(),
+        event: 'dl_remove_from_cart',
         user_properties: _userProperties,
         ecommerce: {
           currencyCode: lines[0].cost?.totalAmount?.currencyCode,
-          cart_id: _cart?.id?.split('/').pop(),
-          cart_total: _cart?.cost?.totalAmount?.amount,
-          cart_count: lines.reduce((acc, line) => acc + line.quantity, 0) || 0,
           remove: {
             actionField: {list},
             products: lines.map(mapCartLine(list)),
           },
+          ...(!isElevar
+            ? {
+                cart_id: _cart?.id?.split('/').pop(),
+                cart_total: _cart?.cost?.totalAmount?.amount,
+                cart_count:
+                  lines.reduce((acc, line) => acc + line.quantity, 0) || 0,
+              }
+            : null),
         },
       };
-
-      if (window.gtag) window.gtag('event', event.event, event);
-      if (DEBUG) console.log(`DataLayer:gtag:${event.event}`, event);
+      handleDataLayerEvent(event);
     },
     [],
   );
@@ -148,27 +154,30 @@ export function useDataLayerCart({
         (previousPath?.startsWith('/collections') && previousPath) ||
         '';
       const event = {
-        event: 'view_cart',
-        event_id: uuidv4(),
-        event_time: new Date().toISOString(),
+        event: 'dl_view_cart',
         user_properties: _userProperties,
-        cart_total: _cart?.cost?.totalAmount?.amount || '0.0',
+        ...(isElevar
+          ? {cart_total: _cart?.cost?.totalAmount?.amount || '0.0'}
+          : null),
         ecommerce: {
           currencyCode: _cart?.cost?.totalAmount?.currencyCode || _currencyCode,
-          cart_id: _cart?.id?.split('/').pop(),
-          cart_total: _cart?.cost?.totalAmount?.amount,
-          cart_count:
-            _cart?.lines?.reduce(
-              (acc, line) => acc + (line?.quantity || 0),
-              0,
-            ) || 0,
           actionField: {list: 'Shopping Cart'},
-          impressions: _cart?.lines?.slice(0, 12).map(mapCartLine(list)) || [],
+          [isElevar ? 'impressions' : 'products']:
+            _cart?.lines?.slice(0, 12).map(mapCartLine(list)) || [],
+          ...(!isElevar
+            ? {
+                cart_id: _cart?.id?.split('/').pop(),
+                cart_total: _cart?.cost?.totalAmount?.amount,
+                cart_count:
+                  _cart?.lines?.reduce(
+                    (acc, line) => acc + (line?.quantity || 0),
+                    0,
+                  ) || 0,
+              }
+            : null),
         },
       };
-
-      if (window.gtag) window.gtag('event', event.event, event);
-      if (DEBUG) console.log(`DataLayer:gtag:${event.event}`, event);
+      handleDataLayerEvent(event);
     },
     [],
   );
@@ -177,7 +186,7 @@ export function useDataLayerCart({
   useEffect(() => {
     if (
       !pathname.startsWith('/cart') ||
-      status !== 'idle' ||
+      !cartReady ||
       !currencyCode ||
       !userProperties ||
       pathname === pathnameRef.current
@@ -189,7 +198,7 @@ export function useDataLayerCart({
     return () => {
       pathnameRef.current = null;
     };
-  }, [pathname, status, !!userProperties]);
+  }, [cartReady, pathname, !!userProperties]);
 
   // Trigger 'view_cart' event when cart is opened
   useEffect(() => {

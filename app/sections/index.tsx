@@ -13,8 +13,10 @@ import {Image} from './Image';
 import {ImageTiles} from './ImageTiles';
 import {ImageTilesGrid} from './ImageTilesGrid';
 import {Markdown} from './Markdown';
+import {MarketingSignup} from './MarketingSignup';
 import {PressSlider} from './PressSlider';
 import {ProductRecommendationsSlider} from './ProductRecommendationsSlider';
+import {ProductReviews} from './ProductReviews';
 import {ProductsSlider} from './ProductsSlider';
 import {SocialImagesGrid} from './SocialImagesGrid';
 import {TabbedThreeTiles} from './TabbedThreeTiles';
@@ -41,10 +43,12 @@ export function registerSections() {
   registerSection(ImageTiles, {name: 'image-tiles'});
   registerSection(ImageTilesGrid, {name: 'image-tiles-grid'});
   registerSection(Markdown, {name: 'markdown'});
+  registerSection(MarketingSignup, {name: 'marketing-signup'});
   registerSection(PressSlider, {name: 'press-slider'});
   registerSection(ProductRecommendationsSlider, {
     name: 'product-recommendations-slider',
   });
+  registerSection(ProductReviews, {name: 'product-reviews'});
   registerSection(ProductsSlider, {name: 'products-slider'});
   registerSection(SocialImagesGrid, {name: 'social-images-grid'});
   registerSection(TabbedThreeTiles, {name: 'tabbed-three-tiles'});

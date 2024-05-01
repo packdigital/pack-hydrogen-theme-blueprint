@@ -49,6 +49,7 @@ export function CollectionFilterOption({
         <MultiRangeSlider
           key={`${currentMin}-${currentMax}`}
           canReset={isActive}
+          isPrice
           min={defaultMin}
           minValue={currentMin}
           max={defaultMax}

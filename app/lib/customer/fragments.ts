@@ -35,7 +35,7 @@ const ADDRESS_FULL = `#graphql
     city
     company
     country
-    countryCode: countryCodeV2
+    countryCodeV2
     firstName
     formattedArea
     id

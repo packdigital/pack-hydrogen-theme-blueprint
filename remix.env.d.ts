@@ -33,6 +33,13 @@ declare global {
   interface Window {
     ENV?: Record<string, string>;
     unHover?: ReturnType<typeof setTimeout> | null;
+    dataLayer?: any[];
+    // Elevar specific, if applicable to project
+    ElevarDataLayer?: any[];
+    ElevarInvalidateContext?: () => void;
+    // Fueled specific, if applicable to project
+    fueled?: any;
+    fueledConfig?: Record<string, any>;
   }
 }
 
