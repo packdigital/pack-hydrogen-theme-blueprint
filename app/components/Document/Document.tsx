@@ -34,7 +34,7 @@ export function Document({children, title}: DocumentProps) {
     <ShopifyProvider
       storeDomain={`https://${ENV.PUBLIC_STORE_DOMAIN}`}
       storefrontToken={ENV.PUBLIC_STOREFRONT_API_TOKEN}
-      storefrontApiVersion={ENV.PUBLIC_STOREFRONT_API_VERSION || '2024-01'}
+      storefrontApiVersion={ENV.PUBLIC_STOREFRONT_API_VERSION || '2024-04'}
       countryIsoCode={locale.country}
       languageIsoCode={locale.language}
     >
