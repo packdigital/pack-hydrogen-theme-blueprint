@@ -33,7 +33,8 @@ export default async function handleRequest(
   const isPreview = cookies['__preview'];
 
   const {nonce, header, NonceProvider} = createContentSecurityPolicy({
-    // Custom CSP policies, modify if adding new 3rd party resources
+    // Custom CSP policies
+    // Modify these policies if adding new 3rd party resources
     ...(isPreview
       ? {
           frameAncestors: ['*.packdigital.com'],
