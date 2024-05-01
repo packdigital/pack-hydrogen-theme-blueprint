@@ -117,8 +117,7 @@ export function Schema() {
         label: 'Section Settings',
         name: 'section',
         component: 'group',
-        description:
-          'Image aspect ratio, background color, text color, full width',
+        description: 'Image aspect ratio, text color, full width',
         fields: [
           {
             label: 'Image Aspect Ratio',
@@ -135,12 +134,6 @@ export function Schema() {
               {label: '3:4', value: 'aspect-[3/4]'},
               {label: '2:3', value: 'aspect-[2/3]'},
             ],
-          },
-          {
-            label: 'Background Color',
-            name: 'bgColor',
-            component: 'select',
-            options: COLORS,
           },
           {
             label: 'Text Color',
@@ -172,7 +165,6 @@ export function Schema() {
         ],
         defaultValue: {
           aspectRatio: 'aspect-[3/4]',
-          bgColor: 'var(--background)',
           textColor: 'var(--text)',
           buttonStyle: 'btn-primary',
           fullWidth: false,

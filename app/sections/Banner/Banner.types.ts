@@ -31,7 +31,6 @@ export interface BannerCms {
   };
   section: {
     aboveTheFold?: boolean;
-    bgColor: string;
     fullWidth: boolean;
     fullBleed: boolean;
     desktop: {

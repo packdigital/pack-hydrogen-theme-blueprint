@@ -66,8 +66,7 @@ export function Schema() {
         label: 'Section Settings',
         name: 'section',
         component: 'group',
-        description:
-          'Above the fold, background color, text color, icon color, full width',
+        description: 'Above the fold, text color, icon color, full width',
         fields: [
           {
             label: 'Above The Fold',
@@ -78,12 +77,6 @@ export function Schema() {
               true: 'On',
               false: 'Off',
             },
-          },
-          {
-            label: 'Background Color',
-            name: 'bgColor',
-            component: 'select',
-            options: COLORS,
           },
           {
             label: 'Text Color',
@@ -104,7 +97,6 @@ export function Schema() {
         ],
         defaultValue: {
           aboveTheFold: false,
-          bgColor: 'var(--background)',
           textColor: 'var(--text)',
           fullWidth: false,
         },
