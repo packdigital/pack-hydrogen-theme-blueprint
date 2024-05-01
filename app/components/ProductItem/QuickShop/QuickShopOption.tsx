@@ -49,7 +49,7 @@ export function QuickShopOption({
   return (
     <button
       aria-label={value}
-      className={`group/option relative flex h-full w-full items-center justify-center whitespace-nowrap text-center text-sm transition ${validClass} ${unavailableClass} ${isUpdatingClass}`}
+      className={`group/option relative flex size-full items-center justify-center whitespace-nowrap text-center text-sm transition ${validClass} ${unavailableClass} ${isUpdatingClass}`}
       disabled={disabled || isSoldOut}
       onClick={() => {
         if (isNotifyMe) {

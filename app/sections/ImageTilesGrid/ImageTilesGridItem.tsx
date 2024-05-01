@@ -34,7 +34,7 @@ export function ImageTilesGridItem({
       />
 
       <div
-        className={`pointer-events-none absolute inset-0 flex h-full w-full p-6 text-center md:p-8 ${
+        className={`pointer-events-none absolute inset-0 flex size-full p-6 text-center md:p-8 ${
           content?.darkOverlay ? 'bg-[rgba(0,0,0,0.2)]' : ''
         } ${content?.contentPosition}`}
       >

@@ -92,7 +92,7 @@ export function CustomerAccountLayout({children}: {children: React.ReactNode}) {
             </Menu.Button>
 
             <Transition
-              className="absolute left-0 top-[calc(100%+0.5rem)] z-10 w-full rounded-[0.5rem] border border-gray bg-background text-base"
+              className="absolute left-0 top-[calc(100%+0.5rem)] z-10 w-full rounded-lg border border-gray bg-background text-base"
               enter="transition duration-100 ease-out"
               enterFrom="transform scale-95 opacity-0"
               enterTo="transform scale-100 opacity-100"
@@ -102,7 +102,7 @@ export function CustomerAccountLayout({children}: {children: React.ReactNode}) {
             >
               <Menu.Items
                 as="nav"
-                className="scrollbar-hide flex max-h-[18rem] flex-col gap-0 overflow-y-auto py-2"
+                className="scrollbar-hide flex max-h-72 flex-col gap-0 overflow-y-auto py-2"
               >
                 {menuItems?.map(({link}, index) => {
                   return link?.text ? (

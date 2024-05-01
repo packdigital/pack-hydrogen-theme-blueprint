@@ -49,7 +49,7 @@ export function BackInStockModal({selectedVariant}: BackInStockModalProps) {
         onSubmit={handleSubmit}
       >
         <input
-          className="input-text text-text md:max-w-[30rem]"
+          className="input-text text-text md:max-w-screen-xs"
           name="email"
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Enter your email..."

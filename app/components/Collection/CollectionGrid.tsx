@@ -98,7 +98,7 @@ export function CollectionGrid({
             </NextLink>
 
             {!products?.nodes?.length && activeFilterValues?.length > 0 && (
-              <div className="flex min-h-[12rem] items-center justify-center text-center">
+              <div className="flex min-h-48 items-center justify-center text-center">
                 <p>No products found matching these filters.</p>
               </div>
             )}

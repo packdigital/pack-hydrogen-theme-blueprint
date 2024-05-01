@@ -85,7 +85,7 @@ export function Addresses() {
       {!addressesWithDefaultFirst?.length && (
         <div
           role="status"
-          className="relative flex min-h-[12rem] items-center justify-center"
+          className="relative flex min-h-48 items-center justify-center"
         >
           You don&#39;t have any addresses saved yet
         </div>

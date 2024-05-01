@@ -116,19 +116,19 @@ export function ProductsSlider({
 
             {/* Navigation */}
             {products.length > slidesPerViewDesktop && (
-              <div className="z-1 absolute left-0 right-0 top-[calc(50%-28px)] md:px-8 xl:px-14">
+              <div className="z-1 absolute inset-x-0 top-[calc(50%-28px)] md:px-8 xl:px-14">
                 <div
                   className={`relative mx-auto ${maxWidthClass} ${
                     isFullBleedAndCentered ? 'min-[90rem]:max-w-full' : ''
                   }`}
                 >
                   <div
-                    className={`swiper-button-prev left-0 top-[calc(50%-1.6875rem)] !hidden !h-[3.5rem] !w-[3.5rem] rounded-full border border-border bg-white after:hidden lg:!flex ${
+                    className={`swiper-button-prev left-0 top-[calc(50%-1.6875rem)] !hidden !h-14 !w-14 rounded-full border border-border bg-white after:hidden lg:!flex ${
                       !isFullBleedAndCentered ? 'xl:-left-[1.6875rem]' : ''
                     }`}
                   >
                     <Svg
-                      className="max-w-[1.25rem] text-black"
+                      className="max-w-5 text-black"
                       src="/svgs/arrow-left.svg#arrow-left"
                       title="Arrow Left"
                       viewBox="0 0 24 24"
@@ -136,12 +136,12 @@ export function ProductsSlider({
                   </div>
 
                   <div
-                    className={`swiper-button-next right-0 top-[calc(50%-1.6875rem)] !hidden !h-[3.5rem] !w-[3.5rem] rounded-full border border-border bg-white after:hidden lg:!flex ${
+                    className={`swiper-button-next right-0 top-[calc(50%-1.6875rem)] !hidden !h-14 !w-14 rounded-full border border-border bg-white after:hidden lg:!flex ${
                       !isFullBleedAndCentered ? 'xl:-right-[1.6875rem]' : ''
                     }`}
                   >
                     <Svg
-                      className="max-w-[1.25rem] text-black"
+                      className="max-w-5 text-black"
                       src="/svgs/arrow-right.svg#arrow-right"
                       title="Arrow Right"
                       viewBox="0 0 24 24"
@@ -154,7 +154,7 @@ export function ProductsSlider({
         )}
 
         {!swiper && (
-          <div className="flex min-h-[20rem] items-center justify-center">
+          <div className="flex min-h-80 items-center justify-center">
             <Spinner width="32" />
           </div>
         )}

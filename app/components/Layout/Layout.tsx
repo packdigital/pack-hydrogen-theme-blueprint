@@ -23,7 +23,7 @@ export function Layout({children}: {children: ReactNode}) {
     >
       <Header />
 
-      <main role="main" id="mainContent" className={`flex-grow ${paddingTop}`}>
+      <main role="main" id="mainContent" className={`grow ${paddingTop}`}>
         {children}
       </main>
 

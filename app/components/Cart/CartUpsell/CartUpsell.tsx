@@ -90,7 +90,7 @@ export function CartUpsell({closeCart, settings}: CartUpsellProps) {
               <div>
                 <div className="swiper-button-prev left-0 after:hidden">
                   <Svg
-                    className="max-w-[1rem] text-text"
+                    className="max-w-4 text-text"
                     src="/svgs/chevron-left.svg#chevron-left"
                     title="Arrow Left"
                     viewBox="0 0 24 24"
@@ -99,7 +99,7 @@ export function CartUpsell({closeCart, settings}: CartUpsellProps) {
 
                 <div className="swiper-button-next right-0 after:hidden">
                   <Svg
-                    className="max-w-[1rem] text-text"
+                    className="max-w-4 text-text"
                     src="/svgs/chevron-right.svg#chevron-right"
                     title="Arrow Right"
                     viewBox="0 0 24 24"

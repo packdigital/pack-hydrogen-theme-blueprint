@@ -15,7 +15,7 @@ export function TwoTiles({cms}: {cms: TwoTilesCms}) {
     <Container container={cms.container}>
       <div className="px-contained py-contained">
         <div
-          className={`${maxWidthClass} mx-auto grid gap-x-5 gap-y-5 md:grid-cols-2 lg:gap-x-8`}
+          className={`${maxWidthClass} mx-auto grid gap-5 md:grid-cols-2 lg:gap-x-8`}
         >
           {tiles?.slice(0, 2).map((item, index) => {
             return (
@@ -50,7 +50,7 @@ export function TwoTiles({cms}: {cms: TwoTilesCms}) {
                     <div className="group flex">
                       <h3 className="text-2xl lg:text-3xl">{item.heading}</h3>
 
-                      <span className="ml-[0.75rem] block max-w-[1.25rem] transition-transform lg:w-[1.5rem] lg:group-hover:translate-x-2">
+                      <span className="ml-3 block max-w-5 transition-transform lg:w-6 lg:group-hover:translate-x-2">
                         <Svg
                           src="/svgs/arrow-right.svg#arrow-right"
                           title="Arrow"

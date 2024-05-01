@@ -59,7 +59,7 @@ export function ForgotPasswordForm({
 
         <button
           aria-label="Submit email for password recovery"
-          className={`btn-primary mt-3 min-w-[10rem] self-center ${
+          className={`btn-primary mt-3 min-w-40 self-center ${
             status.started ? 'cursor-default' : ''
           }`}
           type="submit"

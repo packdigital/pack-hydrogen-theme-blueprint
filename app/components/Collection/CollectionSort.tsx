@@ -130,7 +130,7 @@ export function CollectionSort({
   );
 
   return (
-    <div className="ml-auto w-full md:w-auto md:min-w-[8rem]">
+    <div className="ml-auto w-full md:w-auto md:min-w-32">
       <Select
         className="[&>button]:max-md:h-14 [&>button]:max-md:rounded-none [&>button]:max-md:border-x-0 [&>button]:max-md:pl-4 [&>button]:max-md:pr-2.5 [&>ul]:max-md:w-[calc(100%-32px)]"
         onSelect={handleSort}

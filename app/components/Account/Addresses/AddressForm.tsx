@@ -240,7 +240,7 @@ export function AddressForm({
         <div className="col-span-2 mt-4 flex justify-center">
           <button
             aria-label={initialAddress ? 'Update Address' : 'Add Address'}
-            className={`btn-primary w-full min-w-[12rem] md:w-auto ${
+            className={`btn-primary w-full min-w-48 md:w-auto ${
               status.started ? 'cursor-default' : ''
             }`}
             type="submit"

@@ -57,7 +57,7 @@ export function LoginForm({setIsForgotPassword, settings}: LoginFormProps) {
 
         <button
           aria-label="Log in to your account"
-          className={`btn-primary mt-3 w-full min-w-[10rem] self-center md:w-auto ${
+          className={`btn-primary mt-3 w-full min-w-40 self-center md:w-auto ${
             status.started ? 'cursor-default' : ''
           }`}
           type="submit"

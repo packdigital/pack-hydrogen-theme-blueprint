@@ -37,7 +37,7 @@ export function QuickShopOptions({
       <p className="btn-text truncate px-3">{option.text}</p>
 
       <ul
-        className="invisible absolute inset-0 grid h-full w-full bg-background group-hover/quickshop:visible group-focus/quickshop:visible"
+        className="invisible absolute inset-0 grid size-full bg-background group-hover/quickshop:visible group-focus/quickshop:visible"
         style={{
           gridTemplateColumns: `repeat(${option.values.length}, 1fr)`,
         }}

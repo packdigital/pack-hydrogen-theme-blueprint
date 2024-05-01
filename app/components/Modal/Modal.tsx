@@ -36,12 +36,12 @@ export function Modal() {
         >
           <Dialog.Panel
             as="aside"
-            className={`fixed left-1/2 top-1/2 z-50 max-h-[calc(var(--viewport-height)-2rem)] w-[calc(100%-2rem)] max-w-[48rem] -translate-x-1/2 -translate-y-1/2 overflow-hidden bg-background ${className}`}
+            className={`fixed left-1/2 top-1/2 z-50 max-h-[calc(var(--viewport-height)-2rem)] w-[calc(100%-2rem)] max-w-screen-md -translate-x-1/2 -translate-y-1/2 overflow-hidden bg-background ${className}`}
             {...props}
           >
             <button
               aria-label="Close modal"
-              className="absolute right-0 top-0  z-10 flex h-7 w-7 items-center justify-center bg-offWhite"
+              className="absolute right-0 top-0  z-10 flex size-7 items-center justify-center bg-offWhite"
               onClick={closeModal}
               type="button"
             >

@@ -29,15 +29,15 @@ export function LoadingDots({
         <p className="sr-only">{status}</p>
       )}
       <div
-        className="h-2.5 w-2.5 animate-flash rounded-full [animation-delay:-0.3s]"
+        className="size-2.5 animate-flash rounded-full [animation-delay:-0.3s]"
         style={{backgroundColor: color}}
       />
       <div
-        className="h-2.5 w-2.5 animate-flash rounded-full [animation-delay:-0.15s]"
+        className="size-2.5 animate-flash rounded-full [animation-delay:-0.15s]"
         style={{backgroundColor: color}}
       />
       <div
-        className="h-2.5 w-2.5 animate-flash rounded-full"
+        className="size-2.5 animate-flash rounded-full"
         style={{backgroundColor: color}}
       />
     </div>

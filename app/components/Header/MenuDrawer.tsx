@@ -76,7 +76,7 @@ export function MenuDrawer({
     >
       <div className="relative w-full flex-1 overflow-x-hidden">
         <div
-          className={`scrollbar-hide h-full w-full overflow-y-auto ${
+          className={`scrollbar-hide size-full overflow-y-auto ${
             nestedDrawerContent ? 'invisible' : 'visible'
           }`}
         >
@@ -89,7 +89,7 @@ export function MenuDrawer({
                 return (
                   <li
                     key={index}
-                    className="flex min-h-[3.5rem] w-full border-b border-b-border"
+                    className="flex min-h-14 w-full border-b border-b-border"
                   >
                     {hasContent ? (
                       <button
@@ -156,7 +156,7 @@ export function MenuDrawer({
           )}
 
           {additionalLinks?.length > 0 && (
-            <ul className="mb-8 flex flex-col gap-[0.25rem] px-5">
+            <ul className="mb-8 flex flex-col gap-1 px-5">
               {additionalLinks.map(({link}, index) => {
                 return (
                   <li key={index}>

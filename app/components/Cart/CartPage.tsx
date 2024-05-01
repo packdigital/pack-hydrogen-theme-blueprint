@@ -36,7 +36,7 @@ export function CartPage() {
           <div className="md:row-span-2">
             <ul
               className={`relative border-y border-border ${
-                hasCartLines ? '' : 'min-h-[20rem] py-12 md:min-h-[30rem]'
+                hasCartLines ? '' : 'min-h-80 py-12 md:min-h-[30rem]'
               }`}
             >
               {hasCartLines ? (
@@ -62,7 +62,7 @@ export function CartPage() {
                 <CartTotals settings={settings} />
               </div>
 
-              <div className="[&>div]:border-b-0 [&>div]:border-t [&>div]:border-border [&>div]:md:rounded [&>div]:md:border [&>div]:md:border-b">
+              <div className="[&>div]:border-b-0 [&>div]:border-t [&>div]:border-border [&>div]:md:rounded [&>div]:md:border">
                 <FreeShippingMeter settings={settings} />
               </div>
 

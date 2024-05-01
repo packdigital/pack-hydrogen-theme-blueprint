@@ -48,7 +48,7 @@ export function Order() {
 
       {!order && (
         <div
-          className="relative flex min-h-[12rem] items-center justify-center"
+          className="relative flex min-h-48 items-center justify-center"
           role="status"
         >
           Order not found.

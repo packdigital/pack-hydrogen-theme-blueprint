@@ -99,12 +99,12 @@ export function TestimonialSlider({cms}: {cms: TestimonialSliderCms}) {
               <div className="swiper-pagination !static mt-6 lg:!hidden" />
 
               <div
-                className={`swiper-button-prev left-0 !hidden !h-[3.5rem] !w-[3.5rem] rounded-full bg-white after:hidden ${
+                className={`swiper-button-prev left-0 !hidden !h-14 !w-14 rounded-full bg-white after:hidden ${
                   blocks.length > 3 ? 'lg:!flex' : 'lg:!hidden'
                 }`}
               >
                 <Svg
-                  className="max-w-[1.25rem] text-black"
+                  className="max-w-5 text-black"
                   src="/svgs/arrow-left.svg#arrow-left"
                   title="Arrow Left"
                   viewBox="0 0 24 24"
@@ -112,12 +112,12 @@ export function TestimonialSlider({cms}: {cms: TestimonialSliderCms}) {
               </div>
 
               <div
-                className={`swiper-button-next right-0 !hidden !h-[3.5rem] !w-[3.5rem] rounded-full bg-white after:hidden ${
+                className={`swiper-button-next right-0 !hidden !h-14 !w-14 rounded-full bg-white after:hidden ${
                   blocks.length > 3 ? 'lg:!flex' : 'lg:!hidden'
                 }`}
               >
                 <Svg
-                  className="max-w-[1.25rem] text-black"
+                  className="max-w-5 text-black"
                   src="/svgs/arrow-right.svg#arrow-right"
                   title="Arrow Right"
                   viewBox="0 0 24 24"

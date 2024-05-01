@@ -21,14 +21,14 @@ export function Menu({
 
   return (
     <div
-      className={`absolute left-0 top-[100%] hidden w-full origin-top border-border bg-background transition duration-200 lg:block ${
+      className={`absolute left-0 top-full hidden w-full origin-top border-border bg-background transition duration-200 lg:block ${
         hasContent ? 'scale-y-100 border-b' : 'scale-y-0'
       }`}
       onMouseEnter={handleMenuStayOpen}
       onMouseLeave={handleMenuHoverOut}
     >
       {hasContent && (
-        <div className="mx-[auto] grid max-w-[70rem] grid-cols-[12rem_1fr] gap-5 p-8 md:p-12">
+        <div className="mx-auto grid max-w-[70rem] grid-cols-[12rem_1fr] gap-5 p-8 md:p-12">
           <div>
             <ul className="flex flex-col gap-2">
               {links?.map(({link}, index) => {

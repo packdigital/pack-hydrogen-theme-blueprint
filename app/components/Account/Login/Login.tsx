@@ -22,7 +22,7 @@ export function Login() {
     <div className="flex flex-col items-center">
       {pageHeading && <h1 className="text-title-h2 mb-6">{pageHeading}</h1>}
 
-      <div className="mx-auto grid w-full max-w-[28rem] grid-cols-1 gap-5 md:max-w-[64rem] md:grid-cols-2">
+      <div className="mx-auto grid w-full max-w-md grid-cols-1 gap-5 md:max-w-[64rem] md:grid-cols-2">
         <div>
           {isForgotPassword ? (
             <ForgotPasswordForm

@@ -16,14 +16,14 @@ export function MenuNestedDrawer({
 
   return (
     <div
-      className={`scrollbar-hide absolute left-0 top-0 z-[1] h-full w-full bg-background ${
+      className={`scrollbar-hide absolute left-0 top-0 z-[1] size-full bg-background ${
         nestedDrawerContent ? 'visible' : 'invisible'
       }`}
     >
-      <div className="scrollbar-hide h-full w-full overflow-y-auto">
+      <div className="scrollbar-hide size-full overflow-y-auto">
         <button
           aria-label="Go back to main menu"
-          className="sticky top-0 z-[1] flex h-[3.5rem] w-full items-center justify-between gap-4 border-b border-b-border bg-background p-4"
+          className="sticky top-0 z-[1] flex h-14 w-full items-center justify-between gap-4 border-b border-b-border bg-background p-4"
           onClick={() => handleNestedDrawer(null)}
           type="button"
         >

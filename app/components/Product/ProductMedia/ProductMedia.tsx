@@ -98,7 +98,7 @@ export function ProductMedia({
 
           {/* placeholder image while swiper inits */}
           {!swiper && (
-            <div className="absolute inset-0 z-[1] h-full w-full max-md:hidden">
+            <div className="absolute inset-0 z-[1] size-full max-md:hidden">
               <ProductImage
                 alt={product.title}
                 image={firstMediaImageOnMount}

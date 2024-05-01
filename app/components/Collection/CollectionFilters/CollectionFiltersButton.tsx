@@ -31,7 +31,7 @@ export function CollectionFiltersButton({
       {/* mobile */}
       <button
         aria-label="Open filters drawer"
-        className="flex h-14 w-full items-center gap-2 rounded-none border-x-0 border-b border-r border-t border-border pl-4 pr-2.5 md:hidden"
+        className="flex h-14 w-full items-center gap-2 rounded-none border-x-0 border-y border-r border-border pl-4 pr-2.5 md:hidden"
         onClick={() => setMobileFiltersOpen(true)}
         type="button"
       >

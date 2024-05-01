@@ -34,7 +34,7 @@ export function IconRow({cms}: {cms: IconRowCms}) {
                 return (
                   <li
                     key={index}
-                    className="flex max-w-[16rem] grow basis-1/2 flex-col items-center p-4 text-center md:basis-1/6"
+                    className="flex max-w-64 grow basis-1/2 flex-col items-center p-4 text-center md:basis-1/6"
                   >
                     {image?.src && (
                       <Image

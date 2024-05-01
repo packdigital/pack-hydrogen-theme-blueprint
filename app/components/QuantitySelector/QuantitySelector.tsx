@@ -25,7 +25,7 @@ export function QuantitySelector({
         aria-label={`Reduce quantity of ${productTitle} by 1 to ${
           quantity - 1
         }`}
-        className={`relative h-8 w-8 rounded-full border border-border transition disabled:opacity-50 ${
+        className={`relative size-8 rounded-full border border-border transition disabled:opacity-50 ${
           disableDecrement ? 'cursor-not-allowed' : 'md:hover:border-gray'
         }`}
         disabled={disabled || isUpdating || disableDecrement}
@@ -52,7 +52,7 @@ export function QuantitySelector({
         aria-label={`Increase quantity of ${productTitle} by 1 to ${
           quantity + 1
         }`}
-        className="relative h-8 w-8 rounded-full border border-border transition disabled:opacity-50 md:hover:border-gray"
+        className="relative size-8 rounded-full border border-border transition disabled:opacity-50 md:hover:border-gray"
         disabled={disabled || isUpdating}
         onClick={handleIncrement}
         type="button"

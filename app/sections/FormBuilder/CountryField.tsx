@@ -1,7 +1,8 @@
 import {useMemo} from 'react';
 
-import type {CountryFieldProps} from './FormBuilder.types';
 import {useCountriesList} from '~/hooks';
+
+import type {CountryFieldProps} from './FormBuilder.types';
 
 const firstCountries = [
   'United States',

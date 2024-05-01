@@ -59,7 +59,7 @@ export function HeroContent({
 
   return (
     <div
-      className={`absolute inset-0 flex h-full w-full p-4 md:p-8 xl:p-12 ${positionClasses} ${darkOverlayClass} ${
+      className={`absolute inset-0 flex size-full p-4 md:p-8 xl:p-12 ${positionClasses} ${darkOverlayClass} ${
         isActiveSlide ? 'pointer-events-auto' : 'pointer-events-none'
       }`}
     >
@@ -106,7 +106,7 @@ export function HeroContent({
       {isActiveSlide && button?.clickableSlide && (
         <Link
           aria-label={button.buttons?.[0]?.link?.text}
-          className="pointer-events-auto absolute inset-0 z-[1] h-full w-full"
+          className="pointer-events-auto absolute inset-0 z-[1] size-full"
           to={button.buttons?.[0]?.link?.url}
           type={button.buttons?.[0]?.link?.type}
         />

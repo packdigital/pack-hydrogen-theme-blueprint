@@ -111,7 +111,7 @@ export function FormBuilder({cms}: {cms: FormBuilderCms}) {
               )}
 
               <button
-                className={`btn-primary mt-4 w-auto max-w-[12rem] ${
+                className={`btn-primary mt-4 w-auto max-w-48 ${
                   endpoint ? 'cursor-pointer' : 'cursor-not-allowed'
                 }`}
                 disabled={!endpoint}

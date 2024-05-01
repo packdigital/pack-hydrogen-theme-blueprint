@@ -20,7 +20,7 @@ export function HeroSlider({aboveTheFold, slider, slides}: HeroSliderProps) {
             }
           : false
       }
-      className="h-full w-full"
+      className="size-full"
       effect={effect}
       fadeEffect={{
         crossFade: true,

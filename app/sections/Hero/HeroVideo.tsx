@@ -16,7 +16,7 @@ export function HeroVideo({isVisible, posterSrc, videoSrc}: HeroVideoProps) {
 
   return (
     <video
-      className="absolute inset-0 h-full w-full object-cover"
+      className="absolute inset-0 size-full object-cover"
       controls={false}
       loop
       muted

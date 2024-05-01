@@ -33,7 +33,7 @@ export function ProductHeader({
       }`}
     >
       {enabledStarRating && (
-        <div className="min-h-[1.5rem]">
+        <div className="min-h-6">
           <button
             aria-label="Scroll to product reviews"
             onClick={() => {
@@ -55,12 +55,12 @@ export function ProductHeader({
       )}
 
       {selectedVariantColor && (
-        <h2 className="min-h-[1.5rem] text-base font-normal">
+        <h2 className="min-h-6 text-base font-normal">
           {selectedVariantColor}
         </h2>
       )}
 
-      <div className="mt-2 flex min-h-[1.5rem] gap-2">
+      <div className="mt-2 flex min-h-6 gap-2">
         {compareAtPrice && (
           <p className="text-mediumDarkGray line-through">{compareAtPrice}</p>
         )}

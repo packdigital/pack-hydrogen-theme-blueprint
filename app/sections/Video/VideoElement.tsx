@@ -21,12 +21,12 @@ export function VideoElement({
   const [isPlaying, setIsPlaying] = useState(autoplay);
 
   return (
-    <span className="group absolute inset-0 h-full w-full" ref={inViewRef}>
+    <span className="group absolute inset-0 size-full" ref={inViewRef}>
       {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
       <video
         aria-label={title}
         autoPlay={autoplay}
-        className={`absolute inset-0 h-full w-full object-cover ${
+        className={`absolute inset-0 size-full object-cover ${
           pauseAndPlay ? 'cursor-pointer' : ''
         }`}
         controls={controls}

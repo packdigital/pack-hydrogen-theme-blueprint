@@ -23,7 +23,7 @@ export const Svg = forwardRef(
       <svg
         ref={ref}
         viewBox={viewBox}
-        className={className || 'h-full w-full'}
+        className={className || 'size-full'}
         {...props}
       >
         {title && <title>{title}</title>}

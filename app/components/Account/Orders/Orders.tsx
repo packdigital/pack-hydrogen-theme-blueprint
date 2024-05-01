@@ -44,7 +44,7 @@ export function Orders() {
 
       {!orders?.length && (
         <div
-          className="relative flex min-h-[12rem] flex-col items-center justify-center gap-4"
+          className="relative flex min-h-48 flex-col items-center justify-center gap-4"
           role="status"
         >
           <p className="text-center">{emptyOrdersText}</p>

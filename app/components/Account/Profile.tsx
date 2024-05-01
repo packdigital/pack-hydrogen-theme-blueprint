@@ -89,7 +89,7 @@ export function Profile() {
         <div className="col-span-2 flex justify-center">
           <button
             aria-label="Save to update profile"
-            className={`btn-primary mt-4 w-full min-w-[10rem] md:w-auto ${
+            className={`btn-primary mt-4 w-full min-w-40 md:w-auto ${
               status.started ? 'cursor-default' : ''
             }`}
             type="submit"

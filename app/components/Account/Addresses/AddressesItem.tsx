@@ -100,7 +100,7 @@ export function AddressesItem({
       </div>
 
       {isDeleteConfirm && (
-        <div className="absolute left-0 top-0 flex h-full w-full flex-col items-center justify-center gap-4 bg-[rgba(255,255,255,0.9)] p-4">
+        <div className="absolute left-0 top-0 flex size-full flex-col items-center justify-center gap-4 bg-[rgba(255,255,255,0.9)] p-4">
           <p className="text-center text-sm">
             Are you sure you want to delete this address?
           </p>

@@ -34,7 +34,7 @@ export function ThreeTilesTile({
         />
       </Link>
 
-      <div className="inset-0 flex h-full w-full flex-col items-start gap-4">
+      <div className="inset-0 flex size-full flex-col items-start gap-4">
         <Link
           aria-label={item.heading}
           to={item.link?.url}
@@ -44,7 +44,7 @@ export function ThreeTilesTile({
           <div className="group flex">
             <h2 className="text-xl lg:text-2xl">{item.heading}</h2>
 
-            <span className="ml-[0.75rem] block max-w-[1.25rem] transition-transform lg:group-hover:translate-x-2">
+            <span className="ml-3 block max-w-5 transition-transform lg:group-hover:translate-x-2">
               <Svg
                 src="/svgs/arrow-right.svg#arrow-right"
                 title="Arrow"

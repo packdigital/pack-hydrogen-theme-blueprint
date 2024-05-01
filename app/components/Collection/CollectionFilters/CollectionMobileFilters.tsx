@@ -51,11 +51,11 @@ export function CollectionMobileFilters({
           )}
         </div>
 
-        <div className="scrollbar-hide max-h-[4.5rem] min-h-[2rem] overflow-y-auto">
+        <div className="scrollbar-hide max-h-[4.5rem] min-h-8 overflow-y-auto">
           {totalFilters ? (
             <CollectionFiltersSummary hideClear />
           ) : (
-            <p className="text-sm leading-[2rem] text-mediumDarkGray">
+            <p className="text-sm leading-8 text-mediumDarkGray">
               No filters selected yet
             </p>
           )}

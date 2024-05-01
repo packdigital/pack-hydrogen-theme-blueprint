@@ -32,7 +32,7 @@ export function Header() {
 
   return (
     <header
-      className={`fixed left-0 right-0 top-0 z-20 flex flex-col bg-background transition-[height] duration-300 ease-out ${
+      className={`fixed inset-x-0 top-0 z-20 flex flex-col bg-background transition-[height] duration-300 ease-out ${
         promobarHidden || promobarDisabled
           ? 'h-[var(--header-height)]'
           : 'h-[calc(var(--header-height)+var(--promobar-height))]'

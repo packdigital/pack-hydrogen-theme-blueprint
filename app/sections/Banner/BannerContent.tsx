@@ -38,7 +38,7 @@ export function BannerContent({
 
   return (
     <div
-      className={`pointer-events-none relative flex h-full w-full p-4 md:p-8 xl:p-12 ${positionClasses} ${darkOverlayClass}`}
+      className={`pointer-events-none relative flex size-full p-4 md:p-8 xl:p-12 ${positionClasses} ${darkOverlayClass}`}
     >
       <div
         className={`pointer-events-auto flex flex-col gap-6 ${alignmentClasses} ${maxWidthContentClasses}`}

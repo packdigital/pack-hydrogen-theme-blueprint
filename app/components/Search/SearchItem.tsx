@@ -76,7 +76,7 @@ export function SearchItem({
         <div>
           <h4 className="text-title-h6">{product.title}</h4>
 
-          <p className="min-h-[1.25rem] text-sm text-mediumDarkGray">{color}</p>
+          <p className="min-h-5 text-sm text-mediumDarkGray">{color}</p>
         </div>
 
         <div className="flex flex-wrap gap-x-1.5">
@@ -85,7 +85,7 @@ export function SearchItem({
               {compareAtPrice}
             </p>
           )}
-          <p className="min-h-[1.25rem] text-sm">{price}</p>
+          <p className="min-h-5 text-sm">{price}</p>
         </div>
       </div>
     </Link>

@@ -31,7 +31,7 @@ export function Activate() {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="mx-auto flex w-full max-w-[28rem] flex-col items-center rounded border border-border px-3 py-6 md:px-6 md:py-10">
+      <div className="mx-auto flex w-full max-w-md flex-col items-center rounded border border-border px-3 py-6 md:px-6 md:py-10">
         <div className="mb-6 flex flex-col gap-4">
           <h1 className="text-title-h3 text-center">{heading}</h1>
 
@@ -70,7 +70,7 @@ export function Activate() {
 
           <button
             aria-label="Submit to activate account"
-            className={`btn-primary mt-3 min-w-[10rem] self-center ${
+            className={`btn-primary mt-3 min-w-40 self-center ${
               status.started ? 'cursor-default' : ''
             }`}
             type="submit"

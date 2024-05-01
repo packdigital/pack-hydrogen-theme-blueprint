@@ -83,7 +83,7 @@ export function RegisterForm({settings}: {settings: Settings['account']}) {
 
         <button
           aria-label="Create Account"
-          className={`btn-primary mt-3 w-full min-w-[10rem] self-center md:w-auto  ${
+          className={`btn-primary mt-3 w-full min-w-40 self-center md:w-auto  ${
             status.started ? 'cursor-default' : ''
           }`}
           type="submit"

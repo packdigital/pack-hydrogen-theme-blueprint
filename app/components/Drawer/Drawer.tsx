@@ -78,7 +78,7 @@ export function Drawer({
               >
                 <Dialog.Panel
                   as="aside"
-                  className="flex h-[var(--viewport-height)] w-screen transform flex-col justify-between overflow-hidden bg-background align-middle shadow-xl transition-all md:max-w-[var(--drawer-width)]"
+                  className="flex h-[var(--viewport-height)] w-screen flex-col justify-between overflow-hidden bg-background align-middle shadow-xl transition-all md:max-w-[var(--drawer-width)]"
                 >
                   {/* Drawer header */}
                   <header className="relative flex h-[var(--header-height)] items-center justify-center border-b border-b-border px-16">
