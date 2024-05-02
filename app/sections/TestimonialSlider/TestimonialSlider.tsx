@@ -8,13 +8,7 @@ import type {TestimonialSliderCms} from './TestimonialSlider.types';
 
 export function TestimonialSlider({cms}: {cms: TestimonialSliderCms}) {
   const {heading, link, section, testimonialSlides: blocks} = {...cms};
-  const {
-    bgColor,
-    fullWidth,
-    reviewStarColor,
-    sliderPaginationBulletColor,
-    textColor,
-  } = {
+  const {fullWidth, reviewStarColor, sliderPaginationBulletColor, textColor} = {
     ...section,
   };
   const maxWidthClass = fullWidth
@@ -23,10 +17,7 @@ export function TestimonialSlider({cms}: {cms: TestimonialSliderCms}) {
 
   return (
     <Container container={cms.container}>
-      <div
-        className="md:px-contained py-12 lg:py-16"
-        style={{backgroundColor: bgColor}}
-      >
+      <div className="md:px-contained py-12 lg:py-16">
         <div
           className={`${maxWidthClass} relative mx-auto flex flex-col items-center lg:px-14`}
         >

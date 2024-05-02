@@ -10,7 +10,6 @@ interface Icon {
 
 interface Section {
   fullWidth?: boolean;
-  bgColor?: string;
   textColor?: string;
   iconColor?: string;
 }

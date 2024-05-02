@@ -3,7 +3,6 @@ import type {ImageCms, LinkCms} from '~/lib/types';
 
 interface Section {
   aspectRatio: string;
-  bgColor: string;
   buttonStyle: string;
   fullWidth: boolean;
   textColor: string;

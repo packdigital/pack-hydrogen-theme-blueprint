@@ -13,7 +13,7 @@ export function TextBlock({cms}: {cms: TextBlockCms}) {
     <Container container={cms.container}>
       <div
         className="px-contained py-contained"
-        style={{backgroundColor: section?.bgColor, color: section?.textColor}}
+        style={{color: section?.textColor}}
       >
         <div
           className={`mx-auto flex flex-col items-center gap-4 md:gap-6 ${maxWidthClass} text-center`}

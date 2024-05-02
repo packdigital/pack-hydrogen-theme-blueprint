@@ -92,8 +92,7 @@ export function Schema() {
         label: 'Section Settings',
         name: 'section',
         component: 'group',
-        description:
-          'Full width, background color, text color, bullet color, star color',
+        description: 'Full width, text color, bullet color, star color',
         fields: [
           {
             label: 'Full Width',
@@ -105,12 +104,6 @@ export function Schema() {
               false: 'Off',
             },
             defaultValue: false,
-          },
-          {
-            label: 'Background Color',
-            name: 'bgColor',
-            component: 'select',
-            options: COLORS,
           },
           {
             label: 'Text Color',
@@ -133,7 +126,6 @@ export function Schema() {
         ],
         defaultValue: {
           fullWidth: false,
-          bgColor: 'var(--black)',
           textColor: 'var(--white)',
           sliderPaginationBulletColor: 'var(--white)',
           reviewStarColor: 'var(--accent1)',

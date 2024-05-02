@@ -13,7 +13,7 @@ export function IconRow({cms}: {cms: IconRowCms}) {
     <Container container={cms.container}>
       <div
         className="px-contained py-contained"
-        style={{backgroundColor: section?.bgColor, color: section?.textColor}}
+        style={{color: section?.textColor}}
       >
         <div
           className={`mx-auto flex flex-col items-center gap-4 text-center md:gap-6 ${maxWidthClass}`}
