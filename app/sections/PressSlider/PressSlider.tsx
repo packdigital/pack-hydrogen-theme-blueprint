@@ -11,7 +11,7 @@ import {Schema} from './PressSlider.schema';
 
 export function PressSlider({cms}: {cms: PressSliderCms}) {
   const {section, slides} = cms;
-  const {bgColor, fullWidth, textColor} = {...section};
+  const {fullWidth, textColor} = {...section};
 
   const [mainSwiper, setMainSwiper] = useState<SwiperClass | null>(null);
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperClass | null>(null);
@@ -26,7 +26,6 @@ export function PressSlider({cms}: {cms: PressSliderCms}) {
       <div
         className="md:px-contained py-contained"
         style={{
-          backgroundColor: bgColor,
           color: textColor,
         }}
       >

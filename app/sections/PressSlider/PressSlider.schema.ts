@@ -110,7 +110,7 @@ export function Schema() {
         label: 'Section Settings',
         name: 'section',
         component: 'group',
-        description: 'Full width, background color, text color',
+        description: 'Full width, text color',
         fields: [
           {
             label: 'Full Width',
@@ -123,12 +123,6 @@ export function Schema() {
             },
           },
           {
-            label: 'Background Color',
-            name: 'bgColor',
-            component: 'select',
-            options: COLORS,
-          },
-          {
             label: 'Text Color',
             name: 'textColor',
             component: 'select',
@@ -137,7 +131,6 @@ export function Schema() {
         ],
         defaultValue: {
           fullWidth: false,
-          bgColor: 'var(--background)',
           textColor: 'var(--text)',
         },
       },

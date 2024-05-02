@@ -2,7 +2,6 @@ import type {ContainerSettings} from '~/settings/container';
 import type {LinkCms} from '~/lib/types';
 
 interface Section {
-  bgColor: string;
   fullWidth: boolean;
   reviewStarColor: string;
   sliderPaginationBulletColor: string;

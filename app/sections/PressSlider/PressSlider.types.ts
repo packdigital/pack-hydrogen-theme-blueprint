@@ -2,7 +2,6 @@ import type {ContainerSettings} from '~/settings/container';
 import type {ImageCms} from '~/lib/types';
 
 interface Section {
-  bgColor: string;
   fullWidth: boolean;
   textColor: string;
 }
