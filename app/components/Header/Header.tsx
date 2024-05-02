@@ -1,6 +1,4 @@
-import {useSiteSettings} from '@pack/react';
-
-import type {SiteSettings} from '~/lib/types';
+import {useSettings} from '~/hooks';
 
 import {Navigation} from './Navigation';
 import {Menu} from './Menu';
@@ -11,24 +9,23 @@ import {useMenuDrawer} from './useMenuDrawer';
 import {usePromobar} from './usePromobar';
 
 export function Header() {
-  const siteSettings = useSiteSettings() as SiteSettings;
-  const settings = siteSettings?.settings?.header;
+  const {header} = useSettings();
   const {
     menuContent,
     handleMenuClose,
     handleMenuStayOpen,
     handleMenuHoverIn,
     handleMenuHoverOut,
-  } = useMenu({settings});
+  } = useMenu({settings: header});
   const {promobarDisabled, promobarHeight, promobarHidden, setPromobarHidden} =
-    usePromobar({settings});
+    usePromobar({settings: header});
   const {
     menuDrawerOpen,
     nestedDrawerContent,
     handleCloseDrawer,
     handleNestedDrawer,
     handleOpenDrawer,
-  } = useMenuDrawer({settings});
+  } = useMenuDrawer({settings: header});
 
   return (
     <header
@@ -43,7 +40,7 @@ export function Header() {
         promobarHeight={promobarHeight}
         promobarHidden={promobarHidden}
         setPromobarHidden={setPromobarHidden}
-        settings={settings}
+        settings={header}
       />
 
       <Navigation
@@ -52,7 +49,7 @@ export function Header() {
         handleMenuHoverIn={handleMenuHoverIn}
         handleMenuHoverOut={handleMenuHoverOut}
         menuContent={menuContent}
-        settings={settings}
+        settings={header}
       />
 
       <Menu
@@ -67,7 +64,7 @@ export function Header() {
         handleNestedDrawer={handleNestedDrawer}
         menuDrawerOpen={menuDrawerOpen}
         nestedDrawerContent={nestedDrawerContent}
-        settings={settings}
+        settings={header}
       />
     </header>
   );

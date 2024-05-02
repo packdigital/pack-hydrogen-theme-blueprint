@@ -1,7 +1,5 @@
-import {useSiteSettings} from '@pack/react';
-
 import {CountrySelector, Link, Svg} from '~/components';
-import type {SiteSettings} from '~/lib/types';
+import {useSettings} from '~/hooks';
 
 import {EmailSignup} from './EmailSignup';
 import {FooterLegal} from './FooterLegal';
@@ -9,8 +7,7 @@ import {FooterMenu} from './FooterMenu';
 import {FooterSocial} from './FooterSocial';
 
 export function Footer() {
-  const siteSettings = useSiteSettings() as SiteSettings;
-  const {footer, localization} = {...siteSettings?.settings};
+  const {footer, localization} = useSettings();
   const {bgColor = 'var(--black)', textColor = 'var(--white)'} = {...footer};
 
   return (

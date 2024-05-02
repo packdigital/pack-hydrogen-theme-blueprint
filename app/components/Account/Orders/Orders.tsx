@@ -1,26 +1,22 @@
 import {useLocation} from '@remix-run/react';
-import {useSiteSettings} from '@pack/react';
 
 import {Link, Pagination} from '~/components';
-import type {SiteSettings} from '~/lib/types';
 import {useCustomerOrders} from '~/lib/customer';
-import {usePagination} from '~/hooks';
+import {usePagination, useSettings} from '~/hooks';
 
 import {OrdersItem} from './OrdersItem';
 
 export function Orders() {
-  const siteSettings = useSiteSettings() as SiteSettings;
+  const {account} = useSettings();
   const {orders} = useCustomerOrders();
 
-  const {menuItems} = {...siteSettings?.settings?.account?.menu};
+  const {menuItems} = {...account?.menu};
   const {
     buttonStyle,
     emptyOrdersButton,
     emptyOrdersText,
     ordersPerPage = 10,
-  } = {
-    ...siteSettings?.settings?.account?.orders,
-  };
+  } = {...account?.orders};
   const {pathname} = useLocation();
   const heading = menuItems?.find(({link}) => pathname.startsWith(link?.url))
     ?.link?.text;

@@ -1,22 +1,18 @@
 import {useMemo} from 'react';
 import {useLocation} from '@remix-run/react';
 import {Menu, Transition} from '@headlessui/react';
-import {useSiteSettings} from '@pack/react';
 
 import {Link, Svg} from '~/components';
-import type {SiteSettings} from '~/lib/types';
-import {useCustomer} from '~/hooks';
+import {useCustomer, useSettings} from '~/hooks';
 import {useCustomerLogOut} from '~/lib/customer';
 
 export function CustomerAccountLayout({children}: {children: React.ReactNode}) {
   const {pathname} = useLocation();
   const customer = useCustomer();
   const {customerLogOut} = useCustomerLogOut();
-  const siteSettings = useSiteSettings() as SiteSettings;
+  const {account} = useSettings();
 
-  const {helpHeading, helpItems, menuItems} = {
-    ...siteSettings?.settings?.account?.menu,
-  };
+  const {helpHeading, helpItems, menuItems} = {...account?.menu};
 
   const activeMenuItem = useMemo(() => {
     return menuItems?.find(({link}) => {
@@ -29,7 +25,7 @@ export function CustomerAccountLayout({children}: {children: React.ReactNode}) {
       className="px-contained py-contained"
       data-comp={CustomerAccountLayout.displayName}
     >
-      <div className="mx-auto grid w-full max-w-[80rem] grid-cols-1 gap-8 md:grid-cols-[12rem_1fr] lg:grid-cols-[16rem_1fr]">
+      <div className="mx-auto grid w-full max-w-screen-xl grid-cols-1 gap-8 md:grid-cols-[12rem_1fr] lg:grid-cols-[16rem_1fr]">
         <div>
           <div className="flex flex-row justify-between gap-6 pb-6 md:flex-col md:justify-start md:border-b md:border-b-border">
             <div className="flex-1">

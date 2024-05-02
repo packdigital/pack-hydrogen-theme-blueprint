@@ -1,15 +1,13 @@
 import type {ReactNode} from 'react';
-import {useSiteSettings} from '@pack/react';
 
 import {Cart, Footer, Header, Modal, Search} from '~/components';
-import type {SiteSettings} from '~/lib/types';
-import {useSetViewportHeightCssVar} from '~/hooks';
+import {useSetViewportHeightCssVar, useSettings} from '~/hooks';
 
 export function Layout({children}: {children: ReactNode}) {
-  const siteSettings = useSiteSettings() as SiteSettings;
+  const {header} = useSettings();
   useSetViewportHeightCssVar();
 
-  const {promobar} = {...siteSettings?.settings?.header};
+  const {promobar} = {...header};
   const promobarDisabled =
     !!promobar && (!promobar.enabled || !promobar.messages?.length);
   const paddingTop = promobarDisabled

@@ -10,3 +10,4 @@ export * from './useLoadScript';
 export * from './useMarketingListSubscribe';
 export * from './usePagination';
 export * from './useRootLoaderData';
+export * from './useSettings';

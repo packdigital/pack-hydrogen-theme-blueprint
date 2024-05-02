@@ -1,8 +1,7 @@
 import {useState} from 'react';
-import {useSiteSettings} from '@pack/react';
 
 import {Link} from '~/components';
-import type {SiteSettings} from '~/lib/types';
+import {useSettings} from '~/hooks';
 
 import {RegisterForm} from '../Register/RegisterForm';
 
@@ -10,11 +9,8 @@ import {LoginForm} from './LoginForm';
 import {ForgotPasswordForm} from './ForgotPasswordForm';
 
 export function Login() {
-  const siteSettings = useSiteSettings() as SiteSettings;
-  const settings = siteSettings?.settings?.account;
-  const {createLinkText, createText, pageHeading} = {
-    ...settings?.login,
-  };
+  const {account} = useSettings();
+  const {createLinkText, createText, pageHeading} = {...account?.login};
 
   const [isForgotPassword, setIsForgotPassword] = useState(false);
 
@@ -27,18 +23,18 @@ export function Login() {
           {isForgotPassword ? (
             <ForgotPasswordForm
               setIsForgotPassword={setIsForgotPassword}
-              settings={settings}
+              settings={account}
             />
           ) : (
             <LoginForm
               setIsForgotPassword={setIsForgotPassword}
-              settings={settings}
+              settings={account}
             />
           )}
         </div>
 
         <div className="hidden md:block">
-          <RegisterForm settings={settings} />
+          <RegisterForm settings={account} />
         </div>
       </div>
 

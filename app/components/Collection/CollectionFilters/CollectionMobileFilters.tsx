@@ -1,7 +1,5 @@
-import {useSiteSettings} from '@pack/react';
-
 import {Drawer} from '~/components';
-import type {SiteSettings} from '~/lib/types';
+import {useSettings} from '~/hooks';
 
 import {CollectionFilterDropdown} from './CollectionFilterDropdown';
 import {CollectionFiltersSummary} from './CollectionFiltersSummary';
@@ -13,12 +11,12 @@ export function CollectionMobileFilters({
   setMobileFiltersOpen,
   swatchesMap,
 }: CollectionMobileFiltersProps) {
-  const siteSettings = useSiteSettings() as SiteSettings;
+  const {collection: collectionSettings} = useSettings();
   const {activeFilterValues, addFilter, clearFilters, filters, removeFilter} =
     useCollectionFilters();
 
   const {optionsMaxCount = 6, showCount = true} = {
-    ...siteSettings?.settings?.collection?.filters,
+    ...collectionSettings?.filters,
   };
   const totalFilters = activeFilterValues.length;
 

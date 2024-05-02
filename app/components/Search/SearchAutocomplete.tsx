@@ -1,9 +1,7 @@
 import {useEffect} from 'react';
 import {useFetcher} from '@remix-run/react';
-import {useSiteSettings} from '@pack/react';
 
-import type {SiteSettings} from '~/lib/types';
-import {useIsHydrated, useLocale} from '~/hooks';
+import {useIsHydrated, useLocale, useSettings} from '~/hooks';
 
 import type {SearchAutocompleteProps} from './Search.types';
 
@@ -16,16 +14,14 @@ export function SearchAutocomplete({
   handleSuggestion,
   searchTerm,
 }: SearchAutocompleteProps) {
-  const siteSettings = useSiteSettings() as SiteSettings;
+  const {search} = useSettings();
   const isHydrated = useIsHydrated();
   const locale = useLocale();
   const fetcher = useFetcher<AutocompleteFetcherData>({
     key: `predictive-search-query:${searchTerm}`,
   });
 
-  const {enabled, heading, limit} = {
-    ...siteSettings?.settings?.search?.autocomplete,
-  };
+  const {enabled, heading, limit} = {...search?.autocomplete};
 
   useEffect(() => {
     if (!isHydrated) return;

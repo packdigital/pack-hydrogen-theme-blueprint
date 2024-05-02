@@ -36,7 +36,7 @@ export function CollectionFiltersButton({
         type="button"
       >
         <Svg
-          className="w-4 text-text"
+          className="w-4 text-current"
           src="/svgs/filter.svg#filter"
           title="Filter"
           viewBox="0 0 24 24"

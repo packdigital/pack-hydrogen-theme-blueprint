@@ -1,8 +1,5 @@
-import {useSiteSettings} from '@pack/react';
-
 import {Link} from '~/components';
-import type {SiteSettings} from '~/lib/types';
-import {useDataLayerViewSearchResults} from '~/hooks';
+import {useDataLayerViewSearchResults, useSettings} from '~/hooks';
 
 import {SearchItem} from './SearchItem';
 import type {SearchResultsProps} from './Search.types';
@@ -13,15 +10,14 @@ export function SearchResults({
   collectionResults,
   searchTerm,
 }: SearchResultsProps) {
-  const siteSettings = useSiteSettings() as SiteSettings;
+  const {search} = useSettings();
 
   useDataLayerViewSearchResults({
     products: productResults,
     searchTerm,
   });
 
-  const collectionsEnabled =
-    siteSettings?.settings?.search?.results?.collectionsEnabled ?? true;
+  const collectionsEnabled = search?.results?.collectionsEnabled ?? true;
 
   return (
     <div className="scrollbar-hide relative flex flex-1 flex-col gap-4 overflow-y-auto pt-4">

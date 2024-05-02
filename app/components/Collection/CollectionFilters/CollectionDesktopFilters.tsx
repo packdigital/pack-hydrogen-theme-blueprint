@@ -1,7 +1,6 @@
 import {useEffect, useState} from 'react';
-import {useSiteSettings} from '@pack/react';
 
-import type {SiteSettings} from '~/lib/types';
+import {useSettings} from '~/hooks';
 
 import type {CollectionDesktopFiltersProps} from './CollectionFilters.types';
 import {CollectionFilterDropdown} from './CollectionFilterDropdown';
@@ -12,7 +11,7 @@ export function CollectionDesktopFilters({
   desktopFiltersOpen,
   swatchesMap,
 }: CollectionDesktopFiltersProps) {
-  const siteSettings = useSiteSettings() as SiteSettings;
+  const {collection: collectionSettings, header} = useSettings();
   const {activeFilterValues, addFilter, filters, removeFilter} =
     useCollectionFilters();
 
@@ -22,12 +21,9 @@ export function CollectionDesktopFilters({
     optionsMaxCount = 6,
     showCount = true,
     sticky = true,
-  } = {
-    ...siteSettings?.settings?.collection?.filters,
-  };
+  } = {...collectionSettings?.filters};
   const stickyPromobar =
-    siteSettings?.settings?.header?.promobar?.enabled &&
-    !siteSettings?.settings?.header?.promobar?.autohide;
+    header?.promobar?.enabled && !header?.promobar?.autohide;
   const stickyTopClass = stickyPromobar
     ? 'md:top-[calc(var(--header-height)+var(--promobar-height)+1.5rem)]'
     : 'md:top-[calc(var(--header-height)+1.5rem)]';

@@ -1,12 +1,10 @@
 import {useMemo, useState} from 'react';
 import {useLocation} from '@remix-run/react';
-import {useSiteSettings} from '@pack/react';
 import {flattenConnection} from '@shopify/hydrogen';
 import type {MailingAddress} from '@shopify/hydrogen/storefront-api-types';
 
 import {Pagination} from '~/components';
-import type {Settings, SiteSettings} from '~/lib/types';
-import {useCustomer, usePagination} from '~/hooks';
+import {useCustomer, usePagination, useSettings} from '~/hooks';
 
 import {AddressesItem} from './AddressesItem';
 import {CreateAddressForm} from './CreateAddressForm';
@@ -16,7 +14,7 @@ const RESULTS_PER_PAGE = 10;
 
 export function Addresses() {
   const {pathname} = useLocation();
-  const siteSettings = useSiteSettings() as SiteSettings;
+  const {account} = useSettings();
   const customer = useCustomer();
   const defaultAddress = customer?.defaultAddress as MailingAddress | null;
 
@@ -46,9 +44,7 @@ export function Addresses() {
   );
   const [isCreateAddress, setIsCreateAddress] = useState(false);
 
-  const {menuItems} = {
-    ...siteSettings?.settings?.account?.menu,
-  } as Settings['account']['menu'];
+  const {menuItems} = {...account?.menu};
   const heading = menuItems?.find(({link}) => pathname.startsWith(link?.url))
     ?.link?.text;
 

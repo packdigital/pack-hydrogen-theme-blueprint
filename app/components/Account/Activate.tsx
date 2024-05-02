@@ -1,16 +1,14 @@
 import {useEffect, useState} from 'react';
 import {useNavigate} from '@remix-run/react';
-import {useSiteSettings} from '@pack/react';
 
 import {LoadingDots, Link} from '~/components';
-import type {SiteSettings} from '~/lib/types';
 import {useCustomerActivate} from '~/lib/customer';
-import {useLocale} from '~/hooks';
+import {useLocale, useSettings} from '~/hooks';
 
 export function Activate() {
   const {activateAccount, errors, status} = useCustomerActivate();
   const navigate = useNavigate();
-  const siteSettings = useSiteSettings() as SiteSettings;
+  const {account} = useSettings();
   const {pathPrefix} = useLocale();
 
   const [buttonText, setButtonText] = useState('Activate Account');
@@ -18,9 +16,7 @@ export function Activate() {
   const {
     heading = 'Activate Account',
     subtext = 'Create your password to activate your account.',
-  } = {
-    ...siteSettings?.settings?.account?.activate,
-  };
+  } = {...account?.activate};
 
   useEffect(() => {
     if (status.success) {

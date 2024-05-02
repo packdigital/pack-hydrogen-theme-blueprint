@@ -1,21 +1,19 @@
 import {useEffect, useState} from 'react';
 import {useNavigate} from '@remix-run/react';
-import {useSiteSettings} from '@pack/react';
 
 import {LoadingDots, Link} from '~/components';
-import type {SiteSettings} from '~/lib/types';
 import {useCustomerPasswordReset} from '~/lib/customer';
-import {useLocale} from '~/hooks';
+import {useLocale, useSettings} from '~/hooks';
 
 export function ResetPassword() {
   const {errors, resetPassword, status} = useCustomerPasswordReset();
   const navigate = useNavigate();
-  const siteSettings = useSiteSettings() as SiteSettings;
+  const {account} = useSettings();
   const {pathPrefix} = useLocale();
 
   const [buttonText, setButtonText] = useState('Reset Password');
 
-  const {heading, subtext} = {...siteSettings?.settings?.account?.reset};
+  const {heading, subtext} = {...account?.reset};
 
   useEffect(() => {
     if (status.success) {

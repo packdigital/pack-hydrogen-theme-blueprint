@@ -1,6 +1,4 @@
-import {useSiteSettings} from '@pack/react';
-
-import type {SiteSettings} from '~/lib/types';
+import {useSettings} from '~/hooks';
 
 import type {SearchSuggestionsProps} from './Search.types';
 
@@ -8,8 +6,8 @@ export function SearchSuggestions({
   handleSuggestion,
   hasNoProductResults,
 }: SearchSuggestionsProps) {
-  const siteSettings = useSiteSettings() as SiteSettings;
-  const {results, suggestions} = {...siteSettings?.settings?.search};
+  const {search} = useSettings();
+  const {results, suggestions} = {...search};
   const {noResultsText} = {...results};
   const {heading, terms} = {...suggestions};
 

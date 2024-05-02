@@ -1,8 +1,12 @@
 import {useCallback, useState} from 'react';
-import {useSiteSettings} from '@pack/react';
 
-import type {SelectedVariant, SiteSettings} from '~/lib/types';
-import {useCustomer, useDataLayerClickEvents, useGlobal} from '~/hooks';
+import type {SelectedVariant} from '~/lib/types';
+import {
+  useCustomer,
+  useDataLayerClickEvents,
+  useGlobal,
+  useSettings,
+} from '~/hooks';
 
 interface BackInStockModalProps {
   selectedVariant: SelectedVariant;
@@ -11,13 +15,11 @@ interface BackInStockModalProps {
 export function BackInStockModal({selectedVariant}: BackInStockModalProps) {
   const customer = useCustomer();
   const {sendSubscribeEvent} = useDataLayerClickEvents();
-  const siteSettings = useSiteSettings() as SiteSettings;
+  const {product} = useSettings();
   const {closeModal} = useGlobal();
 
   const [email, setEmail] = useState(customer?.email || '');
-  const {heading, subtext, submitText} = {
-    ...siteSettings?.settings?.product?.backInStock,
-  };
+  const {heading, subtext, submitText} = {...product?.backInStock};
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {

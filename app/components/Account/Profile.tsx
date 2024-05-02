@@ -1,10 +1,8 @@
 import {useEffect, useRef, useState} from 'react';
 import {useLocation} from '@remix-run/react';
-import {useSiteSettings} from '@pack/react';
 
 import {LoadingDots} from '~/components';
-import type {SiteSettings} from '~/lib/types';
-import {useCustomer} from '~/hooks';
+import {useCustomer, useSettings} from '~/hooks';
 import {useCustomerUpdateProfile} from '~/lib/customer';
 
 interface ProfileFormElements extends HTMLFormControlsCollection {
@@ -21,11 +19,11 @@ export function Profile() {
   const {updateCustomerDetails, errors, status} = useCustomerUpdateProfile();
   const customer = useCustomer();
   const {pathname} = useLocation();
-  const siteSettings = useSiteSettings() as SiteSettings;
+  const {account} = useSettings();
 
   const [buttonText, setButtonText] = useState('Save');
 
-  const {menuItems} = {...siteSettings?.settings?.account?.menu};
+  const {menuItems} = {...account?.menu};
   const heading = menuItems?.find(({link}) => pathname.startsWith(link?.url))
     ?.link?.text;
 

@@ -140,7 +140,7 @@ export function CollectionSort({
         placeholderClass="text-text"
       >
         <Svg
-          className="inline w-4 text-text"
+          className="inline w-4 text-current"
           src="/svgs/sort.svg#sort"
           title="Filter"
           viewBox="0 0 24 24"

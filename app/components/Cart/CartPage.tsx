@@ -1,8 +1,7 @@
-import {useSiteSettings} from '@pack/react';
 import {useCart} from '@shopify/hydrogen-react';
 import type {CartLine as CartLineType} from '@shopify/hydrogen/storefront-api-types';
 
-import type {SiteSettings} from '~/lib/types';
+import {useSettings} from '~/hooks';
 
 import {CartEmpty} from './CartEmpty';
 import {CartLine} from './CartLine';
@@ -11,11 +10,10 @@ import {CartUpsell} from './CartUpsell/CartUpsell';
 import {FreeShippingMeter} from './FreeShippingMeter';
 
 export function CartPage() {
-  const siteSettings = useSiteSettings() as SiteSettings;
+  const {cart: cartSettings} = useSettings();
   const {lines = [], totalQuantity = 0} = useCart();
   const cartLines = lines as CartLineType[];
-  const settings = siteSettings?.settings?.cart;
-  const heading = settings?.heading ?? 'My Cart';
+  const heading = cartSettings?.heading ?? 'My Cart';
   const hasCartLines = totalQuantity > 0;
 
   return (
@@ -23,7 +21,7 @@ export function CartPage() {
       className="md:px-contained py-contained"
       data-comp={CartPage.displayName}
     >
-      <div className="mx-auto max-w-[80rem]">
+      <div className="mx-auto max-w-screen-xl">
         <h1 className="text-title-h2 mb-4 px-4">{heading || 'My Cart'}</h1>
 
         <div
@@ -51,7 +49,7 @@ export function CartPage() {
                   );
                 })
               ) : (
-                <CartEmpty settings={settings} />
+                <CartEmpty settings={cartSettings} />
               )}
             </ul>
           </div>
@@ -59,15 +57,15 @@ export function CartPage() {
           {hasCartLines && (
             <div className="flex flex-col overflow-hidden md:gap-4">
               <div className="[&>div]:max-md:border-t-0 [&>div]:md:rounded [&>div]:md:border [&>div]:md:border-border">
-                <CartTotals settings={settings} />
+                <CartTotals settings={cartSettings} />
               </div>
 
               <div className="[&>div]:border-b-0 [&>div]:border-t [&>div]:border-border [&>div]:md:rounded [&>div]:md:border">
-                <FreeShippingMeter settings={settings} />
+                <FreeShippingMeter settings={cartSettings} />
               </div>
 
               <div className="[&>div]:border-border [&>div]:md:rounded [&>div]:md:border">
-                <CartUpsell settings={settings} />
+                <CartUpsell settings={cartSettings} />
               </div>
             </div>
           )}
