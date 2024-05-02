@@ -19,7 +19,8 @@ export function BackInStockModal({selectedVariant}: BackInStockModalProps) {
   const {closeModal} = useGlobal();
 
   const [email, setEmail] = useState(customer?.email || '');
-  const {heading, subtext, submitText} = {...product?.backInStock};
+  const [message, setMessage] = useState('');
+  const {heading, subtext, submitText, successText} = {...product?.backInStock};
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
@@ -29,7 +30,12 @@ export function BackInStockModal({selectedVariant}: BackInStockModalProps) {
       // back in stock integration here
 
       sendSubscribeEvent({email});
-      closeModal();
+      setEmail('');
+      setMessage(successText || 'Thank you!');
+      setTimeout(() => {
+        setMessage('');
+        closeModal();
+      }, 2500);
     },
     [],
   );
@@ -68,6 +74,8 @@ export function BackInStockModal({selectedVariant}: BackInStockModalProps) {
           {submitText}
         </button>
       </form>
+
+      {message && <p>{message}</p>}
     </div>
   );
 }
