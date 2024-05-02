@@ -61,7 +61,7 @@ export function Select({
         )}
 
         <Svg
-          className="w-4 text-text ui-open:rotate-180"
+          className="w-4 text-current ui-open:rotate-180"
           src="/svgs/chevron-down.svg#chevron-down"
           title="Chevron"
           viewBox="0 0 24 24"

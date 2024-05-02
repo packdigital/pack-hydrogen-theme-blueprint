@@ -31,9 +31,7 @@ export function Activate() {
         <div className="mb-6 flex flex-col gap-4">
           <h1 className="text-title-h3 text-center">{heading}</h1>
 
-          {subtext && (
-            <p className="max-w-[20rem] text-center text-sm">{subtext}</p>
-          )}
+          {subtext && <p className="max-w-xs text-center text-sm">{subtext}</p>}
         </div>
 
         <form

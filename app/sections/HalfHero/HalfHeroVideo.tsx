@@ -57,7 +57,7 @@ export function HalfHeroVideo({
         >
           {!isPlaying && (
             <Svg
-              className="absolute left-1/2 top-1/2 w-12 -translate-x-1/2 -translate-y-1/2 text-white opacity-90 transition group-hover:opacity-100 xs:w-16 lg:w-20"
+              className="absolute left-1/2 top-1/2 w-12 -translate-x-1/2 -translate-y-1/2 text-white opacity-90 transition xs:w-16 md:group-hover:opacity-100 lg:w-20"
               src="/svgs/play.svg#play"
               title="Play"
               viewBox="0 0 24 24"

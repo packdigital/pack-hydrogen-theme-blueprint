@@ -49,6 +49,8 @@ export interface BannerCms {
     };
   };
   container: ContainerSettings;
+  sectionName: string;
+  sectionVisibility: string;
 }
 
 export interface BannerContentProps {

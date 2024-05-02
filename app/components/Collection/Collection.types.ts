@@ -15,6 +15,7 @@ export interface CollectionProps {
   collection: Collection;
   searchTerm?: string;
   showHeading?: boolean;
+  title?: string;
 }
 
 export interface CollectionGridProps {

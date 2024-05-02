@@ -51,7 +51,7 @@ export function VideoElement({
 
       {pauseAndPlay && isPlaying && (
         <Svg
-          className="pointer-events-none absolute left-1/2 top-1/2 w-10 -translate-x-1/2 -translate-y-1/2 text-white opacity-0 transition group-hover:opacity-90"
+          className="pointer-events-none absolute left-1/2 top-1/2 w-10 -translate-x-1/2 -translate-y-1/2 text-white opacity-0 transition md:group-hover:opacity-90"
           src="/svgs/pause.svg#pause"
           title="Pause"
           viewBox="0 0 24 24"
@@ -60,7 +60,7 @@ export function VideoElement({
 
       {pauseAndPlay && !isPlaying && (
         <Svg
-          className="pointer-events-none absolute left-1/2 top-1/2 w-10 -translate-x-1/2 -translate-y-1/2 text-white opacity-70 transition group-hover:opacity-90"
+          className="pointer-events-none absolute left-1/2 top-1/2 w-10 -translate-x-1/2 -translate-y-1/2 text-white opacity-70 transition md:group-hover:opacity-90"
           src="/svgs/play.svg#play"
           title="Play"
           viewBox="0 0 24 24"

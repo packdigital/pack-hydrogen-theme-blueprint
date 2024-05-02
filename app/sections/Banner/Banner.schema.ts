@@ -201,7 +201,7 @@ const content = {
 export function Schema() {
   return {
     category: 'Heros',
-    label: 'Banner',
+    label: 'Hero Banner',
     key: 'banner',
     previewSrc:
       'https://cdn.shopify.com/s/files/1/0629/5519/2520/files/banner-preview.jpg?v=1708133574',
@@ -415,7 +415,7 @@ export function Schema() {
           },
         ],
         defaultValue: {
-          aboveTheFold: true,
+          aboveTheFold: false,
           fullWidth: true,
           fullBleed: true,
         },

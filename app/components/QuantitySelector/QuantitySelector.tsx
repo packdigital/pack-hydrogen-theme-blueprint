@@ -3,8 +3,10 @@ import {Spinner, Svg} from '~/components';
 interface QuantitySelectorProps {
   disabled?: boolean;
   disableDecrement?: boolean;
+  disableIncrement?: boolean;
   handleDecrement: () => void;
   handleIncrement: () => void;
+  hideButtons?: boolean;
   isUpdating?: boolean;
   productTitle?: string;
   quantity: number;
@@ -13,8 +15,10 @@ interface QuantitySelectorProps {
 export function QuantitySelector({
   disabled = false,
   disableDecrement = false,
+  disableIncrement = false,
   handleDecrement,
   handleIncrement,
+  hideButtons = false,
   isUpdating = false,
   productTitle = 'product',
   quantity = 1,
@@ -26,8 +30,8 @@ export function QuantitySelector({
           quantity - 1
         }`}
         className={`relative size-8 rounded-full border border-border transition disabled:opacity-50 ${
-          disableDecrement ? 'cursor-not-allowed' : 'md:hover:border-gray'
-        }`}
+          hideButtons ? 'invisible' : ''
+        } ${disableDecrement ? 'cursor-not-allowed' : 'md:hover:border-gray'}`}
         disabled={disabled || isUpdating || disableDecrement}
         onClick={handleDecrement}
         type="button"
@@ -52,8 +56,10 @@ export function QuantitySelector({
         aria-label={`Increase quantity of ${productTitle} by 1 to ${
           quantity + 1
         }`}
-        className="relative size-8 rounded-full border border-border transition disabled:opacity-50 md:hover:border-gray"
-        disabled={disabled || isUpdating}
+        className={`relative size-8 rounded-full border border-border transition disabled:opacity-50 md:hover:border-gray ${
+          hideButtons ? 'invisible' : ''
+        } ${disableIncrement ? 'cursor-not-allowed' : 'md:hover:border-gray'}`}
+        disabled={disabled || isUpdating || disableIncrement}
         onClick={handleIncrement}
         type="button"
       >

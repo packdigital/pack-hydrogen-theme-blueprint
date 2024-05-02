@@ -116,15 +116,16 @@ export function ProductsSlider({
 
             {/* Navigation */}
             {products.length > slidesPerViewDesktop && (
-              <div className="z-1 absolute inset-x-0 top-[calc(50%-28px)] md:px-8 xl:px-14">
+              <div className="absolute inset-x-0 top-[calc(50%-28px)] z-[1] md:px-8 xl:px-14">
                 <div
                   className={`relative mx-auto ${maxWidthClass} ${
                     isFullBleedAndCentered ? 'min-[90rem]:max-w-full' : ''
                   }`}
                 >
                   <div
+                    // eslint-disable-next-line tailwindcss/no-custom-classname
                     className={`swiper-button-prev left-0 top-[calc(50%-1.6875rem)] !hidden !h-14 !w-14 rounded-full border border-border bg-white after:hidden lg:!flex ${
-                      !isFullBleedAndCentered ? 'xl:-left-[1.6875rem]' : ''
+                      !isFullBleedAndCentered ? 'xl:left-[-1.6875rem]' : ''
                     }`}
                   >
                     <Svg
@@ -136,8 +137,9 @@ export function ProductsSlider({
                   </div>
 
                   <div
+                    // eslint-disable-next-line tailwindcss/no-custom-classname
                     className={`swiper-button-next right-0 top-[calc(50%-1.6875rem)] !hidden !h-14 !w-14 rounded-full border border-border bg-white after:hidden lg:!flex ${
-                      !isFullBleedAndCentered ? 'xl:-right-[1.6875rem]' : ''
+                      !isFullBleedAndCentered ? 'xl:right-[-1.6875rem]' : ''
                     }`}
                   >
                     <Svg
@@ -153,7 +155,7 @@ export function ProductsSlider({
           </Swiper>
         )}
 
-        {!swiper && (
+        {(!swiper || !products?.length) && (
           <div className="flex min-h-80 items-center justify-center">
             <Spinner width="32" />
           </div>

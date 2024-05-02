@@ -41,7 +41,7 @@ export function QuickShopOption({
   const validClass =
     disabled || (isSoldOut && !isNotifyMe)
       ? 'cursor-not-allowed'
-      : 'hover:bg-black hover:text-white';
+      : 'md:hover:bg-black md:hover:text-white';
   const unavailableClass = isSoldOut
     ? 'after:h-px after:w-[150%] after:rotate-[135deg] after:absolute after:top-1/2 after:left-1/2 after:-translate-x-1/2 after:-translate-y-1/2 after:bg-mediumGray text-gray overflow-hidden'
     : '';
@@ -61,7 +61,7 @@ export function QuickShopOption({
       type="button"
     >
       {isAdding ? (
-        <div className="text-mediumDarkGray group-hover/option:text-white">
+        <div className="text-mediumDarkGray md:group-hover/option:text-white">
           <Spinner width="20" />
         </div>
       ) : (

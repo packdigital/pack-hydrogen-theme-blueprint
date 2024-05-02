@@ -112,6 +112,7 @@ export default function CollectionRoute() {
           activeFilterValues={activeFilterValues as ActiveFilterValue[]}
           collection={collection}
           showHeading={!hasVisibleHeroSection}
+          title={collectionPage.title}
         />
       </section>
     </div>

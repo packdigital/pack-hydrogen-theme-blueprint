@@ -24,8 +24,9 @@ export function Collection({
   collection,
   searchTerm,
   showHeading = true,
+  title = '',
 }: CollectionProps) {
-  const {handle, products, title} = collection;
+  const {handle, products} = collection;
   const swatchesMap = useColorSwatches();
   const {collection: collectionSettings} = useSettings();
 
