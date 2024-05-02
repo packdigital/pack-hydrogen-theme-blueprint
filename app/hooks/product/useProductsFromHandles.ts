@@ -14,19 +14,22 @@ import {useLocale} from '~/hooks';
  * ```
  */
 
-export function useProductsFromHandles(handles: string[] = []): Product[] {
+export function useProductsFromHandles(
+  handles: string[] = [],
+  fetchOnMount = true,
+): Product[] {
   const {pathPrefix} = useLocale();
   const fetcher = useFetcher<{products: Product[]}>({
     key: `products-from-handles:${handles.join(',')}:${pathPrefix}`,
   });
 
   useEffect(() => {
-    if (!handles?.length || fetcher.data?.products) return;
+    if (!fetchOnMount || !handles?.length || fetcher.data?.products) return;
     fetcher.submit(
       {handles},
       {method: 'POST', action: `${pathPrefix}/api/products`},
     );
-  }, [handles]);
+  }, [fetchOnMount, JSON.stringify(handles)]);
 
   return fetcher.data?.products || [];
 }
