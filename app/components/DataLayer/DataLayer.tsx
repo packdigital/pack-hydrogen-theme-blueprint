@@ -1,3 +1,5 @@
+import {useEffect, useState} from 'react';
+import {useCart} from '@shopify/hydrogen-react';
 import {Script} from '@shopify/hydrogen';
 
 import {useLocale, useRootLoaderData} from '~/hooks';
@@ -27,12 +29,26 @@ export function DataLayer() {
   const {ENV} = useRootLoaderData();
   const {currency: currencyCode} = useLocale();
   const {handleDataLayerEvent} = useDataLayerEvent({DEBUG, ENV});
+  const {status} = useCart();
+
+  const cartIsIdle = status === 'idle';
+  const [cartReady, setCartReady] = useState(cartIsIdle);
+
+  useEffect(() => {
+    if (cartIsIdle) {
+      setCartReady(true);
+    } else {
+      // uninitialized cart never becomes idle so instead set cart ready after 1 sec
+      setTimeout(() => setCartReady(true), 1000);
+    }
+  }, [cartIsIdle]);
 
   const {generateUserProperties, userProperties} = useDataLayerInit({
     handleDataLayerEvent,
   });
 
   const {userDataEvent, userDataEventTriggered} = useDataLayerCustomer({
+    cartReady,
     currencyCode,
     handleDataLayerEvent,
     userProperties,
@@ -47,6 +63,7 @@ export function DataLayer() {
   });
 
   useDataLayerCart({
+    cartReady,
     currencyCode,
     handleDataLayerEvent,
     userDataEvent,
@@ -55,12 +72,14 @@ export function DataLayer() {
   });
 
   useDataLayerProduct({
+    cartReady,
     handleDataLayerEvent,
     userDataEvent,
     userProperties,
   });
 
   useDataLayerCollection({
+    cartReady,
     handleDataLayerEvent,
     userDataEvent,
     userDataEventTriggered,
@@ -68,6 +87,7 @@ export function DataLayer() {
   });
 
   useDataLayerSearch({
+    cartReady,
     handleDataLayerEvent,
     userDataEvent,
     userDataEventTriggered,

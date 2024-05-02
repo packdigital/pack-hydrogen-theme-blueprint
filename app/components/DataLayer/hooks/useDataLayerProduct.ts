@@ -1,5 +1,4 @@
 import {useCallback, useEffect, useRef, useState} from 'react';
-import {useCart} from '@shopify/hydrogen-react';
 import type {ProductVariant} from '@shopify/hydrogen-react/storefront-api-types';
 
 import {pathWithoutLocalePrefix} from '~/lib/utils';
@@ -9,22 +8,21 @@ import {mapProductPageVariant} from './utils';
 import type {UserProperties} from './useDataLayerInit';
 
 export function useDataLayerProduct({
+  cartReady,
   handleDataLayerEvent,
   userDataEvent,
   userProperties,
 }: {
+  cartReady: boolean;
   handleDataLayerEvent: (event: Record<string, any>) => void;
   userDataEvent: (arg0: any) => void;
   userProperties: UserProperties;
 }) {
   const productHandleRef = useRef<string | null>(null);
   const {emitter} = useGlobal();
-  const {status} = useCart();
 
   const [viewedProductVariant, setViewedProductVariant] =
     useState<ProductVariant | null>(null);
-
-  const cartReady = status === 'idle';
 
   const viewProductEvent = useCallback(
     ({
