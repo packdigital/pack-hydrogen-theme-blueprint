@@ -1,6 +1,6 @@
 import {useMemo, useState} from 'react';
 
-import {COLOR_OPTION_NAME} from '~/lib/constants';
+import {PRIMARY_OPTION_NAME} from '~/lib/constants';
 import type {Group, SelectedProduct, SelectedVariant} from '~/lib/types';
 
 import {ColorVariantOption} from './ColorVariantOption';
@@ -38,7 +38,7 @@ export function ColorVariantOptions({
 
   const selectedVariantColor = useMemo(() => {
     return selectedVariant?.selectedOptions.find(
-      (option) => option.name === COLOR_OPTION_NAME,
+      (option) => option.name === PRIMARY_OPTION_NAME,
     )?.value;
   }, [selectedVariant]);
 

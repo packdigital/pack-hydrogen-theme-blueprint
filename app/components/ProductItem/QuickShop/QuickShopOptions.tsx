@@ -4,7 +4,7 @@ import type {
   ProductVariant,
 } from '@shopify/hydrogen/storefront-api-types';
 
-import {COLOR_OPTION_NAME} from '~/lib/constants';
+import {PRIMARY_OPTION_NAME} from '~/lib/constants';
 
 import {QuickShopOption} from './QuickShopOption';
 
@@ -22,7 +22,7 @@ export function QuickShopOptions({
     if (!selectedProduct) return {name: '', values: [], text: ''};
     // Find first non-color option that has more than one value for quick shop
     const _option = selectedProduct.options?.find(({name, values}) => {
-      return name !== COLOR_OPTION_NAME && values.length > 1;
+      return name !== PRIMARY_OPTION_NAME && values.length > 1;
     });
     return {
       name: _option?.name || '',
@@ -37,7 +37,7 @@ export function QuickShopOptions({
       <p className="btn-text truncate px-3">{option.text}</p>
 
       <ul
-        className="invisible absolute inset-0 grid size-full bg-background group-hover/quickshop:visible group-focus/quickshop:visible"
+        className="invisible absolute inset-0 grid size-full bg-background group-focus/quickshop:visible md:group-hover/quickshop:visible"
         style={{
           gridTemplateColumns: `repeat(${option.values.length}, 1fr)`,
         }}

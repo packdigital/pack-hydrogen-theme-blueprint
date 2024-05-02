@@ -16,6 +16,6 @@ export const DEFAULT_LOCALE: I18nLocale = Object.freeze({
   pathPrefix: '',
 });
 
-export const COLOR_OPTION_NAME = 'Color' as const;
+export const PRIMARY_OPTION_NAME = 'Color' as const;
 
 export const PRICE_FILTER_ID = 'filter.v.price' as const;

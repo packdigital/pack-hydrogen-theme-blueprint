@@ -1,6 +1,6 @@
 import {useMemo} from 'react';
 
-import {COLOR_OPTION_NAME, PRICE_FILTER_ID} from '~/lib/constants';
+import {PRIMARY_OPTION_NAME, PRICE_FILTER_ID} from '~/lib/constants';
 import {isLightHexColor} from '~/lib/utils';
 import {Image, Svg} from '~/components';
 
@@ -19,7 +19,7 @@ export function CollectionFilterOption({
 
   const isPrice = id === PRICE_FILTER_ID;
   const isColor =
-    parsedInput?.variantOption?.name === COLOR_OPTION_NAME.toLowerCase();
+    parsedInput?.variantOption?.name === PRIMARY_OPTION_NAME.toLowerCase();
   let swatch = '';
   let hasImage = false;
 

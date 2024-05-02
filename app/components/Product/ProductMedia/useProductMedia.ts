@@ -4,7 +4,7 @@ import type {
   MediaImage,
 } from '@shopify/hydrogen/storefront-api-types';
 
-import {COLOR_OPTION_NAME} from '~/lib/constants';
+import {PRIMARY_OPTION_NAME} from '~/lib/constants';
 import type {ProductWithGrouping, SelectedVariant} from '~/lib/types';
 
 type Media = MediaEdge['node'];
@@ -25,7 +25,7 @@ export function useProductMedia({
   selectedVariant,
 }: UseProductMediaProps): UseProductMediaReturn {
   const colorOptions = useMemo(() => {
-    return product.options?.find((option) => option.name === COLOR_OPTION_NAME)
+    return product.options?.find((option) => option.name === PRIMARY_OPTION_NAME)
       ?.values;
   }, [product.id]);
 
@@ -59,7 +59,7 @@ export function useProductMedia({
     if (hasMultiColorsNotFromGroup && selectedVariant) {
       const color =
         selectedVariant?.selectedOptions?.find(
-          (option) => option.name === COLOR_OPTION_NAME,
+          (option) => option.name === PRIMARY_OPTION_NAME,
         )?.value || '';
       if (mediaMapByAltText?.[color]) {
         return mediaMapByAltText[color];

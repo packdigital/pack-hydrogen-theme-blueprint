@@ -1,6 +1,6 @@
 import type {Product} from '@shopify/hydrogen/storefront-api-types';
 
-import {COLOR_OPTION_NAME} from '~/lib/constants';
+import {PRIMARY_OPTION_NAME} from '~/lib/constants';
 import type {Group, OptionWithGroups} from '~/lib/types';
 
 export const formatGroupingWithOptions = ({
@@ -75,7 +75,7 @@ export const formatGroupingWithOptions = ({
     parentGroupOptionsMap = parentGroupProducts.reduce(
       (acc: Record<string, string[]>, {options}) => {
         options?.forEach(({name, values}) => {
-          if (name === COLOR_OPTION_NAME && !hasColorOption)
+          if (name === PRIMARY_OPTION_NAME && !hasColorOption)
             hasColorOption = true;
           if (!acc[name]) {
             acc[name] = values;
@@ -96,7 +96,7 @@ export const formatGroupingWithOptions = ({
         const subGroupOptions = sgProducts.reduce(
           (sgAcc: Record<string, string[]>, {options}) => {
             options?.forEach(({name, values}) => {
-              if (name === COLOR_OPTION_NAME && !hasColorOption)
+              if (name === PRIMARY_OPTION_NAME && !hasColorOption)
                 hasColorOption = true;
               if (!sgAcc[name]) {
                 sgAcc[name] = values;
@@ -119,7 +119,7 @@ export const formatGroupingWithOptions = ({
   }
 
   // by default break up subgroups based on color option
-  let groupingOptionName: string = COLOR_OPTION_NAME;
+  let groupingOptionName: string = PRIMARY_OPTION_NAME;
   // if there are no color options, use the first option from the first product
   if (!hasColorOption) {
     const parentProductFirstOptionName =
@@ -129,7 +129,7 @@ export const formatGroupingWithOptions = ({
     groupingOptionName =
       parentProductFirstOptionName ||
       subGroupFirstProductFirstOptionName ||
-      COLOR_OPTION_NAME;
+      PRIMARY_OPTION_NAME;
   }
 
   const combinedGroupOptionsInitialMap: Record<string, OptionWithGroups> = {};

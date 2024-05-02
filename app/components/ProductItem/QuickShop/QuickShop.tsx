@@ -5,7 +5,7 @@ import type {
 } from '@shopify/hydrogen/storefront-api-types';
 
 import {AddToCart} from '~/components';
-import {COLOR_OPTION_NAME} from '~/lib/constants';
+import {PRIMARY_OPTION_NAME} from '~/lib/constants';
 import {useSettings} from '~/hooks';
 
 import {QuickShopOptions} from './QuickShopOptions';
@@ -31,7 +31,7 @@ export function QuickShop({
 
     const initialOptions = selectedProduct.options;
     const options = enabledColorSelector
-      ? initialOptions?.filter((option) => option.name !== COLOR_OPTION_NAME)
+      ? initialOptions?.filter((option) => option.name !== PRIMARY_OPTION_NAME)
       : initialOptions;
 
     const hasOnlySingleValueOptions =
@@ -49,7 +49,7 @@ export function QuickShop({
   const hasOneVariant = selectedProduct?.variants?.nodes?.length === 1;
 
   return qualifiesForQuickShop && selectedVariant ? (
-    <div className="mt-5 hidden opacity-0 transition group-hover:opacity-100 md:block lg:mt-6">
+    <div className="mt-5 hidden opacity-0 transition md:block md:group-hover:opacity-100 lg:mt-6">
       {hasOneVariant && (
         <AddToCart
           addToCartText={quickShopSingleText}

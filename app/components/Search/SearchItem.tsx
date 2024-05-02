@@ -1,6 +1,6 @@
 import {useCallback, useMemo} from 'react';
 
-import {COLOR_OPTION_NAME, PRODUCT_IMAGE_ASPECT_RATIO} from '~/lib/constants';
+import {PRIMARY_OPTION_NAME, PRODUCT_IMAGE_ASPECT_RATIO} from '~/lib/constants';
 import {Image, Link} from '~/components';
 import {useDataLayerClickEvents, useVariantPrices} from '~/hooks';
 
@@ -30,7 +30,7 @@ export function SearchItem({
 
   const color = useMemo(() => {
     return firstVariant?.selectedOptions.find(
-      (option) => option.name === COLOR_OPTION_NAME,
+      (option) => option.name === PRIMARY_OPTION_NAME,
     )?.value;
   }, [firstVariant?.id]);
 
