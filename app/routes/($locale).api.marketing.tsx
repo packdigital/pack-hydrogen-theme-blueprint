@@ -112,7 +112,7 @@ const subscribeEmailOrPhoneToList = async ({
     await response.json();
 
   const isDataArray = Array.isArray(data);
-  const success = isDataArray && !data[0];
+  const success = isDataArray && (!data[0] || !!data[0].id);
 
   return success
     ? {
