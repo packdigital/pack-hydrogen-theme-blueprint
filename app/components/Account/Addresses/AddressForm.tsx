@@ -86,7 +86,7 @@ export function AddressForm({
   return (
     <div className="rounded border border-border p-4 sm:p-8">
       <div className="mb-8 flex items-start justify-between gap-3">
-        <h2 className="text-title-h5">{title}</h2>
+        <h2 className="text-h5">{title}</h2>
 
         <button
           aria-label="Cancel"

@@ -16,7 +16,7 @@ export function Login() {
 
   return (
     <div className="flex flex-col items-center">
-      {pageHeading && <h1 className="text-title-h2 mb-6">{pageHeading}</h1>}
+      {pageHeading && <h1 className="text-h2 mb-6">{pageHeading}</h1>}
 
       <div className="mx-auto grid w-full max-w-md grid-cols-1 gap-5 md:max-w-screen-lg md:grid-cols-2">
         <div>

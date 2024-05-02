@@ -22,7 +22,7 @@ export function CartPage() {
       data-comp={CartPage.displayName}
     >
       <div className="mx-auto max-w-screen-xl">
-        <h1 className="text-title-h2 mb-4 px-4">{heading || 'My Cart'}</h1>
+        <h1 className="text-h2 mb-4 px-4">{heading || 'My Cart'}</h1>
 
         <div
           className={`grid gap-x-4 md:grid-flow-col-dense md:grid-rows-[auto_1fr] md:gap-y-4 ${

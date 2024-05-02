@@ -39,9 +39,9 @@ export function HalfHeroContent({aboveTheFold, content}: HalfHeroContentProps) {
           )}
 
           {aboveTheFold ? (
-            <h1 className="text-title-h2">{headingWithBreaks}</h1>
+            <h1 className="text-h2">{headingWithBreaks}</h1>
           ) : (
-            <h2 className="text-title-h2">{headingWithBreaks}</h2>
+            <h2 className="text-h2">{headingWithBreaks}</h2>
           )}
         </div>
 

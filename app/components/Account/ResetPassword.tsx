@@ -26,7 +26,7 @@ export function ResetPassword() {
     <div className="flex flex-col items-center">
       <div className="mx-auto flex w-full max-w-md flex-col items-center rounded border border-border px-3 py-6 md:px-6 md:py-10">
         <div className="mb-6 flex flex-col gap-4">
-          <h1 className="text-title-h3 text-center">{heading}</h1>
+          <h1 className="text-h3 text-center">{heading}</h1>
 
           {subtext && <p className="max-w-xs text-center text-sm">{subtext}</p>}
         </div>
@@ -36,7 +36,7 @@ export function ResetPassword() {
           onSubmit={resetPassword}
         >
           <label htmlFor="password">
-            <span className="text-title-h6 block pb-1 pl-5">Password</span>
+            <span className="text-h6 block pb-1 pl-5">Password</span>
             <input
               className="input-text"
               name="password"
@@ -47,7 +47,7 @@ export function ResetPassword() {
           </label>
 
           <label htmlFor="passwordConfirm">
-            <span className="text-title-h6 block pb-1 pl-5">
+            <span className="text-h6 block pb-1 pl-5">
               Confirm Password
             </span>
             <input

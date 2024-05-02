@@ -87,7 +87,7 @@ export function FormBuilder({cms}: {cms: FormBuilderCms}) {
       <div className="px-contained py-contained">
         <div className={`mx-auto ${section?.maxWidth}`}>
           {heading && (
-            <h2 className="text-title-h2 mb-4 md:mb-6 lg:mb-8">{heading}</h2>
+            <h2 className="text-h2 mb-4 md:mb-6 lg:mb-8">{heading}</h2>
           )}
 
           <form

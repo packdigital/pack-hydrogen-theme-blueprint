@@ -151,7 +151,7 @@ export default function SearchRoute() {
     useLoaderData<typeof loader>();
 
   return (
-    <section data-comp="search-page" className="[&_h1]:text-title-h3">
+    <section data-comp="search-page" className="[&_h1]:text-h3">
       <Collection
         activeFilterValues={activeFilterValues as ActiveFilterValue[]}
         collection={collection}

@@ -57,7 +57,7 @@ export function AddressesItem({
   return (
     <div className="relative flex h-full flex-col justify-between gap-x-4 gap-y-6 rounded border border-border p-6 xs:flex-row md:flex-col lg:flex-row">
       <div>
-        <h3 className="text-title-h5 mb-2">{name}</h3>
+        <h3 className="text-h5 mb-2">{name}</h3>
 
         <div className="flex flex-col gap-1.5 text-sm">
           {company && <p>{company}</p>}

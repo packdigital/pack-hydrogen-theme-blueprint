@@ -19,7 +19,7 @@ export function SearchSuggestions({
 
       {terms?.length > 0 && (
         <div>
-          <h3 className="text-title-h5 mb-3">{heading}</h3>
+          <h3 className="text-h5 mb-3">{heading}</h3>
 
           <ul className="flex flex-col items-start gap-3">
             {terms.map((suggestion) => {

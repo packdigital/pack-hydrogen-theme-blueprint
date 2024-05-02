@@ -23,9 +23,9 @@ export function ImageTiles({cms}: {cms: ImageTilesCms}) {
         <div className={`mx-auto ${maxWidthClass}`}>
           {(!!heading || !!subheading) && (
             <div className="mb-6 px-4 text-center">
-              {heading && <h2 className="text-title-h2">{heading}</h2>}
+              {heading && <h2 className="text-h2">{heading}</h2>}
               {subheading && (
-                <h4 className="text-title-h4 mt-2">{subheading}</h4>
+                <h4 className="text-h4 mt-2">{subheading}</h4>
               )}
             </div>
           )}

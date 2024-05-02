@@ -22,7 +22,7 @@ export function TestimonialSlider({cms}: {cms: TestimonialSliderCms}) {
           className={`${maxWidthClass} relative mx-auto flex flex-col items-center lg:px-14`}
         >
           <h2
-            className="text-title-h2 px-4 text-center"
+            className="text-h2 px-4 text-center"
             style={{color: textColor}}
           >
             {heading}

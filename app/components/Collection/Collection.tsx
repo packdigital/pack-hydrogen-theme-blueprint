@@ -65,7 +65,7 @@ export function Collection({
     >
       <div className="md:px-contained py-contained mx-auto grid w-full max-w-[var(--content-max-width)] !pt-0">
         {showHeading && (
-          <h1 className="text-title-h2 py-contained mb-4 !pb-0 text-center max-md:px-4 md:mb-2">
+          <h1 className="text-h2 py-contained mb-4 !pb-0 text-center max-md:px-4 md:mb-2">
             {title}
           </h1>
         )}

@@ -29,7 +29,7 @@ export function CustomerAccountLayout({children}: {children: React.ReactNode}) {
         <div>
           <div className="flex flex-row justify-between gap-6 pb-6 md:flex-col md:justify-start md:border-b md:border-b-border">
             <div className="flex-1">
-              <h2 className="text-title-h4 md:text-title-h5 lg:text-title-h4 mb-1 break-words">
+              <h2 className="text-h4 md:text-h5 lg:text-h4 mb-1 break-words">
                 Hi{customer?.firstName ? `, ${customer.firstName}` : ''}
               </h2>
 
@@ -60,7 +60,7 @@ export function CustomerAccountLayout({children}: {children: React.ReactNode}) {
                       newTab={link.newTab}
                       type={link.type}
                     >
-                      <p className="text-title-h5 md:text-title-h4 lg:text-title-h3 hover-text-underline">
+                      <p className="text-h5 md:text-h4 lg:text-h3 hover-text-underline">
                         {link.text}
                       </p>
                     </Link>

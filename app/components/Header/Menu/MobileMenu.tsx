@@ -125,7 +125,7 @@ export function MobileMenu({
 
           {products?.length > 0 && (
             <div className="mb-8">
-              <h3 className="text-title-h5 mb-2 px-4">{productsHeading}</h3>
+              <h3 className="text-h5 mb-2 px-4">{productsHeading}</h3>
 
               <Swiper
                 modules={[A11y]}

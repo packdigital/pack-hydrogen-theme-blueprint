@@ -49,9 +49,9 @@ export function ProductHeader({
       {/* ensure only one H1 is in the DOM at a time */}
       {/* remove ternary and only use <h1> if only one header placement is used */}
       {isVisibleHeader ? (
-        <h1 className="text-title-h2">{product.title}</h1>
+        <h1 className="text-h2">{product.title}</h1>
       ) : (
-        <h2 className="text-title-h2">{product.title}</h2>
+        <h2 className="text-h2">{product.title}</h2>
       )}
 
       {selectedVariantColor && (

@@ -25,7 +25,7 @@ export function MarketingPhoneSignup({
       ref={formRef}
     >
       {heading && (
-        <h3 className="text-title-h4 text-center text-current">{heading}</h3>
+        <h3 className="text-h4 text-center text-current">{heading}</h3>
       )}
 
       {subtext && <p className="mt-2 text-center text-base">{subtext}</p>}

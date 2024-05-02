@@ -51,7 +51,7 @@ export function Addresses() {
   return (
     <div className="flex flex-col gap-8 md:gap-10">
       <div className="flex flex-col items-start justify-start gap-4 md:flex-row md:justify-between">
-        <h1 className="text-title-h4">{heading}</h1>
+        <h1 className="text-h4">{heading}</h1>
 
         <button
           aria-label="Add a new address"

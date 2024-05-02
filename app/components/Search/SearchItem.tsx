@@ -74,7 +74,7 @@ export function SearchItem({
 
       <div className="flex flex-col justify-between gap-3">
         <div>
-          <h4 className="text-title-h6">{product.title}</h4>
+          <h4 className="text-h6">{product.title}</h4>
 
           <p className="min-h-5 text-sm text-mediumDarkGray">{color}</p>
         </div>

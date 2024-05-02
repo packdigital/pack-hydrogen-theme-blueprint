@@ -21,7 +21,7 @@ export function Accordion({
             style={{backgroundColor: headerBgColor, color: headerTextColor}}
             type="button"
           >
-            <h3 className="text-title-h6 flex-1">{header}</h3>
+            <h3 className="text-h6 flex-1">{header}</h3>
 
             {open ? (
               <Svg

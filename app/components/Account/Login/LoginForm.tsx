@@ -23,9 +23,9 @@ export function LoginForm({setIsForgotPassword, settings}: LoginFormProps) {
   return (
     <div className="flex flex-col items-center rounded border border-border px-3 py-6 md:px-6 md:py-10">
       {pathname.startsWith(`${pathPrefix}/account/login`) && !pageHeading ? (
-        <h1 className="text-title-h3 mb-6 text-center">{heading}</h1>
+        <h1 className="text-h3 mb-6 text-center">{heading}</h1>
       ) : (
-        <h2 className="text-title-h3 mb-6 text-center">{heading}</h2>
+        <h2 className="text-h3 mb-6 text-center">{heading}</h2>
       )}
 
       <form

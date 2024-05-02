@@ -72,9 +72,9 @@ export function HeroContent({
           )}
 
           {aboveTheFold && isFirstSlide ? (
-            <h1 className="text-title-h1">{headingWithBreaks}</h1>
+            <h1 className="text-h1">{headingWithBreaks}</h1>
           ) : (
-            <h2 className="text-title-h1">{headingWithBreaks}</h2>
+            <h2 className="text-h1">{headingWithBreaks}</h2>
           )}
 
           {subheading && <p className="mt-4">{subheading}</p>}

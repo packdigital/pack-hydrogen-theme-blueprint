@@ -24,7 +24,7 @@ export function MarketingSignup({cms}: {cms: MarketingSignupCms}) {
   return (
     <Container container={cms.container}>
       <div className="px-contained py-contained flex flex-col gap-6">
-        <h2 className="text-title-h2 text-center text-current">{heading}</h2>
+        <h2 className="text-h2 text-center text-current">{heading}</h2>
 
         {(type === 'email' || type === 'emailPhone') && (
           <div

@@ -42,7 +42,7 @@ export function Profile() {
 
   return (
     <div className="flex flex-col">
-      <h1 className="text-title-h4 mb-8 md:mb-10">{heading}</h1>
+      <h1 className="text-h4 mb-8 md:mb-10">{heading}</h1>
 
       <form
         className="grid grid-cols-2 gap-3 rounded border border-border p-4 sm:p-6"

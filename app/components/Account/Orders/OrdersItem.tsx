@@ -45,7 +45,7 @@ export function OrdersItem({order}: {order: Order}) {
           <p className="text-sm">{orderDate}</p>
         </div>
 
-        <p className="text-title-h4">{total}</p>
+        <p className="text-h4">{total}</p>
 
         <p className="text-xs">{products}</p>
 

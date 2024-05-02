@@ -36,7 +36,7 @@ export function Orders() {
 
   return (
     <div className="flex flex-col gap-8 md:gap-10">
-      <h1 className="text-title-h4">{heading}</h1>
+      <h1 className="text-h4">{heading}</h1>
 
       {!orders?.length && (
         <div

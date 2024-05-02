@@ -38,7 +38,7 @@ export function Order() {
         </Link>
 
         <div className="flex flex-1 flex-col items-start gap-x-4 gap-y-1 md:flex-row md:items-center md:justify-between">
-          <h1 className="text-title-h4 md:text-title-h5 lg:text-title-h4">
+          <h1 className="text-h4 md:text-h5 lg:text-h4">
             Order {order?.name}
           </h1>
 

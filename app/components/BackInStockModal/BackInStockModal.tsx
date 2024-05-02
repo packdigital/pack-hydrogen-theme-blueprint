@@ -37,12 +37,12 @@ export function BackInStockModal({selectedVariant}: BackInStockModalProps) {
   return (
     <div className="flex flex-col items-center gap-8 text-center">
       <div>
-        <h2 className="text-title-h3">{heading}</h2>
+        <h2 className="text-h3">{heading}</h2>
         {subtext && <p className="mt-2">{subtext}</p>}
       </div>
 
       <div>
-        <h3 className="text-title-h4">{selectedVariant?.product.title}</h3>
+        <h3 className="text-h4">{selectedVariant?.product.title}</h3>
         <p>{selectedVariant?.title}</p>
       </div>
 
