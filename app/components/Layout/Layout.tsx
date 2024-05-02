@@ -1,18 +1,11 @@
 import type {ReactNode} from 'react';
 
 import {Cart, Footer, Header, Modal, Search} from '~/components';
-import {useSetViewportHeightCssVar, useSettings} from '~/hooks';
+import {usePromobar, useSetViewportHeightCssVar} from '~/hooks';
 
 export function Layout({children}: {children: ReactNode}) {
-  const {header} = useSettings();
+  const {mainPaddingTopClass} = usePromobar();
   useSetViewportHeightCssVar();
-
-  const {promobar} = {...header};
-  const promobarDisabled =
-    !!promobar && (!promobar.enabled || !promobar.messages?.length);
-  const paddingTop = promobarDisabled
-    ? 'pt-[var(--header-height)]'
-    : 'pt-[calc(var(--header-height)+var(--promobar-height))]';
 
   return (
     <div
@@ -21,7 +14,11 @@ export function Layout({children}: {children: ReactNode}) {
     >
       <Header />
 
-      <main role="main" id="mainContent" className={`grow ${paddingTop}`}>
+      <main
+        role="main"
+        id="mainContent"
+        className={`grow ${mainPaddingTopClass}`}
+      >
         {children}
       </main>
 

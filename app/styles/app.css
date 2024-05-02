@@ -64,11 +64,14 @@
   --2xl: 1536px;
 
   /* Constants */
-  --header-height: 4.5rem;
-  --promobar-height: 3rem;
+  --header-height-mobile: 4.5rem;
+  --header-height-desktop: 4.5rem;
+  --promobar-height-mobile: 3rem; /* Ensure this is equivalent to PROMOBAR_HEIGHT_MOBILE in /lib/constants.ts */
+  --promobar-height-desktop: 3rem; /* Ensure this is equivalent to PROMOBAR_HEIGHT_DESKTOP in /lib/constants.ts */
   --drawer-width: 23.5rem;
-  --product-image-aspect-ratio: 3 / 4; /* Ensure updating this ratio as needed */
   --content-max-width: 96rem;
+  /* Ensure updating this ratio as needed.  */
+  --product-image-aspect-ratio: 3 / 4; /* Ensure this is equivalent to PRODUCT_IMAGE_ASPECT_RATIO in /lib/constants.ts */
 }
 
 @layer base {

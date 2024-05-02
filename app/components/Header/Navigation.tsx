@@ -1,35 +1,37 @@
 import {useCart} from '@shopify/hydrogen-react';
 
 import {Link, Svg} from '~/components';
-import type {Settings} from '~/lib/types';
-import {useCustomer, useGlobal} from '~/hooks';
+import {useCustomer, useGlobal, useSettings} from '~/hooks';
 
-import type {UseMenuReturn} from './useMenu';
-import type {UseMenuDrawerReturn} from './useMenuDrawer';
+import type {UseDesktopMenuReturn} from './useDesktopMenu';
+import type {UseMobileMenuReturn} from './useMobileMenu';
 
-type NavigationProps = Pick<UseMenuDrawerReturn, 'handleOpenDrawer'> &
+type NavigationProps = Pick<
+  UseMobileMenuReturn,
+  'handleCloseMobileMenu' | 'handleOpenMobileMenu' | 'mobileMenuOpen'
+> &
   Pick<
-    UseMenuReturn,
-    | 'handleMenuClose'
-    | 'handleMenuHoverIn'
-    | 'handleMenuHoverOut'
-    | 'menuContent'
-  > & {
-    settings: Settings['header'];
-  };
+    UseDesktopMenuReturn,
+    | 'handleDesktopMenuClose'
+    | 'handleDesktopMenuHoverIn'
+    | 'handleDesktopMenuHoverOut'
+    | 'desktopMenuContent'
+  >;
 
 export function Navigation({
-  handleOpenDrawer,
-  handleMenuClose,
-  handleMenuHoverIn,
-  handleMenuHoverOut,
-  menuContent,
-  settings,
+  handleCloseMobileMenu,
+  handleOpenMobileMenu,
+  handleDesktopMenuClose,
+  handleDesktopMenuHoverIn,
+  handleDesktopMenuHoverOut,
+  desktopMenuContent,
+  mobileMenuOpen,
 }: NavigationProps) {
   const {totalQuantity = 0} = useCart();
   const customer = useCustomer();
   const {openCart, openSearch} = useGlobal();
-  const {logoPositionDesktop, menuItems} = {...settings?.menu};
+  const {header} = useSettings();
+  const {logoPositionDesktop, menuItems} = {...header?.menu};
   const gridColsClassDesktop =
     logoPositionDesktop === 'center'
       ? 'lg:grid-cols-[1fr_auto_1fr]'
@@ -59,7 +61,7 @@ export function Navigation({
           <ul className="flex">
             {menuItems?.map((item, index) => {
               const isHovered =
-                item.menuItem?.text === menuContent?.menuItem?.text;
+                item.menuItem?.text === desktopMenuContent?.menuItem?.text;
 
               return (
                 <li key={index} className="flex">
@@ -69,14 +71,14 @@ export function Navigation({
                       isHovered ? 'bg-offWhite' : 'bg-background'
                     }`}
                     to={item.menuItem?.url}
-                    onClick={handleMenuClose}
-                    onMouseEnter={() => handleMenuHoverIn(index)}
-                    onMouseLeave={handleMenuHoverOut}
+                    onClick={handleDesktopMenuClose}
+                    onMouseEnter={() => handleDesktopMenuHoverIn(index)}
+                    onMouseLeave={handleDesktopMenuHoverOut}
                   >
                     <p className="text-nav">{item.menuItem?.text}</p>
 
                     <div
-                      className={`after:w-fill absolute left-0 top-[calc(100%_-_2px)] h-[3px] w-full origin-center scale-0 border-t-2 border-t-primary bg-transparent transition group-hover:scale-100 ${
+                      className={`absolute left-0 top-[calc(100%_-_2px)] h-[3px] w-full origin-center scale-0 border-t-2 border-t-primary bg-transparent transition after:w-full group-hover:scale-100 ${
                         isHovered ? 'scale-100' : 'scale-0'
                       }`}
                     />
@@ -89,17 +91,31 @@ export function Navigation({
 
         <div className="flex items-center gap-4">
           <button
-            aria-label="Open menu"
+            aria-label={
+              mobileMenuOpen ? 'Close mobile menu' : 'Open mobile menu'
+            }
             className="w-5 lg:hidden"
-            onClick={handleOpenDrawer}
+            onClick={() => {
+              if (mobileMenuOpen) handleCloseMobileMenu();
+              else handleOpenMobileMenu();
+            }}
             type="button"
           >
-            <Svg
-              className="w-full text-text"
-              src="/svgs/menu.svg#menu"
-              title="Navigation"
-              viewBox="0 0 24 24"
-            />
+            {mobileMenuOpen ? (
+              <Svg
+                className="w-full text-text"
+                src="/svgs/close.svg#close"
+                title="Close"
+                viewBox="0 0 24 24"
+              />
+            ) : (
+              <Svg
+                className="w-full text-text"
+                src="/svgs/menu.svg#menu"
+                title="Navigation"
+                viewBox="0 0 24 24"
+              />
+            )}
           </button>
 
           <button

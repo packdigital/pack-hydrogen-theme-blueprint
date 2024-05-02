@@ -25,8 +25,8 @@ export function CollectionDesktopFilters({
   const stickyPromobar =
     header?.promobar?.enabled && !header?.promobar?.autohide;
   const stickyTopClass = stickyPromobar
-    ? 'md:top-[calc(var(--header-height)+var(--promobar-height)+1.5rem)]'
-    : 'md:top-[calc(var(--header-height)+1.5rem)]';
+    ? 'md:top-[calc(var(--header-height-desktop)+var(--promobar-height-desktop)+1.5rem)]'
+    : 'md:top-[calc(var(--header-height-desktop)+1.5rem)]';
 
   useEffect(() => {
     if (desktopFiltersOpen) setMounted(true);
@@ -39,7 +39,7 @@ export function CollectionDesktopFilters({
       } ${sticky ? stickyTopClass : ''}`}
     >
       <div className="overflow-hidden rounded border border-border max-md:hidden">
-        <div className="max-h-[calc(var(--viewport-height)-var(--header-height)-100px)] overflow-y-auto overflow-x-hidden">
+        <div className="max-h-[calc(var(--viewport-height)-var(--header-height-desktop)-100px)] overflow-y-auto overflow-x-hidden">
           {!!filters.length && (
             <ul className="overflow-y-auto">
               {filters.map((filter, index) => {

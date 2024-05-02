@@ -1,30 +1,35 @@
 import {Image, Link, Svg} from '~/components';
 
-import type {UseMenuDrawerReturn} from './useMenuDrawer';
+import type {UseMobileMenuReturn} from '../useMobileMenu';
 
-type MenuNestedDrawerProps = Pick<
-  UseMenuDrawerReturn,
-  'handleCloseDrawer' | 'handleNestedDrawer' | 'nestedDrawerContent'
+type MobileNestedMenuProps = Pick<
+  UseMobileMenuReturn,
+  'handleCloseMobileMenu' | 'handleMobileSubmenu' | 'mobileSubmenuContent'
 >;
 
-export function MenuNestedDrawer({
-  handleCloseDrawer,
-  nestedDrawerContent,
-  handleNestedDrawer,
-}: MenuNestedDrawerProps) {
-  const {imageLinks = [], links, mainLink, menuItem} = {...nestedDrawerContent};
+export function MobileNestedMenu({
+  handleCloseMobileMenu,
+  mobileSubmenuContent,
+  handleMobileSubmenu,
+}: MobileNestedMenuProps) {
+  const {
+    imageLinks = [],
+    links,
+    mainLink,
+    menuItem,
+  } = {...mobileSubmenuContent};
 
   return (
     <div
       className={`scrollbar-hide absolute left-0 top-0 z-[1] size-full bg-background ${
-        nestedDrawerContent ? 'visible' : 'invisible'
+        mobileSubmenuContent ? 'visible' : 'invisible'
       }`}
     >
       <div className="scrollbar-hide size-full overflow-y-auto">
         <button
           aria-label="Go back to main menu"
           className="sticky top-0 z-[1] flex h-14 w-full items-center justify-between gap-4 border-b border-b-border bg-background p-4"
-          onClick={() => handleNestedDrawer(null)}
+          onClick={() => handleMobileSubmenu(null)}
           type="button"
         >
           <Svg
@@ -47,7 +52,7 @@ export function MenuNestedDrawer({
                     className="hover-text-underline"
                     to={link?.url}
                     newTab={link?.newTab}
-                    onClick={handleCloseDrawer}
+                    onClick={handleCloseMobileMenu}
                     type={link?.type}
                   >
                     {link?.text}
@@ -63,7 +68,7 @@ export function MenuNestedDrawer({
               className="btn-primary mb-8"
               to={mainLink.url}
               newTab={mainLink.newTab}
-              onClick={handleCloseDrawer}
+              onClick={handleCloseMobileMenu}
               type={mainLink.type}
             >
               {mainLink.text}
@@ -79,7 +84,7 @@ export function MenuNestedDrawer({
                       aria-label={caption}
                       to={link?.url}
                       newTab={link?.newTab}
-                      onClick={handleCloseDrawer}
+                      onClick={handleCloseMobileMenu}
                       type={link?.type}
                     >
                       <Image
@@ -106,4 +111,4 @@ export function MenuNestedDrawer({
   );
 }
 
-MenuNestedDrawer.displayName = 'MenuNestedDrawer';
+MobileNestedMenu.displayName = 'MobileNestedMenu';

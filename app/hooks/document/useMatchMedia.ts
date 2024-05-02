@@ -46,10 +46,12 @@ function useMedia(query: string) {
   }, []);
 
   useEffect(() => {
+    if (!query) return;
     setMounted(true);
   }, []);
 
   useEffect(() => {
+    if (!query) return;
     const matchMediaResult = fallbackMatchMedia(query);
     callback(matchMediaResult);
     if (matchMediaResult) {

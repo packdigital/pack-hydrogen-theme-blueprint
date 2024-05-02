@@ -52,8 +52,8 @@ export function Product({product}: ProductProps) {
   const stickyPromobar =
     header?.promobar?.enabled && !header?.promobar?.autohide;
   const stickyTopClass = stickyPromobar
-    ? 'md:top-[calc(var(--header-height)+var(--promobar-height)+2.5rem)] xl:top-[calc(var(--header-height)+var(--promobar-height)+3rem)]'
-    : 'md:top-[calc(var(--header-height)+2.5rem)] xl:top-[calc(var(--header-height)+3rem)]';
+    ? 'md:top-[calc(var(--header-height-desktop)+var(--promobar-height-desktop)+2.5rem)] xl:top-[calc(var(--header-height-desktop)+var(--promobar-height-desktop)+3rem)]'
+    : 'md:top-[calc(var(--header-height-desktop)+2.5rem)] xl:top-[calc(var(--header-height-desktop)+3rem)]';
 
   return (
     <section data-comp="product">

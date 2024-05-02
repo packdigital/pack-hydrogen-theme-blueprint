@@ -2,39 +2,31 @@ import {Swiper, SwiperSlide} from 'swiper/react';
 import {A11y} from 'swiper/modules';
 
 import {Link, Drawer, Svg} from '~/components';
-import type {Settings} from '~/lib/types';
-import {useGlobal} from '~/hooks';
+import {useGlobal, useSettings} from '~/hooks';
 
-import {ProductItem} from '../ProductItem';
+import {ProductItem} from '../../ProductItem';
+import type {UseMobileMenuReturn} from '../useMobileMenu';
 
-import {MenuNestedDrawer} from './MenuNestedDrawer';
-import type {UseMenuDrawerReturn} from './useMenuDrawer';
+import {MobileNestedMenu} from './MobileNestedMenu';
 
-interface MenuDrawerProps
-  extends Pick<
-    UseMenuDrawerReturn,
-    | 'handleCloseDrawer'
-    | 'handleNestedDrawer'
-    | 'menuDrawerOpen'
-    | 'nestedDrawerContent'
-  > {
-  settings: Settings['header'];
-}
+type MobileMenuProps = Pick<
+  UseMobileMenuReturn,
+  | 'handleCloseMobileMenu'
+  | 'handleMobileSubmenu'
+  | 'mobileMenuOpen'
+  | 'mobileSubmenuContent'
+>;
 
-export function MenuDrawer({
-  handleCloseDrawer,
-  menuDrawerOpen,
-  nestedDrawerContent,
-  handleNestedDrawer,
-  settings,
-}: MenuDrawerProps) {
+export function MobileMenu({
+  handleCloseMobileMenu,
+  mobileMenuOpen,
+  mobileSubmenuContent,
+  handleMobileSubmenu,
+}: MobileMenuProps) {
+  const {header} = useSettings();
   const {openSearch} = useGlobal();
 
-  const {
-    links: additionalLinks,
-    menuItems,
-    productsSlider,
-  } = {...settings?.menu};
+  const {links: additionalLinks, menuItems, productsSlider} = {...header?.menu};
   const {products, heading: productsHeading} = {
     ...productsSlider,
   };
@@ -42,11 +34,15 @@ export function MenuDrawer({
   return (
     <Drawer
       ariaName="menu drawer"
-      onClose={handleCloseDrawer}
-      open={menuDrawerOpen}
+      onClose={handleCloseMobileMenu}
+      open={mobileMenuOpen}
       openFrom="left"
       heading={
-        <Link aria-label="Go to homepage" to="/" onClick={handleCloseDrawer}>
+        <Link
+          aria-label="Go to homepage"
+          to="/"
+          onClick={handleCloseMobileMenu}
+        >
           <Svg
             className="h-10 text-text"
             src="/svgs/logo.svg#logo"
@@ -60,7 +56,7 @@ export function MenuDrawer({
           aria-label="Open search drawer"
           className="absolute right-4 top-1/2 -translate-y-1/2"
           onClick={() => {
-            handleCloseDrawer();
+            handleCloseMobileMenu();
             openSearch();
           }}
           type="button"
@@ -77,7 +73,7 @@ export function MenuDrawer({
       <div className="relative w-full flex-1 overflow-x-hidden">
         <div
           className={`scrollbar-hide size-full overflow-y-auto ${
-            nestedDrawerContent ? 'invisible' : 'visible'
+            mobileSubmenuContent ? 'invisible' : 'visible'
           }`}
         >
           <nav className="mb-8 flex">
@@ -95,7 +91,7 @@ export function MenuDrawer({
                       <button
                         aria-label={item.menuItem.text}
                         className="flex h-14 w-full items-center justify-between gap-5 p-4"
-                        onClick={() => handleNestedDrawer(index)}
+                        onClick={() => handleMobileSubmenu(index)}
                         type="button"
                       >
                         <p className="text-nav flex-1 text-left">
@@ -114,7 +110,7 @@ export function MenuDrawer({
                         aria-label={item.menuItem.text}
                         className="text-nav flex h-14 w-full items-center p-4"
                         to={item.menuItem.url}
-                        onClick={handleCloseDrawer}
+                        onClick={handleCloseMobileMenu}
                         newTab={item.menuItem.newTab}
                         type={item.menuItem.type}
                       >
@@ -146,7 +142,7 @@ export function MenuDrawer({
                       <ProductItem
                         handle={product.handle}
                         index={index}
-                        onClick={handleCloseDrawer}
+                        onClick={handleCloseMobileMenu}
                       />
                     </SwiperSlide>
                   );
@@ -163,7 +159,7 @@ export function MenuDrawer({
                     <Link
                       aria-label={link?.text}
                       to={link?.url}
-                      onClick={handleCloseDrawer}
+                      onClick={handleCloseMobileMenu}
                       newTab={link?.newTab}
                       type={link?.type}
                     >
@@ -176,14 +172,14 @@ export function MenuDrawer({
           )}
         </div>
 
-        <MenuNestedDrawer
-          handleCloseDrawer={handleCloseDrawer}
-          handleNestedDrawer={handleNestedDrawer}
-          nestedDrawerContent={nestedDrawerContent}
+        <MobileNestedMenu
+          handleCloseMobileMenu={handleCloseMobileMenu}
+          handleMobileSubmenu={handleMobileSubmenu}
+          mobileSubmenuContent={mobileSubmenuContent}
         />
       </div>
     </Drawer>
   );
 }
 
-MenuDrawer.displayName = 'MenuDrawer';
+MobileMenu.displayName = 'MobileMenu';

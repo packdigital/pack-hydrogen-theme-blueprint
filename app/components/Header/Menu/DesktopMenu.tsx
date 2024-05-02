@@ -1,22 +1,22 @@
 import {Image, Link} from '~/components';
 
-import type {UseMenuReturn} from './useMenu';
+import type {UseDesktopMenuReturn} from '../useDesktopMenu';
 
-type MenuProps = Pick<
-  UseMenuReturn,
-  | 'handleMenuClose'
-  | 'handleMenuStayOpen'
-  | 'handleMenuHoverOut'
-  | 'menuContent'
+type DesktopMenuProps = Pick<
+  UseDesktopMenuReturn,
+  | 'handleDesktopMenuClose'
+  | 'handleDesktopMenuStayOpen'
+  | 'handleDesktopMenuHoverOut'
+  | 'desktopMenuContent'
 >;
 
-export function Menu({
-  handleMenuClose,
-  handleMenuStayOpen,
-  handleMenuHoverOut,
-  menuContent,
-}: MenuProps) {
-  const {imageLinks = [], links = [], mainLink} = {...menuContent};
+export function DesktopMenu({
+  handleDesktopMenuClose,
+  handleDesktopMenuStayOpen,
+  handleDesktopMenuHoverOut,
+  desktopMenuContent,
+}: DesktopMenuProps) {
+  const {imageLinks = [], links = [], mainLink} = {...desktopMenuContent};
   const hasContent = imageLinks?.length > 0 || links?.length > 0;
 
   return (
@@ -24,8 +24,8 @@ export function Menu({
       className={`absolute left-0 top-full hidden w-full origin-top border-border bg-background transition duration-200 lg:block ${
         hasContent ? 'scale-y-100 border-b' : 'scale-y-0'
       }`}
-      onMouseEnter={handleMenuStayOpen}
-      onMouseLeave={handleMenuHoverOut}
+      onMouseEnter={handleDesktopMenuStayOpen}
+      onMouseLeave={handleDesktopMenuHoverOut}
     >
       {hasContent && (
         <div className="mx-auto grid max-w-[70rem] grid-cols-[12rem_1fr] gap-5 p-8 md:p-12">
@@ -40,7 +40,7 @@ export function Menu({
                       className="hover-text-underline"
                       to={link?.url}
                       newTab={link?.newTab}
-                      onClick={handleMenuClose}
+                      onClick={handleDesktopMenuClose}
                       tabIndex={hasContent ? 0 : -1}
                       type={link?.type}
                     >
@@ -58,7 +58,7 @@ export function Menu({
                 className="btn-primary mt-5"
                 to={mainLink.url}
                 newTab={mainLink.newTab}
-                onClick={handleMenuClose}
+                onClick={handleDesktopMenuClose}
                 tabIndex={hasContent ? 0 : -1}
                 type={mainLink.type}
               >
@@ -76,7 +76,7 @@ export function Menu({
                     aria-label={caption}
                     to={link?.url}
                     newTab={link?.newTab}
-                    onClick={handleMenuClose}
+                    onClick={handleDesktopMenuClose}
                     tabIndex={hasContent ? 0 : -1}
                     type={link?.type}
                   >
@@ -104,4 +104,4 @@ export function Menu({
   );
 }
 
-Menu.displayName = 'Menu';
+DesktopMenu.displayName = 'DesktopMenu';
