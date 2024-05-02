@@ -25,7 +25,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
   }): Promise<BlogPage> => {
     const {data} = await context.pack.query(BLOG_QUERY, {
       variables: {
-        first: 100,
+        first: 250,
         handle,
         cursor,
       },
@@ -61,11 +61,22 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
 
   if (!blog) throw new Response(null, {status: 404});
 
+  const sortedArticles = blog.articles.nodes.sort((articleA, articleB) => {
+    return articleA.firstPublishedAt > articleB.firstPublishedAt ? -1 : 1;
+  });
+  const blogWithSortedArticles = {
+    ...blog,
+    articles: {
+      ...blog.articles,
+      nodes: sortedArticles,
+    },
+  };
+
   const shop = await getShop(context);
   const siteSettings = await getSiteSettings(context);
   const analytics = {pageType: AnalyticsPageType.blog};
   const seo = seoPayload.blog({
-    page: blog,
+    page: blogWithSortedArticles,
     shop,
     siteSettings,
     url: request.url,
@@ -73,7 +84,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
 
   return json({
     analytics,
-    blog,
+    blog: blogWithSortedArticles,
     seo,
   });
 }
