@@ -1,4 +1,5 @@
 import {
+  BUTTONS,
   COLORS,
   FLEX_POSITIONS,
   OBJECT_POSITIONS,
@@ -171,12 +172,7 @@ const buttons = {
           label: 'Button Style',
           name: 'style',
           component: 'select',
-          options: [
-            {label: 'Primary', value: 'btn-primary'},
-            {label: 'Secondary', value: 'btn-secondary'},
-            {label: 'Inverse Light', value: 'btn-inverse-light'},
-            {label: 'Inverse Dark', value: 'btn-inverse-dark'},
-          ],
+          options: BUTTONS,
         },
       ],
       defaultItem: {
