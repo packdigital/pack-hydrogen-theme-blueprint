@@ -35,9 +35,12 @@ export function Collection({
   );
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
-  const promotion = collectionSettings?.promotion;
-  const enabledFilters = collectionSettings?.filters?.enabled ?? true;
-  const enabledSort = collectionSettings?.sort?.enabled ?? true;
+  const {filters, promotion, sort} = {...collectionSettings};
+  const isDisabledFiltersCollection =
+    filters?.disabledByHandle?.includes(handle);
+  const enabledFilters =
+    (filters?.enabled ?? true) && !isDisabledFiltersCollection;
+  const enabledSort = sort?.enabled ?? true;
   const isSearchResults = handle === 'search';
 
   const promoTiles = useMemo(() => {
