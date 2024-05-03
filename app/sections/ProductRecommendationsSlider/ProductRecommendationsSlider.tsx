@@ -1,4 +1,5 @@
 import {useProduct} from '@shopify/hydrogen-react';
+import {useInView} from 'react-intersection-observer';
 
 import {
   Container,
@@ -15,12 +16,18 @@ export function ProductRecommendationsSlider({
 }: {
   cms: ProductsSliderCms & {container: ContainerSettings};
 }) {
+  const {ref, inView} = useInView({
+    rootMargin: '200px',
+    triggerOnce: true,
+  });
+
   const limit = (cms?.limit || 0) > 10 ? 10 : cms?.limit || 10;
 
   const {product} = useProduct();
   const productRecommendations = useProductRecommendations(
     product?.id || '',
     'RELATED',
+    inView,
   );
 
   const products = productRecommendations
@@ -29,7 +36,9 @@ export function ProductRecommendationsSlider({
 
   return (
     <Container container={cms.container}>
-      <ProductsSliderComponent cms={cms} products={products} />
+      <div ref={ref}>
+        <ProductsSliderComponent cms={cms} products={products} />
+      </div>
     </Container>
   );
 }

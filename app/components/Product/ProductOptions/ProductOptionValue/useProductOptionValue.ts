@@ -1,14 +1,9 @@
 import {useMemo} from 'react';
 import equal from 'fast-deep-equal';
-import {useSiteSettings} from '@pack/react';
 
 import {COLOR_OPTION_NAME} from '~/lib/constants';
-import type {
-  ProductWithGrouping,
-  SelectedVariant,
-  Settings,
-  SiteSettings,
-} from '~/lib/types';
+import {useSettings} from '~/hooks';
+import type {ProductWithGrouping, SelectedVariant, Settings} from '~/lib/types';
 
 export type Swatch = Settings['product']['colors']['swatches'][number];
 
@@ -35,8 +30,8 @@ export function useProductOptionValue({
   selectedOptionsMap,
   value,
 }: UseProductOptionValueProps): UseProductOptionValueReturn {
-  const siteSettings = useSiteSettings() as SiteSettings;
-  const swatches = siteSettings?.settings?.product?.colors?.swatches;
+  const {product: productSettings} = useSettings();
+  const swatches = productSettings?.colors?.swatches;
 
   const newSelectedOptions = useMemo(() => {
     return selectedOptionsMap ? {...selectedOptionsMap, [name]: value} : null;

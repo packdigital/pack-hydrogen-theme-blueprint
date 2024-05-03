@@ -1,10 +1,8 @@
 import {useEffect, useRef, useState} from 'react';
 import {useLocation} from '@remix-run/react';
-import {useSiteSettings} from '@pack/react';
 
 import {LoadingDots} from '~/components';
-import type {SiteSettings} from '~/lib/types';
-import {useCustomer} from '~/hooks';
+import {useCustomer, useSettings} from '~/hooks';
 import {useCustomerUpdateProfile} from '~/lib/customer';
 
 interface ProfileFormElements extends HTMLFormControlsCollection {
@@ -21,11 +19,11 @@ export function Profile() {
   const {updateCustomerDetails, errors, status} = useCustomerUpdateProfile();
   const customer = useCustomer();
   const {pathname} = useLocation();
-  const siteSettings = useSiteSettings() as SiteSettings;
+  const {account} = useSettings();
 
   const [buttonText, setButtonText] = useState('Save');
 
-  const {menuItems} = {...siteSettings?.settings?.account?.menu};
+  const {menuItems} = {...account?.menu};
   const heading = menuItems?.find(({link}) => pathname.startsWith(link?.url))
     ?.link?.text;
 
@@ -44,7 +42,7 @@ export function Profile() {
 
   return (
     <div className="flex flex-col">
-      <h1 className="text-title-h4 mb-8 md:mb-10">{heading}</h1>
+      <h1 className="text-h4 mb-8 md:mb-10">{heading}</h1>
 
       <form
         className="grid grid-cols-2 gap-3 rounded border border-border p-4 sm:p-6"
@@ -89,7 +87,7 @@ export function Profile() {
         <div className="col-span-2 flex justify-center">
           <button
             aria-label="Save to update profile"
-            className={`btn-primary mt-4 w-full min-w-[10rem] md:w-auto ${
+            className={`btn-primary mt-4 w-full min-w-40 md:w-auto ${
               status.started ? 'cursor-default' : ''
             }`}
             type="submit"

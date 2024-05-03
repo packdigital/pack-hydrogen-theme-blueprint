@@ -500,7 +500,8 @@
             "heading": "Notify Me When Available",
             "subtext": "Enter your email below and we'll notify you when this product is back in stock.",
             "submitText": "Submit",
-            "notifyMeText": "Notify Me When Available"
+            "notifyMeText": "Notify Me When Available",
+            "successText": "Thank you! We will notify you when this product is back in stock."
           },
           "quantitySelector": {
             "enabled": false

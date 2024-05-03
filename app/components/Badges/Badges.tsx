@@ -1,7 +1,6 @@
 import {useMemo} from 'react';
-import {useSiteSettings} from '@pack/react';
 
-import type {SiteSettings} from '~/lib/types';
+import {useSettings} from '~/hooks';
 
 interface BadgesProps {
   className?: string;
@@ -9,8 +8,8 @@ interface BadgesProps {
 }
 
 export function Badges({className = '', tags = []}: BadgesProps) {
-  const siteSettings = useSiteSettings() as SiteSettings;
-  const {badgeColors} = {...siteSettings?.settings?.product?.badges};
+  const {product} = useSettings();
+  const {badgeColors} = {...product?.badges};
 
   const badgeColorsMap = useMemo((): Record<
     string,

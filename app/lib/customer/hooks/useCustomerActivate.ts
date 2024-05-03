@@ -28,7 +28,7 @@ export function useCustomerActivate() {
     } catch (error) {
       pathname = `${location.pathname}${location.search}`;
     }
-    const [customerId, activationToken] = pathname.split('/');
+    const [, , , customerId, activationToken] = pathname.split('/');
     return {customerId, activationToken};
   }, [url]);
 

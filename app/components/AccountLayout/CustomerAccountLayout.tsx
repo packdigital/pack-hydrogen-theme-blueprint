@@ -1,22 +1,18 @@
 import {useMemo} from 'react';
 import {useLocation} from '@remix-run/react';
 import {Menu, Transition} from '@headlessui/react';
-import {useSiteSettings} from '@pack/react';
 
 import {Link, Svg} from '~/components';
-import type {SiteSettings} from '~/lib/types';
-import {useCustomer} from '~/hooks';
+import {useCustomer, useSettings} from '~/hooks';
 import {useCustomerLogOut} from '~/lib/customer';
 
 export function CustomerAccountLayout({children}: {children: React.ReactNode}) {
   const {pathname} = useLocation();
   const customer = useCustomer();
   const {customerLogOut} = useCustomerLogOut();
-  const siteSettings = useSiteSettings() as SiteSettings;
+  const {account} = useSettings();
 
-  const {helpHeading, helpItems, menuItems} = {
-    ...siteSettings?.settings?.account?.menu,
-  };
+  const {helpHeading, helpItems, menuItems} = {...account?.menu};
 
   const activeMenuItem = useMemo(() => {
     return menuItems?.find(({link}) => {
@@ -29,11 +25,11 @@ export function CustomerAccountLayout({children}: {children: React.ReactNode}) {
       className="px-contained py-contained"
       data-comp={CustomerAccountLayout.displayName}
     >
-      <div className="mx-auto grid w-full max-w-[80rem] grid-cols-1 gap-8 md:grid-cols-[12rem_1fr] lg:grid-cols-[16rem_1fr]">
+      <div className="mx-auto grid w-full max-w-screen-xl grid-cols-1 gap-8 md:grid-cols-[12rem_1fr] lg:grid-cols-[16rem_1fr]">
         <div>
           <div className="flex flex-row justify-between gap-6 pb-6 md:flex-col md:justify-start md:border-b md:border-b-border">
             <div className="flex-1">
-              <h2 className="text-title-h4 md:text-title-h5 lg:text-title-h4 mb-1 break-words">
+              <h2 className="text-h4 md:text-h5 lg:text-h4 mb-1 break-words">
                 Hi{customer?.firstName ? `, ${customer.firstName}` : ''}
               </h2>
 
@@ -64,7 +60,7 @@ export function CustomerAccountLayout({children}: {children: React.ReactNode}) {
                       newTab={link.newTab}
                       type={link.type}
                     >
-                      <p className="text-title-h5 md:text-title-h4 lg:text-title-h3 hover-text-underline">
+                      <p className="text-h5 md:text-h4 lg:text-h3 hover-text-underline">
                         {link.text}
                       </p>
                     </Link>
@@ -92,7 +88,7 @@ export function CustomerAccountLayout({children}: {children: React.ReactNode}) {
             </Menu.Button>
 
             <Transition
-              className="absolute left-0 top-[calc(100%+0.5rem)] z-10 w-full rounded-[0.5rem] border border-gray bg-background text-base"
+              className="absolute left-0 top-[calc(100%+0.5rem)] z-10 w-full rounded-lg border border-gray bg-background text-base"
               enter="transition duration-100 ease-out"
               enterFrom="transform scale-95 opacity-0"
               enterTo="transform scale-100 opacity-100"
@@ -102,7 +98,7 @@ export function CustomerAccountLayout({children}: {children: React.ReactNode}) {
             >
               <Menu.Items
                 as="nav"
-                className="scrollbar-hide flex max-h-[18rem] flex-col gap-0 overflow-y-auto py-2"
+                className="scrollbar-hide flex max-h-72 flex-col gap-0 overflow-y-auto py-2"
               >
                 {menuItems?.map(({link}, index) => {
                   return link?.text ? (

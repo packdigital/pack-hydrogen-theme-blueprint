@@ -27,7 +27,7 @@ export function MarketingEmailSignup({
       onSubmit={handleSubmit}
       ref={formRef}
     >
-      {heading && <h3 className="text-title-h4 text-current">{heading}</h3>}
+      {heading && <h3 className="text-h4 text-current">{heading}</h3>}
 
       {subtext && <p className="mt-2 text-base">{subtext}</p>}
 

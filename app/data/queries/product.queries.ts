@@ -1,4 +1,8 @@
 import {SECTION_FRAGMENT} from './pack.queries';
+import {
+  SELLING_PLAN_ALLOCATION_FRAGMENT,
+  SELLING_PLAN_GROUP_FRAGMENT,
+} from './sellingPlans.queries';
 
 /*
  * BACKPACK API QUERIES -------------------------------------------------------
@@ -100,6 +104,15 @@ export const VARIANT_FRAGMENT = `#graphql
       currencyCode
       amount
     }
+    sellingPlanAllocations(first: 10) {
+      edges {
+        node {
+          ... on SellingPlanAllocation {
+            ...sellingPlanAllocation
+          }
+        }
+      }
+    }
     compareAtPrice {
       currencyCode
       amount
@@ -113,8 +126,10 @@ export const VARIANT_FRAGMENT = `#graphql
       id
       productType
       title
+      tags
     }
   }
+  ${SELLING_PLAN_ALLOCATION_FRAGMENT}
 ` as const;
 
 export const PRODUCT_FRAGMENT = `#graphql
@@ -189,6 +204,15 @@ export const PRODUCT_FRAGMENT = `#graphql
           ...variantFragment
         }
     }
+    sellingPlanGroups(first: 10) {
+      edges {
+        node {
+          ... on SellingPlanGroup {
+            ...sellingPlanGroup
+          }
+        }
+      }
+    }
     variants(first: 250) {
       nodes {
         ... on ProductVariant {
@@ -202,6 +226,7 @@ export const PRODUCT_FRAGMENT = `#graphql
     }
   }
   ${VARIANT_FRAGMENT}
+  ${SELLING_PLAN_GROUP_FRAGMENT}
 ` as const;
 
 export const PRODUCT_ITEM_FRAGMENT = `#graphql
@@ -262,6 +287,15 @@ export const PRODUCT_ITEM_FRAGMENT = `#graphql
       values
       name
     }
+    sellingPlanGroups(first: 10) {
+      edges {
+        node {
+          ... on SellingPlanGroup {
+            ...sellingPlanGroup
+          }
+        }
+      }
+    }
     variants(first: 100) {
       nodes {
         ... on ProductVariant {
@@ -271,6 +305,7 @@ export const PRODUCT_ITEM_FRAGMENT = `#graphql
     }
   }
   ${VARIANT_FRAGMENT}
+  ${SELLING_PLAN_GROUP_FRAGMENT}
 ` as const;
 
 export const PRODUCT_QUERY = `#graphql

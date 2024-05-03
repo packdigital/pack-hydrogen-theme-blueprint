@@ -1,8 +1,12 @@
 import {useCallback, useState} from 'react';
-import {useSiteSettings} from '@pack/react';
 
-import type {SelectedVariant, SiteSettings} from '~/lib/types';
-import {useCustomer, useDataLayerClickEvents, useGlobal} from '~/hooks';
+import type {SelectedVariant} from '~/lib/types';
+import {
+  useCustomer,
+  useDataLayerClickEvents,
+  useGlobal,
+  useSettings,
+} from '~/hooks';
 
 interface BackInStockModalProps {
   selectedVariant: SelectedVariant;
@@ -11,13 +15,12 @@ interface BackInStockModalProps {
 export function BackInStockModal({selectedVariant}: BackInStockModalProps) {
   const customer = useCustomer();
   const {sendSubscribeEvent} = useDataLayerClickEvents();
-  const siteSettings = useSiteSettings() as SiteSettings;
+  const {product} = useSettings();
   const {closeModal} = useGlobal();
 
   const [email, setEmail] = useState(customer?.email || '');
-  const {heading, subtext, submitText} = {
-    ...siteSettings?.settings?.product?.backInStock,
-  };
+  const [message, setMessage] = useState('');
+  const {heading, subtext, submitText, successText} = {...product?.backInStock};
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
@@ -27,7 +30,12 @@ export function BackInStockModal({selectedVariant}: BackInStockModalProps) {
       // back in stock integration here
 
       sendSubscribeEvent({email});
-      closeModal();
+      setEmail('');
+      setMessage(successText || 'Thank you!');
+      setTimeout(() => {
+        setMessage('');
+        closeModal();
+      }, 2500);
     },
     [],
   );
@@ -35,12 +43,12 @@ export function BackInStockModal({selectedVariant}: BackInStockModalProps) {
   return (
     <div className="flex flex-col items-center gap-8 text-center">
       <div>
-        <h2 className="text-title-h3">{heading}</h2>
+        <h2 className="text-h3">{heading}</h2>
         {subtext && <p className="mt-2">{subtext}</p>}
       </div>
 
       <div>
-        <h3 className="text-title-h4">{selectedVariant?.product.title}</h3>
+        <h3 className="text-h4">{selectedVariant?.product.title}</h3>
         <p>{selectedVariant?.title}</p>
       </div>
 
@@ -49,7 +57,7 @@ export function BackInStockModal({selectedVariant}: BackInStockModalProps) {
         onSubmit={handleSubmit}
       >
         <input
-          className="input-text text-text md:max-w-[30rem]"
+          className="input-text text-text md:max-w-screen-xs"
           name="email"
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Enter your email..."
@@ -66,6 +74,8 @@ export function BackInStockModal({selectedVariant}: BackInStockModalProps) {
           {submitText}
         </button>
       </form>
+
+      {message && <p>{message}</p>}
     </div>
   );
 }

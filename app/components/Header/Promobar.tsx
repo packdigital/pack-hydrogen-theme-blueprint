@@ -4,23 +4,29 @@ import {Swiper, SwiperSlide} from 'swiper/react';
 import {A11y, EffectFade, Autoplay, Navigation} from 'swiper/modules';
 
 import {Link} from '~/components';
-import type {Settings} from '~/lib/types';
+import {useGlobal, useMatchMedia, usePromobar, useSettings} from '~/hooks';
 
-import type {UsePromobarReturn} from './usePromobar';
-
-export function Promobar({
-  promobarDisabled,
-  promobarHeight,
-  promobarHidden,
-  setPromobarHidden,
-  settings,
-}: UsePromobarReturn & {
-  settings: Settings['header'];
-}) {
-  const {promobar} = {...settings};
+export function Promobar() {
+  const {
+    promobarDisabled,
+    promobarHeightMobile,
+    promobarHeightDesktop,
+    promobarOpen,
+    togglePromobar,
+  } = usePromobar();
+  const {closeAll} = useGlobal();
+  const {header} = useSettings();
+  const isMobileViewport = useMatchMedia(
+    // no need to check if mobile view if both heights are the same
+    promobarHeightMobile !== promobarHeightDesktop ? '(max-width: 767px)' : '',
+  );
+  const {promobar} = {...header};
   const {autohide, bgColor, color, delay, effect, enabled, messages, speed} = {
     ...promobar,
   };
+  const promobarHeight = isMobileViewport
+    ? promobarHeightMobile
+    : promobarHeightDesktop;
 
   const swiperParams = {
     autoplay: {
@@ -48,11 +54,16 @@ export function Promobar({
   useEffect(() => {
     const setPromobarVisibility = () => {
       if (document.body.style.position === 'fixed') return;
-      setPromobarHidden(window.scrollY > promobarHeight);
+      togglePromobar(
+        window.scrollY <=
+          (typeof promobarHeight === 'string'
+            ? parseInt(promobarHeight, 10)
+            : Number(promobarHeight)),
+      );
     };
 
     if (!autohide) {
-      setPromobarHidden(false);
+      togglePromobar(true);
       window.removeEventListener('scroll', setPromobarVisibility);
       return undefined;
     }
@@ -66,9 +77,9 @@ export function Promobar({
   return (
     <div
       className={`overflow-hidden transition-[height] ease-out ${
-        promobarHidden || promobarDisabled
-          ? 'h-0 duration-[50ms]'
-          : 'h-[var(--promobar-height)] duration-300'
+        promobarOpen && !promobarDisabled
+          ? 'duration-300 max-md:h-[var(--promobar-height-mobile)] md:h-[var(--promobar-height-desktop)]'
+          : 'h-0 duration-[50ms]'
       }`}
       style={{backgroundColor: bgColor}}
     >
@@ -86,9 +97,10 @@ export function Promobar({
                 >
                   <Link
                     aria-label={message}
-                    className="test-link select-none"
+                    className="select-none"
                     draggable={false}
                     to={link.url}
+                    onClick={closeAll}
                     newTab={link.newTab}
                     type={link.type}
                   >
@@ -103,12 +115,14 @@ export function Promobar({
             <>
               <button
                 aria-label="See previous slide"
+                // eslint-disable-next-line tailwindcss/no-custom-classname
                 className="swiper-button-prev !left-4 md:!left-8 xl:!left-12"
                 type="button"
               />
 
               <button
                 aria-label="See next slide"
+                // eslint-disable-next-line tailwindcss/no-custom-classname
                 className="swiper-button-next !right-4 md:!right-8 xl:!right-12"
                 type="button"
               />

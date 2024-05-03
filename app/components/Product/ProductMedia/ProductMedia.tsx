@@ -93,12 +93,15 @@ export function ProductMedia({
               );
             })}
 
-            <div className="active-bullet-black swiper-pagination !top-[calc(100%-8px)] flex w-full justify-center gap-2.5 md:hidden" />
+            <div
+              // eslint-disable-next-line tailwindcss/no-custom-classname
+              className="active-bullet-black swiper-pagination !top-[calc(100%-8px)] flex w-full justify-center gap-2.5 md:hidden"
+            />
           </Swiper>
 
           {/* placeholder image while swiper inits */}
           {!swiper && (
-            <div className="absolute inset-0 z-[1] h-full w-full max-md:hidden">
+            <div className="absolute inset-0 z-[1] size-full max-md:hidden">
               <ProductImage
                 alt={product.title}
                 image={firstMediaImageOnMount}
@@ -113,6 +116,14 @@ export function ProductMedia({
         </div>
       </div>
 
+      {/*
+       * Height classes breakdown for a vertical stack. For horizontal stack, use inverse logic with width instead
+       * Example: "h-[calc(90px*4+10px*3)]" (with w-[90px])
+       * 90px = height of each thumbnail. In this case, this implies a square aspect ratio because it's the same as the width. For anything else, update px height accordingly in relation to its width
+       * 4 = number of thumbnails
+       * 10px = gutter between thumbnails
+       * 3 = number of gutters between thumbnails
+       */}
       <div className="scrollbar-hide relative order-2 hidden w-full overflow-x-auto md:block md:max-lg:pb-[calc((100%-5*8px)/6)] lg:order-1 lg:h-[calc(80px*5+12px*4)] xl:h-[calc(80px*6+12px*5)]">
         {media.length > 0 && (
           <ProductMediaThumbnails

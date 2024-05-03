@@ -64,11 +64,14 @@
   --2xl: 1536px;
 
   /* Constants */
-  --header-height: 4.5rem;
-  --promobar-height: 3rem;
+  --header-height-mobile: 4.5rem;
+  --header-height-desktop: 4.5rem;
+  --promobar-height-mobile: 3rem; /* Ensure this is equivalent to PROMOBAR_HEIGHT_MOBILE in /lib/constants.ts */
+  --promobar-height-desktop: 3rem; /* Ensure this is equivalent to PROMOBAR_HEIGHT_DESKTOP in /lib/constants.ts */
   --drawer-width: 23.5rem;
-  --product-image-aspect-ratio: 3 / 4; /* Ensure updating this ratio as needed */
   --content-max-width: 96rem;
+  /* Ensure updating this ratio as needed.  */
+  --product-image-aspect-ratio: 3 / 4; /* Ensure this is equivalent to PRODUCT_IMAGE_ASPECT_RATIO in /lib/constants.ts */
 }
 
 @layer base {
@@ -89,27 +92,27 @@
   }
 
   h1 {
-    @apply text-title-h1;
+    @apply text-h1;
   }
 
   h2 {
-    @apply text-title-h2;
+    @apply text-h2;
   }
 
   h3 {
-    @apply text-title-h3;
+    @apply text-h3;
   }
 
   h4 {
-    @apply text-title-h4;
+    @apply text-h4;
   }
 
   h5 {
-    @apply text-title-h5;
+    @apply text-h5;
   }
 
   h6 {
-    @apply text-title-h6;
+    @apply text-h6;
   }
 
   input::-webkit-outer-spin-button,
@@ -124,7 +127,7 @@
 
 @layer components {
   /* text specific */
-  .text-title-h1 {
+  .text-h1 {
     @apply overflow-anywhere
       font-heading
       text-4xl
@@ -132,7 +135,7 @@
       md:text-5xl
       xl:text-6xl;
   }
-  .text-title-h2 {
+  .text-h2 {
     @apply overflow-anywhere
       font-heading
       text-3xl
@@ -140,7 +143,7 @@
       md:text-4xl
       xl:text-5xl;
   }
-  .text-title-h3 {
+  .text-h3 {
     @apply overflow-anywhere
       font-heading
       text-2xl
@@ -148,7 +151,7 @@
       md:text-3xl
       xl:text-4xl;
   }
-  .text-title-h4 {
+  .text-h4 {
     @apply overflow-anywhere
       font-heading
       text-xl
@@ -156,14 +159,14 @@
       md:text-2xl
       xl:text-3xl;
   }
-  .text-title-h5 {
+  .text-h5 {
     @apply overflow-anywhere
       font-heading
       text-base
       font-bold
       md:text-lg;
   }
-  .text-title-h6 {
+  .text-h6 {
     @apply overflow-anywhere
       font-heading
       text-sm

@@ -1,7 +1,7 @@
 import {useLoaderData} from '@remix-run/react';
 import {json} from '@shopify/remix-oxygen';
-import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
-import {AnalyticsPageType} from '@shopify/hydrogen';
+import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
+import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 import {RenderSections} from '@pack/react';
 
 import {BLOG_QUERY} from '~/data/queries';
@@ -25,7 +25,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
   }): Promise<BlogPage> => {
     const {data} = await context.pack.query(BLOG_QUERY, {
       variables: {
-        first: 100,
+        first: 250,
         handle,
         cursor,
       },
@@ -61,11 +61,22 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
 
   if (!blog) throw new Response(null, {status: 404});
 
+  const sortedArticles = blog.articles.nodes.sort((articleA, articleB) => {
+    return articleA.firstPublishedAt > articleB.firstPublishedAt ? -1 : 1;
+  });
+  const blogWithSortedArticles = {
+    ...blog,
+    articles: {
+      ...blog.articles,
+      nodes: sortedArticles,
+    },
+  };
+
   const shop = await getShop(context);
   const siteSettings = await getSiteSettings(context);
   const analytics = {pageType: AnalyticsPageType.blog};
   const seo = seoPayload.blog({
-    page: blog,
+    page: blogWithSortedArticles,
     shop,
     siteSettings,
     url: request.url,
@@ -73,10 +84,14 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
 
   return json({
     analytics,
-    blog,
+    blog: blogWithSortedArticles,
     seo,
   });
 }
+
+export const meta = ({data}: MetaArgs) => {
+  return getSeoMeta(data.seo);
+};
 
 export default function BlogRoute() {
   const {blog} = useLoaderData<typeof loader>();

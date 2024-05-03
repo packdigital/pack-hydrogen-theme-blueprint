@@ -2,8 +2,9 @@ import {json, redirect} from '@shopify/remix-oxygen';
 import type {
   ActionFunctionArgs,
   LoaderFunctionArgs,
+  MetaArgs,
 } from '@shopify/remix-oxygen';
-import {AnalyticsPageType} from '@shopify/hydrogen';
+import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 
 import {customerLoginRegisterAction} from '~/lib/customer';
 import {getAccountSeo} from '~/lib/utils';
@@ -31,6 +32,10 @@ export async function loader({context, params}: LoaderFunctionArgs) {
   const seo = await getAccountSeo(context, 'Register');
   return json({analytics, seo});
 }
+
+export const meta = ({data}: MetaArgs) => {
+  return getSeoMeta(data.seo);
+};
 
 export default function RegisterRoute() {
   return <Register />;

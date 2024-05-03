@@ -18,14 +18,14 @@ export function ApplicationError({error}: ApplicationErrorProps) {
   }, [error]);
 
   return isDevelopment && error ? (
-    <div className="pointer-events-none fixed inset-0 z-[1000] h-full w-full">
+    <div className="pointer-events-none fixed inset-0 z-[1000] size-full">
       {modalOpen && (
         <section
-          className="px-contained py-contained pointer-events-auto flex h-full w-full items-center justify-center bg-[rgba(0,0,0,0.5)]"
+          className="px-contained py-contained pointer-events-auto flex size-full items-center justify-center bg-[rgba(0,0,0,0.5)]"
           data-comp="application-error"
         >
-          <aside className="flex max-h-full max-w-full justify-center overflow-hidden rounded-md bg-white p-5 drop-shadow after:absolute after:left-0 after:right-0 after:top-0 after:h-[4px] after:w-full after:bg-red-500 md:p-10">
-            <div className="flex w-full max-w-[80rem] flex-col overflow-hidden">
+          <aside className="flex max-h-full max-w-full justify-center overflow-hidden rounded-md bg-white p-5 drop-shadow after:absolute after:inset-x-0 after:top-0 after:h-[4px] after:w-full after:bg-red-500 md:p-10">
+            <div className="flex w-full max-w-screen-xl flex-col overflow-hidden">
               <h1
                 aria-live="assertive"
                 className="mb-4 font-[system-ui,sans-serif] text-[24px]"
@@ -35,7 +35,7 @@ export function ApplicationError({error}: ApplicationErrorProps) {
               </h1>
 
               <div className="flex-1 overflow-y-auto">
-                <pre className="overflow-auto bg-offWhite p-[2rem] text-red-500">
+                <pre className="overflow-auto bg-offWhite p-8 text-red-500">
                   {error instanceof Error
                     ? error.stack
                     : typeof error === 'string'

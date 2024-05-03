@@ -21,7 +21,7 @@ export function Container({
   const marginClasses = `${tabletDesktopMarginBottom} ${mobileMarginBottom}`;
   return (
     <div
-      className={`${paddingClasses} ${marginClasses}`}
+      className={`relative ${paddingClasses} ${marginClasses}`}
       style={{backgroundColor: bgColorCustom || bgColor}}
     >
       {children}

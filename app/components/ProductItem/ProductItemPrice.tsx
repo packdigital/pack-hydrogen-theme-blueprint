@@ -15,7 +15,7 @@ export function ProductItemPrice({selectedVariant}: ProductItemPriceProps) {
           {compareAtPrice}
         </p>
       )}
-      <p className="min-h-[1.25rem] text-sm">{price}</p>
+      <p className="min-h-5 text-sm">{price}</p>
     </div>
   );
 }

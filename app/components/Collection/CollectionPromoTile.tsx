@@ -34,7 +34,7 @@ export function CollectionPromoTile({tile}: CollectionPromoTileProps) {
         {videoSrc && (
           <video
             autoPlay
-            className="absolute inset-0 h-full w-full object-cover"
+            className="absolute inset-0 size-full object-cover"
             controls={false}
             loop
             muted
@@ -60,7 +60,7 @@ export function CollectionPromoTile({tile}: CollectionPromoTileProps) {
         )}
 
         {(videoSrc || image?.src) && darkOverlay && (
-          <div className="pointer-events-none absolute inset-0 h-full w-full bg-[rgba(0,0,0,0.2)]" />
+          <div className="pointer-events-none absolute inset-0 size-full bg-[rgba(0,0,0,0.2)]" />
         )}
 
         {(text?.heading || text?.subtext) && (

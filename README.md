@@ -7,21 +7,23 @@
 <p align="center"><b><a href="https://hydrogen.packdigital.com/" target="_blank">Check out the demo store</a></b></p>
 
 ## Table of Contents
-* [Our Philosophy](#our-philosophy)
-* [Major Features](#major-features)
-* [Pack Features](#pack-features)
-* [Get Started](#get-started)
-  * [Environment Variables](#environment-variables)
-  * [Requirements](#requirements)
-  * [Building for production](#building-for-production)
-  * [Building for local development](#building-for-local-development)
-* [Pack Customizer Content](#pack-customizer-content)
-  * [Caching](#caching)
-* [Datalayer](#data-layer)
-* [Documentation and Support](#documentation-and-support)
-* [Contributors](#contributors)
+
+- [Our Philosophy](#our-philosophy)
+- [Major Features](#major-features)
+- [Pack Features](#pack-features)
+- [Get Started](#get-started)
+  - [Environment Variables](#environment-variables)
+  - [Requirements](#requirements)
+  - [Building for production](#building-for-production)
+  - [Building for local development](#building-for-local-development)
+- [Pack Customizer Content](#pack-customizer-content)
+  - [Caching](#caching)
+- [Datalayer](#data-layer)
+- [Documentation and Support](#documentation-and-support)
+- [Contributors](#contributors)
 
 ## Our Philosophy
+
 React is the future of ecommerce, but 99% of all Shopify brands are still using Liquid themes (great for starting out, less optimal for advanced interactivity, flexibility and performance).
 
 Historically, the only way to build a React storefront was to stitch together a headless CMS / hosting / data orchestrator / middleware, then build a custom storefront. It generally required a full technical team to build + manage it.
@@ -36,8 +38,8 @@ Connect your Shopify and Github repo to Pack, and you’ll get access to a real-
 
 Instead of hard-coding the whole experience and having to stay on top of every site change, Pack’s platform makes it easy to hand your finished storefront off to non-technical stakeholders so they can make edits on their own. It’s as easy to use as Shopify.
 
-
 ## Major Features
+
 - CSS Framework: Tailwind
 - Framework: Remix
 - Open-source Hydrogen theme that’s opinionated to Pack, a visual frontend for Hydrogen.
@@ -74,7 +76,7 @@ Instead of hard-coding the whole experience and having to stay on top of every s
     - In-menu promos
     - Press coverage
     - Promo banners
-    - Cross-selling 
+    - Cross-selling
     - Country selector (change currency, UI/UX for language change)
   - Merchandising
     - Color swatches
@@ -138,6 +140,7 @@ Instead of hard-coding the whole experience and having to stay on top of every s
 Note: Pack is free if you’re only looking to spin up a few landing pages, with pay-as-you-go / custom pricing for large storefronts.
 
 ## Pack Features
+
 - Visual editor / headless CMS + content environments
 - Native integrations with
   - Shopify product catalog
@@ -148,7 +151,9 @@ Note: Pack is free if you’re only looking to spin up a few landing pages, with
 - A/B testing <b>(coming soon)</b>
 
 ## Get started
+
 Use our CLI tool to get started quickly.
+
 ```
 npx @pack/create-hydrogen@latest
 ```
@@ -156,11 +161,13 @@ npx @pack/create-hydrogen@latest
 You can also create a free Pack account, or check out our documentation.
 
 Want a quick demo of Pack? Check out this <a href="https://hydrogen.packdigital.com/pages/demo" target="_blank">video overview</a> (7 min).
+
 ### Requirements
 
 - Node.js version 16.14.0 or higher
 
 Once you have your project cloned start off by installing your node packages
+
 ```
 npm install
 ```
@@ -168,6 +175,7 @@ npm install
 ### Environment Variables
 
 To run your application locally, you can use Shopify's mock.shop API to simulate a Shopify storefront. You can set the `PUBLIC_STORE_DOMAIN` environment variable to `mock.shop` to use the mock.shop API.
+
 ```dotenv
 SESSION_SECRET="foobar"
 PUBLIC_STORE_DOMAIN="mock.shop"
@@ -175,11 +183,13 @@ PUBLIC_STOREFRONT_API_TOKEN="foobar"
 ```
 
 You can automate pull in your Shopify environment variables directly from your Shopify Hydrogen storefront using the Hydrogen CLI. Run the command below and follow its prompts.
+
 ```
 npx shopify hydrogen env pull
 ```
 
 Alternatively, you can create a `.env` file and manually copy these values from your Shopify Hydrogen storefront. You can find the variables by going to the Hydrogen storefront > Storefront Settings > Environments & Variables. These are the required variables needed:
+
 ```dotenv
 SESSION_SECRET="XXX"
 PUBLIC_STOREFRONT_API_TOKEN="XXX"
@@ -187,7 +197,6 @@ PUBLIC_STORE_DOMAIN="XXX"
 PACK_PUBLIC_TOKEN="XXX"
 PACK_SECRET_TOKEN="XXX"
 ```
-
 
 ### Building for production
 
@@ -204,6 +213,7 @@ This command will start a server locally on your machine at http://localhost:300
 ```bash
 npm run dev
 ```
+
 ## Pack Customizer Content
 
 You can access the data in the Pack Customizer by using the `pack` object that lives in the Hydrogen `context`. See the following example:
@@ -331,17 +341,19 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
 ```
 
 ## Documentation and Support
+
 View [Pack's developer documentation](https://docs.packdigital.com) for info on how to set up and use the platform.
 Join our Discord community if you get stuck, want to chat, or are thinking of a new feature.
 Or email us at contact@packdigital.com if Discord isn't your thing.
 We're here to help - and to make Pack even better!
 
 ## Contributors
+
 We ❤ all contributions, big and small!
 Read our [quickstart](https://docs.packdigital.com/quickstart) guide for how to set up your local development environment.
 The TLDR:
+
 - If there’s a bug, raise an issue
 - If you have a fix, fork it and do a PR
 - If you have a feature request → Raise it as an issue / discussion, put in a PR if you build it
-If you want to, you can reach out via [Discord](#) or email and we'll set up a pair programming session to get you started.
-
+  If you want to, you can reach out via [Discord](#) or email and we'll set up a pair programming session to get you started.

@@ -1,6 +1,5 @@
 import {useCallback, useEffect, useRef, useState} from 'react';
 import {useLocation} from '@remix-run/react';
-import {useCart} from '@shopify/hydrogen-react';
 import type {
   Product,
   ProductVariant,
@@ -18,11 +17,13 @@ const isElevar =
   typeof document !== 'undefined' && !!window.ENV?.PUBLIC_ELEVAR_SIGNING_KEY;
 
 export function useDataLayerSearch({
+  cartReady,
   handleDataLayerEvent,
   userDataEvent,
   userDataEventTriggered,
   userProperties,
 }: {
+  cartReady: boolean;
   handleDataLayerEvent: (event: Record<string, any>) => void;
   userDataEvent: (arg0: any) => void;
   userDataEventTriggered: boolean;
@@ -32,7 +33,6 @@ export function useDataLayerSearch({
   const location = useLocation();
   const pathname = pathWithoutLocalePrefix(location.pathname);
   const {emitter} = useGlobal();
-  const {status} = useCart();
 
   const [searchPageResults, setSearchPageResults] = useState<
     SearchProduct[] | null | undefined
@@ -43,8 +43,6 @@ export function useDataLayerSearch({
   const [clickedSearchResultsItem, setClickedSearchResultsItem] = useState<
     ProductVariant | null | undefined
   >(null);
-
-  const cartReady = status === 'idle';
 
   const viewSearchResultsEvent = useCallback(
     ({

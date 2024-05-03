@@ -11,7 +11,7 @@ export function Banner({cms}: {cms: BannerCms}) {
   return (
     <Container container={cms.container}>
       <BannerContainer cms={cms}>
-        <div className="absolute inset-0 h-full w-full overflow-hidden md:hidden">
+        <div className="absolute inset-0 size-full overflow-hidden md:hidden">
           {image?.imageMobile?.src && (
             <Image
               data={{
@@ -27,7 +27,7 @@ export function Banner({cms}: {cms: BannerCms}) {
           )}
         </div>
 
-        <div className="absolute inset-0 hidden h-full w-full overflow-hidden md:block">
+        <div className="absolute inset-0 hidden size-full overflow-hidden md:block">
           {image?.imageDesktop?.src && (
             <Image
               data={{

@@ -1,6 +1,7 @@
 import {useEffect} from 'react';
 import {json, redirect} from '@shopify/remix-oxygen';
-import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
+import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
+import {getSeoMeta} from '@shopify/hydrogen';
 import {useLoaderData, useNavigate} from '@remix-run/react';
 import {useCart} from '@shopify/hydrogen-react';
 
@@ -34,6 +35,10 @@ export async function loader({request, params}: LoaderFunctionArgs) {
     seo: {robots: {noIndex: true, noFollow: true}},
   });
 }
+
+export const meta = ({data}: MetaArgs) => {
+  return getSeoMeta(data.seo);
+};
 
 export default function DiscountsRoute() {
   const {code, redirectUrl} = useLoaderData<typeof loader>();

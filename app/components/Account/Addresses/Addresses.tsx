@@ -1,12 +1,10 @@
 import {useMemo, useState} from 'react';
 import {useLocation} from '@remix-run/react';
-import {useSiteSettings} from '@pack/react';
 import {flattenConnection} from '@shopify/hydrogen';
 import type {MailingAddress} from '@shopify/hydrogen/storefront-api-types';
 
 import {Pagination} from '~/components';
-import type {Settings, SiteSettings} from '~/lib/types';
-import {useCustomer, usePagination} from '~/hooks';
+import {useCustomer, usePagination, useSettings} from '~/hooks';
 
 import {AddressesItem} from './AddressesItem';
 import {CreateAddressForm} from './CreateAddressForm';
@@ -16,7 +14,7 @@ const RESULTS_PER_PAGE = 10;
 
 export function Addresses() {
   const {pathname} = useLocation();
-  const siteSettings = useSiteSettings() as SiteSettings;
+  const {account} = useSettings();
   const customer = useCustomer();
   const defaultAddress = customer?.defaultAddress as MailingAddress | null;
 
@@ -46,16 +44,14 @@ export function Addresses() {
   );
   const [isCreateAddress, setIsCreateAddress] = useState(false);
 
-  const {menuItems} = {
-    ...siteSettings?.settings?.account?.menu,
-  } as Settings['account']['menu'];
+  const {menuItems} = {...account?.menu};
   const heading = menuItems?.find(({link}) => pathname.startsWith(link?.url))
     ?.link?.text;
 
   return (
     <div className="flex flex-col gap-8 md:gap-10">
       <div className="flex flex-col items-start justify-start gap-4 md:flex-row md:justify-between">
-        <h1 className="text-title-h4">{heading}</h1>
+        <h1 className="text-h4">{heading}</h1>
 
         <button
           aria-label="Add a new address"
@@ -85,7 +81,7 @@ export function Addresses() {
       {!addressesWithDefaultFirst?.length && (
         <div
           role="status"
-          className="relative flex min-h-[12rem] items-center justify-center"
+          className="relative flex min-h-48 items-center justify-center"
         >
           You don&#39;t have any addresses saved yet
         </div>

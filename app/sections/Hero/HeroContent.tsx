@@ -59,7 +59,7 @@ export function HeroContent({
 
   return (
     <div
-      className={`absolute inset-0 flex h-full w-full p-4 md:p-8 xl:p-12 ${positionClasses} ${darkOverlayClass} ${
+      className={`absolute inset-0 flex size-full p-4 md:p-8 xl:p-12 ${positionClasses} ${darkOverlayClass} ${
         isActiveSlide ? 'pointer-events-auto' : 'pointer-events-none'
       }`}
     >
@@ -72,9 +72,9 @@ export function HeroContent({
           )}
 
           {aboveTheFold && isFirstSlide ? (
-            <h1 className="text-title-h1">{headingWithBreaks}</h1>
+            <h1 className="text-h1">{headingWithBreaks}</h1>
           ) : (
-            <h2 className="text-title-h1">{headingWithBreaks}</h2>
+            <h2 className="text-h1">{headingWithBreaks}</h2>
           )}
 
           {subheading && <p className="mt-4">{subheading}</p>}
@@ -106,7 +106,7 @@ export function HeroContent({
       {isActiveSlide && button?.clickableSlide && (
         <Link
           aria-label={button.buttons?.[0]?.link?.text}
-          className="pointer-events-auto absolute inset-0 z-[1] h-full w-full"
+          className="pointer-events-auto absolute inset-0 z-[1] size-full"
           to={button.buttons?.[0]?.link?.url}
           type={button.buttons?.[0]?.link?.type}
         />

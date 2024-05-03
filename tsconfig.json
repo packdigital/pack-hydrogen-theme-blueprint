@@ -13,7 +13,11 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
     "baseUrl": ".",
-    "types": ["@shopify/oxygen-workers-types", "@types/gtag.js", "@types/grecaptcha"],
+    "types": [
+      "@shopify/oxygen-workers-types",
+      "@types/gtag.js",
+      "@types/grecaptcha"
+    ],
     "paths": {
       "~/*": ["app/*"]
     },

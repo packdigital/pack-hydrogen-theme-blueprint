@@ -1,12 +1,11 @@
 import {useMemo, useState} from 'react';
-import {useSiteSettings} from '@pack/react';
 import {flattenConnection} from '@shopify/hydrogen';
 
-import type {SiteSettings} from '~/lib/types';
 import {
   useColorSwatches,
   useDataLayerViewCollection,
   useDataLayerViewSearchResults,
+  useSettings,
 } from '~/hooks';
 
 import {
@@ -25,20 +24,23 @@ export function Collection({
   collection,
   searchTerm,
   showHeading = true,
+  title = '',
 }: CollectionProps) {
-  const {handle, products, title} = collection;
+  const {handle, products} = collection;
   const swatchesMap = useColorSwatches();
-  const siteSettings = useSiteSettings() as SiteSettings;
+  const {collection: collectionSettings} = useSettings();
 
   const [desktopFiltersOpen, setDesktopFiltersOpen] = useState(
     activeFilterValues.length > 0,
   );
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
-  const settings = siteSettings?.settings?.collection;
-  const promotion = settings?.promotion;
-  const enabledFilters = settings?.filters?.enabled ?? true;
-  const enabledSort = settings?.sort?.enabled ?? true;
+  const {filters, promotion, sort} = {...collectionSettings};
+  const isDisabledFiltersCollection =
+    filters?.disabledByHandle?.includes(handle);
+  const enabledFilters =
+    (filters?.enabled ?? true) && !isDisabledFiltersCollection;
+  const enabledSort = sort?.enabled ?? true;
   const isSearchResults = handle === 'search';
 
   const promoTiles = useMemo(() => {
@@ -66,7 +68,7 @@ export function Collection({
     >
       <div className="md:px-contained py-contained mx-auto grid w-full max-w-[var(--content-max-width)] !pt-0">
         {showHeading && (
-          <h1 className="text-title-h2 py-contained mb-4 !pb-0 text-center max-md:px-4 md:mb-2">
+          <h1 className="text-h2 py-contained mb-4 !pb-0 text-center max-md:px-4 md:mb-2">
             {title}
           </h1>
         )}
@@ -88,7 +90,7 @@ export function Collection({
             {enabledSort && (
               <CollectionSort
                 isSearchResults={isSearchResults}
-                settings={settings}
+                settings={collectionSettings}
               />
             )}
           </div>
@@ -123,7 +125,7 @@ export function Collection({
             products={products}
             promoTiles={promoTiles}
             searchTerm={searchTerm}
-            settings={settings}
+            settings={collectionSettings}
             swatchesMap={swatchesMap}
           />
         </div>

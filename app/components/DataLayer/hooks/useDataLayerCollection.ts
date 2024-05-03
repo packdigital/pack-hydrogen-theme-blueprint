@@ -1,5 +1,4 @@
 import {useCallback, useEffect, useRef, useState} from 'react';
-import {useCart} from '@shopify/hydrogen-react';
 import type {
   Product,
   ProductVariant,
@@ -17,11 +16,13 @@ const isElevar =
   typeof document !== 'undefined' && !!window.ENV?.PUBLIC_ELEVAR_SIGNING_KEY;
 
 export function useDataLayerCollection({
+  cartReady,
   handleDataLayerEvent,
   userDataEvent,
   userDataEventTriggered,
   userProperties,
 }: {
+  cartReady: boolean;
   handleDataLayerEvent: (event: Record<string, any>) => void;
   userDataEvent: (arg0: any) => void;
   userDataEventTriggered: boolean;
@@ -29,15 +30,12 @@ export function useDataLayerCollection({
 }) {
   const collectionHandleRef = useRef<string | undefined>(undefined);
   const {emitter} = useGlobal();
-  const {status} = useCart();
 
   const [collectionProducts, setCollectionProducts] = useState<
     Product[] | null
   >(null);
   const [clickedCollectionItem, setClickedCollectionItem] =
     useState<DlProductVariant | null>(null);
-
-  const cartReady = status === 'idle';
 
   const viewCollectionEvent = useCallback(
     ({

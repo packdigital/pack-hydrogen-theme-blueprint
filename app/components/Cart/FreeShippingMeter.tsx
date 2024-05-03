@@ -73,7 +73,7 @@ export function FreeShippingMeter({settings}: FreeShippingMeterProps) {
 
       <div className="h-1.5 w-full overflow-hidden rounded bg-lightGray">
         <div
-          className="h-full w-full origin-left transition"
+          className="size-full origin-left transition"
           style={{
             transform: `scaleX(${progress.percent}%)`,
             backgroundColor: progressBarColor,

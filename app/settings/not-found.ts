@@ -1,5 +1,10 @@
 import type {BannerCms} from '~/sections/Banner/Banner.types';
-import {COLORS, FLEX_POSITIONS, OBJECT_POSITIONS} from '~/settings/common';
+import {
+  BUTTONS,
+  COLORS,
+  FLEX_POSITIONS,
+  OBJECT_POSITIONS,
+} from '~/settings/common';
 
 export type NotFoundSettings = BannerCms;
 
@@ -95,12 +100,7 @@ const text = {
           label: 'Button Style',
           name: 'style',
           component: 'select',
-          options: [
-            {label: 'Primary', value: 'btn-primary'},
-            {label: 'Secondary', value: 'btn-secondary'},
-            {label: 'Inverse Light', value: 'btn-inverse-light'},
-            {label: 'Inverse Dark', value: 'btn-inverse-dark'},
-          ],
+          options: BUTTONS,
         },
       ],
       defaultItem: {

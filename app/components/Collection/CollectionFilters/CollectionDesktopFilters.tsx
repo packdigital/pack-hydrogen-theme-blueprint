@@ -1,7 +1,6 @@
 import {useEffect, useState} from 'react';
-import {useSiteSettings} from '@pack/react';
 
-import type {SiteSettings} from '~/lib/types';
+import {useSettings} from '~/hooks';
 
 import type {CollectionDesktopFiltersProps} from './CollectionFilters.types';
 import {CollectionFilterDropdown} from './CollectionFilterDropdown';
@@ -12,7 +11,7 @@ export function CollectionDesktopFilters({
   desktopFiltersOpen,
   swatchesMap,
 }: CollectionDesktopFiltersProps) {
-  const siteSettings = useSiteSettings() as SiteSettings;
+  const {collection: collectionSettings, header} = useSettings();
   const {activeFilterValues, addFilter, filters, removeFilter} =
     useCollectionFilters();
 
@@ -22,15 +21,12 @@ export function CollectionDesktopFilters({
     optionsMaxCount = 6,
     showCount = true,
     sticky = true,
-  } = {
-    ...siteSettings?.settings?.collection?.filters,
-  };
+  } = {...collectionSettings?.filters};
   const stickyPromobar =
-    siteSettings?.settings?.header?.promobar?.enabled &&
-    !siteSettings?.settings?.header?.promobar?.autohide;
+    header?.promobar?.enabled && !header?.promobar?.autohide;
   const stickyTopClass = stickyPromobar
-    ? 'md:top-[calc(var(--header-height)+var(--promobar-height)+1.5rem)]'
-    : 'md:top-[calc(var(--header-height)+1.5rem)]';
+    ? 'md:top-[calc(var(--header-height-desktop)+var(--promobar-height-desktop)+1.5rem)]'
+    : 'md:top-[calc(var(--header-height-desktop)+1.5rem)]';
 
   useEffect(() => {
     if (desktopFiltersOpen) setMounted(true);
@@ -43,7 +39,7 @@ export function CollectionDesktopFilters({
       } ${sticky ? stickyTopClass : ''}`}
     >
       <div className="overflow-hidden rounded border border-border max-md:hidden">
-        <div className="max-h-[calc(var(--viewport-height)-var(--header-height)-100px)] overflow-y-auto overflow-x-hidden">
+        <div className="max-h-[calc(var(--viewport-height)-var(--header-height-desktop)-100px)] overflow-y-auto overflow-x-hidden">
           {!!filters.length && (
             <ul className="overflow-y-auto">
               {filters.map((filter, index) => {

@@ -6,6 +6,13 @@ module.exports = {
     '@remix-run/eslint-config',
     'plugin:hydrogen/recommended',
     'plugin:hydrogen/typescript',
+    'plugin:tailwindcss/recommended',
+  ],
+  overrides: [
+    {
+      files: ['*.ts', '*.tsx', '*.js', '*.jsx'],
+      parser: '@typescript-eslint/parser',
+    },
   ],
   rules: {
     'no-console': 'off',

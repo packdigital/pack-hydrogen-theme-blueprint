@@ -1,11 +1,10 @@
 import {useEffect, useMemo} from 'react';
-import {useSiteSettings} from '@pack/react';
 import {useProduct} from '@shopify/hydrogen-react';
 import type {Product as ProductType} from '@shopify/hydrogen/storefront-api-types';
 
 import {COLOR_OPTION_NAME} from '~/lib/constants';
-import type {SelectedVariant, SiteSettings} from '~/lib/types';
-import {useDataLayerViewProduct, useLocale} from '~/hooks';
+import {useDataLayerViewProduct, useLocale, useSettings} from '~/hooks';
+import type {SelectedVariant} from '~/lib/types';
 
 import {ProductDetails} from './ProductDetails';
 import {ProductMetafields} from './ProductMetafields';
@@ -21,8 +20,7 @@ export function Product({product}: ProductProps) {
     selectedVariant: SelectedVariant;
   };
   const {pathPrefix} = useLocale();
-  const siteSettings = useSiteSettings() as SiteSettings;
-  const settings = siteSettings?.settings?.product;
+  const {header, product: productSettings} = useSettings();
 
   useDataLayerViewProduct({
     product,
@@ -52,16 +50,15 @@ export function Product({product}: ProductProps) {
   }, [product.handle, selectedVariant?.id]);
 
   const stickyPromobar =
-    siteSettings?.settings?.header?.promobar?.enabled &&
-    !siteSettings?.settings?.header?.promobar?.autohide;
+    header?.promobar?.enabled && !header?.promobar?.autohide;
   const stickyTopClass = stickyPromobar
-    ? 'md:top-[calc(var(--header-height)+var(--promobar-height)+2.5rem)] xl:top-[calc(var(--header-height)+var(--promobar-height)+3rem)]'
-    : 'md:top-[calc(var(--header-height)+2.5rem)] xl:top-[calc(var(--header-height)+3rem)]';
+    ? 'md:top-[calc(var(--header-height-desktop)+var(--promobar-height-desktop)+2.5rem)] xl:top-[calc(var(--header-height-desktop)+var(--promobar-height-desktop)+3rem)]'
+    : 'md:top-[calc(var(--header-height-desktop)+2.5rem)] xl:top-[calc(var(--header-height-desktop)+3rem)]';
 
   return (
     <section data-comp="product">
       <div className="md:px-contained py-6 md:py-10 lg:py-12">
-        <div className="mx-auto grid max-w-[80rem] grid-cols-1 gap-y-5 md:grid-cols-2 md:grid-rows-[auto_1fr] md:gap-y-4">
+        <div className="mx-auto grid max-w-screen-xl grid-cols-1 gap-y-5 md:grid-cols-2 md:grid-rows-[auto_1fr] md:gap-y-4">
           {/* mobile header placement */}
           {/* note: remove this component if mobile header shares same placement as desktop */}
           <ProductHeader
@@ -69,7 +66,7 @@ export function Product({product}: ProductProps) {
             product={product}
             selectedVariant={selectedVariant}
             selectedVariantColor={selectedVariantColor}
-            settings={settings}
+            settings={productSettings}
           />
 
           <div>
@@ -91,11 +88,13 @@ export function Product({product}: ProductProps) {
                 product={product}
                 selectedVariant={selectedVariant}
                 selectedVariantColor={selectedVariantColor}
-                settings={settings}
+                settings={productSettings}
               />
 
               <ProductDetails
-                enabledQuantitySelector={settings?.quantitySelector?.enabled}
+                enabledQuantitySelector={
+                  productSettings?.quantitySelector?.enabled
+                }
                 product={product}
                 selectedVariant={selectedVariant}
               />

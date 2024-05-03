@@ -36,7 +36,7 @@ export function InnerColorOptionValue({
 
   return (
     <div
-      className={`relative flex h-8 w-8 items-center justify-center overflow-hidden rounded-[50%] border border-border transition ${validClass} ${unavailableClass} ${selectedClass}`}
+      className={`relative flex size-8 items-center justify-center overflow-hidden rounded-[50%] border border-border transition ${validClass} ${unavailableClass} ${selectedClass}`}
       style={{backgroundColor: swatch?.color}}
     >
       {swatch?.image?.src && (
@@ -56,7 +56,7 @@ export function InnerColorOptionValue({
 
       <div
         className={`media-fill rounded-[50%] border-white transition-[border-width] duration-100 ${
-          isSelected ? 'border-[3px]' : 'border-[0px]'
+          isSelected ? 'border-[3px]' : 'border-0'
         }`}
       />
     </div>

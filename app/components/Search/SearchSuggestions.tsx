@@ -1,6 +1,4 @@
-import {useSiteSettings} from '@pack/react';
-
-import type {SiteSettings} from '~/lib/types';
+import {useSettings} from '~/hooks';
 
 import type {SearchSuggestionsProps} from './Search.types';
 
@@ -8,8 +6,8 @@ export function SearchSuggestions({
   handleSuggestion,
   hasNoProductResults,
 }: SearchSuggestionsProps) {
-  const siteSettings = useSiteSettings() as SiteSettings;
-  const {results, suggestions} = {...siteSettings?.settings?.search};
+  const {search} = useSettings();
+  const {results, suggestions} = {...search};
   const {noResultsText} = {...results};
   const {heading, terms} = {...suggestions};
 
@@ -21,7 +19,7 @@ export function SearchSuggestions({
 
       {terms?.length > 0 && (
         <div>
-          <h3 className="text-title-h5 mb-3">{heading}</h3>
+          <h3 className="text-h5 mb-3">{heading}</h3>
 
           <ul className="flex flex-col items-start gap-3">
             {terms.map((suggestion) => {

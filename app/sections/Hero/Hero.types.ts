@@ -99,6 +99,8 @@ export interface HeroCms {
   slider: Slider;
   slides: Slide[];
   container: ContainerSettings;
+  sectionName: string;
+  sectionVisibility: string;
 }
 
 export interface HeroSlideProps {
