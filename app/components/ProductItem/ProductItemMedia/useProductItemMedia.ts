@@ -4,7 +4,7 @@ import type {
   MediaImage,
 } from '@shopify/hydrogen/storefront-api-types';
 
-import {PRIMARY_OPTION_NAME} from '~/lib/constants';
+import {COLOR_OPTION_NAME} from '~/lib/constants';
 
 import type {ProductItemMediaProps} from './ProductItemMedia';
 
@@ -18,7 +18,7 @@ export function useProductItemMedia({
 } {
   const colorOptions = useMemo(() => {
     return selectedProduct?.options?.find(
-      (option) => option.name === PRIMARY_OPTION_NAME,
+      (option) => option.name === COLOR_OPTION_NAME,
     )?.values;
   }, [selectedProduct?.id]);
 
@@ -70,7 +70,7 @@ export function useProductItemMedia({
     if (hasMultiColorsNotFromGroup && selectedVariant) {
       const color =
         selectedVariant?.selectedOptions?.find(
-          (option) => option.name === PRIMARY_OPTION_NAME,
+          (option) => option.name === COLOR_OPTION_NAME,
         )?.value || '';
       // use media with color name as alt text if any matches
       if (mediaMapByAltText?.[color]?.[0]) {

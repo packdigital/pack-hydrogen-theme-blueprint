@@ -5,7 +5,7 @@ import type {
 } from '@shopify/hydrogen/storefront-api-types';
 
 import {AddToCart} from '~/components';
-import {PRIMARY_OPTION_NAME} from '~/lib/constants';
+import {COLOR_OPTION_NAME} from '~/lib/constants';
 import {useSettings} from '~/hooks';
 
 import {QuickShopOptions} from './QuickShopOptions';
@@ -31,7 +31,7 @@ export function QuickShop({
 
     const initialOptions = selectedProduct.options;
     const options = enabledColorSelector
-      ? initialOptions?.filter((option) => option.name !== PRIMARY_OPTION_NAME)
+      ? initialOptions?.filter((option) => option.name !== COLOR_OPTION_NAME)
       : initialOptions;
 
     const hasOnlySingleValueOptions =

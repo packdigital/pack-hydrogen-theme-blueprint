@@ -7,7 +7,7 @@ import {useGlobal, useSettings} from '~/hooks';
 import {ProductItem} from '../../ProductItem';
 import type {UseMobileMenuReturn} from '../useMobileMenu';
 
-import {MobileNestedMenu} from './MobileNestedMenu';
+import {MobileSubmenu} from './MobileSubmenu';
 
 type MobileMenuProps = Pick<
   UseMobileMenuReturn,
@@ -172,7 +172,7 @@ export function MobileMenu({
           )}
         </div>
 
-        <MobileNestedMenu
+        <MobileSubmenu
           handleCloseMobileMenu={handleCloseMobileMenu}
           handleMobileSubmenu={handleMobileSubmenu}
           mobileSubmenuContent={mobileSubmenuContent}

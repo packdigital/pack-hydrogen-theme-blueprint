@@ -9,7 +9,7 @@ import type {Settings, SiteSettings} from '~/lib/types';
  *  * @example
  * ```js
  * const settings = useSettings();
- * or destructure
+ * // or destructure
  * const {header} = useSettings();
  * ```
  */

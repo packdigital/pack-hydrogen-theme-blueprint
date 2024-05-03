@@ -7,6 +7,7 @@ import {useLocale} from '~/hooks';
 /**
  * Fetch products by handles
  * @param handles - Array of product handles
+ * @param fetchOnMount - Determines when to fetch
  * @returns array of product items
  * @example
  * ```js

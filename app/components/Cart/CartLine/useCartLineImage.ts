@@ -1,7 +1,7 @@
 import {useMemo} from 'react';
 import type {CartLine} from '@shopify/hydrogen/storefront-api-types';
 
-import {PRIMARY_OPTION_NAME} from '~/lib/constants';
+import {COLOR_OPTION_NAME} from '~/lib/constants';
 
 export function useCartLineImage({line}: {line: CartLine}) {
   const {merchandise} = {...line};
@@ -10,13 +10,13 @@ export function useCartLineImage({line}: {line: CartLine}) {
     const hasMultipleColors =
       Number(
         merchandise?.product?.options?.find(({name}) => {
-          return name === PRIMARY_OPTION_NAME;
+          return name === COLOR_OPTION_NAME;
         })?.values?.length,
       ) > 1;
     if (!hasMultipleColors) return merchandise?.image;
 
     const variantColor = merchandise.selectedOptions
-      .find(({name}) => name === PRIMARY_OPTION_NAME)
+      .find(({name}) => name === COLOR_OPTION_NAME)
       ?.value?.toLowerCase();
 
     return variantColor

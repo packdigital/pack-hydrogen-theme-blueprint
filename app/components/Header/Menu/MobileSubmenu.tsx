@@ -2,16 +2,16 @@ import {Image, Link, Svg} from '~/components';
 
 import type {UseMobileMenuReturn} from '../useMobileMenu';
 
-type MobileNestedMenuProps = Pick<
+type MobileSubmenuProps = Pick<
   UseMobileMenuReturn,
   'handleCloseMobileMenu' | 'handleMobileSubmenu' | 'mobileSubmenuContent'
 >;
 
-export function MobileNestedMenu({
+export function MobileSubmenu({
   handleCloseMobileMenu,
   mobileSubmenuContent,
   handleMobileSubmenu,
-}: MobileNestedMenuProps) {
+}: MobileSubmenuProps) {
   const {
     imageLinks = [],
     links,
@@ -111,4 +111,4 @@ export function MobileNestedMenu({
   );
 }
 
-MobileNestedMenu.displayName = 'MobileNestedMenu';
+MobileSubmenu.displayName = 'MobileSubmenu';

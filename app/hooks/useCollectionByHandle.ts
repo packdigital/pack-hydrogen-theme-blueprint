@@ -8,6 +8,7 @@ import {useLocale} from '~/hooks';
  * Fetch collection by its handle
  * @param handle - The handle of the collection
  * @param searchParams - Any search params to be used in the query
+ * @param fetchOnMount - Determines when to fetch
  * @returns collection
  * @example
  * ```js
@@ -18,6 +19,7 @@ import {useLocale} from '~/hooks';
 export function useCollectionByHandle(
   handle: string | undefined | null = '',
   searchParams?: URLSearchParams,
+  fetchOnMount = true,
 ): Collection | null {
   const {pathPrefix} = useLocale();
   const fetcher = useFetcher<{collection: Collection}>({
@@ -26,9 +28,9 @@ export function useCollectionByHandle(
   const search = searchParams?.toString();
 
   useEffect(() => {
-    if (!handle || fetcher.data?.collection) return;
+    if (!fetchOnMount || !handle || fetcher.data?.collection) return;
     fetcher.load(`/collections/${handle}${search ? `?${search}` : ''}`);
-  }, [handle, search]);
+  }, [fetchOnMount, handle, search]);
 
   return fetcher.data?.collection || null;
 }

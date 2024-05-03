@@ -8,7 +8,7 @@ import {useLocale} from '~/hooks';
  * Fetch articles by blog handle
  * @param handle - The handle of the blog
  * @param limit - The number of articles to fetch
- * @param fetchOnMount - Fetch articles on mount
+ * @param fetchOnMount - Determines when to fetch
  * @returns articles
  * @example
  * ```js

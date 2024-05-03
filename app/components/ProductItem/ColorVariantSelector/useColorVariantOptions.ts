@@ -1,7 +1,7 @@
 import {useCallback, useEffect, useMemo, useState} from 'react';
 import type {Product} from '@shopify/hydrogen/storefront-api-types';
 
-import {PRIMARY_OPTION_NAME} from '~/lib/constants';
+import {COLOR_OPTION_NAME} from '~/lib/constants';
 import type {Group, SelectedProduct, SelectedVariant} from '~/lib/types';
 
 interface UseColorVariantOptionsProps {
@@ -29,7 +29,7 @@ export function useColorVariantOptions({
     return grouping?.optionsMap
       ? [
           originalColor,
-          ...grouping.optionsMap[PRIMARY_OPTION_NAME].filter(
+          ...grouping.optionsMap[COLOR_OPTION_NAME].filter(
             (color) => color !== originalColor,
           ),
         ]
@@ -45,13 +45,13 @@ export function useColorVariantOptions({
     // any intial product options that are not color and has only one value
     const initialProductSingleValueOptions = initialProduct?.options?.filter(
       (option) =>
-        option.name !== PRIMARY_OPTION_NAME && option.values.length === 1,
+        option.name !== COLOR_OPTION_NAME && option.values.length === 1,
     );
 
     const _productMapByColor = groupingProducts.reduce(
       (acc: ProductMapByColor, groupProduct) => {
         const colors = groupProduct?.options.find(({name}) => {
-          return name === PRIMARY_OPTION_NAME;
+          return name === COLOR_OPTION_NAME;
         })?.values;
         if (!colors?.length) return acc;
         colors.forEach((color) => {
@@ -90,7 +90,7 @@ export function useColorVariantOptions({
     const _variantMapByColor = initialProduct?.variants?.nodes?.reduce(
       (acc: VariantMapByColor, variant) => {
         const variantColor = variant.selectedOptions.find((option) => {
-          return option.name === PRIMARY_OPTION_NAME;
+          return option.name === COLOR_OPTION_NAME;
         })?.value;
         if (!variantColor) return acc;
         if (acc[variantColor]) return acc;

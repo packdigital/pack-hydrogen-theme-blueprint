@@ -2,7 +2,7 @@ import {v4 as uuidv4} from 'uuid';
 import cookieParser from 'cookie';
 import type {Product} from '@shopify/hydrogen/storefront-api-types';
 
-import {PRIMARY_OPTION_NAME} from '~/lib/constants';
+import {COLOR_OPTION_NAME} from '~/lib/constants';
 import type {Group, OptionWithGroups} from '~/lib/types';
 
 const SESSION_COOKIE = 'pack_session';
@@ -31,8 +31,6 @@ export const setPackCookie = async ({
         'Set-Cookie',
         `${SESSION_COOKIE}=${sessionCookie}; Path=/; Expires=${expiresAt}; SameSite=Strict; Secure;`,
       );
-
-      console.log('headers', headers);
     }
 
     return {headers};
@@ -114,7 +112,7 @@ export const formatGroupingWithOptions = ({
     parentGroupOptionsMap = parentGroupProducts.reduce(
       (acc: Record<string, string[]>, {options}) => {
         options?.forEach(({name, values}) => {
-          if (name === PRIMARY_OPTION_NAME && !hasColorOption)
+          if (name === COLOR_OPTION_NAME && !hasColorOption)
             hasColorOption = true;
           if (!acc[name]) {
             acc[name] = values;
@@ -135,7 +133,7 @@ export const formatGroupingWithOptions = ({
         const subGroupOptions = sgProducts.reduce(
           (sgAcc: Record<string, string[]>, {options}) => {
             options?.forEach(({name, values}) => {
-              if (name === PRIMARY_OPTION_NAME && !hasColorOption)
+              if (name === COLOR_OPTION_NAME && !hasColorOption)
                 hasColorOption = true;
               if (!sgAcc[name]) {
                 sgAcc[name] = values;
@@ -158,7 +156,7 @@ export const formatGroupingWithOptions = ({
   }
 
   // by default break up subgroups based on color option
-  let groupingOptionName: string = PRIMARY_OPTION_NAME;
+  let groupingOptionName: string = COLOR_OPTION_NAME;
   // if there are no color options, use the first option from the first product
   if (!hasColorOption) {
     const parentProductFirstOptionName =
@@ -168,7 +166,7 @@ export const formatGroupingWithOptions = ({
     groupingOptionName =
       parentProductFirstOptionName ||
       subGroupFirstProductFirstOptionName ||
-      PRIMARY_OPTION_NAME;
+      COLOR_OPTION_NAME;
   }
 
   const combinedGroupOptionsInitialMap: Record<string, OptionWithGroups> = {};

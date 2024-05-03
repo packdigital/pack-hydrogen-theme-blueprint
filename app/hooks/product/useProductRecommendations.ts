@@ -11,6 +11,7 @@ import {useLocale} from '~/hooks';
  * Fetch up to 10 product recommendations for a given product id
  * @param productId - The id of the product
  * @param intent - https://shopify.dev/docs/api/storefront/latest/enums/ProductRecommendationIntent
+ * @param fetchOnMount - Determines when to fetch
  * @returns array of product items
  * @example
  * ```js

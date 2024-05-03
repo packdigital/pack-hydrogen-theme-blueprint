@@ -17,7 +17,7 @@ export async function action({context, request}: ActionFunctionArgs) {
   const handle = String(
     body?.get('handle') || searchParams.get('handle') || '',
   );
-  const limit = Number(body?.get('limit') || searchParams.get('limit') || 3);
+  const limit = Number(body?.get('limit') || searchParams.get('limit')) || 4;
 
   if (!handle)
     return json(

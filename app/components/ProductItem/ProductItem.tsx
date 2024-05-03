@@ -2,7 +2,7 @@ import {useCallback, useMemo, useState} from 'react';
 import {useInView} from 'react-intersection-observer';
 import type {Product} from '@shopify/hydrogen/storefront-api-types';
 
-import {PRIMARY_OPTION_NAME} from '~/lib/constants';
+import {COLOR_OPTION_NAME} from '~/lib/constants';
 import type {SelectedProduct, SelectedVariant} from '~/lib/types';
 import {Link} from '~/components';
 import {
@@ -82,7 +82,7 @@ export function ProductItem({
 
   const color = useMemo(() => {
     return selectedVariant?.selectedOptions.find(
-      (option) => option.name === PRIMARY_OPTION_NAME,
+      (option) => option.name === COLOR_OPTION_NAME,
     )?.value;
   }, [selectedVariant]);
 
@@ -91,7 +91,7 @@ export function ProductItem({
     if (!productHandle) return '';
     const searchParams = new URLSearchParams();
     selectedVariant.selectedOptions.forEach(({name, value}) => {
-      if (name !== PRIMARY_OPTION_NAME) return;
+      if (name !== COLOR_OPTION_NAME) return;
       searchParams.set(name, value);
     });
     return `/products/${productHandle}${

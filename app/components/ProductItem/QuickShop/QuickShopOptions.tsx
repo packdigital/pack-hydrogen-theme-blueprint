@@ -4,7 +4,7 @@ import type {
   ProductVariant,
 } from '@shopify/hydrogen/storefront-api-types';
 
-import {PRIMARY_OPTION_NAME} from '~/lib/constants';
+import {COLOR_OPTION_NAME} from '~/lib/constants';
 
 import {QuickShopOption} from './QuickShopOption';
 
@@ -22,7 +22,7 @@ export function QuickShopOptions({
     if (!selectedProduct) return {name: '', values: [], text: ''};
     // Find first non-color option that has more than one value for quick shop
     const _option = selectedProduct.options?.find(({name, values}) => {
-      return name !== PRIMARY_OPTION_NAME && values.length > 1;
+      return name !== COLOR_OPTION_NAME && values.length > 1;
     });
     return {
       name: _option?.name || '',

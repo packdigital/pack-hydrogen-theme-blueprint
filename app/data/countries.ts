@@ -5,7 +5,7 @@ import type {Localizations} from '~/lib/types';
  * English is default language
  * For other languages, add additional language-country pairs
  * @example
- * ```
+ * ```js
  * // French Canadian
  * '/fr-ca': {
       label: 'Canada (CAD $)',

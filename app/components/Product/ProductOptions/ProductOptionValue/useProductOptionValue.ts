@@ -1,7 +1,7 @@
 import {useMemo} from 'react';
 import equal from 'fast-deep-equal';
 
-import {PRIMARY_OPTION_NAME} from '~/lib/constants';
+import {COLOR_OPTION_NAME} from '~/lib/constants';
 import {useSettings} from '~/hooks';
 import type {ProductWithGrouping, SelectedVariant, Settings} from '~/lib/types';
 
@@ -97,7 +97,7 @@ export function useProductOptionValue({
   }, [newSelectedOptions, product.id, value]);
 
   const isAvailable = !!selectedVariantFromOptions?.availableForSale;
-  const isColor = name === PRIMARY_OPTION_NAME;
+  const isColor = name === COLOR_OPTION_NAME;
   const isDisabled = !selectedVariantFromOptions;
   const isFromGrouping = Boolean(
     selectedVariantFromOptions?.product?.id !== product.id,

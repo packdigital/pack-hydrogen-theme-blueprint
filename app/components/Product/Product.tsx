@@ -2,7 +2,7 @@ import {useEffect, useMemo} from 'react';
 import {useProduct} from '@shopify/hydrogen-react';
 import type {Product as ProductType} from '@shopify/hydrogen/storefront-api-types';
 
-import {PRIMARY_OPTION_NAME} from '~/lib/constants';
+import {COLOR_OPTION_NAME} from '~/lib/constants';
 import {useDataLayerViewProduct, useLocale, useSettings} from '~/hooks';
 import type {SelectedVariant} from '~/lib/types';
 
@@ -29,7 +29,7 @@ export function Product({product}: ProductProps) {
 
   const selectedVariantColor = useMemo(() => {
     return selectedVariant?.selectedOptions?.find(
-      ({name}) => name === PRIMARY_OPTION_NAME,
+      ({name}) => name === COLOR_OPTION_NAME,
     )?.value;
   }, [selectedVariant]);
 
