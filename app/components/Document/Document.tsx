@@ -6,7 +6,6 @@ import {
   Scripts,
   ScrollRestoration,
 } from '@remix-run/react';
-import {Seo} from '@shopify/hydrogen';
 import {CartProvider, ShopifyProvider} from '@shopify/hydrogen-react';
 import {PreviewProvider} from '@pack/react';
 
@@ -57,7 +56,6 @@ export function Document({children, title}: DocumentProps) {
                 />
                 <meta name="keywords" content={keywords} />
                 <Favicon />
-                <Seo />
                 <Meta />
                 <Links />
               </head>

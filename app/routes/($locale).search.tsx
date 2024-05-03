@@ -1,10 +1,15 @@
 import {json} from '@shopify/remix-oxygen';
+import {useLoaderData} from '@remix-run/react';
 import type {
   ActionFunctionArgs,
   LoaderFunctionArgs,
+  MetaArgs,
 } from '@shopify/remix-oxygen';
-import {useLoaderData} from '@remix-run/react';
-import {AnalyticsPageType, getPaginationVariables} from '@shopify/hydrogen';
+import {
+  AnalyticsPageType,
+  getPaginationVariables,
+  getSeoMeta,
+} from '@shopify/hydrogen';
 import type {
   Collection as CollectionType,
   SearchSortKeys,
@@ -145,6 +150,10 @@ export async function loader({request, context}: LoaderFunctionArgs) {
     seo,
   });
 }
+
+export const meta = ({data}: MetaArgs) => {
+  return getSeoMeta(data.seo);
+};
 
 export default function SearchRoute() {
   const {activeFilterValues, collection, searchTerm} =

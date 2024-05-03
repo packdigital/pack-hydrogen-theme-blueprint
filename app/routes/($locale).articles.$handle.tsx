@@ -1,8 +1,8 @@
 import {useMemo} from 'react';
 import {useLoaderData} from '@remix-run/react';
 import {json} from '@shopify/remix-oxygen';
-import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
-import {AnalyticsPageType} from '@shopify/hydrogen';
+import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
+import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 import {RenderSections} from '@pack/react';
 
 import {ARTICLE_QUERY} from '~/data/queries';
@@ -37,6 +37,10 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     seo,
   });
 }
+
+export const meta = ({data}: MetaArgs) => {
+  return getSeoMeta(data.seo);
+};
 
 export default function ArticleRoute() {
   const {article} = useLoaderData<typeof loader>();

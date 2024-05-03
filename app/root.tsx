@@ -6,8 +6,12 @@ import {
 } from '@remix-run/react';
 import type {ShouldRevalidateFunction} from '@remix-run/react';
 import {defer} from '@shopify/remix-oxygen';
-import type {LinksFunction, LoaderFunctionArgs} from '@shopify/remix-oxygen';
-import {ShopifySalesChannel} from '@shopify/hydrogen';
+import type {
+  LinksFunction,
+  LoaderFunctionArgs,
+  MetaArgs,
+} from '@shopify/remix-oxygen';
+import {getSeoMeta, ShopifySalesChannel} from '@shopify/hydrogen';
 
 import {ApplicationError, Document, NotFound, ServerError} from '~/components';
 import {customerGetAction, validateCustomerAccessToken} from '~/lib/customer';
@@ -124,6 +128,10 @@ export async function loader({context, request}: LoaderFunctionArgs) {
     {headers},
   );
 }
+
+export const meta = ({data}: MetaArgs) => {
+  return getSeoMeta(data.seo);
+};
 
 export default function App() {
   return (

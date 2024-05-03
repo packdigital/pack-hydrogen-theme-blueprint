@@ -2,8 +2,9 @@ import {json, redirect} from '@shopify/remix-oxygen';
 import type {
   ActionFunctionArgs,
   LoaderFunctionArgs,
+  MetaArgs,
 } from '@shopify/remix-oxygen';
-import {AnalyticsPageType} from '@shopify/hydrogen';
+import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 
 import {Profile} from '~/components';
 import {getAccountSeo} from '~/lib/utils';
@@ -32,6 +33,10 @@ export async function loader({context, params}: LoaderFunctionArgs) {
   const seo = await getAccountSeo(context, 'Profile');
   return json({analytics, seo});
 }
+
+export const meta = ({data}: MetaArgs) => {
+  return getSeoMeta(data.seo);
+};
 
 export default function ProfileRoute() {
   return <Profile />;

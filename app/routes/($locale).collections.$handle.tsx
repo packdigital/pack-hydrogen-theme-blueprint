@@ -1,8 +1,12 @@
 import {useMemo} from 'react';
 import {useLoaderData} from '@remix-run/react';
 import {json} from '@shopify/remix-oxygen';
-import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
-import {AnalyticsPageType, getPaginationVariables} from '@shopify/hydrogen';
+import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
+import {
+  AnalyticsPageType,
+  getPaginationVariables,
+  getSeoMeta,
+} from '@shopify/hydrogen';
 import {RenderSections} from '@pack/react';
 import type {ProductCollectionSortKeys} from '@shopify/hydrogen/storefront-api-types';
 
@@ -88,6 +92,10 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     seo,
   });
 }
+
+export const meta = ({data}: MetaArgs) => {
+  return getSeoMeta(data.seo);
+};
 
 export default function CollectionRoute() {
   const {activeFilterValues, collection, collectionPage} =

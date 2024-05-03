@@ -1,6 +1,6 @@
 import {json} from '@shopify/remix-oxygen';
-import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
-import {AnalyticsPageType} from '@shopify/hydrogen';
+import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
+import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 
 import {CartPage} from '~/components';
 import {getShop, getSiteSettings} from '~/lib/utils';
@@ -18,6 +18,10 @@ export async function loader({context}: LoaderFunctionArgs) {
   });
   return json({analytics, seo});
 }
+
+export const meta = ({data}: MetaArgs) => {
+  return getSeoMeta(data.seo);
+};
 
 export default function CartRoute() {
   return <CartPage />;

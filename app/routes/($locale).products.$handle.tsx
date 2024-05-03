@@ -1,8 +1,8 @@
 import {useLoaderData} from '@remix-run/react';
 import {ProductProvider} from '@shopify/hydrogen-react';
 import {json} from '@shopify/remix-oxygen';
-import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
-import {AnalyticsPageType} from '@shopify/hydrogen';
+import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
+import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 import type {ShopifyAnalyticsProduct} from '@shopify/hydrogen';
 import {RenderSections} from '@pack/react';
 
@@ -185,6 +185,10 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     storeDomain,
   });
 }
+
+export const meta = ({data}: MetaArgs) => {
+  return getSeoMeta(data.seo);
+};
 
 export default function ProductRoute() {
   const {product, productPage, selectedVariant} =
