@@ -25,7 +25,7 @@ export function loadScript(
     const additionalAttributesKeys = Object.keys({...additionalAttributes});
     if (additionalAttributesKeys.length) {
       additionalAttributesKeys.forEach((key) => {
-        script[key] = additionalAttributes[key];
+        script.setAttribute(key, additionalAttributes[key]);
       });
     }
     script.onload = (e): void => {

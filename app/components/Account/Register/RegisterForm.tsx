@@ -16,9 +16,9 @@ export function RegisterForm({settings}: {settings: Settings['account']}) {
   return (
     <div className="rounded border border-border px-3 py-6 md:px-6 md:py-10">
       {pathname.startsWith(`${pathPrefix}/account/register`) && !pageHeading ? (
-        <h1 className="text-title-h3 mb-6 text-center">{heading}</h1>
+        <h1 className="text-h3 mb-6 text-center">{heading}</h1>
       ) : (
-        <h2 className="text-title-h3 mb-6 text-center">{heading}</h2>
+        <h2 className="text-h3 mb-6 text-center">{heading}</h2>
       )}
 
       <form
@@ -83,7 +83,7 @@ export function RegisterForm({settings}: {settings: Settings['account']}) {
 
         <button
           aria-label="Create Account"
-          className={`btn-primary mt-3 w-full min-w-[10rem] self-center md:w-auto  ${
+          className={`btn-primary mt-3 w-full min-w-40 self-center md:w-auto  ${
             status.started ? 'cursor-default' : ''
           }`}
           type="submit"

@@ -1,74 +1,27 @@
-import {useSiteSettings} from '@pack/react';
-
-import type {SiteSettings} from '~/lib/types';
+import {usePromobar} from '~/hooks';
 
 import {Navigation} from './Navigation';
-import {Menu} from './Menu';
-import {MenuDrawer} from './MenuDrawer';
+import {DesktopMenu, MobileMenu} from './Menu';
 import {Promobar} from './Promobar';
-import {useMenu} from './useMenu';
-import {useMenuDrawer} from './useMenuDrawer';
-import {usePromobar} from './usePromobar';
+import {useDesktopMenu} from './useDesktopMenu';
+import {useMobileMenu} from './useMobileMenu';
 
 export function Header() {
-  const siteSettings = useSiteSettings() as SiteSettings;
-  const settings = siteSettings?.settings?.header;
-  const {
-    menuContent,
-    handleMenuClose,
-    handleMenuStayOpen,
-    handleMenuHoverIn,
-    handleMenuHoverOut,
-  } = useMenu({settings});
-  const {promobarDisabled, promobarHeight, promobarHidden, setPromobarHidden} =
-    usePromobar({settings});
-  const {
-    menuDrawerOpen,
-    nestedDrawerContent,
-    handleCloseDrawer,
-    handleNestedDrawer,
-    handleOpenDrawer,
-  } = useMenuDrawer({settings});
+  const {headerHeightClass} = usePromobar();
+  const desktopMenuContext = useDesktopMenu();
+  const mobileMenuContext = useMobileMenu();
 
   return (
     <header
-      className={`fixed left-0 right-0 top-0 z-20 flex flex-col bg-background transition-[height] duration-300 ease-out ${
-        promobarHidden || promobarDisabled
-          ? 'h-[var(--header-height)]'
-          : 'h-[calc(var(--header-height)+var(--promobar-height))]'
-      }`}
+      className={`fixed inset-x-0 top-0 z-20 flex flex-col bg-background transition-[height] duration-300 ease-out ${headerHeightClass}`}
     >
-      <Promobar
-        promobarDisabled={promobarDisabled}
-        promobarHeight={promobarHeight}
-        promobarHidden={promobarHidden}
-        setPromobarHidden={setPromobarHidden}
-        settings={settings}
-      />
+      <Promobar />
 
-      <Navigation
-        handleOpenDrawer={handleOpenDrawer}
-        handleMenuClose={handleMenuClose}
-        handleMenuHoverIn={handleMenuHoverIn}
-        handleMenuHoverOut={handleMenuHoverOut}
-        menuContent={menuContent}
-        settings={settings}
-      />
+      <Navigation {...desktopMenuContext} {...mobileMenuContext} />
 
-      <Menu
-        handleMenuClose={handleMenuClose}
-        handleMenuStayOpen={handleMenuStayOpen}
-        handleMenuHoverOut={handleMenuHoverOut}
-        menuContent={menuContent}
-      />
+      <DesktopMenu {...desktopMenuContext} />
 
-      <MenuDrawer
-        handleCloseDrawer={handleCloseDrawer}
-        handleNestedDrawer={handleNestedDrawer}
-        menuDrawerOpen={menuDrawerOpen}
-        nestedDrawerContent={nestedDrawerContent}
-        settings={settings}
-      />
+      <MobileMenu {...mobileMenuContext} />
     </header>
   );
 }

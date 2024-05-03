@@ -1,4 +1,9 @@
-import {COLORS, FLEX_POSITIONS, OBJECT_POSITIONS} from '~/settings/common';
+import {
+  BUTTONS,
+  COLORS,
+  FLEX_POSITIONS,
+  OBJECT_POSITIONS,
+} from '~/settings/common';
 import {containerSettings} from '~/settings/container';
 
 const image = {
@@ -92,12 +97,7 @@ const text = {
           label: 'Button Style',
           name: 'style',
           component: 'select',
-          options: [
-            {label: 'Primary', value: 'btn-primary'},
-            {label: 'Secondary', value: 'btn-secondary'},
-            {label: 'Inverse Light', value: 'btn-inverse-light'},
-            {label: 'Inverse Dark', value: 'btn-inverse-dark'},
-          ],
+          options: BUTTONS,
         },
       ],
       defaultItem: {
@@ -201,7 +201,7 @@ const content = {
 export function Schema() {
   return {
     category: 'Heros',
-    label: 'Banner',
+    label: 'Hero Banner',
     key: 'banner',
     previewSrc:
       'https://cdn.shopify.com/s/files/1/0629/5519/2520/files/banner-preview.jpg?v=1708133574',
@@ -415,7 +415,7 @@ export function Schema() {
           },
         ],
         defaultValue: {
-          aboveTheFold: true,
+          aboveTheFold: false,
           fullWidth: true,
           fullBleed: true,
         },

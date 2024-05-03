@@ -20,22 +20,22 @@ const isElevar =
   typeof document !== 'undefined' && !!window.ENV?.PUBLIC_ELEVAR_SIGNING_KEY;
 
 export function useDataLayerCustomer({
+  cartReady,
   currencyCode,
   handleDataLayerEvent,
   userProperties,
 }: {
+  cartReady: boolean;
   currencyCode?: CurrencyCode | undefined;
   handleDataLayerEvent: (event: Record<string, any>) => void;
   userProperties: UserProperties;
 }) {
   const pathnameRef = useRef<string | undefined>(undefined);
-  const {cost, lines = [], status} = useCart();
+  const {cost, lines = []} = useCart();
   const location = useLocation();
   const pathname = pathWithoutLocalePrefix(location.pathname);
 
   const [userDataEventTriggered, setUserDataEventTriggered] = useState(false);
-
-  const cartReady = status === 'idle';
 
   const userDataEvent = useCallback(
     ({

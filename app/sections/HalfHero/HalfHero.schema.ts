@@ -1,4 +1,4 @@
-import {COLORS, CROP_POSITIONS} from '~/settings/common';
+import {BUTTONS, COLORS, CROP_POSITIONS} from '~/settings/common';
 import {containerSettings} from '~/settings/container';
 
 const media = {
@@ -231,12 +231,7 @@ const content = {
           label: 'Button Style',
           name: 'style',
           component: 'select',
-          options: [
-            {label: 'Primary', value: 'btn-primary'},
-            {label: 'Secondary', value: 'btn-secondary'},
-            {label: 'Inverse Light', value: 'btn-inverse-light'},
-            {label: 'Inverse Dark', value: 'btn-inverse-dark'},
-          ],
+          options: BUTTONS,
         },
       ],
       defaultItem: {

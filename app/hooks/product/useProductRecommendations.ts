@@ -11,6 +11,7 @@ import {useLocale} from '~/hooks';
  * Fetch up to 10 product recommendations for a given product id
  * @param productId - The id of the product
  * @param intent - https://shopify.dev/docs/api/storefront/latest/enums/ProductRecommendationIntent
+ * @param fetchOnMount - Determines when to fetch
  * @returns array of product items
  * @example
  * ```js
@@ -21,6 +22,7 @@ import {useLocale} from '~/hooks';
 export function useProductRecommendations(
   productId = '',
   intent: ProductRecommendationIntent = 'RELATED',
+  fetchOnMount = true,
 ): Product[] | null {
   const {pathPrefix} = useLocale();
   const fetcher = useFetcher<{productRecommendations: Product[]}>({
@@ -28,12 +30,18 @@ export function useProductRecommendations(
   });
 
   useEffect(() => {
-    if (!productId || !intent || fetcher.data?.productRecommendations) return;
+    if (
+      !fetchOnMount ||
+      !productId ||
+      !intent ||
+      fetcher.data?.productRecommendations
+    )
+      return;
     fetcher.submit(
       {productId, intent},
       {method: 'POST', action: `${pathPrefix}/api/recommendations`},
     );
-  }, [productId, intent]);
+  }, [fetchOnMount, productId, intent]);
 
   return fetcher.data?.productRecommendations || null;
 }

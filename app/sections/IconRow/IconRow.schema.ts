@@ -75,14 +75,8 @@ export function Schema() {
         label: 'Section Settings',
         name: 'section',
         component: 'group',
-        description: 'Background color, text color, icon color, full width',
+        description: 'Text color, icon color, full width',
         fields: [
-          {
-            label: 'Background Color',
-            name: 'bgColor',
-            component: 'select',
-            options: COLORS,
-          },
           {
             label: 'Text Color',
             name: 'textColor',

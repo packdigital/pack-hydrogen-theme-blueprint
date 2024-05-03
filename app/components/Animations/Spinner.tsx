@@ -36,7 +36,7 @@ export function Spinner({
       className={`relative ${className}`}
     >
       <div
-        className="inline-block h-full w-full animate-spin-fast rounded-full border-solid border-current border-l-transparent border-r-transparent border-t-transparent align-[-0.125em]"
+        className="inline-block size-full animate-spin-fast rounded-full border-solid border-current border-x-transparent border-t-transparent align-[-0.125em]"
         style={{borderWidth}}
         role="status"
       >
@@ -45,7 +45,7 @@ export function Spinner({
         </span>
       </div>
       <div
-        className="absolute inset-0 z-[0] inline-block h-full w-full rounded-full border-solid border-current opacity-[25%]"
+        className="absolute inset-0 z-0 inline-block size-full rounded-full border-solid border-current opacity-[25%]"
         style={{borderWidth}}
       />
     </div>

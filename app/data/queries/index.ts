@@ -7,4 +7,5 @@ export * from './pack.queries';
 export * from './page.queries';
 export * from './product.queries';
 export * from './search.queries';
+export * from './sellingPlans.queries';
 export * from './shop.queries';

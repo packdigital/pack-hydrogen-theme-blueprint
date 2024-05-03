@@ -1,7 +1,6 @@
 import {useMemo} from 'react';
-import {useSiteSettings} from '@pack/react';
 
-import type {SiteSettings} from '~/lib/types';
+import {useSettings} from '~/hooks';
 
 /**
  * Generate a table of color swatches from the site settings
@@ -13,10 +12,8 @@ import type {SiteSettings} from '~/lib/types';
  */
 
 export function useColorSwatches(): Record<string, string> {
-  const siteSettings = useSiteSettings() as SiteSettings;
-  const {swatches} = {
-    ...siteSettings?.settings?.product?.colors,
-  };
+  const {product: productSettings} = useSettings();
+  const {swatches} = {...productSettings?.colors};
 
   return useMemo(() => {
     if (!swatches?.length) return {};

@@ -1,10 +1,8 @@
 import {useCart} from '@shopify/hydrogen-react';
-import {useSiteSettings} from '@pack/react';
 import type {CartLine as CartLineType} from '@shopify/hydrogen/storefront-api-types';
 
 import {Drawer, Svg} from '~/components';
-import type {SiteSettings} from '~/lib/types';
-import {useGlobal} from '~/hooks';
+import {useGlobal, useSettings} from '~/hooks';
 
 import {CartDiscounts} from './CartDiscounts';
 import {CartEmpty} from './CartEmpty';
@@ -14,20 +12,19 @@ import {CartUpsell} from './CartUpsell/CartUpsell';
 import {FreeShippingMeter} from './FreeShippingMeter';
 
 export function Cart() {
-  const siteSettings = useSiteSettings() as SiteSettings;
-  const settings = siteSettings?.settings?.cart;
+  const {cart: cartSettings} = useSettings();
   const {lines = [], totalQuantity = 0} = useCart();
   const {cartOpen, closeCart} = useGlobal();
 
   const cartLines = lines as CartLineType[];
   const hasCartLines = totalQuantity > 0;
-  const enabledUpsell = settings?.upsell?.enabled;
-  const enabledDiscounts = settings?.discounts?.enabled ?? true;
+  const enabledUpsell = cartSettings?.upsell?.enabled;
+  const enabledDiscounts = cartSettings?.discounts?.enabled ?? true;
 
   return (
     <Drawer
       ariaName="cart drawer"
-      heading={settings?.heading || 'My Cart'}
+      heading={cartSettings?.heading || 'My Cart'}
       onClose={closeCart}
       open={cartOpen}
       openFrom="right"
@@ -45,7 +42,7 @@ export function Cart() {
         </>
       }
     >
-      <FreeShippingMeter settings={settings} />
+      <FreeShippingMeter settings={cartSettings} />
 
       <ul className="scrollbar-hide relative flex-1 overflow-y-auto">
         {cartLines?.length ? (
@@ -60,19 +57,19 @@ export function Cart() {
             );
           })
         ) : (
-          <CartEmpty closeCart={closeCart} settings={settings} />
+          <CartEmpty closeCart={closeCart} settings={cartSettings} />
         )}
       </ul>
 
       {hasCartLines && (
         <>
           {enabledUpsell && (
-            <CartUpsell closeCart={closeCart} settings={settings} />
+            <CartUpsell closeCart={closeCart} settings={cartSettings} />
           )}
 
           {enabledDiscounts && <CartDiscounts />}
 
-          <CartTotals settings={settings} />
+          <CartTotals settings={cartSettings} />
         </>
       )}
     </Drawer>

@@ -20,12 +20,14 @@ const isElevar =
   typeof document !== 'undefined' && !!window.ENV?.PUBLIC_ELEVAR_SIGNING_KEY;
 
 export function useDataLayerCart({
+  cartReady,
   currencyCode,
   handleDataLayerEvent,
   userDataEvent,
   userDataEventTriggered,
   userProperties,
 }: {
+  cartReady: boolean;
   currencyCode?: CurrencyCode | undefined;
   handleDataLayerEvent: (event: Record<string, any>) => void;
   userDataEvent: (arg0: any) => void;
@@ -51,8 +53,6 @@ export function useDataLayerCart({
     string,
     CartLine[]
   > | null>(null);
-
-  const cartReady = status === 'idle';
 
   const addToCartEvent = useCallback(
     ({
@@ -208,11 +208,11 @@ export function useDataLayerCart({
 
   // Determine if a cart item was added, removed, or updated for events
   useEffect(() => {
-    if (!userDataEventTriggered) return;
     if (!mounted) {
       setMounted(true);
       return;
     }
+    if (!userDataEventTriggered) return;
     if (
       (status !== 'idle' && status !== 'uninitialized') ||
       totalQuantity === previousCartCount

@@ -1,3 +1,4 @@
+import {BUTTONS} from '~/settings/common';
 import {containerSettings} from '~/settings/container';
 
 export function Schema({template}: {template: string}) {
@@ -141,12 +142,7 @@ export function Schema({template}: {template: string}) {
             label: 'Button Style',
             name: 'buttonStyle',
             component: 'select',
-            options: [
-              {label: 'Primary', value: 'btn-primary'},
-              {label: 'Secondary', value: 'btn-secondary'},
-              {label: 'Inverse Light', value: 'btn-inverse-light'},
-              {label: 'Inverse Dark', value: 'btn-inverse-dark'},
-            ],
+            options: BUTTONS,
           },
           {
             label: 'Full Width',

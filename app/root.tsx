@@ -6,8 +6,12 @@ import {
 } from '@remix-run/react';
 import type {ShouldRevalidateFunction} from '@remix-run/react';
 import {defer} from '@shopify/remix-oxygen';
-import type {LinksFunction, LoaderFunctionArgs} from '@shopify/remix-oxygen';
-import {ShopifySalesChannel} from '@shopify/hydrogen';
+import type {
+  LinksFunction,
+  LoaderFunctionArgs,
+  MetaArgs,
+} from '@shopify/remix-oxygen';
+import {getSeoMeta, ShopifySalesChannel} from '@shopify/hydrogen';
 
 import {ApplicationError, Document, NotFound, ServerError} from '~/components';
 import {customerGetAction, validateCustomerAccessToken} from '~/lib/customer';
@@ -16,6 +20,7 @@ import {
   getProductGroupings,
   getShop,
   getSiteSettings,
+  setPackCookie,
 } from '~/lib/utils';
 import {registerSections} from '~/sections';
 import {registerStorefrontSettings} from '~/settings';
@@ -81,10 +86,8 @@ export async function loader({context, request}: LoaderFunctionArgs) {
   const customerAccessToken = await session.get('customerAccessToken');
   const groupingsPromise = getProductGroupings(context);
 
-  const {isLoggedIn, headers} = await validateCustomerAccessToken(
-    session,
-    customerAccessToken,
-  );
+  const {isLoggedIn, headers: headersWithAccessToken} =
+    await validateCustomerAccessToken(session, customerAccessToken);
   let customer = null;
   if (isLoggedIn) {
     const {data: customerData} = await customerGetAction({context});
@@ -92,6 +95,11 @@ export async function loader({context, request}: LoaderFunctionArgs) {
       customer = customerData.customer;
     }
   }
+  const {headers: headersWithPackCookie} = await setPackCookie({
+    headers: headersWithAccessToken,
+    request,
+  });
+  const headers = headersWithPackCookie;
 
   const analytics = {
     shopifySalesChannel: ShopifySalesChannel.hydrogen,
@@ -124,6 +132,10 @@ export async function loader({context, request}: LoaderFunctionArgs) {
     {headers},
   );
 }
+
+export const meta = ({data}: MetaArgs) => {
+  return getSeoMeta(data.seo);
+};
 
 export default function App() {
   return (

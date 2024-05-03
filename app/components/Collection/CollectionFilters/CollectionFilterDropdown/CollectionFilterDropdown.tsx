@@ -68,7 +68,7 @@ export function CollectionFilterDropdown({
     <div className="border-b border-border">
       <button
         aria-label={filter.label}
-        className={`relative flex min-h-[3rem] w-full items-center justify-between gap-4 px-4 py-2 text-left`}
+        className={`relative flex min-h-12 w-full items-center justify-between gap-4 px-4 py-2 text-left`}
         onClick={() => setIsOpen(!isOpen)}
         type="button"
       >

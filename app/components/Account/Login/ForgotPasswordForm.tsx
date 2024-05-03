@@ -35,11 +35,9 @@ export function ForgotPasswordForm({
   return (
     <div className="flex flex-col items-center rounded border border-border px-3 py-6 md:px-6 md:py-10">
       <div className="mb-6 flex flex-col gap-4">
-        <h2 className="text-title-h3 text-center">{heading}</h2>
+        <h2 className="text-h3 text-center">{heading}</h2>
 
-        {subtext && (
-          <p className="max-w-[20rem] text-center text-sm">{subtext}</p>
-        )}
+        {subtext && <p className="max-w-xs text-center text-sm">{subtext}</p>}
       </div>
 
       <form
@@ -59,7 +57,7 @@ export function ForgotPasswordForm({
 
         <button
           aria-label="Submit email for password recovery"
-          className={`btn-primary mt-3 min-w-[10rem] self-center ${
+          className={`btn-primary mt-3 min-w-40 self-center ${
             status.started ? 'cursor-default' : ''
           }`}
           type="submit"

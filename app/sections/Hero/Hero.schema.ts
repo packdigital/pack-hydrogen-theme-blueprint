@@ -1,4 +1,5 @@
 import {
+  BUTTONS,
   COLORS,
   FLEX_POSITIONS,
   OBJECT_POSITIONS,
@@ -171,12 +172,7 @@ const buttons = {
           label: 'Button Style',
           name: 'style',
           component: 'select',
-          options: [
-            {label: 'Primary', value: 'btn-primary'},
-            {label: 'Secondary', value: 'btn-secondary'},
-            {label: 'Inverse Light', value: 'btn-inverse-light'},
-            {label: 'Inverse Dark', value: 'btn-inverse-dark'},
-          ],
+          options: BUTTONS,
         },
       ],
       defaultItem: {
@@ -331,7 +327,7 @@ const defaultSlide = {
 export const Schema = () => {
   return {
     category: 'Heros',
-    label: 'Hero',
+    label: 'Hero Slider',
     key: 'hero',
     previewSrc:
       'https://cdn.shopify.com/s/files/1/0671/5074/1778/files/hero-preview_2cd7154c-7ec6-4846-84ca-85aaef836165.jpg?v=1675795229',

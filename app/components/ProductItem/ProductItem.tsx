@@ -143,7 +143,7 @@ export function ProductItem({
         )}
 
         <Link aria-label={title} to={productUrl} onClick={handleClick}>
-          <h3 className="text-bold min-h-[1.5rem] text-base">{title}</h3>
+          <h3 className="text-bold min-h-6 text-base">{title}</h3>
         </Link>
 
         {color && <p className="text-sm text-mediumDarkGray">{color}</p>}

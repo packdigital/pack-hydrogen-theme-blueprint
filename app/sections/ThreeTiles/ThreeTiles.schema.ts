@@ -1,4 +1,4 @@
-import {COLORS, CROP_POSITIONS} from '~/settings/common';
+import {BUTTONS, COLORS, CROP_POSITIONS} from '~/settings/common';
 import {containerSettings} from '~/settings/container';
 
 export function Schema() {
@@ -117,8 +117,7 @@ export function Schema() {
         label: 'Section Settings',
         name: 'section',
         component: 'group',
-        description:
-          'Image aspect ratio, background color, text color, full width',
+        description: 'Image aspect ratio, text color, full width',
         fields: [
           {
             label: 'Image Aspect Ratio',
@@ -137,12 +136,6 @@ export function Schema() {
             ],
           },
           {
-            label: 'Background Color',
-            name: 'bgColor',
-            component: 'select',
-            options: COLORS,
-          },
-          {
             label: 'Text Color',
             name: 'textColor',
             component: 'select',
@@ -152,12 +145,7 @@ export function Schema() {
             label: 'Button Style',
             name: 'buttonStyle',
             component: 'select',
-            options: [
-              {label: 'Primary', value: 'btn-primary'},
-              {label: 'Secondary', value: 'btn-secondary'},
-              {label: 'Inverse Light', value: 'btn-inverse-light'},
-              {label: 'Inverse Dark', value: 'btn-inverse-dark'},
-            ],
+            options: BUTTONS,
           },
           {
             label: 'Full Width',
@@ -172,7 +160,6 @@ export function Schema() {
         ],
         defaultValue: {
           aspectRatio: 'aspect-[3/4]',
-          bgColor: 'var(--background)',
           textColor: 'var(--text)',
           buttonStyle: 'btn-primary',
           fullWidth: false,

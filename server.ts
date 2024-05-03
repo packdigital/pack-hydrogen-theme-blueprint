@@ -15,7 +15,6 @@ import {createPackClient, PreviewSession} from '@pack/hydrogen';
 
 import {AppSession} from '~/lib/session.server';
 import {getLocaleFromRequest} from '~/lib/utils';
-
 import defaultThemeData from '~/config/default-theme-data.json';
 
 /**
@@ -69,11 +68,7 @@ export default {
       /**
        * Create Pack client.
        */
-      const apiUrl = env.PACK_API_URL
-        ? `${env.PACK_API_URL}/graphql`
-        : 'https://app.packdigital.com/graphql';
       const pack = createPackClient({
-        apiUrl,
         cache,
         waitUntil,
         token: env.PACK_SECRET_TOKEN,

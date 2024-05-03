@@ -2,7 +2,7 @@ import {Fragment, useMemo} from 'react';
 import {useCart} from '@shopify/hydrogen-react';
 import {Navigation} from 'swiper/modules';
 import {Swiper, SwiperSlide} from 'swiper/react';
-import {Disclosure} from '@headlessui/react';
+import {Disclosure, Transition} from '@headlessui/react';
 import type {CartLine} from '@shopify/hydrogen/storefront-api-types';
 
 import {Svg} from '~/components';
@@ -62,52 +62,68 @@ export function CartUpsell({closeCart, settings}: CartUpsellProps) {
             </div>
           </Disclosure.Button>
 
-          <Disclosure.Panel as={Fragment}>
-            <Swiper
-              className="mb-4 w-full px-2"
-              grabCursor
-              modules={[Navigation]}
-              navigation={{
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
-              }}
-              slidesPerView={1}
-              spaceBetween={0}
-            >
-              {productsNotInCart.map(({product}, index) => {
-                return (
-                  <SwiperSlide key={index}>
-                    <CartUpsellItem
-                      closeCart={closeCart}
-                      handle={product.handle}
-                      isOnlyUpsell={products.length === 1}
+          <Transition
+            show={open}
+            enter="transition duration-100 ease-out"
+            enterFrom="transform scale-97 opacity-0"
+            enterTo="transform scale-100 opacity-100"
+            leave="transition duration-75 ease-out"
+            leaveFrom="transform scale-100 opacity-100"
+            leaveTo="transform scale-97 opacity-0"
+          >
+            <Disclosure.Panel as={Fragment}>
+              <Swiper
+                className="mb-4 w-full px-2"
+                grabCursor
+                modules={[Navigation]}
+                navigation={{
+                  nextEl: '.swiper-button-next',
+                  prevEl: '.swiper-button-prev',
+                }}
+                slidesPerView={1}
+                spaceBetween={0}
+              >
+                {productsNotInCart.map(({product}, index) => {
+                  return (
+                    <SwiperSlide key={index}>
+                      <CartUpsellItem
+                        closeCart={closeCart}
+                        handle={product.handle}
+                        isOnlyUpsell={products.length === 1}
+                      />
+                    </SwiperSlide>
+                  );
+                })}
+
+                {/* Navigation */}
+                <div>
+                  <div
+                    // eslint-disable-next-line tailwindcss/no-custom-classname
+                    className="swiper-button-prev left-0 after:hidden"
+                  >
+                    <Svg
+                      className="max-w-4 text-text"
+                      src="/svgs/chevron-left.svg#chevron-left"
+                      title="Arrow Left"
+                      viewBox="0 0 24 24"
                     />
-                  </SwiperSlide>
-                );
-              })}
+                  </div>
 
-              {/* Navigation */}
-              <div>
-                <div className="swiper-button-prev left-0 after:hidden">
-                  <Svg
-                    className="max-w-[1rem] text-text"
-                    src="/svgs/chevron-left.svg#chevron-left"
-                    title="Arrow Left"
-                    viewBox="0 0 24 24"
-                  />
+                  <div
+                    // eslint-disable-next-line tailwindcss/no-custom-classname
+                    className="swiper-button-next right-0 after:hidden"
+                  >
+                    <Svg
+                      className="max-w-4 text-text"
+                      src="/svgs/chevron-right.svg#chevron-right"
+                      title="Arrow Right"
+                      viewBox="0 0 24 24"
+                    />
+                  </div>
                 </div>
-
-                <div className="swiper-button-next right-0 after:hidden">
-                  <Svg
-                    className="max-w-[1rem] text-text"
-                    src="/svgs/chevron-right.svg#chevron-right"
-                    title="Arrow Right"
-                    viewBox="0 0 24 24"
-                  />
-                </div>
-              </div>
-            </Swiper>
-          </Disclosure.Panel>
+              </Swiper>
+            </Disclosure.Panel>
+          </Transition>
         </>
       )}
     </Disclosure>

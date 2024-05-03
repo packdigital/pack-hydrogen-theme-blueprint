@@ -1,20 +1,11 @@
 import type {ReactNode} from 'react';
-import {useSiteSettings} from '@pack/react';
 
 import {Cart, Footer, Header, Modal, Search} from '~/components';
-import type {SiteSettings} from '~/lib/types';
-import {useSetViewportHeightCssVar} from '~/hooks';
+import {usePromobar, useSetViewportHeightCssVar} from '~/hooks';
 
 export function Layout({children}: {children: ReactNode}) {
-  const siteSettings = useSiteSettings() as SiteSettings;
+  const {mainPaddingTopClass} = usePromobar();
   useSetViewportHeightCssVar();
-
-  const {promobar} = {...siteSettings?.settings?.header};
-  const promobarDisabled =
-    !!promobar && (!promobar.enabled || !promobar.messages?.length);
-  const paddingTop = promobarDisabled
-    ? 'pt-[var(--header-height)]'
-    : 'pt-[calc(var(--header-height)+var(--promobar-height))]';
 
   return (
     <div
@@ -23,7 +14,11 @@ export function Layout({children}: {children: ReactNode}) {
     >
       <Header />
 
-      <main role="main" id="mainContent" className={`flex-grow ${paddingTop}`}>
+      <main
+        role="main"
+        id="mainContent"
+        className={`grow ${mainPaddingTopClass}`}
+      >
         {children}
       </main>
 

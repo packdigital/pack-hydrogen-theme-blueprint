@@ -1,10 +1,8 @@
 import {useCallback, useEffect, useRef, useState, useMemo} from 'react';
 import {useFetcher} from '@remix-run/react';
 import debounce from 'lodash/debounce';
-import {useSiteSettings} from '@pack/react';
 
-import type {SiteSettings} from '~/lib/types';
-import {useIsHydrated, useLocale} from '~/hooks';
+import {useIsHydrated, useLocale, useSettings} from '~/hooks';
 
 const PRODUCTS_LIMIT = 10;
 const COLLECTIONS_LIMIT = 10;
@@ -19,7 +17,7 @@ interface CollectionsFetcherData {
 }
 
 export function useSearch() {
-  const siteSettings = useSiteSettings() as SiteSettings;
+  const {search} = useSettings();
   const isHydrated = useIsHydrated();
   const locale = useLocale();
 
@@ -33,8 +31,7 @@ export function useSearch() {
     key: `predictive-search-collection:${searchTerm}`,
   });
 
-  const collectionsEnabled =
-    siteSettings?.settings?.search?.results?.collectionsEnabled ?? true;
+  const collectionsEnabled = search?.results?.collectionsEnabled ?? true;
 
   useEffect(() => {
     if (!isHydrated) return;

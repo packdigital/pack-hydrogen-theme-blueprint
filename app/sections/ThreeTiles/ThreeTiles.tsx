@@ -5,7 +5,7 @@ import {Schema} from './ThreeTiles.schema';
 
 export function ThreeTiles({cms}: {cms: ThreeTilesCms}) {
   const {button, heading, section, tiles} = cms;
-  const {aspectRatio, bgColor, fullWidth, textColor} = {...section};
+  const {aspectRatio, fullWidth, textColor} = {...section};
 
   const maxWidthClass = fullWidth
     ? 'max-w-none'
@@ -13,13 +13,10 @@ export function ThreeTiles({cms}: {cms: ThreeTilesCms}) {
 
   return (
     <Container container={cms.container}>
-      <div
-        className="lg:px-contained py-contained"
-        style={{backgroundColor: bgColor}}
-      >
+      <div className="lg:px-contained py-contained">
         {heading && (
           <h2
-            className="text-title-h2 mb-6 px-4 text-center md:mb-10"
+            className="text-h2 mb-6 px-4 text-center md:mb-10"
             style={{color: textColor}}
           >
             {heading}

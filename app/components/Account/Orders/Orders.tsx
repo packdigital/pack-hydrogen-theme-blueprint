@@ -1,26 +1,22 @@
 import {useLocation} from '@remix-run/react';
-import {useSiteSettings} from '@pack/react';
 
 import {Link, Pagination} from '~/components';
-import type {SiteSettings} from '~/lib/types';
 import {useCustomerOrders} from '~/lib/customer';
-import {usePagination} from '~/hooks';
+import {usePagination, useSettings} from '~/hooks';
 
 import {OrdersItem} from './OrdersItem';
 
 export function Orders() {
-  const siteSettings = useSiteSettings() as SiteSettings;
+  const {account} = useSettings();
   const {orders} = useCustomerOrders();
 
-  const {menuItems} = {...siteSettings?.settings?.account?.menu};
+  const {menuItems} = {...account?.menu};
   const {
     buttonStyle,
     emptyOrdersButton,
     emptyOrdersText,
     ordersPerPage = 10,
-  } = {
-    ...siteSettings?.settings?.account?.orders,
-  };
+  } = {...account?.orders};
   const {pathname} = useLocation();
   const heading = menuItems?.find(({link}) => pathname.startsWith(link?.url))
     ?.link?.text;
@@ -40,11 +36,11 @@ export function Orders() {
 
   return (
     <div className="flex flex-col gap-8 md:gap-10">
-      <h1 className="text-title-h4">{heading}</h1>
+      <h1 className="text-h4">{heading}</h1>
 
       {!orders?.length && (
         <div
-          className="relative flex min-h-[12rem] flex-col items-center justify-center gap-4"
+          className="relative flex min-h-48 flex-col items-center justify-center gap-4"
           role="status"
         >
           <p className="text-center">{emptyOrdersText}</p>

@@ -1,14 +1,12 @@
 import {useCallback, useEffect, useState} from 'react';
 import {useCart} from '@shopify/hydrogen-react';
-import {useSiteSettings} from '@pack/react';
 import type {
   Attribute,
   ProductVariant,
   SellingPlan,
 } from '@shopify/hydrogen/storefront-api-types';
 
-import type {SiteSettings} from '~/lib/types';
-import {useGlobal} from '~/hooks';
+import {useGlobal, useSettings} from '~/hooks';
 
 /**
  * Add to cart hook
@@ -57,29 +55,27 @@ export function useAddToCart({
   sellingPlanId,
 }: UseAddToCartProps): UseAddToCartReturn {
   const {error, linesAdd, status} = useCart();
-  const siteSettings = useSiteSettings() as SiteSettings;
+  const {product: productSettings} = useSettings();
   const {openCart, openModal} = useGlobal();
 
   const [isAdding, setIsAdding] = useState(false);
   const [isAdded, setIsAdded] = useState(false);
 
-  const enabledNotifyMe = siteSettings?.settings?.product?.backInStock?.enabled;
+  const enabledNotifyMe = productSettings?.backInStock?.enabled;
   const variantIsSoldOut = selectedVariant && !selectedVariant.availableForSale;
   const variantIsPreorder = !!selectedVariant?.currentlyNotInStock;
 
   let buttonText = '';
   if (variantIsPreorder) {
-    buttonText =
-      siteSettings?.settings?.product?.addToCart?.preorderText || 'Preorder';
+    buttonText = productSettings?.addToCart?.preorderText || 'Preorder';
   } else if (variantIsSoldOut) {
     buttonText = enabledNotifyMe
-      ? siteSettings?.settings?.product?.backInStock?.notifyMeText ||
-        'Notify Me'
-      : siteSettings?.settings?.product?.addToCart?.soldOutText || 'Sold Out';
+      ? productSettings?.backInStock?.notifyMeText || 'Notify Me'
+      : productSettings?.addToCart?.soldOutText || 'Sold Out';
   } else {
     buttonText =
       addToCartTextOverride ||
-      siteSettings?.settings?.product?.addToCart?.addToCartText ||
+      productSettings?.addToCart?.addToCartText ||
       'Add To Cart';
   }
 
@@ -137,6 +133,6 @@ export function useAddToCart({
     isAdding, // line is adding
     isNotifyMe: !!variantIsSoldOut && enabledNotifyMe,
     isSoldOut: !!variantIsSoldOut,
-    subtext: siteSettings?.settings?.product?.addToCart?.subtext,
+    subtext: productSettings?.addToCart?.subtext,
   };
 }

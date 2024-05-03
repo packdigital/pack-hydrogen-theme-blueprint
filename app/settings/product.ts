@@ -15,6 +15,7 @@ export interface ProductSettings {
     heading: string;
     subtext: string;
     submitText: string;
+    successText: string;
   };
   badges: {
     badgeColors: {
@@ -115,6 +116,11 @@ export default {
           name: 'submitText',
           component: 'text',
         },
+        {
+          label: 'Modal Success Message',
+          name: 'successText',
+          component: 'text',
+        },
       ],
       defaultValue: {
         enabled: false,
@@ -122,6 +128,8 @@ export default {
         heading: 'Notify Me When Available',
         subtext: `Enter your email below and we'll notify you when this product is back in stock.`,
         submitText: 'Submit',
+        successText:
+          'Thank you! We will notify you when this product is back in stock.',
       },
     },
     {

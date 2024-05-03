@@ -56,7 +56,7 @@ export function CartLine({closeCart, line}: CartLineProps) {
             to={url}
             onClick={closeCart}
           >
-            <h3 className="text-title-h6">{merchandise.product.title}</h3>
+            <h3 className="text-h6">{merchandise.product.title}</h3>
           </Link>
 
           {merchandise.title !== 'Default Title' && (

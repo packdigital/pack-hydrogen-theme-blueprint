@@ -1,4 +1,4 @@
-import {COLORS} from '~/settings/common';
+import {BUTTONS, COLORS} from '~/settings/common';
 import {containerSettings} from '~/settings/container';
 
 export function Schema() {
@@ -43,12 +43,7 @@ export function Schema() {
             label: 'Button Style',
             name: 'style',
             component: 'select',
-            options: [
-              {label: 'Primary', value: 'btn-primary'},
-              {label: 'Secondary', value: 'btn-secondary'},
-              {label: 'Inverse Light', value: 'btn-inverse-light'},
-              {label: 'Inverse Dark', value: 'btn-inverse-dark'},
-            ],
+            options: BUTTONS,
           },
         ],
         defaultItem: {
@@ -66,8 +61,7 @@ export function Schema() {
         label: 'Section Settings',
         name: 'section',
         component: 'group',
-        description:
-          'Above the fold, background color, text color, icon color, full width',
+        description: 'Above the fold, text color, icon color, full width',
         fields: [
           {
             label: 'Above The Fold',
@@ -78,12 +72,6 @@ export function Schema() {
               true: 'On',
               false: 'Off',
             },
-          },
-          {
-            label: 'Background Color',
-            name: 'bgColor',
-            component: 'select',
-            options: COLORS,
           },
           {
             label: 'Text Color',
@@ -104,7 +92,6 @@ export function Schema() {
         ],
         defaultValue: {
           aboveTheFold: false,
-          bgColor: 'var(--background)',
           textColor: 'var(--text)',
           fullWidth: false,
         },

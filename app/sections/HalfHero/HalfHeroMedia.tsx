@@ -14,8 +14,8 @@ export function HalfHeroMedia({
   const {image, video} = {...media};
 
   return (
-    <div className="absolute inset-0 h-full w-full">
-      <div className="relative h-full w-full overflow-hidden md:hidden">
+    <div className="absolute inset-0 size-full">
+      <div className="relative size-full overflow-hidden md:hidden">
         {video?.srcMobile && (
           <HalfHeroVideo
             autoplay={video.autoplay}
@@ -43,7 +43,7 @@ export function HalfHeroMedia({
         )}
       </div>
 
-      <div className="relative hidden h-full w-full overflow-hidden md:block">
+      <div className="relative hidden size-full overflow-hidden md:block">
         {video?.srcDesktop && (
           <HalfHeroVideo
             autoplay={video.autoplay}

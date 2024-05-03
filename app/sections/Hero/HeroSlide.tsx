@@ -1,4 +1,4 @@
-import {useInView} from 'react-intersection-observer';
+import {useEffect, useState} from 'react';
 
 import {Image} from '~/components';
 
@@ -13,17 +13,22 @@ export function HeroSlide({
   slide,
 }: HeroSlideProps) {
   const {image, video} = slide;
-  const {ref, inView} = useInView({
-    rootMargin: '0px',
-    triggerOnce: true,
-  });
+  const [mounted, setMounted] = useState(aboveTheFold && isActiveSlide);
+
   const isVisible =
     (aboveTheFold && isActiveSlide) ||
-    (!aboveTheFold && isActiveSlide && inView);
+    (!aboveTheFold && isActiveSlide && mounted);
+
+  useEffect(() => {
+    if (mounted) return;
+    if (isActiveSlide && !mounted) {
+      setMounted(true);
+    }
+  }, [isActiveSlide]);
 
   return (
-    <div className="relative h-full w-full" ref={ref}>
-      <div className="relative h-full w-full overflow-hidden md:hidden">
+    <div className="relative size-full">
+      <div className="relative size-full overflow-hidden md:hidden">
         {video?.srcMobile && (
           <HeroVideo
             isVisible={isVisible}
@@ -36,7 +41,7 @@ export function HeroSlide({
           <Image
             data={{
               altText: image.imageMobile.altText || image.alt,
-              url: image.imageMobile.src,
+              url: mounted ? image.imageMobile.src : '',
             }}
             className={`media-fill ${image.positionMobile}`}
             loading={aboveTheFold && isFirstSlide ? 'eager' : 'lazy'}
@@ -45,7 +50,7 @@ export function HeroSlide({
         )}
       </div>
 
-      <div className="relative hidden h-full w-full overflow-hidden md:block">
+      <div className="relative hidden size-full overflow-hidden md:block">
         {video?.srcDesktop && (
           <HeroVideo
             isVisible={isVisible}
@@ -58,7 +63,7 @@ export function HeroSlide({
           <Image
             data={{
               altText: image.imageDesktop.altText || image.alt,
-              url: image.imageDesktop.src,
+              url: mounted ? image.imageDesktop.src : '',
             }}
             className={`media-fill ${image.positionDesktop}`}
             loading={aboveTheFold && isFirstSlide ? 'eager' : 'lazy'}

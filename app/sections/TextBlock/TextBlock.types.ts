@@ -3,7 +3,6 @@ import type {LinkCms} from '~/lib/types';
 
 interface Section {
   aboveTheFold: boolean;
-  bgColor: string;
   fullWidth: boolean;
   textColor: string;
 }

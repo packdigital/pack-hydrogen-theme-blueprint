@@ -1,4 +1,4 @@
-import {FLEX_POSITIONS, CROP_POSITIONS} from '~/settings/common';
+import {BUTTONS, FLEX_POSITIONS, CROP_POSITIONS} from '~/settings/common';
 import {containerSettings} from '~/settings/container';
 
 const DEFAULT_IMAGE_ROW = [
@@ -173,23 +173,13 @@ export function Schema() {
             label: 'Primary Button Style',
             name: 'primaryButtonStyle',
             component: 'select',
-            options: [
-              {label: 'Primary', value: 'btn-primary'},
-              {label: 'Secondary', value: 'btn-secondary'},
-              {label: 'Inverse Light', value: 'btn-inverse-light'},
-              {label: 'Inverse Dark', value: 'btn-inverse-dark'},
-            ],
+            options: BUTTONS,
           },
           {
             label: 'Secondary Button Style',
             name: 'secondaryButtonStyle',
             component: 'select',
-            options: [
-              {label: 'Primary', value: 'btn-primary'},
-              {label: 'Secondary', value: 'btn-secondary'},
-              {label: 'Inverse Light', value: 'btn-inverse-light'},
-              {label: 'Inverse Dark', value: 'btn-inverse-dark'},
-            ],
+            options: BUTTONS,
           },
           {
             label: 'Clickable Image',

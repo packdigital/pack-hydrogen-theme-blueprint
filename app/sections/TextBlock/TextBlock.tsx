@@ -13,16 +13,16 @@ export function TextBlock({cms}: {cms: TextBlockCms}) {
     <Container container={cms.container}>
       <div
         className="px-contained py-contained"
-        style={{backgroundColor: section?.bgColor, color: section?.textColor}}
+        style={{color: section?.textColor}}
       >
         <div
           className={`mx-auto flex flex-col items-center gap-4 md:gap-6 ${maxWidthClass} text-center`}
         >
           {heading &&
             (section?.aboveTheFold ? (
-              <h1 className="text-title-h2 mx-auto max-w-[46rem]">{heading}</h1>
+              <h1 className="text-h2 mx-auto max-w-[46rem]">{heading}</h1>
             ) : (
-              <h2 className="text-title-h2 mx-auto max-w-[46rem]">{heading}</h2>
+              <h2 className="text-h2 mx-auto max-w-[46rem]">{heading}</h2>
             ))}
 
           {subtext && (

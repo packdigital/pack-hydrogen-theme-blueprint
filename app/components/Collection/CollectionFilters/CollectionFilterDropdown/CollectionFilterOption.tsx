@@ -89,7 +89,7 @@ export function CollectionFilterOption({
       type="button"
     >
       <div
-        className={`relative flex h-5 w-5 items-center justify-center overflow-hidden rounded border border-border transition md:mt-[1px] md:h-[18px] md:w-[18px] ${
+        className={`relative flex size-5 items-center justify-center overflow-hidden rounded border border-border transition md:mt-px md:size-[18px] ${
           !disabled ? 'group-hover:md:border-text' : ''
         } ${isActive ? 'border-text' : ''}`}
         style={{
@@ -111,7 +111,7 @@ export function CollectionFilterOption({
 
         <div
           className={`media-fill rounded-[1px] border-white transition-[border-width] duration-100 ${
-            isActive ? 'border-[0px] md:border-[0px]' : 'border-[0px]'
+            isActive ? 'border-0 md:border-0' : 'border-0'
           }`}
         />
 

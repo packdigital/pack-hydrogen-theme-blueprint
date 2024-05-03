@@ -35,7 +35,7 @@ export function Scripts() {
 
   // ↓ Other third party scripts ↓
 
-  // Example:c
+  // Example:
   // useLoadScript(
   //   {
   //     id: 'google-script',

@@ -1,4 +1,3 @@
-import {encode} from 'shopify-gid';
 import type {AppLoadContext} from '@shopify/remix-oxygen';
 import type {
   Customer,
@@ -377,7 +376,7 @@ export const customerActivateClient = async (
 
     activated.response = await storefront.mutate(mutations.CUSTOMER_ACTIVATE, {
       variables: {
-        id: encode('Customer', customerId),
+        id: `gid://shopify/Customer/${customerId}`,
         input: {
           activationToken,
           password,

@@ -1,10 +1,15 @@
 import {json} from '@shopify/remix-oxygen';
+import {useLoaderData} from '@remix-run/react';
 import type {
   ActionFunctionArgs,
   LoaderFunctionArgs,
+  MetaArgs,
 } from '@shopify/remix-oxygen';
-import {useLoaderData} from '@remix-run/react';
-import {AnalyticsPageType, getPaginationVariables} from '@shopify/hydrogen';
+import {
+  AnalyticsPageType,
+  getPaginationVariables,
+  getSeoMeta,
+} from '@shopify/hydrogen';
 import type {
   Collection as CollectionType,
   SearchSortKeys,
@@ -146,12 +151,16 @@ export async function loader({request, context}: LoaderFunctionArgs) {
   });
 }
 
+export const meta = ({data}: MetaArgs) => {
+  return getSeoMeta(data.seo);
+};
+
 export default function SearchRoute() {
   const {activeFilterValues, collection, searchTerm} =
     useLoaderData<typeof loader>();
 
   return (
-    <section data-comp="search-page" className="[&_h1]:text-title-h3">
+    <section data-comp="search-page" className="[&_h1]:text-h3">
       <Collection
         activeFilterValues={activeFilterValues as ActiveFilterValue[]}
         collection={collection}

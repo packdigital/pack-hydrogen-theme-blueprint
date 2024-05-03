@@ -17,7 +17,7 @@ export function ProductOptionValuesLabel({
     // example modal
     openModal(
       <div>
-        <h2 className="text-title-h3 mb-6 text-center">Size Guide</h2>
+        <h2 className="text-h3 mb-6 text-center">Size Guide</h2>
         <div className="h-[30rem] bg-offWhite" />
       </div>,
     );

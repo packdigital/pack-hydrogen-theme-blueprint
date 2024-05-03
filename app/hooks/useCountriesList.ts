@@ -54,7 +54,7 @@ interface CountriesData {
 }
 
 export const useCountriesList = (
-  props: {firstCountries: string[]} | undefined,
+  props?: {firstCountries: string[]} | undefined,
 ): CountriesData => {
   const {firstCountries = []} = {...props};
   const [countriesData, setCountriesData] = useState<CountriesData>({

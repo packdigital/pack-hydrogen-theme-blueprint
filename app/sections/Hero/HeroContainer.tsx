@@ -1,3 +1,5 @@
+import kebabCase from 'lodash/kebabCase';
+
 import type {HeroContainerProps} from './Hero.types';
 
 const FALLBACK_DESKTOP_HEIGHT_CLASS = 'md:h-[43.75rem]';
@@ -48,11 +50,16 @@ export function HeroContainer({children, cms}: HeroContainerProps) {
     : section?.mobile?.staticHeight || FALLBACK_MOBILE_HEIGHT_CLASS;
   const heightContainerClasses = `${heightClassesMobile} ${heightClassesDesktop}`;
 
+  /* unique class name is important to not override other banner aspect ratios */
+  const nativeAspectRatiosClass = `hero-native-aspect-ratios-${kebabCase(
+    cms.sectionName,
+  )}-${cms.sectionVisibility}`;
+
   return (
     <div className={`${fullBleedClass}`}>
       {(usesDesktopNativeAspectRatio || usesMobileNativeAspectRatio) && (
         <style>
-          {`.hero-native-aspect-ratios {
+          {`.${nativeAspectRatiosClass}{
                 ${
                   usesMobileNativeAspectRatio
                     ? `@media (max-width: 767px) {
@@ -79,7 +86,7 @@ export function HeroContainer({children, cms}: HeroContainerProps) {
       )}
 
       <div
-        className={`hero-native-aspect-ratios relative mx-auto flex w-full flex-col bg-offWhite ${heightContainerClasses} ${maxWidthContainerClass}`}
+        className={`relative mx-auto flex w-full flex-col bg-offWhite ${nativeAspectRatiosClass} ${heightContainerClasses} ${maxWidthContainerClass}`}
       >
         {children}
       </div>

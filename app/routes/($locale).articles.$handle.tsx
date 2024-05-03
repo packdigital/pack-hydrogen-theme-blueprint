@@ -1,8 +1,8 @@
 import {useMemo} from 'react';
 import {useLoaderData} from '@remix-run/react';
 import {json} from '@shopify/remix-oxygen';
-import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
-import {AnalyticsPageType} from '@shopify/hydrogen';
+import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
+import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 import {RenderSections} from '@pack/react';
 
 import {ARTICLE_QUERY} from '~/data/queries';
@@ -38,6 +38,10 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
   });
 }
 
+export const meta = ({data}: MetaArgs) => {
+  return getSeoMeta(data.seo);
+};
+
 export default function ArticleRoute() {
   const {article} = useLoaderData<typeof loader>();
 
@@ -63,7 +67,7 @@ export default function ArticleRoute() {
           {date}
         </p>
 
-        <h1 className="text-title-h2 max-w-[60rem]">{article.title}</h1>
+        <h1 className="text-h2 max-w-[60rem]">{article.title}</h1>
 
         {article.category && (
           <p className="btn-text flex h-8 items-center justify-center rounded-full bg-lightGray px-4 text-text">

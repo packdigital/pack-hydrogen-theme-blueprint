@@ -1,3 +1,10 @@
+export const BUTTONS = [
+  {label: 'Primary', value: 'btn-primary'},
+  {label: 'Secondary', value: 'btn-secondary'},
+  {label: 'Inverse Light', value: 'btn-inverse-light'},
+  {label: 'Inverse Dark', value: 'btn-inverse-dark'},
+];
+
 /*
  * Update color labels and values as per project's theme
  * IMPORTANT: Do not string interpolate values; Tailwind requires absolute values

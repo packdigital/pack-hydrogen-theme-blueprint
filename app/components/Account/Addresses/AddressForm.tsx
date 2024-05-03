@@ -86,7 +86,7 @@ export function AddressForm({
   return (
     <div className="rounded border border-border p-4 sm:p-8">
       <div className="mb-8 flex items-start justify-between gap-3">
-        <h2 className="text-title-h5">{title}</h2>
+        <h2 className="text-h5">{title}</h2>
 
         <button
           aria-label="Cancel"
@@ -240,7 +240,7 @@ export function AddressForm({
         <div className="col-span-2 mt-4 flex justify-center">
           <button
             aria-label={initialAddress ? 'Update Address' : 'Add Address'}
-            className={`btn-primary w-full min-w-[12rem] md:w-auto ${
+            className={`btn-primary w-full min-w-48 md:w-auto ${
               status.started ? 'cursor-default' : ''
             }`}
             type="submit"

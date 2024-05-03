@@ -45,7 +45,6 @@ interface Content {
 
 interface Section {
   aboveTheFold: boolean;
-  bgColor: string;
   fullBleed: boolean;
   fullWidth: boolean;
   verticalPadding: boolean;

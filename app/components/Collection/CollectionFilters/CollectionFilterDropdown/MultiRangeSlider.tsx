@@ -143,7 +143,7 @@ export const MultiRangeSlider = ({
           <button
             type="button"
             aria-label={`Set min and max values to ${minVal} and ${maxVal}`}
-            className={`mt-3 rounded border border-border px-1 py-[1px] text-xs font-bold uppercase transition ${
+            className={`mt-3 rounded border border-border px-1 py-px text-xs font-bold uppercase transition ${
               hasChanges ? '' : 'opacity-40'
             }`}
             disabled={!hasChanges}
@@ -158,7 +158,7 @@ export const MultiRangeSlider = ({
           <button
             type="button"
             aria-label={`Set min and max values to ${minVal} and ${maxVal}`}
-            className={`mt-3 rounded border border-border px-1 py-[1px] text-xs font-bold uppercase ${
+            className={`mt-3 rounded border border-border px-1 py-px text-xs font-bold uppercase ${
               canReset ? '' : 'opacity-40'
             }`}
             onClick={onReset}

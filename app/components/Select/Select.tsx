@@ -61,7 +61,7 @@ export function Select({
         )}
 
         <Svg
-          className="w-4 text-text ui-open:rotate-180"
+          className="w-4 text-current ui-open:rotate-180"
           src="/svgs/chevron-down.svg#chevron-down"
           title="Chevron"
           viewBox="0 0 24 24"
@@ -78,7 +78,7 @@ export function Select({
         leaveTo="transform scale-95 opacity-0"
       >
         <Listbox.Options
-          className={`absolute left-1/2 z-10 flex max-h-[18rem] w-full -translate-x-1/2 flex-col gap-0 overflow-hidden overflow-y-auto rounded-[0.5rem] border border-gray bg-background py-2 text-base ${
+          className={`absolute left-1/2 z-10 flex max-h-72 w-full -translate-x-1/2 flex-col gap-0 overflow-hidden overflow-y-auto rounded-lg border border-gray bg-background py-2 text-base ${
             openFrom === 'top'
               ? 'bottom-[calc(100%+0.5rem)]'
               : 'top-[calc(100%+0.5rem)]'

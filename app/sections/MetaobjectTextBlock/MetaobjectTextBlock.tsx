@@ -25,9 +25,9 @@ export function MetaobjectTextBlock({cms}: {cms: Record<string, any>}) {
       >
         {heading &&
           (above_the_fold ? (
-            <h1 className="text-title-h2 mx-auto max-w-[46rem]">{heading}</h1>
+            <h1 className="text-h2 mx-auto max-w-[46rem]">{heading}</h1>
           ) : (
-            <h2 className="text-title-h2 mx-auto max-w-[46rem]">{heading}</h2>
+            <h2 className="text-h2 mx-auto max-w-[46rem]">{heading}</h2>
           ))}
 
         {subtext && (

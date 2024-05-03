@@ -42,7 +42,7 @@ export function BlogGridItem({article}: {article: Article}) {
         </p>
 
         <Link aria-label={article.title} to={url} tabIndex={-1}>
-          <h3 className="text-title-h4">{article.title}</h3>
+          <h3 className="text-h4">{article.title}</h3>
         </Link>
 
         {article.excerpt && (

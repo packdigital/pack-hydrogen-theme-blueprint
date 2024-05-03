@@ -57,7 +57,7 @@ export function AddressesItem({
   return (
     <div className="relative flex h-full flex-col justify-between gap-x-4 gap-y-6 rounded border border-border p-6 xs:flex-row md:flex-col lg:flex-row">
       <div>
-        <h3 className="text-title-h5 mb-2">{name}</h3>
+        <h3 className="text-h5 mb-2">{name}</h3>
 
         <div className="flex flex-col gap-1.5 text-sm">
           {company && <p>{company}</p>}
@@ -100,7 +100,7 @@ export function AddressesItem({
       </div>
 
       {isDeleteConfirm && (
-        <div className="absolute left-0 top-0 flex h-full w-full flex-col items-center justify-center gap-4 bg-[rgba(255,255,255,0.9)] p-4">
+        <div className="absolute left-0 top-0 flex size-full flex-col items-center justify-center gap-4 bg-[rgba(255,255,255,0.9)] p-4">
           <p className="text-center text-sm">
             Are you sure you want to delete this address?
           </p>

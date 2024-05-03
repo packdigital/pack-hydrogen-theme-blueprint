@@ -8,13 +8,7 @@ import type {TestimonialSliderCms} from './TestimonialSlider.types';
 
 export function TestimonialSlider({cms}: {cms: TestimonialSliderCms}) {
   const {heading, link, section, testimonialSlides: blocks} = {...cms};
-  const {
-    bgColor,
-    fullWidth,
-    reviewStarColor,
-    sliderPaginationBulletColor,
-    textColor,
-  } = {
+  const {fullWidth, reviewStarColor, sliderPaginationBulletColor, textColor} = {
     ...section,
   };
   const maxWidthClass = fullWidth
@@ -23,17 +17,11 @@ export function TestimonialSlider({cms}: {cms: TestimonialSliderCms}) {
 
   return (
     <Container container={cms.container}>
-      <div
-        className="md:px-contained py-12 lg:py-16"
-        style={{backgroundColor: bgColor}}
-      >
+      <div className="md:px-contained py-12 lg:py-16">
         <div
           className={`${maxWidthClass} relative mx-auto flex flex-col items-center lg:px-14`}
         >
-          <h2
-            className="text-title-h2 px-4 text-center"
-            style={{color: textColor}}
-          >
+          <h2 className="text-h2 px-4 text-center" style={{color: textColor}}>
             {heading}
           </h2>
 
@@ -96,15 +84,19 @@ export function TestimonialSlider({cms}: {cms: TestimonialSliderCms}) {
                 );
               })}
 
-              <div className="swiper-pagination !static mt-6 lg:!hidden" />
+              <div
+                // eslint-disable-next-line tailwindcss/no-custom-classname
+                className="swiper-pagination !static mt-6 lg:!hidden"
+              />
 
               <div
-                className={`swiper-button-prev left-0 !hidden !h-[3.5rem] !w-[3.5rem] rounded-full bg-white after:hidden ${
+                // eslint-disable-next-line tailwindcss/no-custom-classname
+                className={`swiper-button-prev left-0 !hidden !h-14 !w-14 rounded-full bg-white after:hidden ${
                   blocks.length > 3 ? 'lg:!flex' : 'lg:!hidden'
                 }`}
               >
                 <Svg
-                  className="max-w-[1.25rem] text-black"
+                  className="max-w-5 text-black"
                   src="/svgs/arrow-left.svg#arrow-left"
                   title="Arrow Left"
                   viewBox="0 0 24 24"
@@ -112,12 +104,13 @@ export function TestimonialSlider({cms}: {cms: TestimonialSliderCms}) {
               </div>
 
               <div
-                className={`swiper-button-next right-0 !hidden !h-[3.5rem] !w-[3.5rem] rounded-full bg-white after:hidden ${
+                // eslint-disable-next-line tailwindcss/no-custom-classname
+                className={`swiper-button-next right-0 !hidden !h-14 !w-14 rounded-full bg-white after:hidden ${
                   blocks.length > 3 ? 'lg:!flex' : 'lg:!hidden'
                 }`}
               >
                 <Svg
-                  className="max-w-[1.25rem] text-black"
+                  className="max-w-5 text-black"
                   src="/svgs/arrow-right.svg#arrow-right"
                   title="Arrow Right"
                   viewBox="0 0 24 24"

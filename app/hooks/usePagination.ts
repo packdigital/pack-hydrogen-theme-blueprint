@@ -40,6 +40,7 @@ export function usePagination({
   const {search} = useLocation();
   const {pathPrefix} = useLocale();
 
+  const [mounted, setMounted] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
   const pageParam = useMemo(() => {
@@ -61,6 +62,10 @@ export function usePagination({
   }, [pageParam]);
 
   useEffect(() => {
+    if (!mounted) {
+      setMounted(true);
+      return;
+    }
     setCurrentPage(1);
   }, [...resetDependencies]);
 
