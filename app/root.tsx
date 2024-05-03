@@ -20,6 +20,7 @@ import {
   getProductGroupings,
   getShop,
   getSiteSettings,
+  setPackCookie,
 } from '~/lib/utils';
 import {registerSections} from '~/sections';
 import {registerStorefrontSettings} from '~/settings';
@@ -85,10 +86,8 @@ export async function loader({context, request}: LoaderFunctionArgs) {
   const customerAccessToken = await session.get('customerAccessToken');
   const groupingsPromise = getProductGroupings(context);
 
-  const {isLoggedIn, headers} = await validateCustomerAccessToken(
-    session,
-    customerAccessToken,
-  );
+  const {isLoggedIn, headers: headersWithAccessToken} =
+    await validateCustomerAccessToken(session, customerAccessToken);
   let customer = null;
   if (isLoggedIn) {
     const {data: customerData} = await customerGetAction({context});
@@ -96,6 +95,11 @@ export async function loader({context, request}: LoaderFunctionArgs) {
       customer = customerData.customer;
     }
   }
+  const {headers: headersWithPackCookie} = await setPackCookie({
+    headers: headersWithAccessToken,
+    request,
+  });
+  const headers = headersWithPackCookie;
 
   const analytics = {
     shopifySalesChannel: ShopifySalesChannel.hydrogen,
