@@ -1,8 +1,19 @@
 import type {Localizations} from '~/lib/types';
 
-/*
- * All countries supported by Shopify w/ US as default
- * with English as default language
+/**
+ * All countries supported by Shopify w/ US as default. Refine as needed.
+ * English is default language
+ * For other languages, add additional language-country pairs
+ * @example
+ * ```
+ * // French Canadian
+ * '/fr-ca': {
+      label: 'Canada (CAD $)',
+      language: 'FR',
+      country: 'CA',
+      currency: 'CAD',
+    },
+  ```
  */
 
 export const countries: Localizations = {

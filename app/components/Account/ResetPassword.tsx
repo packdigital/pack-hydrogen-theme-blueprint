@@ -47,9 +47,7 @@ export function ResetPassword() {
           </label>
 
           <label htmlFor="passwordConfirm">
-            <span className="text-h6 block pb-1 pl-5">
-              Confirm Password
-            </span>
+            <span className="text-h6 block pb-1 pl-5">Confirm Password</span>
             <input
               className="input-text"
               name="passwordConfirm"

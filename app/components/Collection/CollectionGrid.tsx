@@ -29,7 +29,10 @@ export function CollectionGrid({
         const productNodes = nodes as Product[];
         return (
           <div className="flex flex-col gap-4">
-            <PreviousLink className={`btn-pill relative self-center`}>
+            <PreviousLink
+              className={`btn-pill relative self-center`}
+              suppressHydrationWarning
+            >
               {isLoading && (
                 <LoadingDots
                   status="Loading previous products"
@@ -84,7 +87,10 @@ export function CollectionGrid({
               })}
             </ul>
 
-            <NextLink className={`btn-pill relative flex self-center`}>
+            <NextLink
+              className={`btn-pill relative flex self-center`}
+              suppressHydrationWarning
+            >
               {isLoading && (
                 <LoadingDots
                   status="Loading more products"

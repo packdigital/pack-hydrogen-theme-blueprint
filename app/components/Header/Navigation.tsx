@@ -67,7 +67,7 @@ export function Navigation({
                 <li key={index} className="flex">
                   <Link
                     aria-label={item.menuItem?.text}
-                    className={`group relative flex items-center px-4 transition ${
+                    className={`group relative flex cursor-pointer items-center px-4 transition ${
                       isHovered ? 'bg-offWhite' : 'bg-background'
                     }`}
                     to={item.menuItem?.url}

@@ -77,7 +77,7 @@ export function MobileMenu({
           }`}
         >
           <nav className="mb-8 flex">
-            <ul className="w-full flex-col">
+            <ul className="flex w-full flex-col">
               {menuItems?.map((item, index) => {
                 const hasContent =
                   item.links?.length > 0 || item.imageLinks?.length > 0;

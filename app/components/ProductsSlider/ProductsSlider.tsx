@@ -40,10 +40,7 @@ export function ProductsSlider({
       }`}
     >
       <div className="m-auto flex flex-col items-center">
-        <h2
-          className="text-h2 px-4 text-center"
-          style={{color: textColor}}
-        >
+        <h2 className="text-h2 px-4 text-center" style={{color: textColor}}>
           {heading}
         </h2>
 

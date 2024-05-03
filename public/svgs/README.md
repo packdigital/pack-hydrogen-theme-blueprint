@@ -16,8 +16,8 @@
 - Any styles applied to the svg via this tag will not work
 - Instead apply the styles inline to the svg paths directly
 
-
 ### Example svg file
+
 ```
 <svg id="close" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M4 20L20 4M4 4L20 20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -37,6 +37,7 @@
 - If `"currentColor"` was used within the svg, pass style or classname dictating text color
 
 ### Example Svg component usage
+
 ```
 <Svg
   src="/svgs/close.svg#close"

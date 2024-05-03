@@ -106,9 +106,15 @@ export function ProductMediaThumbnails({
             );
           })}
 
-        <div className="swiper-button-prev !left-0 !text-black opacity-90 after:flex after:size-5 after:items-center after:justify-center after:overflow-hidden after:rounded-[50%] after:bg-white after:!text-[0.6rem] after:!content-['prev'] lg:!left-1/2 lg:!top-5 lg:!-translate-x-1/2 lg:!rotate-90" />
+        <div
+          // eslint-disable-next-line tailwindcss/no-custom-classname
+          className="swiper-button-prev !left-0 !text-black opacity-90 after:flex after:size-5 after:items-center after:justify-center after:overflow-hidden after:rounded-[50%] after:bg-white after:!text-[0.6rem] after:!content-['prev'] lg:!left-1/2 lg:!top-5 lg:!-translate-x-1/2 lg:!rotate-90"
+        />
 
-        <div className="swiper-button-next !right-0 !text-black opacity-90 after:flex after:size-5 after:items-center after:justify-center after:overflow-hidden after:rounded-[50%] after:bg-white after:!text-[0.6rem] after:!content-['next'] lg:!bottom-0 lg:!left-1/2 lg:!top-auto lg:!-translate-x-1/2 lg:!rotate-90" />
+        <div
+          // eslint-disable-next-line tailwindcss/no-custom-classname
+          className="swiper-button-next !right-0 !text-black opacity-90 after:flex after:size-5 after:items-center after:justify-center after:overflow-hidden after:rounded-[50%] after:bg-white after:!text-[0.6rem] after:!content-['next'] lg:!bottom-0 lg:!left-1/2 lg:!top-auto lg:!-translate-x-1/2 lg:!rotate-90"
+        />
       </Swiper>
     </>
   );

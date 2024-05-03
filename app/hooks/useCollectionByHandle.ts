@@ -20,7 +20,7 @@ export function useCollectionByHandle(
   searchParams?: URLSearchParams,
 ): Collection | null {
   const {pathPrefix} = useLocale();
-  const fetcher = useFetcher<{product: Collection}>({
+  const fetcher = useFetcher<{collection: Collection}>({
     key: `collection-by-handle:${handle}:${pathPrefix}`,
   });
   const search = searchParams?.toString();
