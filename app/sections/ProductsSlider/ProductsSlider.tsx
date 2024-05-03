@@ -1,4 +1,5 @@
 import {useMemo} from 'react';
+import {useInView} from 'react-intersection-observer';
 
 import {
   Container,
@@ -15,6 +16,11 @@ export function ProductsSlider({
 }: {
   cms: ProductsSliderCms & {container: ContainerSettings};
 }) {
+  const {ref, inView} = useInView({
+    rootMargin: '200px',
+    triggerOnce: true,
+  });
+
   const productHandles = useMemo(() => {
     return (
       cms.products?.reduce((acc: string[], {product}) => {
@@ -24,11 +30,13 @@ export function ProductsSlider({
     );
   }, [cms.products]);
 
-  const products = useProductsFromHandles(productHandles);
+  const products = useProductsFromHandles(productHandles, inView);
 
   return (
     <Container container={cms.container}>
-      <ProductsSliderComponent cms={cms} products={products} />
+      <div ref={ref}>
+        <ProductsSliderComponent cms={cms} products={products} />
+      </div>
     </Container>
   );
 }
