@@ -1,4 +1,4 @@
-import {Fragment, useMemo} from 'react';
+import {Fragment, useEffect, useState} from 'react';
 import {useCart} from '@shopify/hydrogen-react';
 import {Navigation} from 'swiper/modules';
 import {Swiper, SwiperSlide} from 'swiper/react';
@@ -12,26 +12,31 @@ import type {CartUpsellProps} from '../Cart.types';
 import {CartUpsellItem} from './CartUpsellItem';
 
 export function CartUpsell({closeCart, settings}: CartUpsellProps) {
-  const {lines = []} = useCart();
+  const {lines = [], status} = useCart();
   const cartLines = lines as CartLine[];
 
   const {message = '', products = []} = {...settings?.upsell};
 
-  const productsNotInCart = useMemo(() => {
-    if (!cartLines?.length || !products?.length) return [];
-    return products.filter(({product}) => {
-      return !cartLines.some((line) => {
-        return line.merchandise.product.handle === product.handle;
-      });
-    });
-  }, [cartLines, products]);
+  const [productsNotInCart, setProductsNotInCart] = useState([])
+
+  useEffect(() => {
+    if (status === 'idle') {
+      const remaining = [...products].filter(({product}) => {
+        return !cartLines.some((line) => {
+          return line.merchandise.product.handle === product.handle;
+        });
+      }) as []
+
+      setProductsNotInCart(remaining)
+    }
+  }, [cartLines, products, status]);
 
   const showUpsell = lines?.length > 0 && productsNotInCart?.length > 0;
 
   return showUpsell ? (
     <Disclosure
       as="div"
-      className="flex flex-col border-t border-t-border"
+      className={`flex flex-col border-t border-t-border`}
       defaultOpen
     >
       {({open}) => (
