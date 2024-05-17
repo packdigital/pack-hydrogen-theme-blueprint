@@ -1,11 +1,16 @@
 import type {ReactNode} from 'react';
 
 import {Cart, Footer, Header, Modal, Search} from '~/components';
-import {usePromobar, useSetViewportHeightCssVar} from '~/hooks';
+import {
+  useCartAddDiscountUrl,
+  usePromobar,
+  useSetViewportHeightCssVar,
+} from '~/hooks';
 
 export function Layout({children}: {children: ReactNode}) {
   const {mainPaddingTopClass} = usePromobar();
   useSetViewportHeightCssVar();
+  useCartAddDiscountUrl();
 
   return (
     <div
