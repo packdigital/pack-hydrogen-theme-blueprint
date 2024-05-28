@@ -11,10 +11,10 @@ import {
   createRequestHandler,
   getStorefrontHeaders,
 } from '@shopify/remix-oxygen';
-import {createPackClient, PreviewSession} from '@pack/hydrogen';
+import { createPackClient, PackSession, handleRequest } from '@pack/hydrogen';
 
-import {AppSession} from '~/lib/session.server';
-import {getLocaleFromRequest} from '~/lib/utils';
+import { AppSession } from '~/lib/session.server';
+import { getLocaleFromRequest } from '~/lib/utils';
 import defaultThemeData from '~/config/default-theme-data.json';
 
 /**
@@ -35,16 +35,16 @@ export default {
       }
 
       const waitUntil = (p: Promise<any>) => executionContext.waitUntil(p);
-      const [cache, session, previewSession] = await Promise.all([
+      const [cache, session, packSession] = await Promise.all([
         caches.open('hydrogen'),
         AppSession.init(request, [env.SESSION_SECRET]),
-        PreviewSession.init(request, [env.SESSION_SECRET]),
+        PackSession.init(request, [env.SESSION_SECRET]),
       ]);
 
       /**
        * Create Hydrogen's Storefront client.
        */
-      const {storefront} = createStorefrontClient({
+      const { storefront } = createStorefrontClient({
         cache,
         waitUntil,
         i18n: getLocaleFromRequest(request),
@@ -72,22 +72,29 @@ export default {
         cache,
         waitUntil,
         token: env.PACK_SECRET_TOKEN,
-        preview: {session: previewSession},
+        storeId: env.PACK_STOREFRONT_ID,
+        session: packSession,
         contentEnvironment: env.PACK_CONTENT_ENVIRONMENT,
         defaultThemeData,
       });
 
-      /**
-       * Create a Remix request handler and pass
-       * Hydrogen's Storefront client to the loader context.
-       */
-      const handleRequest = createRequestHandler({
-        build: remixBuild,
-        mode: process.env.NODE_ENV,
-        getLoadContext: () => ({session, storefront, env, cart, pack}),
-      });
-
-      const response = await handleRequest(request);
+      const response = await handleRequest(
+        pack,
+        request,
+        createRequestHandler({
+          build: remixBuild,
+          mode: process.env.NODE_ENV,
+          getLoadContext: () => ({
+            cache,
+            waitUntil,
+            session,
+            storefront,
+            cart,
+            env,
+            pack,
+          }),
+        }),
+      );
 
       if (response.status === 404) {
         /**
@@ -95,13 +102,13 @@ export default {
          * If the redirect doesn't exist, then `storefrontRedirect`
          * will pass through the 404 response.
          */
-        return storefrontRedirect({request, response, storefront});
+        return storefrontRedirect({ request, response, storefront });
       }
 
       return response;
     } catch (error) {
       console.error(error);
-      return new Response('An unexpected error occurred', {status: 500});
+      return new Response('An unexpected error occurred', { status: 500 });
     }
   },
 };
