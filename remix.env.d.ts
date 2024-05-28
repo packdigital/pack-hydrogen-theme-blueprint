@@ -24,6 +24,7 @@ declare global {
     PUBLIC_STOREFRONT_ID: string;
     PACK_PUBLIC_TOKEN: string;
     PACK_SECRET_TOKEN: string;
+    PACK_STOREFRONT_ID: string;
     PACK_CONTENT_ENVIRONMENT?: string;
     PACK_API_URL?: string;
     PRIVATE_SHOPIFY_CHECKOUT_DOMAIN?: string;
