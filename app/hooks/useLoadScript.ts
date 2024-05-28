@@ -5,6 +5,7 @@ const SCRIPTS_LOADED: Record<string, Promise<boolean>> = {};
 export function loadScript(
   attributes: Partial<HTMLScriptElement> & {id: string},
   placement?: 'head' | 'body' | null,
+  dataAttributes?: Record<string, string> | null,
 ): Promise<boolean> {
   const {id, innerHTML, src, type, onload, onerror, ...additionalAttributes} = {
     ...attributes,
@@ -23,9 +24,15 @@ export function loadScript(
     if (src) script.src = src;
     if (innerHTML) script.innerHTML = innerHTML;
     const additionalAttributesKeys = Object.keys({...additionalAttributes});
+    const dataAttributesKeys = Object.keys({...dataAttributes}) || [];
     if (additionalAttributesKeys.length) {
       additionalAttributesKeys.forEach((key) => {
         script.setAttribute(key, additionalAttributes[key]);
+      });
+    }
+    if (dataAttributesKeys.length) {
+      dataAttributesKeys.forEach((key) => {
+        script.setAttribute(`data-${key}`, dataAttributes[key]);
       });
     }
     script.onload = (e): void => {
@@ -81,10 +88,12 @@ type LoadScriptParams = Parameters<typeof loadScript>;
 export function useLoadScript(
   attributes: LoadScriptParams[0], // any valid HTMLScriptElement attributes; id is required
   placement: LoadScriptParams[1] = 'body', // 'head' | 'body'
+  dataAttributes?: Record<string, string>, // data attributes to be added to the script tag
   ready = true, // boolean to determine if the script should be loaded
 ): ScriptState {
   const [status, setStatus] = useState<ScriptState>('loading');
   const stringifiedAttributes = JSON.stringify(attributes);
+  const stringifiedDataAttributes = JSON.stringify(dataAttributes);
 
   useEffect(() => {
     if (!ready) return;
@@ -92,7 +101,7 @@ export function useLoadScript(
     async function loadScriptWrapper(): Promise<void> {
       try {
         setStatus('loading');
-        await loadScript(attributes, placement);
+        await loadScript(attributes, placement, dataAttributes);
         setStatus('done');
       } catch (error) {
         setStatus('error');
@@ -102,7 +111,7 @@ export function useLoadScript(
     loadScriptWrapper().catch(() => {
       setStatus('error');
     });
-  }, [placement, ready, stringifiedAttributes]);
+  }, [placement, ready, stringifiedAttributes, stringifiedDataAttributes]);
 
   return status;
 }
