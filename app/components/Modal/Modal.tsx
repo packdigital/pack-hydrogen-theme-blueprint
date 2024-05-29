@@ -1,5 +1,10 @@
 import {Fragment} from 'react';
-import {Dialog, Transition} from '@headlessui/react';
+import {
+  Dialog,
+  DialogPanel,
+  Transition,
+  TransitionChild,
+} from '@headlessui/react';
 
 import {Svg} from '~/components';
 import {useGlobal} from '~/hooks';
@@ -13,7 +18,7 @@ export function Modal() {
     <Transition appear show={!!modal.children} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={closeModal}>
         {/* Overlay */}
-        <Transition.Child
+        <TransitionChild
           as={Fragment}
           enter="ease-out duration-300"
           enterFrom="opacity-0 left-0"
@@ -23,9 +28,9 @@ export function Modal() {
           leaveTo="opacity-0"
         >
           <div className="fixed inset-0 bg-[rgba(0,0,0,0.3)]" />
-        </Transition.Child>
+        </TransitionChild>
 
-        <Transition.Child
+        <TransitionChild
           as={Fragment}
           enter="transition duration-100 ease-out"
           enterFrom="transform scale-95 opacity-0"
@@ -34,7 +39,7 @@ export function Modal() {
           leaveFrom="transform scale-100 opacity-100"
           leaveTo="transform scale-95 opacity-0"
         >
-          <Dialog.Panel
+          <DialogPanel
             as="aside"
             className={`fixed left-1/2 top-1/2 z-50 max-h-[calc(var(--viewport-height)-2rem)] w-[calc(100%-2rem)] max-w-screen-md -translate-x-1/2 -translate-y-1/2 overflow-hidden bg-background ${className}`}
             {...props}
@@ -56,8 +61,8 @@ export function Modal() {
             <div className="scrollbar-hide px-contained py-contained max-h-[calc(var(--viewport-height)-2rem)] overflow-y-auto">
               {modal.children}
             </div>
-          </Dialog.Panel>
-        </Transition.Child>
+          </DialogPanel>
+        </TransitionChild>
       </Dialog>
     </Transition>
   ) : null;
