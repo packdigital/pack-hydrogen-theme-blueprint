@@ -1,6 +1,6 @@
-import {Fragment} from 'react';
-import {Pagination} from '@shopify/hydrogen';
+import {Fragment, useMemo} from 'react';
 import type {Product} from '@shopify/hydrogen/storefront-api-types';
+import {Pagination} from '@shopify/hydrogen';
 
 import {LoadingDots, ProductItem} from '~/components';
 
@@ -23,8 +23,12 @@ export function CollectionGrid({
     ...pagination,
   };
 
+  const connection = useMemo(() => {
+    return products;
+  }, [JSON.stringify(products.pageInfo)]);
+
   return (
-    <Pagination connection={products}>
+    <Pagination connection={connection}>
       {({nodes, isLoading, PreviousLink, NextLink}) => {
         const productNodes = nodes as Product[];
         return (
