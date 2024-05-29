@@ -22,6 +22,7 @@ import {
 import {Product} from '~/components';
 import {routeHeaders} from '~/data/cache';
 import {seoPayload} from '~/lib/seo.server';
+import {useDataLayerViewProduct} from '~/hooks';
 
 /*
  * Add metafield queries to the METAFIELD_QUERIES array to fetch desired metafields for product pages
@@ -190,6 +191,11 @@ export const meta = ({data}: MetaArgs) => {
 export default function ProductRoute() {
   const {product, productPage, selectedVariant} =
     useLoaderData<typeof loader>();
+
+  useDataLayerViewProduct({
+    product,
+    selectedVariant,
+  });
 
   return (
     <ProductProvider

@@ -3,7 +3,7 @@ import {useProduct} from '@shopify/hydrogen-react';
 import type {Product as ProductType} from '@shopify/hydrogen/storefront-api-types';
 
 import {COLOR_OPTION_NAME} from '~/lib/constants';
-import {useDataLayerViewProduct, useLocale, useSettings} from '~/hooks';
+import {useLocale, useSettings} from '~/hooks';
 import type {SelectedVariant} from '~/lib/types';
 
 import {ProductDetails} from './ProductDetails';
@@ -21,11 +21,6 @@ export function Product({product}: ProductProps) {
   };
   const {pathPrefix} = useLocale();
   const {header, product: productSettings} = useSettings();
-
-  useDataLayerViewProduct({
-    product,
-    selectedVariant,
-  });
 
   const selectedVariantColor = useMemo(() => {
     return selectedVariant?.selectedOptions?.find(
