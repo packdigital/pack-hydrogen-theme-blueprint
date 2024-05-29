@@ -8,6 +8,7 @@ import {useLocale} from '~/hooks';
  * Fetch specific metafields for a product
  * @param handle - The handle of the product
  * @param metafieldQueries - An array of objects with `key` and `namespace` properties
+ * @param fetchOnMount - Determines when to fetch
  * @returns Oject with `${namespace}.${key}` as key and the value as the metafield
  * @example
  * ```js
@@ -26,6 +27,7 @@ interface MetafieldQuery {
 export function useProductMetafields(
   handle: string | undefined | null = '',
   metafieldQueries: MetafieldQuery[] = [],
+  fetchOnMount = true,
 ): Record<string, Metafield> | null {
   const {pathPrefix} = useLocale();
   const metafieldQueriesString = JSON.stringify(metafieldQueries);
@@ -37,12 +39,12 @@ export function useProductMetafields(
   const {metafields} = {...fetcher.data};
 
   useEffect(() => {
-    if (!handle || !metafieldQueries?.length) return;
+    if (!fetchOnMount || !handle || !metafieldQueries?.length) return;
     fetcher.submit(
       {handle, metafieldQueries: metafieldQueriesString},
       {method: 'POST', action: `${pathPrefix}/api/product`},
     );
-  }, [handle, metafieldQueriesString]);
+  }, [fetchOnMount, handle, metafieldQueriesString]);
 
   return metafields || null;
 }

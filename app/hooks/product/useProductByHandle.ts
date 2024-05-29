@@ -7,6 +7,7 @@ import {useLocale} from '~/hooks';
 /**
  * Fetch product item by its handle
  * @param handle - The handle of the product
+ * @param fetchOnMount - Determines when to fetch
  * @returns product item
  * @example
  * ```js
@@ -16,6 +17,7 @@ import {useLocale} from '~/hooks';
 
 export function useProductByHandle(
   handle: string | undefined | null = '',
+  fetchOnMount = true,
 ): Product | null {
   const {pathPrefix} = useLocale();
   const fetcher = useFetcher<{product: Product}>({
@@ -23,12 +25,12 @@ export function useProductByHandle(
   });
 
   useEffect(() => {
-    if (!handle || fetcher.data?.product) return;
+    if (!fetchOnMount || !handle || fetcher.data?.product) return;
     fetcher.submit(
       {handle},
       {method: 'POST', action: `${pathPrefix}/api/product`},
     );
-  }, [handle]);
+  }, [fetchOnMount, handle]);
 
   return fetcher.data?.product || null;
 }
