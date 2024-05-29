@@ -2,6 +2,12 @@ import {useCallback, useEffect} from 'react';
 import {useFetcher} from '@remix-run/react';
 import type {MailingAddress} from '@shopify/hydrogen/storefront-api-types';
 
+import {
+  getCustomerAccessTokenFromLocalStorage,
+  usePreviewModeCustomerFetch,
+} from '~/lib/customer';
+import {useGlobal} from '~/hooks';
+
 import {useFetcherStatus} from './useFetcherStatus';
 
 interface FetcherData {
@@ -12,6 +18,7 @@ interface FetcherData {
 }
 
 export function useCustomerUpdateAddress() {
+  const {isPreviewModeEnabled} = useGlobal();
   const fetcher = useFetcher({key: 'update-address'});
 
   const {address, defaultAddress, updateErrors, formErrors} = {
@@ -40,10 +47,21 @@ export function useCustomerUpdateAddress() {
 
       const formData = new FormData(e.currentTarget);
       formData.append('action', 'update-address');
+      /* if in customizer, pass customer access token from storage */
+      if (isPreviewModeEnabled) {
+        const customerAccessToken = getCustomerAccessTokenFromLocalStorage();
+        formData.append(
+          'previewModeCustomerAccessToken',
+          JSON.stringify(customerAccessToken),
+        );
+      }
       fetcher.submit(formData, {method: 'POST'});
     },
     [status.started],
   );
+
+  /* if in customizer, refetch customer after address update */
+  usePreviewModeCustomerFetch(address);
 
   useEffect(() => {
     if (process.env.NODE_ENV !== 'development') return;

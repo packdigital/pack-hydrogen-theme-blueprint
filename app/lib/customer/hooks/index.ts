@@ -10,3 +10,5 @@ export {useCustomerPasswordReset} from './useCustomerPasswordReset';
 export {useCustomerRegister} from './useCustomerRegister';
 export {useCustomerUpdateAddress} from './useCustomerUpdateAddress';
 export {useCustomerUpdateProfile} from './useCustomerUpdateProfile';
+export {usePreviewModeCustomerFetch} from './usePreviewModeCustomerFetch';
+export {usePreviewModeCustomerInit} from './usePreviewModeCustomerInit';

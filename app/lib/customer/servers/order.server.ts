@@ -1,4 +1,4 @@
-import type {ActionFunctionArgs} from '@shopify/remix-oxygen';
+import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import type {Order} from '@shopify/hydrogen/storefront-api-types';
 
 import {customerOrderClient} from '~/lib/customer';
@@ -14,8 +14,8 @@ export const customerOrderLoader = async ({
   params,
 }: {
   request: Request;
-  context: ActionFunctionArgs['context'];
-  params: ActionFunctionArgs['params'];
+  context: LoaderFunctionArgs['context'];
+  params: LoaderFunctionArgs['params'];
 }): Promise<{
   data: Data;
   status: number;
@@ -25,9 +25,18 @@ export const customerOrderLoader = async ({
     order: null,
   };
   try {
-    const customerAccessToken = await context.session.get(
-      'customerAccessToken',
+    const body = await request.formData();
+
+    let customerAccessToken = await context.session.get('customerAccessToken');
+    /* in customizer, customer access token is stored in local storage, so it needs to be passed in */
+    const previewModeCustomerAccessToken = String(
+      body?.get('previewModeCustomerAccessToken') || '',
     );
+    if (previewModeCustomerAccessToken) {
+      try {
+        customerAccessToken = JSON.parse(previewModeCustomerAccessToken);
+      } catch (error) {}
+    }
 
     if (!customerAccessToken) {
       data.errors = ['Cannot find customer access token'];
@@ -66,3 +75,5 @@ export const customerOrderLoader = async ({
     return {data, status: 500};
   }
 };
+
+export const customerOrderAction = customerOrderLoader;

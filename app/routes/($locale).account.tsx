@@ -1,45 +1,67 @@
-import {Outlet, useLoaderData} from '@remix-run/react';
+import {Outlet} from '@remix-run/react';
 import {json, redirect} from '@shopify/remix-oxygen';
-import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
+import type {
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+} from '@shopify/remix-oxygen';
 
-import {CustomerAccountLayout, GuestAccountLayout} from '~/components';
-import {customerGetAction} from '~/lib/customer';
+import {customerGetAction, customerGetClient} from '~/lib/customer';
 import {pathWithoutLocalePrefix} from '~/lib/utils';
+import {LOGGED_OUT_REDIRECT_TO, LOGGED_IN_REDIRECT_TO} from '~/lib/constants';
+
+export async function action({context, request}: ActionFunctionArgs) {
+  try {
+    const body = await request.formData();
+    const customerAccessTokenString = String(
+      body?.get('customerAccessToken') || '',
+    );
+    const customerAccessToken = JSON.parse(customerAccessTokenString);
+
+    const {errors, response} = await customerGetClient(context, {
+      customerAccessToken,
+    });
+
+    if (errors?.length) {
+      console.error('/account:action:error', errors);
+      return json({customer: null, errors}, {status: 400});
+    }
+
+    return json({
+      customer: response?.customer || null,
+    });
+  } catch (error) {
+    console.error('/account:action:error', error);
+    return json({customer: null, errors: [error]}, {status: 500});
+  }
+}
 
 export async function loader({request, context, params}: LoaderFunctionArgs) {
   const {session} = context;
   const {locale} = params;
   const url = new URL(request.url);
   const pathname = pathWithoutLocalePrefix(url.pathname, `/${locale}`);
+  const isAccountHome = pathname === '/account' || pathname === '/account/';
+
   const customerAccessToken = await session.get('customerAccessToken');
   const isLoggedIn = !!customerAccessToken?.accessToken;
-  const isAccountHome = pathname === '/account' || pathname === '/account/';
-  // Any new private account routes need to be added to this regex
-  const isPrivateRoute =
-    /^(\/[a-zA-Z]{2}-[a-zA-Z]{2})?\/account\/(orders|orders\/.*|profile|addresses|addresses\/.*)$/.test(
-      pathname,
-    );
+
+  if (isAccountHome) {
+    if (isLoggedIn) {
+      return redirect(
+        locale ? `/${locale}${LOGGED_IN_REDIRECT_TO}` : LOGGED_IN_REDIRECT_TO,
+      );
+    } else {
+      return redirect(
+        locale ? `/${locale}${LOGGED_OUT_REDIRECT_TO}` : LOGGED_OUT_REDIRECT_TO,
+      );
+    }
+  }
 
   if (!isLoggedIn) {
-    if (isPrivateRoute || isAccountHome) {
-      session.unset('customerAccessToken');
-      return redirect(locale ? `/${locale}/account/login` : '/account/login', {
-        headers: {
-          'Set-Cookie': await session.commit(),
-        },
-      });
-    } else {
-      return json({
-        isLoggedIn: false,
-        isAccountHome,
-        isPrivateRoute,
-        customer: null,
-      });
-    }
-  } else {
-    if (isAccountHome) {
-      return redirect(locale ? `/${locale}/account/orders` : '/account/orders');
-    }
+    return json({
+      isLoggedIn: false,
+      customer: null,
+    });
   }
 
   try {
@@ -48,7 +70,10 @@ export async function loader({request, context, params}: LoaderFunctionArgs) {
       throw new Error('Customer not found');
     }
     return json(
-      {isLoggedIn, isPrivateRoute, isAccountHome, customer: data.customer},
+      {
+        isLoggedIn: true,
+        customer: data.customer,
+      },
       {
         headers: {
           'Cache-Control': 'no-cache, no-store, must-revalidate',
@@ -58,28 +83,17 @@ export async function loader({request, context, params}: LoaderFunctionArgs) {
   } catch (error) {
     console.error('There was a problem loading account', error);
     session.unset('customerAccessToken');
-    return redirect(locale ? `/${locale}/account/login` : '/account/login', {
-      headers: {
-        'Set-Cookie': await session.commit(),
+    return redirect(
+      locale ? `/${locale}${LOGGED_OUT_REDIRECT_TO}` : LOGGED_OUT_REDIRECT_TO,
+      {
+        headers: {
+          'Set-Cookie': await session.commit(),
+        },
       },
-    });
+    );
   }
 }
 
 export default function AccountsRoute() {
-  const {isPrivateRoute, isAccountHome} = useLoaderData<typeof loader>();
-
-  if (!isPrivateRoute && !isAccountHome) {
-    return (
-      <GuestAccountLayout>
-        <Outlet />
-      </GuestAccountLayout>
-    );
-  }
-
-  return (
-    <CustomerAccountLayout>
-      <Outlet />
-    </CustomerAccountLayout>
-  );
+  return <Outlet />;
 }

@@ -1,4 +1,4 @@
-import {json, redirect} from '@shopify/remix-oxygen';
+import {json} from '@shopify/remix-oxygen';
 import type {
   ActionFunctionArgs,
   LoaderFunctionArgs,
@@ -6,9 +6,9 @@ import type {
 } from '@shopify/remix-oxygen';
 import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 
-import {Profile} from '~/components';
+import {CustomerAccountLayout, Profile} from '~/components';
 import {getAccountSeo} from '~/lib/utils';
-import {customerUpdateProfileAction} from '~/lib/customer';
+import {customerUpdateProfileAction, redirectIfLoggedOut} from '~/lib/customer';
 
 export async function action({request, context}: ActionFunctionArgs) {
   const {data, status} = await customerUpdateProfileAction({request, context});
@@ -23,12 +23,7 @@ export async function action({request, context}: ActionFunctionArgs) {
 }
 
 export async function loader({context, params}: LoaderFunctionArgs) {
-  const customerAccessToken = await context.session.get('customerAccessToken');
-  if (!customerAccessToken) {
-    return redirect(
-      params.locale ? `/${params.locale}/account/login` : '/account/login',
-    );
-  }
+  await redirectIfLoggedOut({context, params});
   const analytics = {pageType: AnalyticsPageType.customersAccount};
   const seo = await getAccountSeo(context, 'Profile');
   return json({analytics, seo});
@@ -39,7 +34,11 @@ export const meta = ({data}: MetaArgs) => {
 };
 
 export default function ProfileRoute() {
-  return <Profile />;
+  return (
+    <CustomerAccountLayout>
+      <Profile />
+    </CustomerAccountLayout>
+  );
 }
 
 ProfileRoute.displayName = 'ProfileRoute';

@@ -1,4 +1,4 @@
-import {json, redirect} from '@shopify/remix-oxygen';
+import {json} from '@shopify/remix-oxygen';
 import type {
   ActionFunctionArgs,
   LoaderFunctionArgs,
@@ -6,9 +6,9 @@ import type {
 } from '@shopify/remix-oxygen';
 import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 
-import {customerLoginRegisterAction} from '~/lib/customer';
+import {customerLoginRegisterAction, redirectIfLoggedIn} from '~/lib/customer';
 import {getAccountSeo} from '~/lib/utils';
-import {Login} from '~/components';
+import {GuestAccountLayout, Login} from '~/components';
 
 export async function action({request, context}: ActionFunctionArgs) {
   const {session} = context;
@@ -22,12 +22,7 @@ export async function action({request, context}: ActionFunctionArgs) {
 }
 
 export async function loader({context, params}: LoaderFunctionArgs) {
-  const customerAccessToken = await context.session.get('customerAccessToken');
-  if (customerAccessToken) {
-    return redirect(
-      params.locale ? `/${params.locale}/account/orders` : '/account/orders',
-    );
-  }
+  await redirectIfLoggedIn({context, params});
   const analytics = {pageType: AnalyticsPageType.customersLogin};
   const seo = await getAccountSeo(context, 'Login');
   return json({analytics, seo});
@@ -38,7 +33,11 @@ export const meta = ({data}: MetaArgs) => {
 };
 
 export default function LoginRoute() {
-  return <Login />;
+  return (
+    <GuestAccountLayout>
+      <Login />
+    </GuestAccountLayout>
+  );
 }
 
 LoginRoute.displayName = 'LoginRoute';

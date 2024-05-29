@@ -2,6 +2,12 @@ import {useCallback, useEffect} from 'react';
 import {useFetcher} from '@remix-run/react';
 import type {Customer} from '@shopify/hydrogen/storefront-api-types';
 
+import {
+  getCustomerAccessTokenFromLocalStorage,
+  usePreviewModeCustomerFetch,
+} from '~/lib/customer';
+import {useGlobal} from '~/hooks';
+
 import {useFetcherStatus} from './useFetcherStatus';
 
 interface FetcherData {
@@ -11,6 +17,7 @@ interface FetcherData {
 }
 
 export function useCustomerUpdateProfile() {
+  const {isPreviewModeEnabled} = useGlobal();
   const fetcher = useFetcher({key: 'update-profile'});
 
   const {
@@ -31,10 +38,21 @@ export function useCustomerUpdateProfile() {
       setErrors([]);
       const formData = new FormData(e.currentTarget);
       formData.append('action', 'update-profile');
+      /* if in customizer, pass customer access token from storage */
+      if (isPreviewModeEnabled) {
+        const customerAccessToken = getCustomerAccessTokenFromLocalStorage();
+        formData.append(
+          'previewModeCustomerAccessToken',
+          JSON.stringify(customerAccessToken),
+        );
+      }
       fetcher.submit(formData, {method: 'POST'});
     },
     [status.started],
   );
+
+  /* if in customizer, refetch customer after profile update */
+  usePreviewModeCustomerFetch(customer);
 
   useEffect(() => {
     if (process.env.NODE_ENV !== 'development') return;
