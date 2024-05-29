@@ -131,7 +131,7 @@ export function useDataLayerInit({
     const event = {
       event: 'dl_route_update',
       page: {
-        pathname,
+        path: pathname,
         title: document.title,
         type: pageType,
         search: window.location.search,
