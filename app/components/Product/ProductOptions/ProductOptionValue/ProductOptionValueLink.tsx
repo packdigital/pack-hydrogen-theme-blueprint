@@ -2,7 +2,7 @@ import {useMemo} from 'react';
 import {useLocation} from '@remix-run/react';
 
 import {Link} from '~/components';
-import type {SelectedVariant} from '~/lib/types';
+import type {I18nLocale, SelectedVariant} from '~/lib/types';
 
 import {InnerColorOptionValue} from './InnerColorOptionValue';
 import {InnerOptionValue} from './InnerOptionValue';
@@ -13,6 +13,7 @@ interface ProductOptionValueLinkProps {
   isColor: boolean;
   isDisabled: boolean;
   isSelected: boolean;
+  pathPrefix: I18nLocale['pathPrefix'];
   selectedVariantFromOptions: SelectedVariant;
   swatch?: Swatch | null;
   value: string;
@@ -23,6 +24,7 @@ export function ProductOptionValueLink({
   isColor,
   isDisabled,
   isSelected,
+  pathPrefix,
   selectedVariantFromOptions,
   swatch,
   value,
@@ -37,8 +39,8 @@ export function ProductOptionValueLink({
         params.set(optionName, optionValue);
       },
     );
-    return `/products/${selectedVariantFromOptions.product.handle}?${params}`;
-  }, [search, selectedVariantFromOptions]);
+    return `${pathPrefix}/products/${selectedVariantFromOptions.product.handle}?${params}`;
+  }, [pathPrefix, search, selectedVariantFromOptions]);
 
   return (
     <Link aria-label={value} preventScrollReset to={url}>

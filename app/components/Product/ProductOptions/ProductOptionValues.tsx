@@ -1,5 +1,6 @@
 import {useMemo} from 'react';
 
+import {useLocale} from '~/hooks';
 import type {OptionWithGroups, ProductWithGrouping} from '~/lib/types';
 
 import {ProductOptionValuesLabel} from './ProductOptionValuesLabel';
@@ -18,6 +19,7 @@ export function ProductOptionValues({
   selectedOptionsMap,
   setSelectedOption,
 }: ProductOptionValueProps) {
+  const {pathPrefix} = useLocale();
   const option = useMemo((): OptionWithGroups | undefined => {
     return product.grouping
       ? product.grouping.options?.find(
@@ -52,6 +54,7 @@ export function ProductOptionValues({
                       <li key={value}>
                         <ProductOptionValue
                           name={name}
+                          pathPrefix={pathPrefix}
                           product={product}
                           selectedOptionsMap={selectedOptionsMap}
                           setSelectedOption={setSelectedOption}
@@ -80,6 +83,7 @@ export function ProductOptionValues({
                 <li key={value}>
                   <ProductOptionValue
                     name={name}
+                    pathPrefix={pathPrefix}
                     product={product}
                     selectedOptionsMap={selectedOptionsMap}
                     setSelectedOption={setSelectedOption}

@@ -2,8 +2,10 @@ import {useMemo} from 'react';
 
 import type {Article} from '~/lib/types';
 import {Image, Link} from '~/components';
+import {useLocale} from '~/hooks';
 
 export function BlogGridItem({article}: {article: Article}) {
+  const {pathPrefix} = useLocale();
   const atDate =
     article.firstPublishedAt || article.publishedAt || article.createdAt;
   const date = useMemo(() => {
@@ -15,7 +17,7 @@ export function BlogGridItem({article}: {article: Article}) {
     return new Date(atDate).toLocaleDateString('en-US', options);
   }, [atDate]);
 
-  const url = `/articles/${article.handle}`;
+  const url = `${pathPrefix}/articles/${article.handle}`;
 
   return (
     <div>

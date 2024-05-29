@@ -7,6 +7,7 @@ import type {SelectedProduct, SelectedVariant} from '~/lib/types';
 import {Link} from '~/components';
 import {
   useDataLayerClickEvents,
+  useLocale,
   useProductByHandle,
   useProductGroupingByHandle,
 } from '~/hooks';
@@ -51,6 +52,7 @@ export function ProductItem({
     rootMargin: '200px',
     triggerOnce: true,
   });
+  const {pathPrefix} = useLocale();
   const {sendClickProductItemEvent} = useDataLayerClickEvents();
   // if full product passed, don't query for it; only query when in view unless priority
   const queriedProduct = useProductByHandle(
@@ -94,10 +96,10 @@ export function ProductItem({
       if (name !== COLOR_OPTION_NAME) return;
       searchParams.set(name, value);
     });
-    return `/products/${productHandle}${
+    return `${pathPrefix}/products/${productHandle}${
       searchParams ? `?${searchParams}` : ''
     }`;
-  }, [selectedVariant]);
+  }, [pathPrefix, selectedVariant]);
 
   const title = selectedProduct?.title;
 

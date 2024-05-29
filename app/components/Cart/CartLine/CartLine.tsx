@@ -2,6 +2,7 @@ import {useMemo} from 'react';
 
 import {Image, Link, QuantitySelector, Svg} from '~/components';
 import {PRODUCT_IMAGE_ASPECT_RATIO} from '~/lib/constants';
+import {useLocale} from '~/hooks';
 
 import type {CartLineProps} from '../Cart.types';
 
@@ -10,6 +11,7 @@ import {useCartLineImage} from './useCartLineImage';
 import {useCartLinePrices} from './useCartLinePrices';
 
 export function CartLine({closeCart, line}: CartLineProps) {
+  const {pathPrefix} = useLocale();
   const {discountAllocations, quantity, merchandise} = line;
 
   const {handleDecrement, handleIncrement, handleRemove, isUpdatingLine} =
@@ -20,10 +22,10 @@ export function CartLine({closeCart, line}: CartLineProps) {
   const image = useCartLineImage({line});
 
   const url = useMemo(() => {
-    return `/products/${merchandise.product.handle}?merchandise=${merchandise.id
-      .split('/')
-      .pop()}`;
-  }, [merchandise.id]);
+    return `${pathPrefix}/products/${
+      merchandise.product.handle
+    }?merchandise=${merchandise.id.split('/').pop()}`;
+  }, [merchandise.id, pathPrefix]);
 
   return (
     <div className="relative grid grid-cols-[auto_1fr] items-center gap-3 p-4 ">

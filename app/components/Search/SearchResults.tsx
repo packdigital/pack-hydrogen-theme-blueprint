@@ -1,5 +1,5 @@
 import {Link} from '~/components';
-import {useDataLayerViewSearchResults, useSettings} from '~/hooks';
+import {useDataLayerViewSearchResults, useLocale, useSettings} from '~/hooks';
 
 import {SearchItem} from './SearchItem';
 import type {SearchResultsProps} from './Search.types';
@@ -11,6 +11,7 @@ export function SearchResults({
   searchTerm,
 }: SearchResultsProps) {
   const {search} = useSettings();
+  const {pathPrefix} = useLocale();
 
   useDataLayerViewSearchResults({
     products: productResults,
@@ -53,7 +54,10 @@ export function SearchResults({
             {collectionResults.map(({handle, title}, index) => {
               return (
                 <li key={index}>
-                  <Link aria-label={title} href={`/collections/${handle}`}>
+                  <Link
+                    aria-label={title}
+                    href={`${pathPrefix}/collections/${handle}`}
+                  >
                     <p className="text-underline">{title}</p>
                   </Link>
                 </li>
