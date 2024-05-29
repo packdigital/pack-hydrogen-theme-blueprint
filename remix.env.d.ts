@@ -29,6 +29,7 @@ declare global {
     PACK_API_URL?: string;
     PRIVATE_SHOPIFY_CHECKOUT_DOMAIN?: string;
     PRIVATE_SHOPIFY_STORE_MULTIPASS_SECRET?: string;
+    PRIMARY_DOMAIN: string;
   }
 
   interface Window {

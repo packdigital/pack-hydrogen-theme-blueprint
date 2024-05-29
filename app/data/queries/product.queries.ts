@@ -61,6 +61,11 @@ export const CMS_PRODUCTS_QUERY = `#graphql
         seo {
           noIndex
         }
+        sourceProduct {
+          data {
+            status
+          }
+        }
       }
     }
   }

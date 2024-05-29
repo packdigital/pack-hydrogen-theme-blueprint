@@ -87,10 +87,19 @@ export const getAccountSeo = async (
   return seo;
 };
 
+export const getPrimaryDomain = (context: AppLoadContext) => {
+  const PRIMARY_DOMAIN = context.env.PRIMARY_DOMAIN;
+  let primaryDomainOrigin = '';
+  try {
+    primaryDomainOrigin = new URL(PRIMARY_DOMAIN).origin;
+  } catch (error) {}
+  return primaryDomainOrigin;
+};
+
 export const getEnvs = async (
   context: AppLoadContext,
 ): Promise<Record<string, string>> => {
-  const SITE_DOMAIN = context.storefront.getShopifyDomain();
+  const PRIMARY_DOMAIN = getPrimaryDomain(context);
 
   const publicEnvs = Object.entries({...context.env}).reduce(
     (acc: any, [key, value]) => {
@@ -100,7 +109,7 @@ export const getEnvs = async (
     {},
   );
 
-  return {...publicEnvs, SITE_DOMAIN};
+  return {...publicEnvs, PRIMARY_DOMAIN};
 };
 
 export const getFilters = async ({

@@ -1,6 +1,10 @@
 import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 
-import {generatedSitemapFromPages, getSiteSettings} from '~/lib/utils';
+import {
+  generatedSitemapFromPages,
+  getPrimaryDomain,
+  getSiteSettings,
+} from '~/lib/utils';
 import type {Page} from '~/lib/types';
 
 const STATIC_PAGES = (accountNoIndex: boolean) =>
@@ -14,14 +18,14 @@ const STATIC_PAGES = (accountNoIndex: boolean) =>
   ] as Page[];
 
 export async function loader({context}: LoaderFunctionArgs) {
-  const SITE_DOMAIN = context.storefront.getShopifyDomain();
+  const PRIMARY_DOMAIN = getPrimaryDomain(context);
   const siteSettings = await getSiteSettings(context);
   const accountNoIndex =
     !!siteSettings?.data?.siteSettings?.settings?.account?.noIndex;
 
   const sitemap = generatedSitemapFromPages({
     pages: STATIC_PAGES(accountNoIndex),
-    siteUrl: SITE_DOMAIN,
+    siteUrl: PRIMARY_DOMAIN,
     route: 'static',
   });
 

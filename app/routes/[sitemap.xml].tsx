@@ -1,5 +1,7 @@
 import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 
+import {getPrimaryDomain} from '~/lib/utils';
+
 const SITEMAP_FILENAMES = [
   'sitemap_static.xml',
   'sitemap_pages.xml',
@@ -26,8 +28,8 @@ const generatedSitemapIndex = (filenames: string[], siteUrl: string) => {
 };
 
 export async function loader({context}: LoaderFunctionArgs) {
-  const SITE_DOMAIN = context.storefront.getShopifyDomain();
-  const sitemapIndex = generatedSitemapIndex(SITEMAP_FILENAMES, SITE_DOMAIN);
+  const PRIMARY_DOMAIN = getPrimaryDomain(context);
+  const sitemapIndex = generatedSitemapIndex(SITEMAP_FILENAMES, PRIMARY_DOMAIN);
 
   return new Response(sitemapIndex, {
     headers: {
