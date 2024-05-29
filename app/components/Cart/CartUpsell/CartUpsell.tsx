@@ -1,4 +1,4 @@
-import {Fragment, useEffect, useState} from 'react';
+import {Fragment, useEffect, useMemo, useState} from 'react';
 import {useCart} from '@shopify/hydrogen-react';
 import {Navigation} from 'swiper/modules';
 import {Swiper, SwiperSlide} from 'swiper/react';
@@ -11,6 +11,7 @@ import {
 import type {CartLine} from '@shopify/hydrogen/storefront-api-types';
 
 import {Svg} from '~/components';
+import {useProductsFromHandles} from '~/hooks';
 
 import type {CartUpsellProps} from '../Cart.types';
 
@@ -20,21 +21,35 @@ export function CartUpsell({closeCart, settings}: CartUpsellProps) {
   const {lines = [], status} = useCart();
   const cartLines = lines as CartLine[];
 
-  const {message = '', products = []} = {...settings?.upsell};
+  const {message = '', products} = {...settings?.upsell};
 
   const [productsNotInCart, setProductsNotInCart] = useState([]);
 
+  const productHandles = useMemo(() => {
+    return (
+      products?.reduce((acc: string[], {product}) => {
+        if (!product?.handle) return acc;
+        return [...acc, product.handle];
+      }, []) || []
+    );
+  }, [products]);
+
+  const fullProducts = useProductsFromHandles(productHandles);
+
+  const fullProductsDep = fullProducts
+    .map((product) => product.handle)
+    .join('');
+
   useEffect(() => {
     if (status === 'idle') {
-      const remaining = [...products].filter(({product}) => {
+      const remaining = [...fullProducts].filter((product) => {
         return !cartLines.some((line) => {
           return line.merchandise.product.handle === product.handle;
         });
       }) as [];
-
       setProductsNotInCart(remaining);
     }
-  }, [cartLines, products, status]);
+  }, [cartLines, fullProductsDep, status]);
 
   const showUpsell = lines?.length > 0 && productsNotInCart?.length > 0;
 
@@ -73,6 +88,7 @@ export function CartUpsell({closeCart, settings}: CartUpsellProps) {
           </DisclosureButton>
 
           <Transition
+            as="div"
             show={open}
             enter="transition duration-100 ease-out"
             enterFrom="transform scale-97 opacity-0"
@@ -93,13 +109,13 @@ export function CartUpsell({closeCart, settings}: CartUpsellProps) {
                 slidesPerView={1}
                 spaceBetween={0}
               >
-                {productsNotInCart.map(({product}, index) => {
+                {productsNotInCart.map((product, index) => {
                   return (
                     <SwiperSlide key={index}>
                       <CartUpsellItem
                         closeCart={closeCart}
-                        handle={product?.handle}
-                        isOnlyUpsell={products.length === 1}
+                        isOnlyUpsell={products?.length === 1}
+                        product={product}
                       />
                     </SwiperSlide>
                   );

@@ -1,17 +1,16 @@
 import {BackInStockModal, Image, Link, Spinner} from '~/components';
 import {PRODUCT_IMAGE_ASPECT_RATIO} from '~/lib/constants';
-import {useAddToCart, useProductByHandle, useVariantPrices} from '~/hooks';
+import {useAddToCart, useLocale, useVariantPrices} from '~/hooks';
 
 import type {CartUpsellItemProps} from '../Cart.types';
 
 export function CartUpsellItem({
   closeCart,
-  handle,
   isOnlyUpsell,
+  product,
 }: CartUpsellItemProps) {
-  const fullProduct = useProductByHandle(handle);
-
-  const selectedVariant = fullProduct?.variants?.nodes?.[0];
+  const {pathPrefix} = useLocale();
+  const selectedVariant = product.variants?.nodes?.[0];
 
   const {
     buttonText,
@@ -27,9 +26,9 @@ export function CartUpsellItem({
 
   const {price, compareAtPrice} = useVariantPrices(selectedVariant);
 
-  const image = fullProduct?.featuredImage;
+  const image = product.featuredImage;
   const isUpdatingClass = isAdding || cartIsUpdating ? 'cursor-default' : '';
-  const url = `/products/${handle}`;
+  const url = `${pathPrefix}/products/${product.handle}`;
 
   return (
     <div
@@ -38,7 +37,7 @@ export function CartUpsellItem({
       }`}
     >
       <Link
-        aria-label={fullProduct?.title}
+        aria-label={product.title}
         to={url}
         onClick={closeCart}
         tabIndex={-1}
@@ -46,7 +45,7 @@ export function CartUpsellItem({
         <Image
           data={{
             ...image,
-            altText: fullProduct?.title,
+            altText: product.title,
           }}
           aspectRatio={
             image?.width && image?.height
@@ -60,12 +59,12 @@ export function CartUpsellItem({
 
       <div className="flex max-w-[25rem] flex-1 flex-col gap-2">
         <Link
-          aria-label={fullProduct?.title}
+          aria-label={product.title}
           className="self-start"
           to={url}
           onClick={closeCart}
         >
-          <h4 className="text-xs font-bold">{fullProduct?.title}</h4>
+          <h4 className="text-xs font-bold">{product.title}</h4>
         </Link>
 
         <div className="flex items-center justify-between gap-4">
