@@ -16,7 +16,7 @@ import {
 } from '~/data/queries';
 import {PRICE_FILTER_ID} from '~/lib/constants';
 import type {ActiveFilterValue} from '~/components/Collection/CollectionFilters/CollectionFilters.types';
-import type {RootSiteSettings, Seo} from '~/lib/types';
+import type {Group, RootSiteSettings, Seo} from '~/lib/types';
 
 export const getShop = async (context: AppLoadContext) => {
   const layout = await context.storefront.query(LAYOUT_QUERY, {
@@ -34,10 +34,37 @@ export const getSiteSettings = async (
 };
 
 export const getProductGroupings = async (context: AppLoadContext) => {
-  return context.pack.query(PRODUCT_GROUPINGS_QUERY, {
-    variables: {first: 250},
-    cache: context.storefront.CacheShort(),
+  const getAllProductGroupings = async ({
+    groupings,
+    cursor,
+  }: {
+    groupings: Group[] | null;
+    cursor: string | null;
+  }): Promise<Group[] | null> => {
+    const {data} = await context.pack.query(PRODUCT_GROUPINGS_QUERY, {
+      variables: {first: 250, after: cursor},
+      cache: context.storefront.CacheShort(),
+    });
+    if (!data?.groups) return null;
+
+    const queriedGroupings =
+      data.groups.edges?.map(({node}: {node: Group}) => node) || [];
+    const {endCursor, hasNextPage} = data.groups.pageInfo || {};
+
+    const compiledGroupings = [...(groupings || []), ...queriedGroupings];
+    if (hasNextPage) {
+      return getAllProductGroupings({
+        groupings: compiledGroupings,
+        cursor: endCursor,
+      });
+    }
+    return compiledGroupings;
+  };
+  const groupings = await getAllProductGroupings({
+    groupings: null,
+    cursor: null,
   });
+  return groupings || null;
 };
 
 export const getAccountSeo = async (

@@ -9,13 +9,13 @@ import {RenderSections} from '@pack/react';
 import {
   formatGroupingWithOptions,
   getMetafields,
+  getProductGroupings,
   getShop,
   getSiteSettings,
 } from '~/lib/utils';
 import type {Group, ProductWithGrouping} from '~/lib/types';
 import {
   GROUPING_PRODUCT_QUERY,
-  PRODUCT_GROUPINGS_QUERY,
   PRODUCT_PAGE_QUERY,
   PRODUCT_QUERY,
 } from '~/data/queries';
@@ -70,22 +70,19 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     queriedProduct = {...queriedProduct, metafields};
   }
 
-  const groupingsData = await context.pack.query(PRODUCT_GROUPINGS_QUERY, {
-    variables: {first: 100},
-    cache: context.storefront.CacheShort(),
-  });
+  const productGroupings = await getProductGroupings(context);
 
-  let grouping: Group = groupingsData?.data?.groups?.edges?.find(
-    ({node}: {node: Group}) => {
+  let grouping: Group | undefined = [...(productGroupings || [])].find(
+    (grouping: Group) => {
       const groupingProducts = [
-        ...node.products,
-        ...node.subgroups.flatMap(({products}) => products),
+        ...grouping.products,
+        ...grouping.subgroups.flatMap(({products}) => products),
       ];
       return groupingProducts.some(
         (groupProduct) => groupProduct.handle === handle,
       );
     },
-  )?.node;
+  );
 
   if (grouping) {
     const productsToQuery = [
