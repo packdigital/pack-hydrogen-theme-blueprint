@@ -1,8 +1,13 @@
-import {Fragment, useMemo} from 'react';
+import {Fragment, useEffect, useState} from 'react';
 import {useCart} from '@shopify/hydrogen-react';
 import {Navigation} from 'swiper/modules';
 import {Swiper, SwiperSlide} from 'swiper/react';
-import {Disclosure, Transition} from '@headlessui/react';
+import {
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+  Transition,
+} from '@headlessui/react';
 import type {CartLine} from '@shopify/hydrogen/storefront-api-types';
 
 import {Svg} from '~/components';
@@ -12,19 +17,24 @@ import type {CartUpsellProps} from '../Cart.types';
 import {CartUpsellItem} from './CartUpsellItem';
 
 export function CartUpsell({closeCart, settings}: CartUpsellProps) {
-  const {lines = []} = useCart();
+  const {lines = [], status} = useCart();
   const cartLines = lines as CartLine[];
 
   const {message = '', products = []} = {...settings?.upsell};
 
-  const productsNotInCart = useMemo(() => {
-    if (!cartLines?.length || !products?.length) return [];
-    return products.filter(({product}) => {
-      return !cartLines.some((line) => {
-        return line.merchandise.product.handle === product.handle;
-      });
-    });
-  }, [cartLines, products]);
+  const [productsNotInCart, setProductsNotInCart] = useState([]);
+
+  useEffect(() => {
+    if (status === 'idle') {
+      const remaining = [...products].filter(({product}) => {
+        return !cartLines.some((line) => {
+          return line.merchandise.product.handle === product.handle;
+        });
+      }) as [];
+
+      setProductsNotInCart(remaining);
+    }
+  }, [cartLines, products, status]);
 
   const showUpsell = lines?.length > 0 && productsNotInCart?.length > 0;
 
@@ -36,7 +46,7 @@ export function CartUpsell({closeCart, settings}: CartUpsellProps) {
     >
       {({open}) => (
         <>
-          <Disclosure.Button
+          <DisclosureButton
             aria-label={`${open ? 'Collapse' : 'Expand'} upsells`}
             type="button"
             className="relative px-4 py-3"
@@ -60,7 +70,7 @@ export function CartUpsell({closeCart, settings}: CartUpsellProps) {
                 />
               )}
             </div>
-          </Disclosure.Button>
+          </DisclosureButton>
 
           <Transition
             show={open}
@@ -71,7 +81,7 @@ export function CartUpsell({closeCart, settings}: CartUpsellProps) {
             leaveFrom="transform scale-100 opacity-100"
             leaveTo="transform scale-97 opacity-0"
           >
-            <Disclosure.Panel as={Fragment}>
+            <DisclosurePanel as={Fragment}>
               <Swiper
                 className="mb-4 w-full px-2"
                 grabCursor
@@ -88,7 +98,7 @@ export function CartUpsell({closeCart, settings}: CartUpsellProps) {
                     <SwiperSlide key={index}>
                       <CartUpsellItem
                         closeCart={closeCart}
-                        handle={product.handle}
+                        handle={product?.handle}
                         isOnlyUpsell={products.length === 1}
                       />
                     </SwiperSlide>
@@ -122,7 +132,7 @@ export function CartUpsell({closeCart, settings}: CartUpsellProps) {
                   </div>
                 </div>
               </Swiper>
-            </Disclosure.Panel>
+            </DisclosurePanel>
           </Transition>
         </>
       )}
