@@ -769,6 +769,7 @@
           {
             "data": {
               "_template": "hero",
+              "id": "default-hero-data",
               "slider": {
                 "delay": 8000,
                 "effect": "fade",
@@ -962,6 +963,7 @@
                 "buttonStyle": "btn-primary"
               },
               "_template": "tabbed-three-tiles",
+              "id": "default-tabbed-three-tiles-data",
               "sectionName": "Homepage Homepage Tabbed Three Tiles",
               "sectionType": "local",
               "resourceType": "page",
@@ -1002,6 +1004,7 @@
                 }
               ],
               "_template": "products-slider",
+              "id": "default-products-slider-data",
               "productItem": {
                 "enabledQuickShop": true,
                 "enabledStarRating": true,
@@ -1068,6 +1071,7 @@
                 "verticalPadding": false
               },
               "_template": "half-hero",
+              "id": "default-half-hero-data-1",
               "sectionName": "Homepage Homepage Half Hero",
               "sectionType": "local",
               "resourceType": "page",
@@ -1128,6 +1132,7 @@
                 "verticalPadding": false
               },
               "_template": "half-hero",
+              "id": "default-half-hero-data-2",
               "sectionName": "Homepage Homepage Half Hero",
               "sectionType": "local",
               "resourceType": "page",
@@ -1194,6 +1199,7 @@
                 "textColor": "var(--text)"
               },
               "_template": "press-slider",
+              "id": "default-press-slider-data",
               "sectionName": "Pack Hydrogen Storefront Homepage Press Slider",
               "sectionType": "local",
               "resourceType": "page",
@@ -1227,6 +1233,7 @@
                 "aspectRatio": "aspect-[5/4]"
               },
               "_template": "two-tiles",
+              "id": "default-two-tiles-data",
               "sectionName": "Pack Hydrogen Storefront Homepage Two Tiles",
               "sectionType": "local",
               "resourceType": "page",
@@ -1246,6 +1253,7 @@
                 "sliderPaginationBulletColor": "var(--white)"
               },
               "_template": "testimonial-slider",
+              "id": "default-testimonial-slider-data",
               "sectionName": "Homepage Homepage Testimonial Slider",
               "sectionType": "local",
               "resourceType": "page",
@@ -1339,6 +1347,7 @@
                 "aspectRatio": "aspect-[3/4]"
               },
               "_template": "image-tiles",
+              "id": "default-image-tiles-data",
               "sectionName": "Homepage Homepage Image Tiles",
               "sectionType": "local",
               "resourceType": "page",
@@ -1369,6 +1378,7 @@
                 "maxWidth": "max-w-[60rem]"
               },
               "_template": "markdown",
+              "id": "default-about-us-markdown-data",
               "sectionName": "About Us Page Markdown",
               "sectionType": "local",
               "resourceType": "page",
@@ -1398,6 +1408,7 @@
                 "maxWidth": "max-w-[60rem]"
               },
               "_template": "markdown",
+              "id": "default-privacy-markdown-data",
               "sectionName": "Privacy Policy Page Markdown",
               "sectionType": "local",
               "resourceType": "page",
@@ -1427,6 +1438,7 @@
                 "maxWidth": "max-w-[60rem]"
               },
               "_template": "markdown",
+              "id": "default-markdown-data",
               "sectionName": "Terms & Conditions Page Markdown",
               "sectionType": "local",
               "resourceType": "page",
@@ -1535,6 +1547,7 @@
                 "aboveTheFold": true
               },
               "_template": "hero",
+              "id": "default-blog-hero-data",
               "sectionName": "Blog Blog Hero",
               "sectionType": "local",
               "resourceType": "blog",
@@ -1544,6 +1557,7 @@
           {
             "data": {
               "_template": "blog-categories",
+              "id": "default-blog-categories-data",
               "categories": ["News"],
               "sectionName": "Blog Blog Blog Categories",
               "sectionType": "local",
@@ -1556,6 +1570,7 @@
           {
             "data": {
               "_template": "blog-grid",
+              "id": "default-blog-grid-data",
               "sectionName": "Blog Blog Blog Grid",
               "sectionType": "local",
               "resourceType": "blog",
