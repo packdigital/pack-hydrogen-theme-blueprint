@@ -25,7 +25,10 @@ export const customerOrderLoader = async ({
     order: null,
   };
   try {
-    const body = await request.formData();
+    let body;
+    try {
+      body = await request.formData();
+    } catch (error) {}
 
     let customerAccessToken = await context.session.get('customerAccessToken');
     /* in customizer, customer access token is stored in local storage, so it needs to be passed in */

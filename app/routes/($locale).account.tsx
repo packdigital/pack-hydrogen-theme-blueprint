@@ -11,7 +11,10 @@ import {LOGGED_OUT_REDIRECT_TO, LOGGED_IN_REDIRECT_TO} from '~/lib/constants';
 
 export async function action({context, request}: ActionFunctionArgs) {
   try {
-    const body = await request.formData();
+    let body;
+    try {
+      body = await request.formData();
+    } catch (error) {}
     const customerAccessTokenString = String(
       body?.get('customerAccessToken') || '',
     );
