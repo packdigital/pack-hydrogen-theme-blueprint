@@ -35,26 +35,6 @@
             "qualifiedMessage": "You've qualified for free shipping!"
           }
         },
-        "theme": {
-          "colors": {
-            "gray": "#C0C0C0",
-            "text": "#000000",
-            "black": "#000000",
-            "white": "#FFFFFF",
-            "border": "#E8E8E8",
-            "accent1": "#189CC5",
-            "accent2": "#4A69D4",
-            "primary": "#008464",
-            "darkGray": "#484848",
-            "offBlack": "#101010",
-            "offWhite": "#F9F9F9",
-            "lightGray": "#E8E8E8",
-            "secondary": "#8164BF",
-            "background": "#FFFFFF",
-            "mediumGray": "#989898",
-            "mediumDarkGray": "#707070"
-          }
-        },
         "footer": {
           "menu": {
             "title": "",
@@ -367,122 +347,19 @@
         },
         "product": {
           "colors": {
-            "swatches": [
+            "swatchesGroups": [
               {
-                "name": "Black",
-                "color": "#000000"
-              },
-              {
-                "name": "White",
-                "color": "#FFFFFF"
-              },
-              {
-                "name": "Sage",
-                "color": "#9EA790"
-              },
-              {
-                "name": "Sky",
-                "color": "#E0EEF2"
-              },
-              {
-                "name": "Twilight",
-                "color": "#EFDBD2"
-              },
-              {
-                "name": "Adobe",
-                "color": "#E9A93F"
-              },
-              {
-                "name": "Concrete",
-                "color": "#E8E5EE"
-              },
-              {
-                "name": "Granite",
-                "color": "#D1D0D0"
-              },
-              {
-                "name": "Pacific Blue",
-                "color": "#29415D"
-              },
-              {
-                "name": "Cast Iron",
-                "color": "#626262"
-              },
-              {
-                "name": "Canyon",
-                "color": "#897E73"
-              },
-              {
-                "name": "Coast",
-                "color": "#E2CAA7"
-              },
-              {
-                "name": "Dark Pine",
-                "color": "#757C73"
-              },
-              {
-                "name": "Heather Grey",
-                "color": "#A7A7A7"
-              },
-              {
-                "name": "Ivory",
-                "color": "#FBFAEC"
-              },
-              {
-                "name": "River",
-                "color": "#BBCCEB"
-              },
-              {
-                "name": "Heather Twilight",
-                "color": "#E5D3C7"
-              },
-              {
-                "name": "Heather Sage",
-                "color": "#B0B6B0"
-              },
-              {
-                "name": "Heather Pacific Blue",
-                "color": "#B7C0C2"
-              },
-              {
-                "name": "Heather Black",
-                "color": "#949494"
-              },
-              {
-                "name": "Agave",
-                "color": "#B6C5A6"
-              },
-              {
-                "name": "Teakwood",
-                "color": "#956333"
-              },
-              {
-                "name": "Breeze",
-                "color": "#C9DFE6"
-              },
-              {
-                "name": "Blue",
-                "color": "#1A5498"
-              },
-              {
-                "name": "Brown",
-                "color": "#9A7350"
-              },
-              {
-                "name": "Green",
-                "color": "#417505"
-              },
-              {
-                "name": "Grey",
-                "color": "#9B9B9B"
-              },
-              {
-                "name": "Purple",
-                "color": "#765595"
-              },
-              {
-                "name": "Red",
-                "color": "#BF3542"
+                "name": "Primary Colors",
+                "swatches": [
+                  {
+                    "name": "Black",
+                    "color": "#000000"
+                  },
+                  {
+                    "name": "White",
+                    "color": "#FFFFFF"
+                  }
+                ]
               }
             ]
           },
@@ -635,95 +512,9 @@
           "filters": {
             "sticky": true,
             "enabled": true,
-            "filters": [
-              {
-                "name": "",
-                "label": "Product Type",
-                "isColor": false,
-                "_template": "productType",
-                "orderValuesBy": "alphabet",
-                "defaultOpenMobile": false,
-                "defaultOpenDesktop": false
-              },
-              {
-                "name": "colorfilter",
-                "label": "Color",
-                "isColor": true,
-                "_template": "tag",
-                "orderValuesBy": "alphabet",
-                "defaultOpenMobile": false,
-                "defaultOpenDesktop": false
-              },
-              {
-                "name": "Size",
-                "label": "Size",
-                "isColor": false,
-                "_template": "option",
-                "customOrder": [
-                  "One Size",
-                  "OS",
-                  "O S",
-                  "O/S",
-                  "XXS",
-                  "XX-Small",
-                  "2XS",
-                  "XS",
-                  "X-Small",
-                  "XS/S",
-                  "XS/SM",
-                  "S",
-                  "SM",
-                  "Small",
-                  "S/M",
-                  "SM/MD",
-                  "M",
-                  "MD",
-                  "Medium",
-                  "M/L",
-                  "MD/LG",
-                  "L",
-                  "Large",
-                  "LG",
-                  "L/XL",
-                  "LG/XL",
-                  "XL",
-                  "X-Large",
-                  "XXL",
-                  "XX-Large",
-                  "2XL",
-                  "XXXL",
-                  "XXX-Large",
-                  "3XL"
-                ],
-                "orderValuesBy": "custom",
-                "defaultOpenMobile": false,
-                "defaultOpenDesktop": false
-              },
-              {
-                "label": "Price",
-                "ranges": [
-                  {
-                    "max": 50,
-                    "min": 0,
-                    "label": "Under $50"
-                  },
-                  {
-                    "max": 100,
-                    "min": 50,
-                    "label": "$50 to $100"
-                  },
-                  {
-                    "min": 100,
-                    "label": "$100 and over"
-                  }
-                ],
-                "_template": "price",
-                "defaultOpenMobile": false,
-                "defaultOpenDesktop": false
-              }
-            ],
             "showCount": true,
             "optionsMaxCount": 6,
+            "showMoreCount": 10,
             "disabledByHandle": []
           },
           "pagination": {
@@ -733,7 +524,6 @@
             "buttonStyle": "btn-inverse-dark",
             "loadMoreText": "Load More ↓",
             "resultsPerPage": 24,
-            "progressMessage": "Showing 1-{{loaded}} of {{total}} total",
             "loadPreviousText": "↑ Load Previous"
           },
           "productItem": {
@@ -743,18 +533,7 @@
             "quickShopSingleText": "+ Quick Add",
             "enabledColorSelector": true,
             "enabledColorNameOnHover": false
-          },
-          "inStockFilter": {
-            "label": "Show in stock results only",
-            "enabled": true
           }
-        },
-        "storefront": {
-          "title": "Pack Hydrogen Storefront",
-          "favicon": "",
-          "keywords": ["Hydrogen", "Headless"],
-          "description": "Pack is the only Digital Experience Platform (DXP) that gives growing brands every tool they need to build and manage their Shopify Hydrogen storefront.",
-          "storefrontTitle": "Pack Hydrogen Storefront"
         },
         "localization": {
           "enabled": true
