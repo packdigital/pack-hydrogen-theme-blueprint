@@ -77,7 +77,7 @@ export function ImageTilesMosaic({cms}: {cms: ImageTilesMosaicCms}) {
               className={`mx-auto flex w-full flex-col ${gapClasses} ${maxWidthClass} ${alignment}`}
             >
               {heading && <h2 className="text-h2">{heading}</h2>}
-              {subheading && <h3 className="text-body">{subheading}</h3>}
+              {subheading && <p className="text-body">{subheading}</p>}
             </div>
           </div>
         )}

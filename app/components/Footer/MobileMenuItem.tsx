@@ -22,7 +22,6 @@ export function MobileMenuItem({
               open ? `Close ${item.title} menu` : `Open ${item.title} menu`
             }
             className="flex h-14 w-full items-center justify-between p-4"
-            type="button"
           >
             <h3 className="text-nav">{item.title}</h3>
 

@@ -94,7 +94,11 @@ export function ProductItemMedia({
       )}
 
       {/* loading shimmer */}
-      {!primaryMedia && <div className="loading-shimmer opacity-60" />}
+      {!primaryMedia && (
+        <div className="relative size-full overflow-hidden">
+          <div className="loading-shimmer opacity-60" />
+        </div>
+      )}
 
       <div className="pointer-events-none absolute left-0 top-0 z-[1] p-2.5 xs:p-3 xl:p-4">
         <Badges
