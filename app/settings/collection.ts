@@ -41,6 +41,7 @@ export interface CollectionSettings {
     enabledColorSelector: boolean;
     enabledColorNameOnHover: boolean;
     enabledQuickShop: boolean;
+    quickShopMobileHidden: boolean;
     quickShopMultiText: string;
     quickShopSingleText: string;
   };
@@ -202,7 +203,16 @@ export default {
           name: 'enabledQuickShop',
           component: 'toggle',
           description:
-            'Quick shop is hidden on mobile and will only show if the product item has only one variant or multiple variants through a single option, e.g. "Size"',
+            'Quick shop will only show if the product item has only one variant or multiple variants through a single option, e.g. "Size"',
+          toggleLabels: {
+            true: 'On',
+            false: 'Off',
+          },
+        },
+        {
+          label: 'Hide Quick Shop on Mobile',
+          name: 'quickShopMobileHidden',
+          component: 'toggle',
           toggleLabels: {
             true: 'On',
             false: 'Off',
@@ -225,6 +235,7 @@ export default {
         enabledColorSelector: true,
         enabledColorNameOnHover: false,
         enabledQuickShop: true,
+        quickShopMobileHidden: true,
         quickShopMultiText: '+ Quick Add {{option}}',
         quickShopSingleText: '+ Quick Add',
       },

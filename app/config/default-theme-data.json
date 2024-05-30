@@ -535,6 +535,7 @@
             "enabledStarRating": true,
             "quickShopMultiText": "+ Quick Add {{option}}",
             "quickShopSingleText": "+ Quick Add",
+            "quickShopMobileHidden": true,
             "enabledColorSelector": true,
             "enabledColorNameOnHover": false
           }
@@ -790,6 +791,7 @@
               "id": "default-products-slider-data",
               "productItem": {
                 "enabledQuickShop": true,
+                "quickShopMobileHidden": true,
                 "enabledStarRating": true,
                 "enabledColorSelector": true,
                 "enabledColorNameOnHover": false

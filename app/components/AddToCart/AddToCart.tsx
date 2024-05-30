@@ -68,7 +68,7 @@ export function AddToCart({
 
         {isAdding && (
           <span aria-label="Adding to cart" aria-live="assertive" role="status">
-            <LoadingDots color="white" />
+            <LoadingDots />
           </span>
         )}
 

@@ -82,6 +82,9 @@ export function CollectionGrid({
                         isSearchResults={isSearchResults}
                         product={product}
                         priority={index < 8}
+                        quickShopMobileHidden={
+                          itemSettings?.quickShopMobileHidden
+                        }
                         searchTerm={searchTerm}
                         swatchesMap={swatchesMap}
                       />
