@@ -31,6 +31,7 @@ export interface CartSettings {
     products: {
       product: ProductCms;
     }[];
+    recsLimit: number;
   };
 }
 
@@ -222,12 +223,19 @@ export default {
             },
           ],
         },
+        {
+          label: 'Recommendations Limit',
+          name: 'recsLimit',
+          component: 'number',
+          description: 'Max of 10 recommendations can be fetched',
+        },
       ],
       defaultValue: {
         enabled: false,
         type: 'manual',
         message: `Don't miss out on these items!`,
         products: [{handle: ''}, {handle: ''}],
+        recsLimit: 10,
       },
     },
   ],

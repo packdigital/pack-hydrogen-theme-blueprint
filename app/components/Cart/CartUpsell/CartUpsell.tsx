@@ -21,7 +21,12 @@ export function CartUpsell({closeCart, settings}: CartUpsellProps) {
   const {lines = [], status} = useCart();
   const cartLines = lines as CartLine[];
 
-  const {message = '', products, type = 'manual'} = {...settings?.upsell};
+  const {
+    message = '',
+    products,
+    recsLimit = 10,
+    type = 'manual',
+  } = {...settings?.upsell};
   const isRecs = type === 'recommendations';
 
   const [productsNotInCart, setProductsNotInCart] = useState([]);
@@ -43,7 +48,8 @@ export function CartUpsell({closeCart, settings}: CartUpsellProps) {
     isRecs,
   );
 
-  const fullProducts = (isRecs ? recommendedProducts : manualProducts) || [];
+  const fullProducts =
+    (isRecs ? recommendedProducts?.slice(0, recsLimit) : manualProducts) || [];
 
   const fullProductsDep = fullProducts
     .map((product) => product.handle)
