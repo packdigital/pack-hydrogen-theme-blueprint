@@ -1,5 +1,11 @@
 import {useMemo, useState} from 'react';
 import equal from 'fast-deep-equal';
+import {
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+  Transition,
+} from '@headlessui/react';
 
 import {PRICE_FILTER_ID} from '~/lib/constants';
 import {Svg} from '~/components';
@@ -62,70 +68,80 @@ export function CollectionFilterDropdown({
     }, 0);
   }, [parsedValuesWithIsActive]);
 
-  const [isOpen, setIsOpen] = useState(defaultOpen || totalSelectedOptions > 0);
-
   return (
-    <div className="border-b border-border">
-      <button
-        aria-label={filter.label}
-        className={`relative flex min-h-12 w-full items-center justify-between gap-4 px-4 py-2 text-left`}
-        onClick={() => setIsOpen(!isOpen)}
-        type="button"
-      >
-        <div className="flex flex-1 items-center">
-          <h3 className="text-nav">{filter.label}</h3>
-
-          {totalSelectedOptions > 0 && (
-            <p className="ml-1 text-2xs text-mediumDarkGray">
-              ({totalSelectedOptions})
-            </p>
-          )}
-        </div>
-
-        <Svg
-          className={`w-4 text-text ${isOpen ? 'rotate-180' : ''}`}
-          src="/svgs/chevron-down.svg#chevron-down"
-          title="Chevron"
-          viewBox="0 0 24 24"
-        />
-      </button>
-
-      <div
-        className={`flex-col md:items-start md:gap-2 md:pb-4 ${
-          isOpen ? 'flex' : 'hidden'
-        }`}
-      >
-        <ul className="flex w-full flex-col md:items-start md:gap-2">
-          {parsedValuesWithIsActive.slice(0, maxOptions).map((option) => {
-            return (
-              <li
-                key={option.id}
-                className="w-full max-md:border-b max-md:border-border max-md:last:border-none"
-              >
-                <CollectionFilterOption
-                  addFilter={addFilter}
-                  option={option}
-                  removeFilter={removeFilter}
-                  showCount={showCount}
-                  swatchesMap={swatchesMap}
-                />
-              </li>
-            );
-          })}
-        </ul>
-
-        {maxOptions < filter.values.length && (
-          <button
-            type="button"
-            className="h-6 px-4 text-left text-sm font-bold uppercase max-md:h-11 md:text-xs"
-            aria-label="Show all options"
-            onClick={() => setMaxOptions(filter.values.length)}
+    <Disclosure
+      as="div"
+      className="border-b border-border"
+      defaultOpen={defaultOpen || totalSelectedOptions > 0}
+    >
+      {({open}) => (
+        <>
+          <DisclosureButton
+            aria-label={filter.label}
+            className={`relative flex min-h-12 w-full items-center justify-between gap-4 px-4 py-2 text-left`}
           >
-            + {filter.values.length - maxOptions} More
-          </button>
-        )}
-      </div>
-    </div>
+            <div className="flex flex-1 items-center">
+              <h3 className="text-nav">{filter.label}</h3>
+
+              {totalSelectedOptions > 0 && (
+                <p className="ml-1 text-2xs text-mediumDarkGray">
+                  ({totalSelectedOptions})
+                </p>
+              )}
+            </div>
+
+            <Svg
+              className={`w-4 text-text ${open ? 'rotate-180' : ''}`}
+              src="/svgs/chevron-down.svg#chevron-down"
+              title="Chevron"
+              viewBox="0 0 24 24"
+            />
+          </DisclosureButton>
+
+          <Transition
+            show={open}
+            enter="transition duration-100 ease-out"
+            enterFrom="transform scale-97 opacity-0"
+            enterTo="transform scale-100 opacity-100"
+            leave="transition duration-75 ease-out"
+            leaveFrom="transform scale-100 opacity-100"
+            leaveTo="transform scale-97 opacity-0"
+          >
+            <DisclosurePanel className="flex-col md:items-start md:gap-2 md:pb-4">
+              <ul className="flex w-full flex-col md:items-start md:gap-2">
+                {parsedValuesWithIsActive.slice(0, maxOptions).map((option) => {
+                  return (
+                    <li
+                      key={option.id}
+                      className="w-full max-md:border-b max-md:border-border max-md:last:border-none"
+                    >
+                      <CollectionFilterOption
+                        addFilter={addFilter}
+                        option={option}
+                        removeFilter={removeFilter}
+                        showCount={showCount}
+                        swatchesMap={swatchesMap}
+                      />
+                    </li>
+                  );
+                })}
+              </ul>
+
+              {maxOptions < filter.values.length && (
+                <button
+                  type="button"
+                  className="h-6 px-4 text-left text-sm font-bold uppercase max-md:h-11 md:text-xs"
+                  aria-label="Show all options"
+                  onClick={() => setMaxOptions(filter.values.length)}
+                >
+                  + {filter.values.length - maxOptions} More
+                </button>
+              )}
+            </DisclosurePanel>
+          </Transition>
+        </>
+      )}
+    </Disclosure>
   );
 }
 
