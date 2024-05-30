@@ -62,7 +62,19 @@ export function useCustomerLogIn() {
         setPreviewModeCustomer(customer);
         setCustomerAccessTokenInLocalStorage(customerAccessToken);
       }
-      navigate(`${locale.pathPrefix}/account/orders`);
+      let navigateTo = `${locale.pathPrefix}/account/orders`;
+
+      /* Redirect to checkout if there is a checkout_url query param */
+      const params = new URLSearchParams(window.location.search);
+      const redirect = params.get('checkout_url');
+      if (redirect) {
+        try {
+          const url = new URL(decodeURIComponent(redirect));
+          navigateTo = url.pathname;
+        } catch (error) {}
+      }
+
+      navigate(navigateTo);
     }
   }, [buyerIdentityUpdate, !!customer]);
 
