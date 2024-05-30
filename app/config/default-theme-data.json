@@ -10,6 +10,7 @@
           },
           "upsell": {
             "enabled": false,
+            "type": "manual",
             "message": "Don't miss out on these items!"
           },
           "heading": "My Cart",

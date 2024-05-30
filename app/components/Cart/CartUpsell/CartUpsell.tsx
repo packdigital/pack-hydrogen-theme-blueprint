@@ -11,7 +11,7 @@ import {
 import type {CartLine} from '@shopify/hydrogen/storefront-api-types';
 
 import {Svg} from '~/components';
-import {useProductsFromHandles} from '~/hooks';
+import {useProductsFromHandles, useProductRecommendations} from '~/hooks';
 
 import type {CartUpsellProps} from '../Cart.types';
 
@@ -21,20 +21,29 @@ export function CartUpsell({closeCart, settings}: CartUpsellProps) {
   const {lines = [], status} = useCart();
   const cartLines = lines as CartLine[];
 
-  const {message = '', products} = {...settings?.upsell};
+  const {message = '', products, type = 'manual'} = {...settings?.upsell};
+  const isRecs = type === 'recommendations';
 
   const [productsNotInCart, setProductsNotInCart] = useState([]);
 
   const productHandles = useMemo(() => {
+    if (isRecs) return [];
     return (
       products?.reduce((acc: string[], {product}) => {
         if (!product?.handle) return acc;
         return [...acc, product.handle];
       }, []) || []
     );
-  }, [products]);
+  }, [isRecs, products]);
 
-  const fullProducts = useProductsFromHandles(productHandles);
+  const manualProducts = useProductsFromHandles(productHandles, !isRecs);
+  const recommendedProducts = useProductRecommendations(
+    cartLines?.[0]?.merchandise?.product?.id || '',
+    'RELATED',
+    isRecs,
+  );
+
+  const fullProducts = (isRecs ? recommendedProducts : manualProducts) || [];
 
   const fullProductsDep = fullProducts
     .map((product) => product.handle)
