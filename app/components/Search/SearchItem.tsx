@@ -2,7 +2,7 @@ import {useCallback, useMemo} from 'react';
 
 import {COLOR_OPTION_NAME, PRODUCT_IMAGE_ASPECT_RATIO} from '~/lib/constants';
 import {Image, Link} from '~/components';
-import {useDataLayerClickEvents, useLocale, useVariantPrices} from '~/hooks';
+import {useDataLayerClickEvents, useVariantPrices} from '~/hooks';
 
 import type {SearchItemProps} from './Search.types';
 
@@ -15,7 +15,6 @@ export function SearchItem({
   const firstVariant = product.variants.nodes[0];
   const {price, compareAtPrice} = useVariantPrices(firstVariant);
   const {sendClickProductItemEvent} = useDataLayerClickEvents();
-  const {pathPrefix} = useLocale();
 
   const handleClick = useCallback(() => {
     sendClickProductItemEvent({
@@ -40,13 +39,11 @@ export function SearchItem({
     })?.previewImage;
   }, [product]);
 
-  const url = `${pathPrefix}/products/${product.handle}`;
-
   return (
     <Link
       aria-label={`View ${product.title}`}
       className="relative grid grid-cols-[5.5rem_1fr] items-center gap-3"
-      to={url}
+      to={`/products/${product.handle}`}
       onClick={handleClick}
     >
       <div

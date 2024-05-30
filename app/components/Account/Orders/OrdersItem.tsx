@@ -4,10 +4,8 @@ import {Money} from '@shopify/hydrogen-react';
 import type {Order} from '@shopify/hydrogen/storefront-api-types';
 
 import {Link} from '~/components';
-import {useLocale} from '~/hooks';
 
 export function OrdersItem({order}: {order: Order}) {
-  const {pathPrefix} = useLocale();
   const orderDate = useMemo(() => {
     const newDate = new Date(order.processedAt);
     return newDate.toLocaleDateString('default', {
@@ -23,8 +21,8 @@ export function OrdersItem({order}: {order: Order}) {
 
   const orderUrl = useMemo(() => {
     const [legacyOrderId, key] = order!.id!.split('/').pop()!.split('?');
-    return `${pathPrefix}/account/orders/${legacyOrderId}?${key}`;
-  }, [order.id, pathPrefix]);
+    return `/account/orders/${legacyOrderId}?${key}`;
+  }, [order.id]);
 
   const financialStatus = startCase(order.financialStatus?.toLowerCase());
   const fulfillmentStatus = startCase(order.fulfillmentStatus.toLowerCase());

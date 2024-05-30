@@ -1,6 +1,6 @@
 import type {Customer} from '@shopify/hydrogen-react/storefront-api-types';
 
-import type {I18nLocale, Settings} from '~/lib/types';
+import type {Settings} from '~/lib/types';
 
 export type Action = {type: string; payload?: any};
 
@@ -23,7 +23,6 @@ export interface GlobalState {
   emitter: any;
   previewModeCustomer: Customer | null | undefined;
   isPreviewModeEnabled: boolean;
-  selectedLocale: I18nLocale;
 }
 
 export interface GlobalActions {

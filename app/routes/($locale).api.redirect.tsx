@@ -9,7 +9,10 @@ export async function action({request}: ActionFunctionArgs) {
   const to = String(body?.get('to') || '');
   const status = Number(body?.get('status'));
   const headersString = String(body?.get('headers') || '');
-  const headers = JSON.parse(headersString);
+  let headers;
+  try {
+    headers = JSON.parse(headersString);
+  } catch (error) {}
 
   if (!to) return json({errors: ['Missing `to` in body']}, {status: 400});
 

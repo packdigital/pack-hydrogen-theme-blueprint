@@ -1,4 +1,4 @@
-import type {I18nLocale, ProductWithGrouping} from '~/lib/types';
+import type {ProductWithGrouping} from '~/lib/types';
 
 import {ProductOptionValueButton} from './ProductOptionValueButton';
 import {ProductOptionValueLink} from './ProductOptionValueLink';
@@ -6,7 +6,6 @@ import {useProductOptionValue} from './useProductOptionValue';
 
 interface ProductOptionValueProps {
   name: string;
-  pathPrefix: I18nLocale['pathPrefix'];
   product: ProductWithGrouping;
   selectedOptionsMap: Record<string, string>;
   setSelectedOption: (name: string, value: string) => void;
@@ -15,7 +14,6 @@ interface ProductOptionValueProps {
 
 export function ProductOptionValue({
   name,
-  pathPrefix,
   product,
   selectedOptionsMap,
   setSelectedOption,
@@ -42,7 +40,6 @@ export function ProductOptionValue({
       isColor={isColor}
       isDisabled={isDisabled}
       isSelected={isSelected}
-      pathPrefix={pathPrefix}
       selectedVariantFromOptions={selectedVariantFromOptions}
       swatch={swatch}
       value={value}

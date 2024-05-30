@@ -4,10 +4,8 @@ import type {OrderLineItem} from '@shopify/hydrogen/storefront-api-types';
 
 import {Image, Link} from '~/components';
 import {PRODUCT_IMAGE_ASPECT_RATIO} from '~/lib/constants';
-import {useLocale} from '~/hooks';
 
 export function OrderItem({item}: {item: OrderLineItem}) {
-  const {pathPrefix} = useLocale();
   const {discountedTotalPrice, originalTotalPrice, quantity, variant} = item;
   const {image} = {...variant};
 
@@ -28,8 +26,6 @@ export function OrderItem({item}: {item: OrderLineItem}) {
         : null,
     };
   }, [discountedTotalPrice, originalTotalPrice, quantity]);
-
-  const url = `${pathPrefix}/products/${variant?.product?.handle}`;
 
   return (
     <div className="grid grid-cols-[10fr_auto] items-center gap-3 border-b border-b-border py-4 text-sm md:grid-cols-[6fr_2fr_1fr_1fr_1fr]">
@@ -52,7 +48,10 @@ export function OrderItem({item}: {item: OrderLineItem}) {
         <div className="flex flex-1 flex-col items-start gap-2">
           {/* mobile/desktop product title */}
           {variant?.product ? (
-            <Link aria-label={variant.product.title} to={url}>
+            <Link
+              aria-label={variant.product.title}
+              to={`/products/${variant?.product?.handle}`}
+            >
               <p className="whitespace-normal break-words font-semibold">
                 {variant.product.title}
               </p>

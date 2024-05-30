@@ -75,7 +75,13 @@ export function CountrySelector() {
 
   useEffect(() => {
     if (!availableCountries?.length || !defaultCountry) return;
-    const countriesWithDefaultFirst = [defaultCountry, ...availableCountries];
+    const alphabeticallySortedCountries = [...availableCountries].sort((a, b) =>
+      a.name.localeCompare(b.name),
+    );
+    const countriesWithDefaultFirst = [
+      defaultCountry,
+      ...alphabeticallySortedCountries,
+    ];
     const countriesAsLocalesMap = countriesWithDefaultFirst.reduce(
       (acc, country) => {
         const {isoCode: countryCode, currency, name} = country;

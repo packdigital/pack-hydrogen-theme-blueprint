@@ -1,6 +1,6 @@
 import {DEFAULT_LOCALE} from '~/lib/constants';
 import type {I18nLocale} from '~/lib/types';
-import {useGlobal} from '~/hooks';
+import {useRootLoaderData} from '~/hooks';
 
 /**
  * Get selected locale of buyer
@@ -8,6 +8,6 @@ import {useGlobal} from '~/hooks';
  */
 
 export function useLocale(): I18nLocale {
-  const {selectedLocale} = useGlobal();
-  return selectedLocale || DEFAULT_LOCALE;
+  const rootData = useRootLoaderData();
+  return (rootData?.selectedLocale ?? DEFAULT_LOCALE) as I18nLocale;
 }

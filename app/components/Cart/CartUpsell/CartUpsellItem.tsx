@@ -1,6 +1,6 @@
 import {BackInStockModal, Image, Link, Spinner} from '~/components';
 import {PRODUCT_IMAGE_ASPECT_RATIO} from '~/lib/constants';
-import {useAddToCart, useLocale, useVariantPrices} from '~/hooks';
+import {useAddToCart, useVariantPrices} from '~/hooks';
 
 import type {CartUpsellItemProps} from '../Cart.types';
 
@@ -9,7 +9,6 @@ export function CartUpsellItem({
   isOnlyUpsell,
   product,
 }: CartUpsellItemProps) {
-  const {pathPrefix} = useLocale();
   const selectedVariant = product.variants?.nodes?.[0];
 
   const {
@@ -28,7 +27,7 @@ export function CartUpsellItem({
 
   const image = product.featuredImage;
   const isUpdatingClass = isAdding || cartIsUpdating ? 'cursor-default' : '';
-  const url = `${pathPrefix}/products/${product.handle}`;
+  const url = `/products/${product.handle}`;
 
   return (
     <div

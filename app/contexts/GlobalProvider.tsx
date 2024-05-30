@@ -10,13 +10,7 @@ import {
 import EventEmitter from 'eventemitter3';
 import type {Customer} from '@shopify/hydrogen-react/storefront-api-types';
 
-import type {
-  Action,
-  Dispatch,
-  GlobalContext,
-  GlobalState,
-  I18nLocale,
-} from '~/lib/types';
+import type {Action, Dispatch, GlobalContext, GlobalState} from '~/lib/types';
 import {useRootLoaderData} from '~/hooks';
 
 const emitter = new EventEmitter();
@@ -185,13 +179,11 @@ const actions = (dispatch: Dispatch) => ({
 });
 
 export function GlobalProvider({children}: {children: ReactNode}) {
-  const {isPreviewModeEnabled, selectedLocale, siteSettings} =
-    useRootLoaderData();
+  const {isPreviewModeEnabled, siteSettings} = useRootLoaderData();
   const [state, dispatch] = useReducer(reducer, {
     ...globalState,
     settings: siteSettings?.data?.siteSettings?.settings,
     isPreviewModeEnabled,
-    selectedLocale: selectedLocale as I18nLocale,
   });
   const [mounted, setMounted] = useState(false);
 
