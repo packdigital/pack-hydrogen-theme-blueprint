@@ -1,6 +1,7 @@
 import type {ChangeEvent} from 'react';
 import {useCallback, useEffect, useMemo, useState, useRef} from 'react';
 
+import {parseAsCurrency} from '~/lib/utils';
 import {useLocale} from '~/hooks';
 
 interface MultiRangeSliderProps {
@@ -39,6 +40,16 @@ export const MultiRangeSlider = ({
     if (!isPrice) return '';
     return locale.label?.split(' ').pop()?.split(')')[0].trim() || '';
   }, [isPrice, locale.label]);
+
+  const displayedMinVal = useMemo(() => {
+    if (!isPrice) return minVal;
+    return parseAsCurrency(minVal, locale);
+  }, [isPrice, locale, minVal]);
+
+  const displayedMaxVal = useMemo(() => {
+    if (!isPrice) return maxVal;
+    return parseAsCurrency(maxVal, locale);
+  }, [isPrice, locale, maxVal]);
 
   // Convert to percentage
   const getPercent = useCallback(
@@ -126,14 +137,8 @@ export const MultiRangeSlider = ({
             className="absolute z-[2] h-1 rounded-[3px] bg-black"
           ></div>
           <div className="absolute left-0 mt-5 flex w-full justify-between text-sm text-text">
-            <p>
-              {isPrice ? currencySymbol : ''}
-              {minVal}
-            </p>
-            <p>
-              {isPrice ? currencySymbol : ''}
-              {maxVal}
-            </p>
+            <p>{displayedMinVal}</p>
+            <p>{displayedMaxVal}</p>
           </div>
         </div>
       </div>
