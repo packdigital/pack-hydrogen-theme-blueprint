@@ -26,13 +26,6 @@ export function Scripts() {
     !!ENV?.PUBLIC_GTM_CONTAINER_ID,
   );
 
-  /* Pack demo store only. Do not merge into base repo */
-  useLoadScript({
-    id: 'warmly-script-loader',
-    src: 'https://opps-widget.getwarmly.com/warmly.js?clientId=9813acb22c9471794c5700cfb732ad82',
-    defer: true,
-  });
-
   // ↓ Other third party scripts ↓
 
   // Example:
