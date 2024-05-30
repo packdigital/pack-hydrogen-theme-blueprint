@@ -89,9 +89,11 @@ export function CollectionFilterOption({
       type="button"
     >
       <div
-        className={`relative flex size-5 items-center justify-center overflow-hidden rounded border border-border transition md:mt-px md:size-[18px] ${
-          !disabled ? 'group-hover:md:border-text' : ''
-        } ${isActive ? 'border-text' : ''}`}
+        className={`relative flex size-5 items-center justify-center overflow-hidden border border-border transition md:mt-px md:size-[18px] ${
+          isColor ? 'rounded-[50%]' : 'rounded'
+        } ${!disabled ? 'group-hover:md:border-text' : ''} ${
+          isActive ? 'border-text' : ''
+        }`}
         style={{
           backgroundColor: isColor ? colorBackground : nonColorBackground,
         }}

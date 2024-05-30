@@ -17,11 +17,7 @@ export function CollectionDesktopFilters({
 
   const [mounted, setMounted] = useState(activeFilterValues.length > 0);
 
-  const {
-    optionsMaxCount = 6,
-    showCount = true,
-    sticky = true,
-  } = {...collectionSettings?.filters};
+  const {sticky = true} = {...collectionSettings?.filters};
   const stickyPromobar =
     header?.promobar?.enabled && !header?.promobar?.autohide;
   const stickyTopClass = stickyPromobar
@@ -39,7 +35,7 @@ export function CollectionDesktopFilters({
       } ${sticky ? stickyTopClass : ''}`}
     >
       <div className="overflow-hidden rounded border border-border max-md:hidden">
-        <div className="max-h-[calc(var(--viewport-height)-var(--header-height-desktop)-100px)] overflow-y-auto overflow-x-hidden">
+        <div className="scrollbar-hide max-h-[calc(var(--viewport-height)-var(--header-height-desktop)-100px)] overflow-y-auto overflow-x-hidden">
           {!!filters.length && (
             <ul className="overflow-y-auto">
               {filters.map((filter, index) => {
@@ -52,9 +48,7 @@ export function CollectionDesktopFilters({
                         activeFilterValues={activeFilterValues}
                         addFilter={addFilter}
                         filter={filter}
-                        optionsMaxCount={optionsMaxCount}
                         removeFilter={removeFilter}
-                        showCount={showCount}
                         swatchesMap={swatchesMap}
                       />
                     )}

@@ -9,6 +9,7 @@ import {
 
 import {PRICE_FILTER_ID} from '~/lib/constants';
 import {Svg} from '~/components';
+import {useSettings} from '~/hooks';
 
 import type {
   CollectionFilterDropdownProps,
@@ -22,11 +23,18 @@ export function CollectionFilterDropdown({
   addFilter,
   defaultOpen,
   filter,
-  optionsMaxCount,
   removeFilter,
-  showCount,
   swatchesMap,
 }: CollectionFilterDropdownProps) {
+  const {collection: collectionSettings} = useSettings();
+  const {
+    optionsMaxCount = 6,
+    showCount = true,
+    showMoreCount = 10,
+  } = {
+    ...collectionSettings?.filters,
+  };
+
   const [maxOptions, setMaxOptions] = useState(
     optionsMaxCount || filter.values.length,
   );
@@ -67,6 +75,17 @@ export function CollectionFilterDropdown({
       return acc;
     }, 0);
   }, [parsedValuesWithIsActive]);
+
+  const showMoreCountMax = Math.min(
+    showMoreCount,
+    filter.values.length - maxOptions,
+  );
+  const showLessCountMax = Math.min(
+    showMoreCount,
+    maxOptions - optionsMaxCount,
+  );
+  const showMoreButton = maxOptions < filter.values.length;
+  const showLessButton = maxOptions > optionsMaxCount;
 
   return (
     <Disclosure
@@ -127,15 +146,34 @@ export function CollectionFilterDropdown({
                 })}
               </ul>
 
-              {maxOptions < filter.values.length && (
-                <button
-                  type="button"
-                  className="h-6 px-4 text-left text-sm font-bold uppercase max-md:h-11 md:text-xs"
-                  aria-label="Show all options"
-                  onClick={() => setMaxOptions(filter.values.length)}
-                >
-                  + {filter.values.length - maxOptions} More
-                </button>
+              {(showMoreButton || showLessButton) && (
+                <div className="md:mt-2">
+                  {showLessButton && (
+                    <button
+                      type="button"
+                      className="h-6 px-4 text-left text-sm font-bold uppercase max-md:h-11 md:text-xs"
+                      aria-label={`Show ${showLessCountMax} less options`}
+                      onClick={() =>
+                        setMaxOptions(maxOptions - showLessCountMax)
+                      }
+                    >
+                      Show {showLessCountMax} Less
+                    </button>
+                  )}
+
+                  {showMoreButton && (
+                    <button
+                      type="button"
+                      className="h-6 px-4 text-left text-sm font-bold uppercase max-md:h-11 md:text-xs"
+                      aria-label={`Show ${showMoreCountMax} more options`}
+                      onClick={() =>
+                        setMaxOptions(maxOptions + showMoreCountMax)
+                      }
+                    >
+                      Show {showMoreCountMax} More
+                    </button>
+                  )}
+                </div>
               )}
             </DisclosurePanel>
           </Transition>

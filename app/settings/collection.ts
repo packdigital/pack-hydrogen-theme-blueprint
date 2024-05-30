@@ -28,6 +28,7 @@ export interface CollectionSettings {
     showCount: boolean;
     sticky: boolean;
     optionsMaxCount: number;
+    showMoreCount: number;
   };
   pagination: {
     resultsPerPage: number;
@@ -121,6 +122,14 @@ export default {
           description:
             'Initial number of options to show per filter. Remaining options will be hidden behind a "more" button',
           defaultValue: 6,
+        },
+        {
+          label: 'Show More Count',
+          name: 'showMoreCount',
+          component: 'number',
+          description:
+            'Number of new options to show when clicking the "more" button',
+          defaultValue: 10,
         },
       ],
     },
