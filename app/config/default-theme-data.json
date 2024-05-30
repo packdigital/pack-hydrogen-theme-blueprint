@@ -261,6 +261,9 @@
             "productsEnabled": true,
             "collectionsEnabled": true
           },
+          "input": {
+            "characterMin": 3
+          },
           "suggestions": {
             "terms": ["Jogger", "Tee", "Polo"],
             "enabled": true,

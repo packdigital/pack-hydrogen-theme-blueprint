@@ -3,6 +3,9 @@ export interface SearchSettings {
     collectionsEnabled: boolean;
     noResultsText: string;
   };
+  input: {
+    characterMin: number;
+  };
   autocomplete: {
     enabled: boolean;
     heading: string;
@@ -19,7 +22,7 @@ export default {
   label: 'Search',
   name: 'search',
   component: 'group',
-  description: 'Search results, autocomplete, suggestions',
+  description: 'Search results, input, autocomplete, suggestions',
   fields: [
     {
       label: 'Search Results (Drawer)',
@@ -45,6 +48,24 @@ export default {
       ],
       defaultValue: {
         noResultsText: 'No results found.',
+      },
+    },
+    {
+      label: 'Search Input',
+      name: 'input',
+      component: 'group',
+      description: 'Character minimum',
+      fields: [
+        {
+          label: 'Character Minimum',
+          name: 'characterMin',
+          component: 'number',
+          description:
+            'Minimum number of characters for search input to trigger a search',
+        },
+      ],
+      defaultValue: {
+        characterMin: 3,
       },
     },
     {
