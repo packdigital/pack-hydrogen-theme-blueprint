@@ -1,4 +1,3 @@
-import {redirect} from '@shopify/remix-oxygen';
 import type {
   ActionFunctionArgs,
   LoaderFunctionArgs,
@@ -31,7 +30,7 @@ export const validateCustomerAccessToken = async (
   return {isLoggedIn, headers};
 };
 
-export const redirectIfLoggedIn = async ({
+export const redirectLinkIfLoggedIn = async ({
   context,
   params,
 }: {
@@ -45,16 +44,15 @@ export const redirectIfLoggedIn = async ({
       'customerAccessToken',
     );
     if (customerAccessToken) {
-      return redirect(
-        params.locale
-          ? `/${params.locale}${LOGGED_IN_REDIRECT_TO}`
-          : LOGGED_IN_REDIRECT_TO,
-      );
+      return params.locale
+        ? `/${params.locale}${LOGGED_IN_REDIRECT_TO}`
+        : LOGGED_IN_REDIRECT_TO;
     }
   }
+  return undefined;
 };
 
-export const redirectIfLoggedOut = async ({
+export const redirectLinkIfLoggedOut = async ({
   context,
   params,
 }: {
@@ -68,13 +66,12 @@ export const redirectIfLoggedOut = async ({
       'customerAccessToken',
     );
     if (!customerAccessToken) {
-      return redirect(
-        params.locale
-          ? `/${params.locale}${LOGGED_OUT_REDIRECT_TO}`
-          : LOGGED_OUT_REDIRECT_TO,
-      );
+      return params.locale
+        ? `/${params.locale}${LOGGED_OUT_REDIRECT_TO}`
+        : LOGGED_OUT_REDIRECT_TO;
     }
   }
+  return undefined;
 };
 
 const isBrowser = typeof document !== 'undefined';

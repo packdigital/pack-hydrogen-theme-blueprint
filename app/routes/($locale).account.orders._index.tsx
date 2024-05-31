@@ -1,4 +1,4 @@
-import {json} from '@shopify/remix-oxygen';
+import {json, redirect} from '@shopify/remix-oxygen';
 import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 import type {
   ActionFunctionArgs,
@@ -11,7 +11,7 @@ import {getAccountSeo} from '~/lib/utils';
 import {
   customerOrdersAction,
   customerOrdersLoader,
-  redirectIfLoggedOut,
+  redirectLinkIfLoggedOut,
 } from '~/lib/customer';
 
 export async function action({request, context}: ActionFunctionArgs) {
@@ -20,7 +20,8 @@ export async function action({request, context}: ActionFunctionArgs) {
 }
 
 export async function loader({context, params, request}: LoaderFunctionArgs) {
-  await redirectIfLoggedOut({context, params});
+  const redirectLink = await redirectLinkIfLoggedOut({context, params});
+  if (redirectLink) return redirect(redirectLink);
   const {data, status} = await customerOrdersLoader({context, request});
   const analytics = {pageType: AnalyticsPageType.customersAccount};
   const seo = await getAccountSeo(context, 'Orders');
