@@ -245,7 +245,7 @@ export function AddressForm({
             }`}
             type="submit"
           >
-            {status.started ? <LoadingDots color="white" /> : buttonText}
+            {status.started ? <LoadingDots /> : buttonText}
           </button>
         </div>
 

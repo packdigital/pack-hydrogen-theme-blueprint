@@ -62,7 +62,7 @@ export function ForgotPasswordForm({
           }`}
           type="submit"
         >
-          {status.started ? <LoadingDots color="white" /> : buttonText}
+          {status.started ? <LoadingDots /> : buttonText}
         </button>
       </form>
 
