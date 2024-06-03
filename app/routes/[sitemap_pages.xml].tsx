@@ -3,8 +3,8 @@ import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import {CMS_PAGES_QUERY} from '~/data/queries';
 import {generatedSitemapFromPages, getPrimaryDomain} from '~/lib/utils';
 
-export async function loader({context}: LoaderFunctionArgs) {
-  const PRIMARY_DOMAIN = getPrimaryDomain(context);
+export async function loader({context, request}: LoaderFunctionArgs) {
+  const PRIMARY_DOMAIN = getPrimaryDomain({context, request});
 
   const getPages: any = async ({
     first,

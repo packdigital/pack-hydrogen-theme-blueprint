@@ -106,17 +106,19 @@ export function DataLayer() {
         id="elevar-script"
         dangerouslySetInnerHTML={{
           __html: `try {
-            const response = await fetch("${`https://shopify-gtm-suite.getelevar.com/configs/${ENV?.PUBLIC_ELEVAR_SIGNING_KEY}/config.json`}");
-            const config = await response.json();
-            const scriptUrl = config.script_src_custom_pages;
+            const settings = {};
+            const config = (await import("https://shopify-gtm-suite.getelevar.com/configs/${ENV.PUBLIC_ELEVAR_SIGNING_KEY}/config.js")).default;
+            const scriptUrl = settings.proxyPath
+              ? settings.proxyPath + config.script_src_custom_pages_proxied
+              : config.script_src_custom_pages;
 
             if (scriptUrl) {
               const { handler } = await import(scriptUrl);
-              await handler(config);
+              await handler(config, settings);
             }
           } catch (error) {
             console.error("Elevar Error:", error);
-        }`,
+          }`,
         }}
       />
     );

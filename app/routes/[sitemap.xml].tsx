@@ -27,8 +27,8 @@ const generatedSitemapIndex = (filenames: string[], siteUrl: string) => {
   `;
 };
 
-export async function loader({context}: LoaderFunctionArgs) {
-  const PRIMARY_DOMAIN = getPrimaryDomain(context);
+export async function loader({context, request}: LoaderFunctionArgs) {
+  const PRIMARY_DOMAIN = getPrimaryDomain({context, request});
   const sitemapIndex = generatedSitemapIndex(SITEMAP_FILENAMES, PRIMARY_DOMAIN);
 
   return new Response(sitemapIndex, {

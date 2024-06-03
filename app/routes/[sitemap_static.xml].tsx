@@ -17,8 +17,8 @@ const STATIC_PAGES = (accountNoIndex: boolean) =>
     {handle: 'search', seo: {noIndex: false}},
   ] as Page[];
 
-export async function loader({context}: LoaderFunctionArgs) {
-  const PRIMARY_DOMAIN = getPrimaryDomain(context);
+export async function loader({context, request}: LoaderFunctionArgs) {
+  const PRIMARY_DOMAIN = getPrimaryDomain({context, request});
   const siteSettings = await getSiteSettings(context);
   const accountNoIndex =
     !!siteSettings?.data?.siteSettings?.settings?.account?.noIndex;

@@ -71,9 +71,9 @@ const generatedProductFeed = (products: Product[], siteUrl: string) => {
   `;
 };
 
-export async function loader({context}: LoaderFunctionArgs) {
+export async function loader({context, request}: LoaderFunctionArgs) {
   const {storefront} = context;
-  const PRIMARY_DOMAIN = getPrimaryDomain(context);
+  const PRIMARY_DOMAIN = getPrimaryDomain({context, request});
 
   const getAllProducts = async ({
     products,
