@@ -8,6 +8,7 @@ import {
   useState,
 } from 'react';
 import EventEmitter from 'eventemitter3';
+import type {Customer} from '@shopify/hydrogen-react/storefront-api-types';
 
 import type {Action, Dispatch, GlobalContext, GlobalState} from '~/lib/types';
 import {useRootLoaderData} from '~/hooks';
@@ -25,6 +26,7 @@ const globalState = {
   promobarOpen: true,
   searchOpen: false,
   emitter,
+  previewModeCustomer: undefined,
 };
 
 const reducer = (state: GlobalState, action: Action) => {
@@ -121,6 +123,11 @@ const reducer = (state: GlobalState, action: Action) => {
         modal: {children: null, props: {}},
         searchOpen: false,
       };
+    case 'SET_PREVIEW_MODE_CUSTOMER':
+      return {
+        ...state,
+        previewModeCustomer: action.payload,
+      };
     default:
       throw new Error(`Invalid Context action of type: ${action.type}`);
   }
@@ -166,13 +173,17 @@ const actions = (dispatch: Dispatch) => ({
   closeAll: () => {
     dispatch({type: 'CLOSE_ALL'});
   },
+  setPreviewModeCustomer: (customer: Customer | null | undefined) => {
+    dispatch({type: 'SET_PREVIEW_MODE_CUSTOMER', payload: customer});
+  },
 });
 
 export function GlobalProvider({children}: {children: ReactNode}) {
-  const {siteSettings} = useRootLoaderData();
+  const {isPreviewModeEnabled, siteSettings} = useRootLoaderData();
   const [state, dispatch] = useReducer(reducer, {
     ...globalState,
     settings: siteSettings?.data?.siteSettings?.settings,
+    isPreviewModeEnabled,
   });
   const [mounted, setMounted] = useState(false);
 

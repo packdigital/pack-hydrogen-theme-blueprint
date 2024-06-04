@@ -25,7 +25,7 @@ export const setPackCookie = async ({
 
       const daysInMs = DEFAULT_EXPIRES * 24 * 60 * 60 * 1000;
       const expiresAtInMs = Date.now() + daysInMs;
-      const expiresAt = new Date(expiresAtInMs).toGMTString();
+      const expiresAt = new Date(expiresAtInMs).toUTCString();
 
       headers.append(
         'Set-Cookie',

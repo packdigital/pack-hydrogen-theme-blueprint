@@ -49,9 +49,11 @@ Instead of hard-coding the whole experience and having to stay on top of every s
     - Product tiles
     - Products slider
     - Product recommendations slider
+    - Build Your Own Bundle (BYOB)
     - Form builder
     - Tiles row
     - Tiles grid
+    - Tiles mosaic
     - Image tiles
     - Text/markdown block
     - Image block

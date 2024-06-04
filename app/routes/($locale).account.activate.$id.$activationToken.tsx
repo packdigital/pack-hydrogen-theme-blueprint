@@ -6,9 +6,9 @@ import type {
 } from '@shopify/remix-oxygen';
 import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 
-import {Activate} from '~/components';
+import {Activate, GuestAccountLayout} from '~/components';
 import {getAccountSeo} from '~/lib/utils';
-import {customerActivateAction} from '~/lib/customer';
+import {customerActivateAction, redirectLinkIfLoggedIn} from '~/lib/customer';
 
 export async function action({request, context}: ActionFunctionArgs) {
   const {data, status} = await customerActivateAction({request, context});
@@ -16,12 +16,8 @@ export async function action({request, context}: ActionFunctionArgs) {
 }
 
 export async function loader({context, params}: LoaderFunctionArgs) {
-  const customerAccessToken = await context.session.get('customerAccessToken');
-  if (customerAccessToken) {
-    return redirect(
-      params.locale ? `/${params.locale}/account/orders` : '/account/orders',
-    );
-  }
+  const redirectLink = await redirectLinkIfLoggedIn({context, params});
+  if (redirectLink) return redirect(redirectLink);
   const analytics = {pageType: AnalyticsPageType.customersActivateAccount};
   const seo = await getAccountSeo(context, 'Activate');
   return json({analytics, seo});
@@ -32,7 +28,11 @@ export const meta = ({data}: MetaArgs) => {
 };
 
 export default function ActivateRoute() {
-  return <Activate />;
+  return (
+    <GuestAccountLayout>
+      <Activate />
+    </GuestAccountLayout>
+  );
 }
 
 ActivateRoute.displayName = 'ActivateRoute';

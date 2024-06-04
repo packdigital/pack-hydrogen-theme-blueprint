@@ -16,7 +16,7 @@ import {
 } from '~/data/queries';
 import {PRICE_FILTER_ID} from '~/lib/constants';
 import type {ActiveFilterValue} from '~/components/Collection/CollectionFilters/CollectionFilters.types';
-import type {RootSiteSettings, Seo} from '~/lib/types';
+import type {Group, RootSiteSettings, Seo} from '~/lib/types';
 
 export const getShop = async (context: AppLoadContext) => {
   const layout = await context.storefront.query(LAYOUT_QUERY, {
@@ -34,10 +34,37 @@ export const getSiteSettings = async (
 };
 
 export const getProductGroupings = async (context: AppLoadContext) => {
-  return context.pack.query(PRODUCT_GROUPINGS_QUERY, {
-    variables: {first: 250},
-    cache: context.storefront.CacheShort(),
+  const getAllProductGroupings = async ({
+    groupings,
+    cursor,
+  }: {
+    groupings: Group[] | null;
+    cursor: string | null;
+  }): Promise<Group[] | null> => {
+    const {data} = await context.pack.query(PRODUCT_GROUPINGS_QUERY, {
+      variables: {first: 250, after: cursor},
+      cache: context.storefront.CacheShort(),
+    });
+    if (!data?.groups) return null;
+
+    const queriedGroupings =
+      data.groups.edges?.map(({node}: {node: Group}) => node) || [];
+    const {endCursor, hasNextPage} = data.groups.pageInfo || {};
+
+    const compiledGroupings = [...(groupings || []), ...queriedGroupings];
+    if (hasNextPage) {
+      return getAllProductGroupings({
+        groupings: compiledGroupings,
+        cursor: endCursor,
+      });
+    }
+    return compiledGroupings;
+  };
+  const groupings = await getAllProductGroupings({
+    groupings: null,
+    cursor: null,
   });
+  return groupings || null;
 };
 
 export const getAccountSeo = async (
@@ -60,10 +87,34 @@ export const getAccountSeo = async (
   return seo;
 };
 
-export const getEnvs = async (
-  context: AppLoadContext,
-): Promise<Record<string, string>> => {
-  const SITE_DOMAIN = context.storefront.getShopifyDomain();
+export const getPrimaryDomain = ({
+  context,
+  request,
+}: {
+  context: AppLoadContext;
+  request?: Request;
+}) => {
+  const PRIMARY_DOMAIN = context.env.PRIMARY_DOMAIN;
+  let primaryDomainOrigin = '';
+  if (PRIMARY_DOMAIN) {
+    try {
+      primaryDomainOrigin = new URL(PRIMARY_DOMAIN).origin;
+    } catch (error) {}
+  }
+  if (!primaryDomainOrigin && request) {
+    primaryDomainOrigin = new URL(request.url).origin;
+  }
+  return primaryDomainOrigin;
+};
+
+export const getEnvs = async ({
+  context,
+  request,
+}: {
+  context: AppLoadContext;
+  request?: Request;
+}): Promise<Record<string, string>> => {
+  const PRIMARY_DOMAIN = getPrimaryDomain({context, request});
 
   const publicEnvs = Object.entries({...context.env}).reduce(
     (acc: any, [key, value]) => {
@@ -73,7 +124,7 @@ export const getEnvs = async (
     {},
   );
 
-  return {...publicEnvs, SITE_DOMAIN};
+  return {...publicEnvs, PRIMARY_DOMAIN};
 };
 
 export const getFilters = async ({

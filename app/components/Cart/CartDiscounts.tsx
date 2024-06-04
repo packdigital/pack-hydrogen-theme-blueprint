@@ -67,7 +67,7 @@ export function CartDiscounts() {
     <div className="flex flex-col gap-2 border-t border-t-border p-4">
       <form
         ref={formRef}
-        className="flex items-center justify-between overflow-hidden rounded border border-border"
+        className="flex h-10 items-center justify-between overflow-hidden rounded border border-border"
         onSubmit={handleUpdateCode}
       >
         <input
@@ -75,7 +75,7 @@ export function CartDiscounts() {
           name="code"
           placeholder="Discount code"
           id="cart-discount-code"
-          className="flex-1 rounded p-2"
+          className="flex-1 p-2 text-base"
         />
         <label htmlFor="cart-discount-code" className="sr-only">
           Discount code

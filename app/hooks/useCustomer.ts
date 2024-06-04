@@ -2,6 +2,8 @@ import {useMemo} from 'react';
 import {useMatches} from '@remix-run/react';
 import type {Customer} from '@shopify/hydrogen/storefront-api-types';
 
+import {useGlobal} from '~/hooks';
+
 import type {RootLoaderData} from './useRootLoaderData';
 
 /**
@@ -13,12 +15,17 @@ import type {RootLoaderData} from './useRootLoaderData';
  * ```
  */
 
-export function useCustomer(): Customer | null {
+export function useCustomer(): Customer | null | undefined {
   const [root, account] = useMatches();
+  const {previewModeCustomer} = useGlobal();
   const customerFromRoot = (root?.data as RootLoaderData)?.customer;
   const customerFromAccount = (account?.data as {customer: Customer})?.customer;
+  const isPreviewModeEnabled = (root?.data as RootLoaderData)
+    ?.isPreviewModeEnabled;
 
   return useMemo(() => {
-    return customerFromAccount || customerFromRoot || null;
-  }, [customerFromRoot, customerFromAccount]);
+    return isPreviewModeEnabled
+      ? previewModeCustomer // while in customizer, customer only exists via previewModeCustomer
+      : customerFromAccount || customerFromRoot || null;
+  }, [customerFromRoot, customerFromAccount, previewModeCustomer]);
 }

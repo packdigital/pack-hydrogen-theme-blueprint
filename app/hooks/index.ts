@@ -3,6 +3,7 @@ export * from './document';
 export * from './locale';
 export * from './product';
 export * from './useArticles';
+export * from './useCartAddDiscountUrl';
 export * from './useCollectionByHandle';
 export * from './useCountriesList';
 export * from './useCustomer';

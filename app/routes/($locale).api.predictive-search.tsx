@@ -7,6 +7,7 @@ import type {
 } from '@shopify/hydrogen/storefront-api-types';
 
 import {PREDICTIVE_SEARCH_QUERY} from '~/data/queries';
+import {getSiteSettings} from '~/lib/utils';
 
 type PredictiveCollection = PredictiveSearchResult['collections'][number];
 type PredicticeSearchResultItemImage = PredictiveCollection['image'];
@@ -66,7 +67,13 @@ async function fetchPredictiveSearchResults({
           .map((t) => t.toUpperCase() as PredictiveSearchType)
           .filter((t) => DEFAULT_SEARCH_TYPES.includes(t));
 
-  if (!searchTerm) {
+  const siteSettings = await getSiteSettings(context);
+  const characterMin = Number(
+    siteSettings?.data?.siteSettings?.settings?.search?.input?.characterMin ||
+      1,
+  );
+
+  if (!searchTerm || searchTerm.length < characterMin) {
     return {
       searchResults: {results: null, totalResults: 0},
       searchTerm,

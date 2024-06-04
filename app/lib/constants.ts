@@ -19,3 +19,7 @@ export const DEFAULT_LOCALE: I18nLocale = Object.freeze({
 export const COLOR_OPTION_NAME = 'Color' as const;
 
 export const PRICE_FILTER_ID = 'filter.v.price' as const;
+
+export const LOGGED_OUT_REDIRECT_TO = '/account/login' as const;
+
+export const LOGGED_IN_REDIRECT_TO = '/account/orders' as const;

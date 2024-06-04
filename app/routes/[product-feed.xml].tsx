@@ -3,6 +3,7 @@ import {parseGid} from '@shopify/hydrogen-react';
 import type {Product} from '@shopify/hydrogen/storefront-api-types';
 
 import {PRODUCT_FEED_QUERY} from '~/data/queries';
+import {getPrimaryDomain} from '~/lib/utils';
 
 const formatStr = (str: string) =>
   str.replaceAll(/&/g, '&amp;').replaceAll(/"/g, '&quot;');
@@ -70,9 +71,9 @@ const generatedProductFeed = (products: Product[], siteUrl: string) => {
   `;
 };
 
-export async function loader({context}: LoaderFunctionArgs) {
+export async function loader({context, request}: LoaderFunctionArgs) {
   const {storefront} = context;
-  const SITE_DOMAIN = storefront.getShopifyDomain();
+  const PRIMARY_DOMAIN = getPrimaryDomain({context, request});
 
   const getAllProducts = async ({
     products,
@@ -108,7 +109,7 @@ export async function loader({context}: LoaderFunctionArgs) {
     cursor: null,
   });
 
-  return new Response(generatedProductFeed(products, SITE_DOMAIN), {
+  return new Response(generatedProductFeed(products, PRIMARY_DOMAIN), {
     headers: {
       'Content-Type': 'application/xml',
       'xml-version': '1.0',

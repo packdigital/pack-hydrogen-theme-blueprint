@@ -1,4 +1,9 @@
-import {Disclosure, Transition} from '@headlessui/react';
+import {
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+  Transition,
+} from '@headlessui/react';
 import type {Metafield} from '@shopify/hydrogen/storefront-api-types';
 import startCase from 'lodash/startCase';
 
@@ -19,7 +24,7 @@ export function ProductMetafieldsAccordion({
     <Disclosure defaultOpen={defaultOpen}>
       {({open}) => (
         <>
-          <Disclosure.Button
+          <DisclosureButton
             aria-label={`${open ? 'Close' : 'Open'} accordion for ${title}`}
             className="flex h-14 w-full items-center justify-between gap-x-4 bg-offWhite p-4"
             type="button"
@@ -41,7 +46,7 @@ export function ProductMetafieldsAccordion({
                 viewBox="0 0 24 24"
               />
             )}
-          </Disclosure.Button>
+          </DisclosureButton>
 
           <Transition
             show={open}
@@ -52,12 +57,12 @@ export function ProductMetafieldsAccordion({
             leaveFrom="transform scale-100 opacity-100"
             leaveTo="transform scale-97 opacity-0"
           >
-            <Disclosure.Panel
+            <DisclosurePanel
               className="px-4 pt-4 [&_h1]:mb-3 [&_h1]:text-sm [&_h2]:mb-3 [&_h2]:text-sm [&_h3]:mb-3 [&_h3]:text-sm [&_h4]:mb-3 [&_h4]:text-sm [&_h5]:mb-3 [&_h5]:text-sm [&_h6]:mb-3 [&_h6]:text-sm [&_ol]:!pl-4 [&_ol]:text-sm [&_p]:mb-3 [&_p]:text-sm [&_ul]:!pl-4 [&_ul]:text-sm"
               static
             >
               <Markdown>{value}</Markdown>
-            </Disclosure.Panel>
+            </DisclosurePanel>
           </Transition>
         </>
       )}

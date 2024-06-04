@@ -35,9 +35,7 @@ export interface CollectionFilterDropdownProps {
   addFilter: AddFilter;
   defaultOpen?: boolean;
   filter: Filter;
-  optionsMaxCount?: number;
   removeFilter: RemoveFilter;
-  showCount?: boolean;
   swatchesMap?: SwatchesMap | undefined;
 }
 

@@ -51,12 +51,12 @@ export function GroupingsProvider({children}: {children: ReactNode}) {
 
   useEffect(() => {
     if (!groupingsPromise) return;
-    const groupingsContextInit = async () => {
-      const groupingsData = await groupingsPromise;
-      const groupings = groupingsData?.data?.groups?.edges || [];
+    const groupingsInit = async () => {
+      const initialGroupings = await groupingsPromise;
+      if (!initialGroupings?.length) return;
       const groupingIndexesMap: GroupingIndexesMap = {};
-      const updatedGroupings: ProductGroupings = [];
-      groupings.forEach(({node: grouping}: {node: Group}, index: number) => {
+      const groupings: ProductGroupings = [];
+      initialGroupings.forEach((grouping: Group, index: number) => {
         const groupingProducts = [
           ...grouping.products,
           ...grouping.subgroups.flatMap(({products}) => products),
@@ -69,13 +69,13 @@ export function GroupingsProvider({children}: {children: ReactNode}) {
           allProducts: groupingProducts,
           isReady: false,
         };
-        updatedGroupings.push(updatedGrouping);
+        groupings.push(updatedGrouping);
       });
       actions(dispatch).setGroupingIndexesMap(groupingIndexesMap);
-      actions(dispatch).setGroupings(updatedGroupings);
+      actions(dispatch).setGroupings(groupings);
     };
-    groupingsContextInit();
-  }, [groupingsPromise]);
+    groupingsInit();
+  }, []);
 
   return <Context.Provider value={value}>{children}</Context.Provider>;
 }

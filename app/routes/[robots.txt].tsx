@@ -1,9 +1,11 @@
 import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 
-export const loader = ({context}: LoaderFunctionArgs) => {
-  const SITE_DOMAIN = context.storefront.getShopifyDomain();
+import {getPrimaryDomain} from '~/lib/utils';
 
-  return new Response(robotsTxtData({url: SITE_DOMAIN}), {
+export const loader = ({context, request}: LoaderFunctionArgs) => {
+  const PRIMARY_DOMAIN = getPrimaryDomain({context, request});
+
+  return new Response(robotsTxtData({url: PRIMARY_DOMAIN}), {
     status: 200,
     headers: {
       'content-type': 'text/plain',

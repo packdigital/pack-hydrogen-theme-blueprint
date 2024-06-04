@@ -1,4 +1,4 @@
-import type {CartLine} from '@shopify/hydrogen/storefront-api-types';
+import type {CartLine, Product} from '@shopify/hydrogen/storefront-api-types';
 
 import type {Settings} from '~/lib/types';
 
@@ -34,8 +34,8 @@ export interface CartUpsellProps {
 
 export interface CartUpsellItemProps {
   closeCart?: CloseCart;
-  handle: string;
   isOnlyUpsell?: boolean;
+  product: Product;
 }
 
 export interface FreeShippingMeterProps {

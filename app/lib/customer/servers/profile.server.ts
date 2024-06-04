@@ -38,16 +38,23 @@ export const customerUpdateProfileAction = async ({
     formErrors: null,
   };
   try {
-    const customerAccessToken = await context.session.get(
-      'customerAccessToken',
+    const body = await request.formData();
+
+    let customerAccessToken = await context.session.get('customerAccessToken');
+    /* in customizer, customer access token is stored in local storage, so it needs to be passed in */
+    const previewModeCustomerAccessToken = String(
+      body?.get('previewModeCustomerAccessToken') || '',
     );
+    if (previewModeCustomerAccessToken) {
+      try {
+        customerAccessToken = JSON.parse(previewModeCustomerAccessToken);
+      } catch (error) {}
+    }
 
     if (!customerAccessToken) {
       data.errors = ['Cannot find customer access token'];
       return {data, status: 401};
     }
-
-    const body = await request.formData();
 
     const customer = {
       firstName: body.get('firstName') || '',

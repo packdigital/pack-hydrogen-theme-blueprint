@@ -1,5 +1,10 @@
 import {Fragment} from 'react';
-import {Dialog, Transition} from '@headlessui/react';
+import {
+  Dialog,
+  DialogPanel,
+  Transition,
+  TransitionChild,
+} from '@headlessui/react';
 
 import {Svg} from '~/components';
 
@@ -48,7 +53,7 @@ export function Drawer({
         onClose={onClose}
       >
         {/* Overlay */}
-        <Transition.Child
+        <TransitionChild
           as={Fragment}
           enter="ease-out duration-300"
           enterFrom="opacity-0 left-0"
@@ -58,7 +63,7 @@ export function Drawer({
           leaveTo="opacity-0"
         >
           <div className="fixed inset-0 bg-[rgba(0,0,0,0.3)]" />
-        </Transition.Child>
+        </TransitionChild>
 
         <div className="fixed inset-0">
           <div className="absolute inset-0 overflow-hidden">
@@ -67,7 +72,7 @@ export function Drawer({
                 openFrom === 'right' ? 'right-0' : ''
               }`}
             >
-              <Transition.Child
+              <TransitionChild
                 as={Fragment}
                 enter="transform transition ease-in-out duration-300"
                 enterFrom={offScreen[openFrom]}
@@ -76,7 +81,7 @@ export function Drawer({
                 leaveFrom="translate-x-0"
                 leaveTo={offScreen[openFrom]}
               >
-                <Dialog.Panel
+                <DialogPanel
                   as="aside"
                   className="flex h-[var(--viewport-height)] w-screen flex-col justify-between overflow-hidden bg-background align-middle shadow-xl transition-all md:max-w-[var(--drawer-width)]"
                 >
@@ -111,8 +116,8 @@ export function Drawer({
 
                   {/* Drawer body */}
                   {children}
-                </Dialog.Panel>
-              </Transition.Child>
+                </DialogPanel>
+              </TransitionChild>
             </div>
           </div>
         </div>

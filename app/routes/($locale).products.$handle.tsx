@@ -9,19 +9,20 @@ import {RenderSections} from '@pack/react';
 import {
   formatGroupingWithOptions,
   getMetafields,
+  getProductGroupings,
   getShop,
   getSiteSettings,
 } from '~/lib/utils';
 import type {Group, ProductWithGrouping} from '~/lib/types';
 import {
   GROUPING_PRODUCT_QUERY,
-  PRODUCT_GROUPINGS_QUERY,
   PRODUCT_PAGE_QUERY,
   PRODUCT_QUERY,
 } from '~/data/queries';
 import {Product} from '~/components';
 import {routeHeaders} from '~/data/cache';
 import {seoPayload} from '~/lib/seo.server';
+import {useDataLayerViewProduct} from '~/hooks';
 
 /*
  * Add metafield queries to the METAFIELD_QUERIES array to fetch desired metafields for product pages
@@ -70,22 +71,19 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     queriedProduct = {...queriedProduct, metafields};
   }
 
-  const groupingsData = await context.pack.query(PRODUCT_GROUPINGS_QUERY, {
-    variables: {first: 100},
-    cache: context.storefront.CacheShort(),
-  });
+  const productGroupings = await getProductGroupings(context);
 
-  let grouping: Group = groupingsData?.data?.groups?.edges?.find(
-    ({node}: {node: Group}) => {
+  let grouping: Group | undefined = [...(productGroupings || [])].find(
+    (grouping: Group) => {
       const groupingProducts = [
-        ...node.products,
-        ...node.subgroups.flatMap(({products}) => products),
+        ...grouping.products,
+        ...grouping.subgroups.flatMap(({products}) => products),
       ];
       return groupingProducts.some(
         (groupProduct) => groupProduct.handle === handle,
       );
     },
-  )?.node;
+  );
 
   if (grouping) {
     const productsToQuery = [
@@ -193,6 +191,11 @@ export const meta = ({data}: MetaArgs) => {
 export default function ProductRoute() {
   const {product, productPage, selectedVariant} =
     useLoaderData<typeof loader>();
+
+  useDataLayerViewProduct({
+    product,
+    selectedVariant,
+  });
 
   return (
     <ProductProvider

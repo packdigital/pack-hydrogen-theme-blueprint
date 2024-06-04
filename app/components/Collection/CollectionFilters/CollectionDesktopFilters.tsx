@@ -17,11 +17,7 @@ export function CollectionDesktopFilters({
 
   const [mounted, setMounted] = useState(activeFilterValues.length > 0);
 
-  const {
-    optionsMaxCount = 6,
-    showCount = true,
-    sticky = true,
-  } = {...collectionSettings?.filters};
+  const {sticky = true} = {...collectionSettings?.filters};
   const stickyPromobar =
     header?.promobar?.enabled && !header?.promobar?.autohide;
   const stickyTopClass = stickyPromobar
@@ -33,40 +29,40 @@ export function CollectionDesktopFilters({
   }, [desktopFiltersOpen]);
 
   return (
-    <div
-      className={`flex-col gap-5 md:sticky ${
-        desktopFiltersOpen ? 'max-md:hidden md:flex' : 'hidden'
-      } ${sticky ? stickyTopClass : ''}`}
-    >
-      <div className="overflow-hidden rounded border border-border max-md:hidden">
-        <div className="max-h-[calc(var(--viewport-height)-var(--header-height-desktop)-100px)] overflow-y-auto overflow-x-hidden">
-          {!!filters.length && (
-            <ul className="overflow-y-auto">
-              {filters.map((filter, index) => {
-                if (!filter.values.length) return null;
+    <div className={`${desktopFiltersOpen ? 'max-md:hidden' : 'hidden'}`}>
+      <div
+        className={`flex flex-col gap-5 md:sticky ${
+          sticky ? stickyTopClass : ''
+        }`}
+      >
+        <div className="overflow-hidden rounded border border-border max-md:hidden">
+          <div className="scrollbar-hide max-h-[calc(var(--viewport-height)-var(--header-height-desktop)-100px)] overflow-y-auto overflow-x-hidden">
+            {!!filters.length && (
+              <ul className="overflow-y-auto">
+                {filters.map((filter, index) => {
+                  if (!filter.values.length) return null;
 
-                return (
-                  <li className="[&>div]:last:border-b-0" key={index}>
-                    {mounted && (
-                      <CollectionFilterDropdown
-                        activeFilterValues={activeFilterValues}
-                        addFilter={addFilter}
-                        filter={filter}
-                        optionsMaxCount={optionsMaxCount}
-                        removeFilter={removeFilter}
-                        showCount={showCount}
-                        swatchesMap={swatchesMap}
-                      />
-                    )}
-                  </li>
-                );
-              })}
-            </ul>
-          )}
+                  return (
+                    <li className="[&>div]:last:border-b-0" key={index}>
+                      {mounted && (
+                        <CollectionFilterDropdown
+                          activeFilterValues={activeFilterValues}
+                          addFilter={addFilter}
+                          filter={filter}
+                          removeFilter={removeFilter}
+                          swatchesMap={swatchesMap}
+                        />
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </div>
         </div>
-      </div>
 
-      <CollectionFiltersSummary className="max-md:hidden" />
+        <CollectionFiltersSummary className="max-md:hidden" />
+      </div>
     </div>
   );
 }

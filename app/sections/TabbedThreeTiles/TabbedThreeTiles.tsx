@@ -1,5 +1,5 @@
 import {Fragment, useState} from 'react';
-import {Tab} from '@headlessui/react';
+import {TabGroup, TabPanels, TabPanel} from '@headlessui/react';
 
 import {Container, Link, ThreeTilesRow} from '~/components';
 
@@ -28,7 +28,7 @@ export function TabbedThreeTiles({cms}: {cms: TabbedThreeTilesCms}) {
           </h2>
         )}
 
-        <Tab.Group
+        <TabGroup
           as="div"
           className="mx-auto"
           selectedIndex={activeTabIndex}
@@ -41,22 +41,22 @@ export function TabbedThreeTiles({cms}: {cms: TabbedThreeTilesCms}) {
             textColor={textColor}
           />
 
-          <Tab.Panels as={Fragment}>
+          <TabPanels as={Fragment}>
             {tabs?.length > 0 &&
               tabs.map(({tiles}, index) => {
                 return (
-                  <Tab.Panel as={Fragment} key={index}>
+                  <TabPanel as={Fragment} key={index}>
                     <ThreeTilesRow
                       aspectRatio={aspectRatio}
                       maxWidthClass={maxWidthClass}
                       textColor={textColor}
                       tiles={tiles}
                     />
-                  </Tab.Panel>
+                  </TabPanel>
                 );
               })}
-          </Tab.Panels>
-        </Tab.Group>
+          </TabPanels>
+        </TabGroup>
 
         {button?.text && (
           <div className="mt-10 flex flex-col items-center">

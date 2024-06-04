@@ -1,3 +1,7 @@
+/*
+ * Update button styles and class names as per project's theme
+ */
+
 export const BUTTONS = [
   {label: 'Primary', value: 'btn-primary'},
   {label: 'Secondary', value: 'btn-secondary'},
@@ -247,5 +251,18 @@ export const TEXT_ALIGN = {
     {label: 'Left', value: 'md:text-left'},
     {label: 'Center', value: 'md:text-center'},
     {label: 'Right', value: 'md:text-right'},
+  ],
+};
+
+export const CONTENT_ALIGN = {
+  mobile: [
+    {label: 'Left', value: 'text-left items-start'},
+    {label: 'Center', value: 'text-center items-center'},
+    {label: 'Right', value: 'text-right items-end'},
+  ],
+  desktop: [
+    {label: 'Left', value: 'md:text-left md:items-start'},
+    {label: 'Center', value: 'md:text-center md:items-center'},
+    {label: 'Right', value: 'md:text-right md:items-end'},
   ],
 };

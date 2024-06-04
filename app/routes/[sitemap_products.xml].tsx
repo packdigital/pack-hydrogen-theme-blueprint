@@ -1,10 +1,10 @@
 import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 
 import {CMS_PRODUCTS_QUERY} from '~/data/queries';
-import {generatedSitemapFromPages} from '~/lib/utils';
+import {generatedSitemapFromPages, getPrimaryDomain} from '~/lib/utils';
 
-export async function loader({context}: LoaderFunctionArgs) {
-  const SITE_DOMAIN = context.storefront.getShopifyDomain();
+export async function loader({context, request}: LoaderFunctionArgs) {
+  const PRIMARY_DOMAIN = getPrimaryDomain({context, request});
 
   const getProductPages: any = async ({
     first,
@@ -35,9 +35,12 @@ export async function loader({context}: LoaderFunctionArgs) {
     pages: null,
     cursor: null,
   });
+  const activeProductPages = productPages.filter(
+    (page: any) => page.sourceProduct?.data?.status === 'ACTIVE',
+  );
   const sitemap = generatedSitemapFromPages({
-    pages: productPages,
-    siteUrl: SITE_DOMAIN,
+    pages: activeProductPages,
+    siteUrl: PRIMARY_DOMAIN,
     route: 'products',
   });
 

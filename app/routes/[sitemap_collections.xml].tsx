@@ -1,10 +1,10 @@
 import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 
 import {CMS_COLLECTIONS_QUERY} from '~/data/queries';
-import {generatedSitemapFromPages} from '~/lib/utils';
+import {generatedSitemapFromPages, getPrimaryDomain} from '~/lib/utils';
 
-export async function loader({context}: LoaderFunctionArgs) {
-  const SITE_DOMAIN = context.storefront.getShopifyDomain();
+export async function loader({context, request}: LoaderFunctionArgs) {
+  const PRIMARY_DOMAIN = getPrimaryDomain({context, request});
 
   const getCollectionPages: any = async ({
     first,
@@ -37,7 +37,7 @@ export async function loader({context}: LoaderFunctionArgs) {
   });
   const sitemap = generatedSitemapFromPages({
     pages: collectionPages,
-    siteUrl: SITE_DOMAIN,
+    siteUrl: PRIMARY_DOMAIN,
     route: 'collections',
   });
 

@@ -155,7 +155,7 @@ export function useDataLayerSearch({
   useEffect(() => {
     if (!searchResults || !userDataEventTriggered) return;
     viewSearchResultsEvent({results: searchResults, userProperties});
-  }, [searchPageResults, userDataEventTriggered]);
+  }, [searchResults, userDataEventTriggered]);
 
   // Trigger 'select_item' after clicked search item and user event
   useEffect(() => {

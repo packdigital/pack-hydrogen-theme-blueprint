@@ -8,7 +8,7 @@ import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 
 import {customerPasswordResetAction} from '~/lib/customer';
 import {getAccountSeo} from '~/lib/utils';
-import {ResetPassword} from '~/components';
+import {GuestAccountLayout, ResetPassword} from '~/components';
 
 export async function action({request, context}: ActionFunctionArgs) {
   const {data, status} = await customerPasswordResetAction({request, context});
@@ -26,7 +26,11 @@ export const meta = ({data}: MetaArgs) => {
   return getSeoMeta(data.seo);
 };
 export default function ResetPasswordRoute() {
-  return <ResetPassword />;
+  return (
+    <GuestAccountLayout>
+      <ResetPassword />
+    </GuestAccountLayout>
+  );
 }
 
 ResetPasswordRoute.displayName = 'ResetPasswordRoute';

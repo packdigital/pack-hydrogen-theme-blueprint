@@ -13,15 +13,22 @@ import {useSettings} from '~/hooks';
 
 export function useColorSwatches(): Record<string, string> {
   const {product: productSettings} = useSettings();
-  const {swatches} = {...productSettings?.colors};
+  const {swatchesGroups} = {...productSettings?.colors};
 
   return useMemo(() => {
-    if (!swatches?.length) return {};
-    return swatches.reduce((acc, {name, color, image}) => {
-      return {
-        ...acc,
-        [name?.toLowerCase().trim()]: image?.src || color,
-      };
+    if (!swatchesGroups?.length) return {};
+    return swatchesGroups.reduce((groupsAcc, {swatches}) => {
+      if (!swatches?.length) return groupsAcc;
+      const groupSwatches = swatches.reduce(
+        (swatchesAcc, {name, color, image}) => {
+          return {
+            ...swatchesAcc,
+            [name?.toLowerCase().trim()]: image?.src || color,
+          };
+        },
+        {},
+      );
+      return {...groupsAcc, ...groupSwatches};
     }, {});
-  }, [swatches]);
+  }, [swatchesGroups]);
 }

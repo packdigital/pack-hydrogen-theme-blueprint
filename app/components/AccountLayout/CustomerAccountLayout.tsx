@@ -1,12 +1,22 @@
-import {useMemo} from 'react';
-import {useLocation} from '@remix-run/react';
-import {Menu, Transition} from '@headlessui/react';
+import {useEffect, useMemo} from 'react';
+import {useLocation, useNavigate} from '@remix-run/react';
+import {
+  Menu,
+  MenuButton,
+  MenuItems,
+  MenuItem,
+  Transition,
+} from '@headlessui/react';
 
-import {Link, Svg} from '~/components';
-import {useCustomer, useSettings} from '~/hooks';
+import {Link, Spinner, Svg} from '~/components';
+import {useCustomer, useGlobal, useLocale, useSettings} from '~/hooks';
 import {useCustomerLogOut} from '~/lib/customer';
+import {LOGGED_OUT_REDIRECT_TO} from '~/lib/constants';
 
 export function CustomerAccountLayout({children}: {children: React.ReactNode}) {
+  const {isPreviewModeEnabled} = useGlobal();
+  const navigate = useNavigate();
+  const {pathPrefix} = useLocale();
   const {pathname} = useLocation();
   const customer = useCustomer();
   const {customerLogOut} = useCustomerLogOut();
@@ -19,6 +29,24 @@ export function CustomerAccountLayout({children}: {children: React.ReactNode}) {
       return pathname.startsWith(link?.url);
     });
   }, [pathname, menuItems]);
+
+  const customerPending =
+    !!isPreviewModeEnabled && typeof customer === 'undefined';
+
+  useEffect(() => {
+    if (customerPending) return;
+    if (isPreviewModeEnabled && !customer) {
+      navigate(`${pathPrefix}${LOGGED_OUT_REDIRECT_TO}`);
+    }
+  }, [customerPending]);
+
+  if (customerPending) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
     <section
@@ -72,7 +100,7 @@ export function CustomerAccountLayout({children}: {children: React.ReactNode}) {
 
           {/* mobile nav */}
           <Menu as="div" className="relative w-full md:hidden">
-            <Menu.Button
+            <MenuButton
               aria-label="Open account menu"
               className="flex h-14 w-full items-center justify-between gap-4 rounded-full border border-gray px-5 text-base"
               type="button"
@@ -85,9 +113,10 @@ export function CustomerAccountLayout({children}: {children: React.ReactNode}) {
                 title="Chevron Down"
                 viewBox="0 0 24 24"
               />
-            </Menu.Button>
+            </MenuButton>
 
             <Transition
+              as="div"
               className="absolute left-0 top-[calc(100%+0.5rem)] z-10 w-full rounded-lg border border-gray bg-background text-base"
               enter="transition duration-100 ease-out"
               enterFrom="transform scale-95 opacity-0"
@@ -96,13 +125,13 @@ export function CustomerAccountLayout({children}: {children: React.ReactNode}) {
               leaveFrom="transform scale-100 opacity-100"
               leaveTo="transform scale-95 opacity-0"
             >
-              <Menu.Items
+              <MenuItems
                 as="nav"
                 className="scrollbar-hide flex max-h-72 flex-col gap-0 overflow-y-auto py-2"
               >
                 {menuItems?.map(({link}, index) => {
                   return link?.text ? (
-                    <Menu.Item key={index}>
+                    <MenuItem key={index}>
                       {({active, close}) => {
                         const selected = activeMenuItem?.link?.url === link.url;
                         return (
@@ -120,10 +149,10 @@ export function CustomerAccountLayout({children}: {children: React.ReactNode}) {
                           </Link>
                         );
                       }}
-                    </Menu.Item>
+                    </MenuItem>
                   ) : null;
                 })}
-              </Menu.Items>
+              </MenuItems>
             </Transition>
           </Menu>
 

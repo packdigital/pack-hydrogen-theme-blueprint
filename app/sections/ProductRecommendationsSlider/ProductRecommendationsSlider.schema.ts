@@ -12,10 +12,18 @@ export function Schema({template}: {template: string}) {
       'https://cdn.shopify.com/s/files/1/0629/5519/2520/files/products-slider-preview.jpg?v=1710957354',
     fields: [
       {
-        label: 'Heading',
-        name: 'heading',
-        component: 'text',
-        defaultValue: 'Product Recommendations Heading',
+        label: 'Recommendations Type',
+        name: 'intent',
+        component: 'radio-group',
+        direction: 'horizontal',
+        variant: 'radio',
+        description:
+          'Recommendations are managed through the Shopify Search & Discovery app.\n\nRelated: auto-generated and/or manual selection of products that are a good alternative to the product.\n\nComplementary: manual selection of products that are often bought together with the product.',
+        options: [
+          {label: 'Related', value: 'RELATED'},
+          {label: 'Complementary', value: 'COMPLEMENTARY'},
+        ],
+        defaultValue: 'RELATED',
       },
       {
         label: 'Number of Products',
@@ -23,6 +31,12 @@ export function Schema({template}: {template: string}) {
         component: 'number',
         description: 'Max of 10 recommendations can be fetched',
         defaultValue: 10,
+      },
+      {
+        label: 'Heading',
+        name: 'heading',
+        component: 'text',
+        defaultValue: 'Product Recommendations Heading',
       },
       {
         label: 'Footer Button',
@@ -68,7 +82,16 @@ export function Schema({template}: {template: string}) {
             name: 'enabledQuickShop',
             component: 'toggle',
             description:
-              'Quick shop is hidden on mobile and will only show if the product item has only one variant or multiple variants through a single option, e.g. "Size',
+              'Quick shop will only show if the product item has only one variant or multiple variants through a single option, e.g. "Size',
+            toggleLabels: {
+              true: 'On',
+              false: 'Off',
+            },
+          },
+          {
+            label: 'Hide Quick Shop on Mobile',
+            name: 'quickShopMobileHidden',
+            component: 'toggle',
             toggleLabels: {
               true: 'On',
               false: 'Off',
@@ -80,6 +103,7 @@ export function Schema({template}: {template: string}) {
           enabledColorSelector: false,
           enabledColorNameOnHover: false,
           enabledQuickShop: false,
+          quickShopMobileHidden: true,
         },
       },
       {
