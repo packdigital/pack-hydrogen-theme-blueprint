@@ -1,5 +1,4 @@
 import {Drawer} from '~/components';
-import {useSettings} from '~/hooks';
 
 import {CollectionFilterDropdown} from './CollectionFilterDropdown';
 import {CollectionFiltersSummary} from './CollectionFiltersSummary';
@@ -11,13 +10,9 @@ export function CollectionMobileFilters({
   setMobileFiltersOpen,
   swatchesMap,
 }: CollectionMobileFiltersProps) {
-  const {collection: collectionSettings} = useSettings();
   const {activeFilterValues, addFilter, clearFilters, filters, removeFilter} =
     useCollectionFilters();
 
-  const {optionsMaxCount = 6, showCount = true} = {
-    ...collectionSettings?.filters,
-  };
   const totalFilters = activeFilterValues.length;
 
   return (
@@ -60,26 +55,26 @@ export function CollectionMobileFilters({
         </div>
       </div>
 
-      <ul className="scrollbar-hide relative flex-1 overflow-y-auto">
-        {filters.map((filter, index) => {
-          if (!filter.values.length) return null;
+      <div className="flex-1 overflow-hidden">
+        <ul className="scrollbar-hide relative h-full overflow-y-auto">
+          {filters.map((filter, index) => {
+            if (!filter.values.length) return null;
 
-          return (
-            <li key={index}>
-              <CollectionFilterDropdown
-                activeFilterValues={activeFilterValues}
-                addFilter={addFilter}
-                defaultOpen
-                filter={filter}
-                optionsMaxCount={optionsMaxCount}
-                removeFilter={removeFilter}
-                showCount={showCount}
-                swatchesMap={swatchesMap}
-              />
-            </li>
-          );
-        })}
-      </ul>
+            return (
+              <li key={index}>
+                <CollectionFilterDropdown
+                  activeFilterValues={activeFilterValues}
+                  addFilter={addFilter}
+                  defaultOpen
+                  filter={filter}
+                  removeFilter={removeFilter}
+                  swatchesMap={swatchesMap}
+                />
+              </li>
+            );
+          })}
+        </ul>
+      </div>
     </Drawer>
   );
 }

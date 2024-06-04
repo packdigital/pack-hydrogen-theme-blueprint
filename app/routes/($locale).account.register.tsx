@@ -6,9 +6,12 @@ import type {
 } from '@shopify/remix-oxygen';
 import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 
-import {customerLoginRegisterAction} from '~/lib/customer';
+import {
+  customerLoginRegisterAction,
+  redirectLinkIfLoggedIn,
+} from '~/lib/customer';
 import {getAccountSeo} from '~/lib/utils';
-import {Register} from '~/components';
+import {GuestAccountLayout, Register} from '~/components';
 
 export async function action({request, context}: ActionFunctionArgs) {
   const {session} = context;
@@ -22,12 +25,8 @@ export async function action({request, context}: ActionFunctionArgs) {
 }
 
 export async function loader({context, params}: LoaderFunctionArgs) {
-  const customerAccessToken = await context.session.get('customerAccessToken');
-  if (customerAccessToken) {
-    return redirect(
-      params.locale ? `/${params.locale}/account/orders` : '/account/orders',
-    );
-  }
+  const redirectLink = await redirectLinkIfLoggedIn({context, params});
+  if (redirectLink) return redirect(redirectLink);
   const analytics = {pageType: AnalyticsPageType.customersRegister};
   const seo = await getAccountSeo(context, 'Register');
   return json({analytics, seo});
@@ -38,7 +37,11 @@ export const meta = ({data}: MetaArgs) => {
 };
 
 export default function RegisterRoute() {
-  return <Register />;
+  return (
+    <GuestAccountLayout>
+      <Register />
+    </GuestAccountLayout>
+  );
 }
 
 RegisterRoute.displayName = 'RegisterRoute';

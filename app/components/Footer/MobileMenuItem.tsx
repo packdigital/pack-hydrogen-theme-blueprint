@@ -1,4 +1,9 @@
-import {Disclosure, Transition} from '@headlessui/react';
+import {
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+  Transition,
+} from '@headlessui/react';
 
 import type {Settings} from '~/lib/types';
 import {Link, Svg} from '~/components';
@@ -12,12 +17,11 @@ export function MobileMenuItem({
     <Disclosure as="div" className="border-b border-b-gray">
       {({open}) => (
         <>
-          <Disclosure.Button
+          <DisclosureButton
             aria-label={
               open ? `Close ${item.title} menu` : `Open ${item.title} menu`
             }
             className="flex h-14 w-full items-center justify-between p-4"
-            type="button"
           >
             <h3 className="text-nav">{item.title}</h3>
 
@@ -27,7 +31,7 @@ export function MobileMenuItem({
               title="Chevron"
               viewBox="0 0 24 24"
             />
-          </Disclosure.Button>
+          </DisclosureButton>
 
           <Transition
             show={open}
@@ -38,7 +42,7 @@ export function MobileMenuItem({
             leaveFrom="transform scale-100 opacity-100"
             leaveTo="transform scale-97 opacity-0"
           >
-            <Disclosure.Panel
+            <DisclosurePanel
               as="ul"
               className="flex-col items-start gap-2 px-4 pb-6"
               static
@@ -59,7 +63,7 @@ export function MobileMenuItem({
                   </li>
                 );
               })}
-            </Disclosure.Panel>
+            </DisclosurePanel>
           </Transition>
         </>
       )}

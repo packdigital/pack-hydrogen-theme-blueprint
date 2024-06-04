@@ -92,7 +92,7 @@ export function Profile() {
             }`}
             type="submit"
           >
-            {status.started ? <LoadingDots color="white" /> : buttonText}
+            {status.started ? <LoadingDots /> : buttonText}
           </button>
         </div>
 

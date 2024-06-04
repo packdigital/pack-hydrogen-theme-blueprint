@@ -1,5 +1,11 @@
 import {Fragment} from 'react';
-import {Listbox, Transition} from '@headlessui/react';
+import {
+  Listbox,
+  ListboxButton,
+  ListboxOptions,
+  ListboxOption,
+  Transition,
+} from '@headlessui/react';
 
 import {Svg} from '~/components';
 
@@ -44,7 +50,7 @@ export function Select({
         } catch (error) {}
       }}
     >
-      <Listbox.Button
+      <ListboxButton
         aria-label="Open account menu"
         className={`btn-pill w-full justify-between gap-2 ${textClassName}`}
       >
@@ -66,7 +72,7 @@ export function Select({
           title="Chevron"
           viewBox="0 0 24 24"
         />
-      </Listbox.Button>
+      </ListboxButton>
 
       <Transition
         as={Fragment}
@@ -77,7 +83,7 @@ export function Select({
         leaveFrom="transform scale-100 opacity-100"
         leaveTo="transform scale-95 opacity-0"
       >
-        <Listbox.Options
+        <ListboxOptions
           className={`absolute left-1/2 z-10 flex max-h-72 w-full -translate-x-1/2 flex-col gap-0 overflow-hidden overflow-y-auto rounded-lg border border-gray bg-background py-2 text-base ${
             openFrom === 'top'
               ? 'bottom-[calc(100%+0.5rem)]'
@@ -87,24 +93,24 @@ export function Select({
           {options.map((option, index) => {
             if (!option.label) return null;
             return (
-              <Listbox.Option
+              <ListboxOption
                 key={index}
                 className={`w-full text-left text-text ${textClassName}`}
                 value={JSON.stringify(option)}
               >
-                {({active, selected}) => (
+                {({selected}) => (
                   <div
                     className={`cursor-pointer px-5 py-1.5 transition md:hover:bg-offWhite ${
-                      selected || active ? 'bg-lightGray' : ''
+                      selected ? 'bg-lightGray' : ''
                     }`}
                   >
                     {option.label}
                   </div>
                 )}
-              </Listbox.Option>
+              </ListboxOption>
             );
           })}
-        </Listbox.Options>
+        </ListboxOptions>
       </Transition>
 
       <input type="hidden" name={name} value={selectedOption?.value} />

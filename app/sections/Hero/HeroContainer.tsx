@@ -57,6 +57,7 @@ export function HeroContainer({children, cms}: HeroContainerProps) {
 
   return (
     <div className={`${fullBleedClass}`}>
+      {/* For dynamic media queries, it must be done outside of tailwind using a style block */}
       {(usesDesktopNativeAspectRatio || usesMobileNativeAspectRatio) && (
         <style>
           {`.${nativeAspectRatiosClass}{

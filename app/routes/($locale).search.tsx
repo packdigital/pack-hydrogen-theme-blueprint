@@ -38,7 +38,13 @@ export async function action({request, context}: ActionFunctionArgs) {
 
   const searchTerm = String(body?.get('q') || searchParams.get('q') || '');
 
-  if (!searchTerm)
+  const siteSettings = await getSiteSettings(context);
+  const characterMin = Number(
+    siteSettings?.data?.siteSettings?.settings?.search?.input?.characterMin ||
+      1,
+  );
+
+  if (!searchTerm || searchTerm.length < characterMin)
     return json({
       searchResults: {results: null, totalResults: 0},
       searchTerm,
@@ -166,6 +172,7 @@ export default function SearchRoute() {
         collection={collection}
         searchTerm={searchTerm}
         showHeading
+        title={collection.title}
       />
     </section>
   );

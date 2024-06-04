@@ -28,6 +28,7 @@ export interface CollectionSettings {
     showCount: boolean;
     sticky: boolean;
     optionsMaxCount: number;
+    showMoreCount: number;
   };
   pagination: {
     resultsPerPage: number;
@@ -40,6 +41,7 @@ export interface CollectionSettings {
     enabledColorSelector: boolean;
     enabledColorNameOnHover: boolean;
     enabledQuickShop: boolean;
+    quickShopMobileHidden: boolean;
     quickShopMultiText: string;
     quickShopSingleText: string;
   };
@@ -122,6 +124,14 @@ export default {
             'Initial number of options to show per filter. Remaining options will be hidden behind a "more" button',
           defaultValue: 6,
         },
+        {
+          label: 'Show More Count',
+          name: 'showMoreCount',
+          component: 'number',
+          description:
+            'Number of new options to show when clicking the "more" button',
+          defaultValue: 10,
+        },
       ],
     },
     {
@@ -193,7 +203,16 @@ export default {
           name: 'enabledQuickShop',
           component: 'toggle',
           description:
-            'Quick shop is hidden on mobile and will only show if the product item has only one variant or multiple variants through a single option, e.g. "Size"',
+            'Quick shop will only show if the product item has only one variant or multiple variants through a single option, e.g. "Size"',
+          toggleLabels: {
+            true: 'On',
+            false: 'Off',
+          },
+        },
+        {
+          label: 'Hide Quick Shop on Mobile',
+          name: 'quickShopMobileHidden',
+          component: 'toggle',
           toggleLabels: {
             true: 'On',
             false: 'Off',
@@ -216,6 +235,7 @@ export default {
         enabledColorSelector: true,
         enabledColorNameOnHover: false,
         enabledQuickShop: true,
+        quickShopMobileHidden: true,
         quickShopMultiText: '+ Quick Add {{option}}',
         quickShopSingleText: '+ Quick Add',
       },

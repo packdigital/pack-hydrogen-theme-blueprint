@@ -11,22 +11,27 @@ import {useProductRecommendations} from '~/hooks';
 
 import {Schema} from './ProductRecommendationsSlider.schema';
 
+type ProductRecommendationsSliderCms = ProductsSliderCms & {
+  intent: 'RELATED' | 'COMPLEMENTARY';
+  container: ContainerSettings;
+};
+
 export function ProductRecommendationsSlider({
   cms,
 }: {
-  cms: ProductsSliderCms & {container: ContainerSettings};
+  cms: ProductRecommendationsSliderCms;
 }) {
   const {ref, inView} = useInView({
     rootMargin: '200px',
     triggerOnce: true,
   });
 
-  const limit = (cms?.limit || 0) > 10 ? 10 : cms?.limit || 10;
+  const limit = (cms.limit || 0) > 10 ? 10 : cms.limit || 10;
 
   const {product} = useProduct();
   const productRecommendations = useProductRecommendations(
     product?.id || '',
-    'RELATED',
+    cms.intent || 'RELATED',
     inView,
   );
 

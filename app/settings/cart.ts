@@ -26,10 +26,12 @@ export interface CartSettings {
   };
   upsell: {
     enabled: boolean;
+    type: 'manual' | 'recommendations';
     message: string;
     products: {
       product: ProductCms;
     }[];
+    recsLimit: number;
   };
 }
 
@@ -178,7 +180,7 @@ export default {
       label: 'Upsell',
       name: 'upsell',
       component: 'group',
-      description: 'Enable, message, products',
+      description: 'Enable, upsell type, message, products',
       fields: [
         {
           label: 'Enabled',
@@ -190,12 +192,24 @@ export default {
           },
         },
         {
+          label: 'Upsell Type',
+          name: 'type',
+          component: 'radio-group',
+          direction: 'horizontal',
+          variant: 'radio',
+          description: `Manual: manually select products below.\n\nRecommendations: recommended products based on the latest item in the cart. Recommendations for a product are managed through Shopify's Search & Discovery app.`,
+          options: [
+            {label: 'Manual', value: 'manual'},
+            {label: 'Recommendations', value: 'recommendations'},
+          ],
+        },
+        {
           label: 'Message',
           name: 'message',
           component: 'text',
         },
         {
-          label: 'Products',
+          label: 'Manual Products',
           name: 'products',
           component: 'group-list',
           itemProps: {
@@ -209,11 +223,19 @@ export default {
             },
           ],
         },
+        {
+          label: 'Recommendations Limit',
+          name: 'recsLimit',
+          component: 'number',
+          description: 'Max of 10 recommendations can be fetched',
+        },
       ],
       defaultValue: {
         enabled: false,
+        type: 'manual',
         message: `Don't miss out on these items!`,
         products: [{handle: ''}, {handle: ''}],
+        recsLimit: 10,
       },
     },
   ],

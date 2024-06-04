@@ -50,19 +50,21 @@ export function OrderItem({item}: {item: OrderLineItem}) {
           {variant?.product ? (
             <Link
               aria-label={variant.product.title}
-              to={`/products/${variant.product.handle}`}
+              to={`/products/${variant?.product?.handle}`}
             >
-              <p className="break-words font-semibold">
+              <p className="whitespace-normal break-words font-semibold">
                 {variant.product.title}
               </p>
             </Link>
           ) : (
-            <p className="break-words font-semibold">{item.title}</p>
+            <p className="whitespace-normal break-words font-semibold">
+              {item.title}
+            </p>
           )}
 
           {/* mobile variant title */}
           {variant?.title !== 'Default Title' && (
-            <p className="text-xss md:hidden">{variant?.title}</p>
+            <p className="text-2xs md:hidden">{variant?.title}</p>
           )}
 
           {/* mobile price per qty and quantity */}

@@ -25,10 +25,13 @@ export interface ProductSettings {
     }[];
   };
   colors: {
-    swatches: {
+    swatchesGroups: {
       name: string;
-      color: string;
-      image: ImageCms;
+      swatches: {
+        name: string;
+        color: string;
+        image: ImageCms;
+      }[];
     }[];
   };
   quantitySelector: {
@@ -204,42 +207,66 @@ export default {
       description: 'Color swatches',
       fields: [
         {
-          label: 'Color Swatches',
-          name: 'swatches',
+          label: 'Color Swatches Groups',
+          name: 'swatchesGroups',
           component: 'group-list',
           itemProps: {
             label: '{{item.name}}',
           },
           defaultItem: {
-            name: 'New Color',
+            name: 'New Swatches Group',
           },
+          description: 'Color names should be unique across all groups',
           fields: [
             {
-              label: 'Color Name',
+              label: 'Group Name',
               name: 'name',
               component: 'text',
             },
             {
-              label: 'Color',
-              name: 'color',
-              component: 'color',
-            },
-            {
-              name: 'image',
-              label: 'Image',
-              component: 'image',
-              description:
-                'If provided, image will overlay the color.\nEnsure image is no more than 2KB in size',
+              label: 'Color Swatches',
+              name: 'swatches',
+              component: 'group-list',
+              itemProps: {
+                label: '{{item.name}}',
+              },
+              defaultItem: {
+                name: 'New Color',
+              },
+              fields: [
+                {
+                  label: 'Color Name',
+                  name: 'name',
+                  component: 'text',
+                },
+                {
+                  label: 'Color',
+                  name: 'color',
+                  component: 'color',
+                },
+                {
+                  name: 'image',
+                  label: 'Image',
+                  component: 'image',
+                  description:
+                    'If provided, image will overlay the color.\nEnsure image is no more than 2KB in size',
+                },
+              ],
             },
           ],
           defaultValue: [
             {
-              name: 'Black',
-              color: '#000000',
-            },
-            {
-              name: 'White',
-              color: '#FFFFFF',
+              name: 'Primary Colors',
+              swatches: [
+                {
+                  name: 'Black',
+                  color: '#000000',
+                },
+                {
+                  name: 'White',
+                  color: '#FFFFFF',
+                },
+              ],
             },
           ],
         },

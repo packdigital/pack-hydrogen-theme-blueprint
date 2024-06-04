@@ -68,7 +68,7 @@ export function LoginForm({setIsForgotPassword, settings}: LoginFormProps) {
 
           {status.started && (
             <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-              <LoadingDots color="white" />
+              <LoadingDots />
             </span>
           )}
         </button>

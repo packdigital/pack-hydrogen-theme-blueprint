@@ -24,7 +24,7 @@ export function QuantitySelector({
   quantity = 1,
 }: QuantitySelectorProps) {
   return (
-    <div className="flex w-[6.5rem] items-center justify-between">
+    <div className="flex w-full max-w-[6.5rem] items-center justify-between">
       <button
         aria-label={`Reduce quantity of ${productTitle} by 1 to ${
           quantity - 1

@@ -6,7 +6,8 @@ import type {
   CustomerAccessToken,
 } from '@shopify/hydrogen/storefront-api-types';
 
-import {useDataLayerClickEvents, useLocale} from '~/hooks';
+import {setCustomerAccessTokenInLocalStorage} from '~/lib/customer';
+import {useDataLayerClickEvents, useGlobal, useLocale} from '~/hooks';
 
 import {useFetcherStatus} from './useFetcherStatus';
 
@@ -18,7 +19,8 @@ interface FetcherData {
 }
 
 export function useCustomerLogIn() {
-  const fetcher = useFetcher({key: 'login'});
+  const {isPreviewModeEnabled, setPreviewModeCustomer} = useGlobal();
+  const fetcher = useFetcher();
   const {
     customerAccessToken,
     customer,
@@ -54,7 +56,23 @@ export function useCustomerLogIn() {
       buyerIdentityUpdate({
         customerAccessToken: customerAccessToken.accessToken,
       });
-      navigate(`${locale.pathPrefix}/account/orders`);
+      /* when in customizer, customer is managed through local storage and
+       * global state, instead of session cookies */
+      if (isPreviewModeEnabled) {
+        setPreviewModeCustomer(customer);
+        setCustomerAccessTokenInLocalStorage(customerAccessToken);
+      }
+      /* Redirect to checkout if there is a checkout_url query param */
+      const params = new URLSearchParams(window.location.search);
+      const redirect = params.get('checkout_url');
+      if (redirect) {
+        try {
+          const url = new URL(decodeURIComponent(redirect));
+          window.location.href = url.href;
+        } catch (error) {}
+      } else {
+        navigate(`${locale.pathPrefix}/account/orders`);
+      }
     }
   }, [buyerIdentityUpdate, !!customer]);
 

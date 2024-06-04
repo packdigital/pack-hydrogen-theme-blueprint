@@ -15,7 +15,6 @@ export function SearchItem({
   const firstVariant = product.variants.nodes[0];
   const {price, compareAtPrice} = useVariantPrices(firstVariant);
   const {sendClickProductItemEvent} = useDataLayerClickEvents();
-  const localized = null;
 
   const handleClick = useCallback(() => {
     sendClickProductItemEvent({
@@ -26,7 +25,7 @@ export function SearchItem({
       selectedVariant: firstVariant,
     });
     closeSearch();
-  }, [index, localized, product.id]);
+  }, [index, product.id]);
 
   const color = useMemo(() => {
     return firstVariant?.selectedOptions.find(
@@ -40,13 +39,11 @@ export function SearchItem({
     })?.previewImage;
   }, [product]);
 
-  const url = `/products/${product.handle}`;
-
   return (
     <Link
       aria-label={`View ${product.title}`}
       className="relative grid grid-cols-[5.5rem_1fr] items-center gap-3"
-      to={url}
+      to={`/products/${product.handle}`}
       onClick={handleClick}
     >
       <div

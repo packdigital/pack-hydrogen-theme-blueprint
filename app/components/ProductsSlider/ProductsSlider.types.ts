@@ -8,6 +8,7 @@ export interface ProductsSliderCms {
     enabledColorSelector: boolean;
     enabledQuickShop: boolean;
     enabledStarRating: boolean;
+    quickShopMobileHidden: boolean;
   };
   limit?: number;
   products: {
@@ -24,5 +25,4 @@ export interface ProductsSliderCms {
     slidesPerViewTablet: number;
     sliderStyle: string;
   };
-  textColor: string;
 }

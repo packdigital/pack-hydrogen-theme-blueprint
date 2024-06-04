@@ -11,10 +11,10 @@ import {
   createRequestHandler,
   getStorefrontHeaders,
 } from '@shopify/remix-oxygen';
-import { createPackClient, PackSession, handleRequest } from '@pack/hydrogen';
+import {createPackClient, PackSession, handleRequest} from '@pack/hydrogen';
 
-import { AppSession } from '~/lib/session.server';
-import { getLocaleFromRequest } from '~/lib/utils';
+import {AppSession} from '~/lib/session.server';
+import {getLocaleFromRequest} from '~/lib/utils';
 import defaultThemeData from '~/config/default-theme-data.json';
 
 /**
@@ -44,7 +44,7 @@ export default {
       /**
        * Create Hydrogen's Storefront client.
        */
-      const { storefront } = createStorefrontClient({
+      const {storefront} = createStorefrontClient({
         cache,
         waitUntil,
         i18n: getLocaleFromRequest(request),
@@ -78,6 +78,10 @@ export default {
         defaultThemeData,
       });
 
+      /**
+       * Create a Remix request handler and pass
+       * Hydrogen's Storefront client to the loader context.
+       */
       const response = await handleRequest(
         pack,
         request,
@@ -102,13 +106,13 @@ export default {
          * If the redirect doesn't exist, then `storefrontRedirect`
          * will pass through the 404 response.
          */
-        return storefrontRedirect({ request, response, storefront });
+        return storefrontRedirect({request, response, storefront});
       }
 
       return response;
     } catch (error) {
       console.error(error);
-      return new Response('An unexpected error occurred', { status: 500 });
+      return new Response('An unexpected error occurred', {status: 500});
     }
   },
 };

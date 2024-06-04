@@ -29,6 +29,7 @@ interface ProductItemProps {
   onClick?: () => void;
   priority?: boolean;
   product?: Product | null;
+  quickShopMobileHidden?: boolean;
   searchTerm?: string;
   swatchesMap?: Record<string, string>;
 }
@@ -44,6 +45,7 @@ export function ProductItem({
   onClick,
   priority,
   product: passedProduct,
+  quickShopMobileHidden,
   searchTerm,
   swatchesMap,
 }: ProductItemProps) {
@@ -166,6 +168,7 @@ export function ProductItem({
       {enabledQuickShop && (
         <QuickShop
           enabledColorSelector={enabledColorSelector}
+          quickShopMobileHidden={quickShopMobileHidden}
           selectedProduct={selectedProduct}
           selectedVariant={selectedVariant}
         />

@@ -3,12 +3,16 @@ import {useState, useEffect} from 'react';
 const SCRIPTS_LOADED: Record<string, Promise<boolean>> = {};
 
 export function loadScript(
-  attributes: Partial<HTMLScriptElement> & {id: string},
+  attributes: Partial<HTMLScriptElement> & {id: string} & Record<
+      `data-${string}`,
+      any
+    >,
   placement?: 'head' | 'body' | null,
 ): Promise<boolean> {
-  const {id, innerHTML, src, type, onload, onerror, ...additionalAttributes} = {
+  const {id, innerHTML, src, type, onload, onerror, ...rest} = {
     ...attributes,
   };
+  const additionalAttributes = {...rest} as Record<string, any>;
   const scriptId = id || src || innerHTML || '';
   const isScriptLoaded = SCRIPTS_LOADED[scriptId];
 

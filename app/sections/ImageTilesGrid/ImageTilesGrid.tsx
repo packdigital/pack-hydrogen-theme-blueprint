@@ -30,7 +30,7 @@ export function ImageTilesGrid({cms}: {cms: ImageTilesGridCms}) {
           {(!!heading || !!subheading) && (
             <div className="mb-6 px-4 text-center">
               {heading && <h2 className="text-h2">{heading}</h2>}
-              {subheading && <h4 className="text-h4 mt-2">{subheading}</h4>}
+              {subheading && <p className="text-h4 mt-2">{subheading}</p>}
             </div>
           )}
 

@@ -21,7 +21,7 @@ import {useLocale} from '~/hooks';
 
 export function useProductRecommendations(
   productId = '',
-  intent: ProductRecommendationIntent = 'RELATED',
+  intent: ProductRecommendationIntent = 'RELATED', // 'COMPLEMENTARY' | 'RELATED'
   fetchOnMount = true,
 ): Product[] | null {
   const {pathPrefix} = useLocale();

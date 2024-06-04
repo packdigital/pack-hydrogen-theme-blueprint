@@ -10,6 +10,7 @@ import {useLocale} from '~/hooks';
 /**
  * Get product grouping object by handle from cache
  * @param handle handle of product
+ * @param fetchOnMount - Determines when to fetch
  * @returns product grouping object
  * @example
  * ```js
@@ -19,6 +20,7 @@ import {useLocale} from '~/hooks';
 
 export function useProductGroupingByHandle(
   handle: string | undefined | null = '',
+  fetchOnMount = true,
 ): Group | null {
   const {pathPrefix} = useLocale();
   const fetcher = useFetcher<{products: Product[]}>({
@@ -48,9 +50,9 @@ export function useProductGroupingByHandle(
   const groupingIsReady = !!grouping?.isReady;
 
   useEffect(() => {
-    if (!groupings || !handle || groupingIsReady) return;
+    if (!fetchOnMount || !groupings || !handle || groupingIsReady) return;
     setGrouping(getProductGroupingByHandle(handle));
-  }, [groupings, handle]);
+  }, [fetchOnMount, groupings, handle]);
 
   useEffect(() => {
     if (!grouping?.allProducts || groupingIsReady) return;

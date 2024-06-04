@@ -2,15 +2,15 @@
 /// <reference types="@shopify/remix-oxygen" />
 /// <reference types="@shopify/oxygen-workers-types" />
 
-import type { Storefront } from '@shopify/hydrogen';
-import type { Pack } from '@pack/hydrogen';
-import type { HydrogenSession } from './server';
+import type {Storefront} from '@shopify/hydrogen';
+import type {Pack} from '@pack/hydrogen';
+import type {HydrogenSession} from './server';
 
 declare global {
   /**
    * A global `process` object is only available during build to access NODE_ENV.
    */
-  const process: { env: { NODE_ENV: 'production' | 'development' } };
+  const process: {env: {NODE_ENV: 'production' | 'development'}};
 
   /**
    * Declare expected Env parameter in fetch handler.
@@ -29,6 +29,7 @@ declare global {
     PACK_API_URL?: string;
     PRIVATE_SHOPIFY_CHECKOUT_DOMAIN?: string;
     PRIVATE_SHOPIFY_STORE_MULTIPASS_SECRET?: string;
+    PRIMARY_DOMAIN: string;
   }
 
   interface Window {

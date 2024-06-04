@@ -16,7 +16,7 @@ export function ProductsSlider({
   cms: ProductsSliderCms;
   products: Product[];
 }) {
-  const {button, heading, productItem, section, slider, textColor} = cms;
+  const {button, heading, productItem, section, slider} = cms;
   const swatchesMap = useColorSwatches();
 
   const [swiper, setSwiper] = useState<SwiperClass | null>(null);
@@ -40,9 +40,7 @@ export function ProductsSlider({
       }`}
     >
       <div className="m-auto flex flex-col items-center">
-        <h2 className="text-h2 px-4 text-center" style={{color: textColor}}>
-          {heading}
-        </h2>
+        <h2 className="text-h2 px-4 text-center">{heading}</h2>
 
         {products?.length > 0 && (
           <Swiper
@@ -105,6 +103,7 @@ export function ProductsSlider({
                       handle={product?.handle}
                       index={index}
                       product={hasFullProduct ? product : null}
+                      quickShopMobileHidden={productItem?.quickShopMobileHidden}
                       swatchesMap={swatchesMap}
                     />
                   </SwiperSlide>

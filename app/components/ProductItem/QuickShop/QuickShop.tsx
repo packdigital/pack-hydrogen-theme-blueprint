@@ -12,12 +12,14 @@ import {QuickShopOptions} from './QuickShopOptions';
 
 interface QuickShopProps {
   enabledColorSelector?: boolean;
+  quickShopMobileHidden?: boolean;
   selectedProduct: Product | null | undefined;
   selectedVariant: ProductVariant | null | undefined;
 }
 
 export function QuickShop({
   enabledColorSelector,
+  quickShopMobileHidden = true,
   selectedProduct,
   selectedVariant,
 }: QuickShopProps) {
@@ -49,7 +51,11 @@ export function QuickShop({
   const hasOneVariant = selectedProduct?.variants?.nodes?.length === 1;
 
   return qualifiesForQuickShop && selectedVariant ? (
-    <div className="mt-5 hidden opacity-0 transition md:block md:group-hover:opacity-100 lg:mt-6">
+    <div
+      className={`mt-5 transition md:block md:opacity-0 md:group-hover:opacity-100 lg:mt-6 ${
+        quickShopMobileHidden ? 'max-md:hidden' : ''
+      }`}
+    >
       {hasOneVariant && (
         <AddToCart
           addToCartText={quickShopSingleText}
@@ -61,6 +67,7 @@ export function QuickShop({
       {selectedProduct && !hasOneVariant && (
         <QuickShopOptions
           quickShopMultiText={quickShopMultiText}
+          quickShopMobileHidden={quickShopMobileHidden}
           selectedProduct={selectedProduct}
           selectedVariant={selectedVariant}
         />

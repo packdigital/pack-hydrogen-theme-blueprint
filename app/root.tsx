@@ -110,7 +110,7 @@ export async function loader({context, request}: LoaderFunctionArgs) {
     siteSettings,
     url: request.url,
   });
-  const ENV = await getEnvs(context);
+  const ENV = await getEnvs({context, request});
   const SITE_TITLE = siteSettings?.data?.siteSettings?.seo?.title || shop.name;
   const SITE_LOGO = shop.brand.logo?.image?.url;
 

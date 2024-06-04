@@ -1,6 +1,7 @@
 import {useCallback, useEffect, useRef, useState, useMemo} from 'react';
 import {useFetcher} from '@remix-run/react';
 import debounce from 'lodash/debounce';
+import type {Product} from '@shopify/hydrogen/storefront-api-types';
 
 import {useIsHydrated, useLocale, useSettings} from '~/hooks';
 
@@ -8,7 +9,7 @@ const PRODUCTS_LIMIT = 10;
 const COLLECTIONS_LIMIT = 10;
 
 interface ProductsFetcherData {
-  searchResults: {results: Record<string, any>[] | null; totalResults: number};
+  searchResults: {results: Product[] | null; totalResults: number};
   searchTerm: string;
 }
 interface CollectionsFetcherData {
@@ -74,7 +75,7 @@ export function useSearch() {
   }, []);
 
   const handleInput = useCallback(
-    (e) => {
+    (e: React.ChangeEvent<HTMLInputElement>) => {
       doCallbackWithDebounce();
       setRawTerm(e.target.value);
     },

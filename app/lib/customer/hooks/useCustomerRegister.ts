@@ -6,7 +6,8 @@ import type {
   CustomerAccessToken,
 } from '@shopify/hydrogen/storefront-api-types';
 
-import {useDataLayerClickEvents, useLocale} from '~/hooks';
+import {setCustomerAccessTokenInLocalStorage} from '~/lib/customer';
+import {useDataLayerClickEvents, useGlobal, useLocale} from '~/hooks';
 
 import {useFetcherStatus} from './useFetcherStatus';
 
@@ -19,6 +20,7 @@ interface FetcherData {
 }
 
 export function useCustomerRegister() {
+  const {isPreviewModeEnabled, setPreviewModeCustomer} = useGlobal();
   const fetcher = useFetcher({key: 'register'});
   const {
     customerAccessToken,
@@ -60,6 +62,12 @@ export function useCustomerRegister() {
       buyerIdentityUpdate({
         customerAccessToken: customerAccessToken.accessToken,
       });
+      /* when in customizer, customer is managed through local storage and
+       * global state, instead of session cookies */
+      if (isPreviewModeEnabled) {
+        setPreviewModeCustomer(customer);
+        setCustomerAccessTokenInLocalStorage(customerAccessToken);
+      }
       navigate(`${locale.pathPrefix}/account/orders`);
     }
   }, [buyerIdentityUpdate, !!customer]);

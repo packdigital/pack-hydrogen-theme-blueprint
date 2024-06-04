@@ -35,7 +35,7 @@ export function BlogCategories({cms}: {cms: BlogCategoriesCms}) {
 
   return (
     <Container container={cms.container}>
-      <div className="px-contained scrollbar-hide flex overflow-x-auto pt-4 xs:justify-center">
+      <div className="px-contained scrollbar-hide flex overflow-x-auto overflow-y-hidden pt-4 xs:justify-center">
         <ul className="flex justify-center gap-2 xs:flex-wrap">
           {['All', ...(categories || [])].map((item, index) => {
             const category = item.toLowerCase().trim();

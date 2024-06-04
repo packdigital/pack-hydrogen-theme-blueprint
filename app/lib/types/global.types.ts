@@ -1,3 +1,5 @@
+import type {Customer} from '@shopify/hydrogen-react/storefront-api-types';
+
 import type {Settings} from '~/lib/types';
 
 export type Action = {type: string; payload?: any};
@@ -19,6 +21,8 @@ export interface GlobalState {
   searchOpen: boolean;
   settings: Settings;
   emitter: any;
+  previewModeCustomer: Customer | null | undefined;
+  isPreviewModeEnabled: boolean;
 }
 
 export interface GlobalActions {
@@ -35,6 +39,7 @@ export interface GlobalActions {
   togglePromobar: (isOpen: boolean) => void;
   toggleIframesHidden: (isHidden: boolean) => void;
   closeAll: () => void;
+  setPreviewModeCustomer: (customer: Customer | null) => void;
 }
 
 export interface GlobalContext {

@@ -26,6 +26,7 @@ export const PRODUCT_GROUPINGS_QUERY = `#graphql
     groups(first: $first, after: $after) {
       pageInfo {
         hasNextPage
+        endCursor
       }
       edges {
         node {
