@@ -7,6 +7,7 @@ export * from './useCartAddDiscountUrl';
 export * from './useCollectionByHandle';
 export * from './useCountriesList';
 export * from './useCustomer';
+export * from './useGeoLocation';
 export * from './useGlobal';
 export * from './useIsHydrated';
 export * from './useLoadScript';

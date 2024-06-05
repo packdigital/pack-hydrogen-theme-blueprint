@@ -12,7 +12,7 @@ import {PreviewProvider} from '@pack/react';
 import {GlobalProvider, GroupingsProvider} from '~/contexts';
 import {CART_FRAGMENT} from '~/data/queries';
 import {Analytics, DataLayer, Layout} from '~/components';
-import {useLocale, useRootLoaderData} from '~/hooks';
+import {useLocale, useGeoLocation, useRootLoaderData} from '~/hooks';
 
 import {Favicon} from './Favicon';
 import {Scripts as RootScripts} from './Scripts';
