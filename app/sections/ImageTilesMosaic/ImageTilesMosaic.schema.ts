@@ -1,4 +1,11 @@
-import {BUTTONS, FLEX_POSITIONS, OBJECT_POSITIONS} from '~/settings/common';
+import {
+  BUTTONS,
+  COLORS,
+  CONTENT_ALIGN,
+  FLEX_POSITIONS,
+  HEADING_SIZES,
+  OBJECT_POSITIONS,
+} from '~/settings/common';
 import {containerSettings} from '~/settings/container';
 
 const ASPECT_RATIOS_MOBILE = [
@@ -195,6 +202,33 @@ export function Schema() {
       'https://cdn.shopify.com/s/files/1/0629/5519/2520/files/image-tiles-mosaic-preview.jpg?v=1714954409',
     fields: [
       {
+        label: 'Header Settings',
+        name: 'header',
+        component: 'group',
+        description: 'Heading, subheading, alignment',
+        fields: [
+          {
+            label: 'Heading',
+            name: 'heading',
+            component: 'text',
+          },
+          {
+            label: 'Subheading',
+            name: 'subheading',
+            component: 'text',
+          },
+          {
+            label: 'Alignment',
+            name: 'alignment',
+            component: 'radio-group',
+            direction: 'horizontal',
+            variant: 'radio',
+            options: CONTENT_ALIGN.mobile,
+            defaultValue: 'text-center items-center',
+          },
+        ],
+      },
+      {
         label: 'Primary Tile',
         name: 'primary',
         component: 'group',
@@ -312,42 +346,11 @@ export function Schema() {
         ],
       },
       {
-        label: 'Header Settings',
-        name: 'header',
-        component: 'group',
-        description: 'Heading, subheading, alignment',
-        fields: [
-          {
-            label: 'Heading',
-            name: 'heading',
-            component: 'text',
-          },
-          {
-            label: 'Subheading',
-            name: 'subheading',
-            component: 'text',
-          },
-          {
-            label: 'Alignment',
-            name: 'alignment',
-            component: 'radio-group',
-            direction: 'horizontal',
-            variant: 'radio',
-            options: [
-              {label: 'Left', value: 'text-left items-start'},
-              {label: 'Center', value: 'text-center items-center'},
-              {label: 'Right', value: 'text-right items-end'},
-            ],
-            defaultValue: 'text-center items-center',
-          },
-        ],
-      },
-      {
         label: 'Content Settings',
         name: 'content',
         component: 'group',
         description:
-          'Dark overlay, content position, content alignment, clickable image',
+          'Dark overlay, content position, content alignment, tile heading size, clickable image',
         fields: [
           {
             label: 'Dark Overlay',
@@ -376,6 +379,12 @@ export function Schema() {
             ],
           },
           {
+            label: 'Tile Heading Size',
+            name: 'tileHeadingSize',
+            component: 'select',
+            options: HEADING_SIZES,
+          },
+          {
             label: 'Clickable Image',
             name: 'clickableImage',
             component: 'toggle',
@@ -390,6 +399,7 @@ export function Schema() {
           darkOverlay: true,
           contentPosition: 'justify-start items-end',
           contentAlign: 'left',
+          tileHeadingSize: 'text-h4',
           clickableImage: true,
         },
       },
@@ -397,7 +407,8 @@ export function Schema() {
         label: 'Section Settings',
         name: 'section',
         component: 'group',
-        description: 'Display settings per viewport, full width',
+        description:
+          'Display settings per viewport, heading text color, full width',
         fields: [
           {
             label: 'Desktop Settings',
@@ -530,6 +541,13 @@ export function Schema() {
               gap: 'max-md:gap-2',
               fullBleed: false,
             },
+          },
+          {
+            label: 'Heading Text Color',
+            name: 'textColor',
+            component: 'select',
+            options: COLORS,
+            defaultValue: 'var(--text)',
           },
           {
             label: 'Full Width',

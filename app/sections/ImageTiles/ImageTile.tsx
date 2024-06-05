@@ -5,19 +5,45 @@ import {Image, Link} from '~/components';
 
 import type {ImageTileProps} from './ImageTiles.types';
 
+const ALIGNMENT_CLASSES: Record<string, {text: string; buttons: string}> = {
+  left: {
+    text: 'text-left items-start',
+    buttons: 'justify-start',
+  },
+  center: {
+    text: 'text-center items-center',
+    buttons: 'justify-center',
+  },
+  right: {
+    text: 'text-right items-end',
+    buttons: 'justify-end',
+  },
+};
+
 export function ImageTile({
   aspectRatio = 'aspect-[3/4]',
   content,
   tile,
 }: ImageTileProps) {
+  const {
+    contentPosition,
+    contentAlign = 'center',
+    tileHeadingSize = 'text-h3',
+    hideButtons,
+    clickableImage,
+    darkOverlay,
+    primaryButtonStyle,
+    secondaryButtonStyle,
+  } = {...content};
   const firstLink = tile.buttons?.[0]?.link;
   const secondLink = tile.buttons?.[1]?.link;
+  const alignment = ALIGNMENT_CLASSES[contentAlign];
 
   return (
     <Link
       aria-label={firstLink?.text}
       className="w-full"
-      to={content?.clickableImage ? firstLink?.url : ''}
+      to={clickableImage ? firstLink?.url : ''}
       newTab={firstLink?.newTab}
       type={firstLink?.type}
     >
@@ -35,19 +61,21 @@ export function ImageTile({
 
       <div
         className={`pointer-events-none absolute inset-0 flex size-full p-6 text-center md:p-8 ${
-          content?.darkOverlay ? 'bg-[rgba(0,0,0,0.2)]' : ''
-        } ${content?.contentPosition}`}
+          darkOverlay ? 'bg-[rgba(0,0,0,0.2)]' : ''
+        } ${contentPosition}`}
       >
-        <div className="pointer-events-auto flex flex-col gap-3 lg:gap-4">
+        <div
+          className={`pointer-events-auto flex w-full flex-col gap-3 lg:gap-4 ${alignment.text}`}
+        >
           {tile.heading && (
-            <h3 className="text-xl text-white sm:text-2xl">{tile.heading}</h3>
+            <h3 className={`text-white ${tileHeadingSize}`}>{tile.heading}</h3>
           )}
 
-          {!content?.hideButtons && (firstLink?.text || secondLink?.text) && (
-            <div className="flex flex-wrap justify-center gap-3">
+          {!hideButtons && (firstLink?.text || secondLink?.text) && (
+            <div className={`flex flex-wrap gap-3 ${alignment.buttons}`}>
               {tile.buttons?.slice(0, 2).map(({link}, index) => {
                 // hide second button if clickable image is enabled
-                if (content?.clickableImage && index > 0) return null;
+                if (clickableImage && index > 0) return null;
 
                 return link?.text ? (
                   <Fragment key={index}>
@@ -55,11 +83,9 @@ export function ImageTile({
                     <Link
                       aria-label={link.text}
                       className={`${
-                        index === 1
-                          ? content?.secondaryButtonStyle
-                          : content?.primaryButtonStyle
+                        index === 1 ? secondaryButtonStyle : primaryButtonStyle
                       }`}
-                      to={!content?.clickableImage ? link.url : ''}
+                      to={!clickableImage ? link.url : ''}
                       newTab={link.newTab}
                       type={link.type}
                     >

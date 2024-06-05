@@ -2,7 +2,6 @@ import {
   BUTTONS,
   COLORS,
   CONTENT_ALIGN,
-  FLEX_POSITIONS,
   CROP_POSITIONS,
   HEADING_SIZES,
 } from '~/settings/common';
@@ -11,10 +10,10 @@ import {containerSettings} from '~/settings/container';
 export function Schema() {
   return {
     category: 'Media',
-    label: 'Image Tiles Slider',
-    key: 'image-tiles',
+    label: 'Tiles Slider',
+    key: 'tiles-slider',
     previewSrc:
-      'https://cdn.shopify.com/s/files/1/0671/5074/1778/files/image-tiles-preview.jpg?v=1675730325',
+      'https://cdn.shopify.com/s/files/1/0629/5519/2520/files/tiles-slider-preview.jpg?v=1717550764',
     fields: [
       {
         label: 'Header Settings',
@@ -26,6 +25,7 @@ export function Schema() {
             label: 'Heading',
             name: 'heading',
             component: 'text',
+            defaultValue: 'Tiles Slider Heading',
           },
           {
             label: 'Subheading',
@@ -77,30 +77,14 @@ export function Schema() {
             component: 'text',
           },
           {
-            label: 'Buttons',
-            name: 'buttons',
-            component: 'group-list',
-            description:
-              'Max of 2 buttons. Second button will be hidden if image is set to be clickable',
-            itemProps: {
-              label: '{{item.link.text}}',
-            },
-            defaultItem: {
-              link: {
-                text: 'Shop Now',
-                url: '',
-              },
-            },
-            validate: {
-              maxItems: 2,
-            },
-            fields: [
-              {
-                label: 'Link',
-                name: 'link',
-                component: 'link',
-              },
-            ],
+            label: 'Description',
+            name: 'description',
+            component: 'textarea',
+          },
+          {
+            label: 'Link',
+            name: 'link',
+            component: 'link',
           },
         ],
         defaultItem: {
@@ -110,14 +94,12 @@ export function Schema() {
           },
           crop: 'center',
           heading: 'Headline',
-          buttons: [
-            {
-              link: {
-                text: 'Shop Now',
-                url: '',
-              },
-            },
-          ],
+          description:
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+          link: {
+            text: '',
+            url: '',
+          },
         },
         defaultValue: [
           {
@@ -127,14 +109,8 @@ export function Schema() {
             },
             crop: 'center',
             heading: 'Headline',
-            buttons: [
-              {
-                link: {
-                  text: 'Shop Now',
-                  url: '',
-                },
-              },
-            ],
+            description:
+              'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
           },
           {
             alt: 'Man in brown coat sitting down',
@@ -143,14 +119,8 @@ export function Schema() {
             },
             crop: 'center',
             heading: 'Headline',
-            buttons: [
-              {
-                link: {
-                  text: 'Shop Now',
-                  url: '',
-                },
-              },
-            ],
+            description:
+              'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
           },
           {
             alt: 'Man in gray sweater and tan coat',
@@ -159,105 +129,22 @@ export function Schema() {
             },
             crop: 'center',
             heading: 'Headline',
-            buttons: [
-              {
-                link: {
-                  text: 'Shop Now',
-                  url: '',
-                },
-              },
-            ],
+            description:
+              'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
           },
         ],
       },
       {
-        label: 'Content Settings',
-        name: 'content',
-        component: 'group',
-        description:
-          'Dark overlay, content position, content alignment, tile heading size, button styles, clickable image, hide buttons',
-        fields: [
-          {
-            label: 'Dark Overlay',
-            name: 'darkOverlay',
-            component: 'toggle',
-            description: 'Adds 20% opacity black overlay over media',
-            toggleLabels: {
-              true: 'On',
-              false: 'Off',
-            },
-          },
-          {
-            label: 'Content Position',
-            name: 'contentPosition',
-            component: 'select',
-            options: FLEX_POSITIONS.mobile,
-          },
-          {
-            label: 'Content Alignment',
-            name: 'contentAlign',
-            component: 'select',
-            options: [
-              {label: 'Left', value: 'left'},
-              {label: 'Center', value: 'center'},
-              {label: 'Right', value: 'right'},
-            ],
-          },
-          {
-            label: 'Tile Heading Size',
-            name: 'tileHeadingSize',
-            component: 'select',
-            options: HEADING_SIZES,
-          },
-          {
-            label: 'Primary Button Style',
-            name: 'primaryButtonStyle',
-            component: 'select',
-            options: BUTTONS,
-          },
-          {
-            label: 'Secondary Button Style',
-            name: 'secondaryButtonStyle',
-            component: 'select',
-            options: BUTTONS,
-          },
-          {
-            label: 'Clickable Image',
-            name: 'clickableImage',
-            component: 'toggle',
-            description: `Makes entire image clickable using primary button's link; hides any secondary button`,
-            toggleLabels: {
-              true: 'On',
-              false: 'Off',
-            },
-          },
-          {
-            label: 'Hide Buttons',
-            name: 'hideButtons',
-            component: 'toggle',
-            toggleLabels: {
-              true: 'On',
-              false: 'Off',
-            },
-          },
-        ],
-        defaultValue: {
-          darkOverlay: true,
-          contentPosition: 'justify-center items-end',
-          contentAlign: 'center',
-          tileHeadingSize: 'text-h3',
-          primaryButtonStyle: 'btn-inverse-light',
-          secondaryButtonStyle: 'btn-inverse-light',
-          clickableImage: true,
-          hideButtons: false,
-        },
+        label: 'Footer Button',
+        name: 'button',
+        component: 'link',
       },
       {
         label: 'Section Settings',
         name: 'section',
         component: 'group',
         description:
-          'Tiles per view, image aspect ratio, heading text color, full width',
+          'Tiles per view, image aspect ratio, text color, tile text alignment, tile heading size, footer button style, full width',
         fields: [
           {
             label: 'Tiles Per View (desktop)',
@@ -297,10 +184,28 @@ export function Schema() {
             ],
           },
           {
-            label: 'Heading Text Color',
+            label: 'Text Color',
             name: 'textColor',
             component: 'select',
             options: COLORS,
+          },
+          {
+            label: 'Tile Text Alignment',
+            name: 'textAlign',
+            component: 'select',
+            options: CONTENT_ALIGN.mobile,
+          },
+          {
+            label: 'Tile Heading Size',
+            name: 'tileHeadingSize',
+            component: 'select',
+            options: HEADING_SIZES,
+          },
+          {
+            label: 'Footer Button Style',
+            name: 'buttonStyle',
+            component: 'select',
+            options: BUTTONS,
           },
           {
             label: 'Full Width',
@@ -319,6 +224,9 @@ export function Schema() {
           tilesPerViewMobile: 1.4,
           aspectRatio: 'aspect-[3/4]',
           textColor: 'var(--text)',
+          textAlign: 'text-left items-start',
+          tileHeadingSize: 'text-h4',
+          buttonStyle: 'btn-primary',
           fullWidth: false,
         },
       },

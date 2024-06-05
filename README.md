@@ -51,10 +51,11 @@ Instead of hard-coding the whole experience and having to stay on top of every s
     - Product recommendations slider
     - Build Your Own Bundle (BYOB)
     - Form builder
-    - Tiles row
-    - Tiles grid
-    - Tiles mosaic
-    - Image tiles
+    - Images tiles slider
+    - Images tiles grid
+    - Images tiles mosaic
+    - Tiles slider
+    - Tiles stack
     - Text/markdown block
     - Image block
     - Video/video embed block

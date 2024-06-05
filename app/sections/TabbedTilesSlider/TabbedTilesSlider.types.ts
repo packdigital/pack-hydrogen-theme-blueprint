@@ -1,11 +1,22 @@
 import type {ContainerSettings} from '~/settings/container';
 import type {ImageCms, LinkCms} from '~/lib/types';
 
+interface Header {
+  heading: string;
+  subheading: string;
+  alignment: string;
+}
+
 interface Section {
+  tilesPerViewDesktop: number;
+  tilesPerViewTablet: number;
+  tilesPerViewMobile: number;
   aspectRatio: string;
   buttonStyle: string;
   fullWidth: boolean;
   textColor: string;
+  textAlign: string;
+  tileHeadingSize: string;
 }
 
 interface Tile {
@@ -19,15 +30,15 @@ interface Tab {
   tiles: Tile[];
 }
 
-export interface TabbedThreeTilesCms {
+export interface TabbedTilesSliderCms {
+  header: Header;
   button: LinkCms;
-  heading: string;
   section: Section;
   tabs: Tab[];
   container: ContainerSettings;
 }
 
-export interface TabbedThreeTilesTabsProps {
+export interface TabbedTilesSliderTabsProps {
   activeTabIndex: number;
   maxWidthClass: string;
   tabs: Tab[];

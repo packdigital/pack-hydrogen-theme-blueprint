@@ -1,6 +1,12 @@
 import type {ContainerSettings} from '~/settings/container';
 import type {Crop, ImageCms, LinkCms} from '~/lib/types';
 
+interface Header {
+  heading: string;
+  subheading: string;
+  alignment: string;
+}
+
 interface Content {
   clickableImage?: boolean;
   contentPosition?: string;
@@ -21,14 +27,17 @@ interface Tile {
 }
 
 interface Section {
-  aspectRatio?: string;
-  fullWidth?: boolean;
+  tilesPerViewDesktop: number;
+  tilesPerViewTablet: number;
+  tilesPerViewMobile: number;
+  aspectRatio: string;
+  textColor: string;
+  fullWidth: boolean;
 }
 
 export interface ImageTilesCms {
+  header: Header;
   content: Content;
-  heading?: string;
-  subheading?: string;
   section: Section;
   tiles: Tile[];
   container: ContainerSettings;

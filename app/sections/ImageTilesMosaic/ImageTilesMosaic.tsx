@@ -44,8 +44,18 @@ const GRID_LAYOUT_CONFIG: Record<string, Record<string, any>> = {
 
 export function ImageTilesMosaic({cms}: {cms: ImageTilesMosaicCms}) {
   const {content, grid, header, primary, section} = cms;
-  const {heading, subheading, alignment} = {...header};
-  const {desktop, tablet, mobile, fullWidth} = {...section};
+  const {
+    heading,
+    subheading,
+    alignment = 'text-center items-center',
+  } = {...header};
+  const {
+    desktop,
+    tablet,
+    mobile,
+    textColor = 'var(--text)',
+    fullWidth,
+  } = {...section};
 
   const gridConfig = GRID_LAYOUT_CONFIG[grid?.gridLayout || '1-wide-2-square'];
   const maxWidthClass = fullWidth
@@ -72,13 +82,12 @@ export function ImageTilesMosaic({cms}: {cms: ImageTilesMosaicCms}) {
     <Container container={cms.container}>
       <div className="py-contained flex flex-col gap-10">
         {(!!heading || !!subheading) && (
-          <div className="px-contained w-full">
-            <div
-              className={`mx-auto flex w-full flex-col ${gapClasses} ${maxWidthClass} ${alignment}`}
-            >
-              {heading && <h2 className="text-h2">{heading}</h2>}
-              {subheading && <p className="text-body">{subheading}</p>}
-            </div>
+          <div
+            className={`px-contained mx-auto mb-6 flex w-full flex-col gap-2 ${alignment} ${maxWidthClass}`}
+            style={{color: textColor}}
+          >
+            {heading && <h2 className="text-h2">{heading}</h2>}
+            {subheading && <span className="text-body-lg">{subheading}</span>}
           </div>
         )}
 

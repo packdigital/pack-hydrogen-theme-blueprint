@@ -650,7 +650,7 @@
                 "fullWidth": true,
                 "aboveTheFold": true
               },
-              "sectionName": "Homepage Homepage Hero",
+              "sectionName": "Homepage Hero",
               "sectionType": "local",
               "resourceType": "page",
               "hasReferences": false,
@@ -738,17 +738,24 @@
                   "tabName": "Tab Name"
                 }
               ],
-              "heading": "New Collections",
-              "section": {
-                "bgColor": "var(--background)",
-                "fullWidth": false,
-                "textColor": "var(--text)",
-                "aspectRatio": "aspect-[3/4]",
-                "buttonStyle": "btn-primary"
+              "header": {
+                "heading": "New Collections",
+                "alignment": "text-center items-center"
               },
-              "_template": "tabbed-three-tiles",
-              "id": "default-tabbed-three-tiles-data",
-              "sectionName": "Homepage Homepage Tabbed Three Tiles",
+              "section": {
+                "tilesPerViewDesktop": 3,
+                "tilesPerViewTablet": 2.4,
+                "tilesPerViewMobile": 1.4,
+                "aspectRatio": "aspect-[3/4]",
+                "textColor": "var(--text)",
+                "textAlign": "text-left items-start",
+                "tileHeadingSize": "text-h4",
+                "buttonStyle": "btn-primary",
+                "fullWidth": false
+             },
+              "_template": "tabbed-tiles-slider",
+              "id": "default-tabbed-tiles-slider-data",
+              "sectionName": "Homepage Tabbed Tiles Slider",
               "sectionType": "local",
               "resourceType": "page",
               "hasReferences": false,
@@ -796,7 +803,7 @@
                 "enabledColorSelector": true,
                 "enabledColorNameOnHover": false
               },
-              "sectionName": "Homepage Homepage Products Slider",
+              "sectionName": "Homepage Products Slider",
               "sectionType": "local",
               "resourceType": "page",
               "hasReferences": false,
@@ -857,7 +864,7 @@
               },
               "_template": "half-hero",
               "id": "default-half-hero-data-1",
-              "sectionName": "Homepage Homepage Half Hero",
+              "sectionName": "Homepage Half Hero",
               "sectionType": "local",
               "resourceType": "page",
               "hasReferences": false,
@@ -918,7 +925,7 @@
               },
               "_template": "half-hero",
               "id": "default-half-hero-data-2",
-              "sectionName": "Homepage Homepage Half Hero",
+              "sectionName": "Homepage Half Hero",
               "sectionType": "local",
               "resourceType": "page",
               "hasReferences": false,
@@ -1013,13 +1020,19 @@
                   "description": "Nulla vitae elit libero, a pharetra augue."
                 }
               ],
-              "section": {
-                "fullWidth": false,
-                "aspectRatio": "aspect-[5/4]"
+              "header": {
+                "alignment": "text-center items-center"
               },
-              "_template": "two-tiles",
-              "id": "default-two-tiles-data",
-              "sectionName": "Pack Hydrogen Storefront Homepage Two Tiles",
+              "section": {
+                "aspectRatio": "aspect-[5/4]",
+                "textColor": "var(--text)",
+                "textAlign": "text-left items-start",
+                "tileHeadingSize": "text-h4",
+                "fullWidth": false
+             },
+              "_template": "tiles-stack",
+              "id": "default-tiles-stack-data",
+              "sectionName": "Homepage Tiles Stack",
               "sectionType": "local",
               "resourceType": "page",
               "hasReferences": false,
@@ -1039,7 +1052,7 @@
               },
               "_template": "testimonial-slider",
               "id": "default-testimonial-slider-data",
-              "sectionName": "Homepage Homepage Testimonial Slider",
+              "sectionName": "Homepage Testimonial Slider",
               "sectionType": "local",
               "resourceType": "page",
               "hasReferences": false,
@@ -1121,19 +1134,28 @@
               ],
               "content": {
                 "darkOverlay": true,
-                "hideButtons": false,
-                "clickableImage": true,
                 "contentPosition": "justify-center items-end",
+                "contentAlign": "center",
+                "tileHeadingSize": "text-h3",
                 "primaryButtonStyle": "btn-inverse-light",
-                "secondaryButtonStyle": "btn-inverse-light"
+                "secondaryButtonStyle": "btn-inverse-light",
+                "clickableImage": true,
+                "hideButtons": false
+             },
+              "header": {
+                "alignment": "text-center items-center"
               },
               "section": {
-                "fullWidth": false,
-                "aspectRatio": "aspect-[3/4]"
-              },
+                "tilesPerViewDesktop": 3,
+                "tilesPerViewTablet": 2.4,
+                "tilesPerViewMobile": 1.4,
+                "aspectRatio": "aspect-[3/4]",
+                "textColor": "var(--text)",
+                "fullWidth": false
+             },
               "_template": "image-tiles",
               "id": "default-image-tiles-data",
-              "sectionName": "Homepage Homepage Image Tiles",
+              "sectionName": "Homepage Image Tiles",
               "sectionType": "local",
               "resourceType": "page",
               "hasReferences": false,

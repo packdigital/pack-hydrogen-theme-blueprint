@@ -53,7 +53,8 @@ interface Section {
   desktop: ViewportSettings;
   tablet: ViewportSettings;
   mobile: ViewportSettings;
-  fullWidth?: boolean;
+  textColor: string;
+  fullWidth: boolean;
 }
 
 export interface ImageTilesMosaicCms {

@@ -1,1 +1,0 @@
-export {TabbedThreeTiles} from './TabbedThreeTiles';

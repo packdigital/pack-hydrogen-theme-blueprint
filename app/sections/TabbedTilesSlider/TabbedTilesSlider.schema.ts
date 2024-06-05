@@ -1,4 +1,10 @@
-import {BUTTONS, COLORS, CROP_POSITIONS} from '~/settings/common';
+import {
+  BUTTONS,
+  COLORS,
+  CONTENT_ALIGN,
+  CROP_POSITIONS,
+  HEADING_SIZES,
+} from '~/settings/common';
 import {containerSettings} from '~/settings/container';
 
 const defaultTab = {
@@ -40,16 +46,38 @@ const defaultTab = {
 export function Schema() {
   return {
     category: 'Media',
-    label: 'Tabbed Three Tiles',
-    key: 'tabbed-three-tiles',
+    label: 'Tabbed Tiles Slider',
+    key: 'tabbed-tiles-slider',
     previewSrc:
-      'https://cdn.shopify.com/s/files/1/0671/5074/1778/files/tabbed-three-tiles-preview.jpg?v=1675730342',
+      'https://cdn.shopify.com/s/files/1/0629/5519/2520/files/tabbed-tiles-slider-preview.jpg?v=1717550761',
     fields: [
       {
-        label: 'Heading',
-        name: 'heading',
-        component: 'text',
-        defaultValue: 'Tabbed Three Tile Heading',
+        label: 'Header Settings',
+        name: 'header',
+        component: 'group',
+        description: 'Heading, subheading, alignment',
+        fields: [
+          {
+            label: 'Heading',
+            name: 'heading',
+            component: 'text',
+            defaultValue: 'Tabbed Tiles Slider Heading',
+          },
+          {
+            label: 'Subheading',
+            name: 'subheading',
+            component: 'text',
+          },
+          {
+            label: 'Alignment',
+            name: 'alignment',
+            component: 'radio-group',
+            direction: 'horizontal',
+            variant: 'radio',
+            options: CONTENT_ALIGN.mobile,
+            defaultValue: 'text-center items-center',
+          },
+        ],
       },
       {
         label: 'Tabs',
@@ -67,13 +95,11 @@ export function Schema() {
           {
             label: 'Tiles',
             name: 'tiles',
-            description: 'Max of 3 tiles',
             component: 'group-list',
+            description:
+              'Maximum number of slides is determined by tiles per view on desktop.\n\nThe slider is only used on mobile and tablet views.',
             itemProps: {
               label: '{{item.heading}}',
-            },
-            validate: {
-              maxItems: 3,
             },
             fields: [
               {
@@ -138,8 +164,30 @@ export function Schema() {
         label: 'Section Settings',
         name: 'section',
         component: 'group',
-        description: 'Image aspect ratio, text color, full width',
+        description:
+          'Tiles per view, image aspect ratio, text color, tile text alignment, tile heading size, footer button style, full width',
         fields: [
+          {
+            label: 'Tiles Per View (desktop)',
+            name: 'tilesPerViewDesktop',
+            description:
+              'On desktop, the slider will be inactive and instead show this number of slides in one view. This number should represent the maximum number of tiles, and all other tiles per view should be equal or less than this number.',
+            component: 'number',
+          },
+          {
+            label: 'Tiles Per View (tablet)',
+            name: 'tilesPerViewTablet',
+            component: 'number',
+            description:
+              'Save and refresh page to observe change\nTip: use decimals to show partial tiles',
+          },
+          {
+            label: 'Tiles Per View (mobile)',
+            name: 'tilesPerViewMobile',
+            component: 'number',
+            description:
+              'Save and refresh page to observe change\nTip: use decimals to show partial tiles',
+          },
           {
             label: 'Image Aspect Ratio',
             name: 'aspectRatio',
@@ -163,7 +211,19 @@ export function Schema() {
             options: COLORS,
           },
           {
-            label: 'Button Style',
+            label: 'Tile Text Alignment',
+            name: 'textAlign',
+            component: 'select',
+            options: CONTENT_ALIGN.mobile,
+          },
+          {
+            label: 'Tile Heading Size',
+            name: 'tileHeadingSize',
+            component: 'select',
+            options: HEADING_SIZES,
+          },
+          {
+            label: 'Footer Button Style',
             name: 'buttonStyle',
             component: 'select',
             options: BUTTONS,
@@ -180,8 +240,13 @@ export function Schema() {
           },
         ],
         defaultValue: {
+          tilesPerViewDesktop: 3,
+          tilesPerViewTablet: 2.4,
+          tilesPerViewMobile: 1.4,
           aspectRatio: 'aspect-[3/4]',
           textColor: 'var(--text)',
+          textAlign: 'text-left items-start',
+          tileHeadingSize: 'text-h4',
           buttonStyle: 'btn-primary',
           fullWidth: false,
         },
