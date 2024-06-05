@@ -112,6 +112,7 @@ const subscribeEmailOrPhoneToList = async ({
     await response.json();
 
   const isDataArray = Array.isArray(data);
+  /* Klaviyo API specific is success logic */
   const success = isDataArray && (!data[0] || !!data[0].id);
 
   return success

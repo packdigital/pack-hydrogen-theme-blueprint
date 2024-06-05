@@ -1,6 +1,12 @@
 import type {ContainerSettings} from '~/settings/container';
 import type {Crop, ImageCms, LinkCms} from '~/lib/types';
 
+interface Header {
+  heading: string;
+  subheading: string;
+  alignment: string;
+}
+
 interface Content {
   clickableImage?: boolean;
   contentPosition?: string;
@@ -27,17 +33,17 @@ interface ViewportSettings {
 }
 
 interface Section {
-  aspectRatio?: string;
+  aspectRatio: string;
   desktop: ViewportSettings;
   tablet: ViewportSettings;
   mobile: ViewportSettings;
+  textColor: string;
   fullWidth?: boolean;
 }
 
 export interface ImageTilesGridCms {
+  header: Header;
   content: Content;
-  heading?: string;
-  subheading?: string;
   section: Section;
   tiles: Tile[];
   container: ContainerSettings;

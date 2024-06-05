@@ -29,4 +29,4 @@ export * from './ReviewStars';
 export * from './Search';
 export * from './Select';
 export * from './Svg';
-export * from './ThreeTilesRow';
+export * from './TilesSlider';

@@ -1,0 +1,1 @@
+export {TabbedTilesSlider} from './TabbedTilesSlider';

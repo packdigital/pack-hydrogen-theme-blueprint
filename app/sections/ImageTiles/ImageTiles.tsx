@@ -9,25 +9,42 @@ import {ImageTile} from './ImageTile';
 import {Schema} from './ImageTiles.schema';
 
 export function ImageTiles({cms}: {cms: ImageTilesCms}) {
-  const {content, heading, subheading, section, tiles} = cms;
+  const {content, header, section, tiles} = cms;
+  const {
+    heading,
+    subheading,
+    alignment = 'text-center items-center',
+  } = {...header};
+  const {
+    tilesPerViewDesktop = 3,
+    tilesPerViewTablet = 2.4,
+    tilesPerViewMobile = 1.4,
+    aspectRatio = 'aspect-[3/4]',
+    textColor = 'var(--text)',
+    fullWidth,
+  } = {...section};
 
   const [swiper, setSwiper] = useState<SwiperClass | null>(null);
 
-  const maxWidthClass = section?.fullWidth
+  const maxWidthClass = fullWidth
     ? 'max-w-none'
     : 'max-w-[var(--content-max-width)]';
+  const maxSlides = Math.floor(tilesPerViewDesktop);
 
   return (
     <Container container={cms.container}>
       <div className="lg:px-contained py-4 md:py-6">
-        <div className={`mx-auto ${maxWidthClass}`}>
-          {(!!heading || !!subheading) && (
-            <div className="mb-6 px-4 text-center">
-              {heading && <h2 className="text-h2">{heading}</h2>}
-              {subheading && <p className="text-h4 mt-2">{subheading}</p>}
-            </div>
-          )}
+        {(!!heading || !!subheading) && (
+          <div
+            className={`max-lg:px-contained mx-auto mb-6 flex w-full flex-col gap-2 ${alignment} ${maxWidthClass}`}
+            style={{color: textColor}}
+          >
+            {heading && <h2 className="text-h2">{heading}</h2>}
+            {subheading && <span className="text-body-lg">{subheading}</span>}
+          </div>
+        )}
 
+        <div className={`mx-auto ${maxWidthClass}`}>
           {tiles?.length > 0 && (
             <>
               {/* mobile/tablet */}
@@ -37,11 +54,11 @@ export function ImageTiles({cms}: {cms: ImageTilesCms}) {
                   onSwiper={setSwiper}
                   slidesOffsetAfter={16}
                   slidesOffsetBefore={16}
-                  slidesPerView={1.4}
+                  slidesPerView={tilesPerViewMobile}
                   spaceBetween={16}
                   breakpoints={{
                     768: {
-                      slidesPerView: tiles.length < 3 ? 1.4 : 2.4,
+                      slidesPerView: tilesPerViewTablet,
                       slidesOffsetBefore: 32,
                       slidesOffsetAfter: 32,
                       spaceBetween: 20,
@@ -49,11 +66,11 @@ export function ImageTiles({cms}: {cms: ImageTilesCms}) {
                   }}
                 >
                   {swiper &&
-                    tiles.slice(0, 3).map((tile, index) => {
+                    tiles.slice(0, maxSlides).map((tile, index) => {
                       return (
                         <SwiperSlide key={index}>
                           <ImageTile
-                            aspectRatio={section?.aspectRatio}
+                            aspectRatio={aspectRatio}
                             content={content}
                             tile={tile}
                           />
@@ -71,15 +88,14 @@ export function ImageTiles({cms}: {cms: ImageTilesCms}) {
 
               {/* desktop */}
               <div
-                className={`hidden gap-x-5 lg:grid ${
-                  tiles.length < 3 ? 'grid-cols-2' : 'grid-cols-3'
-                }`}
+                className="hidden gap-x-5 lg:grid"
+                style={{gridTemplateColumns: `repeat(${maxSlides}, 1fr)`}}
               >
-                {tiles.slice(0, 3).map((tile, index) => {
+                {tiles.slice(0, maxSlides).map((tile, index) => {
                   return (
                     <div className="relative" key={index}>
                       <ImageTile
-                        aspectRatio={section?.aspectRatio}
+                        aspectRatio={aspectRatio}
                         content={content}
                         tile={tile}
                       />

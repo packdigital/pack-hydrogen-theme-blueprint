@@ -1,30 +1,55 @@
-import {BUTTONS, COLORS, CROP_POSITIONS} from '~/settings/common';
+import {
+  COLORS,
+  CONTENT_ALIGN,
+  CROP_POSITIONS,
+  HEADING_SIZES,
+} from '~/settings/common';
 import {containerSettings} from '~/settings/container';
 
 export function Schema() {
   return {
     category: 'Media',
-    label: 'Three Tiles',
-    key: 'three-tiles',
+    label: 'Tiles Stack',
+    key: 'tiles-stack',
     previewSrc:
-      'https://cdn.shopify.com/s/files/1/0671/5074/1778/files/three-tiles-preview.jpg?v=1675730352',
+      'https://cdn.shopify.com/s/files/1/0629/5519/2520/files/tiles-stack-preview.webp?v=1717550766',
     fields: [
       {
-        label: 'Heading',
-        name: 'heading',
-        component: 'text',
-        defaultValue: 'Three Tiles Heading',
+        label: 'Header Settings',
+        name: 'header',
+        component: 'group',
+        description: 'Heading, subheading, alignment',
+        fields: [
+          {
+            label: 'Heading',
+            name: 'heading',
+            component: 'text',
+            defaultValue: 'Tabbed Tiles Slider Heading',
+          },
+          {
+            label: 'Subheading',
+            name: 'subheading',
+            component: 'text',
+          },
+          {
+            label: 'Alignment',
+            name: 'alignment',
+            component: 'radio-group',
+            direction: 'horizontal',
+            variant: 'radio',
+            options: CONTENT_ALIGN.mobile,
+            defaultValue: 'text-center items-center',
+          },
+        ],
       },
       {
         label: 'Tiles',
         name: 'tiles',
-        description: 'Max of 3 tiles',
         component: 'group-list',
+        description:
+          'On tablet and desktop, tiles will be displayed in one row; on mobile, tiles will stack',
         itemProps: {
           label: '{{item.heading}}',
-        },
-        validate: {
-          maxItems: 3,
         },
         fields: [
           {
@@ -62,14 +87,13 @@ export function Schema() {
           },
         ],
         defaultItem: {
-          alt: 'Man in white and light tan outfit',
+          alt: 'Rack of green t-shirts',
           image: {
-            src: 'https://cdn.shopify.com/s/files/1/0671/5074/1778/files/man-in-white-and-light-tan-outfit.jpg?v=1672348139',
+            src: 'https://cdn.shopify.com/s/files/1/0671/5074/1778/files/keagan-henman-xPJYL0l5Ii8-unsplash_20_281_29.jpg?v=1672349016',
           },
           crop: 'center',
           heading: 'Headline',
-          description:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+          description: 'Nulla vitae elit libero, a pharetra augue.',
           link: {
             text: '',
             url: '',
@@ -77,47 +101,31 @@ export function Schema() {
         },
         defaultValue: [
           {
-            alt: 'Man in white and light tan outfit',
+            alt: 'Rack of green t-shirts',
             image: {
-              src: 'https://cdn.shopify.com/s/files/1/0671/5074/1778/files/man-in-white-and-light-tan-outfit.jpg?v=1672348139',
+              src: 'https://cdn.shopify.com/s/files/1/0671/5074/1778/files/keagan-henman-xPJYL0l5Ii8-unsplash_20_281_29.jpg?v=1672349016',
             },
             crop: 'center',
             heading: 'Headline',
-            description:
-              'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+            description: 'Nulla vitae elit libero, a pharetra augue.',
           },
           {
-            alt: 'Man in brown coat sitting down',
+            alt: 'Dark orange jacket on a hanger',
             image: {
-              src: 'https://cdn.shopify.com/s/files/1/0671/5074/1778/files/austin-wade-d2s8NQ6WD24-unsplash.jpg?v=1672348122',
+              src: 'https://cdn.shopify.com/s/files/1/0671/5074/1778/files/tobias-tullius-Fg15LdqpWrs-unsplash.jpg?v=1672348152',
             },
             crop: 'center',
             heading: 'Headline',
-            description:
-              'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-          },
-          {
-            alt: 'Man in gray sweater and tan coat',
-            image: {
-              src: 'https://cdn.shopify.com/s/files/1/0671/5074/1778/files/man-poses-in-light-colored-overcoat.jpg?v=1672348143',
-            },
-            crop: 'center',
-            heading: 'Headline',
-            description:
-              'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+            description: 'Nulla vitae elit libero, a pharetra augue.',
           },
         ],
-      },
-      {
-        label: 'Footer Button',
-        name: 'button',
-        component: 'link',
       },
       {
         label: 'Section Settings',
         name: 'section',
         component: 'group',
-        description: 'Image aspect ratio, text color, full width',
+        description:
+          'Image apsect ratio, text color, tile text alignment, tile heading size, full width',
         fields: [
           {
             label: 'Image Aspect Ratio',
@@ -142,10 +150,16 @@ export function Schema() {
             options: COLORS,
           },
           {
-            label: 'Button Style',
-            name: 'buttonStyle',
+            label: 'Tile Text Alignment',
+            name: 'textAlign',
             component: 'select',
-            options: BUTTONS,
+            options: CONTENT_ALIGN.mobile,
+          },
+          {
+            label: 'Tile Heading Size',
+            name: 'tileHeadingSize',
+            component: 'select',
+            options: HEADING_SIZES,
           },
           {
             label: 'Full Width',
@@ -159,9 +173,10 @@ export function Schema() {
           },
         ],
         defaultValue: {
-          aspectRatio: 'aspect-[3/4]',
+          aspectRatio: 'aspect-[5/4]',
           textColor: 'var(--text)',
-          buttonStyle: 'btn-primary',
+          textAlign: 'text-left items-start',
+          tileHeadingSize: 'text-h4',
           fullWidth: false,
         },
       },

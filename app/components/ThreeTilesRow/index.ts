@@ -1,1 +1,0 @@
-export {ThreeTilesRow} from './ThreeTilesRow';

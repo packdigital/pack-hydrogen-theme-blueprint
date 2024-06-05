@@ -1,13 +1,13 @@
 import {Tab, TabList} from '@headlessui/react';
 
-import type {TabbedThreeTilesTabsProps} from './TabbedThreeTiles.types';
+import type {TabbedTilesSliderTabsProps} from './TabbedTilesSlider.types';
 
-export function TabbedThreeTilesTabs({
+export function TabbedTilesSliderTabs({
   activeTabIndex,
   maxWidthClass,
   tabs,
   textColor,
-}: TabbedThreeTilesTabsProps) {
+}: TabbedTilesSliderTabsProps) {
   return (
     <div
       className={`mx-auto ${maxWidthClass} mb-6 flex justify-center border-b border-border md:mb-10`}
@@ -38,4 +38,4 @@ export function TabbedThreeTilesTabs({
   );
 }
 
-TabbedThreeTilesTabs.displayName = 'TabbedThreeTilesTabs';
+TabbedTilesSliderTabs.displayName = 'TabbedTilesSliderTabs';

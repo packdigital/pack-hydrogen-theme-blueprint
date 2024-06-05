@@ -1,4 +1,11 @@
-import {BUTTONS, FLEX_POSITIONS, CROP_POSITIONS} from '~/settings/common';
+import {
+  BUTTONS,
+  COLORS,
+  CONTENT_ALIGN,
+  CROP_POSITIONS,
+  FLEX_POSITIONS,
+  HEADING_SIZES,
+} from '~/settings/common';
 import {containerSettings} from '~/settings/container';
 
 const DEFAULT_IMAGE_ROW = [
@@ -61,14 +68,31 @@ export function Schema() {
       'https://cdn.shopify.com/s/files/1/0629/5519/2520/files/image-tiles-grid-preview.jpg?v=1707439989',
     fields: [
       {
-        label: 'Heading',
-        name: 'heading',
-        component: 'text',
-      },
-      {
-        label: 'Subheading',
-        name: 'subheading',
-        component: 'text',
+        label: 'Header Settings',
+        name: 'header',
+        component: 'group',
+        description: 'Heading, subheading, alignment',
+        fields: [
+          {
+            label: 'Heading',
+            name: 'heading',
+            component: 'text',
+          },
+          {
+            label: 'Subheading',
+            name: 'subheading',
+            component: 'text',
+          },
+          {
+            label: 'Alignment',
+            name: 'alignment',
+            component: 'radio-group',
+            direction: 'horizontal',
+            variant: 'radio',
+            options: CONTENT_ALIGN.mobile,
+            defaultValue: 'text-center items-center',
+          },
+        ],
       },
       {
         label: 'Tiles',
@@ -151,7 +175,7 @@ export function Schema() {
         name: 'content',
         component: 'group',
         description:
-          'Dark overlay, content position, button styles, clickable image, hide buttons',
+          'Dark overlay, content position, content alignment, tile heading size, button styles, clickable image, hide buttons',
         fields: [
           {
             label: 'Dark Overlay',
@@ -168,6 +192,22 @@ export function Schema() {
             name: 'contentPosition',
             component: 'select',
             options: FLEX_POSITIONS.mobile,
+          },
+          {
+            label: 'Content Alignment',
+            name: 'contentAlign',
+            component: 'select',
+            options: [
+              {label: 'Left', value: 'left'},
+              {label: 'Center', value: 'center'},
+              {label: 'Right', value: 'right'},
+            ],
+          },
+          {
+            label: 'Tile Heading Size',
+            name: 'tileHeadingSize',
+            component: 'select',
+            options: HEADING_SIZES,
           },
           {
             label: 'Primary Button Style',
@@ -204,6 +244,8 @@ export function Schema() {
         defaultValue: {
           darkOverlay: true,
           contentPosition: 'justify-center items-end',
+          contentAlign: 'center',
+          tileHeadingSize: 'text-h3',
           primaryButtonStyle: 'btn-inverse-light',
           secondaryButtonStyle: 'btn-inverse-light',
           clickableImage: true,
@@ -215,7 +257,7 @@ export function Schema() {
         name: 'section',
         component: 'group',
         description:
-          'Image aspect ratio, grid settings per viewport, full width',
+          'Image aspect ratio, grid settings per viewport, heading text color, full width',
         fields: [
           {
             label: 'Image Aspect Ratio',
@@ -405,6 +447,12 @@ export function Schema() {
             },
           },
           {
+            label: 'Heading Text Color',
+            name: 'textColor',
+            component: 'select',
+            options: COLORS,
+          },
+          {
             label: 'Full Width',
             name: 'fullWidth',
             component: 'toggle',
@@ -417,6 +465,7 @@ export function Schema() {
         ],
         defaultValue: {
           aspectRatio: 'aspect-[1/1]',
+          textColor: 'var(--text)',
           fullWidth: false,
         },
       },
