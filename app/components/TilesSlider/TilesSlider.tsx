@@ -5,12 +5,14 @@ import {Swiper, SwiperSlide} from 'swiper/react';
 
 import {Spinner} from '~/components';
 
-import {ThreeTilesTile} from './ThreeTilesTile';
+import {TilesSliderTile} from './TilesSliderTile';
 
-interface ThreeTilesRowProps {
+interface TilesSliderProps {
   aspectRatio: string;
   maxWidthClass: string;
   textColor: string;
+  textAlign?: string;
+  tileHeadingSize?: string;
   tiles: {
     image: {
       src: string;
@@ -18,14 +20,29 @@ interface ThreeTilesRowProps {
     title: string;
     url: string;
   }[];
+  tilesPerViewDesktop: number;
+  tilesPerViewTablet: number;
+  tilesPerViewMobile: number;
 }
 
-export const ThreeTilesRow = forwardRef(
+export const TilesSlider = forwardRef(
   (
-    {aspectRatio, maxWidthClass, textColor, tiles}: ThreeTilesRowProps,
+    {
+      aspectRatio,
+      maxWidthClass,
+      textAlign,
+      textColor,
+      tiles,
+      tileHeadingSize,
+      tilesPerViewDesktop = 3,
+      tilesPerViewTablet = 2.4,
+      tilesPerViewMobile = 1.4,
+    }: TilesSliderProps,
     ref: LegacyRef<HTMLDivElement> | undefined,
   ) => {
     const [swiper, setSwiper] = useState<SwiperClass | null>(null);
+
+    const maxSlides = Math.floor(tilesPerViewDesktop);
 
     return tiles?.length > 0 ? (
       <div className={`mx-auto ${maxWidthClass}`} ref={ref}>
@@ -36,11 +53,11 @@ export const ThreeTilesRow = forwardRef(
             onSwiper={setSwiper}
             slidesOffsetAfter={16}
             slidesOffsetBefore={16}
-            slidesPerView={1.4}
+            slidesPerView={tilesPerViewMobile}
             spaceBetween={16}
             breakpoints={{
               768: {
-                slidesPerView: 2.4,
+                slidesPerView: tilesPerViewTablet,
                 slidesOffsetBefore: 32,
                 slidesOffsetAfter: 32,
                 spaceBetween: 20,
@@ -48,13 +65,15 @@ export const ThreeTilesRow = forwardRef(
             }}
           >
             {swiper &&
-              tiles.slice(0, 3).map((item, index) => {
+              tiles.slice(0, maxSlides).map((item, index) => {
                 return (
                   <SwiperSlide className="w-full" key={index}>
-                    <ThreeTilesTile
+                    <TilesSliderTile
                       aspectRatio={aspectRatio}
                       item={item}
+                      textAlign={textAlign}
                       textColor={textColor}
+                      tileHeadingSize={tileHeadingSize}
                     />
                   </SwiperSlide>
                 );
@@ -69,14 +88,19 @@ export const ThreeTilesRow = forwardRef(
         </div>
 
         {/* desktop */}
-        <div className="hidden grid-cols-3 gap-x-5 lg:grid">
-          {tiles.slice(0, 3).map((item, blockIndex) => {
+        <div
+          className="hidden gap-x-5 lg:grid"
+          style={{gridTemplateColumns: `repeat(${maxSlides}, 1fr)`}}
+        >
+          {tiles.slice(0, maxSlides).map((item, blockIndex) => {
             return (
               <div key={blockIndex}>
-                <ThreeTilesTile
+                <TilesSliderTile
                   aspectRatio={aspectRatio}
                   item={item}
+                  textAlign={textAlign}
                   textColor={textColor}
+                  tileHeadingSize={tileHeadingSize}
                 />
               </div>
             );
@@ -87,4 +111,4 @@ export const ThreeTilesRow = forwardRef(
   },
 );
 
-ThreeTilesRow.displayName = 'ThreeTilesRow';
+TilesSlider.displayName = 'TilesSlider';

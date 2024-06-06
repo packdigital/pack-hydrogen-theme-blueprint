@@ -1,17 +1,21 @@
 import {getAspectRatioFromClass} from '~/lib/utils';
 import {Image, Link, Svg} from '~/components';
 
-interface ThreeTilesTileProps {
+interface TilesSliderTileProps {
   aspectRatio: string;
   item: Record<string, any>;
   textColor: string;
+  textAlign?: string;
+  tileHeadingSize?: string;
 }
 
-export function ThreeTilesTile({
+export function TilesSliderTile({
   aspectRatio = 'aspect-[3/4]',
   item,
-  textColor,
-}: ThreeTilesTileProps) {
+  textColor = 'var(--text)',
+  textAlign = 'text-left items-start',
+  tileHeadingSize = 'text-h4',
+}: TilesSliderTileProps) {
   return (
     <div className="flex w-full flex-col gap-4" style={{color: textColor}}>
       <Link
@@ -34,7 +38,7 @@ export function ThreeTilesTile({
         />
       </Link>
 
-      <div className="inset-0 flex size-full flex-col items-start gap-4">
+      <div className={`inset-0 flex size-full flex-col gap-4 ${textAlign}`}>
         <Link
           aria-label={item.heading}
           to={item.link?.url}
@@ -42,7 +46,7 @@ export function ThreeTilesTile({
           type={item.link?.type}
         >
           <div className="group flex">
-            <h2 className="text-xl lg:text-2xl">{item.heading}</h2>
+            <h2 className={`${tileHeadingSize}`}>{item.heading}</h2>
 
             <span className="ml-3 block max-w-5 transition-transform lg:group-hover:translate-x-2">
               <Svg
@@ -75,4 +79,4 @@ export function ThreeTilesTile({
   );
 }
 
-ThreeTilesTile.displayName = 'ThreeTilesTile';
+TilesSliderTile.displayName = 'TilesSliderTile';

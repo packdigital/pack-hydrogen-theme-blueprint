@@ -5,8 +5,22 @@ import {ImageTilesGridItem} from './ImageTilesGridItem';
 import {Schema} from './ImageTilesGrid.schema';
 
 export function ImageTilesGrid({cms}: {cms: ImageTilesGridCms}) {
-  const {content, heading, subheading, section, tiles} = cms;
-  const {aspectRatio, desktop, tablet, mobile, fullWidth} = {...section};
+  const {content, header, section, tiles} = cms;
+  const {
+    heading,
+    subheading,
+    alignment = 'text-center items-center',
+  } = {...header};
+  const {
+    aspectRatio,
+    desktop,
+    tablet,
+    mobile,
+    textColor = 'var(--text)',
+    fullWidth,
+  } = {
+    ...section,
+  };
 
   const maxWidthClass = fullWidth
     ? 'max-w-none'
@@ -26,14 +40,17 @@ export function ImageTilesGrid({cms}: {cms: ImageTilesGridCms}) {
   return (
     <Container container={cms.container}>
       <div className={`py-4 md:py-6 ${fullBleedClasses}`}>
-        <div className={`mx-auto ${maxWidthClass}`}>
-          {(!!heading || !!subheading) && (
-            <div className="mb-6 px-4 text-center">
-              {heading && <h2 className="text-h2">{heading}</h2>}
-              {subheading && <p className="text-h4 mt-2">{subheading}</p>}
-            </div>
-          )}
+        {(!!heading || !!subheading) && (
+          <div
+            className={`max-lg:px-contained mx-auto mb-6 flex w-full flex-col gap-2 ${alignment} ${maxWidthClass}`}
+            style={{color: textColor}}
+          >
+            {heading && <h2 className="text-h2">{heading}</h2>}
+            {subheading && <span className="text-body-lg">{subheading}</span>}
+          </div>
+        )}
 
+        <div className={`mx-auto ${maxWidthClass}`}>
           {tiles?.length > 0 && (
             <div className={`grid ${gridColsClasses} ${gapClasses}`}>
               {tiles.map((tile, index) => {

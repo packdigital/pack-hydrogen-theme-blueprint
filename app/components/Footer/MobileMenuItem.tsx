@@ -44,7 +44,7 @@ export function MobileMenuItem({
           >
             <DisclosurePanel
               as="ul"
-              className="flex-col items-start gap-2 px-4 pb-6"
+              className="flex flex-col items-start gap-2 px-4 pb-6"
               static
             >
               {item.links?.map(({link}, index) => {
