@@ -1,3 +1,4 @@
+import {COLORS} from '~/settings/common';
 import {containerSettings} from '~/settings/container';
 
 export function Schema() {
@@ -28,7 +29,7 @@ export function Schema() {
         label: 'Section Settings',
         name: 'section',
         component: 'group',
-        description: 'Max content width',
+        description: 'Max content width, text color',
         fields: [
           {
             label: 'Max Content Width',
@@ -57,6 +58,12 @@ export function Schema() {
               },
               {label: 'Full', value: 'max-w-full'},
             ],
+          },
+          {
+            label: 'Text Color',
+            name: 'textColor',
+            component: 'select',
+            options: COLORS,
           },
         ],
         defaultValue: {
