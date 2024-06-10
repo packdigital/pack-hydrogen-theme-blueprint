@@ -9,6 +9,7 @@ interface Section {
   hasXPadding?: boolean;
   hasYPadding?: boolean;
   maxWidth?: string;
+  textColor?: string;
 }
 
 export interface HtmlCms {
