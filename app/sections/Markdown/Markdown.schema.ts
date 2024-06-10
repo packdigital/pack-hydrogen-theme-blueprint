@@ -68,6 +68,7 @@ export function Schema() {
         ],
         defaultValue: {
           maxWidth: 'max-w-[60rem]',
+          textColor: 'var(--text)',
         },
       },
       containerSettings(),
