@@ -42,12 +42,16 @@ export const TilesSlider = forwardRef(
   ) => {
     const [swiper, setSwiper] = useState<SwiperClass | null>(null);
 
-    const maxSlides = Math.floor(tilesPerViewDesktop);
+    const isGridOnDesktop = tiles?.length === tilesPerViewDesktop;
 
     return tiles?.length > 0 ? (
       <div className={`mx-auto ${maxWidthClass}`} ref={ref}>
-        {/* mobile/tablet */}
-        <div className="relative lg:hidden">
+        {/* mobile/tablet/desktop */}
+        <div
+          className={`relative [&_.swiper]:overflow-visible ${
+            isGridOnDesktop ? 'lg:hidden' : ''
+          }`}
+        >
           <Swiper
             grabCursor
             onSwiper={setSwiper}
@@ -62,10 +66,16 @@ export const TilesSlider = forwardRef(
                 slidesOffsetAfter: 32,
                 spaceBetween: 20,
               },
+              1024: {
+                slidesPerView: tilesPerViewDesktop,
+                slidesOffsetBefore: 0,
+                slidesOffsetAfter: 0,
+                spaceBetween: 20,
+              },
             }}
           >
             {swiper &&
-              tiles.slice(0, maxSlides).map((item, index) => {
+              tiles.map((item, index) => {
                 return (
                   <SwiperSlide className="w-full" key={index}>
                     <TilesSliderTile
@@ -88,24 +98,26 @@ export const TilesSlider = forwardRef(
         </div>
 
         {/* desktop */}
-        <div
-          className="hidden gap-x-5 lg:grid"
-          style={{gridTemplateColumns: `repeat(${maxSlides}, 1fr)`}}
-        >
-          {tiles.slice(0, maxSlides).map((item, blockIndex) => {
-            return (
-              <div key={blockIndex}>
-                <TilesSliderTile
-                  aspectRatio={aspectRatio}
-                  item={item}
-                  textAlign={textAlign}
-                  textColor={textColor}
-                  tileHeadingSize={tileHeadingSize}
-                />
-              </div>
-            );
-          })}
-        </div>
+        {isGridOnDesktop && (
+          <div
+            className="hidden gap-x-5 lg:grid"
+            style={{gridTemplateColumns: `repeat(${tilesPerViewDesktop}, 1fr)`}}
+          >
+            {tiles.map((item, blockIndex) => {
+              return (
+                <div key={blockIndex}>
+                  <TilesSliderTile
+                    aspectRatio={aspectRatio}
+                    item={item}
+                    textAlign={textAlign}
+                    textColor={textColor}
+                    tileHeadingSize={tileHeadingSize}
+                  />
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     ) : null;
   },
