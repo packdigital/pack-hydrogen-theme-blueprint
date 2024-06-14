@@ -63,8 +63,11 @@ export const customerLoginRegisterAction = async ({
   };
   let action = null;
   try {
-    const body = await request.formData();
-    action = String(body.get('action') || '');
+    let body;
+    try {
+      body = await request.formData();
+    } catch (error) {}
+    action = String(body?.get('action') || '');
 
     if (!action) {
       data.errors = ['Missing action'];
@@ -82,8 +85,8 @@ export const customerLoginRegisterAction = async ({
         siteSettings?.data?.siteSettings?.settings?.account?.login
           ?.unidentifiedCustomerText;
 
-      const email = String(body.get('email') || '');
-      const password = String(body.get('password') || '');
+      const email = String(body?.get('email') || '');
+      const password = String(body?.get('password') || '');
 
       if (!email || !password) {
         data.loginFormErrors = ['Missing email or password.'];
@@ -118,11 +121,12 @@ export const customerLoginRegisterAction = async ({
 
     /* --- REGISTER --- */
     if (action === 'register') {
-      const firstName = String(body.get('firstName') || '');
-      const lastName = String(body.get('lastName') || '');
-      const email = String(body.get('email') || '');
-      const password = String(body.get('password') || '');
-      const passwordConfirm = String(body.get('passwordConfirm') || '');
+      const firstName = String(body?.get('firstName') || '');
+      const lastName = String(body?.get('lastName') || '');
+      const email = String(body?.get('email') || '');
+      const password = String(body?.get('password') || '');
+      const passwordConfirm = String(body?.get('passwordConfirm') || '');
+      const acceptsMarketing = Boolean(body?.get('acceptsMarketing'));
 
       if (password !== passwordConfirm) {
         data.registerFormErrors = ['Passwords do not match.'];
@@ -134,9 +138,14 @@ export const customerLoginRegisterAction = async ({
         return {data, status: 400};
       }
 
+      if (!firstName || !lastName) {
+        data.registerFormErrors = ['Missing first name or last name.'];
+        return {data, status: 400};
+      }
+
       const {errors: createErrors, response: createResponse} =
         await customerCreateClient(context, {
-          acceptsMarketing: false,
+          acceptsMarketing: acceptsMarketing || false,
           firstName,
           lastName,
           email,
@@ -164,7 +173,7 @@ export const customerLoginRegisterAction = async ({
 
     // /* --- PASSWORD RECOVER --- */
     if (action === 'recover-password') {
-      const email = String(body.get('email') || '');
+      const email = String(body?.get('email') || '');
 
       const {errors: recoverErrors, response: recoverResponse} =
         await passwordRecoverClient(context, {email});

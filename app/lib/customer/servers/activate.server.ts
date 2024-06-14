@@ -30,10 +30,13 @@ export const customerActivateAction = async ({
     formErrors: null,
   };
   try {
-    const body = await request.formData();
-    const customerId = String(body.get('customerId') || '');
-    const activationToken = String(body.get('activationToken') || '');
-    const password = String(body.get('password') || '');
+    let body;
+    try {
+      body = await request.formData();
+    } catch (error) {}
+    const customerId = String(body?.get('customerId') || '');
+    const activationToken = String(body?.get('activationToken') || '');
+    const password = String(body?.get('password') || '');
 
     const {errors} = await customerActivateClient(context, {
       customerId,
