@@ -78,7 +78,7 @@ export const links: LinksFunction = () => {
 };
 
 export async function loader({context, request}: LoaderFunctionArgs) {
-  const {storefront, session, pack} = context;
+  const {storefront, session, oxygen, pack} = context;
   const isPreviewModeEnabled = pack.isPreviewModeEnabled();
 
   const shop = await getShop(context);
@@ -123,6 +123,7 @@ export async function loader({context, request}: LoaderFunctionArgs) {
       ENV: {...ENV, SITE_LOGO, SITE_TITLE} as Record<string, string>,
       groupingsPromise,
       isPreviewModeEnabled,
+      oxygen,
       selectedLocale: storefront.i18n,
       seo,
       siteSettings,
