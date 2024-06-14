@@ -1,4 +1,5 @@
 import {containerSettings} from '~/settings/container';
+import {COLORS} from '~/settings/common';
 
 export function Schema() {
   return {
@@ -51,7 +52,7 @@ export function Schema() {
         label: 'Section Settings',
         name: 'section',
         component: 'group',
-        description: 'Padding, max content width',
+        description: 'Padding, max content width, text color',
         fields: [
           {
             label: 'Horizontal Padding',
@@ -101,11 +102,18 @@ export function Schema() {
               {label: 'Full', value: 'max-w-full'},
             ],
           },
+          {
+            label: 'Text Color',
+            name: 'textColor',
+            component: 'select',
+            options: COLORS,
+          },
         ],
         defaultValue: {
           hasXPadding: false,
           hasYPadding: false,
           maxWidth: 'max-w-full',
+          textColor: 'var(--text)',
         },
       },
       containerSettings(),

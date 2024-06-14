@@ -8,6 +8,7 @@ interface MarkdownCms {
   content: string;
   section: {
     maxWidth: string;
+    textColor: string;
   };
   container: ContainerSettings;
 }
@@ -18,7 +19,12 @@ export function Markdown({cms}: {cms: MarkdownCms}) {
   return (
     <Container container={cms.container}>
       <div className="px-contained py-contained">
-        <div className={`mx-auto ${section?.maxWidth}`}>
+        <div
+          className={`mx-auto ${section?.maxWidth}`}
+          style={{
+            color: section?.textColor,
+          }}
+        >
           <MarkdownComp centerAllText={centerAllText}>{content}</MarkdownComp>
         </div>
       </div>
