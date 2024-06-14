@@ -2,7 +2,7 @@ import {useCallback, useEffect, useRef, useState} from 'react';
 import {useFetcher} from '@remix-run/react';
 
 import {useDataLayerClickEvents, useLocale} from '~/hooks';
-import type {SubscribeEmailOrPhoneToListReturn} from '~/routes/($locale).api.marketing';
+import type {SubscribeEmailOrPhoneToListReturn} from '~/routes/($locale).api.klaviyo';
 
 /**
  * Submit email or phone number to marketing list
@@ -67,7 +67,7 @@ export function useMarketingListSubscribe({
           // default set up to only submit either email or phone at a time
           ...(email ? {email} : {phone, smsConsent}),
         },
-        {method: 'POST', action: `${pathPrefix}/api/marketing`},
+        {method: 'POST', action: `${pathPrefix}/api/klaviyo`},
       );
     },
     [isSubmitting, listId],
