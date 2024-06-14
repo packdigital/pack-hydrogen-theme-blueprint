@@ -75,8 +75,10 @@ export function Collection({
 
         {(enabledFilters || enabledSort) && (
           <div
-            className={`grid w-full grid-cols-2 justify-between md:gap-x-6 ${
+            className={`grid w-full md:gap-x-6 ${
               !showHeading ? 'md:mt-4' : ''
+            } ${
+              enabledFilters && enabledSort ? 'grid-cols-2 justify-between' : ''
             }`}
           >
             {enabledFilters && (
