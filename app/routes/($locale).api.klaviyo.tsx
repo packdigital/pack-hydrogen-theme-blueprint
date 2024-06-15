@@ -300,7 +300,7 @@ const subscribeEmailOrPhoneToList = async ({
         status: 400,
         isAlreadySubscribed: false,
         message: 'Something went wrong. Please try again later.',
-        error: `/api/marketing:subscribeEmailOrPhoneToList:error: ${
+        error: `/api/klaviyo:subscribeEmailOrPhoneToList:error: ${
           detail || 'Something went wrong'
         }\ndata: ${JSON.stringify(data)}`,
         email: email || null,
@@ -314,7 +314,7 @@ const subscribeEmailOrPhoneToList = async ({
       status: 500,
       isAlreadySubscribed: false,
       message: 'Something went wrong. Please try again later.',
-      error: `/api/marketing:subscribeEmailOrPhoneToList:error: ${error.message}`,
+      error: `/api/klaviyo:subscribeEmailOrPhoneToList:error: ${error.message}`,
       email: null,
       phone: null,
       submittedAt: new Date().toISOString(),
@@ -338,7 +338,7 @@ export async function action({request, context}: ActionFunctionArgs) {
 
   if (!marketingAction) {
     return json(
-      {error: `/api/marketing: Unsupported action \`${action}\``},
+      {error: `/api/klaviyo: Unsupported action \`${action}\``},
       {status: 400},
     );
   }
