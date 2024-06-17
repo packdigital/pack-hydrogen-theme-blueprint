@@ -60,7 +60,7 @@ const checkIfEmailIsInList = async ({
       error: null,
     };
   } catch (error) {
-    console.error('checkIfEmailIsInList:error', error.message);
+    console.error('/api/klaviyo: checkIfEmailIsInList:error', error.message);
     return {
       status: 404,
       isSubscribed: false,
@@ -126,7 +126,10 @@ const checkIfPhoneNumberIsInList = async ({
       error: null,
     };
   } catch (error) {
-    console.error('checkIfEmailIsInList:error', error.message);
+    console.error(
+      '/api/klaviyo: checkIfPhoneNumberIsInList:error',
+      error.message,
+    );
     return {
       status: 404,
       isSubscribed: false,
@@ -300,7 +303,7 @@ const subscribeEmailOrPhoneToList = async ({
         status: 400,
         isAlreadySubscribed: false,
         message: 'Something went wrong. Please try again later.',
-        error: `/api/klaviyo:subscribeEmailOrPhoneToList:error: ${
+        error: `/api/klaviyo: subscribeEmailOrPhoneToList:error: ${
           detail || 'Something went wrong'
         }\ndata: ${JSON.stringify(data)}`,
         email: email || null,
@@ -314,7 +317,7 @@ const subscribeEmailOrPhoneToList = async ({
       status: 500,
       isAlreadySubscribed: false,
       message: 'Something went wrong. Please try again later.',
-      error: `/api/klaviyo:subscribeEmailOrPhoneToList:error: ${error.message}`,
+      error: `/api/klaviyo: subscribeEmailOrPhoneToList:error: ${error.message}`,
       email: null,
       phone: null,
       submittedAt: new Date().toISOString(),
