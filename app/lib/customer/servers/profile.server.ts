@@ -38,7 +38,10 @@ export const customerUpdateProfileAction = async ({
     formErrors: null,
   };
   try {
-    const body = await request.formData();
+    let body;
+    try {
+      body = await request.formData();
+    } catch (error) {}
 
     let customerAccessToken = await context.session.get('customerAccessToken');
     /* in customizer, customer access token is stored in local storage, so it needs to be passed in */
@@ -56,10 +59,16 @@ export const customerUpdateProfileAction = async ({
       return {data, status: 401};
     }
 
-    const customer = {
-      firstName: body.get('firstName') || '',
-      lastName: body.get('lastName') || '',
-    };
+    const firstName = String(body?.get('firstName') || '');
+    const lastName = String(body?.get('lastName') || '');
+
+    if (!firstName || !lastName) {
+      data.errors = ['First name and last name are required'];
+      data.formErrors = ['First name and last name are required'];
+      return {data, status: 400};
+    }
+
+    const customer = {firstName, lastName} as Customer;
     const {errors, response} = await customerUpdateClient(context, {
       customerAccessToken,
       customer,

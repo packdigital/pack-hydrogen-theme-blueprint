@@ -33,7 +33,7 @@ export function TabbedTilesSlider({cms}: {cms: TabbedTilesSliderCms}) {
 
   return (
     <Container container={cms.container}>
-      <div className="lg:px-contained py-contained">
+      <div className="lg:px-contained py-contained overflow-x-clip">
         {(!!heading || !!subheading) && (
           <div
             className={`max-lg:px-contained mx-auto mb-6 flex w-full flex-col gap-2 md:mb-10 ${alignment} ${maxWidthClass}`}

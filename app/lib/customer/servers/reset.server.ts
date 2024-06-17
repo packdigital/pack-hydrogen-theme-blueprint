@@ -33,9 +33,12 @@ export const customerPasswordResetAction = async ({
     formErrors: null,
   };
   try {
-    const body = await request.formData();
-    const password = String(body.get('password' || ''));
-    const url = String(body.get('url') || '');
+    let body;
+    try {
+      body = await request.formData();
+    } catch (error) {}
+    const password = String(body?.get('password') || '');
+    const url = String(body?.get('url') || '');
 
     const {errors} = await passwordResetClient(context, {
       password,

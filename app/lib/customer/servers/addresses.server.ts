@@ -10,7 +10,8 @@ import {
 
 const ACTIONS = ['create-address', 'update-address', 'delete-address'];
 
-const getAddressFromBody = (body: FormData) => {
+const getAddressFromBody = (body?: FormData) => {
+  if (!body) return null;
   return {
     firstName: body.get('firstName') || '',
     lastName: body.get('lastName') || '',
@@ -109,12 +110,15 @@ export const customerAddressesAction = async ({
   };
   let action = null;
   try {
-    const body = await request.formData();
+    let body;
+    try {
+      body = await request.formData();
+    } catch (error) {}
 
     let customerAccessToken = await context.session.get('customerAccessToken');
     /* in customizer, customer access token is stored in local storage, so it needs to be passed */
     const previewModeCustomerAccessToken = String(
-      body.get('previewModeCustomerAccessToken') || '',
+      body?.get('previewModeCustomerAccessToken') || '',
     );
     if (previewModeCustomerAccessToken) {
       try {
@@ -127,7 +131,7 @@ export const customerAddressesAction = async ({
       return {data, status: 401};
     }
 
-    action = String(body.get('action') || '');
+    action = String(body?.get('action') || '');
 
     if (!action) {
       data.errors = ['Missing action'];
@@ -140,8 +144,13 @@ export const customerAddressesAction = async ({
 
     /* --- CREATE ADDRESS --- */
     if (action === 'create-address') {
-      const isDefault = body.get('isDefault') === 'true';
       const address = getAddressFromBody(body);
+      if (!address) {
+        data.formErrors = ['Missing address'];
+        return {data, status: 400};
+      }
+      const isDefault = body?.get('isDefault') === 'true';
+
       const {errors, response} = await addressCreateClient(context, {
         customerAccessToken,
         address,
@@ -164,9 +173,14 @@ export const customerAddressesAction = async ({
 
     /* --- UPDATE ADDRESS --- */
     if (action === 'update-address') {
-      const id = String(body.get('id') || '');
-      const isDefault = body.get('isDefault') === 'true';
       const address = getAddressFromBody(body);
+      if (!address) {
+        data.formErrors = ['Missing address'];
+        return {data, status: 400};
+      }
+      const id = String(body?.get('id') || '');
+      const isDefault = body?.get('isDefault') === 'true';
+
       const {errors, response} = await addressUpdateClient(context, {
         customerAccessToken,
         address,
@@ -190,7 +204,7 @@ export const customerAddressesAction = async ({
 
     /* --- DELETE ADDRESS --- */
     if (action === 'delete-address') {
-      const id = String(body.get('id') || '');
+      const id = String(body?.get('id') || '');
       const {errors, response} = await addressDeleteClient(context, {
         customerAccessToken,
         id,

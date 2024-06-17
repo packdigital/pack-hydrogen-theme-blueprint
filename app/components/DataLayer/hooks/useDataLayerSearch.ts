@@ -8,13 +8,10 @@ import type {
 import {pathWithoutLocalePrefix} from '~/lib/utils';
 import {useGlobal} from '~/hooks';
 
-import {mapProductItemProduct, mapProductItemVariant} from './utils';
+import {isElevar, mapProductItemProduct, mapProductItemVariant} from './utils';
 import type {UserProperties} from './useDataLayerInit';
 
 type SearchProduct = Product & {searchTerm: string};
-
-const isElevar =
-  typeof document !== 'undefined' && !!window.ENV?.PUBLIC_ELEVAR_SIGNING_KEY;
 
 export function useDataLayerSearch({
   cartReady,
@@ -153,9 +150,10 @@ export function useDataLayerSearch({
   // Trigger 'view_search_results' events after
   // new search drawer results and base data is ready
   useEffect(() => {
-    if (!searchResults || !userDataEventTriggered) return;
+    if (!searchResults || !userDataEventTriggered || !userProperties) return;
+    if (isElevar) userDataEvent({userProperties});
     viewSearchResultsEvent({results: searchResults, userProperties});
-  }, [searchResults, userDataEventTriggered]);
+  }, [searchResults, userDataEventTriggered, !!userProperties]);
 
   // Trigger 'select_item' after clicked search item and user event
   useEffect(() => {

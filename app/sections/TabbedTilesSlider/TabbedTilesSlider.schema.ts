@@ -96,8 +96,6 @@ export function Schema() {
             label: 'Tiles',
             name: 'tiles',
             component: 'group-list',
-            description:
-              'Maximum number of slides is determined by tiles per view on desktop.\n\nThe slider is only used on mobile and tablet views.',
             itemProps: {
               label: '{{item.heading}}',
             },
@@ -170,8 +168,7 @@ export function Schema() {
           {
             label: 'Tiles Per View (desktop)',
             name: 'tilesPerViewDesktop',
-            description:
-              'On desktop, the slider will be inactive and instead show this number of slides in one view. This number should represent the maximum number of tiles, and all other tiles per view should be equal or less than this number.',
+            description: 'Save and refresh page to observe change',
             component: 'number',
           },
           {

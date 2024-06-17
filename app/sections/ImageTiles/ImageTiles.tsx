@@ -29,11 +29,11 @@ export function ImageTiles({cms}: {cms: ImageTilesCms}) {
   const maxWidthClass = fullWidth
     ? 'max-w-none'
     : 'max-w-[var(--content-max-width)]';
-  const maxSlides = Math.floor(tilesPerViewDesktop);
+  const isGridOnDesktop = tiles?.length === tilesPerViewDesktop;
 
   return (
     <Container container={cms.container}>
-      <div className="lg:px-contained py-4 md:py-6">
+      <div className="lg:px-contained overflow-x-clip py-4 md:py-6">
         {(!!heading || !!subheading) && (
           <div
             className={`max-lg:px-contained mx-auto mb-6 flex w-full flex-col gap-2 ${alignment} ${maxWidthClass}`}
@@ -47,8 +47,12 @@ export function ImageTiles({cms}: {cms: ImageTilesCms}) {
         <div className={`mx-auto ${maxWidthClass}`}>
           {tiles?.length > 0 && (
             <>
-              {/* mobile/tablet */}
-              <div className="relative lg:hidden">
+              {/* mobile/tablet/desktop */}
+              <div
+                className={`relative [&_.swiper]:overflow-visible ${
+                  isGridOnDesktop ? 'lg:hidden' : ''
+                }`}
+              >
                 <Swiper
                   grabCursor
                   onSwiper={setSwiper}
@@ -63,10 +67,16 @@ export function ImageTiles({cms}: {cms: ImageTilesCms}) {
                       slidesOffsetAfter: 32,
                       spaceBetween: 20,
                     },
+                    1024: {
+                      slidesPerView: tilesPerViewDesktop,
+                      slidesOffsetBefore: 0,
+                      slidesOffsetAfter: 0,
+                      spaceBetween: 20,
+                    },
                   }}
                 >
                   {swiper &&
-                    tiles.slice(0, maxSlides).map((tile, index) => {
+                    tiles.map((tile, index) => {
                       return (
                         <SwiperSlide key={index}>
                           <ImageTile
@@ -87,22 +97,26 @@ export function ImageTiles({cms}: {cms: ImageTilesCms}) {
               </div>
 
               {/* desktop */}
-              <div
-                className="hidden gap-x-5 lg:grid"
-                style={{gridTemplateColumns: `repeat(${maxSlides}, 1fr)`}}
-              >
-                {tiles.slice(0, maxSlides).map((tile, index) => {
-                  return (
-                    <div className="relative" key={index}>
-                      <ImageTile
-                        aspectRatio={aspectRatio}
-                        content={content}
-                        tile={tile}
-                      />
-                    </div>
-                  );
-                })}
-              </div>
+              {isGridOnDesktop && (
+                <div
+                  className="hidden gap-x-5 lg:grid"
+                  style={{
+                    gridTemplateColumns: `repeat(${tilesPerViewDesktop}, 1fr)`,
+                  }}
+                >
+                  {tiles.map((tile, index) => {
+                    return (
+                      <div className="relative" key={index}>
+                        <ImageTile
+                          aspectRatio={aspectRatio}
+                          content={content}
+                          tile={tile}
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </>
           )}
         </div>

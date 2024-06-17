@@ -4,6 +4,9 @@
 
 import type {Storefront} from '@shopify/hydrogen';
 import type {Pack} from '@pack/hydrogen';
+
+import type {OxygenEnv} from '~/lib/utils';
+
 import type {HydrogenSession} from './server';
 
 declare global {
@@ -54,5 +57,6 @@ declare module '@shopify/remix-oxygen' {
     storefront: Storefront;
     env: Env;
     pack: Pack;
+    oxygen: OxygenEnv;
   }
 }

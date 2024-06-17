@@ -11,13 +11,10 @@ import type {
 import {pathWithoutLocalePrefix} from '~/lib/utils';
 import {useGlobal} from '~/hooks';
 
-import {mapCartLine} from './utils';
+import {isElevar, mapCartLine} from './utils';
 import type {UserProperties} from './useDataLayerInit';
 
 type DlCartLine = CartLine & {index?: number; list?: string};
-
-const isElevar =
-  typeof document !== 'undefined' && !!window.ENV?.PUBLIC_ELEVAR_SIGNING_KEY;
 
 export function useDataLayerCart({
   cartReady,
@@ -73,9 +70,13 @@ export function useDataLayerCart({
         '';
       const event = {
         event: 'dl_add_to_cart',
+        ...(isElevar
+          ? {cart_total: _cart?.cost?.totalAmount?.amount || '0.0'}
+          : null),
         user_properties: _userProperties,
         ecommerce: {
-          currencyCode: lines[0].cost?.totalAmount?.currencyCode,
+          currencyCode:
+            lines[0].cost?.totalAmount?.currencyCode || currencyCode,
           add: {
             actionField: {list},
             products: lines.map(mapCartLine(list)),
@@ -115,8 +116,12 @@ export function useDataLayerCart({
       const event = {
         event: 'dl_remove_from_cart',
         user_properties: _userProperties,
+        ...(isElevar
+          ? {cart_total: _cart?.cost?.totalAmount?.amount || '0.0'}
+          : null),
         ecommerce: {
-          currencyCode: lines[0].cost?.totalAmount?.currencyCode,
+          currencyCode:
+            lines[0].cost?.totalAmount?.currencyCode || currencyCode,
           remove: {
             actionField: {list},
             products: lines.map(mapCartLine(list)),
@@ -124,7 +129,7 @@ export function useDataLayerCart({
           ...(!isElevar
             ? {
                 cart_id: _cart?.id?.split('/').pop(),
-                cart_total: _cart?.cost?.totalAmount?.amount,
+                cart_total: _cart?.cost?.totalAmount?.amount || '0.0',
                 cart_count:
                   lines.reduce((acc, line) => acc + line.quantity, 0) || 0,
               }
@@ -139,11 +144,9 @@ export function useDataLayerCart({
   const viewCartEvent = useCallback(
     ({
       cart: _cart,
-      currencyCode: _currencyCode,
       userProperties: _userProperties,
     }: {
       cart: CartWithActions;
-      currencyCode?: CurrencyCode;
       userProperties: UserProperties;
     }) => {
       if (!_cart) return;
@@ -160,14 +163,14 @@ export function useDataLayerCart({
           ? {cart_total: _cart?.cost?.totalAmount?.amount || '0.0'}
           : null),
         ecommerce: {
-          currencyCode: _cart?.cost?.totalAmount?.currencyCode || _currencyCode,
+          currencyCode: _cart?.cost?.totalAmount?.currencyCode || currencyCode,
           actionField: {list: 'Shopping Cart'},
           [isElevar ? 'impressions' : 'products']:
             _cart?.lines?.slice(0, 12).map(mapCartLine(list)) || [],
           ...(!isElevar
             ? {
                 cart_id: _cart?.id?.split('/').pop(),
-                cart_total: _cart?.cost?.totalAmount?.amount,
+                cart_total: _cart?.cost?.totalAmount?.amount || '0.0',
                 cart_count:
                   _cart?.lines?.reduce(
                     (acc, line) => acc + (line?.quantity || 0),
@@ -203,6 +206,7 @@ export function useDataLayerCart({
   // Trigger 'view_cart' event when cart is opened
   useEffect(() => {
     if (!cartOpen || !currencyCode || !userDataEventTriggered) return;
+    if (isElevar) userDataEvent({userProperties});
     viewCartEvent({cart, userProperties});
   }, [cartOpen, !!currencyCode, userDataEventTriggered]);
 

@@ -5,6 +5,8 @@ import type {Customer} from '@shopify/hydrogen/storefront-api-types';
 import {pathWithoutLocalePrefix} from '~/lib/utils';
 import {useCustomer} from '~/hooks';
 
+import {returnKeyValueIfNotUndefined} from './utils';
+
 interface LoggedInUserProperties {
   visitor_type: string;
   user_consent: string;
@@ -78,26 +80,53 @@ export function useDataLayerInit({
         _userProperties = {
           visitor_type: 'logged_in',
           user_consent: '',
-          customer_address_1: _customer.defaultAddress?.address1 || '',
-          customer_address_2: _customer.defaultAddress?.address2 || '',
-          customer_city: _customer.defaultAddress?.city || '',
-          customer_country: _customer.defaultAddress?.country || '',
-          customer_country_code: _customer.defaultAddress?.countryCodeV2 || '',
+          ...returnKeyValueIfNotUndefined(
+            'customer_address_1',
+            _customer.defaultAddress?.address1,
+          ),
+          ...returnKeyValueIfNotUndefined(
+            'customer_address_2',
+            _customer.defaultAddress?.address2,
+          ),
+          ...returnKeyValueIfNotUndefined(
+            'customer_city',
+            _customer.defaultAddress?.city,
+          ),
+          ...returnKeyValueIfNotUndefined(
+            'customer_country',
+            _customer.defaultAddress?.country,
+          ),
+          ...returnKeyValueIfNotUndefined(
+            'customer_country_code',
+            _customer.defaultAddress?.countryCodeV2,
+          ),
+          ...returnKeyValueIfNotUndefined(
+            'customer_phone',
+            _customer.defaultAddress?.phone,
+          ),
+          ...returnKeyValueIfNotUndefined(
+            'customer_province_code',
+            _customer.defaultAddress?.provinceCode,
+          ),
+          ...returnKeyValueIfNotUndefined(
+            'customer_province',
+            _customer.defaultAddress?.province,
+          ),
+          ...returnKeyValueIfNotUndefined(
+            'customer_zip',
+            _customer.defaultAddress?.zip,
+          ),
+          customer_id: _customer.id?.split('/').pop() || '',
           customer_email: _customer.email || '',
           customer_first_name: _customer.firstName || '',
-          customer_id: _customer.id?.split('/').pop() || '',
           customer_last_name: _customer.lastName || '',
-          customer_order_count: `${_customer?.numberOfOrders || 0}`,
-          customer_phone: _customer.defaultAddress?.phone || '',
-          customer_province_code: _customer.defaultAddress?.provinceCode || '',
-          customer_province: _customer.defaultAddress?.province || '',
           customer_tags: _customer.tags?.join(', ') || '',
+          customer_order_count: `${_customer?.numberOfOrders || 0}`,
           customer_total_spent: _customer.orders?.edges
             ?.reduce((acc: number, {node}) => {
               return acc + parseFloat(node.totalPrice?.amount || '0');
             }, 0)
             .toFixed(2),
-          customer_zip: _customer.defaultAddress?.zip || '',
         };
       } else {
         _userProperties = {

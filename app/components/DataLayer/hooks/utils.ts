@@ -7,8 +7,13 @@ import type {
 
 const STOREFRONT_NAME =
   (typeof document !== 'undefined' && window.ENV?.SITE_TITLE) || 'Storefront';
-const isElevar =
+
+export const isElevar =
   typeof document !== 'undefined' && !!window.ENV?.PUBLIC_ELEVAR_SIGNING_KEY;
+
+export const returnKeyValueIfNotUndefined = (key: string, value?: any) => {
+  return value ? {[key]: value} : {};
+};
 
 export const mapProductItemProduct =
   (list = '') =>
@@ -27,11 +32,14 @@ export const mapProductItemProduct =
         list,
         product_id: product.id?.split('/').pop() || '',
         variant_id: firstVariant?.id?.split('/').pop() || '',
-        compare_at_price: firstVariant?.compareAtPrice?.amount || '',
-        collections: flattenConnection(product.collections),
+        compare_at_price:
+          firstVariant?.compareAtPrice?.amount || (isElevar ? 'undefined' : ''),
         image: product.featuredImage?.url || '',
         position: index + 1,
         url: `/products/${product.handle}`,
+        ...(!isElevar
+          ? {collections: flattenConnection(product.collections)}
+          : null),
       };
     } catch (error) {
       const message = error instanceof Error ? error.message : error;
@@ -57,13 +65,19 @@ export const mapProductItemVariant =
         list,
         product_id: variant.product.id?.split('/').pop() || '',
         variant_id: variant.id?.split('/').pop() || '',
-        compare_at_price: `${variant.compareAtPrice?.amount || ''}`,
-        collections: variant.product.collections
-          ? flattenConnection(variant.product.collections)
-          : [],
+        compare_at_price: `${
+          variant.compareAtPrice?.amount || (isElevar ? 'undefined' : '')
+        }`,
         image: variant.image?.url || '',
         position: (variant.index ?? index) + 1,
         url: `/products/${variant.product.handle}`,
+        ...(!isElevar
+          ? {
+              collections: variant.product.collections
+                ? flattenConnection(variant.product.collections)
+                : [],
+            }
+          : null),
       };
     } catch (error) {
       const message = error instanceof Error ? error.message : error;
@@ -94,12 +108,18 @@ export const mapProductPageVariant =
         list,
         product_id: variant.product.id?.split('/').pop() || '',
         variant_id: variant.id?.split('/').pop() || '',
-        compare_at_price: `${variant.compareAtPrice?.amount || ''}`,
-        collections: variant.product.collections
-          ? flattenConnection(variant.product.collections)
-          : [],
+        compare_at_price: `${
+          variant.compareAtPrice?.amount || (isElevar ? 'undefined' : '')
+        }`,
         image: variant.image?.url || '',
         url: `/products/${variant.product.handle}?${params}`,
+        ...(!isElevar
+          ? {
+              collections: variant.product.collections
+                ? flattenConnection(variant.product.collections)
+                : [],
+            }
+          : null),
       };
     } catch (error) {
       const message = error instanceof Error ? error.message : error;
@@ -127,12 +147,17 @@ export const mapCartLine =
         list,
         product_id: merchandise.product?.id?.split('/').pop() || '',
         variant_id: merchandise.id?.split('/').pop() || '',
-        compare_at_price: merchandise.compareAtPrice?.amount || '',
-        collections: merchandise.product?.collections
-          ? flattenConnection(merchandise.product.collections)
-          : [],
+        compare_at_price:
+          merchandise.compareAtPrice?.amount || (isElevar ? 'undefined' : ''),
         image: merchandise.image?.url || '',
         position: (line.index || index) + 1,
+        ...(!isElevar
+          ? {
+              collections: merchandise.product?.collections
+                ? flattenConnection(merchandise.product.collections)
+                : [],
+            }
+          : null),
       };
     } catch (error) {
       const message = error instanceof Error ? error.message : error;

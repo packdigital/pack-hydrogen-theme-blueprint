@@ -14,7 +14,7 @@ import {
 import {createPackClient, PackSession, handleRequest} from '@pack/hydrogen';
 
 import {AppSession} from '~/lib/session.server';
-import {getLocaleFromRequest} from '~/lib/utils';
+import {getLocaleFromRequest, getOxygenEnv} from '~/lib/utils';
 import defaultThemeData from '~/config/default-theme-data.json';
 
 /**
@@ -40,6 +40,11 @@ export default {
         AppSession.init(request, [env.SESSION_SECRET]),
         PackSession.init(request, [env.SESSION_SECRET]),
       ]);
+
+      /**
+       * Get Oxygen Environment data.
+       */
+      const oxygen = getOxygenEnv(request);
 
       /**
        * Create Hydrogen's Storefront client.
@@ -95,6 +100,7 @@ export default {
             storefront,
             cart,
             env,
+            oxygen,
             pack,
           }),
         }),

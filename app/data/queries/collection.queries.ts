@@ -76,6 +76,13 @@ const COLLECTION_FRAGMENT = `#graphql
     title
     description
     handle
+    image {
+      altText
+      height
+      id
+      url
+      width
+    }
     products(
       sortKey: $sortKey,
       reverse: $reverse,
