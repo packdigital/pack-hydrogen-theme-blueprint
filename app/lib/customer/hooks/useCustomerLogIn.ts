@@ -1,5 +1,5 @@
 import {useCallback, useEffect} from 'react';
-import {useFetcher, useNavigate} from '@remix-run/react';
+import {useFetcher, useNavigate, useRevalidator} from '@remix-run/react';
 import {useCart} from '@shopify/hydrogen-react';
 import type {
   Customer,
@@ -19,6 +19,7 @@ interface FetcherData {
 }
 
 export function useCustomerLogIn() {
+  const revalidator = useRevalidator();
   const {isPreviewModeEnabled, setPreviewModeCustomer} = useGlobal();
   const fetcher = useFetcher();
   const {
@@ -56,6 +57,7 @@ export function useCustomerLogIn() {
       buyerIdentityUpdate({
         customerAccessToken: customerAccessToken.accessToken,
       });
+      revalidator.revalidate();
       /* when in customizer, customer is managed through local storage and
        * global state, instead of session cookies */
       if (isPreviewModeEnabled) {
