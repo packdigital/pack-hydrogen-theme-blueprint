@@ -16,7 +16,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
   const {handle} = params;
   const {data} = await context.pack.query(ARTICLE_QUERY, {
     variables: {handle},
-    cache: context.storefront.CacheShort(),
+    cache: context.storefront.CacheLong(),
   });
 
   if (!data.article) throw new Response(null, {status: 404});
@@ -35,6 +35,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     analytics,
     article: data.article,
     seo,
+    url: request.url,
   });
 }
 

@@ -24,7 +24,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
   const {pack, storefront} = context;
   const pageData = await pack.query(COLLECTION_PAGE_QUERY, {
     variables: {handle},
-    cache: storefront.CacheShort(),
+    cache: storefront.CacheLong(),
   });
 
   const collectionPage = pageData.data?.collectionPage;
@@ -90,6 +90,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     collection,
     collectionPage,
     seo,
+    url: request.url,
   });
 }
 

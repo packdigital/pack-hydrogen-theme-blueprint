@@ -154,6 +154,7 @@ export async function loader({request, context}: LoaderFunctionArgs) {
     collection,
     searchTerm,
     seo,
+    url: request.url,
   });
 }
 

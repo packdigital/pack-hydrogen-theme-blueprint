@@ -7,7 +7,7 @@ import {getShop, getSiteSettings} from '~/lib/utils';
 import type {Page} from '~/lib/types';
 import {seoPayload} from '~/lib/seo.server';
 
-export async function loader({context}: LoaderFunctionArgs) {
+export async function loader({context, request}: LoaderFunctionArgs) {
   const shop = await getShop(context);
   const siteSettings = await getSiteSettings(context);
   const analytics = {pageType: AnalyticsPageType.cart};
@@ -16,7 +16,7 @@ export async function loader({context}: LoaderFunctionArgs) {
     shop,
     siteSettings,
   });
-  return json({analytics, seo});
+  return json({analytics, seo, url: request.url});
 }
 
 export const meta = ({data}: MetaArgs) => {

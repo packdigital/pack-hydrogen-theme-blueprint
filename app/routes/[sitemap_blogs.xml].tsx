@@ -17,7 +17,7 @@ export async function loader({context, request}: LoaderFunctionArgs) {
   }) => {
     const {data} = await context.pack.query(CMS_BLOGS_QUERY, {
       variables: {first, cursor},
-      cache: context.storefront.CacheShort(),
+      cache: context.storefront.CacheLong(),
     });
     const {endCursor, hasNextPage} = data.blogs.pageInfo;
     const compiledPages = [...(pages || []), ...data.blogs.nodes];

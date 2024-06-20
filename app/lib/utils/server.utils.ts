@@ -29,7 +29,7 @@ export const getSiteSettings = async (
   context: AppLoadContext,
 ): Promise<RootSiteSettings> => {
   return (await context.pack.query(SITE_SETTINGS_QUERY, {
-    cache: context.storefront.CacheShort(),
+    cache: context.storefront.CacheLong(),
   })) as RootSiteSettings;
 };
 
@@ -43,7 +43,7 @@ export const getProductGroupings = async (context: AppLoadContext) => {
   }): Promise<Group[] | null> => {
     const {data} = await context.pack.query(PRODUCT_GROUPINGS_QUERY, {
       variables: {first: 250, after: cursor},
-      cache: context.storefront.CacheShort(),
+      cache: context.storefront.CacheLong(),
     });
     if (!data?.groups) return null;
 

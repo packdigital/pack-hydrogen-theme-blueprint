@@ -64,6 +64,7 @@ export async function loader({request, context, params}: LoaderFunctionArgs) {
     return json({
       isLoggedIn: false,
       customer: null,
+      url: request.url,
     });
   }
 
@@ -76,6 +77,7 @@ export async function loader({request, context, params}: LoaderFunctionArgs) {
       {
         isLoggedIn: true,
         customer: data.customer,
+        url: request.url,
       },
       {
         headers: {
