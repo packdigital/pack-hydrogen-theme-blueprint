@@ -37,7 +37,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
   const {storefront} = context;
   const pageData = await context.pack.query(PRODUCT_PAGE_QUERY, {
     variables: {handle},
-    cache: context.storefront.CacheShort(),
+    cache: context.storefront.CacheLong(),
   });
 
   const productPage = pageData?.data?.productPage;
@@ -181,6 +181,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     selectedVariant,
     seo,
     storeDomain,
+    url: request.url,
   });
 }
 

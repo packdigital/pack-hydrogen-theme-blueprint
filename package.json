@@ -2,7 +2,7 @@
   "name": "hydrogen-starter",
   "private": true,
   "sideEffects": false,
-  "version": "1.5.2",
+  "version": "1.5.4",
   "scripts": {
     "dev": "shopify hydrogen dev --port 8080",
     "build": "shopify hydrogen build",
@@ -21,7 +21,7 @@
     "@headlessui/react": "^2.0.4",
     "@headlessui/tailwindcss": "^0.2.1",
     "@pack/client": "^1.0.0",
-    "@pack/hydrogen": "^1.0.0",
+    "@pack/hydrogen": "^1.0.1",
     "@pack/react": "^0.1.1",
     "@remix-run/react": "^2.9.2",
     "@shopify/cli": "^3.60.1",

@@ -11,11 +11,11 @@ import {seoPayload} from '~/lib/seo.server';
 
 export const headers = routeHeaders;
 
-export async function loader({context, params}: LoaderFunctionArgs) {
+export async function loader({context, params, request}: LoaderFunctionArgs) {
   const {handle} = params;
   const {data} = await context.pack.query(PAGE_QUERY, {
     variables: {handle},
-    cache: context.storefront.CacheShort(),
+    cache: context.storefront.CacheLong(),
   });
 
   if (!data?.page) throw new Response(null, {status: 404});
@@ -36,6 +36,7 @@ export async function loader({context, params}: LoaderFunctionArgs) {
     analytics,
     page: data.page,
     seo,
+    url: request.url,
   });
 }
 

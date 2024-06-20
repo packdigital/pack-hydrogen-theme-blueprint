@@ -14,7 +14,7 @@ export const headers = routeHeaders;
 export async function loader({context}: LoaderFunctionArgs) {
   const {data} = await context.pack.query(PAGE_QUERY, {
     variables: {handle: '/'},
-    cache: context.storefront.CacheShort(),
+    cache: context.storefront.CacheLong(),
   });
 
   if (!data?.page) throw new Response(null, {status: 404});

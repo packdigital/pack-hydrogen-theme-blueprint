@@ -29,7 +29,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
         handle,
         cursor,
       },
-      cache: context.storefront.CacheShort(),
+      cache: context.storefront.CacheLong(),
     });
     if (!data?.blog) throw new Response(null, {status: 404});
 
@@ -86,6 +86,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     analytics,
     blog: blogWithSortedArticles,
     seo,
+    url: request.url,
   });
 }
 
