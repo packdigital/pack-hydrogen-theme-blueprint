@@ -12,11 +12,6 @@ import {seoPayload} from '~/lib/seo.server';
 export const headers = routeHeaders;
 
 export async function loader({context, params}: LoaderFunctionArgs) {
-  const {data} = await context.pack.query(PAGE_QUERY, {
-    variables: {handle: '/'},
-    cache: context.storefront.CacheLong(),
-  });
-
   const {language, country} = context.storefront.i18n;
 
   if (
@@ -27,6 +22,11 @@ export async function loader({context, params}: LoaderFunctionArgs) {
     // the the locale param must be invalid, send to the 404 page
     throw new Response(null, {status: 404});
   }
+
+  const {data} = await context.pack.query(PAGE_QUERY, {
+    variables: {handle: '/'},
+    cache: context.storefront.CacheLong(),
+  });
 
   if (!data?.page) throw new Response(null, {status: 404});
 
