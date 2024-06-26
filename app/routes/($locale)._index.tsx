@@ -11,7 +11,18 @@ import {seoPayload} from '~/lib/seo.server';
 
 export const headers = routeHeaders;
 
-export async function loader({context}: LoaderFunctionArgs) {
+export async function loader({context, params}: LoaderFunctionArgs) {
+  const {language, country} = context.storefront.i18n;
+
+  if (
+    params.locale &&
+    params.locale.toLowerCase() !== `${language}-${country}`.toLowerCase()
+  ) {
+    // If the locale URL param is defined, yet we still are on `EN-US`
+    // the the locale param must be invalid, send to the 404 page
+    throw new Response(null, {status: 404});
+  }
+
   const {data} = await context.pack.query(PAGE_QUERY, {
     variables: {handle: '/'},
     cache: context.storefront.CacheLong(),
