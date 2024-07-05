@@ -1,4 +1,5 @@
 import {useRef} from 'react';
+import {useInView} from 'react-intersection-observer';
 import type {Video} from '@shopify/hydrogen/storefront-api-types';
 
 import {Badges, Image} from '~/components';
@@ -18,6 +19,10 @@ export function ProductItemMedia({
   selectedProduct,
   selectedVariant,
 }: ProductItemMediaProps) {
+  const {ref: inViewRef, inView} = useInView({
+    rootMargin: '200px',
+    triggerOnce: true,
+  });
   const hoverVideoRef = useRef<HTMLVideoElement>(null);
 
   const {primaryMedia, hoverMedia} = useProductItemMedia({
@@ -47,6 +52,7 @@ export function ProductItemMedia({
         if (hoverMedia?.mediaContentType !== 'VIDEO') return;
         hoverVideoRef.current?.pause();
       }}
+      ref={inViewRef}
     >
       {primaryMedia && (
         <div
@@ -72,7 +78,7 @@ export function ProductItemMedia({
         </div>
       )}
 
-      {hoverMedia && (
+      {inView && hoverMedia && (
         <div className="hidden opacity-0 transition duration-300 md:block md:group-hover/media:opacity-100">
           {hoverMedia.mediaContentType === 'VIDEO' ? (
             <ProductItemVideo
