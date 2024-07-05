@@ -48,6 +48,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
 
   // set selected options from the query string
   searchParams.forEach((value, name) => {
+    if (name === 'variant') return;
     selectedOptions.push({name, value});
   });
 
