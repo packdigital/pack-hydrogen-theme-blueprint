@@ -36,17 +36,22 @@ export function useSearch() {
 
   useEffect(() => {
     if (!isHydrated) return;
-    productsFetcher.submit(
-      {q: searchTerm, count: PRODUCTS_LIMIT},
-      {method: 'POST', action: `${locale.pathPrefix}/search`},
-    );
+    const searchParams = new URLSearchParams({
+      q: searchTerm,
+      count: PRODUCTS_LIMIT.toString(),
+    });
+    productsFetcher.load(`${locale.pathPrefix}/search?${searchParams}`);
   }, [searchTerm]);
 
   useEffect(() => {
     if (!isHydrated || !collectionsEnabled) return;
-    collectionsFetcher.submit(
-      {q: searchTerm, limit: COLLECTIONS_LIMIT, type: 'COLLECTION'},
-      {method: 'POST', action: `${locale.pathPrefix}/api/predictive-search`},
+    const searchParams = new URLSearchParams({
+      q: searchTerm,
+      limit: COLLECTIONS_LIMIT.toString(),
+      type: 'COLLECTION',
+    });
+    collectionsFetcher.load(
+      `${locale.pathPrefix}/api/predictive-search?${searchParams}`,
     );
   }, [collectionsEnabled, searchTerm]);
 

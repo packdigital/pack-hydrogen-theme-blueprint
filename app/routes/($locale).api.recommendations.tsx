@@ -1,28 +1,20 @@
 import {json} from '@shopify/remix-oxygen';
-import type {ActionFunctionArgs} from '@shopify/remix-oxygen';
+import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 
 import {PRODUCT_RECOMMENDATIONS_QUERY} from '~/data/queries';
 
 // docs: https://shopify.dev/docs/api/storefront/latest/queries/productRecommendations
 
-export async function action({request, context}: ActionFunctionArgs) {
+export async function loader({request, context}: LoaderFunctionArgs) {
   const {storefront} = context;
   const url = new URL(request.url);
   const searchParams = new URLSearchParams(url.search);
-  let body;
-  try {
-    body = await request.formData();
-  } catch (error) {}
-  const productId = String(
-    body?.get('productId') || searchParams.get('productId') || '',
-  );
-  const intent = String(
-    body?.get('intent') || searchParams.get('intent') || 'RELATED',
-  );
+  const productId = String(searchParams.get('productId') || '');
+  const intent = String(searchParams.get('intent') || 'RELATED');
 
   if (!productId)
     return json(
-      {products: null, errors: ['Missing product productId']},
+      {products: null, errors: ['Missing product `productId` parameter']},
       {status: 500},
     );
 

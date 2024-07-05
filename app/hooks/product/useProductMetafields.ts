@@ -40,10 +40,11 @@ export function useProductMetafields(
 
   useEffect(() => {
     if (!fetchOnMount || !handle || !metafieldQueries?.length) return;
-    fetcher.submit(
-      {handle, metafieldQueries: metafieldQueriesString},
-      {method: 'POST', action: `${pathPrefix}/api/product`},
-    );
+    const searchParams = new URLSearchParams({
+      handle,
+      metafieldQueries: metafieldQueriesString,
+    });
+    fetcher.load(`${pathPrefix}/api/product?${searchParams}`);
   }, [fetchOnMount, handle, metafieldQueriesString]);
 
   return metafields || null;

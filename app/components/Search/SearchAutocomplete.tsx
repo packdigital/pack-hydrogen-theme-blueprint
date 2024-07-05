@@ -25,10 +25,12 @@ export function SearchAutocomplete({
 
   useEffect(() => {
     if (!isHydrated) return;
-    fetcher.submit(
-      {q: searchTerm, limit, type: 'QUERY'},
-      {method: 'POST', action: `${locale.pathPrefix}/api/predictive-search`},
-    );
+    const searchParams = new URLSearchParams({
+      q: searchTerm,
+      limit: limit?.toString(),
+      type: 'QUERY',
+    });
+    fetcher.load(`${locale.pathPrefix}/api/predictive-search?${searchParams}`);
   }, [searchTerm]);
 
   const autocompleteResults = fetcher?.data?.searchResults?.results?.[0]?.items;

@@ -37,10 +37,8 @@ export function useProductRecommendations(
       fetcher.data?.productRecommendations
     )
       return;
-    fetcher.submit(
-      {productId, intent},
-      {method: 'POST', action: `${pathPrefix}/api/recommendations`},
-    );
+    const searchParams = new URLSearchParams({productId, intent});
+    fetcher.load(`${pathPrefix}/api/recommendations?${searchParams}`);
   }, [fetchOnMount, productId, intent]);
 
   return fetcher.data?.productRecommendations || null;

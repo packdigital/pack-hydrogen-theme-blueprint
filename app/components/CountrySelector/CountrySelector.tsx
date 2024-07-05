@@ -57,9 +57,9 @@ export function CountrySelector() {
         countryLocale.pathPrefix,
       );
       buyerIdentityUpdate({countryCode: countryLocale.country});
-      redirectFetcher.submit(
-        {to: countryUrlPath},
-        {method: 'POST', action: `${selectedLocalePrefix}/api/redirect`},
+      const searchParams = new URLSearchParams({to: countryUrlPath});
+      redirectFetcher.load(
+        `${selectedLocalePrefix}/api/redirect?${searchParams}`,
       );
     },
     [buyerIdentityUpdate, countries, pathname, search, selectedLocalePrefix],
@@ -67,10 +67,7 @@ export function CountrySelector() {
 
   useEffect(() => {
     if (!inView) return;
-    localizationFetcher.submit(null, {
-      method: 'POST',
-      action: '/api/countries',
-    });
+    localizationFetcher.load('/api/countries');
   }, [inView]);
 
   useEffect(() => {

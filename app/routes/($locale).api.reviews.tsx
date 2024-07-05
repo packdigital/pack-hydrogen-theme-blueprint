@@ -1,5 +1,5 @@
-import {json, redirect} from '@shopify/remix-oxygen';
-import type {ActionFunctionArgs} from '@shopify/remix-oxygen';
+import {json} from '@shopify/remix-oxygen';
+import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 
 /*
  * example api call to third party; repurpose as needed
@@ -24,12 +24,10 @@ const getProductReviewAggregate = async ({
   return response.json();
 };
 
-export async function action({request, context}: ActionFunctionArgs) {
-  let body;
-  try {
-    body = await request.formData();
-  } catch (error) {}
-  const action = String(body?.get('action') || '');
+export async function loader({request, context}: LoaderFunctionArgs) {
+  const url = new URL(request.url);
+  const searchParams = new URLSearchParams(url.search);
+  const action = String(searchParams.get('action') || '');
 
   const actions: Record<string, any> = {
     getProductReviewAggregate,
@@ -37,21 +35,25 @@ export async function action({request, context}: ActionFunctionArgs) {
   const reviewsAction = actions[action];
 
   if (!reviewsAction) {
-    return json({error: '/api/reviews: Unsupported action'}, {status: 400});
-  }
-
-  const productId = String(body?.get('productId') || '');
-  const env = context.env as Record<string, any>;
-  const platformKey = env.PRIVATE_EXAMPLE_PLATFORM_KEY; // replace with actual env key
-
-  if (!productId) {
     return json(
-      {error: '/api/reviews: Missing productId in request'},
+      {error: `/api/reviews: Unsupported action \`${action}\``},
       {status: 400},
     );
   }
 
-  const data = await reviewsAction({productId, platformKey, body});
+  const productId = String(searchParams.get('productId') || '');
+
+  if (!productId) {
+    return json(
+      {error: '/api/reviews: Missing `productId` parameter'},
+      {status: 400},
+    );
+  }
+
+  const env = context.env as Record<string, any>;
+  const platformKey = env.PRIVATE_EXAMPLE_PLATFORM_KEY; // replace with actual env key
+
+  const data = await reviewsAction({productId, platformKey});
 
   if (!data || data.error) {
     return json(

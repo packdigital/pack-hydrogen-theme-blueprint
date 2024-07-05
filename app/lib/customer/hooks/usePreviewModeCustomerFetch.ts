@@ -18,10 +18,10 @@ export function usePreviewModeCustomerFetch(fetchDependency: any) {
   useEffect(() => {
     if (isPreviewModeEnabled && fetchDependency) {
       const customerAccessToken = getCustomerAccessTokenFromLocalStorage();
-      fetcher.submit(
-        {customerAccessToken: JSON.stringify(customerAccessToken)},
-        {method: 'POST', action: `${pathPrefix}/account`},
-      );
+      const searchParams = new URLSearchParams({
+        customerAccessToken: JSON.stringify(customerAccessToken),
+      });
+      fetcher.load(`${pathPrefix}/api/customer?${searchParams}`);
     }
   }, [JSON.stringify(fetchDependency)]);
 

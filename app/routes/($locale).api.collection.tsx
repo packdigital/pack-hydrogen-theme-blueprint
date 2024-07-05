@@ -1,5 +1,5 @@
 import {json} from '@shopify/remix-oxygen';
-import type {ActionFunctionArgs} from '@shopify/remix-oxygen';
+import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import {getPaginationVariables} from '@shopify/hydrogen';
 import type {ProductCollectionSortKeys} from '@shopify/hydrogen/storefront-api-types';
 
@@ -9,20 +9,17 @@ import {routeHeaders} from '~/data/cache';
 
 export const headers = routeHeaders;
 
-export async function action({context, request}: ActionFunctionArgs) {
+export async function loader({context, request}: LoaderFunctionArgs) {
   const {storefront} = context;
   const siteSettings = await getSiteSettings(context);
+  const url = new URL(request.url);
+  const searchParams = new URLSearchParams(url.search);
 
-  let body;
-  try {
-    body = await request.formData();
-  } catch (error) {}
-
-  const handle = String(body?.get('handle') || '');
-  const sortKey = (String(body?.get('sortKey') || '').toUpperCase() ||
+  const handle = String(searchParams.get('handle') || '');
+  const sortKey = (String(searchParams.get('sortKey') || '').toUpperCase() ||
     'COLLECTION_DEFAULT') as ProductCollectionSortKeys;
-  const reverse = Boolean(body?.get('reverse') ?? false);
-  const first = Number(body?.get('first')); // customize number of products to fetch with this request
+  const reverse = Boolean(searchParams.get('reverse') ?? false);
+  const first = Number(searchParams.get('first')); // customize number of products to fetch with this request
 
   const resultsPerPage = Math.floor(
     Number(

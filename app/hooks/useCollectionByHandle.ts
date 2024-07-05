@@ -37,10 +37,15 @@ export function useCollectionByHandle(
 
   useEffect(() => {
     if (!fetchOnMount || !handle || fetcher.data?.collection) return;
-    fetcher.submit(
-      {handle, ...params},
-      {method: 'POST', action: `${pathPrefix}/api/collection`},
+    const paramsAsStrings = Object.entries(params || {}).reduce(
+      (acc: Record<string, string>, [key, value]) => {
+        acc[key] = String(value);
+        return acc;
+      },
+      {},
     );
+    const searchParams = new URLSearchParams({handle, ...paramsAsStrings});
+    fetcher.load(`${pathPrefix}/api/collection/${handle}?${searchParams}`);
   }, [fetchOnMount, handle, JSON.stringify(params)]);
 
   return (fetcher.data?.collection as Collection) || null;
