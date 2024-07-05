@@ -30,10 +30,7 @@ type NormalizedPredictiveSearchResults = Array<
 >;
 const DEFAULT_SEARCH_TYPES: PredictiveSearchType[] = ['COLLECTION', 'QUERY'];
 
-export async function action({request, params, context}: LoaderFunctionArgs) {
-  if (request.method !== 'POST') {
-    throw new Error('Invalid request method');
-  }
+export async function loader({request, params, context}: LoaderFunctionArgs) {
   const search = await fetchPredictiveSearchResults({
     params,
     request,
@@ -50,15 +47,9 @@ async function fetchPredictiveSearchResults({
   const {storefront} = context;
   const url = new URL(request.url);
   const searchParams = new URLSearchParams(url.search);
-  let body;
-  try {
-    body = await request.formData();
-  } catch (error) {}
-  const searchTerm = String(body?.get('q') || searchParams.get('q') || '');
-  const limit = Number(body?.get('limit') || searchParams.get('limit')) || 10;
-  const rawTypes = String(
-    body?.get('type') || searchParams.get('type') || 'ANY',
-  );
+  const searchTerm = String(searchParams.get('q') || '');
+  const limit = Number(searchParams.get('limit')) || 10;
+  const rawTypes = String(searchParams.get('type') || 'ANY');
   const searchTypes =
     rawTypes === 'ANY'
       ? DEFAULT_SEARCH_TYPES

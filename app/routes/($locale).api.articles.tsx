@@ -1,5 +1,5 @@
 import {json} from '@shopify/remix-oxygen';
-import type {ActionFunctionArgs} from '@shopify/remix-oxygen';
+import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 
 import {BLOG_QUERY} from '~/data/queries';
 import {routeHeaders} from '~/data/cache';
@@ -7,21 +7,15 @@ import type {BlogPage} from '~/lib/types';
 
 export const headers = routeHeaders;
 
-export async function action({context, request}: ActionFunctionArgs) {
+export async function loader({context, request}: LoaderFunctionArgs) {
   const url = new URL(request.url);
   const searchParams = new URLSearchParams(url.search);
-  let body;
-  try {
-    body = await request.formData();
-  } catch (error) {}
-  const handle = String(
-    body?.get('handle') || searchParams.get('handle') || '',
-  );
-  const limit = Number(body?.get('limit') || searchParams.get('limit')) || 4;
+  const handle = String(searchParams.get('handle') || '');
+  const limit = Number(searchParams.get('limit')) || 4;
 
   if (!handle)
     return json(
-      {product: null, errors: ['Missing blog handle']},
+      {product: null, errors: ['Missing blog `handle` parameter']},
       {status: 400},
     );
 

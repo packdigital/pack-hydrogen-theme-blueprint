@@ -1,5 +1,5 @@
 import {json} from '@shopify/remix-oxygen';
-import type {ActionFunctionArgs} from '@shopify/remix-oxygen';
+import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import type {ProductSortKeys} from '@shopify/hydrogen/storefront-api-types';
 
 import {PRODUCTS_QUERY, PRODUCT_ITEM_QUERY} from '~/data/queries';
@@ -12,22 +12,23 @@ const badProductsRequest = (message: string) => {
   );
 };
 
-export async function action({request, context}: ActionFunctionArgs) {
+export async function loader({request, context}: LoaderFunctionArgs) {
   const {storefront} = context;
   const url = new URL(request.url);
   const searchParams = new URLSearchParams(url.search);
 
-  let body;
-  try {
-    body = await request.formData();
-  } catch (error) {}
-  const handlesData = String(body?.get('handles') ?? '');
+  const handlesData = String(searchParams.get('handles') ?? '');
+  const query = String(searchParams.get('query') || '');
+
+  if (!handlesData && !query) {
+    return badProductsRequest('Missing `handles` or `query` parameter');
+  }
 
   /* Products query by handles */
   if (handlesData) {
     const handles = handlesData.split(',');
     if (!handles.every((handle) => typeof handle === 'string')) {
-      return badProductsRequest('Invalid handles paramater');
+      return badProductsRequest('Invalid `handles` paramater');
     }
     const products = await Promise.all(
       handles
@@ -54,15 +55,11 @@ export async function action({request, context}: ActionFunctionArgs) {
   }
 
   /* Products query by query */
-  const query = String(body?.get('query') || searchParams.get('query') || '');
   const sortKey = String(
-    ((body?.get('sortKey') ||
-      searchParams.get('sortKey')) as null | ProductSortKeys) ?? 'BEST_SELLING',
+    (searchParams.get('sortKey') as null | ProductSortKeys) ?? 'BEST_SELLING',
   );
-  const reverse = Boolean(
-    body?.get('reverse') || searchParams.get('reverse') || false,
-  );
-  const count = Number(body?.get('count') || searchParams.get('count')) || 10;
+  const reverse = Boolean(searchParams.get('reverse') || false);
+  const count = Number(searchParams.get('count')) || 10;
 
   const {products} = await queryProducts({
     context,

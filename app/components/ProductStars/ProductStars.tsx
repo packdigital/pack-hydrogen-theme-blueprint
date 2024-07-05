@@ -1,5 +1,6 @@
 import {useEffect, useState} from 'react';
 import {useFetcher} from '@remix-run/react';
+import {parseGid} from '@shopify/hydrogen';
 
 import {ReviewStars} from '~/components';
 import {useLocale} from '~/hooks';
@@ -24,10 +25,12 @@ export function ProductStars({id}: {id: string}) {
   useEffect(() => {
     if (!id) return;
     // ↓ comment back in once proper third party api call is implemented in `/api/reviews`
-    // fetcher.submit(
-    //   {productId: id.split('/').pop(), action: 'getProductReviewAggregate'},
-    //   {method: 'POST', action: `${pathPrefix}/api/reviews`},
-    // );
+    // const {id: productId} = parseGid(id);
+    // const searchParams = new URLSearchParams({
+    //   productId,
+    //   action: 'getProductReviewAggregate',
+    // });
+    // fetcher.load(`${pathPrefix}/api/reviews?${searchParams}`);
   }, [id]);
 
   useEffect(() => {

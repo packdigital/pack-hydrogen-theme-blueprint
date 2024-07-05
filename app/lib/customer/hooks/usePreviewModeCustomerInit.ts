@@ -21,10 +21,10 @@ export function usePreviewModeCustomerInit() {
     const customerAccessToken = getCustomerAccessTokenFromLocalStorage();
     /* if customer access token is in local storage, fetch customer data */
     if (customerAccessToken && !previewModeCustomer) {
-      fetcher.submit(
-        {customerAccessToken: JSON.stringify(customerAccessToken)},
-        {method: 'POST', action: `${pathPrefix}/account`},
-      );
+      const searchParams = new URLSearchParams({
+        customerAccessToken: JSON.stringify(customerAccessToken),
+      });
+      fetcher.load(`${pathPrefix}/api/customer?${searchParams}`);
     } else {
       setPreviewModeCustomer(null);
     }

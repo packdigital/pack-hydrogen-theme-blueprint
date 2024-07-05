@@ -6,6 +6,7 @@ import type {
   CustomerAccessToken,
 } from '@shopify/hydrogen/storefront-api-types';
 
+import {LOGGED_IN_REDIRECT_TO} from '~/lib/constants';
 import {setCustomerAccessTokenInLocalStorage} from '~/lib/customer';
 import {useDataLayerClickEvents, useGlobal, useLocale} from '~/hooks';
 
@@ -36,7 +37,7 @@ export function useCustomerRegister() {
   });
   const {buyerIdentityUpdate} = useCart();
   const navigate = useNavigate();
-  const locale = useLocale();
+  const {pathPrefix} = useLocale();
   const {sendRegisterEvent} = useDataLayerClickEvents();
 
   const customerRegister = useCallback(
@@ -68,7 +69,7 @@ export function useCustomerRegister() {
         setPreviewModeCustomer(customer);
         setCustomerAccessTokenInLocalStorage(customerAccessToken);
       }
-      navigate(`${locale.pathPrefix}/account/orders`);
+      navigate(`${pathPrefix}${LOGGED_IN_REDIRECT_TO}`);
     }
   }, [buyerIdentityUpdate, !!customer]);
 

@@ -26,10 +26,8 @@ export function useProductByHandle(
 
   useEffect(() => {
     if (!fetchOnMount || !handle || fetcher.data?.product) return;
-    fetcher.submit(
-      {handle},
-      {method: 'POST', action: `${pathPrefix}/api/product`},
-    );
+    const searchParams = new URLSearchParams({handle});
+    fetcher.load(`${pathPrefix}/api/product?${searchParams}`);
   }, [fetchOnMount, handle]);
 
   return fetcher.data?.product || null;

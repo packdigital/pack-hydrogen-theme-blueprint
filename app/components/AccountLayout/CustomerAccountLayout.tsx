@@ -132,13 +132,13 @@ export function CustomerAccountLayout({children}: {children: React.ReactNode}) {
                 {menuItems?.map(({link}, index) => {
                   return link?.text ? (
                     <MenuItem key={index}>
-                      {({active, close}) => {
+                      {({close}) => {
                         const selected = activeMenuItem?.link?.url === link.url;
                         return (
                           <Link
                             aria-label={link.text}
                             className={`w-full px-5 py-1.5 transition md:hover:bg-offWhite ${
-                              selected || active ? 'bg-lightGray' : ''
+                              selected ? 'bg-lightGray' : ''
                             }`}
                             onClick={close}
                             to={link.url}

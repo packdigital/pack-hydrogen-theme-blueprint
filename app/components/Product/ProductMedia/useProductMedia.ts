@@ -25,9 +25,8 @@ export function useProductMedia({
   selectedVariant,
 }: UseProductMediaProps): UseProductMediaReturn {
   const colorOptions = useMemo(() => {
-    return product.options?.find(
-      (option) => option.name === COLOR_OPTION_NAME,
-    )?.values;
+    return product.options?.find((option) => option.name === COLOR_OPTION_NAME)
+      ?.values;
   }, [product.id]);
 
   const hasMultiColorsNotFromGroup =

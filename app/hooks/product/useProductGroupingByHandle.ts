@@ -56,10 +56,10 @@ export function useProductGroupingByHandle(
 
   useEffect(() => {
     if (!grouping?.allProducts || groupingIsReady) return;
-    fetcher.submit(
-      {handles: grouping.allProducts.map(({handle}) => handle)},
-      {method: 'POST', action: `${pathPrefix}/api/products`},
-    );
+    const searchParams = new URLSearchParams({
+      handles: grouping.allProducts.map(({handle}) => handle).join(','),
+    });
+    fetcher.load(`${pathPrefix}/api/products?${searchParams}`);
   }, [grouping?.id]);
 
   useEffect(() => {

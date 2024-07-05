@@ -25,7 +25,7 @@ export function ApplicationError({error}: ApplicationErrorProps) {
           data-comp="application-error"
         >
           <aside className="flex max-h-full max-w-full justify-center overflow-hidden rounded-md bg-white p-5 drop-shadow after:absolute after:inset-x-0 after:top-0 after:h-[4px] after:w-full after:bg-red-500 md:p-10">
-            <div className="flex w-full max-w-screen-xl flex-col overflow-hidden">
+            <div className="flex w-full max-w-screen-xl flex-col overflow-hidden xs:max-sm:min-w-96 sm:max-md:min-w-[28rem] md:min-w-[32rem]">
               <h1
                 aria-live="assertive"
                 className="mb-4 font-[system-ui,sans-serif] text-[24px]"

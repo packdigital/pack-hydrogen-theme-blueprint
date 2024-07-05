@@ -28,10 +28,11 @@ export function useArticles(
 
   useEffect(() => {
     if (!fetchOnMount || !handle || fetcher.data?.articles) return;
-    fetcher.submit(
-      {handle, limit},
-      {method: 'POST', action: `${pathPrefix}/api/articles`},
-    );
+    const searchParams = new URLSearchParams({
+      handle,
+      limit: limit?.toString() || '3',
+    });
+    fetcher.load(`${pathPrefix}/api/articles?${searchParams}`);
   }, [fetchOnMount, handle, limit]);
 
   return fetcher.data?.articles || null;

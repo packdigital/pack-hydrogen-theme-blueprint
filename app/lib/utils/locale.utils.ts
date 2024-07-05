@@ -37,8 +37,12 @@ export function getLocaleFromRequest(request: Request): I18nLocale {
 }
 
 export function parseAsCurrency(value: number, locale: I18nLocale) {
-  return new Intl.NumberFormat(locale.language + '-' + locale.country, {
+  const price = new Intl.NumberFormat(locale.language + '-' + locale.country, {
     style: 'currency',
     currency: locale.currency,
   }).format(value);
+  // Remove trailing zeros
+  return price.endsWith('.00') || price.endsWith(',00')
+    ? price.slice(0, -3)
+    : price;
 }

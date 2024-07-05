@@ -4,12 +4,13 @@ import type {
   LoaderFunctionArgs,
 } from '@shopify/remix-oxygen';
 
+import {LOGGED_IN_REDIRECT_TO, LOGGED_OUT_REDIRECT_TO} from '~/lib/constants';
+import {Multipassify} from '~/lib/multipass/multipassify.server';
 import type {
   CustomerInfoType,
   MultipassRequestBody,
   NotLoggedInResponseType,
 } from '~/lib/multipass/multipass.types';
-import {Multipassify} from '~/lib/multipass/multipassify.server';
 
 /*
   Redirect document GET requests to the login page (housekeeping)
@@ -19,11 +20,15 @@ export async function loader({params, context}: LoaderFunctionArgs) {
 
   if (customerAccessToken) {
     return redirect(
-      params.locale ? `/${params.locale}/account/orders` : '/account/orders',
+      params.locale
+        ? `/${params.locale}${LOGGED_IN_REDIRECT_TO}`
+        : LOGGED_IN_REDIRECT_TO,
     );
   }
   return redirect(
-    params.locale ? `/${params.locale}/account/login` : '/account/login',
+    params.locale
+      ? `/${params.locale}${LOGGED_OUT_REDIRECT_TO}`
+      : LOGGED_OUT_REDIRECT_TO,
   );
 }
 
