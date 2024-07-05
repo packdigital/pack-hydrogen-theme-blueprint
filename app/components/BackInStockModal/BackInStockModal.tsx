@@ -1,12 +1,9 @@
-import {useCallback, useState} from 'react';
+import {useEffect, useState} from 'react';
+import {parseGid} from '@shopify/hydrogen';
 
+import {LoadingDots} from '~/components';
+import {useBackInStock, useCustomer, useGlobal, useSettings} from '~/hooks';
 import type {SelectedVariant} from '~/lib/types';
-import {
-  useCustomer,
-  useDataLayerClickEvents,
-  useGlobal,
-  useSettings,
-} from '~/hooks';
 
 interface BackInStockModalProps {
   selectedVariant: SelectedVariant;
@@ -14,31 +11,37 @@ interface BackInStockModalProps {
 
 export function BackInStockModal({selectedVariant}: BackInStockModalProps) {
   const customer = useCustomer();
-  const {sendSubscribeEvent} = useDataLayerClickEvents();
-  const {product} = useSettings();
+  const {product: productSettings} = useSettings();
   const {closeModal} = useGlobal();
+  const {
+    handleSubmit,
+    isSubmitting,
+    message: apiMessage,
+    submittedAt,
+    success,
+  } = useBackInStock();
 
   const [email, setEmail] = useState(customer?.email || '');
   const [message, setMessage] = useState('');
-  const {heading, subtext, submitText, successText} = {...product?.backInStock};
+  const {heading, subtext, submitText, successText} = {
+    ...productSettings?.backInStock,
+  };
 
-  const handleSubmit = useCallback(
-    async (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      const email = e.currentTarget.email.value;
-
-      // back in stock integration here
-
-      sendSubscribeEvent({email});
+  useEffect(() => {
+    if (!submittedAt) return;
+    if (success) {
       setEmail('');
-      setMessage(successText || 'Thank you!');
+      setMessage(successText || apiMessage || 'Thank you!');
       setTimeout(() => {
         setMessage('');
         closeModal();
       }, 2500);
-    },
-    [],
-  );
+    } else {
+      setMessage(apiMessage || 'Something went wrong. Please try again later.');
+    }
+  }, [submittedAt]);
+
+  const {id: variantId} = parseGid(selectedVariant?.id);
 
   return (
     <div className="flex flex-col items-center gap-8 text-center">
@@ -54,7 +57,10 @@ export function BackInStockModal({selectedVariant}: BackInStockModalProps) {
 
       <form
         className="flex w-full flex-col items-center"
-        onSubmit={handleSubmit}
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmit({email, variantId});
+        }}
       >
         <input
           className="input-text text-text md:max-w-screen-xs"
@@ -71,7 +77,13 @@ export function BackInStockModal({selectedVariant}: BackInStockModalProps) {
           className="btn-primary mt-3 max-md:w-full"
           type="submit"
         >
-          {submitText}
+          {!isSubmitting && submitText}
+
+          {isSubmitting && (
+            <span aria-label="Subscribing" aria-live="assertive" role="status">
+              <LoadingDots />
+            </span>
+          )}
         </button>
       </form>
 

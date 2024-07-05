@@ -49,13 +49,7 @@ export const useDataLayerClickEvents = () => {
   );
 
   const sendSubscribeEvent = useCallback(
-    ({
-      email,
-      phone,
-    }: {
-      email?: string | undefined;
-      phone?: string | undefined;
-    }) => {
+    ({email, phone}: {email?: string | null; phone?: string | null}) => {
       if (email) {
         emitter?.emit('SUBSCRIBE_EMAIL', email);
       }
