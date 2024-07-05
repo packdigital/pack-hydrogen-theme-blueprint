@@ -37,7 +37,7 @@ export function useCollectionByHandle(
 
   useEffect(() => {
     if (!fetchOnMount || !handle || fetcher.data?.collection) return;
-    const paramsAsStrings = Object.entries(params || {}).reduce(
+    const paramsAsStrings = Object.entries({...params}).reduce(
       (acc: Record<string, string>, [key, value]) => {
         acc[key] = String(value);
         return acc;
@@ -45,7 +45,7 @@ export function useCollectionByHandle(
       {},
     );
     const searchParams = new URLSearchParams({handle, ...paramsAsStrings});
-    fetcher.load(`${pathPrefix}/api/collection/${handle}?${searchParams}`);
+    fetcher.load(`${pathPrefix}/api/collection?${searchParams}`);
   }, [fetchOnMount, handle, JSON.stringify(params)]);
 
   return (fetcher.data?.collection as Collection) || null;

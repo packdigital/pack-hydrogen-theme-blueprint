@@ -15,7 +15,7 @@ export function CountrySelector() {
     threshold: 0,
     triggerOnce: true,
   });
-  const selectedLocale = useLocale();
+  const {pathPrefix, label} = useLocale();
   const localizationFetcher = useFetcher<{localization: Localization}>({
     key: 'countries',
   }); // only countries within the store's markets will be returned
@@ -31,10 +31,6 @@ export function CountrySelector() {
   const {availableCountries, country: defaultCountry} = {
     ...localizationFetcher?.data?.localization,
   };
-  const selectedLocalePrefix =
-    selectedLocale.country === DEFAULT_LOCALE.country
-      ? ''
-      : `/en-${selectedLocale.country.toLowerCase()}`;
 
   const countryOptions = useMemo(() => {
     if (!countries) return [];
@@ -50,24 +46,24 @@ export function CountrySelector() {
       if (!countryLocale) return;
       const pathnameWithoutLocale = pathWithoutLocalePrefix(
         `${pathname}${search}`,
-        selectedLocalePrefix,
+        pathPrefix,
       );
       const countryUrlPath = pathWithLocalePrefix(
         pathnameWithoutLocale,
         countryLocale.pathPrefix,
       );
       buyerIdentityUpdate({countryCode: countryLocale.country});
-      const searchParams = new URLSearchParams({to: countryUrlPath});
-      redirectFetcher.load(
-        `${selectedLocalePrefix}/api/redirect?${searchParams}`,
+      redirectFetcher.submit(
+        {to: countryUrlPath},
+        {method: 'POST', action: `${pathPrefix}/api/redirect`},
       );
     },
-    [buyerIdentityUpdate, countries, pathname, search, selectedLocalePrefix],
+    [buyerIdentityUpdate, countries, pathname, search, pathPrefix],
   );
 
   useEffect(() => {
     if (!inView) return;
-    localizationFetcher.load('/api/countries');
+    localizationFetcher.load(`${pathPrefix}/api/countries`);
   }, [inView]);
 
   useEffect(() => {
@@ -108,10 +104,8 @@ export function CountrySelector() {
         options={countryOptions}
         placeholder="Select Country"
         selectedOption={{
-          label:
-            countries?.[selectedLocale.pathPrefix]?.label ||
-            selectedLocale.label,
-          value: selectedLocale.pathPrefix,
+          label: countries?.[pathPrefix]?.label || label,
+          value: pathPrefix,
         }}
         placeholderClass="text-text"
         openFrom="top"

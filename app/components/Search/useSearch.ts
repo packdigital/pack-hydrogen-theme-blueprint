@@ -20,7 +20,7 @@ interface CollectionsFetcherData {
 export function useSearch() {
   const {search} = useSettings();
   const isHydrated = useIsHydrated();
-  const locale = useLocale();
+  const {pathPrefix} = useLocale();
 
   const [rawTerm, setRawTerm] = useState('');
   const [searchTerm, setSearchTerm] = useState(rawTerm);
@@ -40,7 +40,7 @@ export function useSearch() {
       q: searchTerm,
       count: PRODUCTS_LIMIT.toString(),
     });
-    productsFetcher.load(`${locale.pathPrefix}/search?${searchParams}`);
+    productsFetcher.load(`${pathPrefix}/api/search?${searchParams}`);
   }, [searchTerm]);
 
   useEffect(() => {
@@ -51,7 +51,7 @@ export function useSearch() {
       type: 'COLLECTION',
     });
     collectionsFetcher.load(
-      `${locale.pathPrefix}/api/predictive-search?${searchParams}`,
+      `${pathPrefix}/api/predictive-search?${searchParams}`,
     );
   }, [collectionsEnabled, searchTerm]);
 
