@@ -16,7 +16,7 @@ export function SearchAutocomplete({
 }: SearchAutocompleteProps) {
   const {search} = useSettings();
   const isHydrated = useIsHydrated();
-  const locale = useLocale();
+  const {pathPrefix} = useLocale();
   const fetcher = useFetcher<AutocompleteFetcherData>({
     key: `predictive-search-query:${searchTerm}`,
   });
@@ -30,7 +30,7 @@ export function SearchAutocomplete({
       limit: limit?.toString(),
       type: 'QUERY',
     });
-    fetcher.load(`${locale.pathPrefix}/api/predictive-search?${searchParams}`);
+    fetcher.load(`${pathPrefix}/api/predictive-search?${searchParams}`);
   }, [searchTerm]);
 
   const autocompleteResults = fetcher?.data?.searchResults?.results?.[0]?.items;

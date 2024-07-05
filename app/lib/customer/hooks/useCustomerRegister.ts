@@ -37,7 +37,7 @@ export function useCustomerRegister() {
   });
   const {buyerIdentityUpdate} = useCart();
   const navigate = useNavigate();
-  const locale = useLocale();
+  const {pathPrefix} = useLocale();
   const {sendRegisterEvent} = useDataLayerClickEvents();
 
   const customerRegister = useCallback(
@@ -69,7 +69,7 @@ export function useCustomerRegister() {
         setPreviewModeCustomer(customer);
         setCustomerAccessTokenInLocalStorage(customerAccessToken);
       }
-      navigate(`${locale.pathPrefix}${LOGGED_IN_REDIRECT_TO}`);
+      navigate(`${pathPrefix}${LOGGED_IN_REDIRECT_TO}`);
     }
   }, [buyerIdentityUpdate, !!customer]);
 

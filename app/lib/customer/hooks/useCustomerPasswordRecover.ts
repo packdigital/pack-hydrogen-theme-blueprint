@@ -11,7 +11,7 @@ interface FetcherData {
 
 export function useCustomerPasswordRecover() {
   const fetcher = useFetcher({key: 'recover-password'});
-  const locale = useLocale();
+  const {pathPrefix} = useLocale();
 
   const {status} = useFetcherStatus({state: fetcher.state});
 
@@ -23,7 +23,7 @@ export function useCustomerPasswordRecover() {
       formData.append('action', 'recover-password');
       fetcher.submit(formData, {
         method: 'POST',
-        action: `${locale.pathPrefix}/account/login`,
+        action: `${pathPrefix}/account/login`,
       });
     },
     [status.started],

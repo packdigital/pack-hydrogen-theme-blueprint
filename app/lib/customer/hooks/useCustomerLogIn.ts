@@ -37,7 +37,7 @@ export function useCustomerLogIn() {
   });
   const {buyerIdentityUpdate} = useCart();
   const navigate = useNavigate();
-  const locale = useLocale();
+  const {pathPrefix} = useLocale();
   const {sendLogInEvent} = useDataLayerClickEvents();
 
   const customerLogIn = useCallback(
@@ -74,7 +74,7 @@ export function useCustomerLogIn() {
           window.location.href = url.href;
         } catch (error) {}
       } else {
-        navigate(`${locale.pathPrefix}${LOGGED_IN_REDIRECT_TO}`);
+        navigate(`${pathPrefix}${LOGGED_IN_REDIRECT_TO}`);
       }
     }
   }, [buyerIdentityUpdate, !!customer]);

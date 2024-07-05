@@ -6,10 +6,10 @@ import type {SubscribeToBackInStockReturn} from '~/lib/klaviyo';
 
 /**
  * Submit email to back in stock subscription
- * @returns {Object} - handleSubmit, message, success
+ * @returns {Object} - handleSubmit, isSubmitting, message, success, submittedAt
  * @example
  * ```tsx
- * const {handleSubmit, message, success} = useBackInStock();
+ * const {handleSubmit, isSubmitting, message, success, submittedAt} = useBackInStock();
  * ```
  */
 
