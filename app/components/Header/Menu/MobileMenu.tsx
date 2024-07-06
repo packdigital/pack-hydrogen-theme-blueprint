@@ -2,7 +2,7 @@ import {Swiper, SwiperSlide} from 'swiper/react';
 import {A11y} from 'swiper/modules';
 
 import {Link, Drawer, Svg} from '~/components';
-import {useGlobal, useSettings} from '~/hooks';
+import {useColorSwatches, useGlobal, useSettings} from '~/hooks';
 
 import {ProductItem} from '../../ProductItem';
 import type {UseMobileMenuReturn} from '../useMobileMenu';
@@ -25,6 +25,7 @@ export function MobileMenu({
 }: MobileMenuProps) {
   const {header} = useSettings();
   const {openSearch} = useGlobal();
+  const swatchesMap = useColorSwatches();
 
   const {links: additionalLinks, menuItems, productsSlider} = {...header?.menu};
   const {products, heading: productsHeading} = {
@@ -143,6 +144,7 @@ export function MobileMenu({
                         handle={product.handle}
                         index={index}
                         onClick={handleCloseMobileMenu}
+                        swatchesMap={swatchesMap}
                       />
                     </SwiperSlide>
                   );

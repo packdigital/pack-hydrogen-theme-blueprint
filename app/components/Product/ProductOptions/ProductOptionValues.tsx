@@ -1,6 +1,10 @@
 import {useMemo} from 'react';
 
-import type {OptionWithGroups, ProductWithGrouping} from '~/lib/types';
+import type {
+  OptionWithGroups,
+  ProductWithGrouping,
+  SwatchesMap,
+} from '~/lib/types';
 
 import {ProductOptionValuesLabel} from './ProductOptionValuesLabel';
 import {ProductOptionValue} from './ProductOptionValue';
@@ -10,6 +14,7 @@ interface ProductOptionValueProps {
   product: ProductWithGrouping;
   selectedOptionsMap: Record<string, string>;
   setSelectedOption: (name: string, value: string) => void;
+  swatchesMap: SwatchesMap;
 }
 
 export function ProductOptionValues({
@@ -17,6 +22,7 @@ export function ProductOptionValues({
   product,
   selectedOptionsMap,
   setSelectedOption,
+  swatchesMap,
 }: ProductOptionValueProps) {
   const option = useMemo((): OptionWithGroups | undefined => {
     return product.grouping
@@ -55,6 +61,7 @@ export function ProductOptionValues({
                           product={product}
                           selectedOptionsMap={selectedOptionsMap}
                           setSelectedOption={setSelectedOption}
+                          swatchesMap={swatchesMap}
                           value={value}
                         />
                       </li>
@@ -83,6 +90,7 @@ export function ProductOptionValues({
                     product={product}
                     selectedOptionsMap={selectedOptionsMap}
                     setSelectedOption={setSelectedOption}
+                    swatchesMap={swatchesMap}
                     value={value}
                   />
                 </li>

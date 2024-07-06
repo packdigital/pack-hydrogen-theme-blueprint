@@ -3,7 +3,7 @@ import {useInView} from 'react-intersection-observer';
 import type {Product} from '@shopify/hydrogen/storefront-api-types';
 
 import {COLOR_OPTION_NAME} from '~/lib/constants';
-import type {SelectedProduct, SelectedVariant} from '~/lib/types';
+import type {SelectedProduct, SelectedVariant, SwatchesMap} from '~/lib/types';
 import {Link} from '~/components';
 import {
   useDataLayerClickEvents,
@@ -31,7 +31,7 @@ interface ProductItemProps {
   product?: Product | null;
   quickShopMobileHidden?: boolean;
   searchTerm?: string;
-  swatchesMap?: Record<string, string>;
+  swatchesMap?: SwatchesMap;
 }
 
 export function ProductItem({
@@ -145,7 +145,7 @@ export function ProductItem({
         )}
 
         <Link aria-label={title} to={productUrl} onClick={handleClick}>
-          <h3 className="text-bold min-h-6 text-base">{title}</h3>
+          <h3 className="min-h-6 text-base">{title}</h3>
         </Link>
 
         {color && <p className="text-sm text-mediumDarkGray">{color}</p>}

@@ -1,4 +1,4 @@
-import type {ProductWithGrouping} from '~/lib/types';
+import type {ProductWithGrouping, SwatchesMap} from '~/lib/types';
 
 import {ProductOptionValueButton} from './ProductOptionValueButton';
 import {ProductOptionValueLink} from './ProductOptionValueLink';
@@ -9,6 +9,7 @@ interface ProductOptionValueProps {
   product: ProductWithGrouping;
   selectedOptionsMap: Record<string, string>;
   setSelectedOption: (name: string, value: string) => void;
+  swatchesMap: SwatchesMap;
   value: string;
 }
 
@@ -17,6 +18,7 @@ export function ProductOptionValue({
   product,
   selectedOptionsMap,
   setSelectedOption,
+  swatchesMap,
   value,
 }: ProductOptionValueProps) {
   const {
@@ -26,13 +28,14 @@ export function ProductOptionValue({
     isFromGrouping,
     isSelected,
     selectedVariantFromOptions,
-    swatch,
   } = useProductOptionValue({
     name,
     product,
     selectedOptionsMap,
     value,
   });
+
+  const swatch = swatchesMap?.[value.toLowerCase()];
 
   return isFromGrouping ? (
     <ProductOptionValueLink

@@ -3,7 +3,7 @@ import type {
   ProductConnection,
 } from '@shopify/hydrogen/storefront-api-types';
 
-import type {Settings} from '~/lib/types';
+import type {Settings, SwatchesMap} from '~/lib/types';
 
 import type {ActiveFilterValue} from './CollectionFilters/CollectionFilters.types';
 
@@ -25,7 +25,7 @@ export interface CollectionGridProps {
   promoTiles?: PromoTile[] | null;
   searchTerm?: string;
   settings: Settings['collection'];
-  swatchesMap?: Record<string, string>;
+  swatchesMap?: SwatchesMap;
 }
 
 export interface CollectionMenuDrawerProps {

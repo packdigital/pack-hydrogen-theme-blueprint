@@ -3,6 +3,7 @@ import {useMemo} from 'react';
 import {COLOR_OPTION_NAME, PRICE_FILTER_ID} from '~/lib/constants';
 import {isLightHexColor} from '~/lib/utils';
 import {Image, Svg} from '~/components';
+import type {Swatch} from '~/lib/types';
 
 import type {CollectionFilterOptionProps} from '../CollectionFilters.types';
 
@@ -20,22 +21,22 @@ export function CollectionFilterOption({
   const isPrice = id === PRICE_FILTER_ID;
   const isColor =
     parsedInput?.variantOption?.name === COLOR_OPTION_NAME.toLowerCase();
-  let swatch = '';
-  let hasImage = false;
+  let swatch: Swatch | undefined;
+  let image: string | undefined;
 
   if (isColor) {
     const color = parsedInput.variantOption.value.toLowerCase();
-    swatch = swatchesMap?.[color] || '';
-    hasImage = swatch?.startsWith('http');
+    swatch = swatchesMap?.[color];
+    image = swatch?.image?.src;
   }
 
   const checkmarkColor = useMemo(() => {
     if (!isColor) return 'text-white';
     if (!swatch) return 'text-black';
-    return isLightHexColor(swatch) ? 'text-black' : 'text-white';
+    return isLightHexColor(swatch.color) ? 'text-black' : 'text-white';
   }, [isColor, swatch]);
 
-  const colorBackground = swatch || 'var(--off-white)';
+  const colorBackground = swatch?.color || 'var(--off-white)';
   const nonColorBackground = isActive ? 'var(--black)' : 'var(--off-white)';
   const disabled = !count;
 
@@ -98,11 +99,11 @@ export function CollectionFilterOption({
           backgroundColor: isColor ? colorBackground : nonColorBackground,
         }}
       >
-        {hasImage && (
+        {image && (
           <Image
             data={{
               altText: label,
-              url: swatch,
+              url: image,
             }}
             aspectRatio="1/1"
             width="24"

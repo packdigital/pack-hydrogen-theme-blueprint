@@ -2,10 +2,7 @@ import {useMemo} from 'react';
 import equal from 'fast-deep-equal';
 
 import {COLOR_OPTION_NAME} from '~/lib/constants';
-import {useSettings} from '~/hooks';
-import type {ProductWithGrouping, SelectedVariant, Settings} from '~/lib/types';
-
-export type Swatch = Settings['product']['colors']['swatches'][number];
+import type {ProductWithGrouping, SelectedVariant} from '~/lib/types';
 
 interface UseProductOptionValueProps {
   name: string;
@@ -21,7 +18,6 @@ interface UseProductOptionValueReturn {
   isFromGrouping: boolean;
   isSelected: boolean;
   selectedVariantFromOptions: SelectedVariant;
-  swatch: Swatch | null;
 }
 
 export function useProductOptionValue({
@@ -30,9 +26,6 @@ export function useProductOptionValue({
   selectedOptionsMap,
   value,
 }: UseProductOptionValueProps): UseProductOptionValueReturn {
-  const {product: productSettings} = useSettings();
-  const swatches = productSettings?.colors?.swatches;
-
   const newSelectedOptions = useMemo(() => {
     return selectedOptionsMap ? {...selectedOptionsMap, [name]: value} : null;
   }, [name, selectedOptionsMap, value]);
@@ -104,16 +97,6 @@ export function useProductOptionValue({
   );
   const isSelected = Boolean(selectedOptionsMap?.[name] === value);
 
-  const swatch = useMemo((): Swatch | null => {
-    if (!swatches || !isColor) return null;
-    return (
-      swatches.find(
-        ({name: swatchName}) =>
-          swatchName?.trim().toLowerCase() === value.toLowerCase(),
-      ) || null
-    );
-  }, [isColor, swatches, value]);
-
   return {
     isAvailable,
     isColor,
@@ -121,6 +104,5 @@ export function useProductOptionValue({
     isFromGrouping,
     isSelected,
     selectedVariantFromOptions,
-    swatch,
   };
 }

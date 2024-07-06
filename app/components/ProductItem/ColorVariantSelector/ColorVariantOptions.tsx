@@ -1,7 +1,12 @@
 import {useMemo, useState} from 'react';
 
 import {COLOR_OPTION_NAME} from '~/lib/constants';
-import type {Group, SelectedProduct, SelectedVariant} from '~/lib/types';
+import type {
+  Group,
+  SelectedProduct,
+  SelectedVariant,
+  SwatchesMap,
+} from '~/lib/types';
 
 import {ColorVariantOption} from './ColorVariantOption';
 import {useColorVariantOptions} from './useColorVariantOptions';
@@ -14,7 +19,7 @@ interface ColorVariantOptionsProps {
   selectedVariant: SelectedVariant;
   setProductFromColorSelector: (product: SelectedProduct) => void;
   setVariantFromColorSelector: (variant: SelectedVariant) => void;
-  swatchesMap?: Record<string, string>;
+  swatchesMap?: SwatchesMap;
 }
 
 export function ColorVariantOptions({
