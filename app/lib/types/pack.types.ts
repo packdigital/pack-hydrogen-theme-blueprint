@@ -33,6 +33,10 @@ export interface Swatch {
   image: ImageCms;
 }
 
+export interface SwatchesMap {
+  [key: string]: Swatch;
+}
+
 export type Crop = 'center' | 'top' | 'bottom' | 'left' | 'right';
 
 export interface Seo {

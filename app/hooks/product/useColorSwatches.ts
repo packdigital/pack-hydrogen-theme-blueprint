@@ -1,6 +1,7 @@
 import {useMemo} from 'react';
 
 import {useSettings} from '~/hooks';
+import type {SwatchesMap} from '~/lib/types';
 
 /**
  * Generate a table of color swatches from the site settings
@@ -11,23 +12,19 @@ import {useSettings} from '~/hooks';
  * ```
  */
 
-export function useColorSwatches(): Record<string, string> {
+export function useColorSwatches(): SwatchesMap {
   const {product: productSettings} = useSettings();
   const {swatchesGroups} = {...productSettings?.colors};
 
   return useMemo(() => {
     if (!swatchesGroups?.length) return {};
-    return swatchesGroups.reduce((groupsAcc, {swatches}) => {
-      if (!swatches?.length) return groupsAcc;
-      const groupSwatches = swatches.reduce(
-        (swatchesAcc, {name, color, image}) => {
-          return {
-            ...swatchesAcc,
-            [name?.toLowerCase().trim()]: image?.src || color,
-          };
-        },
-        {},
-      );
+    return swatchesGroups.reduce((groupsAcc, group) => {
+      const groupSwatches = group.swatches?.reduce((swatchesAcc, swatch) => {
+        return {
+          ...swatchesAcc,
+          [swatch.name?.toLowerCase().trim()]: swatch,
+        };
+      }, {});
       return {...groupsAcc, ...groupSwatches};
     }, {});
   }, [swatchesGroups]);

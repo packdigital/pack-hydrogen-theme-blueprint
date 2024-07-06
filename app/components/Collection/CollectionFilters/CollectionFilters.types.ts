@@ -4,10 +4,11 @@ import type {
   ProductFilter,
 } from '@shopify/hydrogen/storefront-api-types';
 
+import type {SwatchesMap} from '~/lib/types';
+
 type AddFilter = (id: string) => void;
 type ClearFilters = () => void;
 type RemoveFilter = (id: string) => void;
-type SwatchesMap = Record<string, string>;
 
 export type ActiveFilterValue = FilterValue & {
   filter: {

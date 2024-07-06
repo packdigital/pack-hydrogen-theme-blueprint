@@ -201,7 +201,7 @@ export const PRODUCT_FRAGMENT = `#graphql
       }
     }
     options {
-      name,
+      name
       values
     }
     selectedVariant: variantBySelectedOptions(selectedOptions: $selectedOptions) {
@@ -403,6 +403,7 @@ export const GROUPING_PRODUCT_QUERY = `#graphql
           }
           product {
             handle
+            id
           }
         }
       }

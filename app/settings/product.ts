@@ -1,4 +1,4 @@
-import type {ImageCms} from '~/lib/types';
+import type {Swatch} from '~/lib/types';
 
 import {COLORS} from './common';
 
@@ -27,11 +27,7 @@ export interface ProductSettings {
   colors: {
     swatchesGroups: {
       name: string;
-      swatches: {
-        name: string;
-        color: string;
-        image: ImageCms;
-      }[];
+      swatches: Swatch[];
     }[];
   };
   quantitySelector: {

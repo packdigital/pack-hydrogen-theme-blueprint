@@ -3,6 +3,8 @@ import type {
   ProductVariant,
 } from '@shopify/hydrogen/storefront-api-types';
 
+import type {ImageCms} from '~/lib/types';
+
 export type SelectedProduct = Product | null | undefined;
 
 export type SelectedVariant = ProductVariant | null | undefined;

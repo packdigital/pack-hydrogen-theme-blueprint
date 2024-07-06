@@ -1,11 +1,12 @@
 import {Image} from '~/components';
+import type {SwatchesMap} from '~/lib/types';
 
 interface ColorVariantOptionProps {
   color: string;
   enabledColorNameOnHover?: boolean;
   onClick: () => void;
   selectedVariantColor: string | undefined;
-  swatchesMap?: Record<string, string>;
+  swatchesMap?: SwatchesMap;
 }
 
 export function ColorVariantOption({
@@ -17,7 +18,7 @@ export function ColorVariantOption({
 }: ColorVariantOptionProps) {
   const isActive = color === selectedVariantColor;
   const swatch = swatchesMap?.[color?.toLowerCase().trim()];
-  const hasImage = swatch?.startsWith('http');
+  const image = swatch?.image?.src;
 
   return (
     <div className="group/color relative">
@@ -27,14 +28,14 @@ export function ColorVariantOption({
           isActive ? 'border-text' : ''
         }`}
         onClick={onClick}
-        style={{backgroundColor: swatch}}
+        style={{backgroundColor: swatch?.color}}
         type="button"
       >
-        {hasImage && (
+        {image && (
           <Image
             data={{
               altText: color,
-              url: swatch,
+              url: image,
             }}
             width="24"
             aspectRatio="1/1"

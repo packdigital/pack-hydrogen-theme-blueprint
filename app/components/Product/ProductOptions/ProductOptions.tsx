@@ -1,5 +1,6 @@
 import {useProduct} from '@shopify/hydrogen-react';
 
+import {useColorSwatches} from '~/hooks';
 import type {ProductWithGrouping, SelectedVariant} from '~/lib/types';
 
 import {ProductOptionValues} from './ProductOptionValues';
@@ -10,6 +11,7 @@ interface ProductOptionsProps {
 }
 
 export function ProductOptions({product}: ProductOptionsProps) {
+  const swatchesMap = useColorSwatches();
   const _product = useProduct();
   const {setSelectedOption} = _product;
   const selectedOptionsMap = _product.selectedOptions as Record<string, string>;
@@ -27,6 +29,7 @@ export function ProductOptions({product}: ProductOptionsProps) {
               product={product}
               selectedOptionsMap={selectedOptionsMap}
               setSelectedOption={setSelectedOption}
+              swatchesMap={swatchesMap}
             />
           </div>
         );

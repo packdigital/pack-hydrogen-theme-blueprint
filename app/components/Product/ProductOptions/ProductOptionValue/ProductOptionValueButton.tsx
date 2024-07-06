@@ -1,6 +1,7 @@
+import type {Swatch} from '~/lib/types';
+
 import {InnerColorOptionValue} from './InnerColorOptionValue';
 import {InnerOptionValue} from './InnerOptionValue';
-import type {Swatch} from './useProductOptionValue';
 
 interface ProductOptionValueButtonProps {
   isAvailable: boolean;

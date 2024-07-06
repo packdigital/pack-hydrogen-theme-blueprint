@@ -2,8 +2,7 @@ import {useMemo} from 'react';
 
 import {Image} from '~/components';
 import {isLightHexColor} from '~/lib/utils';
-
-import type {Swatch} from './useProductOptionValue';
+import type {Swatch} from '~/lib/types';
 
 interface InnerColorOptionValueProps {
   isAvailable: boolean;

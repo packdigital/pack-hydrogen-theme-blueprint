@@ -2,11 +2,10 @@ import {useMemo} from 'react';
 import {useLocation} from '@remix-run/react';
 
 import {Link} from '~/components';
-import type {SelectedVariant} from '~/lib/types';
+import type {SelectedVariant, Swatch} from '~/lib/types';
 
 import {InnerColorOptionValue} from './InnerColorOptionValue';
 import {InnerOptionValue} from './InnerOptionValue';
-import type {Swatch} from './useProductOptionValue';
 
 interface ProductOptionValueLinkProps {
   isAvailable: boolean;
