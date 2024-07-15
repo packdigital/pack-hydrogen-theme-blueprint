@@ -28,12 +28,10 @@ export function useAddToCartAnalytics({
 
   const [mounted, setMounted] = useState(false);
   const [previousCartCount, setPreviousCartCount] = useState(0);
-  const [previousCartLines, setPreviousCartLines] = useState<
-    CartLine[] | undefined
-  >(undefined);
-  const [previousCartLinesMap, setPreviousCartLinesMap] = useState<
-    Record<string, CartLine[]> | undefined
-  >(undefined);
+  const [previousCartLinesMap, setPreviousCartLinesMap] = useState<Record<
+    string,
+    CartLine[]
+  > | null>(null);
 
   useEffect(() => {
     if (!mounted) {
@@ -54,8 +52,7 @@ export function useAddToCartAnalytics({
       {},
     );
 
-    if (!previousCartLines || totalQuantity <= previousCartCount) {
-      setPreviousCartLines(cartLines || []);
+    if (totalQuantity <= previousCartCount) {
       setPreviousCartCount(totalQuantity || 0);
       setPreviousCartLinesMap(cartItemsMap || {});
       return;
@@ -141,7 +138,6 @@ export function useAddToCartAnalytics({
       };
       await sendShopifyAnalytics(event);
       if (DEBUG) console.log('sendShopifyAnalytics:add_to_cart', event);
-      setPreviousCartLines(cartLines);
       setPreviousCartCount(totalQuantity);
       setPreviousCartLinesMap(cartItemsMap);
     };
