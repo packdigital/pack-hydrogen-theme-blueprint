@@ -48,12 +48,16 @@ export function EmailSignup({settings}: {settings: Settings['footer']}) {
         className="btn-primary mt-3 w-full"
         type="submit"
       >
-        {!isSubmitting && buttonText}
+        <span className={`${isSubmitting ? 'invisible' : 'visible'}`}>
+          {buttonText}
+        </span>
 
         {isSubmitting && (
-          <span aria-label="Subscribing" aria-live="assertive" role="status">
-            <LoadingDots />
-          </span>
+          <LoadingDots
+            status="Subscribing"
+            withAbsolutePosition
+            withStatusRole
+          />
         )}
       </button>
 
