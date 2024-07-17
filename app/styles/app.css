@@ -21,8 +21,7 @@
   --off-black: #101010;
   --dark-gray: #484848;
   --medium-dark-gray: #707070;
-  --medium-gray: #989898;
-  --gray: #c0c0c0;
+  --medium-gray: #c0c0c0;
   --light-gray: #e8e8e8;
   --off-white: #f9f9f9;
   --white: #ffffff;
@@ -303,8 +302,8 @@
       md:hover:bg-[var(--inverse-dark-btn-hover-bg-color)]
       md:hover:text-[var(--inverse-dark-btn-hover-text-color)];
   }
-  .btn-pill {
-    @apply relative flex h-12 items-center justify-center overflow-hidden rounded-full border border-border bg-white px-5 py-3 text-base text-sm text-text transition md:hover:bg-offWhite;
+  .btn-select {
+    @apply relative flex h-12 items-center justify-center overflow-hidden rounded border border-border bg-white px-5 py-3 text-base text-sm text-text transition md:hover:bg-offWhite;
   }
   /* underline specific */
   .hover-text-underline {
@@ -348,17 +347,17 @@
   .input-text {
     @apply h-12
       w-full
-      rounded-full
+      rounded
       border
       border-border
-      px-5
+      px-3.5
       py-2.5
       text-base;
   }
   .input-label {
     @apply block
       pb-1
-      pl-5
+      pl-0
       font-sans
       text-sm
       font-bold;
@@ -430,6 +429,16 @@
       md:py-10
       xl:py-12;
   }
+  .pt-contained {
+    @apply pt-8
+      md:pt-10
+      xl:pt-12;
+  }
+  .pb-contained {
+    @apply pb-8
+      md:pb-10
+      xl:pb-12;
+  }
   .overflow-anywhere {
     overflow-wrap: anywhere;
   }
@@ -442,5 +451,12 @@
       -translate-x-1/2
       -translate-y-1/2
       object-cover;
+  }
+  .absolute-center {
+    @apply absolute
+      left-1/2
+      top-1/2
+      -translate-x-1/2
+      -translate-y-1/2;
   }
 }

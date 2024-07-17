@@ -44,7 +44,6 @@ module.exports = {
         darkGray: 'var(--dark-gray)',
         mediumDarkGray: 'var(--medium-dark-gray)',
         mediumGray: 'var(--medium-gray)',
-        gray: 'var(--gray)',
         lightGray: 'var(--light-gray)',
         offWhite: 'var(--off-white)',
         white: 'var(--white)',

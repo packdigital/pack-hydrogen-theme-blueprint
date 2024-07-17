@@ -95,7 +95,7 @@ export function AddressesItem({
         </div>
 
         {isDefaultAddress && (
-          <p className="text-nav text-right text-gray">Default</p>
+          <p className="text-nav text-right text-mediumGray">Default</p>
         )}
       </div>
 

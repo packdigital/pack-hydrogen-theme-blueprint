@@ -75,26 +75,28 @@ export function Collection({
 
         {(enabledFilters || enabledSort) && (
           <div
-            className={`grid w-full md:gap-x-6 ${
+            className={`grid w-full grid-cols-2 gap-x-4 max-md:px-4 max-md:pt-4 md:gap-x-6 ${
               !showHeading ? 'md:mt-4' : ''
-            } ${
-              enabledFilters && enabledSort ? 'grid-cols-2 justify-between' : ''
             }`}
           >
-            {enabledFilters && (
-              <CollectionFiltersButton
-                desktopFiltersOpen={desktopFiltersOpen}
-                setDesktopFiltersOpen={setDesktopFiltersOpen}
-                setMobileFiltersOpen={setMobileFiltersOpen}
-              />
-            )}
+            <div className="flex">
+              {enabledFilters && (
+                <CollectionFiltersButton
+                  desktopFiltersOpen={desktopFiltersOpen}
+                  setDesktopFiltersOpen={setDesktopFiltersOpen}
+                  setMobileFiltersOpen={setMobileFiltersOpen}
+                />
+              )}
+            </div>
 
-            {enabledSort && (
-              <CollectionSort
-                isSearchResults={isSearchResults}
-                settings={collectionSettings}
-              />
-            )}
+            <div className="flex">
+              {enabledSort && (
+                <CollectionSort
+                  isSearchResults={isSearchResults}
+                  settings={collectionSettings}
+                />
+              )}
+            </div>
           </div>
         )}
 

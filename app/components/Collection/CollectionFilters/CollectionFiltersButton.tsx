@@ -13,9 +13,10 @@ export function CollectionFiltersButton({
 }: CollectionFiltersButtonProps) {
   return (
     <div className="w-full">
+      {/* desktop */}
       <button
         aria-label={`${desktopFiltersOpen ? 'Hide' : 'Show'} filters drawer`}
-        className="btn-pill flex items-center gap-2 max-md:hidden"
+        className="btn-select flex items-center gap-2 max-md:hidden"
         onClick={() => setDesktopFiltersOpen(!desktopFiltersOpen)}
         type="button"
       >
@@ -31,7 +32,7 @@ export function CollectionFiltersButton({
       {/* mobile */}
       <button
         aria-label="Open filters drawer"
-        className="flex h-14 w-full items-center gap-2 rounded-none border-x-0 border-y border-r border-border pl-4 pr-2.5 md:hidden"
+        className="btn-select flex w-full items-center justify-start gap-2 pl-4 pr-2.5 md:hidden"
         onClick={() => setMobileFiltersOpen(true)}
         type="button"
       >
@@ -41,9 +42,7 @@ export function CollectionFiltersButton({
           title="Filter"
           viewBox="0 0 24 24"
         />
-        <div className="flex flex-1 items-center gap-2 overflow-hidden text-left xs:gap-3">
-          <span className="text-nav">Filters</span>
-        </div>
+        Filters
       </button>
     </div>
   );
