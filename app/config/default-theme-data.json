@@ -559,7 +559,7 @@
                 "effect": "fade",
                 "autoplay": false,
                 "pagination": true,
-                "activeBulletColor": "var(--gray)"
+                "activeBulletColor": "var(--medium-gray)"
               },
               "slides": [
                 {

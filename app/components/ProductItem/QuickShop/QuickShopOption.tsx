@@ -46,7 +46,7 @@ export function QuickShopOption({
       ? 'cursor-not-allowed'
       : 'md:hover:bg-black md:hover:text-white';
   const unavailableClass = isSoldOut
-    ? 'after:h-px after:w-[150%] after:rotate-[135deg] after:absolute after:top-1/2 after:left-1/2 after:-translate-x-1/2 after:-translate-y-1/2 after:bg-mediumGray text-gray overflow-hidden'
+    ? 'after:h-px after:w-[150%] after:rotate-[135deg] after:absolute after:top-1/2 after:left-1/2 after:-translate-x-1/2 after:-translate-y-1/2 after:bg-mediumGray text-mediumGray overflow-hidden'
     : '';
 
   return (

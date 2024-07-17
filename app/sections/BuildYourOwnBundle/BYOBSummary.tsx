@@ -143,7 +143,7 @@ export function BYOBSummary({
                   >
                     <div
                       className={`flex size-[28px] items-center justify-center rounded-[50%] transition ${
-                        isActive ? 'bg-secondary' : 'bg-gray'
+                        isActive ? 'bg-secondary' : 'bg-mediumGray'
                       }`}
                     >
                       {isActive ? (

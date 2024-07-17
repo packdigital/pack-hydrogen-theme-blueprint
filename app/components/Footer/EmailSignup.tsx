@@ -25,7 +25,7 @@ export function EmailSignup({settings}: {settings: Settings['footer']}) {
 
   return enabled ? (
     <form
-      className="border-b border-b-gray px-4 py-8 md:border-none md:p-0"
+      className="border-b border-b-mediumGray px-4 py-8 md:border-none md:p-0"
       onSubmit={handleSubmit}
       ref={formRef}
     >

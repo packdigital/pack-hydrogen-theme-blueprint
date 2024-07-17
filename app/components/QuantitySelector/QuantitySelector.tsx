@@ -31,7 +31,9 @@ export function QuantitySelector({
         }`}
         className={`relative size-8 rounded-full border border-border transition disabled:opacity-50 ${
           hideButtons ? 'invisible' : ''
-        } ${disableDecrement ? 'cursor-not-allowed' : 'md:hover:border-gray'}`}
+        } ${
+          disableDecrement ? 'cursor-not-allowed' : 'md:hover:border-mediumGray'
+        }`}
         disabled={disabled || isUpdating || disableDecrement}
         onClick={handleDecrement}
         type="button"
@@ -46,7 +48,7 @@ export function QuantitySelector({
 
       <div className="relative flex flex-1 items-center justify-center">
         {isUpdating ? (
-          <Spinner color="var(--gray)" width="20" />
+          <Spinner color="var(--medium-gray)" width="20" />
         ) : (
           <p className="w-full text-center outline-none">{quantity}</p>
         )}
@@ -56,9 +58,11 @@ export function QuantitySelector({
         aria-label={`Increase quantity of ${productTitle} by 1 to ${
           quantity + 1
         }`}
-        className={`relative size-8 rounded-full border border-border transition disabled:opacity-50 md:hover:border-gray ${
+        className={`relative size-8 rounded-full border border-border transition disabled:opacity-50 md:hover:border-mediumGray ${
           hideButtons ? 'invisible' : ''
-        } ${disableIncrement ? 'cursor-not-allowed' : 'md:hover:border-gray'}`}
+        } ${
+          disableIncrement ? 'cursor-not-allowed' : 'md:hover:border-mediumGray'
+        }`}
         disabled={disabled || isUpdating || disableIncrement}
         onClick={handleIncrement}
         type="button"
