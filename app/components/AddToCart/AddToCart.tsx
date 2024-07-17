@@ -1,5 +1,5 @@
 import type {
-  Attribute,
+  AttributeInput,
   SellingPlan,
 } from '@shopify/hydrogen/storefront-api-types';
 
@@ -9,7 +9,7 @@ import type {SelectedVariant} from '~/lib/types';
 
 interface AddToCartProps {
   addToCartText?: string;
-  attributes?: Attribute[];
+  attributes?: AttributeInput[];
   className?: string;
   isPdp?: boolean;
   quantity?: number;
