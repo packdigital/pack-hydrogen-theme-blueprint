@@ -1,5 +1,6 @@
 import {useMemo} from 'react';
 import {useLocation} from '@remix-run/react';
+import type {ProductOptionValue} from '@shopify/hydrogen/storefront-api-types';
 
 import {Link} from '~/components';
 import type {SelectedVariant, Swatch} from '~/lib/types';
@@ -12,9 +13,9 @@ interface ProductOptionValueLinkProps {
   isColor: boolean;
   isDisabled: boolean;
   isSelected: boolean;
+  optionValue: ProductOptionValue;
   selectedVariantFromOptions: SelectedVariant;
   swatch?: Swatch | null;
-  value: string;
 }
 
 export function ProductOptionValueLink({
@@ -22,9 +23,9 @@ export function ProductOptionValueLink({
   isColor,
   isDisabled,
   isSelected,
+  optionValue,
   selectedVariantFromOptions,
   swatch,
-  value,
 }: ProductOptionValueLinkProps) {
   const {search} = useLocation();
 
@@ -32,29 +33,29 @@ export function ProductOptionValueLink({
     if (!selectedVariantFromOptions) return null;
     const params = new URLSearchParams(search);
     selectedVariantFromOptions.selectedOptions.forEach(
-      ({name: optionName, value: optionValue}) => {
-        params.set(optionName, optionValue);
+      ({name: optionName, value}) => {
+        params.set(optionName, value);
       },
     );
     return `/products/${selectedVariantFromOptions.product.handle}?${params}`;
   }, [search, selectedVariantFromOptions]);
 
   return (
-    <Link aria-label={value} preventScrollReset to={url}>
+    <Link aria-label={optionValue.name} preventScrollReset to={url}>
       {isColor ? (
         <InnerColorOptionValue
           isAvailable={isAvailable}
           isDisabled={isDisabled}
           isSelected={isSelected}
           swatch={swatch}
-          value={value}
+          optionValue={optionValue}
         />
       ) : (
         <InnerOptionValue
           isAvailable={isAvailable}
           isDisabled={isDisabled}
           isSelected={isSelected}
-          value={value}
+          optionValue={optionValue}
         />
       )}
     </Link>

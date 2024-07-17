@@ -11,7 +11,7 @@ export function useCartLineImage({line}: {line: CartLine}) {
       Number(
         merchandise?.product?.options?.find(({name}) => {
           return name === COLOR_OPTION_NAME;
-        })?.values?.length,
+        })?.optionValues?.length,
       ) > 1;
     if (!hasMultipleColors) return merchandise?.image;
 

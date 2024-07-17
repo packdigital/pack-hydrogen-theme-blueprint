@@ -1,3 +1,5 @@
+import {OPTION_FRAGMENT} from './product.queries';
+
 /*
  * STOREFRONT API QUERIES -----------------------------------------------------
  */
@@ -93,8 +95,7 @@ export const CART_LINE_FRAGMENT = `#graphql
             }
           }
           options {
-            name
-            values
+            ...option
           }
           images(first: 20) {
             nodes {
@@ -113,6 +114,7 @@ export const CART_LINE_FRAGMENT = `#graphql
       }
     }
   }
+  ${OPTION_FRAGMENT}
 ` as const;
 
 export const CART_FRAGMENT = `#graphql

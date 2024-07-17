@@ -33,7 +33,7 @@ export function ColorVariantSelector({
     return (
       initialProduct?.options.find(
         (option) => option.name === COLOR_OPTION_NAME,
-      )?.values || []
+      )?.optionValues || []
     );
   }, [initialProduct]);
 

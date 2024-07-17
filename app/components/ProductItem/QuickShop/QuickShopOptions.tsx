@@ -26,14 +26,14 @@ export function QuickShopOptions({
   const [optionsVisible, setOptionsVisible] = useState(false);
 
   const option = useMemo(() => {
-    if (!selectedProduct) return {name: '', values: [], text: ''};
+    if (!selectedProduct) return {name: '', optionValues: [], text: ''};
     // Find first non-color option that has more than one value for quick shop
-    const _option = selectedProduct.options?.find(({name, values}) => {
-      return name !== COLOR_OPTION_NAME && values.length > 1;
+    const _option = selectedProduct.options?.find(({name, optionValues}) => {
+      return name !== COLOR_OPTION_NAME && optionValues.length > 1;
     });
     return {
       name: _option?.name || '',
-      values: _option?.values || [],
+      optionValues: _option?.optionValues || [],
       text:
         quickShopMultiText?.replace('{{option}}', _option?.name || '') || '',
     };
@@ -52,19 +52,19 @@ export function QuickShopOptions({
           optionsVisible ? 'max-md:visible' : ''
         }`}
         style={{
-          gridTemplateColumns: `repeat(${option.values.length}, 1fr)`,
+          gridTemplateColumns: `repeat(${option.optionValues.length}, 1fr)`,
         }}
       >
-        {option.values.map((value) => {
+        {option.optionValues.map((optionValue) => {
           return (
             <li
-              key={value}
+              key={optionValue.name}
               className="overflow-hidden border-r border-black last:border-none"
             >
               <QuickShopOption
                 optionName={option.name}
                 selectedProduct={selectedProduct}
-                value={value}
+                optionValue={optionValue}
               />
             </li>
           );

@@ -33,17 +33,19 @@ export function ProductOptionValues({
   }, [product]);
 
   const hasSubgroups = !!option?.hasSubgroups;
-  const {name = '', values} = {...option};
+  const {name = '', optionValues} = {...option};
 
   return (
     <div>
       {hasSubgroups && (
         <div className="flex flex-col gap-2">
           {option?.groups?.map((group, index) => {
-            if (!group.values.length) return null;
+            if (!group.optionValues.length) return null;
 
             const selectedColor = selectedOptionsMap?.[name];
-            const groupHasSelectedColor = group.values.includes(selectedColor);
+            const groupHasSelectedColor = group.optionValues.some(
+              (optionValue) => optionValue.name === selectedColor,
+            );
 
             return (
               <div key={index}>
@@ -53,16 +55,16 @@ export function ProductOptionValues({
                 />
 
                 <ul className="flex flex-wrap gap-2">
-                  {group.values.map((value) => {
+                  {group.optionValues.map((optionValue) => {
                     return (
-                      <li key={value}>
+                      <li key={optionValue.name}>
                         <ProductOptionValue
                           name={name}
                           product={product}
                           selectedOptionsMap={selectedOptionsMap}
                           setSelectedOption={setSelectedOption}
                           swatchesMap={swatchesMap}
-                          value={value}
+                          optionValue={optionValue}
                         />
                       </li>
                     );
@@ -82,16 +84,16 @@ export function ProductOptionValues({
           />
 
           <ul className="flex flex-wrap gap-2">
-            {values?.map((value) => {
+            {optionValues?.map((optionValue) => {
               return (
-                <li key={value}>
+                <li key={optionValue.name}>
                   <ProductOptionValue
                     name={name}
                     product={product}
                     selectedOptionsMap={selectedOptionsMap}
                     setSelectedOption={setSelectedOption}
                     swatchesMap={swatchesMap}
-                    value={value}
+                    optionValue={optionValue}
                   />
                 </li>
               );

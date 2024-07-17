@@ -107,6 +107,21 @@ const COLLECTION_FRAGMENT = `#graphql
           label
           count
           input
+          swatch {
+            color
+            image {
+              mediaContentType
+              previewImage {
+                height
+                id
+                url
+                width
+                altText
+              }
+              id
+              alt
+            }
+          }
         }
       }
       nodes {

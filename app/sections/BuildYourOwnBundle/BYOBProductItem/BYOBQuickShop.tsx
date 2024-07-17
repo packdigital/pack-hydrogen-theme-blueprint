@@ -43,11 +43,11 @@ export function BYOBQuickShop({
 
     const hasOnlySingleValueOptions =
       options?.every((option) => {
-        return option.values.length === 1;
+        return option.optionValues.length === 1;
       }) || false;
     const hasOnlyOneOptionWithMultipleValues =
       options?.reduce((acc, option) => {
-        return acc + (option.values.length > 1 ? 1 : 0);
+        return acc + (option.optionValues.length > 1 ? 1 : 0);
       }, 0) === 1 || false;
 
     return hasOnlySingleValueOptions || hasOnlyOneOptionWithMultipleValues;

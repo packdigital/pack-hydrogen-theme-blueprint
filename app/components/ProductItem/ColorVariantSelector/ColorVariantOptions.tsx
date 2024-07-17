@@ -1,4 +1,5 @@
 import {useMemo, useState} from 'react';
+import type {ProductOptionValue} from '@shopify/hydrogen-react/storefront-api-types';
 
 import {COLOR_OPTION_NAME} from '~/lib/constants';
 import type {
@@ -15,7 +16,7 @@ interface ColorVariantOptionsProps {
   enabledColorNameOnHover?: boolean;
   grouping?: Group | null;
   initialProduct: SelectedProduct;
-  initialProductColorOptions: string[];
+  initialProductColorOptions: ProductOptionValue[];
   selectedVariant: SelectedVariant;
   setProductFromColorSelector: (product: SelectedProduct) => void;
   setVariantFromColorSelector: (variant: SelectedVariant) => void;
@@ -47,18 +48,21 @@ export function ColorVariantOptions({
     )?.value;
   }, [selectedVariant]);
 
-  const slicedColorOptions: string[] = colorOptions.slice(0, maxCount);
+  const slicedColorOptions: ProductOptionValue[] = colorOptions.slice(
+    0,
+    maxCount,
+  );
   const remainingColorCount = colorOptions.length - slicedColorOptions.length;
 
   return (
     <ul className="flex flex-wrap gap-1">
       {slicedColorOptions.map((color, index) => {
         const productForColor = grouping
-          ? productMapByColor?.[color]
+          ? productMapByColor?.[color.name]
           : initialProduct;
         const variantForColor = grouping
           ? productForColor?.variants?.nodes?.[0]
-          : variantMapByColor?.[color];
+          : variantMapByColor?.[color.name];
 
         return productForColor && variantForColor ? (
           <li key={index}>

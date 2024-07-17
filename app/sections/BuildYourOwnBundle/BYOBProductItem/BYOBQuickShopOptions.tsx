@@ -15,13 +15,13 @@ export function BYOBQuickShopOptions({
     number | null
   >(null);
   const option = useMemo(() => {
-    if (!product) return {name: '', values: [], text: ''};
-    const _option = product.options?.find(({values}) => {
-      return values.length > 1;
+    if (!product) return {name: '', optionValues: [], text: ''};
+    const _option = product.options?.find(({optionValues}) => {
+      return optionValues.length > 1;
     });
     return {
       name: _option?.name || '',
-      values: _option?.values || [],
+      optionValues: _option?.optionValues || [],
     };
   }, [product?.id]);
 
@@ -30,13 +30,13 @@ export function BYOBQuickShopOptions({
       <ul
         className="scrollbar-hide grid h-full flex-1 overflow-y-auto"
         style={{
-          gridTemplateColumns: `repeat(${option.values.length}, 1fr)`,
+          gridTemplateColumns: `repeat(${option.optionValues.length}, 1fr)`,
         }}
       >
-        {option.values.map((value, index) => {
+        {option.optionValues.map((optionValue, index) => {
           return (
             <li
-              key={value}
+              key={optionValue.name}
               className="min-w-5 border-r border-black last:border-none"
             >
               <BYOBQuickShopOption
@@ -50,7 +50,7 @@ export function BYOBQuickShopOptions({
                 handleAddToBundle={handleAddToBundle}
                 optionName={option.name}
                 product={product}
-                value={value}
+                optionValue={optionValue}
               />
             </li>
           );

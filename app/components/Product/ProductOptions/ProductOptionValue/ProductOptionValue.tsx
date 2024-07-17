@@ -1,3 +1,5 @@
+import type {ProductOptionValue as ProductOptionValueType} from '@shopify/hydrogen/storefront-api-types';
+
 import type {ProductWithGrouping, SwatchesMap} from '~/lib/types';
 
 import {ProductOptionValueButton} from './ProductOptionValueButton';
@@ -6,20 +8,20 @@ import {useProductOptionValue} from './useProductOptionValue';
 
 interface ProductOptionValueProps {
   name: string;
+  optionValue: ProductOptionValueType;
   product: ProductWithGrouping;
   selectedOptionsMap: Record<string, string>;
   setSelectedOption: (name: string, value: string) => void;
   swatchesMap: SwatchesMap;
-  value: string;
 }
 
 export function ProductOptionValue({
   name,
+  optionValue,
   product,
   selectedOptionsMap,
   setSelectedOption,
   swatchesMap,
-  value,
 }: ProductOptionValueProps) {
   const {
     isAvailable,
@@ -32,10 +34,10 @@ export function ProductOptionValue({
     name,
     product,
     selectedOptionsMap,
-    value,
+    optionValue,
   });
 
-  const swatch = swatchesMap?.[value.toLowerCase()];
+  const swatch = swatchesMap?.[optionValue.name.toLowerCase()];
 
   return isFromGrouping ? (
     <ProductOptionValueLink
@@ -45,7 +47,7 @@ export function ProductOptionValue({
       isSelected={isSelected}
       selectedVariantFromOptions={selectedVariantFromOptions}
       swatch={swatch}
-      value={value}
+      optionValue={optionValue}
     />
   ) : (
     <ProductOptionValueButton
@@ -56,7 +58,7 @@ export function ProductOptionValue({
       name={name}
       setSelectedOption={setSelectedOption}
       swatch={swatch}
-      value={value}
+      optionValue={optionValue}
     />
   );
 }

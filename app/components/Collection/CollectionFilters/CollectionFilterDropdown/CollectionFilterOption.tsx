@@ -3,7 +3,6 @@ import {useMemo} from 'react';
 import {COLOR_OPTION_NAME, PRICE_FILTER_ID} from '~/lib/constants';
 import {isLightHexColor} from '~/lib/utils';
 import {Image, Svg} from '~/components';
-import type {Swatch} from '~/lib/types';
 
 import type {CollectionFilterOptionProps} from '../CollectionFilters.types';
 
@@ -16,27 +15,34 @@ export function CollectionFilterOption({
   showCount,
   swatchesMap,
 }: CollectionFilterOptionProps) {
-  const {id, count, label, parsedInput, isActive} = option;
+  const {id, count, label, parsedInput, isActive, swatch} = option;
 
   const isPrice = id === PRICE_FILTER_ID;
   const isColor =
     parsedInput?.variantOption?.name === COLOR_OPTION_NAME.toLowerCase();
-  let swatch: Swatch | undefined;
-  let image: string | undefined;
+  let optionColor: string | undefined;
+  let optionImage;
+  let optionImageUrl: string | undefined;
 
   if (isColor) {
     const color = parsedInput.variantOption.value.toLowerCase();
-    swatch = swatchesMap?.[color];
-    image = swatch?.image?.src;
+    const swatchFromCms = swatchesMap?.[color];
+    const colorFromCms = swatchFromCms?.color;
+    const colorFromShopify = swatch?.color;
+    optionColor = colorFromShopify || colorFromCms;
+    const imageFromCms = swatchFromCms?.image;
+    const imageFromShopify = color.swatch?.image?.previewImage;
+    optionImage = imageFromShopify || imageFromCms;
+    optionImageUrl = imageFromShopify?.url || imageFromCms?.src;
   }
 
   const checkmarkColor = useMemo(() => {
     if (!isColor) return 'text-white';
-    if (!swatch) return 'text-black';
-    return isLightHexColor(swatch.color) ? 'text-black' : 'text-white';
-  }, [isColor, swatch]);
+    if (!optionColor) return 'text-black';
+    return isLightHexColor(optionColor) ? 'text-black' : 'text-white';
+  }, [isColor, optionColor]);
 
-  const colorBackground = swatch?.color || 'var(--off-white)';
+  const colorBackground = optionColor || 'var(--off-white)';
   const nonColorBackground = isActive ? 'var(--black)' : 'var(--off-white)';
   const disabled = !count;
 
@@ -99,11 +105,13 @@ export function CollectionFilterOption({
           backgroundColor: isColor ? colorBackground : nonColorBackground,
         }}
       >
-        {image && (
+        {optionImageUrl && (
           <Image
             data={{
               altText: label,
-              url: image,
+              url: optionImageUrl,
+              width: optionImage?.width,
+              height: optionImage?.height,
             }}
             aspectRatio="1/1"
             width="24"
