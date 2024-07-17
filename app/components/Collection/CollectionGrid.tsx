@@ -34,9 +34,13 @@ export function CollectionGrid({
         return (
           <div className="flex flex-col gap-4">
             <PreviousLink
-              className={`btn-pill relative self-center`}
+              className={`btn-select relative self-center`}
               suppressHydrationWarning
             >
+              <span className={`${isLoading ? 'invisible' : 'visible'}`}>
+                {loadPreviousText}
+              </span>
+
               {isLoading && (
                 <LoadingDots
                   status="Loading previous products"
@@ -44,9 +48,6 @@ export function CollectionGrid({
                   withStatusRole
                 />
               )}
-              <span className={`${isLoading ? 'invisible' : 'visible'}`}>
-                {loadPreviousText}
-              </span>
             </PreviousLink>
 
             <ul
@@ -95,9 +96,13 @@ export function CollectionGrid({
             </ul>
 
             <NextLink
-              className={`btn-pill relative flex self-center`}
+              className={`btn-select relative flex self-center`}
               suppressHydrationWarning
             >
+              <span className={`${isLoading ? 'invisible' : 'visible'}`}>
+                {loadMoreText}
+              </span>
+
               {isLoading && (
                 <LoadingDots
                   status="Loading more products"
@@ -105,9 +110,6 @@ export function CollectionGrid({
                   withStatusRole
                 />
               )}
-              <span className={`${isLoading ? 'invisible' : 'visible'}`}>
-                {loadMoreText}
-              </span>
             </NextLink>
 
             {!products?.nodes?.length && activeFilterValues?.length > 0 && (

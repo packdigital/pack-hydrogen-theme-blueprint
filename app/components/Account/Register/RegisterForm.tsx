@@ -93,9 +93,11 @@ export function RegisterForm({settings}: {settings: Settings['account']}) {
           </span>
 
           {status.started && (
-            <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-              <LoadingDots />
-            </span>
+            <LoadingDots
+              status="Registering"
+              withAbsolutePosition
+              withStatusRole
+            />
           )}
         </button>
       </form>
