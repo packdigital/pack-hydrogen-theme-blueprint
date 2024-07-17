@@ -1,5 +1,8 @@
 import {useCallback, useEffect, useMemo, useState} from 'react';
-import type {Product} from '@shopify/hydrogen/storefront-api-types';
+import type {
+  Product,
+  ProductOptionValue,
+} from '@shopify/hydrogen/storefront-api-types';
 
 import {COLOR_OPTION_NAME} from '~/lib/constants';
 import type {Group, SelectedProduct, SelectedVariant} from '~/lib/types';
@@ -7,7 +10,7 @@ import type {Group, SelectedProduct, SelectedVariant} from '~/lib/types';
 interface UseColorVariantOptionsProps {
   grouping?: Group | null;
   initialProduct: SelectedProduct;
-  initialProductColorOptions: string[];
+  initialProductColorOptions: ProductOptionValue[];
 }
 
 type ProductMapByColor = Record<string, Product>;
@@ -30,7 +33,7 @@ export function useColorVariantOptions({
       ? [
           originalColor,
           ...grouping.optionsMap[COLOR_OPTION_NAME].filter(
-            (color) => color !== originalColor,
+            (color) => color.name !== originalColor.name,
           ),
         ]
       : initialProductColorOptions;
@@ -45,20 +48,20 @@ export function useColorVariantOptions({
     // any intial product options that are not color and has only one value
     const initialProductSingleValueOptions = initialProduct?.options?.filter(
       (option) =>
-        option.name !== COLOR_OPTION_NAME && option.values.length === 1,
+        option.name !== COLOR_OPTION_NAME && option.optionValues.length === 1,
     );
 
     const _productMapByColor = groupingProducts.reduce(
       (acc: ProductMapByColor, groupProduct) => {
         const colors = groupProduct?.options.find(({name}) => {
           return name === COLOR_OPTION_NAME;
-        })?.values;
+        })?.optionValues;
         if (!colors?.length) return acc;
         colors.forEach((color) => {
-          if (acc[color]) return;
+          if (acc[color.name]) return;
           // if no additional options to match, set as product
           if (!initialProductSingleValueOptions?.length) {
-            acc[color] = groupProduct;
+            acc[color.name] = groupProduct;
           }
           // if additional options to match, check if they match
           else {
@@ -68,13 +71,14 @@ export function useColorVariantOptions({
                   (groupOption) => groupOption.name === option.name,
                 );
                 return (
-                  groupProductOption?.values[0] === option.values[0] &&
-                  groupProductOption?.values.length === 1
+                  groupProductOption?.optionValues[0].name ===
+                    option.optionValues[0].name &&
+                  groupProductOption?.optionValues.length === 1
                 );
               });
             // if all additional options match, set as product
             if (groupProductMatchesInitialProduct) {
-              acc[color] = groupProduct;
+              acc[color.name] = groupProduct;
             }
           }
         });

@@ -13,23 +13,23 @@ export function BYOBQuickShopOption({
   incrementDisabled,
   index,
   optionName,
+  optionValue,
   product,
   setActiveQtySelectorIndex,
-  value,
 }: BYOBQuickShopOptionProps) {
   const variantToAdd = useMemo(() => {
     const variant = product?.variants?.nodes?.find((variant) => {
       const variantOption = variant.selectedOptions?.find(
         (option) => option.name === optionName,
       )?.value;
-      return variantOption === value;
+      return variantOption === optionValue.name;
     });
     if (!variant) return undefined;
     return {
       ...variant,
       image: variant.image || product?.featuredImage,
     };
-  }, [optionName, product, value]);
+  }, [optionName, product, optionValue.name]);
 
   const showQtySelector = activeQtySelectorIndex === index;
   const variantInBundle = bundleMapById[variantToAdd?.id || ''];
@@ -63,7 +63,7 @@ export function BYOBQuickShopOption({
       }}
     >
       <button
-        aria-label={value}
+        aria-label={optionValue.name}
         className={`relative flex size-full items-center justify-center overflow-hidden whitespace-nowrap px-1 text-center text-sm transition disabled:cursor-not-allowed disabled:md:hover:bg-background disabled:md:hover:text-text ${selectedClass} ${validClass} ${unavailableClass}`}
         disabled={
           disabled || isSoldOut || (incrementDisabled && !variantInBundle)
@@ -80,7 +80,7 @@ export function BYOBQuickShopOption({
         }}
         type="button"
       >
-        {value}
+        {optionValue.name}
       </button>
 
       {showQtySelector && (

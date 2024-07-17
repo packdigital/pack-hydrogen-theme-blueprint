@@ -1,9 +1,8 @@
 import type {
   Product,
+  ProductOptionValue,
   ProductVariant,
 } from '@shopify/hydrogen/storefront-api-types';
-
-import type {ImageCms} from '~/lib/types';
 
 export type SelectedProduct = Product | null | undefined;
 
@@ -11,8 +10,8 @@ export type SelectedVariant = ProductVariant | null | undefined;
 
 export interface OptionWithGroups {
   name: string;
-  values: string[];
-  groups?: {name: string; values: string[]}[];
+  optionValues: ProductOptionValue[];
+  groups?: {name: string; optionValues: ProductOptionValue[]}[];
   hasSubgroups?: boolean;
 }
 
@@ -30,7 +29,7 @@ export interface Group {
   products: {handle: string}[];
   subgroups: Subgroup[];
   options?: OptionWithGroups[];
-  optionsMap?: Record<string, string[]>;
+  optionsMap?: Record<string, ProductOptionValue[]>;
   allProducts?: {handle: string}[];
   productsByHandle?: Record<string, Product>;
   productsByOptionValue?: Record<string, Record<string, Product[]>>;

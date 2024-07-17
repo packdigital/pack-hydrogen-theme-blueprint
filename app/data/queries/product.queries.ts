@@ -77,6 +77,32 @@ export const CMS_PRODUCTS_QUERY = `#graphql
 
 // Docs: https://shopify.dev/docs/api/storefront/latest/queries/product
 
+export const OPTION_FRAGMENT = `#graphql
+  fragment option on ProductOption {
+    id
+    name
+    optionValues {
+      id
+      name
+      swatch {
+        color
+        image {
+          mediaContentType
+          previewImage {
+            height
+            id
+            url
+            width
+            altText
+          }
+          id
+          alt
+        }
+      }
+    }
+  }
+`;
+
 export const METAFIELD_FRAGMENT = `#graphql
 fragment metafield on Metafield {
     createdAt
@@ -201,8 +227,7 @@ export const PRODUCT_FRAGMENT = `#graphql
       }
     }
     options {
-      name
-      values
+      ...option
     }
     selectedVariant: variantBySelectedOptions(selectedOptions: $selectedOptions) {
       ... on ProductVariant {
@@ -232,6 +257,7 @@ export const PRODUCT_FRAGMENT = `#graphql
   }
   ${VARIANT_FRAGMENT}
   ${SELLING_PLAN_GROUP_FRAGMENT}
+  ${OPTION_FRAGMENT}
 ` as const;
 
 export const PRODUCT_ITEM_FRAGMENT = `#graphql
@@ -289,8 +315,7 @@ export const PRODUCT_ITEM_FRAGMENT = `#graphql
       }
     }
     options {
-      values
-      name
+      ...option
     }
     sellingPlanGroups(first: 10) {
       edges {
@@ -311,6 +336,7 @@ export const PRODUCT_ITEM_FRAGMENT = `#graphql
   }
   ${VARIANT_FRAGMENT}
   ${SELLING_PLAN_GROUP_FRAGMENT}
+  ${OPTION_FRAGMENT}
 ` as const;
 
 export const PRODUCT_QUERY = `#graphql
@@ -373,8 +399,7 @@ export const GROUPING_PRODUCT_QUERY = `#graphql
       handle
       productType
       options {
-        name,
-        values
+        ...option
       }
       variants(first: 100) {
         nodes {
@@ -409,6 +434,7 @@ export const GROUPING_PRODUCT_QUERY = `#graphql
       }
     }
   }
+  ${OPTION_FRAGMENT}
 ` as const;
 
 export const PRODUCTS_QUERY = `#graphql

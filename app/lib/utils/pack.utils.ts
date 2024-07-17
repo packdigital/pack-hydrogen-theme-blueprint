@@ -1,6 +1,9 @@
 import {v4 as uuidv4} from 'uuid';
 import cookieParser from 'cookie';
-import type {Product} from '@shopify/hydrogen/storefront-api-types';
+import type {
+  Product,
+  ProductOptionValue,
+} from '@shopify/hydrogen/storefront-api-types';
 
 import {COLOR_OPTION_NAME} from '~/lib/constants';
 import type {Group, OptionWithGroups} from '~/lib/types';
@@ -107,17 +110,24 @@ export const formatGroupingWithOptions = ({
 
   let hasColorOption = false;
 
-  let parentGroupOptionsMap: Record<string, string[]> = {};
+  let parentGroupOptionsMap: Record<string, ProductOptionValue[]> = {};
   if (hasParentGroupWithProducts) {
     parentGroupOptionsMap = parentGroupProducts.reduce(
-      (acc: Record<string, string[]>, {options}) => {
-        options?.forEach(({name, values}) => {
+      (acc: Record<string, ProductOptionValue[]>, {options}) => {
+        options?.forEach(({name, optionValues}) => {
           if (name === COLOR_OPTION_NAME && !hasColorOption)
             hasColorOption = true;
           if (!acc[name]) {
-            acc[name] = values;
+            acc[name] = optionValues;
           } else {
-            acc[name] = [...new Set([...acc[name], ...values])];
+            const newOptionValues = [...acc[name], ...optionValues];
+            const newOptionValuesMap = newOptionValues.reduce(
+              (ovAcc, value) => {
+                return {...ovAcc, [value.name]: value};
+              },
+              {},
+            );
+            acc[name] = Object.values(newOptionValuesMap);
           }
         });
         return acc;
@@ -126,19 +136,29 @@ export const formatGroupingWithOptions = ({
     );
   }
 
-  let subGroupOptionsMapsByIndex: Record<string, Record<string, string[]>> = {};
+  let subGroupOptionsMapsByIndex: Record<
+    string,
+    Record<string, ProductOptionValue[]>
+  > = {};
   if (hasSubgroupsWithProducts) {
     subGroupOptionsMapsByIndex = Object.entries(subGroupProductsByIndex).reduce(
       (acc, [sgIndex, sgProducts]) => {
         const subGroupOptions = sgProducts.reduce(
-          (sgAcc: Record<string, string[]>, {options}) => {
-            options?.forEach(({name, values}) => {
+          (sgAcc: Record<string, ProductOptionValue[]>, {options}) => {
+            options?.forEach(({name, optionValues}) => {
               if (name === COLOR_OPTION_NAME && !hasColorOption)
                 hasColorOption = true;
               if (!sgAcc[name]) {
-                sgAcc[name] = values;
+                sgAcc[name] = optionValues;
               } else {
-                sgAcc[name] = [...new Set([...sgAcc[name], ...values])];
+                const newOptionValues = [...sgAcc[name], ...optionValues];
+                const newOptionValuesMap = newOptionValues.reduce(
+                  (ovAcc, value) => {
+                    return {...ovAcc, [value.name]: value};
+                  },
+                  {},
+                );
+                sgAcc[name] = Object.values(newOptionValuesMap);
               }
             });
             return sgAcc;
@@ -171,13 +191,13 @@ export const formatGroupingWithOptions = ({
 
   const combinedGroupOptionsInitialMap: Record<string, OptionWithGroups> = {};
   if (hasParentGroupWithProducts) {
-    Object.entries(parentGroupOptionsMap).forEach(([name, values]) => {
-      combinedGroupOptionsInitialMap[name] = {values} as OptionWithGroups;
+    Object.entries(parentGroupOptionsMap).forEach(([name, optionValues]) => {
+      combinedGroupOptionsInitialMap[name] = {optionValues} as OptionWithGroups;
       if (name === groupingOptionName && hasSubgroupsWithProducts) {
         combinedGroupOptionsInitialMap[name].groups = [
           {
             name, // customize parent option name if desired, e.g. "Primary"
-            values,
+            optionValues,
           },
         ];
       }
@@ -186,23 +206,31 @@ export const formatGroupingWithOptions = ({
   if (hasSubgroupsWithProducts) {
     Object.entries(subGroupOptionsMapsByIndex).forEach(
       ([subgroupIndex, subGroupOptions]) => {
-        Object.entries(subGroupOptions).forEach(([name, values]) => {
+        Object.entries(subGroupOptions).forEach(([name, optionValues]) => {
           if (!combinedGroupOptionsInitialMap[name]) {
-            combinedGroupOptionsInitialMap[name] = {values} as OptionWithGroups;
+            combinedGroupOptionsInitialMap[name] = {
+              optionValues,
+            } as OptionWithGroups;
           } else {
-            combinedGroupOptionsInitialMap[name].values = [
-              ...new Set([
-                ...combinedGroupOptionsInitialMap[name].values,
-                ...values,
-              ]),
+            const newOptionValues = [
+              ...combinedGroupOptionsInitialMap[name].optionValues,
+              ...optionValues,
             ];
+            const newOptionValuesMap = newOptionValues.reduce(
+              (ovAcc, value) => {
+                return {...ovAcc, [value.name]: value};
+              },
+              {},
+            );
+            combinedGroupOptionsInitialMap[name].optionValues =
+              Object.values(newOptionValuesMap);
           }
           if (name === groupingOptionName) {
             combinedGroupOptionsInitialMap[name].groups = [
               ...(combinedGroupOptionsInitialMap[name].groups || []),
               {
                 name: grouping.subgroups[Number(subgroupIndex)].title,
-                values,
+                optionValues,
               },
             ];
           }
@@ -213,17 +241,17 @@ export const formatGroupingWithOptions = ({
 
   const combinedGroupOptions = Object.entries(
     combinedGroupOptionsInitialMap,
-  ).map(([name, {values, groups}]) => {
+  ).map(([name, {optionValues, groups}]) => {
     return {
       name,
-      values,
+      optionValues,
       ...(groups && {groups, hasSubgroups: true}),
     };
   });
 
   const combinedGroupOptionsMap = combinedGroupOptions.reduce(
-    (acc: Record<string, string[]>, {name, values}) => {
-      acc[name] = values;
+    (acc: Record<string, ProductOptionValue[]>, {name, optionValues}) => {
+      acc[name] = optionValues;
       return acc;
     },
     {},

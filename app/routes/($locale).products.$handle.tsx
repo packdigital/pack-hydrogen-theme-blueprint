@@ -120,11 +120,14 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     const groupingProductsByOptionValue = groupingProducts.reduce(
       (acc, groupProduct: ProductWithGrouping) => {
         groupProduct.options.forEach((option) => {
-          const {name, values} = option;
-          if (!values) return;
-          values.forEach((value) => {
+          const {name, optionValues} = option;
+          if (!optionValues) return;
+          optionValues.forEach((optionValue) => {
             if (!acc[name]) acc[name] = {};
-            acc[name][value] = [...(acc[name][value] || []), groupProduct];
+            acc[name][optionValue.name] = [
+              ...(acc[name][optionValue.name] || []),
+              groupProduct,
+            ];
           });
         });
         return acc;

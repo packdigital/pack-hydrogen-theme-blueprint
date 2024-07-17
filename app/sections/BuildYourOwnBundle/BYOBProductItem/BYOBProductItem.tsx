@@ -32,7 +32,7 @@ export function BYOBProductItem({
     if (!product) return null;
     return (
       product.options.find((option) => option.name === COLOR_OPTION_NAME)
-        ?.values?.[0] || null
+        ?.optionValues?.[0] || null
     );
   }, [product]);
 
@@ -76,7 +76,7 @@ export function BYOBProductItem({
           <h3 className="text-h5">{product?.title}</h3>
 
           {primaryOptionValue && (
-            <p className="text-sm">{primaryOptionValue}</p>
+            <p className="text-sm">{primaryOptionValue.name}</p>
           )}
         </div>
 

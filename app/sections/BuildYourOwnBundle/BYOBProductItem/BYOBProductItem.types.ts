@@ -1,6 +1,7 @@
 import type {
   MediaEdge,
   Product,
+  ProductOptionValue,
   ProductVariant,
   Video,
 } from '@shopify/hydrogen-react/storefront-api-types';
@@ -59,7 +60,7 @@ export interface BYOBQuickShopOptionProps {
   incrementDisabled: boolean;
   index: number;
   optionName: string;
+  optionValue: ProductOptionValue;
   product: Product | null | undefined;
   setActiveQtySelectorIndex: (index: number | null) => void;
-  value: string;
 }

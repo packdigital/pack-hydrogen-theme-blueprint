@@ -42,6 +42,21 @@ export const PRODUCTS_SEARCH_QUERY = `#graphql
           label
           count
           input
+          swatch {
+            color
+            image {
+              mediaContentType
+              previewImage {
+                height
+                id
+                url
+                width
+                altText
+              }
+              id
+              alt
+            }
+          }
         }
       }
       pageInfo {

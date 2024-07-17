@@ -1,3 +1,5 @@
+import type {ProductOptionValue} from '@shopify/hydrogen/storefront-api-types';
+
 import type {Swatch} from '~/lib/types';
 
 import {InnerColorOptionValue} from './InnerColorOptionValue';
@@ -9,9 +11,9 @@ interface ProductOptionValueButtonProps {
   isDisabled: boolean;
   isSelected: boolean;
   name: string;
+  optionValue: ProductOptionValue;
   setSelectedOption: (name: string, value: string) => void;
   swatch?: Swatch | null;
-  value: string;
 }
 
 export function ProductOptionValueButton({
@@ -20,17 +22,17 @@ export function ProductOptionValueButton({
   isDisabled,
   isSelected,
   name,
+  optionValue,
   setSelectedOption,
   swatch,
-  value,
 }: ProductOptionValueButtonProps) {
   return (
     <button
-      aria-label={value}
+      aria-label={optionValue.name}
       disabled={isDisabled}
       onClick={() => {
         if (isSelected) return;
-        setSelectedOption(name, value);
+        setSelectedOption(name, optionValue.name);
       }}
       type="button"
     >
@@ -40,14 +42,14 @@ export function ProductOptionValueButton({
           isDisabled={isDisabled}
           isSelected={isSelected}
           swatch={swatch}
-          value={value}
+          optionValue={optionValue}
         />
       ) : (
         <InnerOptionValue
           isAvailable={isAvailable}
           isDisabled={isDisabled}
           isSelected={isSelected}
-          value={value}
+          optionValue={optionValue}
         />
       )}
     </button>

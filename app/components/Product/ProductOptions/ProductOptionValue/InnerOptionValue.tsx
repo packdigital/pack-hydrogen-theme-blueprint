@@ -1,15 +1,17 @@
+import type {ProductOptionValue} from '@shopify/hydrogen/storefront-api-types';
+
 interface InnerOptionValueProps {
   isAvailable: boolean;
   isDisabled: boolean;
   isSelected: boolean;
-  value: string;
+  optionValue: ProductOptionValue;
 }
 
 export function InnerOptionValue({
   isAvailable,
   isDisabled,
   isSelected,
-  value,
+  optionValue,
 }: InnerOptionValueProps) {
   const validClass = !isDisabled
     ? 'md:hover:border-text'
@@ -23,7 +25,7 @@ export function InnerOptionValue({
     <div
       className={`relative flex h-10 min-w-14 items-center justify-center rounded border border-border px-3 transition ${validClass} ${unavailableClass} ${selectedClass}`}
     >
-      {value}
+      {optionValue.name}
     </div>
   );
 }
