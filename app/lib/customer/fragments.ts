@@ -259,7 +259,6 @@ const METAFIELD = `#graphql
     namespace
     key
     value
-    parentResource
     createdAt
     updatedAt
   }
@@ -276,11 +275,6 @@ const CUSTOMER_SUMMARY = `#graphql
     email
     firstName
     id
-    lastIncompleteCheckout {
-      id
-      webUrl
-      updatedAt
-    }
     lastName
     phone
     tags
@@ -307,11 +301,6 @@ const CUSTOMER_FULL = `#graphql
     email
     firstName
     id
-    lastIncompleteCheckout {
-      id
-      webUrl
-      updatedAt
-    }
     lastName
     numberOfOrders
     orders(first: 100) {

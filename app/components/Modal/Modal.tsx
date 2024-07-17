@@ -68,5 +68,4 @@ export function Modal() {
   ) : null;
 }
 
-Modal.Title = Dialog.Title;
 Modal.displayName = 'Modal';
