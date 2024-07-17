@@ -45,10 +45,10 @@ export function MobileMenu({
           onClick={handleCloseMobileMenu}
         >
           <Svg
-            className="h-10 text-text"
-            src="/svgs/logo.svg#logo"
+            className="h-8 text-text"
+            src="/svgs/pack-logo.svg#pack-logo"
             title="Storefront logo"
-            viewBox="0 0 31 35"
+            viewBox="0 0 44 34"
           />
         </Link>
       }

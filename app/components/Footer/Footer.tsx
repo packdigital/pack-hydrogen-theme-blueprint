@@ -21,9 +21,9 @@ export function Footer() {
             <Link to="/" aria-label="Go to home page">
               <Svg
                 className="w-12 text-current"
-                src="/svgs/logo.svg#logo"
+                src="/svgs/pack-logo.svg#pack-logo"
                 title="Storefront logo"
-                viewBox="0 0 31 35"
+                viewBox="0 0 44 34"
               />
             </Link>
 
