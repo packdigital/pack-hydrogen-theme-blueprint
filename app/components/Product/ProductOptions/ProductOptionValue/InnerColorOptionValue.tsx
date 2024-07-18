@@ -1,4 +1,5 @@
 import {useMemo} from 'react';
+import type {ProductOptionValue} from '@shopify/hydrogen/storefront-api-types';
 
 import {Image} from '~/components';
 import {isLightHexColor} from '~/lib/utils';
@@ -8,16 +9,16 @@ interface InnerColorOptionValueProps {
   isAvailable: boolean;
   isDisabled: boolean;
   isSelected: boolean;
+  optionValue: ProductOptionValue;
   swatch?: Swatch | null;
-  value: string;
 }
 
 export function InnerColorOptionValue({
   isAvailable,
   isDisabled,
   isSelected,
+  optionValue,
   swatch,
-  value,
 }: InnerColorOptionValueProps) {
   const isLightColor = useMemo(() => {
     return isLightHexColor(swatch?.color);
@@ -33,18 +34,27 @@ export function InnerColorOptionValue({
       }`
     : '';
 
+  /* Swatch color/image from Shopify takes priority over CMS */
+  const colorFromCms = swatch?.color;
+  const colorFromShopify = optionValue.swatch?.color;
+  const optionColor = colorFromShopify || colorFromCms;
+  const imageFromCms = swatch?.image;
+  const imageFromShopify = optionValue.swatch?.image?.previewImage;
+  const optionImage = imageFromShopify || imageFromCms;
+  const optionImageUrl = imageFromShopify?.url || imageFromCms?.src;
+
   return (
     <div
       className={`relative flex size-8 items-center justify-center overflow-hidden rounded-[50%] border border-border transition ${validClass} ${unavailableClass} ${selectedClass}`}
-      style={{backgroundColor: swatch?.color}}
+      style={{backgroundColor: optionColor}}
     >
-      {swatch?.image?.src && (
+      {optionImageUrl && (
         <Image
           data={{
-            altText: value,
-            url: swatch.image.src,
-            width: swatch.image.width,
-            height: swatch.image.height,
+            altText: optionValue.name,
+            url: optionImageUrl,
+            width: optionImage?.width,
+            height: optionImage?.height,
           }}
           aspectRatio="1/1"
           width="32"

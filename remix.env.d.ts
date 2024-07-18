@@ -19,20 +19,21 @@ declare global {
    * Declare expected Env parameter in fetch handler.
    */
   interface Env {
-    SESSION_SECRET: string;
-    PUBLIC_STOREFRONT_API_TOKEN: string;
-    PRIVATE_STOREFRONT_API_TOKEN: string;
-    PUBLIC_STORE_DOMAIN: string;
-    PUBLIC_STOREFRONT_API_VERSION: string;
-    PUBLIC_STOREFRONT_ID: string;
+    PACK_API_URL?: string;
+    PACK_CONTENT_ENVIRONMENT?: string;
     PACK_PUBLIC_TOKEN: string;
     PACK_SECRET_TOKEN: string;
     PACK_STOREFRONT_ID: string;
-    PACK_CONTENT_ENVIRONMENT?: string;
-    PACK_API_URL?: string;
+    PRIMARY_DOMAIN: string;
     PRIVATE_SHOPIFY_CHECKOUT_DOMAIN?: string;
     PRIVATE_SHOPIFY_STORE_MULTIPASS_SECRET?: string;
-    PRIMARY_DOMAIN: string;
+    PRIVATE_STOREFRONT_API_TOKEN: string;
+    PUBLIC_CHECKOUT_DOMAIN: string;
+    PUBLIC_STORE_DOMAIN: string;
+    PUBLIC_STOREFRONT_API_TOKEN: string;
+    PUBLIC_STOREFRONT_API_VERSION: string;
+    PUBLIC_STOREFRONT_ID: string;
+    SESSION_SECRET: string;
   }
 
   interface Window {

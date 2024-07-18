@@ -64,7 +64,17 @@ export function ResetPassword() {
             }`}
             type="submit"
           >
-            {status.started ? <LoadingDots /> : buttonText}
+            <span className={`${status.started ? 'invisible' : 'visible'}`}>
+              {buttonText}
+            </span>
+
+            {status.started && (
+              <LoadingDots
+                status="Submitting"
+                withAbsolutePosition
+                withStatusRole
+              />
+            )}
           </button>
         </form>
 

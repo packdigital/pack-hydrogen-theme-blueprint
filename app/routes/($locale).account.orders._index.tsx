@@ -28,8 +28,8 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
   return json({...data, analytics, seo}, {status});
 }
 
-export const meta = ({data}: MetaArgs) => {
-  return getSeoMeta(data.seo);
+export const meta = ({matches}: MetaArgs<typeof loader>) => {
+  return getSeoMeta(...matches.map((match) => (match.data as any).seo));
 };
 
 export default function OrdersRoute() {

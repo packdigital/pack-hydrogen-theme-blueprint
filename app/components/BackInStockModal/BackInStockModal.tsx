@@ -77,12 +77,16 @@ export function BackInStockModal({selectedVariant}: BackInStockModalProps) {
           className="btn-primary mt-3 max-md:w-full"
           type="submit"
         >
-          {!isSubmitting && submitText}
+          <span className={`${isSubmitting ? 'invisible' : 'visible'}`}>
+            {submitText}
+          </span>
 
           {isSubmitting && (
-            <span aria-label="Subscribing" aria-live="assertive" role="status">
-              <LoadingDots />
-            </span>
+            <LoadingDots
+              status="Subscribing"
+              withAbsolutePosition
+              withStatusRole
+            />
           )}
         </button>
       </form>

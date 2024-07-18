@@ -19,8 +19,8 @@ export async function loader({context, request}: LoaderFunctionArgs) {
   return json({analytics, seo, url: request.url});
 }
 
-export const meta = ({data}: MetaArgs) => {
-  return getSeoMeta(data.seo);
+export const meta = ({matches}: MetaArgs<typeof loader>) => {
+  return getSeoMeta(...matches.map((match) => (match.data as any).seo));
 };
 
 export default function CartRoute() {

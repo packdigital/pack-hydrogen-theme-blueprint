@@ -52,7 +52,7 @@ export function Select({
     >
       <ListboxButton
         aria-label="Open account menu"
-        className={`btn-pill w-full justify-between gap-2 ${textClassName}`}
+        className={`btn-select w-full justify-between gap-2 ${textClassName}`}
       >
         {children || (
           <p
@@ -84,7 +84,7 @@ export function Select({
         leaveTo="transform scale-95 opacity-0"
       >
         <ListboxOptions
-          className={`absolute left-1/2 z-10 flex max-h-72 w-full -translate-x-1/2 flex-col gap-0 overflow-hidden overflow-y-auto rounded-lg border border-gray bg-background py-2 text-base ${
+          className={`absolute left-1/2 z-10 flex max-h-72 w-full -translate-x-1/2 flex-col gap-0 overflow-hidden overflow-y-auto rounded border border-mediumGray bg-background py-2 text-base ${
             openFrom === 'top'
               ? 'bottom-[calc(100%+0.5rem)]'
               : 'top-[calc(100%+0.5rem)]'

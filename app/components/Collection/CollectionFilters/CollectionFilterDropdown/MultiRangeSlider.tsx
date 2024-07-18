@@ -36,11 +36,6 @@ export const MultiRangeSlider = ({
   const range = useRef<HTMLDivElement>(null);
   const locale = useLocale();
 
-  const currencySymbol = useMemo(() => {
-    if (!isPrice) return '';
-    return locale.label?.split(' ').pop()?.split(')')[0].trim() || '';
-  }, [isPrice, locale.label]);
-
   const displayedMinVal = useMemo(() => {
     if (!isPrice) return minVal;
     return parseAsCurrency(minVal, locale);

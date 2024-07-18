@@ -25,7 +25,7 @@ export function EmailSignup({settings}: {settings: Settings['footer']}) {
 
   return enabled ? (
     <form
-      className="border-b border-b-gray px-4 py-8 md:border-none md:p-0"
+      className="border-b border-b-mediumGray px-4 py-8 md:border-none md:p-0"
       onSubmit={handleSubmit}
       ref={formRef}
     >
@@ -48,12 +48,16 @@ export function EmailSignup({settings}: {settings: Settings['footer']}) {
         className="btn-primary mt-3 w-full"
         type="submit"
       >
-        {!isSubmitting && buttonText}
+        <span className={`${isSubmitting ? 'invisible' : 'visible'}`}>
+          {buttonText}
+        </span>
 
         {isSubmitting && (
-          <span aria-label="Subscribing" aria-live="assertive" role="status">
-            <LoadingDots />
-          </span>
+          <LoadingDots
+            status="Subscribing"
+            withAbsolutePosition
+            withStatusRole
+          />
         )}
       </button>
 

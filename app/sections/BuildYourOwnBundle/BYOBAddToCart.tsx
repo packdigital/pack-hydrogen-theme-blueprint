@@ -84,12 +84,16 @@ export function BYOBAddToCart({
       onClick={handleAddToCart}
       type="button"
     >
-      {!isAdding && !isAdded && `Add To Cart${total ? ` - ${total}` : ''}`}
+      <span className={`${isAdding || isAdded ? 'invisible' : 'visible'}`}>
+        {`Add To Cart${total ? ` - ${total}` : ''}`}
+      </span>
 
       {isAdding && (
-        <span aria-label="Adding to cart" aria-live="assertive" role="status">
-          <LoadingDots />
-        </span>
+        <LoadingDots
+          status="Adding to cart"
+          withAbsolutePosition
+          withStatusRole
+        />
       )}
 
       {isAdded && (

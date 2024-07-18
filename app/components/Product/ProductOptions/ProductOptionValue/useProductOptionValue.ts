@@ -1,14 +1,15 @@
 import {useMemo} from 'react';
 import equal from 'fast-deep-equal';
+import type {ProductOptionValue} from '@shopify/hydrogen/storefront-api-types';
 
 import {COLOR_OPTION_NAME} from '~/lib/constants';
 import type {ProductWithGrouping, SelectedVariant} from '~/lib/types';
 
 interface UseProductOptionValueProps {
   name: string;
+  optionValue: ProductOptionValue;
   product: ProductWithGrouping;
   selectedOptionsMap: Record<string, string>;
-  value: string;
 }
 
 interface UseProductOptionValueReturn {
@@ -22,13 +23,15 @@ interface UseProductOptionValueReturn {
 
 export function useProductOptionValue({
   name,
+  optionValue,
   product,
   selectedOptionsMap,
-  value,
 }: UseProductOptionValueProps): UseProductOptionValueReturn {
   const newSelectedOptions = useMemo(() => {
-    return selectedOptionsMap ? {...selectedOptionsMap, [name]: value} : null;
-  }, [name, selectedOptionsMap, value]);
+    return selectedOptionsMap
+      ? {...selectedOptionsMap, [name]: optionValue.name}
+      : null;
+  }, [name, selectedOptionsMap, optionValue.name]);
 
   const selectedVariantFromOptions = useMemo(() => {
     if (!newSelectedOptions) return null;
@@ -39,8 +42,8 @@ export function useProductOptionValue({
     if (!product.grouping) {
       return product.variants.nodes.find(({selectedOptions}) => {
         const selectedOptionsMap = selectedOptions.reduce(
-          (acc, {name: optionName, value: optionValue}) => {
-            return {...acc, [optionName]: optionValue};
+          (acc, {name: optionName, value}) => {
+            return {...acc, [optionName]: value};
           },
           {},
         );
@@ -63,8 +66,8 @@ export function useProductOptionValue({
       (firstValueProduct) => {
         return newSelectedOptionsEntries
           .slice(1)
-          .every(([optionName, optionValue]) => {
-            return productsByOptionValue[optionName]?.[optionValue]?.some(
+          .every(([optionName, value]) => {
+            return productsByOptionValue[optionName]?.[value]?.some(
               (valueProduct) => valueProduct.id === firstValueProduct.id,
             );
           });
@@ -77,8 +80,8 @@ export function useProductOptionValue({
     const selectedVariant = selectedProductFromOptions?.variants.nodes.find(
       ({selectedOptions}) => {
         const selectedOptionsMap = selectedOptions.reduce(
-          (acc, {name: optionName, value: optionValue}) => {
-            return {...acc, [optionName]: optionValue};
+          (acc, {name: optionName, value}) => {
+            return {...acc, [optionName]: value};
           },
           {},
         );
@@ -87,7 +90,7 @@ export function useProductOptionValue({
     );
 
     return selectedVariant;
-  }, [newSelectedOptions, product.id, value]);
+  }, [newSelectedOptions, product.id, optionValue.name]);
 
   const isAvailable = !!selectedVariantFromOptions?.availableForSale;
   const isColor = name === COLOR_OPTION_NAME;
@@ -95,7 +98,7 @@ export function useProductOptionValue({
   const isFromGrouping = Boolean(
     selectedVariantFromOptions?.product?.id !== product.id,
   );
-  const isSelected = Boolean(selectedOptionsMap?.[name] === value);
+  const isSelected = Boolean(selectedOptionsMap?.[name] === optionValue.name);
 
   return {
     isAvailable,

@@ -1,7 +1,7 @@
 import {useCallback, useEffect, useState} from 'react';
 import {useCart} from '@shopify/hydrogen-react';
 import type {
-  Attribute,
+  AttributeInput,
   ProductVariant,
   SellingPlan,
 } from '@shopify/hydrogen/storefront-api-types';
@@ -29,7 +29,7 @@ import {useGlobal, useSettings} from '~/hooks';
 
 interface UseAddToCartProps {
   addToCartText?: string;
-  attributes?: Attribute[];
+  attributes?: AttributeInput[];
   quantity?: number;
   selectedVariant?: ProductVariant | null;
   sellingPlanId?: SellingPlan['id'];

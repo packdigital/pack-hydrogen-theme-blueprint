@@ -26,7 +26,7 @@ export function useProductMedia({
 }: UseProductMediaProps): UseProductMediaReturn {
   const colorOptions = useMemo(() => {
     return product.options?.find((option) => option.name === COLOR_OPTION_NAME)
-      ?.values;
+      ?.optionValues;
   }, [product.id]);
 
   const hasMultiColorsNotFromGroup =
@@ -36,11 +36,11 @@ export function useProductMedia({
   const mediaMapByAltText = useMemo((): Record<string, Media[]> | null => {
     if (!hasMultiColorsNotFromGroup) return null;
 
-    const colorKeys = colorOptions.map((color) => color.toLowerCase());
+    const colorKeys = colorOptions.map((color) => color.name.toLowerCase());
 
     return colorOptions.reduce((acc, color) => {
       const medias = product.media.nodes as Media[];
-      const colorKey = color.toLowerCase();
+      const colorKey = color.name.toLowerCase();
       const colorMedias = medias.filter((item) => {
         const alt = (
           item.alt ||
@@ -51,7 +51,7 @@ export function useProductMedia({
           .toLowerCase();
         return alt === colorKey && colorKeys.includes(alt);
       });
-      return {...acc, [color]: colorMedias.length ? colorMedias : null};
+      return {...acc, [color.name]: colorMedias.length ? colorMedias : null};
     }, {});
   }, [product.id]);
 
