@@ -61,7 +61,7 @@ export function useAddToCart({
   const [isAdding, setIsAdding] = useState(false);
   const [isAdded, setIsAdded] = useState(false);
 
-  const enabledNotifyMe = productSettings?.backInStock?.enabled;
+  const enabledNotifyMe = productSettings?.backInStock?.enabled ?? true;
   const variantIsSoldOut = selectedVariant && !selectedVariant.availableForSale;
   const variantIsPreorder = !!selectedVariant?.currentlyNotInStock;
 
