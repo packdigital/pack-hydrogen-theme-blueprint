@@ -122,7 +122,7 @@ export default {
         },
       ],
       defaultValue: {
-        enabled: false,
+        enabled: true,
         notifyMeText: 'Notify Me When Available',
         heading: 'Notify Me When Available',
         subtext: `Enter your email below and we'll notify you when this product is back in stock.`,

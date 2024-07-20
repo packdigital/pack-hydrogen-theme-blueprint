@@ -303,7 +303,7 @@
       md:hover:text-[var(--inverse-dark-btn-hover-text-color)];
   }
   .btn-select {
-    @apply relative flex h-12 items-center justify-center overflow-hidden rounded border border-border bg-white px-5 py-3 text-base text-sm text-text transition md:hover:bg-offWhite;
+    @apply relative flex h-12 items-center justify-center overflow-hidden rounded border border-border bg-white px-5 py-3 text-sm text-text transition md:hover:bg-offWhite;
   }
   /* underline specific */
   .hover-text-underline {

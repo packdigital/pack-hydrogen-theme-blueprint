@@ -57,7 +57,7 @@ export function ProductMediaThumbnails({
 
       <Swiper
         modules={[Navigation]}
-        className="max-lg:absolute max-lg:left-0 max-lg:top-0 max-lg:w-full lg:h-full"
+        className="max-lg:!absolute max-lg:left-0 max-lg:top-0 max-lg:w-full lg:h-full"
         grabCursor
         initialSlide={initialIndex}
         onSwiper={setThumbsSwiper}

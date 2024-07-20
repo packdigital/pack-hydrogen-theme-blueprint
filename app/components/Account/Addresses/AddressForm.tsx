@@ -175,6 +175,7 @@ export function AddressForm({
             onSelect={({value}) => setProvince(value)}
             options={provinces || []}
             placeholder="Select State/Province"
+            selectedClass="text-base"
             selectedOption={{
               label: province,
               value: province,
@@ -201,6 +202,7 @@ export function AddressForm({
             onSelect={({value}) => setCountry(value)}
             options={countries}
             placeholder="Select Country"
+            selectedClass="text-base"
             selectedOption={{
               label: country,
               value: country,

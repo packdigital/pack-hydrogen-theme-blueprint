@@ -52,7 +52,7 @@ export function useAddToCartAnalytics({
       {},
     );
 
-    if (totalQuantity <= previousCartCount) {
+    if (!previousCartLinesMap || totalQuantity <= previousCartCount) {
       setPreviousCartCount(totalQuantity || 0);
       setPreviousCartLinesMap(cartItemsMap || {});
       return;
