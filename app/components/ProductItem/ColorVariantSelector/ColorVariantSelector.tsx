@@ -31,7 +31,7 @@ export function ColorVariantSelector({
 }: ColorVariantSelectorProps) {
   const initialProductColorOptions = useMemo(() => {
     return (
-      initialProduct?.options.find(
+      initialProduct?.options?.find(
         (option) => option.name === COLOR_OPTION_NAME,
       )?.optionValues || []
     );

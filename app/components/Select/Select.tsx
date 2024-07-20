@@ -23,6 +23,7 @@ interface SelectProps {
   options?: Option[];
   placeholder?: string;
   placeholderClass?: string;
+  selectedClass?: string;
   selectedOption?: Option;
   textClassName?: string;
 }
@@ -36,6 +37,7 @@ export function Select({
   options = [], // [{ label: 'label', value: 'value' }]
   placeholder,
   placeholderClass,
+  selectedClass,
   selectedOption, // { label: 'label', value: 'value' }
   textClassName = 'text-sm',
 }: SelectProps) {
@@ -56,7 +58,7 @@ export function Select({
       >
         {children || (
           <p
-            className={`truncate ${
+            className={`truncate ${selectedClass} ${
               selectedOption?.label
                 ? 'text-text'
                 : placeholderClass || 'text-mediumDarkGray'

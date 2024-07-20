@@ -11,7 +11,7 @@ import {seoPayload} from '~/lib/seo.server';
 
 export const headers = routeHeaders;
 
-export async function loader({context, params}: LoaderFunctionArgs) {
+export async function loader({context, params, request}: LoaderFunctionArgs) {
   const {language, country} = context.storefront.i18n;
 
   if (
@@ -43,6 +43,7 @@ export async function loader({context, params}: LoaderFunctionArgs) {
     analytics,
     page: data.page,
     seo,
+    url: request.url,
   });
 }
 
