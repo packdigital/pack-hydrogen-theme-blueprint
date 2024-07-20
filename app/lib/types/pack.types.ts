@@ -82,9 +82,9 @@ export type Page = {
   status: string;
   seo: Seo;
   sections: {
-    node: Section;
+    nodes: Section[];
     pageInfo: PageInfo;
-  }[];
+  };
   template: Template;
   publishedAt: string;
   createdAt: string;
