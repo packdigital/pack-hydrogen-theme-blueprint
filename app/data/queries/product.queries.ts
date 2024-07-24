@@ -266,6 +266,7 @@ export const PRODUCT_ITEM_FRAGMENT = `#graphql
     title
     handle
     vendor
+    description
     productType
     createdAt
     publishedAt
