@@ -5,8 +5,18 @@ import type {Product} from '@shopify/hydrogen/storefront-api-types';
 import {PRODUCT_FEED_QUERY} from '~/data/queries';
 import {getPrimaryDomain} from '~/lib/utils';
 
-const formatStr = (str: string) =>
-  str.replaceAll(/&/g, '&amp;').replaceAll(/"/g, '&quot;');
+const SAFE_XML: Record<string, string> = {
+  '&': '&amp;',
+  '"': '&quot;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '\\': '&apos;',
+};
+
+const formatStr = (str = '') =>
+  str.split('').reduce((acc, char) => {
+    return acc + (SAFE_XML[char] || char);
+  }, '');
 
 const generatedProductFeed = (products: Product[], siteUrl: string) => {
   return `
@@ -15,55 +25,64 @@ const generatedProductFeed = (products: Product[], siteUrl: string) => {
         <link>${siteUrl}</link>
         ${products
           .map((product) => {
-            if (!product.variants.nodes.length) return '';
-            if (product.handle === 'gift-card' || product.isGiftCard) return '';
-            return product.variants.nodes.map((variant) => {
-              const imageLink =
-                variant.image?.src || product.featuredImage?.src;
-              const variantUrlParams = variant.selectedOptions
-                .map(({name, value}) => {
-                  const formattedName = encodeURI(name);
-                  return `${formattedName}=${value}`;
-                })
-                .join('&amp;');
-              const link = `${siteUrl}/products/${product.handle}?${variantUrlParams}`;
-              return `
-                <item>
-                  <g:id>${parseGid(variant.id).id}</g:id>
-                  <g:product_type>${formatStr(
-                    product.productType,
-                  )}</g:product_type>
-                  <g:gtin>${variant.sku}</g:gtin>
-                  <g:link>${link}</g:link>
-                  <g:brand>${formatStr(product.vendor)}</g:brand>
-                  <g:condition>${`new`}</g:condition>
-                  <g:availability>${
-                    variant.availableForSale ? 'in stock' : 'out of stock'
-                  }</g:availability>
-                  <g:shipping_weight>${`${variant.weight} ${variant.weightUnit}`}</g:shipping_weight>
-                  <g:title>${formatStr(product.title)}</g:title>
-                  <g:description>${formatStr(product.description)}
-                  }</g:description>
-                  <g:price>${variant.price.amount}</g:price>
-                  <g:item_group_id>${product.id
-                    .split('/')
-                    .pop()}</g:item_group_id>
-                  ${
-                    imageLink ? `<g:image_link>${imageLink}</g:image_link>` : ''
-                  }
-                  ${variant.selectedOptions
-                    .map(({name, value}) => {
-                      const formattedName = name
-                        .replaceAll(/\s/g, '_')
-                        .replaceAll(/&/g, '&amp;');
-                      return `<g:${formattedName}>${formatStr(
-                        value,
-                      )}</g:${formattedName}>`;
-                    })
-                    .join('')}
-                </item>
-              `;
-            });
+            try {
+              if (!product.variants.nodes.length) return '';
+              if (product.handle === 'gift-card' || product.isGiftCard)
+                return '';
+              return product.variants.nodes.map((variant) => {
+                const imageLink =
+                  variant.image?.url || product.featuredImage?.url;
+                const variantUrlParams = variant.selectedOptions
+                  .map(({name, value}) => {
+                    return `${encodeURI(name)}=${encodeURI(value)}`;
+                  })
+                  .join('&amp;');
+                const link = `${siteUrl}/products/${product.handle}?${variantUrlParams}`;
+
+                return `
+                  <item>
+                    <g:id>${parseGid(variant.id).id}</g:id>
+                    <g:product_type>${formatStr(
+                      product.productType,
+                    )}</g:product_type>
+                    <g:gtin>${variant.sku}</g:gtin>
+                    <g:link>${link}</g:link>
+                    <g:brand>${formatStr(product.vendor)}</g:brand>
+                    <g:condition>${`new`}</g:condition>
+                    <g:availability>${
+                      variant.availableForSale ? 'in stock' : 'out of stock'
+                    }</g:availability>
+                    <g:shipping_weight>${`${variant.weight} ${variant.weightUnit}`}</g:shipping_weight>
+                    <g:title>${formatStr(product.title)}</g:title>
+                    <g:description>${formatStr(
+                      product.description?.slice(0, 256),
+                    )}</g:description>
+                    <g:price>${variant.price.amount}</g:price>
+                    <g:item_group_id>${product.id
+                      .split('/')
+                      .pop()}</g:item_group_id>
+                    ${
+                      imageLink
+                        ? `<g:image_link>${imageLink}</g:image_link>`
+                        : ''
+                    }
+                    ${variant.selectedOptions
+                      .map(({name, value}) => {
+                        const formattedName = formatStr(name).replaceAll(
+                          /\s/g,
+                          '_',
+                        );
+                        return `<g:${formattedName}>${formatStr(
+                          value,
+                        )}</g:${formattedName}>`;
+                      })
+                      .join('')}
+                  </item>
+                `;
+              });
+            } catch (error) {
+              return '';
+            }
           })
           .join('')}
       </channel>
@@ -86,7 +105,7 @@ export async function loader({context, request}: LoaderFunctionArgs) {
       PRODUCT_FEED_QUERY,
       {
         variables: {
-          first: 100,
+          first: 250,
           cursor,
           country: storefront.i18n.country,
           language: storefront.i18n.language,
