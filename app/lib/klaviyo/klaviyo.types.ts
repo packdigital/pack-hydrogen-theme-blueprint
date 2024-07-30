@@ -31,6 +31,16 @@ export interface SubscribeEmailOrPhoneToListReturn {
   submittedAt: string;
 }
 
+export interface CreateClientSubscriptionReturn {
+  status: number;
+  isAlreadySubscribed: boolean;
+  message: string;
+  error: string | null;
+  email?: string | null;
+  phone?: string | null;
+  submittedAt: string;
+}
+
 export interface SubscribeToBackInStockReturn {
   email: string | null;
   status: number;
