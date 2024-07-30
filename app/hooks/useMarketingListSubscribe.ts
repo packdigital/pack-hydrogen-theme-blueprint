@@ -2,7 +2,7 @@ import {useCallback, useEffect, useRef, useState} from 'react';
 import {useFetcher} from '@remix-run/react';
 
 import {useDataLayerClickEvents, useLocale} from '~/hooks';
-import type {SubscribeEmailOrPhoneToListReturn} from '~/lib/klaviyo';
+import type {CreateClientSubscriptionReturn} from '~/lib/klaviyo';
 
 /**
  * Submit email or phone number to marketing list
@@ -35,7 +35,7 @@ export function useMarketingListSubscribe({
 }): UseMarketingListSubscribeReturn {
   const formRef = useRef<HTMLFormElement>(null);
   const {sendSubscribeEvent} = useDataLayerClickEvents();
-  const fetcher = useFetcher<SubscribeEmailOrPhoneToListReturn>();
+  const fetcher = useFetcher<CreateClientSubscriptionReturn>();
   const {pathPrefix} = useLocale();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -55,6 +55,9 @@ export function useMarketingListSubscribe({
         e.currentTarget.sms_consent?.value ||
         false;
 
+      // custom properties to add/update klaviyo profile
+      const properties = {};
+
       if ((!email && !phone) || isSubmitting || !listId) return;
       setIsSubmitting(true);
       setMessage('');
@@ -62,10 +65,11 @@ export function useMarketingListSubscribe({
 
       fetcher.submit(
         {
-          action: 'subscribeEmailOrPhoneToList',
+          action: 'createClientSubscription',
           listId,
           ...(email ? {email} : null),
           ...(phone ? {phone, smsConsent} : null),
+          ...{properties: JSON.stringify({properties})},
         },
         {method: 'POST', action: `${pathPrefix}/api/klaviyo`},
       );
