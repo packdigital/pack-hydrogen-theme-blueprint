@@ -64,7 +64,7 @@ export function AddToCart({
         }}
         type="button"
       >
-        <span className={`${isAdding || isAdded ? 'invisible' : 'visible'}`}>
+        <span className={`${isAdding || isAdded ? 'hidden' : 'block'}`}>
           {buttonText}
         </span>
 
