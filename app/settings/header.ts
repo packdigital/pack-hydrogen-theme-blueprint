@@ -257,6 +257,8 @@ export default {
                   label: 'Product',
                   name: 'product',
                   component: 'productSearch',
+                  description:
+                    'If the selected product does display in the frontend, it may be not be active or on the Hydrogen sales channel.',
                 },
               ],
             },
