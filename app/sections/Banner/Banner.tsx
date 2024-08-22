@@ -6,10 +6,16 @@ import type {BannerCms} from './Banner.types';
 import {Schema} from './Banner.schema';
 
 export function Banner({cms}: {cms: BannerCms}) {
-  const {content, image, section, text} = cms;
+  const {content, container, image, section, text} = cms;
 
   return (
-    <Container container={cms.container}>
+    <Container
+      container={{
+        ...container,
+        // NotFound page uses Banner and places bgColor in section settings
+        bgColor: container?.bgColor || section?.bgColor,
+      }}
+    >
       <BannerContainer cms={cms}>
         <div className="absolute inset-0 size-full overflow-hidden md:hidden">
           {image?.imageMobile?.src && (

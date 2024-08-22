@@ -50,7 +50,7 @@ export function CartLine({closeCart, line}: CartLineProps) {
       </Link>
 
       <div className="flex min-h-[6.25em] flex-col justify-between gap-4">
-        <div className="relative pr-6">
+        <div className="relative flex flex-col items-start pr-6">
           <Link
             aria-label={`View ${merchandise.product.title}`}
             to={url}

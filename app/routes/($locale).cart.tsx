@@ -4,8 +4,8 @@ import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 
 import {CartPage} from '~/components';
 import {getShop, getSiteSettings} from '~/lib/utils';
-import type {Page} from '~/lib/types';
 import {seoPayload} from '~/lib/seo.server';
+import type {Page} from '~/lib/types';
 
 export async function loader({context, request}: LoaderFunctionArgs) {
   const shop = await getShop(context);
