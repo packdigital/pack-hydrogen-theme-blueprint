@@ -51,10 +51,7 @@ export function HeroSlider({aboveTheFold, slider, slides}: HeroSliderProps) {
         );
       })}
 
-      <div
-        // eslint-disable-next-line tailwindcss/no-custom-classname
-        className={`swiper-pagination ${pagination ? '' : '!hidden'}`}
-      />
+      <div className={`swiper-pagination ${pagination ? '' : '!hidden'}`} />
     </Swiper>
   );
 }

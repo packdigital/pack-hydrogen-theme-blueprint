@@ -138,10 +138,7 @@ export function CartUpsell({closeCart, settings}: CartUpsellProps) {
 
                 {/* Navigation */}
                 <div>
-                  <div
-                    // eslint-disable-next-line tailwindcss/no-custom-classname
-                    className="swiper-button-prev left-0 after:hidden"
-                  >
+                  <div className="swiper-button-prev left-0 after:hidden">
                     <Svg
                       className="max-w-4 text-text"
                       src="/svgs/chevron-left.svg#chevron-left"
@@ -150,10 +147,7 @@ export function CartUpsell({closeCart, settings}: CartUpsellProps) {
                     />
                   </div>
 
-                  <div
-                    // eslint-disable-next-line tailwindcss/no-custom-classname
-                    className="swiper-button-next right-0 after:hidden"
-                  >
+                  <div className="swiper-button-next right-0 after:hidden">
                     <Svg
                       className="max-w-4 text-text"
                       src="/svgs/chevron-right.svg#chevron-right"
