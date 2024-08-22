@@ -1,14 +1,16 @@
 import {useCallback, useEffect} from 'react';
 import {useFetcher, useNavigate, useRevalidator} from '@remix-run/react';
 import {useCart} from '@shopify/hydrogen-react';
+import {useAnalytics} from '@shopify/hydrogen';
 import type {
   Customer,
   CustomerAccessToken,
 } from '@shopify/hydrogen/storefront-api-types';
 
+import {PackEventName} from '~/components/PackAnalytics/constants';
 import {LOGGED_IN_REDIRECT_TO} from '~/lib/constants';
 import {setCustomerAccessTokenInLocalStorage} from '~/lib/customer';
-import {useDataLayerClickEvents, useGlobal, useLocale} from '~/hooks';
+import {useGlobal, useLocale} from '~/hooks';
 
 import {useFetcherStatus} from './useFetcherStatus';
 
@@ -22,6 +24,7 @@ interface FetcherData {
 export function useCustomerLogIn() {
   const revalidator = useRevalidator();
   const {isPreviewModeEnabled, setPreviewModeCustomer} = useGlobal();
+  const {publish} = useAnalytics();
   const fetcher = useFetcher();
   const {
     customerAccessToken,
@@ -38,7 +41,6 @@ export function useCustomerLogIn() {
   const {buyerIdentityUpdate} = useCart();
   const navigate = useNavigate();
   const {pathPrefix} = useLocale();
-  const {sendLogInEvent} = useDataLayerClickEvents();
 
   const customerLogIn = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
@@ -54,7 +56,7 @@ export function useCustomerLogIn() {
 
   useEffect(() => {
     if (customer) {
-      sendLogInEvent();
+      publish(PackEventName.CUSTOMER_LOGGED_IN, {customer});
       buyerIdentityUpdate({
         customerAccessToken: customerAccessToken.accessToken,
       });

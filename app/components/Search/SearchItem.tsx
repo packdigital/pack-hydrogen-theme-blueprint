@@ -1,8 +1,10 @@
 import {useCallback, useMemo} from 'react';
+import {useAnalytics} from '@shopify/hydrogen';
 
 import {COLOR_OPTION_NAME, PRODUCT_IMAGE_ASPECT_RATIO} from '~/lib/constants';
 import {Image, Link} from '~/components';
-import {useDataLayerClickEvents, useVariantPrices} from '~/hooks';
+import {PackEventName} from '~/components/PackAnalytics/constants';
+import {useVariantPrices} from '~/hooks';
 
 import type {SearchItemProps} from './Search.types';
 
@@ -14,18 +16,17 @@ export function SearchItem({
 }: SearchItemProps) {
   const firstVariant = product.variants.nodes[0];
   const {price, compareAtPrice} = useVariantPrices(firstVariant);
-  const {sendClickProductItemEvent} = useDataLayerClickEvents();
+  const {publish, shop} = useAnalytics();
 
   const handleClick = useCallback(() => {
-    sendClickProductItemEvent({
-      isSearchResult: true,
+    publish(PackEventName.PRODUCT_ITEM_CLICKED, {
       listIndex: index,
       product,
       searchTerm,
-      selectedVariant: firstVariant,
+      shop,
     });
     closeSearch();
-  }, [index, product.id]);
+  }, [index, product.id, publish, searchTerm]);
 
   const color = useMemo(() => {
     return firstVariant?.selectedOptions.find(

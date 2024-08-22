@@ -5,6 +5,8 @@ import type {ProductOptionValue} from '@shopify/hydrogen/storefront-api-types';
 import {Link} from '~/components';
 import type {SelectedVariant, Swatch} from '~/lib/types';
 
+import type {OnSelect} from '../ProductOptions';
+
 import {InnerColorOptionValue} from './InnerColorOptionValue';
 import {InnerOptionValue} from './InnerOptionValue';
 
@@ -13,6 +15,8 @@ interface ProductOptionValueLinkProps {
   isColor: boolean;
   isDisabled: boolean;
   isSelected: boolean;
+  onSelect?: OnSelect;
+  optionName: string;
   optionValue: ProductOptionValue;
   selectedVariantFromOptions: SelectedVariant;
   swatch?: Swatch | null;
@@ -23,6 +27,8 @@ export function ProductOptionValueLink({
   isColor,
   isDisabled,
   isSelected,
+  onSelect,
+  optionName,
   optionValue,
   selectedVariantFromOptions,
   swatch,
@@ -41,7 +47,21 @@ export function ProductOptionValueLink({
   }, [search, selectedVariantFromOptions]);
 
   return (
-    <Link aria-label={optionValue.name} preventScrollReset to={url}>
+    <Link
+      aria-label={optionValue.name}
+      preventScrollReset
+      to={url}
+      onClick={() => {
+        if (typeof onSelect === 'function') {
+          onSelect({
+            selectedVariant: selectedVariantFromOptions,
+            optionName,
+            optionValue,
+            fromGrouping: true,
+          });
+        }
+      }}
+    >
       {isColor ? (
         <InnerColorOptionValue
           isAvailable={isAvailable}

@@ -1,12 +1,6 @@
 import {useMemo, useState} from 'react';
-import {flattenConnection} from '@shopify/hydrogen';
 
-import {
-  useColorSwatches,
-  useDataLayerViewCollection,
-  useDataLayerViewSearchResults,
-  useSettings,
-} from '~/hooks';
+import {useColorSwatches, useSettings} from '~/hooks';
 
 import {
   CollectionDesktopFilters,
@@ -51,15 +45,6 @@ export function Collection({
     });
     return campaign?.promoTiles || null;
   }, [handle, promotion?.campaigns]);
-
-  useDataLayerViewCollection({
-    collection: isSearchResults ? null : collection,
-  });
-  useDataLayerViewSearchResults({
-    isSearchPage: isSearchResults,
-    products: flattenConnection(products),
-    searchTerm,
-  });
 
   return (
     <CollectionFiltersProvider
@@ -125,7 +110,6 @@ export function Collection({
 
           <CollectionGrid
             desktopFiltersOpen={desktopFiltersOpen}
-            isSearchResults={isSearchResults}
             products={products}
             promoTiles={promoTiles}
             searchTerm={searchTerm}

@@ -2,6 +2,7 @@ import {json} from '@shopify/remix-oxygen';
 import {useLoaderData} from '@remix-run/react';
 import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 import {
+  Analytics,
   AnalyticsPageType,
   getPaginationVariables,
   getSeoMeta,
@@ -14,8 +15,9 @@ import type {
 import {Collection} from '~/components';
 import {PRODUCTS_SEARCH_QUERY} from '~/data/queries';
 import {getFilters, getShop, getSiteSettings} from '~/lib/utils';
-import type {Page} from '~/lib/types';
 import {seoPayload} from '~/lib/seo.server';
+import {useGlobal} from '~/hooks';
+import type {Page} from '~/lib/types';
 import type {ActiveFilterValue} from '~/components/Collection/CollectionFilters/CollectionFilters.types';
 
 export async function loader({request, context}: LoaderFunctionArgs) {
@@ -110,6 +112,7 @@ export const meta = ({matches}: MetaArgs<typeof loader>) => {
 export default function SearchRoute() {
   const {activeFilterValues, collection, searchTerm} =
     useLoaderData<typeof loader>();
+  const {isCartReady} = useGlobal();
 
   return (
     <section data-comp="search-page" className="[&_h1]:text-h3">
@@ -120,6 +123,15 @@ export default function SearchRoute() {
         showHeading
         title={collection.title}
       />
+
+      {isCartReady && (
+        <Analytics.SearchView
+          data={{
+            searchTerm,
+            searchResults: collection.products.nodes,
+          }}
+        />
+      )}
     </section>
   );
 }

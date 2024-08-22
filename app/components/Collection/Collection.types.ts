@@ -20,7 +20,6 @@ export interface CollectionProps {
 
 export interface CollectionGridProps {
   desktopFiltersOpen: boolean;
-  isSearchResults?: boolean;
   products: ProductConnection;
   promoTiles?: PromoTile[] | null;
   searchTerm?: string;

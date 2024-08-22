@@ -13,6 +13,7 @@ export type Modal = {
 
 export interface GlobalState {
   cartOpen: boolean;
+  isCartReady: boolean;
   desktopMenuOpen: boolean;
   iframesHidden: boolean;
   mobileMenuOpen: boolean;
@@ -20,7 +21,6 @@ export interface GlobalState {
   promobarOpen: boolean;
   searchOpen: boolean;
   settings: Settings;
-  emitter: any;
   previewModeCustomer: Customer | null | undefined;
   isPreviewModeEnabled: boolean;
 }
@@ -40,6 +40,7 @@ export interface GlobalActions {
   toggleIframesHidden: (isHidden: boolean) => void;
   closeAll: () => void;
   setPreviewModeCustomer: (customer: Customer | null) => void;
+  setIsCartReady: (isReady: boolean) => void;
 }
 
 export interface GlobalContext {

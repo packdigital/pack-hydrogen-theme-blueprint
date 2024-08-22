@@ -1,4 +1,5 @@
 import {useCart} from '@shopify/hydrogen-react';
+import {Analytics} from '@shopify/hydrogen';
 import type {CartLine as CartLineType} from '@shopify/hydrogen/storefront-api-types';
 
 import {Drawer, Svg} from '~/components';
@@ -13,7 +14,8 @@ import {FreeShippingMeter} from './FreeShippingMeter';
 
 export function Cart() {
   const {cart: cartSettings} = useSettings();
-  const {lines = [], totalQuantity = 0} = useCart();
+  const cart = useCart();
+  const {lines = [], totalQuantity = 0} = cart;
   const {cartOpen, closeCart} = useGlobal();
 
   const cartLines = lines as CartLineType[];
@@ -72,6 +74,8 @@ export function Cart() {
           <CartTotals settings={cartSettings} />
         </>
       )}
+
+      <Analytics.CartView customData={{cart}} />
     </Drawer>
   );
 }

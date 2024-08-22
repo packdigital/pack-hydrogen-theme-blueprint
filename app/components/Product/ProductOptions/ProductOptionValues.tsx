@@ -8,8 +8,10 @@ import type {
 
 import {ProductOptionValuesLabel} from './ProductOptionValuesLabel';
 import {ProductOptionValue} from './ProductOptionValue';
+import type {OnSelect} from './ProductOptions';
 
 interface ProductOptionValueProps {
+  onSelect?: OnSelect;
   option: OptionWithGroups;
   product: ProductWithGrouping;
   selectedOptionsMap: Record<string, string>;
@@ -18,6 +20,7 @@ interface ProductOptionValueProps {
 }
 
 export function ProductOptionValues({
+  onSelect,
   option: initialOption,
   product,
   selectedOptionsMap,
@@ -65,6 +68,7 @@ export function ProductOptionValues({
                           setSelectedOption={setSelectedOption}
                           swatchesMap={swatchesMap}
                           optionValue={optionValue}
+                          onSelect={onSelect}
                         />
                       </li>
                     );
@@ -94,6 +98,7 @@ export function ProductOptionValues({
                     setSelectedOption={setSelectedOption}
                     swatchesMap={swatchesMap}
                     optionValue={optionValue}
+                    onSelect={onSelect}
                   />
                 </li>
               );
