@@ -1,17 +1,9 @@
 import {useMemo} from 'react';
-import type {ProductOptionValue} from '@shopify/hydrogen/storefront-api-types';
 
 import {Image} from '~/components';
 import {isLightHexColor} from '~/lib/utils';
-import type {Swatch} from '~/lib/types';
 
-interface InnerColorOptionValueProps {
-  isAvailable: boolean;
-  isDisabled: boolean;
-  isSelected: boolean;
-  optionValue: ProductOptionValue;
-  swatch?: Swatch | null;
-}
+import type {InnerColorOptionValueProps} from './ProductOptionValue.types';
 
 export function InnerColorOptionValue({
   isAvailable,

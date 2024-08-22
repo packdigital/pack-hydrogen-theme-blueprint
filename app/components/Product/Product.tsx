@@ -1,6 +1,5 @@
 import {useEffect, useMemo} from 'react';
 import {useProduct} from '@shopify/hydrogen-react';
-import type {Product as ProductType} from '@shopify/hydrogen/storefront-api-types';
 
 import {COLOR_OPTION_NAME} from '~/lib/constants';
 import {useLocale, useSettings} from '~/hooks';
@@ -10,10 +9,7 @@ import {ProductDetails} from './ProductDetails';
 import {ProductMetafields} from './ProductMetafields';
 import {ProductHeader} from './ProductHeader';
 import {ProductMedia} from './ProductMedia';
-
-interface ProductProps {
-  product: ProductType;
-}
+import type {ProductProps} from './Product.types';
 
 export function Product({product}: ProductProps) {
   const {selectedVariant} = useProduct() as {

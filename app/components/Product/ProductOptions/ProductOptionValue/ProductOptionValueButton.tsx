@@ -1,24 +1,6 @@
-import type {ProductOptionValue} from '@shopify/hydrogen/storefront-api-types';
-
-import type {SelectedVariant, Swatch} from '~/lib/types';
-
-import type {OnSelect} from '../ProductOptions';
-
 import {InnerColorOptionValue} from './InnerColorOptionValue';
 import {InnerOptionValue} from './InnerOptionValue';
-
-interface ProductOptionValueButtonProps {
-  isAvailable: boolean;
-  isColor: boolean;
-  isDisabled: boolean;
-  isSelected: boolean;
-  onSelect?: OnSelect;
-  optionName: string;
-  optionValue: ProductOptionValue;
-  selectedVariantFromOptions: SelectedVariant;
-  setSelectedOption: (name: string, value: string) => void;
-  swatch?: Swatch | null;
-}
+import type {ProductOptionValueButtonProps} from './ProductOptionValue.types';
 
 export function ProductOptionValueButton({
   isAvailable,

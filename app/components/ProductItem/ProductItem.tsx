@@ -1,10 +1,9 @@
 import {useCallback, useMemo, useState} from 'react';
 import {useInView} from 'react-intersection-observer';
 import {useAnalytics} from '@shopify/hydrogen';
-import type {Product} from '@shopify/hydrogen/storefront-api-types';
 
 import {COLOR_OPTION_NAME} from '~/lib/constants';
-import type {SelectedProduct, SelectedVariant, SwatchesMap} from '~/lib/types';
+import type {SelectedProduct, SelectedVariant} from '~/lib/types';
 import {Link} from '~/components';
 import {PackEventName} from '~/components/PackAnalytics/constants';
 import {useProductByHandle, useProductGroupingByHandle} from '~/hooks';
@@ -15,21 +14,7 @@ import {ColorVariantSelector} from './ColorVariantSelector';
 import {ProductItemMedia} from './ProductItemMedia/ProductItemMedia';
 import {ProductItemPrice} from './ProductItemPrice';
 import {QuickShop} from './QuickShop';
-
-interface ProductItemProps {
-  enabledColorNameOnHover?: boolean;
-  enabledColorSelector?: boolean;
-  enabledQuickShop?: boolean;
-  enabledStarRating?: boolean;
-  handle?: string;
-  index: number;
-  onClick?: () => void;
-  priority?: boolean;
-  product?: Product | null;
-  quickShopMobileHidden?: boolean;
-  searchTerm?: string;
-  swatchesMap?: SwatchesMap;
-}
+import type {ProductItemProps} from './ProductItem.types';
 
 export function ProductItem({
   enabledColorNameOnHover,

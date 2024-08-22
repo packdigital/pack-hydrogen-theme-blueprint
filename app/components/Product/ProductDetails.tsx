@@ -1,16 +1,9 @@
 import {useCallback, useEffect, useState} from 'react';
-import type {Product} from '@shopify/hydrogen/storefront-api-types';
 
 import {AddToCart, QuantitySelector} from '~/components';
-import type {SelectedVariant} from '~/lib/types';
 
 import {ProductOptions} from './ProductOptions';
-
-interface ProductDetailsProps {
-  enabledQuantitySelector: boolean;
-  product: Product;
-  selectedVariant: SelectedVariant;
-}
+import type {ProductDetailsProps} from './Product.types';
 
 export function ProductDetails({
   enabledQuantitySelector,

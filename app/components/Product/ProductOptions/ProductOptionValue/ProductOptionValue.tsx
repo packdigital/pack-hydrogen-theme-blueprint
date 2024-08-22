@@ -1,22 +1,7 @@
-import type {ProductOptionValue as ProductOptionValueType} from '@shopify/hydrogen/storefront-api-types';
-
-import type {ProductWithGrouping, SwatchesMap} from '~/lib/types';
-
-import type {OnSelect} from '../ProductOptions';
-
 import {ProductOptionValueButton} from './ProductOptionValueButton';
 import {ProductOptionValueLink} from './ProductOptionValueLink';
 import {useProductOptionValue} from './useProductOptionValue';
-
-interface ProductOptionValueProps {
-  name: string;
-  onSelect?: OnSelect;
-  optionValue: ProductOptionValueType;
-  product: ProductWithGrouping;
-  selectedOptionsMap: Record<string, string>;
-  setSelectedOption: (name: string, value: string) => void;
-  swatchesMap: SwatchesMap;
-}
+import type {ProductOptionValueProps} from './ProductOptionValue.types';
 
 export function ProductOptionValue({
   name,

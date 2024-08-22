@@ -1,26 +1,11 @@
 import {useMemo} from 'react';
 import {useLocation} from '@remix-run/react';
-import type {ProductOptionValue} from '@shopify/hydrogen/storefront-api-types';
 
 import {Link} from '~/components';
-import type {SelectedVariant, Swatch} from '~/lib/types';
-
-import type {OnSelect} from '../ProductOptions';
 
 import {InnerColorOptionValue} from './InnerColorOptionValue';
 import {InnerOptionValue} from './InnerOptionValue';
-
-interface ProductOptionValueLinkProps {
-  isAvailable: boolean;
-  isColor: boolean;
-  isDisabled: boolean;
-  isSelected: boolean;
-  onSelect?: OnSelect;
-  optionName: string;
-  optionValue: ProductOptionValue;
-  selectedVariantFromOptions: SelectedVariant;
-  swatch?: Swatch | null;
-}
+import type {ProductOptionValueLinkProps} from './ProductOptionValue.types';
 
 export function ProductOptionValueLink({
   isAvailable,

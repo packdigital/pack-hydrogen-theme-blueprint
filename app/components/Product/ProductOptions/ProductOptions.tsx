@@ -1,32 +1,12 @@
 import {useCallback} from 'react';
 import {useAnalytics} from '@shopify/hydrogen';
 import {useProduct} from '@shopify/hydrogen-react';
-import type {ProductOptionValue} from '@shopify/hydrogen/storefront-api-types';
 
 import {PackEventName} from '~/components/PackAnalytics/constants';
 import {useColorSwatches} from '~/hooks';
-import type {ProductWithGrouping, SelectedVariant} from '~/lib/types';
 
 import {ProductOptionValues} from './ProductOptionValues';
-
-export type OnSelect = ({
-  selectedVariant,
-  optionName,
-  optionValue,
-  fromGrouping,
-  fromProductHandle,
-}: {
-  selectedVariant: SelectedVariant;
-  optionName: string;
-  optionValue: Pick<ProductOptionValue, 'name'>;
-  fromGrouping?: boolean;
-  fromProductHandle?: string;
-}) => void;
-
-export interface ProductOptionsProps {
-  product: ProductWithGrouping;
-  selectedVariant: SelectedVariant;
-}
+import type {OnSelect, ProductOptionsProps} from './ProductOptions.types';
 
 export function ProductOptions({product}: ProductOptionsProps) {
   const swatchesMap = useColorSwatches();
@@ -34,7 +14,7 @@ export function ProductOptions({product}: ProductOptionsProps) {
   const {publish, shop} = useAnalytics();
 
   const handleSelect: OnSelect = useCallback(
-    ({selectedVariant, optionName, optionValue, fromGrouping}) => {
+    ({selectedVariant, optionName, optionValue, fromGrouping = false}) => {
       publish(PackEventName.PRODUCT_VARIANT_SELECTED, {
         selectedVariant,
         optionName,

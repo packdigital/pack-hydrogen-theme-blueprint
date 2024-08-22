@@ -8,7 +8,7 @@ import type {
 
 import {ProductOptionValuesLabel} from './ProductOptionValuesLabel';
 import {ProductOptionValue} from './ProductOptionValue';
-import type {OnSelect} from './ProductOptions';
+import type {OnSelect} from './ProductOptions.types';
 
 interface ProductOptionValueProps {
   onSelect?: OnSelect;

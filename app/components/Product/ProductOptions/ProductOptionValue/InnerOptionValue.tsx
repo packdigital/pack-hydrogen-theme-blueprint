@@ -1,11 +1,4 @@
-import type {ProductOptionValue} from '@shopify/hydrogen/storefront-api-types';
-
-interface InnerOptionValueProps {
-  isAvailable: boolean;
-  isDisabled: boolean;
-  isSelected: boolean;
-  optionValue: ProductOptionValue;
-}
+import type {InnerOptionValueProps} from './ProductOptionValue.types';
 
 export function InnerOptionValue({
   isAvailable,
