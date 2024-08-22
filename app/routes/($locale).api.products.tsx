@@ -20,10 +20,6 @@ export async function loader({request, context}: LoaderFunctionArgs) {
   const handlesData = String(searchParams.get('handles') ?? '');
   const query = String(searchParams.get('query') || '');
 
-  if (!handlesData && !query) {
-    return badProductsRequest('Missing `handles` or `query` parameter');
-  }
-
   /* Products query by handles */
   if (handlesData) {
     const handles = handlesData.split(',');
