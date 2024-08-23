@@ -36,6 +36,7 @@ export function Collection({
     (filters?.enabled ?? true) && !isDisabledFiltersCollection;
   const enabledSort = sort?.enabled ?? true;
   const isSearchResults = handle === 'search';
+  const noSearchResults = isSearchResults && !products.nodes?.length;
 
   const promoTiles = useMemo(() => {
     if (!promotion?.campaigns?.length) return null;
@@ -58,7 +59,7 @@ export function Collection({
           </h1>
         )}
 
-        {(enabledFilters || enabledSort) && (
+        {(enabledFilters || enabledSort) && !noSearchResults && (
           <div
             className={`grid w-full grid-cols-2 gap-x-4 max-md:px-4 max-md:pt-4 md:gap-x-6 ${
               !showHeading ? 'md:mt-4' : ''

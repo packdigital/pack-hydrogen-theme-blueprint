@@ -279,14 +279,13 @@ const viewSearchResultsEvent = ({
       throw new Error(
         '`searchTerm` and/or `searchResults` parameters are missing.',
       );
-    if (!searchResults.length) return;
 
     const event = {
       event: 'dl_view_search_results',
       user_properties: generateUserProperties({customer}),
       ecommerce: {
         currency_code:
-          flattenConnection(searchResults[0].variants)?.[0]?.price
+          flattenConnection(searchResults[0]?.variants)?.[0]?.price
             ?.currencyCode || shop?.currency,
         actionField: {
           list: 'search results',
