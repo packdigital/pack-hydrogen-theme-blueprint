@@ -20,7 +20,7 @@ import {
 import {ApplicationError, Document, NotFound, ServerError} from '~/components';
 import {customerGetAction, validateCustomerAccessToken} from '~/lib/customer';
 import {
-  getEnvs,
+  getPublicEnvs,
   getProductGroupings,
   getShop,
   getSiteSettings,
@@ -123,9 +123,8 @@ export async function loader({context, request}: LoaderFunctionArgs) {
     storefront,
     publicStorefrontId: env.PUBLIC_STOREFRONT_ID,
   });
-  const ENV = await getEnvs({context, request});
+  const ENV = await getPublicEnvs({context, request});
   const SITE_TITLE = siteSettings?.data?.siteSettings?.seo?.title || shop.name;
-  const SITE_LOGO = shop.brand.logo?.image?.url;
 
   return defer(
     {
@@ -134,7 +133,7 @@ export async function loader({context, request}: LoaderFunctionArgs) {
       customer,
       customerAccessToken,
       customizerMeta: pack.preview?.session.get('customizerMeta'),
-      ENV: {...ENV, SITE_LOGO, SITE_TITLE} as Record<string, string>,
+      ENV: {...ENV, SITE_TITLE} as Record<string, string>,
       groupingsPromise,
       isPreviewModeEnabled,
       oxygen,

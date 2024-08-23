@@ -107,7 +107,7 @@ export const getPrimaryDomain = ({
   return primaryDomainOrigin;
 };
 
-export const getEnvs = async ({
+export const getPublicEnvs = async ({
   context,
   request,
 }: {

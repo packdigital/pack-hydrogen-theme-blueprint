@@ -1,11 +1,4 @@
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useReducer,
-  useState,
-} from 'react';
+import {createContext, useContext, useEffect, useMemo, useReducer} from 'react';
 import {useCart} from '@shopify/hydrogen-react';
 import type {ReactNode} from 'react';
 import type {Customer} from '@shopify/hydrogen-react/storefront-api-types';
@@ -24,6 +17,7 @@ const globalState = {
   promobarOpen: true,
   searchOpen: false,
   previewModeCustomer: undefined,
+  isHydrated: false,
 };
 
 const reducer = (state: GlobalState, action: Action) => {
@@ -130,6 +124,12 @@ const reducer = (state: GlobalState, action: Action) => {
         ...state,
         isCartReady: action.payload,
       };
+    case 'SET_IS_HYDRATED':
+      return {
+        ...state,
+        isHydrated: action.payload,
+      };
+
     default:
       throw new Error(`Invalid Context action of type: ${action.type}`);
   }
@@ -181,6 +181,9 @@ const actions = (dispatch: Dispatch) => ({
   setIsCartReady: (isReady: boolean) => {
     dispatch({type: 'SET_IS_CART_READY', payload: isReady});
   },
+  setIsHydrated: (isHydrated: boolean) => {
+    dispatch({type: 'SET_IS_HYDRATED', payload: isHydrated});
+  },
 });
 
 export function GlobalProvider({children}: {children: ReactNode}) {
@@ -193,12 +196,16 @@ export function GlobalProvider({children}: {children: ReactNode}) {
     isPreviewModeEnabled,
     isCartReady: cartIsIdle,
   });
-  const [mounted, setMounted] = useState(false);
 
   const value = useMemo(() => ({state, actions: actions(dispatch)}), [state]);
 
   const iframesShouldBeHidden =
     state.iframesHidden || state.mobileMenuOpen || state.searchOpen;
+
+  useEffect(() => {
+    if (state.isHydrated) return;
+    value.actions.setIsHydrated(true);
+  }, []);
 
   useEffect(() => {
     if (cartIsIdle && !state.isCartReady) {
@@ -212,10 +219,7 @@ export function GlobalProvider({children}: {children: ReactNode}) {
   }, [cartIsIdle]);
 
   useEffect(() => {
-    if (!mounted) {
-      setMounted(true);
-      return;
-    }
+    if (!state.isHydrated) return;
     const iframes = document.querySelectorAll('iframe');
     if (iframesShouldBeHidden) {
       [...(iframes || [])].forEach((iframe) => {
