@@ -27,7 +27,7 @@ export function PackAnalytics() {
   const customer = useCustomer();
   usePathStorage();
 
-  const enabledFueled = true;
+  const enabledFueled = false;
   const enabledElevar = !!ENV.PUBLIC_ELEVAR_SIGNING_KEY;
   const enabledGA4 = !!ENV.PUBLIC_GA4_TAG_ID;
   const enabledMetaPixel = !!ENV.PUBLIC_META_PIXEL_ID;
