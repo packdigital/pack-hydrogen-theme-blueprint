@@ -126,8 +126,8 @@ export function Schema() {
         ],
         defaultValue: {
           fullWidth: false,
-          textColor: 'var(--white)',
-          sliderPaginationBulletColor: 'var(--white)',
+          textColor: 'var(--black)',
+          sliderPaginationBulletColor: 'var(--black))',
           reviewStarColor: 'var(--accent1)',
         },
       },
