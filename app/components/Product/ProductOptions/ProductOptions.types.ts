@@ -24,7 +24,8 @@ export type OnSelect = ({
   fromGrouping?: boolean;
 }) => void;
 
-export interface ProductOptionValueProps {
+export interface ProductOptionValuesProps {
+  onSelect?: OnSelect;
   option: OptionWithGroups;
   product: ProductWithGrouping;
   selectedOptionsMap: Record<string, string>;
