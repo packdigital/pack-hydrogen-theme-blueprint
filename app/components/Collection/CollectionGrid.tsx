@@ -10,7 +10,6 @@ import {useCollectionFilters} from './CollectionFilters';
 
 export function CollectionGrid({
   desktopFiltersOpen,
-  isSearchResults,
   products,
   promoTiles,
   searchTerm,
@@ -80,7 +79,6 @@ export function CollectionGrid({
                         enabledStarRating={itemSettings?.enabledStarRating}
                         handle={product.handle}
                         index={index}
-                        isSearchResults={isSearchResults}
                         product={product}
                         priority={index < 8}
                         quickShopMobileHidden={

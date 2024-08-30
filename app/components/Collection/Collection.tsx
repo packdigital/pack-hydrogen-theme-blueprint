@@ -1,12 +1,6 @@
 import {useMemo, useState} from 'react';
-import {flattenConnection} from '@shopify/hydrogen';
 
-import {
-  useColorSwatches,
-  useDataLayerViewCollection,
-  useDataLayerViewSearchResults,
-  useSettings,
-} from '~/hooks';
+import {useColorSwatches, useSettings} from '~/hooks';
 
 import {
   CollectionDesktopFilters,
@@ -42,6 +36,7 @@ export function Collection({
     (filters?.enabled ?? true) && !isDisabledFiltersCollection;
   const enabledSort = sort?.enabled ?? true;
   const isSearchResults = handle === 'search';
+  const noSearchResults = isSearchResults && !products.nodes?.length;
 
   const promoTiles = useMemo(() => {
     if (!promotion?.campaigns?.length) return null;
@@ -51,15 +46,6 @@ export function Collection({
     });
     return campaign?.promoTiles || null;
   }, [handle, promotion?.campaigns]);
-
-  useDataLayerViewCollection({
-    collection: isSearchResults ? null : collection,
-  });
-  useDataLayerViewSearchResults({
-    isSearchPage: isSearchResults,
-    products: flattenConnection(products),
-    searchTerm,
-  });
 
   return (
     <CollectionFiltersProvider
@@ -73,7 +59,7 @@ export function Collection({
           </h1>
         )}
 
-        {(enabledFilters || enabledSort) && (
+        {(enabledFilters || enabledSort) && !noSearchResults && (
           <div
             className={`grid w-full grid-cols-2 gap-x-4 max-md:px-4 max-md:pt-4 md:gap-x-6 ${
               !showHeading ? 'md:mt-4' : ''
@@ -125,7 +111,6 @@ export function Collection({
 
           <CollectionGrid
             desktopFiltersOpen={desktopFiltersOpen}
-            isSearchResults={isSearchResults}
             products={products}
             promoTiles={promoTiles}
             searchTerm={searchTerm}

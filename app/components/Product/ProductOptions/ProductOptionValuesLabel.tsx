@@ -2,10 +2,7 @@ import {useCallback} from 'react';
 
 import {useGlobal} from '~/hooks';
 
-interface ProductOptionValuesLabelProps {
-  name: string;
-  selectedValue: string | null;
-}
+import type {ProductOptionValuesLabelProps} from './ProductOptions.types';
 
 export function ProductOptionValuesLabel({
   name,

@@ -1,5 +1,7 @@
+import {Analytics} from '@shopify/hydrogen';
+
 import {Link} from '~/components';
-import {useDataLayerViewSearchResults, useSettings} from '~/hooks';
+import {useSettings} from '~/hooks';
 
 import {SearchItem} from './SearchItem';
 import type {SearchResultsProps} from './Search.types';
@@ -11,11 +13,6 @@ export function SearchResults({
   searchTerm,
 }: SearchResultsProps) {
   const {search} = useSettings();
-
-  useDataLayerViewSearchResults({
-    products: productResults,
-    searchTerm,
-  });
 
   const collectionsEnabled = search?.results?.collectionsEnabled ?? true;
 
@@ -61,6 +58,15 @@ export function SearchResults({
             })}
           </ul>
         </div>
+      )}
+
+      {searchTerm && !!productResults?.length && (
+        <Analytics.SearchView
+          data={{
+            searchTerm,
+            searchResults: productResults,
+          }}
+        />
       )}
     </div>
   );

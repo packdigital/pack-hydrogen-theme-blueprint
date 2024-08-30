@@ -1,14 +1,16 @@
 import {useCallback, useEffect} from 'react';
 import {useFetcher, useNavigate} from '@remix-run/react';
 import {useCart} from '@shopify/hydrogen-react';
+import {useAnalytics} from '@shopify/hydrogen';
 import type {
   Customer,
   CustomerAccessToken,
 } from '@shopify/hydrogen/storefront-api-types';
 
+import {PackEventName} from '~/components/PackAnalytics/constants';
 import {LOGGED_IN_REDIRECT_TO} from '~/lib/constants';
 import {setCustomerAccessTokenInLocalStorage} from '~/lib/customer';
-import {useDataLayerClickEvents, useGlobal, useLocale} from '~/hooks';
+import {useGlobal, useLocale} from '~/hooks';
 
 import {useFetcherStatus} from './useFetcherStatus';
 
@@ -22,6 +24,7 @@ interface FetcherData {
 
 export function useCustomerRegister() {
   const {isPreviewModeEnabled, setPreviewModeCustomer} = useGlobal();
+  const {publish} = useAnalytics();
   const fetcher = useFetcher({key: 'register'});
   const {
     customerAccessToken,
@@ -38,7 +41,6 @@ export function useCustomerRegister() {
   const {buyerIdentityUpdate} = useCart();
   const navigate = useNavigate();
   const {pathPrefix} = useLocale();
-  const {sendRegisterEvent} = useDataLayerClickEvents();
 
   const customerRegister = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
@@ -59,7 +61,7 @@ export function useCustomerRegister() {
 
   useEffect(() => {
     if (customer) {
-      sendRegisterEvent();
+      publish(PackEventName.CUSTOMER_REGISTERED, {customer});
       buyerIdentityUpdate({
         customerAccessToken: customerAccessToken.accessToken,
       });

@@ -1,19 +1,10 @@
+import {createContext, useContext, useEffect, useMemo, useReducer} from 'react';
+import {useCart} from '@shopify/hydrogen-react';
 import type {ReactNode} from 'react';
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useReducer,
-  useState,
-} from 'react';
-import EventEmitter from 'eventemitter3';
 import type {Customer} from '@shopify/hydrogen-react/storefront-api-types';
 
 import type {Action, Dispatch, GlobalContext, GlobalState} from '~/lib/types';
 import {useRootLoaderData} from '~/hooks';
-
-const emitter = new EventEmitter();
 
 const Context = createContext({state: {}, actions: {}} as GlobalContext);
 
@@ -25,8 +16,8 @@ const globalState = {
   modal: {children: null, props: {}},
   promobarOpen: true,
   searchOpen: false,
-  emitter,
   previewModeCustomer: undefined,
+  isHydrated: false,
 };
 
 const reducer = (state: GlobalState, action: Action) => {
@@ -128,6 +119,17 @@ const reducer = (state: GlobalState, action: Action) => {
         ...state,
         previewModeCustomer: action.payload,
       };
+    case 'SET_IS_CART_READY':
+      return {
+        ...state,
+        isCartReady: action.payload,
+      };
+    case 'SET_IS_HYDRATED':
+      return {
+        ...state,
+        isHydrated: action.payload,
+      };
+
     default:
       throw new Error(`Invalid Context action of type: ${action.type}`);
   }
@@ -176,16 +178,24 @@ const actions = (dispatch: Dispatch) => ({
   setPreviewModeCustomer: (customer: Customer | null | undefined) => {
     dispatch({type: 'SET_PREVIEW_MODE_CUSTOMER', payload: customer});
   },
+  setIsCartReady: (isReady: boolean) => {
+    dispatch({type: 'SET_IS_CART_READY', payload: isReady});
+  },
+  setIsHydrated: (isHydrated: boolean) => {
+    dispatch({type: 'SET_IS_HYDRATED', payload: isHydrated});
+  },
 });
 
 export function GlobalProvider({children}: {children: ReactNode}) {
   const {isPreviewModeEnabled, siteSettings} = useRootLoaderData();
+  const cart = useCart();
+  const cartIsIdle = cart.status === 'idle';
   const [state, dispatch] = useReducer(reducer, {
     ...globalState,
     settings: siteSettings?.data?.siteSettings?.settings,
     isPreviewModeEnabled,
+    isCartReady: cartIsIdle,
   });
-  const [mounted, setMounted] = useState(false);
 
   const value = useMemo(() => ({state, actions: actions(dispatch)}), [state]);
 
@@ -193,10 +203,23 @@ export function GlobalProvider({children}: {children: ReactNode}) {
     state.iframesHidden || state.mobileMenuOpen || state.searchOpen;
 
   useEffect(() => {
-    if (!mounted) {
-      setMounted(true);
-      return;
+    if (state.isHydrated) return;
+    value.actions.setIsHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (cartIsIdle && !state.isCartReady) {
+      value.actions.setIsCartReady(true);
+    } else {
+      // uninitialized cart never becomes idle so instead set cart ready after 1 sec
+      setTimeout(() => {
+        value.actions.setIsCartReady(true);
+      }, 1000);
     }
+  }, [cartIsIdle]);
+
+  useEffect(() => {
+    if (!state.isHydrated) return;
     const iframes = document.querySelectorAll('iframe');
     if (iframesShouldBeHidden) {
       [...(iframes || [])].forEach((iframe) => {

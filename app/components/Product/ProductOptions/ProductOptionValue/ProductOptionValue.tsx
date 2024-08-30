@@ -1,22 +1,11 @@
-import type {ProductOptionValue as ProductOptionValueType} from '@shopify/hydrogen/storefront-api-types';
-
-import type {ProductWithGrouping, SwatchesMap} from '~/lib/types';
-
 import {ProductOptionValueButton} from './ProductOptionValueButton';
 import {ProductOptionValueLink} from './ProductOptionValueLink';
 import {useProductOptionValue} from './useProductOptionValue';
-
-interface ProductOptionValueProps {
-  name: string;
-  optionValue: ProductOptionValueType;
-  product: ProductWithGrouping;
-  selectedOptionsMap: Record<string, string>;
-  setSelectedOption: (name: string, value: string) => void;
-  swatchesMap: SwatchesMap;
-}
+import type {ProductOptionValueProps} from './ProductOptionValue.types';
 
 export function ProductOptionValue({
   name,
+  onSelect,
   optionValue,
   product,
   selectedOptionsMap,
@@ -45,8 +34,10 @@ export function ProductOptionValue({
       isColor={isColor}
       isDisabled={isDisabled}
       isSelected={isSelected}
+      onSelect={onSelect}
       selectedVariantFromOptions={selectedVariantFromOptions}
       swatch={swatch}
+      optionName={name}
       optionValue={optionValue}
     />
   ) : (
@@ -55,9 +46,11 @@ export function ProductOptionValue({
       isColor={isColor}
       isDisabled={isDisabled}
       isSelected={isSelected}
-      name={name}
+      onSelect={onSelect}
+      selectedVariantFromOptions={selectedVariantFromOptions}
       setSelectedOption={setSelectedOption}
       swatch={swatch}
+      optionName={name}
       optionValue={optionValue}
     />
   );

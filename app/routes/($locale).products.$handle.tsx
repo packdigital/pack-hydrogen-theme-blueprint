@@ -2,7 +2,7 @@ import {useLoaderData} from '@remix-run/react';
 import {ProductProvider} from '@shopify/hydrogen-react';
 import {json} from '@shopify/remix-oxygen';
 import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
-import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
+import {Analytics, AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 import type {ShopifyAnalyticsProduct} from '@shopify/hydrogen';
 import {RenderSections} from '@pack/react';
 
@@ -13,7 +13,6 @@ import {
   getShop,
   getSiteSettings,
 } from '~/lib/utils';
-import type {Group, ProductWithGrouping} from '~/lib/types';
 import {
   GROUPING_PRODUCT_QUERY,
   PRODUCT_PAGE_QUERY,
@@ -22,7 +21,8 @@ import {
 import {Product} from '~/components';
 import {routeHeaders} from '~/data/cache';
 import {seoPayload} from '~/lib/seo.server';
-import {useDataLayerViewProduct} from '~/hooks';
+import {useGlobal} from '~/hooks';
+import type {Group, ProductWithGrouping} from '~/lib/types';
 
 /*
  * Add metafield queries to the METAFIELD_QUERIES array to fetch desired metafields for product pages
@@ -196,11 +196,7 @@ export const meta = ({matches}: MetaArgs<typeof loader>) => {
 export default function ProductRoute() {
   const {product, productPage, selectedVariant} =
     useLoaderData<typeof loader>();
-
-  useDataLayerViewProduct({
-    product,
-    selectedVariant,
-  });
+  const {isCartReady} = useGlobal();
 
   return (
     <ProductProvider
@@ -212,6 +208,25 @@ export default function ProductRoute() {
 
         {productPage && <RenderSections content={productPage} />}
       </div>
+
+      {isCartReady && (
+        <Analytics.ProductView
+          data={{
+            products: [
+              {
+                id: product.id,
+                title: product.title,
+                price: selectedVariant?.price.amount || '0',
+                vendor: product.vendor,
+                variantId: selectedVariant?.id || '',
+                variantTitle: selectedVariant?.title || '',
+                quantity: 1,
+              },
+            ],
+          }}
+          customData={{product, selectedVariant}}
+        />
+      )}
     </ProductProvider>
   );
 }

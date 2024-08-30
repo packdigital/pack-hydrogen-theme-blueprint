@@ -93,10 +93,7 @@ export function ProductMedia({
               );
             })}
 
-            <div
-              // eslint-disable-next-line tailwindcss/no-custom-classname
-              className="active-bullet-black swiper-pagination !top-[calc(100%-8px)] flex w-full justify-center gap-2.5 md:hidden"
-            />
+            <div className="active-bullet-black swiper-pagination !top-[calc(100%-8px)] flex w-full justify-center gap-2.5 md:hidden" />
           </Swiper>
 
           {/* placeholder image while swiper inits */}

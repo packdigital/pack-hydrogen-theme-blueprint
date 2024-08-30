@@ -50,6 +50,8 @@ export function Schema({template}: {template: string}) {
                 name: 'product',
                 component: 'productSearch',
                 label: 'Product',
+                description:
+                  'If the selected product does display in the frontend, it may be not be active or on the Hydrogen sales channel.',
               },
             ],
           },

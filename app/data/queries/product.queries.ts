@@ -217,11 +217,35 @@ export const PRODUCT_FRAGMENT = `#graphql
         }
         ... on ExternalVideo {
           originUrl
+          alt
+          embedUrl
+          host
+          id
+          mediaContentType
+          previewImage {
+            altText
+            height
+            id
+            url
+            width
+          }
         }
         ... on Model3d {
+          id
+          alt
+          mediaContentType
           sources {
+            filesize
+            format
             mimeType
             url
+          }
+          previewImage {
+            altText
+            height
+            id
+            url
+            width
           }
         }
       }

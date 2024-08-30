@@ -51,6 +51,7 @@ export function Search() {
         <SearchSuggestions
           handleSuggestion={handleSuggestion}
           hasNoProductResults={hasNoProductResults}
+          searchTerm={searchTerm}
         />
       )}
 

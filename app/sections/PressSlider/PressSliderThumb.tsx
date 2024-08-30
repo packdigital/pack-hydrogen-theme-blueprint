@@ -26,7 +26,9 @@ export function PressSliderThumb({
               height: image.height,
             }}
             width="128"
-            className={`transition ${isActive ? 'opacity-100' : 'opacity-30'}`}
+            className={`bg-transparent transition ${
+              isActive ? 'opacity-100' : 'opacity-30'
+            }`}
             isStatic
           />
         )}

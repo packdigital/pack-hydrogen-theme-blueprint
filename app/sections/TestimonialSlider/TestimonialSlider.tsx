@@ -84,13 +84,9 @@ export function TestimonialSlider({cms}: {cms: TestimonialSliderCms}) {
                 );
               })}
 
-              <div
-                // eslint-disable-next-line tailwindcss/no-custom-classname
-                className="swiper-pagination !static mt-6 lg:!hidden"
-              />
+              <div className="swiper-pagination !static mt-6 lg:!hidden" />
 
               <div
-                // eslint-disable-next-line tailwindcss/no-custom-classname
                 className={`swiper-button-prev left-0 !hidden !h-14 !w-14 rounded-full bg-white after:hidden ${
                   blocks.length > 3 ? 'lg:!flex' : 'lg:!hidden'
                 }`}
@@ -104,7 +100,6 @@ export function TestimonialSlider({cms}: {cms: TestimonialSliderCms}) {
               </div>
 
               <div
-                // eslint-disable-next-line tailwindcss/no-custom-classname
                 className={`swiper-button-next right-0 !hidden !h-14 !w-14 rounded-full bg-white after:hidden ${
                   blocks.length > 3 ? 'lg:!flex' : 'lg:!hidden'
                 }`}

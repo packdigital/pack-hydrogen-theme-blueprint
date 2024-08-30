@@ -11,12 +11,16 @@ import type {
   LoaderFunctionArgs,
   MetaArgs,
 } from '@shopify/remix-oxygen';
-import {getSeoMeta, ShopifySalesChannel} from '@shopify/hydrogen';
+import {
+  getSeoMeta,
+  getShopAnalytics,
+  ShopifySalesChannel,
+} from '@shopify/hydrogen';
 
 import {ApplicationError, Document, NotFound, ServerError} from '~/components';
 import {customerGetAction, validateCustomerAccessToken} from '~/lib/customer';
 import {
-  getEnvs,
+  getPublicEnvs,
   getProductGroupings,
   getShop,
   getSiteSettings,
@@ -79,7 +83,7 @@ export const links: LinksFunction = () => {
 };
 
 export async function loader({context, request}: LoaderFunctionArgs) {
-  const {storefront, session, oxygen, pack} = context;
+  const {storefront, session, oxygen, pack, env} = context;
   const isPreviewModeEnabled = pack.isPreviewModeEnabled();
 
   const shop = await getShop(context);
@@ -111,22 +115,31 @@ export async function loader({context, request}: LoaderFunctionArgs) {
     siteSettings,
     url: request.url,
   });
-  const ENV = await getEnvs({context, request});
+  const consent = {
+    checkoutDomain: env.PUBLIC_CHECKOUT_DOMAIN,
+    storefrontAccessToken: env.PUBLIC_STOREFRONT_API_TOKEN,
+  };
+  const shopAnalytics = getShopAnalytics({
+    storefront,
+    publicStorefrontId: env.PUBLIC_STOREFRONT_ID,
+  });
+  const ENV = await getPublicEnvs({context, request});
   const SITE_TITLE = siteSettings?.data?.siteSettings?.seo?.title || shop.name;
-  const SITE_LOGO = shop.brand.logo?.image?.url;
 
   return defer(
     {
       analytics,
+      consent,
       customer,
       customerAccessToken,
       customizerMeta: pack.preview?.session.get('customizerMeta'),
-      ENV: {...ENV, SITE_LOGO, SITE_TITLE} as Record<string, string>,
+      ENV: {...ENV, SITE_TITLE} as Record<string, string>,
       groupingsPromise,
       isPreviewModeEnabled,
       oxygen,
       selectedLocale: storefront.i18n,
       seo,
+      shop: shopAnalytics,
       siteSettings,
       siteTitle: SITE_TITLE,
       url: request.url,

@@ -119,7 +119,6 @@ export function ProductsSlider({
                   }`}
                 >
                   <div
-                    // eslint-disable-next-line tailwindcss/no-custom-classname
                     className={`swiper-button-prev left-0 top-[calc(50%-1.6875rem)] !hidden !h-14 !w-14 rounded-full border border-border bg-white after:hidden lg:!flex ${
                       !isFullBleedAndCentered ? 'xl:left-[-1.6875rem]' : ''
                     }`}
@@ -133,7 +132,6 @@ export function ProductsSlider({
                   </div>
 
                   <div
-                    // eslint-disable-next-line tailwindcss/no-custom-classname
                     className={`swiper-button-next right-0 top-[calc(50%-1.6875rem)] !hidden !h-14 !w-14 rounded-full border border-border bg-white after:hidden lg:!flex ${
                       !isFullBleedAndCentered ? 'xl:right-[-1.6875rem]' : ''
                     }`}

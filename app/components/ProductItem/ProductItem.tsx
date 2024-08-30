@@ -1,15 +1,12 @@
 import {useCallback, useMemo, useState} from 'react';
 import {useInView} from 'react-intersection-observer';
-import type {Product} from '@shopify/hydrogen/storefront-api-types';
+import {useAnalytics} from '@shopify/hydrogen';
 
 import {COLOR_OPTION_NAME} from '~/lib/constants';
-import type {SelectedProduct, SelectedVariant, SwatchesMap} from '~/lib/types';
+import type {SelectedProduct, SelectedVariant} from '~/lib/types';
 import {Link} from '~/components';
-import {
-  useDataLayerClickEvents,
-  useProductByHandle,
-  useProductGroupingByHandle,
-} from '~/hooks';
+import {PackEventName} from '~/components/PackAnalytics/constants';
+import {useProductByHandle, useProductGroupingByHandle} from '~/hooks';
 
 import {ProductStars} from '../ProductStars';
 
@@ -17,22 +14,7 @@ import {ColorVariantSelector} from './ColorVariantSelector';
 import {ProductItemMedia} from './ProductItemMedia/ProductItemMedia';
 import {ProductItemPrice} from './ProductItemPrice';
 import {QuickShop} from './QuickShop';
-
-interface ProductItemProps {
-  enabledColorNameOnHover?: boolean;
-  enabledColorSelector?: boolean;
-  enabledQuickShop?: boolean;
-  enabledStarRating?: boolean;
-  handle?: string;
-  index: number;
-  isSearchResults?: boolean;
-  onClick?: () => void;
-  priority?: boolean;
-  product?: Product | null;
-  quickShopMobileHidden?: boolean;
-  searchTerm?: string;
-  swatchesMap?: SwatchesMap;
-}
+import type {ProductItemProps} from './ProductItem.types';
 
 export function ProductItem({
   enabledColorNameOnHover,
@@ -41,7 +23,6 @@ export function ProductItem({
   enabledStarRating,
   handle: passedHandle,
   index,
-  isSearchResults,
   onClick,
   priority,
   product: passedProduct,
@@ -53,7 +34,7 @@ export function ProductItem({
     rootMargin: '200px',
     triggerOnce: true,
   });
-  const {sendClickProductItemEvent} = useDataLayerClickEvents();
+  const {publish, shop} = useAnalytics();
   // if full product passed, don't query for it; only query when in view unless priority
   const queriedProduct = useProductByHandle(
     passedProduct ? null : priority || inView ? passedHandle : null,
@@ -104,15 +85,15 @@ export function ProductItem({
   const title = selectedProduct?.title;
 
   const handleClick = useCallback(() => {
-    sendClickProductItemEvent({
-      isSearchResult: isSearchResults,
+    publish(PackEventName.PRODUCT_ITEM_CLICKED, {
       listIndex: index,
       product: selectedProduct,
-      searchTerm,
       selectedVariant,
+      searchTerm,
+      shop,
     });
     if (typeof onClick === 'function') onClick();
-  }, [index, selectedProduct?.id, selectedVariant?.id]);
+  }, [index, publish, selectedProduct?.id, selectedVariant?.id, searchTerm]);
 
   return (
     <div className="group flex h-full flex-col justify-between" ref={inViewRef}>

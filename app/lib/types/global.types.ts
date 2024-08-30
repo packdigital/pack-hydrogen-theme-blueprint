@@ -20,9 +20,10 @@ export interface GlobalState {
   promobarOpen: boolean;
   searchOpen: boolean;
   settings: Settings;
-  emitter: any;
   previewModeCustomer: Customer | null | undefined;
   isPreviewModeEnabled: boolean;
+  isCartReady: boolean;
+  isHydrated: boolean;
 }
 
 export interface GlobalActions {
@@ -40,6 +41,8 @@ export interface GlobalActions {
   toggleIframesHidden: (isHidden: boolean) => void;
   closeAll: () => void;
   setPreviewModeCustomer: (customer: Customer | null) => void;
+  setIsCartReady: (isReady: boolean) => void;
+  setIsHydrated: (isHydrated: boolean) => void;
 }
 
 export interface GlobalContext {

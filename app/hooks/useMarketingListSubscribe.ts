@@ -1,7 +1,9 @@
 import {useCallback, useEffect, useRef, useState} from 'react';
 import {useFetcher} from '@remix-run/react';
+import {useAnalytics} from '@shopify/hydrogen';
 
-import {useDataLayerClickEvents, useLocale} from '~/hooks';
+import {PackEventName} from '~/components/PackAnalytics/constants';
+import {useLocale} from '~/hooks';
 import type {SubscribeEmailOrPhoneToListReturn} from '~/lib/klaviyo';
 
 /**
@@ -34,9 +36,9 @@ export function useMarketingListSubscribe({
   resetTimer?: number;
 }): UseMarketingListSubscribeReturn {
   const formRef = useRef<HTMLFormElement>(null);
-  const {sendSubscribeEvent} = useDataLayerClickEvents();
   const fetcher = useFetcher<SubscribeEmailOrPhoneToListReturn>();
   const {pathPrefix} = useLocale();
+  const {publish} = useAnalytics();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState('');
@@ -86,15 +88,17 @@ export function useMarketingListSubscribe({
           setSubmitted(false);
         }, resetTimer);
       }
-      if (fetcher.data.email) sendSubscribeEvent({email: fetcher.data.email});
-      if (fetcher.data.phone) sendSubscribeEvent({phone: fetcher.data.phone});
+      if (fetcher.data.email)
+        publish(PackEventName.CUSTOMER_SUBSCRIBED, {email: fetcher.data.email});
+      if (fetcher.data.phone)
+        publish(PackEventName.CUSTOMER_SUBSCRIBED, {phone: fetcher.data.phone});
     } else {
       setIsSubmitting(false);
       setMessage(fetcher.data.message);
       if (reset) setTimeout(() => setMessage(''), resetTimer);
       console.error(fetcher.data.error);
     }
-  }, [fetcher.data?.submittedAt]);
+  }, [fetcher.data?.submittedAt, publish]);
 
   return {
     formRef,

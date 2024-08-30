@@ -3,6 +3,7 @@ import {useLoaderData} from '@remix-run/react';
 import {json} from '@shopify/remix-oxygen';
 import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 import {
+  Analytics,
   AnalyticsPageType,
   getPaginationVariables,
   getSeoMeta,
@@ -15,6 +16,7 @@ import {COLLECTION_QUERY, COLLECTION_PAGE_QUERY} from '~/data/queries';
 import {getFilters, getShop, getSiteSettings} from '~/lib/utils';
 import {routeHeaders} from '~/data/cache';
 import {seoPayload} from '~/lib/seo.server';
+import {useGlobal} from '~/hooks';
 import type {ActiveFilterValue} from '~/components/Collection/CollectionFilters/CollectionFilters.types';
 
 export const headers = routeHeaders;
@@ -101,6 +103,7 @@ export const meta = ({matches}: MetaArgs<typeof loader>) => {
 export default function CollectionRoute() {
   const {activeFilterValues, collection, collectionPage} =
     useLoaderData<typeof loader>();
+  const {isCartReady} = useGlobal();
 
   // determines if default collection heading should be shown
   // logic will apply once the hero section is saved and page is refreshed
@@ -124,6 +127,18 @@ export default function CollectionRoute() {
           title={collectionPage.title}
         />
       </section>
+
+      {isCartReady && (
+        <Analytics.CollectionView
+          data={{
+            collection: {
+              id: collection.id,
+              handle: collection.handle,
+            },
+          }}
+          customData={{collection}}
+        />
+      )}
     </div>
   );
 }

@@ -30,6 +30,7 @@ export interface BannerCms {
     maxWidthMobile: string;
   };
   section: {
+    bgColor?: string;
     aboveTheFold?: boolean;
     fullWidth: boolean;
     fullBleed: boolean;

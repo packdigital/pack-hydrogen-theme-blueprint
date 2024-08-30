@@ -19,7 +19,6 @@ declare global {
    * Declare expected Env parameter in fetch handler.
    */
   interface Env {
-    PACK_API_URL?: string;
     PACK_CONTENT_ENVIRONMENT?: string;
     PACK_PUBLIC_TOKEN: string;
     PACK_SECRET_TOKEN: string;
@@ -40,10 +39,14 @@ declare global {
     ENV?: Record<string, string>;
     unHover?: ReturnType<typeof setTimeout> | null;
     dataLayer?: any[];
-    // Elevar specific, if applicable to project
+    // Elevar
     ElevarDataLayer?: any[];
     ElevarInvalidateContext?: () => void;
-    // Fueled specific, if applicable to project
+    // Meta pixel
+    fbq?: Function;
+    // TikTok pixel
+    ttq?: Record<string,any>;
+    // Fueled
     fueled?: any;
     fueledConfig?: Record<string, any>;
   }

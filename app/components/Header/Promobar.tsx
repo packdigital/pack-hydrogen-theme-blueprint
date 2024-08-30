@@ -115,14 +115,12 @@ export function Promobar() {
             <>
               <button
                 aria-label="See previous slide"
-                // eslint-disable-next-line tailwindcss/no-custom-classname
                 className="swiper-button-prev !left-4 md:!left-8 xl:!left-12"
                 type="button"
               />
 
               <button
                 aria-label="See next slide"
-                // eslint-disable-next-line tailwindcss/no-custom-classname
                 className="swiper-button-next !right-4 md:!right-8 xl:!right-12"
                 type="button"
               />

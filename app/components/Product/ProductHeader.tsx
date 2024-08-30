@@ -1,16 +1,7 @@
-import type {Product} from '@shopify/hydrogen/storefront-api-types';
-
 import {ProductStars} from '~/components';
-import type {SelectedVariant, Settings} from '~/lib/types';
 import {useMatchMedia, useVariantPrices} from '~/hooks';
 
-interface ProductHeaderProps {
-  isMobile?: boolean;
-  product: Product;
-  selectedVariant: SelectedVariant;
-  selectedVariantColor: string | null | undefined;
-  settings: Settings['product'];
-}
+import type {ProductHeaderProps} from './Product.types';
 
 export function ProductHeader({
   isMobile,

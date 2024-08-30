@@ -25,6 +25,8 @@ const image = {
       label: 'Image (tablet/desktop)',
       name: 'imageDesktop',
       component: 'image',
+      description:
+        'Note: in order to observe changes in a 404 page in customizer, you need to save then redirect back to a 404 page',
     },
     {
       label: 'Image Position (tablet/desktop)',
@@ -67,6 +69,8 @@ const text = {
       label: 'Heading',
       name: 'heading',
       component: 'textarea',
+      description:
+        'Note: in order to observe changes in a 404 page in customizer, you need to save then redirect back to a 404 page',
     },
     {
       label: 'Subheading',
@@ -230,6 +234,8 @@ export default {
           name: 'bgColor',
           component: 'select',
           options: COLORS,
+          description:
+            'Note: in order to observe changes in a 404 page in customizer, you need to save then redirect back to a 404 page',
         },
         {
           label: 'Full Width',
