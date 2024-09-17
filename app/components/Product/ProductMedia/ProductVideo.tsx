@@ -5,9 +5,15 @@ interface ProductVideoProps {
   inView: boolean;
   media: MediaEdge['node'];
   onLoad?: () => void;
+  priority?: boolean;
 }
 
-export function ProductVideo({inView, media, onLoad}: ProductVideoProps) {
+export function ProductVideo({
+  inView,
+  media,
+  onLoad,
+  priority,
+}: ProductVideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const {sources, previewImage} = media as Video;
@@ -28,7 +34,7 @@ export function ProductVideo({inView, media, onLoad}: ProductVideoProps) {
       playsInline
       loop
       controls={false}
-      poster={previewImage?.url}
+      poster={priority || inView ? previewImage?.url : ''}
       className="media-fill"
     >
       {inView && sources?.length

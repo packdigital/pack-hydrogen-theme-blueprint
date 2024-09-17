@@ -7,7 +7,7 @@ export function InnerOptionValue({
   optionValue,
 }: InnerOptionValueProps) {
   const validClass = !isDisabled
-    ? 'md:hover:border-text'
+    ? 'md:group-hover:border-text'
     : 'cursor-not-allowed';
   const selectedClass = isSelected ? 'border-text' : '';
   const unavailableClass = !isAvailable

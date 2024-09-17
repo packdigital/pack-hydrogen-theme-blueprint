@@ -2,6 +2,7 @@ export interface LoginSettings {
   pageHeading: string;
   heading: string;
   forgotText: string;
+  submitText: string;
   createText: string;
   createLinkText: string;
   unidentifiedCustomerText: string;
@@ -28,6 +29,11 @@ export default {
       component: 'text',
     },
     {
+      label: 'Submit Text',
+      name: 'submitText',
+      component: 'text',
+    },
+    {
       label: 'Create Account Text (mobile)',
       name: 'createText',
       component: 'text',
@@ -47,6 +53,7 @@ export default {
     pageHeading: 'Welcome!',
     heading: 'Sign In',
     forgotText: 'Forgot Password',
+    submitText: 'Log In',
     createText: `Don't have an account?`,
     createLinkText: 'Create Account',
     unidentifiedCustomerText: 'The email and password do not match',

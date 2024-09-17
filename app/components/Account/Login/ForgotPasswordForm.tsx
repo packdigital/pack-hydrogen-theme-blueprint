@@ -16,11 +16,14 @@ export function ForgotPasswordForm({
   const {recoverPassword, status} = useCustomerPasswordRecover();
   const [message, setMessage] = useState('');
 
-  const {heading, postSubmissionText, subtext} = {
+  const {
+    heading,
+    postSubmissionText,
+    subtext,
+    submitText = 'Submit',
+  } = {
     ...settings?.forgot,
   };
-
-  const buttonText = 'Submit';
 
   useEffect(() => {
     if (status.finished) {
@@ -63,7 +66,7 @@ export function ForgotPasswordForm({
           type="submit"
         >
           <span className={`${status.started ? 'invisible' : 'visible'}`}>
-            {buttonText}
+            {submitText}
           </span>
 
           {status.started && (

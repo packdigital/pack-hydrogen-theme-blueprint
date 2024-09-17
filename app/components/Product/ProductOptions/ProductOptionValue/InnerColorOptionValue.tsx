@@ -17,7 +17,7 @@ export function InnerColorOptionValue({
   }, [swatch?.color]);
 
   const validClass = !isDisabled
-    ? 'md:group-hover/color:border-text'
+    ? 'md:group-hover:border-text'
     : 'cursor-not-allowed';
   const selectedClass = isSelected ? 'border-text' : '';
   const unavailableClass = !isAvailable

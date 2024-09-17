@@ -1,4 +1,4 @@
-import {useCallback} from 'react';
+import {useCallback, useMemo} from 'react';
 import {useAnalytics} from '@shopify/hydrogen';
 import {useProduct} from '@shopify/hydrogen-react';
 
@@ -8,9 +8,12 @@ import {useColorSwatches} from '~/hooks';
 import {ProductOptionValues} from './ProductOptionValues';
 import type {OnSelect, ProductOptionsProps} from './ProductOptions.types';
 
-export function ProductOptions({product}: ProductOptionsProps) {
+export function ProductOptions({
+  product,
+  selectedVariant,
+}: ProductOptionsProps) {
   const swatchesMap = useColorSwatches();
-  const _product = useProduct();
+  const {setSelectedOption} = useProduct();
   const {publish, shop} = useAnalytics();
 
   const handleSelect: OnSelect = useCallback(
@@ -27,8 +30,13 @@ export function ProductOptions({product}: ProductOptionsProps) {
     [publish, product.handle],
   );
 
-  const {setSelectedOption} = _product;
-  const selectedOptionsMap = _product.selectedOptions as Record<string, string>;
+  const selectedOptionsMap = useMemo(() => {
+    if (!selectedVariant) return null;
+    return selectedVariant.selectedOptions.reduce(
+      (acc: Record<string, string>, {name, value}) => ({...acc, [name]: value}),
+      {},
+    );
+  }, [selectedVariant]);
 
   return (
     <div className="flex flex-col">

@@ -28,12 +28,12 @@ export interface ProductOptionValuesProps {
   onSelect?: OnSelect;
   option: OptionWithGroups;
   product: ProductWithGrouping;
-  selectedOptionsMap: Record<string, string>;
+  selectedOptionsMap?: Record<string, string> | null;
   setSelectedOption: (name: string, value: string) => void;
   swatchesMap: SwatchesMap;
 }
 
 export interface ProductOptionValuesLabelProps {
   name: string;
-  selectedValue: string | null;
+  selectedValue?: string | null;
 }

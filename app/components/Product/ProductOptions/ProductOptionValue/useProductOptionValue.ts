@@ -9,7 +9,7 @@ interface UseProductOptionValueProps {
   name: string;
   optionValue: ProductOptionValue;
   product: ProductWithGrouping;
-  selectedOptionsMap: Record<string, string>;
+  selectedOptionsMap?: Record<string, string> | null;
 }
 
 interface UseProductOptionValueReturn {
@@ -95,10 +95,14 @@ export function useProductOptionValue({
   const isAvailable = !!selectedVariantFromOptions?.availableForSale;
   const isColor = name === COLOR_OPTION_NAME;
   const isDisabled = !selectedVariantFromOptions;
-  const isFromGrouping = Boolean(
-    selectedVariantFromOptions?.product?.id !== product.id,
-  );
   const isSelected = Boolean(selectedOptionsMap?.[name] === optionValue.name);
+  // if option value is from the grouping, or is the selected option value itself within the grouping
+  const isFromGrouping = Boolean(
+    // if option value variant's product id is different from current product id
+    selectedVariantFromOptions?.product?.id !== product.id ||
+      // if the option is selected, is color and product has grouping
+      (isSelected && !!product.grouping && isColor),
+  );
 
   return {
     isAvailable,

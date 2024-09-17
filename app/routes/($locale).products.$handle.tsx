@@ -7,22 +7,21 @@ import type {ShopifyAnalyticsProduct} from '@shopify/hydrogen';
 import {RenderSections} from '@pack/react';
 
 import {
-  formatGroupingWithOptions,
   getMetafields,
   getProductGroupings,
   getShop,
   getSiteSettings,
 } from '~/lib/utils';
 import {
-  GROUPING_PRODUCT_QUERY,
   PRODUCT_PAGE_QUERY,
   PRODUCT_QUERY,
+  PRODUCTS_QUERY,
 } from '~/data/queries';
 import {Product} from '~/components';
 import {routeHeaders} from '~/data/cache';
 import {seoPayload} from '~/lib/seo.server';
-import {useGlobal} from '~/hooks';
-import type {Group, ProductWithGrouping} from '~/lib/types';
+import {useGlobal, useProductWithGrouping} from '~/hooks';
+import type {Group, ProductWithInitialGrouping} from '~/lib/types';
 
 /*
  * Add metafield queries to the METAFIELD_QUERIES array to fetch desired metafields for product pages
@@ -74,7 +73,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
 
   const productGroupings = await getProductGroupings(context);
 
-  let grouping: Group | undefined = [...(productGroupings || [])].find(
+  const grouping: Group | undefined = [...(productGroupings || [])].find(
     (grouping: Group) => {
       const groupingProducts = [
         ...grouping.products,
@@ -85,73 +84,47 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
       );
     },
   );
+  let groupingProducts = undefined;
 
   if (grouping) {
     const productsToQuery = [
       ...grouping.products,
       ...grouping.subgroups.flatMap(({products}) => products),
     ];
-    const groupingProductsPromises = productsToQuery.map(async (product) => {
-      const data = await storefront.query(GROUPING_PRODUCT_QUERY, {
+
+    const idsQuery = productsToQuery
+      .map(({id}) => `id:${id?.split('/').pop()}`)
+      .join(' OR ');
+
+    const {products: groupingProductsEdge} = await storefront.query(
+      PRODUCTS_QUERY,
+      {
         variables: {
-          handle: product.handle,
+          query: idsQuery,
+          first: productsToQuery.length,
           country: storefront.i18n.country,
           language: storefront.i18n.language,
         },
         cache: storefront.CacheShort(),
-      });
-      return data.product;
-    });
-
-    let groupingProducts = await Promise.all(groupingProductsPromises);
-    groupingProducts = groupingProducts.filter(Boolean);
-
-    const groupingProductsByHandle = groupingProducts.reduce((acc, product) => {
-      acc[product.handle] = product;
-      return acc;
-    }, {});
-    groupingProductsByHandle[queriedProduct.handle] = queriedProduct;
-
-    const groupingWithOptions = formatGroupingWithOptions({
-      grouping,
-      getProductByHandle: (handle) => groupingProductsByHandle[handle],
-    });
-
-    const groupingProductsByOptionValue = groupingProducts.reduce(
-      (acc, groupProduct: ProductWithGrouping) => {
-        groupProduct.options.forEach((option) => {
-          const {name, optionValues} = option;
-          if (!optionValues) return;
-          optionValues.forEach((optionValue) => {
-            if (!acc[name]) acc[name] = {};
-            acc[name][optionValue.name] = [
-              ...(acc[name][optionValue.name] || []),
-              groupProduct,
-            ];
-          });
-        });
-        return acc;
       },
-      {},
     );
 
-    grouping = {
-      ...groupingWithOptions,
-      productsByHandle: groupingProductsByHandle,
-      productsByOptionValue: groupingProductsByOptionValue,
-    } as Group;
+    groupingProducts = groupingProductsEdge.nodes;
   }
 
   const product = {
     ...queriedProduct,
-    ...(grouping?.products.length || grouping?.subgroups.length
-      ? {grouping}
+    ...(grouping
+      ? {
+          initialGrouping: {
+            ...grouping,
+            allProducts: [queriedProduct, ...groupingProducts],
+          },
+        }
       : null),
-  };
+  } as ProductWithInitialGrouping;
 
   const selectedVariant = product.selectedVariant ?? product.variants?.nodes[0];
-
-  delete product.selectedVariant;
 
   const productAnalytics: ShopifyAnalyticsProduct = {
     productGid: product.id,
@@ -194,17 +167,24 @@ export const meta = ({matches}: MetaArgs<typeof loader>) => {
 };
 
 export default function ProductRoute() {
-  const {product, productPage, selectedVariant} =
-    useLoaderData<typeof loader>();
+  const {
+    product: initialProduct,
+    productPage,
+    selectedVariant: initialSelectedVariant,
+  } = useLoaderData<typeof loader>();
   const {isCartReady} = useGlobal();
+  const product = useProductWithGrouping(initialProduct);
 
   return (
     <ProductProvider
       data={product}
-      initialVariantId={selectedVariant?.id || null}
+      initialVariantId={initialSelectedVariant?.id || null}
     >
       <div data-comp={ProductRoute.displayName}>
-        <Product product={product} />
+        <Product
+          product={product}
+          initialSelectedVariant={initialSelectedVariant}
+        />
 
         {productPage && <RenderSections content={productPage} />}
       </div>
@@ -216,15 +196,15 @@ export default function ProductRoute() {
               {
                 id: product.id,
                 title: product.title,
-                price: selectedVariant?.price.amount || '0',
+                price: initialSelectedVariant?.price.amount || '0',
                 vendor: product.vendor,
-                variantId: selectedVariant?.id || '',
-                variantTitle: selectedVariant?.title || '',
+                variantId: initialSelectedVariant?.id || '',
+                variantTitle: initialSelectedVariant?.title || '',
                 quantity: 1,
               },
             ],
           }}
-          customData={{product, selectedVariant}}
+          customData={{product, selectedVariant: initialSelectedVariant}}
         />
       )}
     </ProductProvider>

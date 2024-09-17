@@ -83,12 +83,13 @@ export async function loader({request, context}: LoaderFunctionArgs) {
     metafields: [],
     products: search,
     updatedAt: new Date().toISOString(),
-  } as CollectionType;
+    searchTerm,
+  } as CollectionType & {searchTerm: string};
 
   const shop = await getShop(context);
   const analytics = {pageType: AnalyticsPageType.search};
-  const seo = seoPayload.collection({
-    collection,
+  const seo = seoPayload.search({
+    search: collection,
     page: {} as Page,
     shop,
     siteSettings,
