@@ -1,6 +1,7 @@
 export interface ForgotSettings {
   heading: string;
   subtext: string;
+  submitText: string;
   postSubmissionText: string;
 }
 
@@ -20,6 +21,11 @@ export default {
       component: 'text',
     },
     {
+      label: 'Submit Text',
+      name: 'submitText',
+      component: 'text',
+    },
+    {
       label: 'Post Submission Text',
       name: 'postSubmissionText',
       component: 'text',
@@ -28,6 +34,7 @@ export default {
   defaultValue: {
     heading: 'Forgot Password',
     subtext: 'We will send you an email to reset your password.',
+    submitText: 'Submit',
     postSubmissionText: 'If account exists, an email will be sent shortly',
   },
 };

@@ -1,6 +1,7 @@
 export interface ResetSettings {
   heading: string;
   subtext: string;
+  submitText: string;
 }
 
 export default {
@@ -18,9 +19,15 @@ export default {
       name: 'subtext',
       component: 'text',
     },
+    {
+      label: 'Submit Text',
+      name: 'submitText',
+      component: 'text',
+    },
   ],
   defaultValue: {
     heading: 'Reset Password',
     subtext: 'Please enter your new password.',
+    submitText: 'Reset Password',
   },
 };

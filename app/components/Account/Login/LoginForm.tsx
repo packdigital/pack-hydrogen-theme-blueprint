@@ -14,11 +14,14 @@ export function LoginForm({setIsForgotPassword, settings}: LoginFormProps) {
   const {customerLogIn, errors, status} = useCustomerLogIn();
   const {locale: pathPrefix = ''} = useParams();
 
-  const {forgotText, heading, pageHeading} = {
+  const {
+    forgotText,
+    heading,
+    pageHeading,
+    submitText = 'Log In',
+  } = {
     ...settings?.login,
   };
-
-  const buttonText = 'Log In';
 
   return (
     <div className="flex flex-col items-center rounded border border-border px-3 py-6 md:px-6 md:py-10">
@@ -63,7 +66,7 @@ export function LoginForm({setIsForgotPassword, settings}: LoginFormProps) {
           type="submit"
         >
           <span className={`${status.started ? 'invisible' : 'visible'}`}>
-            {buttonText}
+            {submitText}
           </span>
 
           {status.started && (

@@ -11,12 +11,13 @@ export function Activate() {
   const {account} = useSettings();
   const {pathPrefix} = useLocale();
 
-  const [buttonText, setButtonText] = useState('Activate Account');
-
   const {
     heading = 'Activate Account',
     subtext = 'Create your password to activate your account.',
+    submitText = 'Activate Account',
   } = {...account?.activate};
+
+  const [buttonText, setButtonText] = useState(submitText);
 
   useEffect(() => {
     if (status.success) {

@@ -1,6 +1,7 @@
 export interface RegisterSettings {
   pageHeading: string;
   heading: string;
+  submitText: string;
   loginText: string;
   loginLinkText: string;
 }
@@ -21,6 +22,11 @@ export default {
       component: 'text',
     },
     {
+      label: 'Submit Text',
+      name: 'submitText',
+      component: 'text',
+    },
+    {
       label: 'Login Text (mobile)',
       name: 'loginText',
       component: 'text',
@@ -34,6 +40,7 @@ export default {
   defaultValue: {
     pageHeading: 'Welcome!',
     heading: 'Create Account',
+    submitText: 'Create Account',
     loginText: 'Already have an account?',
     loginLinkText: 'Sign In',
   },

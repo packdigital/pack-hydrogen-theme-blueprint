@@ -314,17 +314,20 @@
             "heading": "Sign In",
             "createText": "Don't have an account?",
             "forgotText": "Forgot Password",
+            "submitText": "Log In",
             "pageHeading": "Welcome!",
             "createLinkText": "Create Account",
             "unidentifiedCustomerText": "The email and password do not match"
           },
           "reset": {
             "heading": "Reset Password",
-            "subtext": "Please enter your new password."
+            "subtext": "Please enter your new password.",
+            "submitText": "Reset Password"
           },
           "forgot": {
             "heading": "Forgot Password",
             "subtext": "We will send you an email to reset your password.",
+            "submitText": "Submit",
             "postSubmissionText": "If account exists, an email will be sent shortly"
           },
           "orders": {
@@ -339,11 +342,13 @@
           "noIndex": true,
           "activate": {
             "heading": "Activate Account",
-            "subtext": "Create your password to activate your account."
+            "subtext": "Create your password to activate your account.",
+            "submitText": "Activate Account"
           },
           "noFollow": true,
           "register": {
             "heading": "Create Account",
+            "submitText": "Create Account",
             "loginText": "Already have an account?",
             "pageHeading": "Welcome!",
             "loginLinkText": "Sign In"

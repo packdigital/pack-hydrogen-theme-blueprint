@@ -1,6 +1,7 @@
 export interface ActivateSettings {
   heading: string;
   subtext: string;
+  submitText: string;
 }
 
 export default {
@@ -18,9 +19,15 @@ export default {
       name: 'subtext',
       component: 'text',
     },
+    {
+      label: 'Submit Text',
+      name: 'submitText',
+      component: 'text',
+    },
   ],
   defaultValue: {
     heading: 'Activate Account',
     subtext: 'Create your password to activate your account.',
+    submitText: 'Activate Account',
   },
 };

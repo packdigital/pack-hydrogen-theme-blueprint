@@ -11,9 +11,9 @@ export function ResetPassword() {
   const {account} = useSettings();
   const {pathPrefix} = useLocale();
 
-  const [buttonText, setButtonText] = useState('Reset Password');
+  const {heading, subtext, submitText = 'Reset Password'} = {...account?.reset};
 
-  const {heading, subtext} = {...account?.reset};
+  const [buttonText, setButtonText] = useState(submitText);
 
   useEffect(() => {
     if (status.success) {

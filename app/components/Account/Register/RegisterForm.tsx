@@ -9,9 +9,11 @@ export function RegisterForm({settings}: {settings: Settings['account']}) {
   const {customerRegister, errors, status} = useCustomerRegister();
   const {locale: pathPrefix = ''} = useParams();
 
-  const {heading, pageHeading} = {...settings?.register};
-
-  const buttonText = 'Create Account';
+  const {
+    heading,
+    pageHeading,
+    submitText = 'Create Account',
+  } = {...settings?.register};
 
   return (
     <div className="rounded border border-border px-3 py-6 md:px-6 md:py-10">
@@ -89,7 +91,7 @@ export function RegisterForm({settings}: {settings: Settings['account']}) {
           type="submit"
         >
           <span className={`${status.started ? 'invisible' : 'visible'}`}>
-            {buttonText}
+            {submitText}
           </span>
 
           {status.started && (
