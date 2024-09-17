@@ -2,7 +2,7 @@ import {useCallback, useEffect, useMemo, useState} from 'react';
 import type {ProductVariant} from '@shopify/hydrogen-react/storefront-api-types';
 
 import {Container} from '~/components';
-import {useProductsFromHandles} from '~/hooks';
+import {useProductsByIds} from '~/hooks';
 import type {ProductCms} from '~/lib/types';
 
 import {BYOBProductItem} from './BYOBProductItem';
@@ -22,21 +22,21 @@ export function BuildYourOwnBundle({cms}: {cms: BuildYourOwnBundleCms}) {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   const [bundle, setBundle] = useState<ProductVariant[]>([]);
 
-  const validPreselectedHandles = useMemo((): string[] => {
+  const validPreselectedIds = useMemo((): string[] => {
     if (!preselects?.length || !productGroupings?.length) return [];
     const allProductsMap = productGroupings.reduce(
       (acc: Record<string, ProductCms>, {products}) => {
         products?.forEach(({product}) => {
           if (!product) return;
-          acc[product.handle] = product;
+          acc[product.id] = product;
         });
         return acc;
       },
       {},
     );
     return preselects.reduce((acc: string[], {product}) => {
-      if (!allProductsMap[product?.handle]) return acc;
-      return [...acc, product.handle];
+      if (!allProductsMap[product?.id]) return acc;
+      return [...acc, product.id];
     }, []);
   }, [preselects, productGroupings]);
 
@@ -61,7 +61,7 @@ export function BuildYourOwnBundle({cms}: {cms: BuildYourOwnBundleCms}) {
     }, {});
   }, [bundle]);
 
-  const preselectedProducts = useProductsFromHandles(validPreselectedHandles);
+  const preselectedProducts = useProductsByIds(validPreselectedIds);
 
   const hasProductGroupings = productGroupings?.length > 1;
   const incrementDisabled = !!tiers && bundle.length >= tiers.length;

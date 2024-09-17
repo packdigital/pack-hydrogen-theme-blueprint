@@ -7,7 +7,7 @@ import {
 } from '~/components';
 import type {ProductsSliderCms} from '~/components';
 import type {ContainerSettings} from '~/settings/container';
-import {useProductsFromHandles} from '~/hooks';
+import {useProductsByIds} from '~/hooks';
 
 import {Schema} from './ProductsSlider.schema';
 
@@ -21,16 +21,16 @@ export function ProductsSlider({
     triggerOnce: true,
   });
 
-  const productHandles = useMemo(() => {
+  const productIds = useMemo(() => {
     return (
       cms.products?.reduce((acc: string[], {product}) => {
-        if (!product?.handle) return acc;
-        return [...acc, product.handle];
+        if (!product?.id) return acc;
+        return [...acc, product.id];
       }, []) || []
     );
   }, [cms.products]);
 
-  const products = useProductsFromHandles(productHandles, inView);
+  const products = useProductsByIds(productIds, inView);
 
   return (
     <Container container={cms.container}>
