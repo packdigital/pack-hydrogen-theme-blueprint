@@ -14,6 +14,7 @@ import type {
   Offer,
   Organization,
   Product as SeoProduct,
+  SearchResultsPage,
   WebPage,
 } from 'schema-dts';
 
@@ -357,6 +358,99 @@ function collection({
   };
 }
 
+type SearchRequiredFields = Omit<
+  Collection,
+  'products' | 'descriptionHtml' | 'metafields' | 'image' | 'updatedAt'
+> & {
+  products: {nodes: Pick<Product, 'handle'>[]};
+  image?: null | Pick<Image, 'url' | 'height' | 'width' | 'altText'>;
+  descriptionHtml?: null | Collection['descriptionHtml'];
+  updatedAt?: null | Collection['updatedAt'];
+  metafields?: null | Collection['metafields'];
+  searchTerm: string;
+};
+
+function searchJsonLd({
+  search,
+  url,
+}: {
+  search: SearchRequiredFields;
+  url: Request['url'];
+}): SeoConfig<SearchResultsPage | BreadcrumbList>['jsonLd'] {
+  const origin = new URL(url).origin;
+  const itemListElement: SearchResultsPage['mainEntity'] = search.products.nodes
+    .slice(0, 10)
+    .map((product, index) => {
+      return {
+        '@type': 'ListItem',
+        position: index + 1,
+        url: `/products/${product.handle}`,
+      };
+    });
+
+  return [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Homepage',
+          item: `${origin}/`,
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: search.seo?.title || search.title || '',
+        },
+      ],
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'SearchResultsPage',
+      name: search.seo?.title || search.title || '',
+      description: truncate(
+        search.seo?.description || search.description || '',
+      ),
+      image: search.image?.url,
+      url: `/search?q=${search.searchTerm}`,
+      mainEntity: {
+        '@type': 'ItemList',
+        itemListElement,
+      },
+    },
+  ];
+}
+
+function search({
+  search,
+  page,
+  shop,
+  siteSettings,
+  url,
+}: {
+  search: SearchRequiredFields;
+  page?: Page;
+  shop: Shop;
+  siteSettings: RootSiteSettings;
+  url: Request['url'];
+}): SeoConfig<SearchResultsPage | BreadcrumbList> {
+  const {title, description, media, robots} = getMeta({
+    page,
+    resource: search,
+    shop,
+    siteSettings,
+  });
+  return {
+    title,
+    description,
+    media,
+    robots,
+    jsonLd: searchJsonLd({search, url}),
+  };
+}
+
 function article({
   page,
   shop,
@@ -458,6 +552,7 @@ export const seoPayload = {
   page,
   product,
   root,
+  search,
 };
 
 /**
