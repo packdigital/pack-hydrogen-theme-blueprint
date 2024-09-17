@@ -188,8 +188,8 @@ const actions = (dispatch: Dispatch) => ({
 
 export function GlobalProvider({children}: {children: ReactNode}) {
   const {isPreviewModeEnabled, siteSettings} = useRootLoaderData();
-  const cart = useCart();
-  const cartIsIdle = cart.status === 'idle';
+  const {cartCreate, status} = useCart();
+  const cartIsIdle = status === 'idle';
   const [state, dispatch] = useReducer(reducer, {
     ...globalState,
     settings: siteSettings?.data?.siteSettings?.settings,
@@ -208,12 +208,22 @@ export function GlobalProvider({children}: {children: ReactNode}) {
   }, []);
 
   useEffect(() => {
-    if (cartIsIdle && !state.isCartReady) {
+    window.__pack_cart_status = status;
+  }, [status]);
+
+  useEffect(() => {
+    if (cartIsIdle) {
       value.actions.setIsCartReady(true);
+      window.__pack_is_cart_ready = true;
     } else {
-      // uninitialized cart never becomes idle so instead set cart ready after 1 sec
+      // uninitialized cart never becomes idle so instead create empty cart after 1 sec
       setTimeout(() => {
-        value.actions.setIsCartReady(true);
+        if (
+          window.__pack_is_cart_ready ||
+          window.__pack_cart_status !== 'uninitialized'
+        )
+          return;
+        cartCreate({lines: []});
       }, 1000);
     }
   }, [cartIsIdle]);

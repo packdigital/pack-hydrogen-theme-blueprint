@@ -38,6 +38,8 @@ declare global {
   interface Window {
     ENV?: Record<string, string>;
     unHover?: ReturnType<typeof setTimeout> | null;
+    __pack_is_cart_ready?: boolean;
+    __pack_cart_status?: string;
     dataLayer?: any[];
     // Elevar
     ElevarDataLayer?: any[];
