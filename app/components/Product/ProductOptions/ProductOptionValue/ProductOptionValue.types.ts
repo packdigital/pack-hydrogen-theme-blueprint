@@ -10,24 +10,30 @@ import type {
 import type {OnSelect} from '../ProductOptions.types';
 
 export interface ProductOptionValueProps {
+  index: number;
   name: string;
   onSelect?: OnSelect;
+  optimisticSelectedIndex: number;
   optionValue: ProductOptionValue;
   product: ProductWithGrouping;
-  selectedOptionsMap: Record<string, string>;
+  selectedOptionsMap?: Record<string, string> | null;
+  setOptimisticSelectedIndex: (index: number) => void;
   setSelectedOption: (name: string, value: string) => void;
   swatchesMap: SwatchesMap;
 }
 
 export interface ProductOptionValueLinkProps {
+  index: number;
   isAvailable: boolean;
   isColor: boolean;
   isDisabled: boolean;
   isSelected: boolean;
   onSelect?: OnSelect;
+  optimisticSelectedIndex: number;
   optionName: string;
   optionValue: ProductOptionValue;
   selectedVariantFromOptions: SelectedVariant;
+  setOptimisticSelectedIndex: (index: number) => void;
   swatch?: Swatch | null;
 }
 

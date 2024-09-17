@@ -19,24 +19,39 @@ export interface Subgroup {
   id: string;
   title: string;
   description: string;
-  products: {handle: string}[];
+  products: {handle: string; id: string}[];
+}
+
+export interface InitialGroup {
+  id: string;
+  title: string;
+  description: string;
+  products: {handle: string; id: string}[];
+  subgroups: Subgroup[];
+  allProducts: Product[];
 }
 
 export interface Group {
   id: string;
   title: string;
   description: string;
-  products: {handle: string}[];
+  products: {handle: string; id: string}[];
   subgroups: Subgroup[];
   options?: OptionWithGroups[];
   optionsMap?: Record<string, ProductOptionValue[]>;
-  allProducts?: {handle: string}[];
+  allProducts?: {handle: string; id: string}[];
   productsByHandle?: Record<string, Product>;
   productsByOptionValue?: Record<string, Record<string, Product[]>>;
   isReady?: boolean;
 }
 
+export interface ProductWithInitialGrouping extends Product {
+  selectedVariant?: SelectedVariant;
+  initialGrouping?: InitialGroup;
+}
+
 export interface ProductWithGrouping extends Product {
+  selectedVariant?: SelectedVariant;
   grouping?: Group;
 }
 

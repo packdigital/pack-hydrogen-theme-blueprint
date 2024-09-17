@@ -35,6 +35,7 @@ export const PRODUCT_GROUPINGS_QUERY = `#graphql
           description
           products {
             handle
+            id
           }
           subgroups {
             id
@@ -42,6 +43,7 @@ export const PRODUCT_GROUPINGS_QUERY = `#graphql
             description
             products {
               handle
+              id
             }
           }
         }

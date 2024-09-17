@@ -1,4 +1,5 @@
-import {useMemo} from 'react';
+import {useEffect, useMemo, useState} from 'react';
+import {useLocation} from '@remix-run/react';
 
 import type {OptionWithGroups} from '~/lib/types';
 
@@ -14,6 +15,15 @@ export function ProductOptionValues({
   setSelectedOption,
   swatchesMap,
 }: ProductOptionValuesProps) {
+  const {pathname} = useLocation();
+
+  /*
+   * optimisticSelectedIndex is used to visually select an option value that
+   * navigates to a new product before the new page is loaded
+   */
+  const [optimisticSelectedIndex, setOptimisticSelectedIndex] =
+    useState<number>(-1);
+
   const option = useMemo((): OptionWithGroups | undefined => {
     return product.grouping
       ? product.grouping.options?.find(
@@ -21,6 +31,13 @@ export function ProductOptionValues({
         )
       : initialOption;
   }, [product]);
+
+  useEffect(() => {
+    // reset optimisticSelectedIndex after navigation
+    if (optimisticSelectedIndex > -1) {
+      setOptimisticSelectedIndex(-1);
+    }
+  }, [pathname]);
 
   const hasSubgroups = !!option?.hasSubgroups;
   const {name = '', optionValues} = {...option};
@@ -45,13 +62,18 @@ export function ProductOptionValues({
                 />
 
                 <ul className="flex flex-wrap gap-2">
-                  {group.optionValues.map((optionValue) => {
+                  {group.optionValues.map((optionValue, index) => {
                     return (
                       <li key={optionValue.name}>
                         <ProductOptionValue
+                          index={index}
                           name={name}
+                          optimisticSelectedIndex={optimisticSelectedIndex}
                           product={product}
                           selectedOptionsMap={selectedOptionsMap}
+                          setOptimisticSelectedIndex={
+                            setOptimisticSelectedIndex
+                          }
                           setSelectedOption={setSelectedOption}
                           swatchesMap={swatchesMap}
                           optionValue={optionValue}
@@ -75,13 +97,16 @@ export function ProductOptionValues({
           />
 
           <ul className="flex flex-wrap gap-2">
-            {optionValues?.map((optionValue) => {
+            {optionValues?.map((optionValue, index) => {
               return (
                 <li key={optionValue.name}>
                   <ProductOptionValue
+                    index={index}
                     name={name}
+                    optimisticSelectedIndex={optimisticSelectedIndex}
                     product={product}
                     selectedOptionsMap={selectedOptionsMap}
+                    setOptimisticSelectedIndex={setOptimisticSelectedIndex}
                     setSelectedOption={setSelectedOption}
                     swatchesMap={swatchesMap}
                     optionValue={optionValue}

@@ -4,6 +4,7 @@ import type {SelectedVariant, Settings} from '~/lib/types';
 
 export interface ProductProps {
   product: Product;
+  initialSelectedVariant?: SelectedVariant;
 }
 
 export interface ProductDetailsProps {

@@ -2,6 +2,15 @@ import type {Settings} from '~/settings';
 
 export interface ProductCms {
   handle: string;
+  id: string;
+  data: {
+    handle: string;
+    images: {originalSrc: string; __typename: string}[];
+    productType: string;
+    status: string;
+    title: string;
+    __typename: string;
+  };
 }
 
 export interface ImageCms {

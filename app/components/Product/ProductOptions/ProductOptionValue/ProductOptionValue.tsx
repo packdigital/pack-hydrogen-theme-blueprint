@@ -4,11 +4,14 @@ import {useProductOptionValue} from './useProductOptionValue';
 import type {ProductOptionValueProps} from './ProductOptionValue.types';
 
 export function ProductOptionValue({
+  index,
   name,
   onSelect,
+  optimisticSelectedIndex,
   optionValue,
   product,
   selectedOptionsMap,
+  setOptimisticSelectedIndex,
   setSelectedOption,
   swatchesMap,
 }: ProductOptionValueProps) {
@@ -30,12 +33,15 @@ export function ProductOptionValue({
 
   return isFromGrouping ? (
     <ProductOptionValueLink
+      index={index}
       isAvailable={isAvailable}
       isColor={isColor}
       isDisabled={isDisabled}
       isSelected={isSelected}
       onSelect={onSelect}
+      optimisticSelectedIndex={optimisticSelectedIndex}
       selectedVariantFromOptions={selectedVariantFromOptions}
+      setOptimisticSelectedIndex={setOptimisticSelectedIndex}
       swatch={swatch}
       optionName={name}
       optionValue={optionValue}

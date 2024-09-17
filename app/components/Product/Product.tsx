@@ -11,12 +11,22 @@ import {ProductHeader} from './ProductHeader';
 import {ProductMedia} from './ProductMedia';
 import type {ProductProps} from './Product.types';
 
-export function Product({product}: ProductProps) {
-  const {selectedVariant} = useProduct() as {
+export function Product({product, initialSelectedVariant}: ProductProps) {
+  const {selectedVariant: providerSelectedVariant} = useProduct() as {
     selectedVariant: SelectedVariant;
   };
   const {pathPrefix} = useLocale();
   const {header, product: productSettings} = useSettings();
+
+  const selectedVariant = useMemo(() => {
+    /* workaround because selected variant from useProduct hook is momentarily
+     * misaligned with the product from the loader after navigation between
+     * product pages */
+    return !providerSelectedVariant ||
+      providerSelectedVariant?.product?.id !== product.id
+      ? initialSelectedVariant
+      : providerSelectedVariant;
+  }, [initialSelectedVariant, providerSelectedVariant, product]);
 
   const selectedVariantColor = useMemo(() => {
     return selectedVariant?.selectedOptions?.find(

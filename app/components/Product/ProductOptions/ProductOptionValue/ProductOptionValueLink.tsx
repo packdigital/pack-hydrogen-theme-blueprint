@@ -8,14 +8,17 @@ import {InnerOptionValue} from './InnerOptionValue';
 import type {ProductOptionValueLinkProps} from './ProductOptionValue.types';
 
 export function ProductOptionValueLink({
+  index,
   isAvailable,
   isColor,
   isDisabled,
   isSelected,
   onSelect,
+  optimisticSelectedIndex,
   optionName,
   optionValue,
   selectedVariantFromOptions,
+  setOptimisticSelectedIndex,
   swatch,
 }: ProductOptionValueLinkProps) {
   const {search} = useLocation();
@@ -31,12 +34,22 @@ export function ProductOptionValueLink({
     return `/products/${selectedVariantFromOptions.product.handle}?${params}`;
   }, [search, selectedVariantFromOptions]);
 
+  const isOptimisticSelected = index === optimisticSelectedIndex;
+  const isVisiblySelected =
+    isOptimisticSelected || (isSelected && optimisticSelectedIndex === -1);
+
   return (
     <Link
       aria-label={optionValue.name}
+      className="group"
       preventScrollReset
       to={url}
-      onClick={() => {
+      onClick={(e) => {
+        if (isSelected) {
+          e.preventDefault();
+          return;
+        }
+        setOptimisticSelectedIndex(index);
         if (typeof onSelect === 'function') {
           onSelect({
             selectedVariant: selectedVariantFromOptions,
@@ -51,7 +64,7 @@ export function ProductOptionValueLink({
         <InnerColorOptionValue
           isAvailable={isAvailable}
           isDisabled={isDisabled}
-          isSelected={isSelected}
+          isSelected={isVisiblySelected}
           swatch={swatch}
           optionValue={optionValue}
         />
@@ -59,7 +72,7 @@ export function ProductOptionValueLink({
         <InnerOptionValue
           isAvailable={isAvailable}
           isDisabled={isDisabled}
-          isSelected={isSelected}
+          isSelected={isVisiblySelected}
           optionValue={optionValue}
         />
       )}
