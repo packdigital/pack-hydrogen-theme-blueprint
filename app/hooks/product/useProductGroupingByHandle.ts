@@ -56,8 +56,12 @@ export function useProductGroupingByHandle(
 
   useEffect(() => {
     if (!grouping?.allProducts || groupingIsReady) return;
+    const idsQuery = grouping.allProducts
+      .map(({id}) => `id:${id?.split('/').pop()}`)
+      .join(' OR ');
     const searchParams = new URLSearchParams({
-      handles: grouping.allProducts.map(({handle}) => handle).join(','),
+      query: idsQuery,
+      count: grouping.allProducts.length.toString(),
     });
     fetcher.load(`${pathPrefix}/api/products?${searchParams}`);
   }, [grouping?.id]);
