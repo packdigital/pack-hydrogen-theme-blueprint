@@ -15,39 +15,41 @@ export function VideoElement({
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const {ref: inViewRef, inView} = useInView({
-    rootMargin: '0px',
+    rootMargin: '200px',
     triggerOnce: true,
   });
   const [isPlaying, setIsPlaying] = useState(autoplay);
 
   return (
     <span className="group absolute inset-0 size-full" ref={inViewRef}>
-      {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-      <video
-        aria-label={title}
-        autoPlay={autoplay}
-        className={`absolute inset-0 size-full object-cover ${
-          pauseAndPlay ? 'cursor-pointer' : ''
-        }`}
-        controls={controls}
-        loop={loop}
-        muted={autoplay || !sound}
-        onClick={() => {
-          if (!pauseAndPlay || !videoRef.current) return;
-          if (isPlaying) {
-            videoRef.current.pause();
-            setIsPlaying(false);
-          } else {
-            videoRef.current.play();
-            setIsPlaying(true);
-          }
-        }}
-        playsInline
-        poster={posterSrc}
-        ref={videoRef}
-      >
-        {inView && videoSrc && <source src={videoSrc} type="video/mp4" />}
-      </video>
+      {inView && (
+        // eslint-disable-next-line jsx-a11y/media-has-caption
+        <video
+          aria-label={title}
+          autoPlay={autoplay}
+          className={`absolute inset-0 size-full object-cover ${
+            pauseAndPlay ? 'cursor-pointer' : ''
+          }`}
+          controls={controls}
+          loop={loop}
+          muted={autoplay || !sound}
+          onClick={() => {
+            if (!pauseAndPlay || !videoRef.current) return;
+            if (isPlaying) {
+              videoRef.current.pause();
+              setIsPlaying(false);
+            } else {
+              videoRef.current.play();
+              setIsPlaying(true);
+            }
+          }}
+          playsInline
+          poster={posterSrc}
+          ref={videoRef}
+        >
+          {videoSrc && <source src={videoSrc} type="video/mp4" />}
+        </video>
+      )}
 
       {pauseAndPlay && isPlaying && (
         <Svg

@@ -14,7 +14,7 @@ export function HeroVideo({isVisible, posterSrc, videoSrc}: HeroVideoProps) {
     }
   }, [isVisible]);
 
-  return (
+  return isVisible ? (
     <video
       className="absolute inset-0 size-full object-cover"
       controls={false}
@@ -24,9 +24,9 @@ export function HeroVideo({isVisible, posterSrc, videoSrc}: HeroVideoProps) {
       poster={posterSrc}
       ref={videoRef}
     >
-      {isVisible && videoSrc && <source src={videoSrc} type="video/mp4" />}
+      {videoSrc && <source src={videoSrc} type="video/mp4" />}
     </video>
-  );
+  ) : null;
 }
 
 HeroVideo.displayName = 'HeroVideo';

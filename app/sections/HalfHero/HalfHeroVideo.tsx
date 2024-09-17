@@ -16,7 +16,7 @@ export function HalfHeroVideo({
 }: HalfHeroVideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const {ref, inView} = useInView({
-    rootMargin: '0px',
+    rootMargin: '200px',
     triggerOnce: true,
   });
 
@@ -33,18 +33,20 @@ export function HalfHeroVideo({
 
   return (
     <div ref={ref} className="absolute inset-0 size-full">
-      <video
-        autoPlay={autoplay}
-        className="size-full object-cover"
-        controls={!autoplay && sound}
-        loop={autoplay || !sound}
-        muted={autoplay || !sound}
-        playsInline
-        poster={posterSrc}
-        ref={videoRef}
-      >
-        {inView && videoSrc && <source src={videoSrc} type="video/mp4" />}
-      </video>
+      {inView && (
+        <video
+          autoPlay={autoplay}
+          className="size-full object-cover"
+          controls={!autoplay && sound}
+          loop={autoplay || !sound}
+          muted={autoplay || !sound}
+          playsInline
+          poster={posterSrc}
+          ref={videoRef}
+        >
+          {videoSrc && <source src={videoSrc} type="video/mp4" />}
+        </video>
+      )}
 
       {!autoplay && !sound && (
         <button

@@ -7,7 +7,7 @@ import type {CollectionPromoTileProps} from './Collection.types';
 
 export function CollectionPromoTile({tile}: CollectionPromoTileProps) {
   const {ref, inView} = useInView({
-    rootMargin: '0px',
+    rootMargin: '200px',
     triggerOnce: true,
   });
 
@@ -31,36 +31,40 @@ export function CollectionPromoTile({tile}: CollectionPromoTileProps) {
           backgroundColor: image ? 'var(--off-white)' : bgColor,
         }}
       >
-        {videoSrc && (
-          <video
-            autoPlay
-            className="absolute inset-0 size-full object-cover"
-            controls={false}
-            loop
-            muted
-            playsInline
-            poster={videoPoster?.src}
-          >
-            {inView && <source src={videoSrc} type="video/mp4" />}
-          </video>
-        )}
+        {inView && (
+          <>
+            {videoSrc && (
+              <video
+                autoPlay
+                className="absolute inset-0 size-full object-cover"
+                controls={false}
+                loop
+                muted
+                playsInline
+                poster={videoPoster?.src}
+              >
+                <source src={videoSrc} type="video/mp4" />
+              </video>
+            )}
 
-        {image?.src && !videoSrc && (
-          <Image
-            data={{
-              altText: image.altText || alt,
-              url: image.src,
-              width: image.width,
-              height: image.height,
-            }}
-            aspectRatio={getAspectRatioFromClass(aspectRatio)}
-            className="media-fill"
-            sizes="(min-width: 768px) 33vw, 50vw"
-          />
-        )}
+            {image?.src && !videoSrc && (
+              <Image
+                data={{
+                  altText: image.altText || alt,
+                  url: image.src,
+                  width: image.width,
+                  height: image.height,
+                }}
+                aspectRatio={getAspectRatioFromClass(aspectRatio)}
+                className="media-fill"
+                sizes="(min-width: 768px) 33vw, 50vw"
+              />
+            )}
 
-        {(videoSrc || image?.src) && darkOverlay && (
-          <div className="pointer-events-none absolute inset-0 size-full bg-[rgba(0,0,0,0.2)]" />
+            {(videoSrc || image?.src) && darkOverlay && (
+              <div className="pointer-events-none absolute inset-0 size-full bg-[rgba(0,0,0,0.2)]" />
+            )}
+          </>
         )}
 
         {(text?.heading || text?.subtext) && (
