@@ -72,7 +72,9 @@ export async function action({request, context}: ActionFunctionArgs) {
       return handleLoggedOutResponse({
         return_to: body?.return_to ?? null,
         checkoutDomain:
-          env.PRIVATE_SHOPIFY_CHECKOUT_DOMAIN || env.PUBLIC_STORE_DOMAIN,
+          env.PRIVATE_SHOPIFY_CHECKOUT_DOMAIN ||
+          env.PUBLIC_CHECKOUT_DOMAIN ||
+          env.PUBLIC_STORE_DOMAIN,
       });
     }
 
