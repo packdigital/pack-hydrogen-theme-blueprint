@@ -58,11 +58,6 @@ export async function loader({request, context, params}: LoaderFunctionArgs) {
     session.unset('customerAccessToken');
     return redirect(
       locale ? `/${locale}${LOGGED_OUT_REDIRECT_TO}` : LOGGED_OUT_REDIRECT_TO,
-      {
-        headers: {
-          'Set-Cookie': await session.commit(),
-        },
-      },
     );
   }
 }
