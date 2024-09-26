@@ -107,6 +107,7 @@ export function AddressForm({
           <span className="input-label">First Name</span>
           <input
             className="input-text"
+            id="firstName"
             name="firstName"
             placeholder="First Name"
             required
@@ -118,6 +119,7 @@ export function AddressForm({
           <span className="input-label">Last Name</span>
           <input
             className="input-text"
+            id="lastName"
             name="lastName"
             placeholder="Last Name"
             required
@@ -129,6 +131,7 @@ export function AddressForm({
           <span className="input-label">Company</span>
           <input
             className="input-text"
+            id="company"
             name="company"
             placeholder="Company"
             type="text"
@@ -139,6 +142,7 @@ export function AddressForm({
           <span className="input-label">Address 1</span>
           <input
             className="input-text"
+            id="address1"
             name="address1"
             placeholder="Address 1"
             required
@@ -150,6 +154,7 @@ export function AddressForm({
           <span className="input-label">Address 2</span>
           <input
             className="input-text"
+            id="address2"
             name="address2"
             placeholder="Address 2"
             type="text"
@@ -160,6 +165,7 @@ export function AddressForm({
           <span className="input-label">City</span>
           <input
             className="input-text"
+            id="city"
             name="city"
             placeholder="City"
             required
@@ -187,6 +193,7 @@ export function AddressForm({
           <span className="input-label">Zip</span>
           <input
             className="input-text"
+            id="zip"
             name="zip"
             placeholder="Zip"
             required
@@ -214,6 +221,7 @@ export function AddressForm({
           <span className="input-label">Phone</span>
           <input
             className="input-text"
+            id="phone"
             name="phone"
             placeholder="Phone"
             type="tel"
@@ -233,7 +241,12 @@ export function AddressForm({
           <span className="ml-2 text-sm">Set as default address</span>
         </label>
 
-        <input type="hidden" name="isDefault" value={`${isDefault}`} />
+        <input
+          type="hidden"
+          id="isDefault"
+          name="isDefault"
+          value={`${isDefault}`}
+        />
 
         {!!initialAddress?.id && (
           <input type="hidden" name="id" value={initialAddress.id} />
