@@ -3,6 +3,7 @@ import ReactMarkdown from 'react-markdown';
 import type {Components} from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkBreaks from 'remark-breaks';
+import { defaultUrlTransform } from 'react-markdown';
 
 interface MarkdownProps {
   centerAllText?: boolean;
@@ -24,7 +25,7 @@ export const Markdown = forwardRef(
       if (url.startsWith('tel:')) {
         return url;
       }
-      return url;
+      return defaultUrlTransform(url);
     };
 
     return (
