@@ -19,6 +19,14 @@ export const Markdown = forwardRef(
     const hTextAlign = centerAllText
       ? '[&>h2]:text-center [&>h3]:text-center [&>h4]:text-center [&>h5]:text-center [&>h6]:text-center'
       : '';
+
+    const urlTransform = (url: string) => {
+      if (url.startsWith('tel:')) {
+        return url;
+      }
+      return url;
+    };
+
     return (
       <div
         ref={ref}
@@ -26,6 +34,7 @@ export const Markdown = forwardRef(
       >
         <ReactMarkdown
           remarkPlugins={[remarkGfm, remarkBreaks]}
+          urlTransform={urlTransform}
           components={components}
         >
           {children}
