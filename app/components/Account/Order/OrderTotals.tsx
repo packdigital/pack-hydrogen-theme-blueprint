@@ -20,7 +20,7 @@ export function OrderTotals({order}: {order: Order}) {
             '0',
         );
         discountTotal += Number(
-          item.discountAllocations?.[0]?.allocatedAmount.amount || '0',
+          item.discountAllocations?.[0]?.allocatedAmount?.amount || '0',
         );
       });
       subtotalAmount = subtotal.toFixed(2);
@@ -42,10 +42,10 @@ export function OrderTotals({order}: {order: Order}) {
         : []),
       {
         label: 'Shipping',
-        amount: order.totalShippingPrice.amount,
+        amount: order.totalShippingPrice?.amount,
       },
       {label: 'Tax', amount: order.totalTax?.amount || '0'},
-      {label: 'Total', amount: order.totalPrice.amount},
+      {label: 'Total', amount: order.totalPrice?.amount || '0'},
       ...(Number(order.totalRefunded?.amount) > 0
         ? [
             {

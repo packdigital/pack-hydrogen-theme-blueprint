@@ -326,7 +326,7 @@ const defaultSlide = {
 
 export const Schema = () => {
   return {
-    category: 'Heros',
+    category: 'Hero',
     label: 'Hero Slider',
     key: 'hero',
     previewSrc:

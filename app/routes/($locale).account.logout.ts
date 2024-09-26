@@ -9,7 +9,7 @@ import type {
 import {LOGGED_OUT_REDIRECT_TO} from '~/lib/constants';
 import type {I18nLocale} from '~/lib/types';
 
-export async function cusomterLogout(context: AppLoadContext) {
+export async function customerLogout(context: AppLoadContext) {
   const {session} = context;
   session.unset('customerAccessToken');
 
@@ -18,11 +18,6 @@ export async function cusomterLogout(context: AppLoadContext) {
     `${
       (context.storefront.i18n as I18nLocale).pathPrefix
     }${LOGGED_OUT_REDIRECT_TO}`,
-    {
-      headers: {
-        'Set-Cookie': await session.commit(),
-      },
-    },
   );
 }
 
@@ -35,5 +30,5 @@ export async function loader({context}: LoaderFunctionArgs) {
 }
 
 export const action: ActionFunction = async ({context}: ActionFunctionArgs) => {
-  return cusomterLogout(context);
+  return customerLogout(context);
 };

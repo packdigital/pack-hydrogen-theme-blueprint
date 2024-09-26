@@ -22,7 +22,6 @@ export const validateCustomerAccessToken = async (
 
   if (customerAccessTokenExpired) {
     session.unset('customerAccessToken');
-    headers.append('Set-Cookie', await session.commit());
   } else {
     isLoggedIn = true;
   }

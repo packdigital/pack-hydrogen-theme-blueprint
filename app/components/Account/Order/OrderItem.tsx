@@ -84,7 +84,7 @@ export function OrderItem({item}: {item: OrderLineItem}) {
 
       {/* desktop variant title */}
       <p className="hidden md:block">
-        {variant?.title !== 'Default Title' ? '' : variant?.title}
+        {variant?.title !== 'Default Title' ? variant?.title : ''}
       </p>
 
       {/* desktop price per qty */}
@@ -108,10 +108,10 @@ export function OrderItem({item}: {item: OrderLineItem}) {
           <Money
             as="p"
             className="text-mediumDarkGray line-through"
-            data={discountedTotalPrice}
+            data={discountedPrice}
           />
         )}
-        <Money as="p" data={originalTotalPrice} />
+        <Money as="p" data={originalPrice} />
       </div>
     </div>
   );

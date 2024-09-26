@@ -28,10 +28,11 @@ export function RegisterForm({settings}: {settings: Settings['account']}) {
         id="customer-create-form"
         onSubmit={customerRegister}
       >
-        <label htmlFor="firstName">
+        <label htmlFor="register-firstName">
           <span className="input-label">First Name</span>
           <input
             className="input-text"
+            id="register-firstName"
             name="firstName"
             placeholder="First Name"
             required
@@ -39,10 +40,11 @@ export function RegisterForm({settings}: {settings: Settings['account']}) {
           />
         </label>
 
-        <label htmlFor="lastName">
+        <label htmlFor="register-lastName">
           <span className="input-label">Last Name</span>
           <input
             className="input-text"
+            id="register-lastName"
             name="lastName"
             placeholder="Last Name"
             required
@@ -50,10 +52,11 @@ export function RegisterForm({settings}: {settings: Settings['account']}) {
           />
         </label>
 
-        <label htmlFor="email">
+        <label htmlFor="register-email">
           <span className="input-label">Email</span>
           <input
             className="input-text"
+            id="register-email"
             name="email"
             placeholder="email@email.com"
             required
@@ -61,10 +64,11 @@ export function RegisterForm({settings}: {settings: Settings['account']}) {
           />
         </label>
 
-        <label htmlFor="password">
+        <label htmlFor="register-password">
           <span className="input-label">Password</span>
           <input
             className="input-text"
+            id="register-password"
             name="password"
             placeholder="••••••••"
             required
@@ -72,10 +76,11 @@ export function RegisterForm({settings}: {settings: Settings['account']}) {
           />
         </label>
 
-        <label htmlFor="passwordConfirm">
+        <label htmlFor="register-passwordConfirm">
           <span className="input-label">Confirm Password</span>
           <input
             className="input-text"
+            id="register-passwordConfirm"
             name="passwordConfirm"
             placeholder="••••••••"
             required

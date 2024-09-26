@@ -3,7 +3,7 @@ import {containerSettings} from '~/settings/container';
 
 export function Schema() {
   return {
-    category: 'Slider',
+    category: 'Reviews',
     label: 'Press Slider',
     key: 'press-slider',
     previewSrc:

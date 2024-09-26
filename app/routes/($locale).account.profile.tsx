@@ -17,10 +17,7 @@ export async function action({request, context}: ActionFunctionArgs) {
   const {data, status} = await customerUpdateProfileAction({request, context});
   if (data.customerAccessToken) {
     context.session.set('customerAccessToken', data.customerAccessToken);
-    return json(data, {
-      status,
-      headers: {'Set-Cookie': await context.session.commit()},
-    });
+    return json(data, {status});
   }
   return json(data, {status});
 }

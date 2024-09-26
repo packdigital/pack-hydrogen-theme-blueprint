@@ -132,7 +132,7 @@ export async function loader({context, request}: LoaderFunctionArgs) {
       consent,
       customer,
       customerAccessToken,
-      customizerMeta: pack.preview?.session.get('customizerMeta'),
+      customizerMeta: pack.session.get('customizerMeta'),
       ENV: {...ENV, SITE_TITLE} as Record<string, string>,
       groupingsPromise,
       isPreviewModeEnabled,

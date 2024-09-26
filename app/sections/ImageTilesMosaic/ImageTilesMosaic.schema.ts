@@ -195,7 +195,7 @@ const tileFields = [
 
 export function Schema() {
   return {
-    category: 'Media',
+    category: 'Featured Media',
     label: 'Image Tiles Mosaic',
     key: 'image-tiles-mosaic',
     previewSrc:

@@ -10,7 +10,7 @@ import {containerSettings} from '~/settings/container';
 
 export function Schema() {
   return {
-    category: 'Media',
+    category: 'Featured Media',
     label: 'Image Tiles Slider',
     key: 'image-tiles',
     previewSrc:

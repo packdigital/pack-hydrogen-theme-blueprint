@@ -21,7 +21,7 @@ export interface CheckIfPhoneNumberIsInListReturn {
   error: string | null;
 }
 
-export interface SubscribeEmailOrPhoneToListReturn {
+export interface CreateClientSubscriptionReturn {
   status: number;
   isAlreadySubscribed: boolean;
   message: string;

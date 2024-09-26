@@ -2,18 +2,26 @@ import {checkIfEmailIsInList} from './checkIfEmailIsInList';
 import {checkIfPhoneNumberIsInList} from './checkIfPhoneNumberIsInList';
 import type {
   ActionProps,
-  SubscribeEmailOrPhoneToListReturn,
+  CreateClientSubscriptionReturn,
 } from './klaviyo.types';
 
-export const subscribeEmailOrPhoneToList = async ({
+/*
+ * Uses a client side api endpoint to create/update profile with custom
+ * properties and adds them to a list
+ */
+
+export const createClientSubscription = async ({
   body,
   privateApiKey,
+  publicApiKey,
   apiVersion,
-}: ActionProps): Promise<SubscribeEmailOrPhoneToListReturn> => {
+}: ActionProps): Promise<CreateClientSubscriptionReturn> => {
   try {
-    const listId = String(body?.get('listId') || '');
+    const listId = String(body?.get('listId'));
     const email = String(body?.get('email') || '');
     const phone = String(body?.get('phone') || '');
+    const source = String(body?.get('source') || 'web');
+    const properties = body?.get('properties') as string;
 
     if (!listId) {
       throw new Error('`listId` is required.');
@@ -84,16 +92,9 @@ export const subscribeEmailOrPhoneToList = async ({
       }
     }
 
-    let phone_number;
-    if (phone) {
-      phone_number = phone.startsWith('+')
-        ? `+${phone.slice(1).replaceAll(/[^\d]/g, '')}`
-        : `+1${phone.replaceAll(/[^\d]/g, '')}`;
-    }
     const smsConsent = Boolean(body?.get('smsConsent'));
 
-    const endpoint =
-      'https://a.klaviyo.com/api/profile-subscription-bulk-create-jobs/';
+    const endpoint = `https://a.klaviyo.com/client/subscriptions/?company_id=${publicApiKey}`;
 
     const options = {
       method: 'POST',
@@ -101,33 +102,26 @@ export const subscribeEmailOrPhoneToList = async ({
         accept: 'application/json',
         revision: apiVersion,
         'content-type': 'application/json',
-        Authorization: `Klaviyo-API-Key ${privateApiKey}`,
       },
       body: JSON.stringify({
         data: {
-          type: 'profile-subscription-bulk-create-job',
+          type: 'subscription',
           attributes: {
-            profiles: {
-              data: [
-                {
-                  type: 'profile',
-                  attributes: {
-                    ...(email ? {email} : null),
-                    ...(phone_number ? {phone_number} : null),
-                    subscriptions: {
-                      ...(email
-                        ? {email: {marketing: {consent: 'SUBSCRIBED'}}}
-                        : null),
-                      ...(phone_number && smsConsent
-                        ? {sms: {marketing: {consent: 'SUBSCRIBED'}}}
-                        : null),
-                    },
-                  },
+            custom_source: source,
+            profile: {
+              data: {
+                type: 'profile',
+                attributes: {
+                  ...(email ? {email} : null),
+                  ...(phone && smsConsent ? {phone_number: phone} : null),
+                  properties: properties ? JSON.parse(properties) : {},
                 },
-              ],
+              },
             },
           },
-          relationships: {list: {data: {type: 'list', id: listId}}},
+          relationships: {
+            list: {data: {type: 'list', id: listId}},
+          },
         },
       }),
     };
@@ -155,7 +149,7 @@ export const subscribeEmailOrPhoneToList = async ({
         status: 400,
         isAlreadySubscribed: false,
         message: 'Something went wrong. Please try again later.',
-        error: `/api/klaviyo: subscribeEmailOrPhoneToList:error: ${
+        error: `/api/klaviyo: createClientSubscription:error: ${
           detail || 'Something went wrong'
         }\ndata: ${JSON.stringify(data)}`,
         email: email || null,
@@ -164,7 +158,7 @@ export const subscribeEmailOrPhoneToList = async ({
       };
     }
   } catch (error) {
-    const errorMessage = `/api/klaviyo: subscribeEmailOrPhoneToList:error: ${
+    const errorMessage = `/api/klaviyo: createClientSubscription:error: ${
       error instanceof Error ? error.message : 'Unknown error'
     }`;
     console.error(errorMessage);

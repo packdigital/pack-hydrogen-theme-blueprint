@@ -53,6 +53,7 @@ export function Profile() {
           <span className="input-label">First Name</span>
           <input
             className="input-text"
+            id="firstName"
             name="firstName"
             placeholder="First Name"
             required
@@ -64,6 +65,7 @@ export function Profile() {
           <span className="input-label">Last Name</span>
           <input
             className="input-text"
+            id="lastName"
             name="lastName"
             placeholder="Last Name"
             required
@@ -76,6 +78,7 @@ export function Profile() {
           <input
             className="input-text text-mediumDarkGray"
             disabled
+            id="email"
             name="email"
             placeholder="Email"
             required

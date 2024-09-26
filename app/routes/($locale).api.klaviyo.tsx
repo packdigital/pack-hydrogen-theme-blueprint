@@ -4,7 +4,7 @@ import type {ActionFunctionArgs} from '@shopify/remix-oxygen';
 import {
   checkIfEmailIsInList,
   checkIfPhoneNumberIsInList,
-  subscribeEmailOrPhoneToList,
+  createClientSubscription,
   subscribeToBackInStock,
 } from '~/lib/klaviyo';
 
@@ -18,7 +18,7 @@ export async function action({request, context}: ActionFunctionArgs) {
   const actions: Record<string, any> = {
     checkIfEmailIsInList,
     checkIfPhoneNumberIsInList,
-    subscribeEmailOrPhoneToList,
+    createClientSubscription,
     subscribeToBackInStock,
   };
   const klaviyoAction = actions[action];

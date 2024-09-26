@@ -3,7 +3,7 @@ import {containerSettings} from '~/settings/container';
 
 export function Schema() {
   return {
-    category: 'Slider',
+    category: 'Reviews',
     label: 'Testimonial Slider',
     key: 'testimonial-slider',
     previewSrc:
@@ -126,8 +126,8 @@ export function Schema() {
         ],
         defaultValue: {
           fullWidth: false,
-          textColor: 'var(--white)',
-          sliderPaginationBulletColor: 'var(--white)',
+          textColor: 'var(--black)',
+          sliderPaginationBulletColor: 'var(--black))',
           reviewStarColor: 'var(--accent1)',
         },
       },

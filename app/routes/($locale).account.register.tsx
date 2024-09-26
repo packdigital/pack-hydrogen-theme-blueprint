@@ -19,7 +19,7 @@ export async function action({request, context}: ActionFunctionArgs) {
   const customerAccessToken = data.customerAccessToken;
   if (customerAccessToken) {
     session.set('customerAccessToken', customerAccessToken);
-    return json(data, {headers: {'Set-Cookie': await session.commit()}});
+    return json(data);
   }
   return json({...data}, {status});
 }

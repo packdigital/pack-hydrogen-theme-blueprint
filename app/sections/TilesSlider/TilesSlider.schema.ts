@@ -9,7 +9,7 @@ import {containerSettings} from '~/settings/container';
 
 export function Schema() {
   return {
-    category: 'Media',
+    category: 'Featured Media',
     label: 'Tiles Slider',
     key: 'tiles-slider',
     previewSrc:

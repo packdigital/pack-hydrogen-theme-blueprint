@@ -4,7 +4,7 @@ import {useAnalytics} from '@shopify/hydrogen';
 
 import {PackEventName} from '~/components/PackAnalytics/constants';
 import {useLocale} from '~/hooks';
-import type {SubscribeEmailOrPhoneToListReturn} from '~/lib/klaviyo';
+import type {CreateClientSubscriptionReturn} from '~/lib/klaviyo';
 
 /**
  * Submit email or phone number to marketing list
@@ -28,21 +28,25 @@ interface UseMarketingListSubscribeReturn {
 
 export function useMarketingListSubscribe({
   listId,
+  properties,
   reset = true,
   resetTimer = 2500,
 }: {
   listId: string;
+  properties?: Record<string, any>; // custom properties to add/update klaviyo profile
   reset?: boolean;
   resetTimer?: number;
 }): UseMarketingListSubscribeReturn {
   const formRef = useRef<HTMLFormElement>(null);
-  const fetcher = useFetcher<SubscribeEmailOrPhoneToListReturn>();
+  const fetcher = useFetcher<CreateClientSubscriptionReturn>();
   const {pathPrefix} = useLocale();
   const {publish} = useAnalytics();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState('');
   const [submitted, setSubmitted] = useState(false);
+
+  const propertiesString = JSON.stringify(properties);
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
@@ -64,15 +68,16 @@ export function useMarketingListSubscribe({
 
       fetcher.submit(
         {
-          action: 'subscribeEmailOrPhoneToList',
+          action: 'createClientSubscription',
           listId,
           ...(email ? {email} : null),
           ...(phone ? {phone, smsConsent} : null),
+          ...(properties ? {properties: propertiesString} : null),
         },
         {method: 'POST', action: `${pathPrefix}/api/klaviyo`},
       );
     },
-    [isSubmitting, listId],
+    [isSubmitting, listId, propertiesString],
   );
 
   useEffect(() => {

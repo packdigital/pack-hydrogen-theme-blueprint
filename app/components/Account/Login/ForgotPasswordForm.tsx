@@ -47,10 +47,11 @@ export function ForgotPasswordForm({
         className="mx-auto flex w-full max-w-[25rem] flex-col gap-4"
         onSubmit={recoverPassword}
       >
-        <label htmlFor="email">
+        <label htmlFor="forgot-email">
           <span className="input-label">Email</span>
           <input
             className="input-text"
+            id="forgot-email"
             name="email"
             placeholder="email@email.com"
             required

@@ -3,7 +3,13 @@ import {useMemo} from 'react';
 import type {Article} from '~/lib/types';
 import {Image, Link} from '~/components';
 
-export function BlogGridItem({article}: {article: Article}) {
+export function BlogGridItem({
+  article,
+  blogHandle,
+}: {
+  article: Article;
+  blogHandle: string;
+}) {
   const atDate =
     article.firstPublishedAt || article.publishedAt || article.createdAt;
   const date = useMemo(() => {
@@ -15,7 +21,7 @@ export function BlogGridItem({article}: {article: Article}) {
     return new Date(atDate).toLocaleDateString('en-US', options);
   }, [atDate]);
 
-  const url = `/articles/${article.handle}`;
+  const url = `/blogs/${blogHandle}/${article.handle}`;
 
   return (
     <div>

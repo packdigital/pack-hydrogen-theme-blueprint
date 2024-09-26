@@ -50,7 +50,7 @@ export function BlogGrid({cms}: {cms: BlogGridCms}) {
             {filteredArticles.slice(startIndex, endIndex).map((article) => {
               return (
                 <li key={article.id}>
-                  <BlogGridItem article={article} />
+                  <BlogGridItem article={article} blogHandle={blog.handle} />
                 </li>
               );
             })}

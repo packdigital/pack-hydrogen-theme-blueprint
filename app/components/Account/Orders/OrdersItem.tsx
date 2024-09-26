@@ -25,7 +25,7 @@ export function OrdersItem({order}: {order: Order}) {
   }, [order.id]);
 
   const financialStatus = startCase(order.financialStatus?.toLowerCase());
-  const fulfillmentStatus = startCase(order.fulfillmentStatus.toLowerCase());
+  const fulfillmentStatus = startCase(order.fulfillmentStatus?.toLowerCase());
   const total = `$${parseFloat(order.totalPrice.amount).toFixed(2)}`;
 
   return (

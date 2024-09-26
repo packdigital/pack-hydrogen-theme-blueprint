@@ -36,10 +36,11 @@ export function LoginForm({setIsForgotPassword, settings}: LoginFormProps) {
         id="customer-login-form"
         onSubmit={customerLogIn}
       >
-        <label htmlFor="email">
+        <label htmlFor="login-email">
           <span className="input-label">Email</span>
           <input
             className="input-text"
+            id="login-email"
             name="email"
             placeholder="email@email.com"
             required
@@ -47,10 +48,11 @@ export function LoginForm({setIsForgotPassword, settings}: LoginFormProps) {
           />
         </label>
 
-        <label htmlFor="password">
+        <label htmlFor="login-password">
           <span className="input-label">Password</span>
           <input
             className="input-text"
+            id="login-password"
             name="password"
             placeholder="••••••••"
             required

@@ -39,6 +39,7 @@ export function ResetPassword() {
             <span className="text-h6 block pb-1 pl-5">Password</span>
             <input
               className="input-text"
+              id="password"
               name="password"
               placeholder="••••••••"
               required
@@ -50,6 +51,7 @@ export function ResetPassword() {
             <span className="text-h6 block pb-1 pl-5">Confirm Password</span>
             <input
               className="input-text"
+              id="passwordConfirm"
               name="passwordConfirm"
               placeholder="••••••••"
               required

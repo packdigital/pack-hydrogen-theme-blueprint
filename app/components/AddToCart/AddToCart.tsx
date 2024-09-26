@@ -68,7 +68,7 @@ export function AddToCart({
           {buttonText}
         </span>
 
-        {isAdding && (
+        {isAdding && !isAdded && (
           <LoadingDots
             status="Adding to cart"
             withAbsolutePosition

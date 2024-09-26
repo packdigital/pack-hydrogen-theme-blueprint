@@ -50,38 +50,35 @@ export function Document({children, title}: DocumentProps) {
   }, [url]);
 
   return (
-    <ShopifyProvider
-      storeDomain={`https://${ENV.PUBLIC_STORE_DOMAIN}`}
-      storefrontToken={ENV.PUBLIC_STOREFRONT_API_TOKEN}
-      storefrontApiVersion={ENV.PUBLIC_STOREFRONT_API_VERSION || '2024-07'}
-      countryIsoCode={locale.country}
-      languageIsoCode={locale.language}
-    >
-      <CartProvider cartFragment={CART_FRAGMENT}>
-        <GlobalProvider>
-          <GroupingsProvider>
-            <html lang="en">
-              <head>
-                {title && <title>{title}</title>}
-                <meta charSet="utf-8" />
-                <meta
-                  name="viewport"
-                  content="width=device-width, initial-scale=1"
-                />
-                <meta name="og:type" content="website" />
-                <meta name="og:site_name" content={siteTitle} />
-                <meta
-                  name="og:locale"
-                  content={`${locale.language}_${locale.country}`}
-                />
-                <meta name="keywords" content={keywords} />
-                <link rel="canonical" href={canonicalUrl} />
-                <Favicon />
-                <Meta />
-                <Links />
-              </head>
+    <html lang={locale.language}>
+      <head>
+        {title && <title>{title}</title>}
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="og:type" content="website" />
+        <meta name="og:site_name" content={siteTitle} />
+        <meta
+          name="og:locale"
+          content={`${locale.language}_${locale.country}`}
+        />
+        <meta name="keywords" content={keywords} />
+        <link rel="canonical" href={canonicalUrl} />
+        <Favicon />
+        <Meta />
+        <Links />
+      </head>
 
-              <body>
+      <body>
+        <ShopifyProvider
+          storeDomain={`https://${ENV.PUBLIC_STORE_DOMAIN}`}
+          storefrontToken={ENV.PUBLIC_STOREFRONT_API_TOKEN}
+          storefrontApiVersion={ENV.PUBLIC_STOREFRONT_API_VERSION || '2024-07'}
+          countryIsoCode={locale.country}
+          languageIsoCode={locale.language}
+        >
+          <CartProvider cartFragment={CART_FRAGMENT}>
+            <GlobalProvider>
+              <GroupingsProvider>
                 <PreviewProvider
                   customizerMeta={customizerMeta}
                   isPreviewModeEnabled={isPreviewModeEnabled}
@@ -91,21 +88,21 @@ export function Document({children, title}: DocumentProps) {
                     {children}
                   </Layout>
                 </PreviewProvider>
-                <RootScripts />
-                <ScrollRestoration
-                  getKey={(location) => {
-                    const isPdp = location.pathname.startsWith('/products/');
-                    return isPdp ? location.key : location.pathname;
-                  }}
-                />
-                <Scripts />
-                <LiveReload />
-              </body>
-            </html>
-          </GroupingsProvider>
-        </GlobalProvider>
-      </CartProvider>
-    </ShopifyProvider>
+              </GroupingsProvider>
+            </GlobalProvider>
+          </CartProvider>
+        </ShopifyProvider>
+        <RootScripts />
+        <ScrollRestoration
+          getKey={(location) => {
+            const isPdp = location.pathname.startsWith('/products/');
+            return isPdp ? location.key : location.pathname;
+          }}
+        />
+        <Scripts />
+        <LiveReload />
+      </body>
+    </html>
   );
 }
 
