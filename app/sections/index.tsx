@@ -32,36 +32,55 @@ import {MetaobjectTextBlock} from './MetaobjectTextBlock/MetaobjectTextBlock';
 import {MetaobjectImage} from './MetaobjectImage';
 
 export function registerSections() {
+  /* Text ---------- */
+  registerSection(TextBlock, {name: 'text-block'});
+  registerSection(Markdown, {name: 'markdown'});
   registerSection(Accordions, {name: 'accordions'});
-  registerSection(Banner, {name: 'banner'});
-  registerSection(BlogCategories, {name: 'blog-categories'});
-  registerSection(BlogGrid, {name: 'blog-grid'});
-  registerSection(BuildYourOwnBundle, {name: 'build-your-own-bundle'});
-  registerSection(FormBuilder, {name: 'form-builder'});
-  registerSection(HalfHero, {name: 'half-hero'});
-  registerSection(Hero, {name: 'hero'});
-  registerSection(Html, {name: 'html'});
   registerSection(IconRow, {name: 'icon-row'});
-  registerSection(Image, {name: 'image'});
+
+  /* Hero ---------- */
+  registerSection(Hero, {name: 'hero'});
+  registerSection(HalfHero, {name: 'half-hero'});
+  registerSection(Banner, {name: 'banner'});
+
+  /* Featured Media ---------- */
   registerSection(ImageTiles, {name: 'image-tiles'});
   registerSection(ImageTilesGrid, {name: 'image-tiles-grid'});
   registerSection(ImageTilesMosaic, {name: 'image-tiles-mosaic'});
-  registerSection(Markdown, {name: 'markdown'});
-  registerSection(MarketingSignup, {name: 'marketing-signup'});
-  registerSection(PressSlider, {name: 'press-slider'});
+  registerSection(TabbedTilesSlider, {name: 'tabbed-tiles-slider'});
+  registerSection(TilesSlider, {name: 'tiles-slider'});
+  registerSection(TilesStack, {name: 'tiles-stack'});
+  registerSection(SocialImagesGrid, {name: 'social-images-grid'});
+
+  /* Media ---------- */
+  registerSection(Image, {name: 'image'});
+  registerSection(Video, {name: 'video'});
+  registerSection(VideoEmbed, {name: 'video-embed'});
+
+  /* Product ---------- */
+  registerSection(ProductsSlider, {name: 'products-slider'});
   registerSection(ProductRecommendationsSlider, {
     name: 'product-recommendations-slider',
   });
-  registerSection(ProductReviews, {name: 'product-reviews'});
-  registerSection(ProductsSlider, {name: 'products-slider'});
-  registerSection(SocialImagesGrid, {name: 'social-images-grid'});
-  registerSection(TabbedTilesSlider, {name: 'tabbed-tiles-slider'});
+  registerSection(BuildYourOwnBundle, {name: 'build-your-own-bundle'});
+
+  /* Reviews ---------- */
+  registerSection(PressSlider, {name: 'press-slider'});
   registerSection(TestimonialSlider, {name: 'testimonial-slider'});
-  registerSection(TextBlock, {name: 'text-block'});
-  registerSection(TilesSlider, {name: 'tiles-slider'});
-  registerSection(TilesStack, {name: 'tiles-stack'});
-  registerSection(Video, {name: 'video'});
-  registerSection(VideoEmbed, {name: 'video-embed'});
+  registerSection(ProductReviews, {name: 'product-reviews'});
+
+  /* Form ---------- */
+  registerSection(FormBuilder, {name: 'form-builder'});
+  registerSection(MarketingSignup, {name: 'marketing-signup'});
+
+  /* HTML ---------- */
+  registerSection(Html, {name: 'html'});
+
+  /* Blog ---------- */
+  registerSection(BlogCategories, {name: 'blog-categories'});
+  registerSection(BlogGrid, {name: 'blog-grid'});
+
+  /* Metaobject example sections ---------- */
   registerSection(MetaobjectTextBlock, {name: 'metaobject-text-block'});
   registerSection(MetaobjectImage, {name: 'metaobject-image'});
 }

@@ -301,7 +301,7 @@ const content = {
 
 export const Schema = () => {
   return {
-    category: 'Heros',
+    category: 'Hero',
     label: 'Half Hero',
     key: 'half-hero',
     previewSrc:

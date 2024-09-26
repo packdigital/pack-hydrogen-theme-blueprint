@@ -61,7 +61,7 @@ const DEFAULT_IMAGE_ROW = [
 
 export function Schema() {
   return {
-    category: 'Media',
+    category: 'Featured Media',
     label: 'Image Tiles Grid',
     key: 'image-tiles-grid',
     previewSrc:

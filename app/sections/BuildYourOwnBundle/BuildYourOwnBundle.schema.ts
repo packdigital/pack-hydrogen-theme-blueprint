@@ -4,7 +4,7 @@ export function Schema({template}: {template: string}) {
   if (template !== 'page') return null;
 
   return {
-    category: 'Bundles',
+    category: 'Product',
     label: 'Build Your Own Bundle',
     key: 'build-your-own-bundle',
     previewSrc:

@@ -2,7 +2,7 @@ import {containerSettings} from '~/settings/container';
 
 export function Schema() {
   return {
-    category: 'Marketing',
+    category: 'Form',
     label: 'Marketing Signup',
     key: 'marketing-signup',
     previewSrc:

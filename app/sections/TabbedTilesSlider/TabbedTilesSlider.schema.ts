@@ -45,7 +45,7 @@ const defaultTab = {
 
 export function Schema() {
   return {
-    category: 'Media',
+    category: 'Featured Media',
     label: 'Tabbed Tiles Slider',
     key: 'tabbed-tiles-slider',
     previewSrc:

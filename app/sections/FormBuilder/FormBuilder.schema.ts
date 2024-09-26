@@ -340,7 +340,7 @@ const fileField = {
 
 export const Schema = () => {
   return {
-    category: 'Text',
+    category: 'Form',
     label: 'Form Builder',
     key: 'form-builder',
     previewSrc:

@@ -200,7 +200,7 @@ const content = {
 
 export function Schema() {
   return {
-    category: 'Heros',
+    category: 'Hero',
     label: 'Hero Banner',
     key: 'banner',
     previewSrc:

@@ -4,7 +4,7 @@ export function Schema({template}: {template: string}) {
   if (template !== 'product') return null;
 
   return {
-    category: 'Product',
+    category: 'Reviews',
     label: 'Product Reviews',
     key: 'product-reviews',
     fields: [containerSettings()],

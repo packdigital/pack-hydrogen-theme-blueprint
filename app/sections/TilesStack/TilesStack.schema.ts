@@ -8,7 +8,7 @@ import {containerSettings} from '~/settings/container';
 
 export function Schema() {
   return {
-    category: 'Media',
+    category: 'Featured Media',
     label: 'Tiles Stack',
     key: 'tiles-stack',
     previewSrc:
