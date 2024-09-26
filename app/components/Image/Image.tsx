@@ -55,9 +55,9 @@ export const Image = forwardRef(
                 placeholderWidth: Number(width) * 3,
               }
             : {
-                intervals: 8,
+                intervals: 12,
                 startingWidth: 200,
-                incrementSize: 400,
+                incrementSize: 250,
                 placeholderWidth: 100,
               }
         }
