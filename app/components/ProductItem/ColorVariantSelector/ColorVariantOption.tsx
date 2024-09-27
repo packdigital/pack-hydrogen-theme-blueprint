@@ -52,7 +52,6 @@ export function ColorVariantOption({
             width="24"
             aspectRatio="1/1"
             className="media-fill"
-            isStatic
           />
         )}
 

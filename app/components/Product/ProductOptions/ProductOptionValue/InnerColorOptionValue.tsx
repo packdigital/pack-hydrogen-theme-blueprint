@@ -51,7 +51,6 @@ export function InnerColorOptionValue({
           aspectRatio="1/1"
           width="32"
           className="media-fill"
-          isStatic
         />
       )}
 

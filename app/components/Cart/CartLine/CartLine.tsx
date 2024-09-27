@@ -44,7 +44,6 @@ export function CartLine({closeCart, line}: CartLineProps) {
               : PRODUCT_IMAGE_ASPECT_RATIO
           }
           width="88"
-          isStatic
           className="bg-offWhite"
         />
       </Link>
