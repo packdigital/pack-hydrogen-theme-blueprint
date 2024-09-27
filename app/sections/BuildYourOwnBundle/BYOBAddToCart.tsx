@@ -88,7 +88,7 @@ export function BYOBAddToCart({
         {`Add To Cart${total ? ` - ${total}` : ''}`}
       </span>
 
-      {isAdding && !isAdded && (
+      {isAdding && (
         <LoadingDots
           status="Adding to cart"
           withAbsolutePosition
@@ -97,7 +97,7 @@ export function BYOBAddToCart({
       )}
 
       {isAdded && (
-        <span aria-live="assertive" role="status">
+        <span aria-live="assertive" className="absolute-center" role="status">
           Added To Cart
         </span>
       )}
