@@ -89,7 +89,6 @@ export function DesktopMenu({
                       }}
                       aspectRatio="16/9"
                       width="400"
-                      isStatic
                     />
 
                     <p className="mt-3 text-sm">{caption}</p>

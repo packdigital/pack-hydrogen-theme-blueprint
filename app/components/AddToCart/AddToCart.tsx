@@ -68,7 +68,7 @@ export function AddToCart({
           {buttonText}
         </span>
 
-        {isAdding && !isAdded && (
+        {isAdding && (
           <LoadingDots
             status="Adding to cart"
             withAbsolutePosition
@@ -77,7 +77,7 @@ export function AddToCart({
         )}
 
         {isAdded && (
-          <span aria-live="assertive" role="status">
+          <span aria-live="assertive" className="absolute-center" role="status">
             Added To Cart
           </span>
         )}

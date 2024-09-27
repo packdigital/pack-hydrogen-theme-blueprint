@@ -1,8 +1,8 @@
 import {forwardRef} from 'react';
-import ReactMarkdown from 'react-markdown';
-import type {Components} from 'react-markdown';
+import ReactMarkdown, {defaultUrlTransform} from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkBreaks from 'remark-breaks';
+import type {Components} from 'react-markdown';
 
 interface MarkdownProps {
   centerAllText?: boolean;
@@ -19,6 +19,14 @@ export const Markdown = forwardRef(
     const hTextAlign = centerAllText
       ? '[&>h2]:text-center [&>h3]:text-center [&>h4]:text-center [&>h5]:text-center [&>h6]:text-center'
       : '';
+
+    const urlTransform = (url: string) => {
+      if (url.startsWith('tel:')) {
+        return url;
+      }
+      return defaultUrlTransform(url);
+    };
+
     return (
       <div
         ref={ref}
@@ -26,6 +34,7 @@ export const Markdown = forwardRef(
       >
         <ReactMarkdown
           remarkPlugins={[remarkGfm, remarkBreaks]}
+          urlTransform={urlTransform}
           components={components}
         >
           {children}

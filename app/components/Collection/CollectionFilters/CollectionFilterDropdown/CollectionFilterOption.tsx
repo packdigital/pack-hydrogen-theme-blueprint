@@ -115,7 +115,6 @@ export function CollectionFilterOption({
             }}
             aspectRatio="1/1"
             width="24"
-            isStatic
             className="media-fill"
           />
         )}

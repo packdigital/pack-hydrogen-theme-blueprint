@@ -37,7 +37,6 @@ export function ProductMediaThumbnail({
         aspectRatio="1/1"
         width="80"
         loading={index < 6 ? 'eager' : 'lazy'}
-        isStatic
       />
 
       {mediaContentType === 'VIDEO' && (

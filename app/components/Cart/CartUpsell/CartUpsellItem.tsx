@@ -52,7 +52,6 @@ export function CartUpsellItem({
               : PRODUCT_IMAGE_ASPECT_RATIO
           }
           width="40"
-          isStatic
         />
       </Link>
 
