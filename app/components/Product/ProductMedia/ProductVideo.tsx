@@ -36,6 +36,7 @@ export function ProductVideo({
       controls={false}
       poster={priority || inView ? previewImage?.url : ''}
       className="media-fill"
+      key={JSON.stringify(sources)}
     >
       {inView && sources?.length
         ? sources.map((source) => {
