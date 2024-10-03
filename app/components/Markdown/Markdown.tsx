@@ -21,7 +21,7 @@ export const Markdown = forwardRef(
       : '';
 
     const urlTransform = (url: string) => {
-      if (url.startsWith('tel:')) {
+      if (url.startsWith('tel:') || url.startsWith('sms:')) {
         return url;
       }
       return defaultUrlTransform(url);
