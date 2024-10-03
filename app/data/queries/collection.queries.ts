@@ -14,7 +14,7 @@ export const COLLECTION_PAGE_QUERY = `#graphql
       status
       sections(first: 25) {
         nodes {
-          ...section
+          ...SectionFragment
         }
         pageInfo {
           hasNextPage
@@ -71,7 +71,7 @@ export const CMS_COLLECTIONS_QUERY = `#graphql
 // Docs: https://shopify.dev/docs/api/storefront/latest/queries/collection
 
 const COLLECTION_FRAGMENT = `#graphql
-  fragment collectionFragment on Collection {
+  fragment CollectionFragment on Collection {
     id
     title
     description
@@ -126,7 +126,7 @@ const COLLECTION_FRAGMENT = `#graphql
       }
       nodes {
         ... on Product {
-          ...productItemFragment
+          ...ProductItemFragment
         }
       }
     }
@@ -139,7 +139,7 @@ const COLLECTION_FRAGMENT = `#graphql
 ` as const;
 
 export const COLLECTION_QUERY = `#graphql
-  query CollectionDetails(
+  query Collection(
     $handle: String!,
     $country: CountryCode,
     $language: LanguageCode
@@ -153,7 +153,7 @@ export const COLLECTION_QUERY = `#graphql
   ) @inContext(country: $country, language: $language) {
     collection(handle: $handle) {
       ... on Collection {
-        ...collectionFragment
+        ...CollectionFragment
       }
     }
   }
@@ -161,7 +161,7 @@ export const COLLECTION_QUERY = `#graphql
 ` as const;
 
 export const COLLECTION_FILTERS_QUERY = `#graphql
-  query CollectionDetails(
+  query CollectionFilters(
     $handle: String!,
     $country: CountryCode,
     $language: LanguageCode

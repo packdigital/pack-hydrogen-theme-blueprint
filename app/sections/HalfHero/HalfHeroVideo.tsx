@@ -43,6 +43,7 @@ export function HalfHeroVideo({
           playsInline
           poster={posterSrc}
           ref={videoRef}
+          key={videoSrc}
         >
           {videoSrc && <source src={videoSrc} type="video/mp4" />}
         </video>

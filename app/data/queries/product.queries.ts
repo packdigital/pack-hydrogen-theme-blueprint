@@ -17,7 +17,7 @@ export const PRODUCT_PAGE_QUERY = `#graphql
       status
       sections(first: 25) {
         nodes {
-          ...section
+          ...SectionFragment
         }
         pageInfo {
           hasNextPage
@@ -78,7 +78,7 @@ export const CMS_PRODUCTS_QUERY = `#graphql
 // Docs: https://shopify.dev/docs/api/storefront/latest/queries/product
 
 export const OPTION_FRAGMENT = `#graphql
-  fragment option on ProductOption {
+  fragment OptionFragment on ProductOption {
     id
     name
     optionValues {
@@ -104,7 +104,7 @@ export const OPTION_FRAGMENT = `#graphql
 `;
 
 export const METAFIELD_FRAGMENT = `#graphql
-fragment metafield on Metafield {
+fragment MetafieldFragment on Metafield {
     createdAt
     description
     id
@@ -117,7 +117,7 @@ fragment metafield on Metafield {
 `;
 
 export const VARIANT_FRAGMENT = `#graphql
-  fragment variantFragment on ProductVariant {
+  fragment VariantFragment on ProductVariant {
     id
     title
     availableForSale
@@ -139,7 +139,7 @@ export const VARIANT_FRAGMENT = `#graphql
       edges {
         node {
           ... on SellingPlanAllocation {
-            ...sellingPlanAllocation
+            ...SellingPlanAllocationFragment
           }
         }
       }
@@ -164,7 +164,7 @@ export const VARIANT_FRAGMENT = `#graphql
 ` as const;
 
 export const PRODUCT_FRAGMENT = `#graphql
-  fragment productFragment on Product {
+  fragment ProductFragment on Product {
     id
     title
     handle
@@ -251,18 +251,18 @@ export const PRODUCT_FRAGMENT = `#graphql
       }
     }
     options {
-      ...option
+      ...OptionFragment
     }
     selectedVariant: variantBySelectedOptions(selectedOptions: $selectedOptions) {
       ... on ProductVariant {
-          ...variantFragment
+          ...VariantFragment
         }
     }
     sellingPlanGroups(first: 10) {
       edges {
         node {
           ... on SellingPlanGroup {
-            ...sellingPlanGroup
+            ...SellingPlanGroupFragment
           }
         }
       }
@@ -270,7 +270,7 @@ export const PRODUCT_FRAGMENT = `#graphql
     variants(first: 250) {
       nodes {
         ... on ProductVariant {
-          ...variantFragment
+          ...VariantFragment
         }
       }
     }
@@ -285,7 +285,7 @@ export const PRODUCT_FRAGMENT = `#graphql
 ` as const;
 
 export const PRODUCT_ITEM_FRAGMENT = `#graphql
-  fragment productItemFragment on Product {
+  fragment ProductItemFragment on Product {
     id
     title
     handle
@@ -340,13 +340,13 @@ export const PRODUCT_ITEM_FRAGMENT = `#graphql
       }
     }
     options {
-      ...option
+      ...OptionFragment
     }
     sellingPlanGroups(first: 10) {
       edges {
         node {
           ... on SellingPlanGroup {
-            ...sellingPlanGroup
+            ...SellingPlanGroupFragment
           }
         }
       }
@@ -354,7 +354,7 @@ export const PRODUCT_ITEM_FRAGMENT = `#graphql
     variants(first: 100) {
       nodes {
         ... on ProductVariant {
-            ...variantFragment
+            ...VariantFragment
           }
       }
     }
@@ -365,7 +365,7 @@ export const PRODUCT_ITEM_FRAGMENT = `#graphql
 ` as const;
 
 export const PRODUCT_QUERY = `#graphql
-  query product(
+  query Product(
     $handle: String!
     $country: CountryCode
     $language: LanguageCode
@@ -373,7 +373,7 @@ export const PRODUCT_QUERY = `#graphql
   ) @inContext(country: $country, language: $language) {
     product(handle: $handle) {
       ... on Product {
-        ...productFragment
+        ...ProductFragment
       }
     }
   }
@@ -381,14 +381,14 @@ export const PRODUCT_QUERY = `#graphql
 ` as const;
 
 export const PRODUCT_ITEM_QUERY = `#graphql
-  query product(
+  query ProductItem(
     $handle: String!
     $country: CountryCode
     $language: LanguageCode
   ) @inContext(country: $country, language: $language) {
     product(handle: $handle) {
       ... on Product {
-        ...productItemFragment
+        ...ProductItemFragment
       }
     }
   }
@@ -396,7 +396,7 @@ export const PRODUCT_ITEM_QUERY = `#graphql
 ` as const;
 
 export const PRODUCT_METAFIELDS_QUERY = `#graphql
-  query product(
+  query ProductMetafields(
     $handle: String!
     $key: String!
     $namespace: String
@@ -405,61 +405,11 @@ export const PRODUCT_METAFIELDS_QUERY = `#graphql
   ) @inContext(country: $country, language: $language) {
     product(handle: $handle) {
       metafields(identifiers: {key: $key, namespace: $namespace}) {
-        ...metafield
+        ...MetafieldFragment
       }
     }
   }
   ${METAFIELD_FRAGMENT}
-` as const;
-
-export const GROUPING_PRODUCT_QUERY = `#graphql
-  query product(
-    $handle: String!
-    $country: CountryCode
-    $language: LanguageCode
-  ) @inContext(country: $country, language: $language) {
-    product(handle: $handle) {
-      id
-      title
-      handle
-      productType
-      options {
-        ...option
-      }
-      variants(first: 100) {
-        nodes {
-          id
-          title
-          availableForSale
-          sku
-          image {
-            altText
-            height
-            id
-            url
-            width
-          }
-          price {
-            currencyCode
-            amount
-          }
-          compareAtPrice {
-            currencyCode
-            amount
-          }
-          selectedOptions {
-            name
-            value
-          }
-          product {
-            handle
-            id
-          }
-        }
-      }
-    }
-  }
-  ${OPTION_FRAGMENT}
 ` as const;
 
 export const PRODUCTS_QUERY = `#graphql
@@ -481,7 +431,7 @@ export const PRODUCTS_QUERY = `#graphql
       }
       nodes {
         ... on Product {
-          ...productItemFragment
+          ...ProductItemFragment
         }
       }
     }
@@ -490,7 +440,7 @@ export const PRODUCTS_QUERY = `#graphql
 ` as const;
 
 export const PRODUCT_FEED_QUERY = `#graphql
-  query Products(
+  query ProductsFeed(
     $first: Int!
     $cursor: String
     $country: CountryCode
@@ -503,7 +453,7 @@ export const PRODUCT_FEED_QUERY = `#graphql
       }
       nodes {
         ... on Product {
-          ...productItemFragment
+          ...ProductItemFragment
         }
       }
     }
@@ -512,7 +462,7 @@ export const PRODUCT_FEED_QUERY = `#graphql
 ` as const;
 
 export const PRODUCT_RECOMMENDATIONS_QUERY = `#graphql
-  query productRecommendations(
+  query ProductRecommendations(
       $productId: ID!
       $intent: ProductRecommendationIntent
       $country: CountryCode
@@ -520,7 +470,7 @@ export const PRODUCT_RECOMMENDATIONS_QUERY = `#graphql
     ) @inContext(country: $country, language: $language) {
       productRecommendations(productId: $productId, intent: $intent) {
         ... on Product {
-          ...productItemFragment
+          ...ProductItemFragment
         }
     }
   }

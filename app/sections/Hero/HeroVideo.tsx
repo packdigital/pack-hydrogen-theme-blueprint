@@ -23,6 +23,7 @@ export function HeroVideo({isVisible, posterSrc, videoSrc}: HeroVideoProps) {
       playsInline
       poster={posterSrc}
       ref={videoRef}
+      key={videoSrc}
     >
       {videoSrc && <source src={videoSrc} type="video/mp4" />}
     </video>

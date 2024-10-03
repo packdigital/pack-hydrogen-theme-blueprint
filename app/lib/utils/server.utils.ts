@@ -264,7 +264,7 @@ export const getMetafields = async (
             metafields_${index}: metafields(
               identifiers: {key: "${key}", namespace: "${namespace}"}
             ) {
-              ...metafield
+              ...MetafieldFragment
             }
           `,
         )}

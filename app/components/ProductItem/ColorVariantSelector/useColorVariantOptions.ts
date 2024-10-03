@@ -33,9 +33,9 @@ export function useColorVariantOptions({
       ? [
           originalColor,
           ...grouping.optionsMap[COLOR_OPTION_NAME].filter(
-            (color) => color.name !== originalColor.name,
+            (color) => color.name !== originalColor?.name,
           ),
-        ]
+        ].filter(Boolean)
       : initialProductColorOptions;
   }, [grouping, initialProductColorOptions]);
 

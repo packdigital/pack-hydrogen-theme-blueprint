@@ -29,7 +29,9 @@ export function useProductsByIds(
     const searchParams = new URLSearchParams({
       query: ids
         .filter(Boolean)
-        .map((id) => `id:${id.split('/').pop()}`)
+        .map((id) => {
+          return `id:${typeof id === 'number' ? id : id.split('/').pop()}`;
+        })
         .join(' OR '),
       count: ids.length.toString(),
     });

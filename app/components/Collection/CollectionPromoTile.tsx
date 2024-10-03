@@ -42,6 +42,7 @@ export function CollectionPromoTile({tile}: CollectionPromoTileProps) {
                 muted
                 playsInline
                 poster={videoPoster?.src}
+                key={videoSrc}
               >
                 <source src={videoSrc} type="video/mp4" />
               </video>

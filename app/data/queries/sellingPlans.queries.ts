@@ -1,5 +1,5 @@
 export const SELLING_PLAN_ALLOCATION_FRAGMENT = `#graphql
-  fragment sellingPlanAllocation on SellingPlanAllocation {
+  fragment SellingPlanAllocationFragment on SellingPlanAllocation {
     sellingPlan {
       id
       name
@@ -52,7 +52,7 @@ export const SELLING_PLAN_ALLOCATION_FRAGMENT = `#graphql
 `;
 
 export const SELLING_PLAN_GROUP_FRAGMENT = `#graphql
-  fragment sellingPlanGroup on SellingPlanGroup {
+  fragment SellingPlanGroupFragment on SellingPlanGroup {
     name
     appName
     options {
