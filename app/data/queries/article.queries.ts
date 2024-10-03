@@ -32,7 +32,7 @@ export const ARTICLE_QUERY = `#graphql
       }
       sections(first: 25, after: $cursor) {
         nodes {
-          ...section
+          ...SectionFragment
         }
         pageInfo {
           hasNextPage

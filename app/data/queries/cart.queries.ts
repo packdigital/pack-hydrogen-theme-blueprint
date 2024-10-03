@@ -95,7 +95,7 @@ export const CART_LINE_FRAGMENT = `#graphql
             }
           }
           options {
-            ...option
+            ...OptionFragment
           }
           images(first: 20) {
             nodes {

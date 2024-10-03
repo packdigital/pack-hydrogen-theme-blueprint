@@ -22,7 +22,7 @@ export const BLOG_QUERY = `#graphql
       }
       sections(first: 25) {
         nodes {
-          ...section
+          ...SectionFragment
         }
         pageInfo {
           hasNextPage

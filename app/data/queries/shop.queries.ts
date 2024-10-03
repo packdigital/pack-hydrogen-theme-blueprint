@@ -5,7 +5,7 @@
 // Docs: https://shopify.dev/docs/api/storefront/latest/objects/Shop
 
 export const LAYOUT_QUERY = `#graphql
-  query layout {
+  query Layout {
     shop {
       id
       name
@@ -22,7 +22,7 @@ export const LAYOUT_QUERY = `#graphql
 ` as const;
 
 const COUNTRY_FRAGMENT = `#graphql
-  fragment Country on Country {
+  fragment CountryFragment on Country {
     currency {
       isoCode
       name
@@ -35,7 +35,7 @@ const COUNTRY_FRAGMENT = `#graphql
 ` as const;
 
 const POLICY_FRAGMENT = `#graphql
-  fragment Policy on ShopPolicy {
+  fragment PolicyFragment on ShopPolicy {
     handle
     id
     title
@@ -45,7 +45,7 @@ const POLICY_FRAGMENT = `#graphql
 ` as const;
 
 export const SHOP_QUERY = `#graphql
-  query ($country: CountryCode, $language: LanguageCode) @inContext(country: $country, language: $language) {
+  query Shop($country: CountryCode, $language: LanguageCode) @inContext(country: $country, language: $language) {
     shop {
       description
       moneyFormat
@@ -65,17 +65,17 @@ export const SHOP_QUERY = `#graphql
         url
       }
       privacyPolicy {
-        ...Policy
+        ...PolicyFragment
       }
       refundPolicy {
-        ...Policy
+        ...PolicyFragment
       }
       shippingPolicy {
-        ...Policy
+        ...PolicyFragment
       }
       shipsToCountries
       termsOfService {
-        ...Policy
+        ...PolicyFragment
       }
     }
   }
@@ -85,7 +85,7 @@ export const SHOP_QUERY = `#graphql
 // Docs: https://shopify.dev/docs/api/storefront/latest/queries/localization
 
 export const LOCALIZATION_QUERY = `#graphql
-  query ($country: CountryCode, $language: LanguageCode) @inContext(country: $country, language: $language) {
+  query Localization($country: CountryCode, $language: LanguageCode) @inContext(country: $country, language: $language) {
     shop {
       paymentSettings {
         enabledCurrencies: enabledPresentmentCurrencies
@@ -93,10 +93,10 @@ export const LOCALIZATION_QUERY = `#graphql
     }
     localization {
       availableCountries {
-        ...Country
+        ...CountryFragment
       }
       country {
-        ...Country
+        ...CountryFragment
       }
     }
   }

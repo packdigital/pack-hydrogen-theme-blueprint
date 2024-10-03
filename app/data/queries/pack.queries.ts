@@ -53,7 +53,7 @@ export const PRODUCT_GROUPINGS_QUERY = `#graphql
 ` as const;
 
 export const SECTION_FRAGMENT = `#graphql
-  fragment section on Section {
+  fragment SectionFragment on Section {
     id
     title
     status

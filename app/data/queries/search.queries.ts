@@ -30,7 +30,7 @@ export const PRODUCTS_SEARCH_QUERY = `#graphql
     ) {
       nodes {
         ... on Product {
-          ...productItemFragment
+          ...ProductItemFragment
         }
       }
       filters: productFilters {
@@ -100,7 +100,7 @@ export const PRODUCTS_SEARCH_FILTERS_QUERY = `#graphql
 ` as const;
 
 const PREDICTIVE_COLLECTION_FRAGMENT = `#graphql
-  fragment PredictiveCollection on Collection {
+  fragment PredictiveCollectionFragment on Collection {
     __typename
     id
     title
@@ -115,7 +115,7 @@ const PREDICTIVE_COLLECTION_FRAGMENT = `#graphql
 ` as const;
 
 const PREDICTIVE_QUERY_FRAGMENT = `#graphql
-  fragment PredictiveQuery on SearchQuerySuggestion {
+  fragment PredictiveQueryFragment on SearchQuerySuggestion {
     __typename
     text
     styledText
@@ -123,7 +123,7 @@ const PREDICTIVE_QUERY_FRAGMENT = `#graphql
 ` as const;
 
 export const PREDICTIVE_SEARCH_QUERY = `#graphql
-  query predictiveSearch(
+  query PredictiveSearch(
     $country: CountryCode
     $language: LanguageCode
     $limit: Int!
@@ -138,10 +138,10 @@ export const PREDICTIVE_SEARCH_QUERY = `#graphql
       types: $types,
     ) {
       collections {
-        ...PredictiveCollection
+        ...PredictiveCollectionFragment
       }
       queries {
-        ...PredictiveQuery
+        ...PredictiveQueryFragment
       }
     }
   }
