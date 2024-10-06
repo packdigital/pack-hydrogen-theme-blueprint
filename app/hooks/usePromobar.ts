@@ -1,5 +1,6 @@
 import {PROMOBAR_HEIGHT_MOBILE, PROMOBAR_HEIGHT_DESKTOP} from '~/lib/constants';
-import {useGlobal, useSettings} from '~/hooks';
+import {usePromobarContext} from '~/contexts';
+import {useSettings} from '~/hooks';
 
 export interface UsePromobarReturn {
   headerMobileHeightClass: string;
@@ -17,7 +18,7 @@ export interface UsePromobarReturn {
 }
 
 export function usePromobar(): UsePromobarReturn {
-  const {promobarOpen, togglePromobar} = useGlobal();
+  const {state, actions} = usePromobarContext();
   const {header} = useSettings();
   const {promobar} = {...header};
 
@@ -25,21 +26,21 @@ export function usePromobar(): UsePromobarReturn {
     !!promobar && (!promobar.enabled || !promobar.messages?.length);
 
   const headerMobileHeightClass =
-    promobarOpen && !promobarDisabled
+    state.promobarOpen && !promobarDisabled
       ? 'max-md:h-[calc(var(--header-height-mobile)+var(--promobar-height-mobile))]'
       : 'max-md:h-[var(--header-height-mobile)]';
   const headerDesktopHeightClass =
-    promobarOpen && !promobarDisabled
+    state.promobarOpen && !promobarDisabled
       ? 'md:h-[calc(var(--header-height-desktop)+var(--promobar-height-desktop))]'
       : 'md:h-[var(--header-height-desktop)]';
   const headerHeightClass = `${headerMobileHeightClass} ${headerDesktopHeightClass}`;
 
   const menuMobileHeightClass =
-    promobarOpen && !promobarDisabled
+    state.promobarOpen && !promobarDisabled
       ? 'max-md:h-[calc(var(--viewport-height)-var(--header-height-mobile)-var(--promobar-height-mobile))]'
       : 'max-md:h-[calc(var(--viewport-height)-var(--header-height-mobile))]';
   const menuDesktopHeightClass =
-    promobarOpen && !promobarDisabled
+    state.promobarOpen && !promobarDisabled
       ? 'md:h-[calc(var(--viewport-height)-var(--header-height-desktop)-var(--promobar-height-desktop))]'
       : 'md:h-[calc(var(--viewport-height)-var(--header-height-desktop))]';
   const menuHeightClass = `${menuMobileHeightClass} ${menuDesktopHeightClass}`;
@@ -58,7 +59,7 @@ export function usePromobar(): UsePromobarReturn {
     promobarDisabled,
     promobarHeightMobile: PROMOBAR_HEIGHT_MOBILE,
     promobarHeightDesktop: PROMOBAR_HEIGHT_DESKTOP,
-    promobarOpen,
-    togglePromobar,
+    promobarOpen: state.promobarOpen,
+    togglePromobar: actions.togglePromobar,
   };
 }

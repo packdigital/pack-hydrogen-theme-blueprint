@@ -7,10 +7,10 @@ import {
 } from '@headlessui/react';
 
 import {Svg} from '~/components';
-import {useGlobal} from '~/hooks';
+import {useMenu} from '~/hooks';
 
 export function Modal() {
-  const {modal, closeModal} = useGlobal();
+  const {modal, closeModal} = useMenu();
 
   const {className = '', ...props} = {...modal.props};
 

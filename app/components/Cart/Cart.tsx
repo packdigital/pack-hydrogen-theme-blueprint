@@ -3,7 +3,7 @@ import {Analytics} from '@shopify/hydrogen';
 import type {CartLine as CartLineType} from '@shopify/hydrogen/storefront-api-types';
 
 import {Drawer, Svg} from '~/components';
-import {useGlobal, useSettings} from '~/hooks';
+import {useMenu, useSettings} from '~/hooks';
 
 import {CartDiscounts} from './CartDiscounts';
 import {CartEmpty} from './CartEmpty';
@@ -16,7 +16,7 @@ export function Cart() {
   const {cart: cartSettings} = useSettings();
   const cart = useCart();
   const {lines = [], totalQuantity = 0} = cart;
-  const {cartOpen, closeCart} = useGlobal();
+  const {cartOpen, closeCart} = useMenu();
 
   const cartLines = lines as CartLineType[];
   const hasCartLines = totalQuantity > 0;

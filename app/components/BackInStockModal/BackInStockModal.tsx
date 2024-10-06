@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react';
 import {parseGid} from '@shopify/hydrogen';
 
 import {LoadingDots} from '~/components';
-import {useBackInStock, useCustomer, useGlobal, useSettings} from '~/hooks';
+import {useBackInStock, useCustomer, useMenu, useSettings} from '~/hooks';
 import type {SelectedVariant} from '~/lib/types';
 
 interface BackInStockModalProps {
@@ -12,7 +12,7 @@ interface BackInStockModalProps {
 export function BackInStockModal({selectedVariant}: BackInStockModalProps) {
   const customer = useCustomer();
   const {product: productSettings} = useSettings();
-  const {closeModal} = useGlobal();
+  const {closeModal} = useMenu();
   const {
     handleSubmit,
     isSubmitting,

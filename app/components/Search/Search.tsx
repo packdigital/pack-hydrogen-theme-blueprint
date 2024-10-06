@@ -1,5 +1,5 @@
 import {Link, Drawer} from '~/components';
-import {useGlobal, usePrefixPathWithLocale} from '~/hooks';
+import {useMenu, usePrefixPathWithLocale} from '~/hooks';
 
 import {SearchInput} from './SearchInput';
 import {SearchResults} from './SearchResults';
@@ -7,7 +7,7 @@ import {SearchSuggestions} from './SearchSuggestions';
 import {useSearch} from './useSearch';
 
 export function Search() {
-  const {closeSearch, searchOpen} = useGlobal();
+  const {closeSearch, searchOpen} = useMenu();
   const {
     productResults,
     collectionResults,

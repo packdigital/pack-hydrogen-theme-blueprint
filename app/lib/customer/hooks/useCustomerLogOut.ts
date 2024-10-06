@@ -4,10 +4,10 @@ import {useCart} from '@shopify/hydrogen-react';
 
 import {LOGGED_OUT_REDIRECT_TO} from '~/lib/constants';
 import {removeCustomerAccessTokenFromLocalStorage} from '~/lib/customer';
-import {useGlobal, useLocale} from '~/hooks';
+import {useLocale, usePreviewMode} from '~/hooks';
 
 export function useCustomerLogOut() {
-  const {isPreviewModeEnabled, setPreviewModeCustomer} = useGlobal();
+  const {isPreviewModeEnabled, setPreviewModeCustomer} = usePreviewMode();
   const {buyerIdentityUpdate} = useCart();
   const {pathPrefix} = useLocale();
   const navigate = useNavigate();

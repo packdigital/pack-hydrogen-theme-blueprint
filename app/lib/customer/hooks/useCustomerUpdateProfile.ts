@@ -6,7 +6,7 @@ import {
   getCustomerAccessTokenFromLocalStorage,
   usePreviewModeCustomerFetch,
 } from '~/lib/customer';
-import {useGlobal} from '~/hooks';
+import {usePreviewMode} from '~/hooks';
 
 import {useFetcherStatus} from './useFetcherStatus';
 
@@ -17,7 +17,7 @@ interface FetcherData {
 }
 
 export function useCustomerUpdateProfile() {
-  const {isPreviewModeEnabled} = useGlobal();
+  const {isPreviewModeEnabled} = usePreviewMode();
   const fetcher = useFetcher({key: 'update-profile'});
 
   const {

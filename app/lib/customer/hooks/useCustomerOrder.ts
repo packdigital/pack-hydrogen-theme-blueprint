@@ -3,11 +3,11 @@ import {useFetcher, useLoaderData} from '@remix-run/react';
 import type {Order} from '@shopify/hydrogen-react/storefront-api-types';
 
 import {getCustomerAccessTokenFromLocalStorage} from '~/lib/customer';
-import {useGlobal} from '~/hooks';
+import {usePreviewMode} from '~/hooks';
 import type {loader} from '~/routes/($locale).account.orders.$id';
 
 export function useCustomerOrder() {
-  const {isPreviewModeEnabled} = useGlobal();
+  const {isPreviewModeEnabled} = usePreviewMode();
   const {order, errors} = useLoaderData<typeof loader>();
   const fetcher = useFetcher<{order: Order}>({key: 'orders'});
 

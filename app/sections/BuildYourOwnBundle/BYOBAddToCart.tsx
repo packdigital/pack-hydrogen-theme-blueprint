@@ -2,7 +2,7 @@ import {useCallback, useEffect, useMemo, useState} from 'react';
 import {useCart} from '@shopify/hydrogen-react';
 
 import {LoadingDots} from '~/components';
-import {useGlobal} from '~/hooks';
+import {useMenu} from '~/hooks';
 
 import type {BYOBAddToCartProps} from './BuildYourOwnBundle.types';
 
@@ -12,7 +12,7 @@ export function BYOBAddToCart({
   total,
 }: BYOBAddToCartProps) {
   const {error, linesAdd, id: cartId, status} = useCart();
-  const {openCart} = useGlobal();
+  const {openCart} = useMenu();
 
   const [isAdding, setIsAdding] = useState(false);
   const [isAdded, setIsAdded] = useState(false);

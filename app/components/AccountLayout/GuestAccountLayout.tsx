@@ -2,10 +2,10 @@ import {useEffect} from 'react';
 import {useNavigate} from '@remix-run/react';
 
 import {LOGGED_IN_REDIRECT_TO} from '~/lib/constants';
-import {useCustomer, useGlobal, useLocale} from '~/hooks';
+import {useCustomer, useLocale, usePreviewMode} from '~/hooks';
 
 export function GuestAccountLayout({children}: {children: React.ReactNode}) {
-  const {isPreviewModeEnabled} = useGlobal();
+  const {isPreviewModeEnabled} = usePreviewMode();
   const customer = useCustomer();
   const navigate = useNavigate();
   const {pathPrefix} = useLocale();

@@ -4,7 +4,7 @@ import {Swiper, SwiperSlide} from 'swiper/react';
 import {A11y, EffectFade, Autoplay, Navigation} from 'swiper/modules';
 
 import {Link} from '~/components';
-import {useGlobal, useMatchMedia, usePromobar, useSettings} from '~/hooks';
+import {useMatchMedia, useMenu, usePromobar, useSettings} from '~/hooks';
 
 export function Promobar() {
   const {
@@ -14,7 +14,7 @@ export function Promobar() {
     promobarOpen,
     togglePromobar,
   } = usePromobar();
-  const {closeAll} = useGlobal();
+  const {closeAll} = useMenu();
   const {header} = useSettings();
   const isMobileViewport = useMatchMedia(
     // no need to check if mobile view if both heights are the same

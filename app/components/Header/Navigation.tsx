@@ -1,7 +1,7 @@
 import {useCart} from '@shopify/hydrogen-react';
 
 import {Link, Svg} from '~/components';
-import {useCustomer, useGlobal, useSettings} from '~/hooks';
+import {useCustomer, useMenu, useSettings} from '~/hooks';
 
 import type {UseDesktopMenuReturn} from './useDesktopMenu';
 import type {UseMobileMenuReturn} from './useMobileMenu';
@@ -29,7 +29,7 @@ export function Navigation({
 }: NavigationProps) {
   const {totalQuantity = 0} = useCart();
   const customer = useCustomer();
-  const {openCart, openSearch} = useGlobal();
+  const {openCart, openSearch} = useMenu();
   const {header} = useSettings();
   const {logoPositionDesktop, menuItems} = {...header?.menu};
   const gridColsClassDesktop =

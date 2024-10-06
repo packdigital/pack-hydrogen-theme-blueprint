@@ -7,7 +7,7 @@ import {
 
 import {
   // useBodyScrollLock,
-  // useGlobal,
+  // useMenu,
   useSettings,
 } from '~/hooks';
 import type {Settings} from '~/lib/types';
@@ -42,7 +42,7 @@ export function useDesktopMenu(): UseDesktopMenuReturn {
 
   // /* Additional hooks for desktop menu based on click ------------------------- */
   // const {lockBodyScroll, unlockBodyScroll} = useBodyScrollLock();
-  // const {desktopMenuOpen, openDesktopMenu, closeDesktopMenu} = useGlobal();
+  // const {desktopMenuOpen, openDesktopMenu, closeDesktopMenu} = useMenu();
   // const [desktopSubmenuIndex, setDesktopSubmenuIndex] = useState<number | null>(
   //   null,
   // );
