@@ -1,4 +1,4 @@
-import {useEffect} from 'react';
+import {memo, useEffect} from 'react';
 import type {SwiperProps} from 'swiper/react';
 import {Swiper, SwiperSlide} from 'swiper/react';
 import {A11y, EffectFade, Autoplay, Navigation} from 'swiper/modules';
@@ -6,7 +6,7 @@ import {A11y, EffectFade, Autoplay, Navigation} from 'swiper/modules';
 import {Link} from '~/components';
 import {useMatchMedia, useMenu, usePromobar, useSettings} from '~/hooks';
 
-export function Promobar() {
+export const Promobar = memo(() => {
   const {
     promobarDisabled,
     promobarHeightMobile,
@@ -131,6 +131,6 @@ export function Promobar() {
       ) : null}
     </div>
   );
-}
+});
 
 Promobar.displayName = 'Promobar';

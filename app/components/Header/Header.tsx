@@ -1,3 +1,5 @@
+import {memo} from 'react';
+
 import {usePromobar} from '~/hooks';
 
 import {Navigation} from './Navigation';
@@ -6,7 +8,7 @@ import {Promobar} from './Promobar';
 import {useDesktopMenu} from './useDesktopMenu';
 import {useMobileMenu} from './useMobileMenu';
 
-export function Header() {
+export const Header = memo(() => {
   const {headerHeightClass} = usePromobar();
   const desktopMenuContext = useDesktopMenu();
   const mobileMenuContext = useMobileMenu();
@@ -24,6 +26,6 @@ export function Header() {
       <MobileMenu {...mobileMenuContext} />
     </header>
   );
-}
+});
 
 Header.displayName = 'Header';

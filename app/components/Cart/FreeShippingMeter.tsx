@@ -1,4 +1,4 @@
-import {useMemo} from 'react';
+import {memo, useMemo} from 'react';
 import {useCart} from '@shopify/hydrogen-react';
 import type {CartWithActions} from '@shopify/hydrogen-react';
 import type {Cart} from '@shopify/hydrogen/storefront-api-types';
@@ -7,7 +7,7 @@ import {useLocale} from '~/hooks';
 
 import type {FreeShippingMeterProps} from './Cart.types';
 
-export function FreeShippingMeter({settings}: FreeShippingMeterProps) {
+export const FreeShippingMeter = memo(({settings}: FreeShippingMeterProps) => {
   const {
     cost,
     discountAllocations = [],
@@ -82,6 +82,6 @@ export function FreeShippingMeter({settings}: FreeShippingMeterProps) {
       </div>
     </div>
   ) : null;
-}
+});
 
 FreeShippingMeter.displayName = 'FreeShippingMeter';

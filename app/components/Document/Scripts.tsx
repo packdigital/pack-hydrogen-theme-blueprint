@@ -1,3 +1,4 @@
+import {memo} from 'react';
 import {Script} from '@shopify/hydrogen';
 
 import {useLoadScript, useRootLoaderData} from '~/hooks';
@@ -10,7 +11,7 @@ import {useLoadScript, useRootLoaderData} from '~/hooks';
  * IMPORTANT: Third party scripts rendered directly, i.e. as <script> tags, will likely cause hydration errors as a gotcha of Remix. Use the useLoadScript hook to avoid this issue.
  */
 
-export function Scripts() {
+export const Scripts = memo(() => {
   const {ENV} = useRootLoaderData();
 
   useLoadScript(
@@ -45,6 +46,6 @@ export function Scripts() {
       }}
     />
   );
-}
+});
 
 Scripts.displayName = 'Scripts';

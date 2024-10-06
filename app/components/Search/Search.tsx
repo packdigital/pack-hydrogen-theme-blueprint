@@ -1,3 +1,5 @@
+import {memo} from 'react';
+
 import {Link, Drawer} from '~/components';
 import {useMenu, usePrefixPathWithLocale} from '~/hooks';
 
@@ -6,7 +8,7 @@ import {SearchResults} from './SearchResults';
 import {SearchSuggestions} from './SearchSuggestions';
 import {useSearch} from './useSearch';
 
-export function Search() {
+export const Search = memo(() => {
   const {closeSearch, searchOpen} = useMenu();
   const {
     productResults,
@@ -69,6 +71,6 @@ export function Search() {
       )}
     </Drawer>
   );
-}
+});
 
 Search.displayName = 'Search';

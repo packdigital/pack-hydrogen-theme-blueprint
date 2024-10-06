@@ -1,3 +1,5 @@
+import {memo} from 'react';
+
 import {CountrySelector, Link, Svg} from '~/components';
 import {useSettings} from '~/hooks';
 
@@ -6,7 +8,7 @@ import {FooterLegal} from './FooterLegal';
 import {FooterMenu} from './FooterMenu';
 import {FooterSocial} from './FooterSocial';
 
-export function Footer() {
+export const Footer = memo(() => {
   const {footer, localization} = useSettings();
   const {bgColor = 'var(--black)', textColor = 'var(--white)'} = {...footer};
 
@@ -47,6 +49,6 @@ export function Footer() {
       </div>
     </footer>
   );
-}
+});
 
 Footer.displayName = 'Footer';

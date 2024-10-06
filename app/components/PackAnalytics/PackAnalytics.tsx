@@ -1,3 +1,4 @@
+import {memo} from 'react';
 import {Analytics, useAnalytics} from '@shopify/hydrogen';
 import {useCart} from '@shopify/hydrogen-react';
 
@@ -19,7 +20,7 @@ const DEBUG =
   typeof document !== 'undefined' &&
   window.ENV?.PUBLIC_PACK_ANALYTICS_DEBUG === 'true';
 
-export function PackAnalytics() {
+export const PackAnalytics = memo(() => {
   const {ENV} = useRootLoaderData();
   const {register, subscribe} = useAnalytics();
   const {isCartReady} = useGlobal();
@@ -93,4 +94,4 @@ export function PackAnalytics() {
       )}
     </>
   );
-}
+});

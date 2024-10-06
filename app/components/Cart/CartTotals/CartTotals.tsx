@@ -1,4 +1,4 @@
-import {useMemo} from 'react';
+import {memo, useMemo} from 'react';
 import {useCart, useMoney} from '@shopify/hydrogen-react';
 import type {CartWithActions} from '@shopify/hydrogen-react';
 import type {
@@ -14,7 +14,7 @@ import {MultipassCheckoutButton} from '../MultipassCheckoutButton';
 
 import {CartTotalsDiscountItem} from './CartTotalsDiscountItem';
 
-export function CartTotals({settings}: CartTotalsProps) {
+export const CartTotals = memo(({settings}: CartTotalsProps) => {
   const {currency} = useLocale();
   const {
     checkoutUrl = '',
@@ -125,6 +125,6 @@ export function CartTotals({settings}: CartTotalsProps) {
       </MultipassCheckoutButton>
     </div>
   );
-}
+});
 
 CartTotals.displayName = 'CartTotals';

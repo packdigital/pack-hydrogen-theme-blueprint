@@ -1,11 +1,11 @@
-import {useEffect, useState} from 'react';
+import {memo, useEffect, useState} from 'react';
 import {useFetcher} from '@remix-run/react';
 import {parseGid} from '@shopify/hydrogen';
 
 import {ReviewStars} from '~/components';
 import {useLocale} from '~/hooks';
 
-export function ProductStars({id}: {id: string}) {
+export const ProductStars = memo(({id}: {id: string}) => {
   const fetcher = useFetcher<{
     error: string | null;
     rating: string;
@@ -57,6 +57,6 @@ export function ProductStars({id}: {id: string}) {
       )}
     </div>
   );
-}
+});
 
 ProductStars.displayName = 'ProductStars';
