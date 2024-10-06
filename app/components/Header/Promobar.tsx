@@ -54,12 +54,13 @@ export function Promobar() {
   useEffect(() => {
     const setPromobarVisibility = () => {
       if (document.body.style.position === 'fixed') return;
-      togglePromobar(
+      const promobarShouldBeOpen =
         window.scrollY <=
-          (typeof promobarHeight === 'string'
-            ? parseInt(promobarHeight, 10)
-            : Number(promobarHeight)),
-      );
+        (typeof promobarHeight === 'string'
+          ? parseInt(promobarHeight, 10)
+          : Number(promobarHeight));
+      if (promobarOpen && !promobarShouldBeOpen) togglePromobar(false);
+      else if (!promobarOpen && promobarShouldBeOpen) togglePromobar(true);
     };
 
     if (!autohide) {
@@ -72,7 +73,7 @@ export function Promobar() {
     return () => {
       window.removeEventListener('scroll', setPromobarVisibility);
     };
-  }, [autohide, promobarHeight]);
+  }, [autohide, promobarHeight, promobarOpen]);
 
   return (
     <div
