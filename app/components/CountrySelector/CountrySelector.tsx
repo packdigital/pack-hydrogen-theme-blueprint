@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useMemo, useState} from 'react';
+import {memo, useCallback, useEffect, useMemo, useState} from 'react';
 import {useFetcher, useLocation} from '@remix-run/react';
 import {useInView} from 'react-intersection-observer';
 import {useCart} from '@shopify/hydrogen-react';
@@ -10,7 +10,7 @@ import {pathWithLocalePrefix, pathWithoutLocalePrefix} from '~/lib/utils';
 import {Select} from '~/components';
 import {useLocale} from '~/hooks';
 
-export function CountrySelector() {
+export const CountrySelector = memo(() => {
   const {ref, inView} = useInView({
     threshold: 0,
     triggerOnce: true,
@@ -112,4 +112,4 @@ export function CountrySelector() {
       />
     </div>
   );
-}
+});

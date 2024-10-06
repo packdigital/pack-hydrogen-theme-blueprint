@@ -1,12 +1,12 @@
-import {useEffect} from 'react';
+import {memo, useEffect} from 'react';
 import type {SwiperProps} from 'swiper/react';
 import {Swiper, SwiperSlide} from 'swiper/react';
 import {A11y, EffectFade, Autoplay, Navigation} from 'swiper/modules';
 
 import {Link} from '~/components';
-import {useGlobal, useMatchMedia, usePromobar, useSettings} from '~/hooks';
+import {useMatchMedia, useMenu, usePromobar, useSettings} from '~/hooks';
 
-export function Promobar() {
+export const Promobar = memo(() => {
   const {
     promobarDisabled,
     promobarHeightMobile,
@@ -14,7 +14,7 @@ export function Promobar() {
     promobarOpen,
     togglePromobar,
   } = usePromobar();
-  const {closeAll} = useGlobal();
+  const {closeAll} = useMenu();
   const {header} = useSettings();
   const isMobileViewport = useMatchMedia(
     // no need to check if mobile view if both heights are the same
@@ -54,12 +54,13 @@ export function Promobar() {
   useEffect(() => {
     const setPromobarVisibility = () => {
       if (document.body.style.position === 'fixed') return;
-      togglePromobar(
+      const promobarShouldBeOpen =
         window.scrollY <=
-          (typeof promobarHeight === 'string'
-            ? parseInt(promobarHeight, 10)
-            : Number(promobarHeight)),
-      );
+        (typeof promobarHeight === 'string'
+          ? parseInt(promobarHeight, 10)
+          : Number(promobarHeight));
+      if (promobarOpen && !promobarShouldBeOpen) togglePromobar(false);
+      else if (!promobarOpen && promobarShouldBeOpen) togglePromobar(true);
     };
 
     if (!autohide) {
@@ -72,7 +73,7 @@ export function Promobar() {
     return () => {
       window.removeEventListener('scroll', setPromobarVisibility);
     };
-  }, [autohide, promobarHeight]);
+  }, [autohide, promobarHeight, promobarOpen]);
 
   return (
     <div
@@ -130,6 +131,6 @@ export function Promobar() {
       ) : null}
     </div>
   );
-}
+});
 
 Promobar.displayName = 'Promobar';

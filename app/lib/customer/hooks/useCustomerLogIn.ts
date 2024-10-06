@@ -10,7 +10,7 @@ import type {
 import {PackEventName} from '~/components/PackAnalytics/constants';
 import {LOGGED_IN_REDIRECT_TO} from '~/lib/constants';
 import {setCustomerAccessTokenInLocalStorage} from '~/lib/customer';
-import {useGlobal, useLocale} from '~/hooks';
+import {useLocale, usePreviewMode} from '~/hooks';
 
 import {useFetcherStatus} from './useFetcherStatus';
 
@@ -23,7 +23,7 @@ interface FetcherData {
 
 export function useCustomerLogIn() {
   const revalidator = useRevalidator();
-  const {isPreviewModeEnabled, setPreviewModeCustomer} = useGlobal();
+  const {isPreviewModeEnabled, setPreviewModeCustomer} = usePreviewMode();
   const {publish} = useAnalytics();
   const fetcher = useFetcher();
   const {

@@ -1,4 +1,4 @@
-import {useMemo} from 'react';
+import {memo, useMemo} from 'react';
 
 import {Image, Link, QuantitySelector, Svg} from '~/components';
 import {PRODUCT_IMAGE_ASPECT_RATIO} from '~/lib/constants';
@@ -9,7 +9,7 @@ import {useCartLine} from './useCartLine';
 import {useCartLineImage} from './useCartLineImage';
 import {useCartLinePrices} from './useCartLinePrices';
 
-export function CartLine({closeCart, line}: CartLineProps) {
+export const CartLine = memo(({closeCart, line}: CartLineProps) => {
   const {discountAllocations, quantity, merchandise} = line;
 
   const {handleDecrement, handleIncrement, handleRemove, isUpdatingLine} =
@@ -122,6 +122,6 @@ export function CartLine({closeCart, line}: CartLineProps) {
       </div>
     </div>
   );
-}
+});
 
 CartLine.displayName = 'CartLine';

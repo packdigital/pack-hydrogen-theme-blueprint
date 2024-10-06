@@ -1,4 +1,4 @@
-import {Fragment, useEffect, useMemo, useState} from 'react';
+import {Fragment, memo, useEffect, useMemo, useState} from 'react';
 import {useCart} from '@shopify/hydrogen-react';
 import {Navigation} from 'swiper/modules';
 import {Swiper, SwiperSlide} from 'swiper/react';
@@ -17,7 +17,7 @@ import type {CartUpsellProps} from '../Cart.types';
 
 import {CartUpsellItem} from './CartUpsellItem';
 
-export function CartUpsell({closeCart, settings}: CartUpsellProps) {
+export const CartUpsell = memo(({closeCart, settings}: CartUpsellProps) => {
   const {lines = [], status} = useCart();
   const cartLines = lines as CartLine[];
 
@@ -163,6 +163,6 @@ export function CartUpsell({closeCart, settings}: CartUpsellProps) {
       )}
     </Disclosure>
   ) : null;
-}
+});
 
 CartUpsell.displayName = 'CartUpsell';

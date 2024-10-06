@@ -10,7 +10,7 @@ import {
 import {CartProvider, ShopifyProvider} from '@shopify/hydrogen-react';
 import {PreviewProvider} from '@pack/react';
 
-import {GlobalProvider, GroupingsProvider} from '~/contexts';
+import {ContextsProvider} from '~/contexts';
 import {CART_FRAGMENT} from '~/data/queries';
 import {Layout} from '~/components';
 import {useLocale, useRootLoaderData} from '~/hooks';
@@ -77,19 +77,17 @@ export function Document({children, title}: DocumentProps) {
           languageIsoCode={locale.language}
         >
           <CartProvider cartFragment={CART_FRAGMENT}>
-            <GlobalProvider>
-              <GroupingsProvider>
-                <PreviewProvider
-                  customizerMeta={customizerMeta}
-                  isPreviewModeEnabled={isPreviewModeEnabled}
-                  siteSettings={siteSettings}
-                >
-                  <Layout key={`${locale.language}-${locale.country}`}>
-                    {children}
-                  </Layout>
-                </PreviewProvider>
-              </GroupingsProvider>
-            </GlobalProvider>
+            <ContextsProvider>
+              <PreviewProvider
+                customizerMeta={customizerMeta}
+                isPreviewModeEnabled={isPreviewModeEnabled}
+                siteSettings={siteSettings}
+              >
+                <Layout key={`${locale.language}-${locale.country}`}>
+                  {children}
+                </Layout>
+              </PreviewProvider>
+            </ContextsProvider>
           </CartProvider>
         </ShopifyProvider>
         <RootScripts />

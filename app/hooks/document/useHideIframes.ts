@@ -1,9 +1,9 @@
 import {useCallback} from 'react';
 
-import {useGlobal} from '~/hooks';
+import {useMenu} from '~/hooks';
 
 export function useHideIframes() {
-  const {toggleIframesHidden} = useGlobal();
+  const {toggleIframesHidden} = useMenu();
 
   const hideIframes = useCallback(() => {
     toggleIframesHidden(true);

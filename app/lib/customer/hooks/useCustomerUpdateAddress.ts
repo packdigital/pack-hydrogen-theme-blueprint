@@ -6,7 +6,7 @@ import {
   getCustomerAccessTokenFromLocalStorage,
   usePreviewModeCustomerFetch,
 } from '~/lib/customer';
-import {useGlobal} from '~/hooks';
+import {usePreviewMode} from '~/hooks';
 
 import {useFetcherStatus} from './useFetcherStatus';
 
@@ -18,7 +18,7 @@ interface FetcherData {
 }
 
 export function useCustomerUpdateAddress() {
-  const {isPreviewModeEnabled} = useGlobal();
+  const {isPreviewModeEnabled} = usePreviewMode();
   const fetcher = useFetcher({key: 'update-address'});
 
   const {address, defaultAddress, updateErrors, formErrors} = {

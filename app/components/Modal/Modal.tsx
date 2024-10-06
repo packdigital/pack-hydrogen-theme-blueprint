@@ -1,4 +1,4 @@
-import {Fragment} from 'react';
+import {Fragment, memo} from 'react';
 import {
   Dialog,
   DialogPanel,
@@ -7,10 +7,10 @@ import {
 } from '@headlessui/react';
 
 import {Svg} from '~/components';
-import {useGlobal} from '~/hooks';
+import {useMenu} from '~/hooks';
 
-export function Modal() {
-  const {modal, closeModal} = useGlobal();
+export const Modal = memo(() => {
+  const {modal, closeModal} = useMenu();
 
   const {className = '', ...props} = {...modal.props};
 
@@ -66,6 +66,6 @@ export function Modal() {
       </Dialog>
     </Transition>
   ) : null;
-}
+});
 
 Modal.displayName = 'Modal';

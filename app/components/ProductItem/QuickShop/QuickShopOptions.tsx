@@ -5,7 +5,7 @@ import type {
 } from '@shopify/hydrogen/storefront-api-types';
 
 import {COLOR_OPTION_NAME} from '~/lib/constants';
-import {useGlobal} from '~/hooks';
+import {useMenu} from '~/hooks';
 
 import {QuickShopOption} from './QuickShopOption';
 
@@ -21,7 +21,7 @@ export function QuickShopOptions({
   quickShopMobileHidden,
   selectedProduct,
 }: QuickShopOptionsProps) {
-  const {cartOpen} = useGlobal();
+  const {cartOpen} = useMenu();
 
   const [optionsVisible, setOptionsVisible] = useState(false);
 

@@ -1,13 +1,15 @@
+import {memo} from 'react';
+
 import {Link, Drawer} from '~/components';
-import {useGlobal, usePrefixPathWithLocale} from '~/hooks';
+import {useMenu, usePrefixPathWithLocale} from '~/hooks';
 
 import {SearchInput} from './SearchInput';
 import {SearchResults} from './SearchResults';
 import {SearchSuggestions} from './SearchSuggestions';
 import {useSearch} from './useSearch';
 
-export function Search() {
-  const {closeSearch, searchOpen} = useGlobal();
+export const Search = memo(() => {
+  const {closeSearch, searchOpen} = useMenu();
   const {
     productResults,
     collectionResults,
@@ -69,6 +71,6 @@ export function Search() {
       )}
     </Drawer>
   );
-}
+});
 
 Search.displayName = 'Search';

@@ -9,12 +9,12 @@ import {
 } from '@headlessui/react';
 
 import {Link, Spinner, Svg} from '~/components';
-import {useCustomer, useGlobal, useLocale, useSettings} from '~/hooks';
+import {useCustomer, useLocale, usePreviewMode, useSettings} from '~/hooks';
 import {useCustomerLogOut} from '~/lib/customer';
 import {LOGGED_OUT_REDIRECT_TO} from '~/lib/constants';
 
 export function CustomerAccountLayout({children}: {children: React.ReactNode}) {
-  const {isPreviewModeEnabled} = useGlobal();
+  const {isPreviewModeEnabled} = usePreviewMode();
   const navigate = useNavigate();
   const {pathPrefix} = useLocale();
   const {pathname} = useLocation();

@@ -1,7 +1,7 @@
 import {useCallback, useState} from 'react';
 
 import type {Settings} from '~/lib/types';
-import {useGlobal, useSettings} from '~/hooks';
+import {useMenu, useSettings} from '~/hooks';
 
 export interface UseMobileMenuReturn {
   handleOpenMobileMenu: () => void;
@@ -12,7 +12,7 @@ export interface UseMobileMenuReturn {
 }
 
 export function useMobileMenu(): UseMobileMenuReturn {
-  const {mobileMenuOpen, openMobileMenu, closeMobileMenu} = useGlobal();
+  const {mobileMenuOpen, openMobileMenu, closeMobileMenu} = useMenu();
   const {header} = useSettings();
   const {menuItems} = {...header?.menu};
 

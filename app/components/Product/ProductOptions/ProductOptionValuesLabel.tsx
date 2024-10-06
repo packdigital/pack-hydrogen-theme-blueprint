@@ -1,6 +1,6 @@
 import {useCallback} from 'react';
 
-import {useGlobal} from '~/hooks';
+import {useMenu} from '~/hooks';
 
 import type {ProductOptionValuesLabelProps} from './ProductOptions.types';
 
@@ -8,7 +8,7 @@ export function ProductOptionValuesLabel({
   name,
   selectedValue,
 }: ProductOptionValuesLabelProps) {
-  const {openModal} = useGlobal();
+  const {openModal} = useMenu();
 
   const handleSizeGuideClick = useCallback(() => {
     // example modal
