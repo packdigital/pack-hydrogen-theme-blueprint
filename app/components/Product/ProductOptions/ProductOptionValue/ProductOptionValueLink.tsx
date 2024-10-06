@@ -45,7 +45,7 @@ export function ProductOptionValueLink({
       preventScrollReset
       to={url}
       onClick={(e) => {
-        if (isSelected) {
+        if (isSelected || isDisabled) {
           e.preventDefault();
           return;
         }
