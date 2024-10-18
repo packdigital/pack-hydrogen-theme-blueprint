@@ -17,8 +17,8 @@ export interface HeaderSettings {
     }[];
   };
   menu: {
-    menuItems: {
-      menuItem: LinkCms;
+    navItems: {
+      navItem: LinkCms;
       links: {
         link: LinkCms;
       }[];
@@ -47,124 +47,29 @@ export default {
   label: 'Header',
   name: 'header',
   component: 'group',
-  description: 'Menu, promobar',
+  description: 'Nav, menu, promobar',
   fields: [
     {
-      label: 'Promobar',
-      name: 'promobar',
-      component: 'group',
-      description: 'Enable, messages, colors, slider settings',
-      fields: [
-        {
-          label: 'Enabled',
-          name: 'enabled',
-          component: 'toggle',
-          toggleLabels: {
-            true: 'On',
-            false: 'Off',
-          },
-          defaultValue: true,
-        },
-        {
-          label: 'Autohide',
-          name: 'autohide',
-          component: 'toggle',
-          description:
-            'Hides promobar after scrolling away from top of the page',
-          toggleLabels: {
-            true: 'On',
-            false: 'Off',
-          },
-          defaultValue: true,
-        },
-        {
-          label: 'Effect Between Transitions',
-          name: 'effect',
-          component: 'select',
-          description: 'Refresh page to observe change',
-          options: [
-            {label: 'Fade', value: 'fade'},
-            {label: 'Horizontal Slide', value: 'slide-horizontal'},
-            {label: 'Vertical Slide', value: 'slide-vertical'},
-          ],
-          defaultValue: 'fade',
-        },
-        {
-          label: 'Autoplay Delay',
-          name: 'delay',
-          component: 'number',
-          description: 'Delay between transitions (in ms)',
-          defaultValue: 5000,
-        },
-        {
-          label: 'Speed',
-          name: 'speed',
-          component: 'number',
-          description: 'Duration of transition between slides (in ms)',
-          defaultValue: 500,
-        },
-        {
-          label: 'Background Color',
-          name: 'bgColor',
-          component: 'select',
-          options: COLORS,
-          defaultValue: 'var(--primary)',
-        },
-        {
-          label: 'Text Color',
-          name: 'color',
-          component: 'select',
-          options: COLORS,
-          defaultValue: 'var(--white)',
-        },
-        {
-          label: 'Messages',
-          name: 'messages',
-          component: 'group-list',
-          itemProps: {
-            label: '{{item.message}}',
-          },
-          fields: [
-            {
-              label: 'Message',
-              name: 'message',
-              component: 'textarea',
-            },
-            {
-              label: 'Link (optional)',
-              name: 'link',
-              component: 'link',
-              description: 'Link wrapping entire message',
-            },
-          ],
-          defaultItem: {
-            message: 'Free shipping on orders over $100. Shop Now',
-            link: {url: '/', text: ''},
-          },
-        },
-      ],
-    },
-    {
-      label: 'Menu',
+      label: 'Nav & Menu',
       name: 'menu',
       component: 'group',
-      description: 'Menu items, logo position, products slider, links',
+      description: 'Nav items, logo position, products slider, links',
       fields: [
         {
-          label: 'Menu Items',
-          name: 'menuItems',
+          label: 'Nav Items',
+          name: 'navItems',
           component: 'group-list',
           itemProps: {
-            label: '{{item.menuItem.text}}',
+            label: '{{item.navItem.text}}',
           },
           fields: [
             {
-              label: 'Menu Item',
-              name: 'menuItem',
+              label: 'Nav Item',
+              name: 'navItem',
               component: 'link',
             },
             {
-              label: 'Submenu Links',
+              label: 'Menu Links',
               name: 'links',
               component: 'group-list',
               itemProps: {
@@ -180,12 +85,12 @@ export default {
               defaultItem: {},
             },
             {
-              label: 'Submenu Button',
+              label: 'Menu Button',
               name: 'mainLink',
               component: 'link',
             },
             {
-              label: 'Submenu Images',
+              label: 'Menu Images',
               name: 'imageLinks',
               component: 'group-list',
               itemProps: {
@@ -279,6 +184,101 @@ export default {
               component: 'link',
             },
           ],
+        },
+      ],
+    },
+    {
+      label: 'Promobar',
+      name: 'promobar',
+      component: 'group',
+      description: 'Enable, messages, colors, slider settings',
+      fields: [
+        {
+          label: 'Enabled',
+          name: 'enabled',
+          component: 'toggle',
+          toggleLabels: {
+            true: 'On',
+            false: 'Off',
+          },
+          defaultValue: true,
+        },
+        {
+          label: 'Autohide',
+          name: 'autohide',
+          component: 'toggle',
+          description:
+            'Hides promobar after scrolling away from top of the page',
+          toggleLabels: {
+            true: 'On',
+            false: 'Off',
+          },
+          defaultValue: true,
+        },
+        {
+          label: 'Effect Between Transitions',
+          name: 'effect',
+          component: 'select',
+          description: 'Refresh page to observe change',
+          options: [
+            {label: 'Fade', value: 'fade'},
+            {label: 'Horizontal Slide', value: 'slide-horizontal'},
+            {label: 'Vertical Slide', value: 'slide-vertical'},
+          ],
+          defaultValue: 'fade',
+        },
+        {
+          label: 'Autoplay Delay',
+          name: 'delay',
+          component: 'number',
+          description: 'Delay between transitions (in ms)',
+          defaultValue: 5000,
+        },
+        {
+          label: 'Speed',
+          name: 'speed',
+          component: 'number',
+          description: 'Duration of transition between slides (in ms)',
+          defaultValue: 500,
+        },
+        {
+          label: 'Background Color',
+          name: 'bgColor',
+          component: 'select',
+          options: COLORS,
+          defaultValue: 'var(--primary)',
+        },
+        {
+          label: 'Text Color',
+          name: 'color',
+          component: 'select',
+          options: COLORS,
+          defaultValue: 'var(--white)',
+        },
+        {
+          label: 'Messages',
+          name: 'messages',
+          component: 'group-list',
+          itemProps: {
+            label: '{{item.message}}',
+          },
+          fields: [
+            {
+              label: 'Message',
+              name: 'message',
+              component: 'textarea',
+            },
+            {
+              label: 'Link (optional)',
+              name: 'link',
+              component: 'link',
+              description: 'Link wrapping entire message',
+            },
+          ],
+          defaultItem: {
+            message: 'Free shipping on orders over $100. Shop Now',
+            link: {url: '/', text: ''},
+          },
         },
       ],
     },

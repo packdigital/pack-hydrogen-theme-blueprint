@@ -132,7 +132,7 @@
         },
         "header": {
           "menu": {
-            "menuItems": [
+            "navItems": [
               {
                 "links": [
                   {
@@ -155,7 +155,7 @@
                   "text": "Shop All",
                   "type": "isExternal"
                 },
-                "menuItem": {
+                "navItem": {
                   "url": "/collections/men",
                   "text": "Shop",
                   "type": "isExternal"
@@ -207,14 +207,14 @@
                 ]
               },
               {
-                "menuItem": {
+                "navItem": {
                   "url": "/pages/about-us",
                   "text": "About Us",
                   "type": "isPage"
                 }
               },
               {
-                "menuItem": {
+                "navItem": {
                   "url": "/blogs/blog",
                   "text": "Blog",
                   "type": "isPage"

@@ -12,12 +12,7 @@ export function MobileSubmenu({
   mobileSubmenuContent,
   handleMobileSubmenu,
 }: MobileSubmenuProps) {
-  const {
-    imageLinks = [],
-    links,
-    mainLink,
-    menuItem,
-  } = {...mobileSubmenuContent};
+  const {imageLinks = [], links, mainLink, navItem} = {...mobileSubmenuContent};
 
   return (
     <div
@@ -39,7 +34,7 @@ export function MobileSubmenu({
             viewBox="0 0 24 24"
           />
 
-          <h3 className="text-nav flex-1 text-left">{menuItem?.text}</h3>
+          <h3 className="text-nav flex-1 text-left">{navItem?.text}</h3>
         </button>
 
         <div className="px-4 pt-5">
