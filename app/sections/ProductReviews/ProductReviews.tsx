@@ -24,7 +24,7 @@ export function ProductReviews({cms}: {cms: {container: ContainerSettings}}) {
       <>
         {/* Placeholder */}
         <div className="flex h-[32rem] w-full items-center justify-center bg-offWhite p-5 text-center">
-          <h2>Product reivews widget here</h2>
+          <h2>Product reviews widget here</h2>
         </div>
 
         {/*
