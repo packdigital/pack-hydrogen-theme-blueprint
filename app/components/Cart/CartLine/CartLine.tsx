@@ -20,9 +20,11 @@ export const CartLine = memo(({closeCart, line}: CartLineProps) => {
   const image = useCartLineImage({line});
 
   const url = useMemo(() => {
-    return `/products/${merchandise.product.handle}?merchandise=${merchandise.id
-      .split('/')
-      .pop()}`;
+    const searchParams = new URLSearchParams();
+    merchandise.selectedOptions.forEach(({name, value}) => {
+      searchParams.set(name, value);
+    });
+    return `/products/${merchandise.product.handle}?${searchParams}`;
   }, [merchandise.id]);
 
   return (
