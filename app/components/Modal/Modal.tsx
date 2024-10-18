@@ -27,7 +27,7 @@ export const Modal = memo(() => {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-[rgba(0,0,0,0.3)]" />
+          <div className="fixed inset-0 bg-overlay" />
         </TransitionChild>
 
         <TransitionChild

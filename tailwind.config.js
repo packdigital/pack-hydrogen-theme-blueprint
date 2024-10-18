@@ -50,6 +50,7 @@ module.exports = {
         text: 'var(--text)',
         background: 'var(--background)',
         border: 'var(--border)',
+        overlay: 'var(--overlay)',
       },
       animation: {
         'spin-fast': 'spin 0.75s linear infinite',

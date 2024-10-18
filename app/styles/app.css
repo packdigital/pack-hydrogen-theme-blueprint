@@ -25,6 +25,7 @@
   --light-gray: #e8e8e8;
   --off-white: #f9f9f9;
   --white: #ffffff;
+  --overlay: rgba(0,0,0,0.3);
 
   --primary-btn-bg-color: #008464;
   --primary-btn-border-color: #008464;

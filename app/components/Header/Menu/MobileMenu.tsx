@@ -41,6 +41,7 @@ export const MobileMenu = memo(
     return (
       <Drawer
         ariaName="menu drawer"
+        className="lg:hidden"
         onClose={handleCloseMobileMenu}
         open={mobileMenuOpen}
         openFrom="left"
