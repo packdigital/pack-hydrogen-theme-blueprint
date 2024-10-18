@@ -88,7 +88,7 @@ export default {
           component: 'textarea',
         },
         {
-          label: 'Placholder Text',
+          label: 'Placeholder Text',
           name: 'placeholder',
           component: 'text',
         },
