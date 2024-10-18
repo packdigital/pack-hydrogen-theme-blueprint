@@ -52,7 +52,7 @@ export function Schema() {
             component: 'textarea',
           },
           {
-            label: 'Placholder Text',
+            label: 'Placeholder Text',
             name: 'placeholder',
             component: 'text',
           },
@@ -101,7 +101,7 @@ export function Schema() {
             component: 'textarea',
           },
           {
-            label: 'Placholder Text',
+            label: 'Placeholder Text',
             name: 'placeholder',
             component: 'text',
           },

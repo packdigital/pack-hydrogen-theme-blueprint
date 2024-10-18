@@ -8,13 +8,13 @@ export interface UseMobileMenuReturn {
   handleCloseMobileMenu: () => void;
   handleMobileSubmenu: (index: number | null) => void;
   mobileMenuOpen: boolean;
-  mobileSubmenuContent: Settings['header']['menu']['menuItems'][number] | null;
+  mobileSubmenuContent: Settings['header']['menu']['navItems'][number] | null;
 }
 
 export function useMobileMenu(): UseMobileMenuReturn {
   const {mobileMenuOpen, openMobileMenu, closeMobileMenu} = useMenu();
   const {header} = useSettings();
-  const {menuItems} = {...header?.menu};
+  const {navItems} = {...header?.menu};
 
   const [mobileSubmenuIndex, setMobileSubmenuIndex] = useState<number | null>(
     null,
@@ -40,7 +40,7 @@ export function useMobileMenu(): UseMobileMenuReturn {
     mobileMenuOpen,
     mobileSubmenuContent:
       typeof mobileSubmenuIndex === 'number'
-        ? menuItems?.[mobileSubmenuIndex] || null
+        ? navItems?.[mobileSubmenuIndex] || null
         : null,
   };
 }

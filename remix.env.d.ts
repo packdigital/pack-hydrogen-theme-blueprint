@@ -33,6 +33,7 @@ declare global {
     PUBLIC_STOREFRONT_API_VERSION: string;
     PUBLIC_STOREFRONT_ID: string;
     SESSION_SECRET: string;
+    SHOP_ID: string;
   }
 
   interface Window {

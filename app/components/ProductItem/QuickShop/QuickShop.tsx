@@ -49,6 +49,11 @@ export function QuickShop({
   }, [enabledColorSelector, selectedProduct?.id]);
 
   const hasOneVariant = selectedProduct?.variants?.nodes?.length === 1;
+  const hasOnlyColorOption =
+    enabledColorSelector &&
+    selectedProduct?.options?.length === 1 &&
+    selectedProduct?.options[0].name === COLOR_OPTION_NAME;
+  const usesAddToCart = hasOneVariant || hasOnlyColorOption;
 
   return qualifiesForQuickShop && selectedVariant ? (
     <div
@@ -56,7 +61,7 @@ export function QuickShop({
         quickShopMobileHidden ? 'max-md:hidden' : ''
       }`}
     >
-      {hasOneVariant && (
+      {usesAddToCart && (
         <AddToCart
           addToCartText={quickShopSingleText}
           className="btn-inverse-dark"
@@ -64,7 +69,7 @@ export function QuickShop({
         />
       )}
 
-      {selectedProduct && !hasOneVariant && (
+      {selectedProduct && !usesAddToCart && (
         <QuickShopOptions
           quickShopMultiText={quickShopMultiText}
           quickShopMobileHidden={quickShopMobileHidden}

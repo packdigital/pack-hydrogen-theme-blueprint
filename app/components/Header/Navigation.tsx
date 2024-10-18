@@ -33,7 +33,7 @@ export const Navigation = memo(
     const customer = useCustomer();
     const {openCart, openSearch} = useMenu();
     const {header} = useSettings();
-    const {logoPositionDesktop, menuItems} = {...header?.menu};
+    const {logoPositionDesktop, navItems} = {...header?.menu};
     const gridColsClassDesktop =
       logoPositionDesktop === 'center'
         ? 'lg:grid-cols-[1fr_auto_1fr]'
@@ -61,23 +61,23 @@ export const Navigation = memo(
         <div className={`order-1 flex items-center ${menuOrderClassDesktop}`}>
           <nav className="hidden h-full lg:flex">
             <ul className="flex">
-              {menuItems?.map((item, index) => {
+              {navItems?.map((item, index) => {
                 const isHovered =
-                  item.menuItem?.text === desktopMenuContent?.menuItem?.text;
+                  item.navItem?.text === desktopMenuContent?.navItem?.text;
 
                 return (
                   <li key={index} className="flex">
                     <Link
-                      aria-label={item.menuItem?.text}
+                      aria-label={item.navItem?.text}
                       className={`group relative flex cursor-pointer items-center px-4 transition ${
                         isHovered ? 'bg-offWhite' : 'bg-background'
                       }`}
-                      to={item.menuItem?.url}
+                      to={item.navItem?.url}
                       onClick={handleDesktopMenuClose}
                       onMouseEnter={() => handleDesktopMenuHoverIn(index)}
                       onMouseLeave={handleDesktopMenuHoverOut}
                     >
-                      <p className="text-nav">{item.menuItem?.text}</p>
+                      <p className="text-nav">{item.navItem?.text}</p>
 
                       <div
                         className={`absolute left-0 top-[calc(100%_-_2px)] h-[3px] w-full origin-center scale-0 border-t-2 border-t-primary bg-transparent transition after:w-full group-hover:scale-100 ${

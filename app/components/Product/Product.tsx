@@ -1,8 +1,9 @@
 import {useEffect, useMemo} from 'react';
+import {useSearchParams} from '@remix-run/react';
 import {useProduct} from '@shopify/hydrogen-react';
 
 import {COLOR_OPTION_NAME} from '~/lib/constants';
-import {useLocale, useSettings} from '~/hooks';
+import {useSettings} from '~/hooks';
 import type {SelectedVariant} from '~/lib/types';
 
 import {ProductDetails} from './ProductDetails';
@@ -15,7 +16,7 @@ export function Product({product, initialSelectedVariant}: ProductProps) {
   const {selectedVariant: providerSelectedVariant} = useProduct() as {
     selectedVariant: SelectedVariant;
   };
-  const {pathPrefix} = useLocale();
+  const setSearchParams = useSearchParams()[1];
   const {header, product: productSettings} = useSettings();
 
   const selectedVariant = useMemo(() => {
@@ -38,16 +39,16 @@ export function Product({product, initialSelectedVariant}: ProductProps) {
   useEffect(() => {
     if (product.variants.nodes.length === 1 || !selectedVariant) return;
 
-    const {origin, search} = window.location;
-
+    const {search} = window.location;
     const params = new URLSearchParams(search);
     selectedVariant.selectedOptions?.forEach(({name, value}) => {
       params.set(name, value);
     });
 
-    const updatedUrl = `${origin}${pathPrefix}/products/${product.handle}?${params}`;
-
-    window.history.replaceState(window.history.state, '', updatedUrl);
+    setSearchParams(params, {
+      preventScrollReset: true,
+      replace: true,
+    });
   }, [product.handle, selectedVariant?.id]);
 
   const stickyPromobar =

@@ -31,7 +31,7 @@ export const MobileMenu = memo(
 
     const {
       links: additionalLinks,
-      menuItems,
+      navItems,
       productsSlider,
     } = {...header?.menu};
     const {products, heading: productsHeading} = {
@@ -41,6 +41,7 @@ export const MobileMenu = memo(
     return (
       <Drawer
         ariaName="menu drawer"
+        className="lg:hidden"
         onClose={handleCloseMobileMenu}
         open={mobileMenuOpen}
         openFrom="left"
@@ -85,7 +86,7 @@ export const MobileMenu = memo(
           >
             <nav className="mb-8 flex">
               <ul className="flex w-full flex-col">
-                {menuItems?.map((item, index) => {
+                {navItems?.map((item, index) => {
                   const hasContent =
                     item.links?.length > 0 || item.imageLinks?.length > 0;
 
@@ -96,13 +97,13 @@ export const MobileMenu = memo(
                     >
                       {hasContent ? (
                         <button
-                          aria-label={item.menuItem.text}
+                          aria-label={item.navItem?.text}
                           className="flex h-14 w-full items-center justify-between gap-5 p-4"
                           onClick={() => handleMobileSubmenu(index)}
                           type="button"
                         >
                           <p className="text-nav flex-1 text-left">
-                            {item.menuItem.text}
+                            {item.navItem?.text}
                           </p>
 
                           <Svg
@@ -114,14 +115,14 @@ export const MobileMenu = memo(
                         </button>
                       ) : (
                         <Link
-                          aria-label={item.menuItem.text}
+                          aria-label={item.navItem?.text}
                           className="text-nav flex h-14 w-full items-center p-4"
-                          to={item.menuItem.url}
+                          to={item.navItem?.url}
                           onClick={handleCloseMobileMenu}
-                          newTab={item.menuItem.newTab}
-                          type={item.menuItem.type}
+                          newTab={item.navItem?.newTab}
+                          type={item.navItem?.type}
                         >
-                          {item.menuItem.text}
+                          {item.navItem?.text}
                         </Link>
                       )}
                     </li>

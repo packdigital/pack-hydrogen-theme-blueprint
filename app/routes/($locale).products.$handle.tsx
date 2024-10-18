@@ -128,17 +128,17 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
 
   const productAnalytics: ShopifyAnalyticsProduct = {
     productGid: product.id,
-    variantGid: selectedVariant.id,
+    variantGid: selectedVariant?.id || '',
     name: product.title,
-    variantName: selectedVariant.title,
+    variantName: selectedVariant?.title || '',
     brand: product.vendor,
-    price: selectedVariant.price.amount,
+    price: selectedVariant?.price?.amount || '',
   };
   const analytics = {
     pageType: AnalyticsPageType.product,
     resourceId: product.id,
     products: [productAnalytics],
-    totalValue: parseFloat(selectedVariant.price.amount),
+    totalValue: Number(selectedVariant?.price?.amount || 0),
   };
   const shop = await getShop(context);
   const siteSettings = await getSiteSettings(context);

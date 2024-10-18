@@ -13,7 +13,7 @@ import {
 import type {Settings} from '~/lib/types';
 
 export interface UseDesktopMenuReturn {
-  desktopMenuContent: Settings['header']['menu']['menuItems'][number] | null;
+  desktopMenuContent: Settings['header']['menu']['navItems'][number] | null;
   desktopMenuIndex: number | null;
   /* Desktop menu based on hover ----------------------------------------------- */
   handleDesktopMenuClose: () => void;
@@ -37,7 +37,7 @@ export interface UseDesktopMenuReturn {
 
 export function useDesktopMenu(): UseDesktopMenuReturn {
   const {header} = useSettings();
-  const {menuItems} = {...header?.menu};
+  const {navItems} = {...header?.menu};
   const [desktopMenuIndex, setDesktopMenuIndex] = useState<number | null>(null);
 
   // /* Additional hooks for desktop menu based on click ------------------------- */
@@ -50,9 +50,9 @@ export function useDesktopMenu(): UseDesktopMenuReturn {
 
   const desktopMenuContent = useMemo(() => {
     return typeof desktopMenuIndex === 'number'
-      ? menuItems?.[desktopMenuIndex] || null
+      ? navItems?.[desktopMenuIndex] || null
       : null;
-  }, [desktopMenuIndex, menuItems]);
+  }, [desktopMenuIndex, navItems]);
 
   /* Desktop menu based on hover ----------------------------------------------- */
   const clearUnHoverTimer = useCallback(() => {
@@ -95,7 +95,7 @@ export function useDesktopMenu(): UseDesktopMenuReturn {
   // const handleDesktopMenuClose = useCallback(() => {
   //   closeDesktopMenu();
   //   setDesktopMenuIndex(null);
-  //   setSubmenuIndex(null);
+  //   setDesktopSubmenuIndex(null);
   // }, []);
 
   // const handleDesktopSubmenuOpen = useCallback((index: number) => {

@@ -66,7 +66,7 @@ export const Promobar = memo(() => {
     if (!autohide) {
       togglePromobar(true);
       window.removeEventListener('scroll', setPromobarVisibility);
-      return undefined;
+      return;
     }
 
     window.addEventListener('scroll', setPromobarVisibility);
