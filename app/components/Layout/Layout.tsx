@@ -12,7 +12,7 @@ import {
 } from '~/hooks';
 
 export function Layout({children}: {children: ReactNode}) {
-  const {consent, shop} = useRootLoaderData();
+  const {consent, cookieDomain, shop} = useRootLoaderData();
   const {mainPaddingTopClass} = usePromobar();
   const cartForAnalytics = useCartForAnalytics();
   useCartAddDiscountUrl();
@@ -20,7 +20,12 @@ export function Layout({children}: {children: ReactNode}) {
   useSetViewportHeightCssVar();
 
   return (
-    <Analytics.Provider shop={shop} cart={cartForAnalytics} consent={consent}>
+    <Analytics.Provider
+      shop={shop}
+      cart={cartForAnalytics}
+      consent={consent}
+      cookieDomain={cookieDomain}
+    >
       <>
         <PackAnalytics />
 
