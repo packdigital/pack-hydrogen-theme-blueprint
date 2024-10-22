@@ -12,9 +12,11 @@ const SESSION_COOKIE = 'pack_session';
 const DEFAULT_EXPIRES = 365;
 
 export const setPackCookie = async ({
+  cookieDomain,
   headers,
   request,
 }: {
+  cookieDomain: string;
   headers: Headers;
   request: Request;
 }) => {
@@ -32,7 +34,7 @@ export const setPackCookie = async ({
 
       headers.append(
         'Set-Cookie',
-        `${SESSION_COOKIE}=${sessionCookie}; Path=/; Expires=${expiresAt}; SameSite=Strict; Secure;`,
+        `${SESSION_COOKIE}=${sessionCookie}; Path=/; Domain=${cookieDomain}; Expires=${expiresAt}; Secure;`,
       );
     }
 

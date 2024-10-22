@@ -20,6 +20,7 @@ import {
 import {ApplicationError, Document, NotFound, ServerError} from '~/components';
 import {customerGetAction, validateCustomerAccessToken} from '~/lib/customer';
 import {
+  getCookieDomain,
   getPublicEnvs,
   getProductGroupings,
   getShop,
@@ -100,7 +101,9 @@ export async function loader({context, request}: LoaderFunctionArgs) {
       customer = customerData.customer;
     }
   }
+  const cookieDomain = getCookieDomain(request.url);
   const {headers: headersWithPackCookie} = await setPackCookie({
+    cookieDomain,
     headers: headersWithAccessToken,
     request,
   });
@@ -130,6 +133,7 @@ export async function loader({context, request}: LoaderFunctionArgs) {
     {
       analytics,
       consent,
+      cookieDomain,
       customer,
       customerAccessToken,
       customizerMeta: pack.session.get('customizerMeta'),
