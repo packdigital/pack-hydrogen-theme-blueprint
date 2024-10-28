@@ -57,9 +57,6 @@ export function useCustomerLogIn() {
   useEffect(() => {
     if (customer) {
       publish(AnalyticsEvent.CUSTOMER_LOGGED_IN, {customer});
-      buyerIdentityUpdate({
-        customerAccessToken: customerAccessToken.accessToken,
-      });
       revalidator.revalidate();
       /* when in customizer, customer is managed through local storage and
        * global state, instead of session cookies */
@@ -79,7 +76,15 @@ export function useCustomerLogIn() {
         navigate(`${pathPrefix}${LOGGED_IN_REDIRECT_TO}`);
       }
     }
-  }, [buyerIdentityUpdate, !!customer]);
+  }, [!!customer]);
+
+  useEffect(() => {
+    if (customerAccessToken?.accessToken) {
+      buyerIdentityUpdate({
+        customerAccessToken: customerAccessToken.accessToken,
+      });
+    }
+  }, [buyerIdentityUpdate, customerAccessToken?.accessToken]);
 
   useEffect(() => {
     if (process.env.NODE_ENV !== 'development') return;
