@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react';
 
 import {Svg} from '~/components';
+import {useRootLoaderData} from '~/hooks';
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 
@@ -9,6 +10,7 @@ interface ApplicationErrorProps {
 }
 
 export function ApplicationError({error}: ApplicationErrorProps) {
+  const rootLoaderData = useRootLoaderData();
   const [modalOpen, setModalOpen] = useState(true);
 
   useEffect(() => {
@@ -16,6 +18,8 @@ export function ApplicationError({error}: ApplicationErrorProps) {
       console.error(error);
     }
   }, [error]);
+
+  const isPreviewModeEnabled = !!rootLoaderData?.isPreviewModeEnabled;
 
   return isDevelopment && error ? (
     <div className="pointer-events-none fixed inset-0 z-[1000] size-full">
@@ -82,8 +86,16 @@ export function ApplicationError({error}: ApplicationErrorProps) {
       data-comp="application-error"
     >
       <div className="container flex items-center justify-center rounded-lg border border-dashed border-red-400 py-56 text-center">
-        <pre aria-live="assertive" className="text-red-400" role="alert">
-          An error has occurred on this page
+        <pre
+          aria-live="assertive"
+          className="whitespace-pre-wrap p-5 text-center text-red-400"
+          role="alert"
+        >
+          {isPreviewModeEnabled
+            ? `An implementation error has occurred on this page.
+
+Check the console for the error log, or open this page locally for the full error.`
+            : `An error has occurred on this page.`}
         </pre>
       </div>
     </section>
