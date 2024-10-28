@@ -1,58 +1,46 @@
-import {Analytics} from '@shopify/hydrogen';
 import type {ReactNode} from 'react';
 
-import {Cart, Footer, Header, Modal, PackAnalytics, Search} from '~/components';
+import {Analytics, Cart, Footer, Header, Modal, Search} from '~/components';
 import {usePreviewModeCustomerInit} from '~/lib/customer';
 import {
   useCartAddDiscountUrl,
-  useCartForAnalytics,
   usePromobar,
-  useRootLoaderData,
   useSetViewportHeightCssVar,
 } from '~/hooks';
 
 export function Layout({children}: {children: ReactNode}) {
-  const {consent, cookieDomain, shop} = useRootLoaderData();
   const {mainPaddingTopClass} = usePromobar();
-  const cartForAnalytics = useCartForAnalytics();
   useCartAddDiscountUrl();
   usePreviewModeCustomerInit();
   useSetViewportHeightCssVar();
 
   return (
-    <Analytics.Provider
-      shop={shop}
-      cart={cartForAnalytics}
-      consent={consent}
-      cookieDomain={cookieDomain}
-    >
-      <>
-        <PackAnalytics />
+    <>
+      <Analytics />
 
-        <div
-          className="flex h-[var(--viewport-height)] flex-col"
-          data-comp={Layout.displayName}
+      <div
+        className="flex h-[var(--viewport-height)] flex-col"
+        data-comp={Layout.displayName}
+      >
+        <Header />
+
+        <main
+          role="main"
+          id="mainContent"
+          className={`grow ${mainPaddingTopClass}`}
         >
-          <Header />
+          {children}
+        </main>
 
-          <main
-            role="main"
-            id="mainContent"
-            className={`grow ${mainPaddingTopClass}`}
-          >
-            {children}
-          </main>
+        <Footer />
 
-          <Footer />
+        <Cart />
 
-          <Cart />
+        <Search />
 
-          <Search />
-
-          <Modal />
-        </div>
-      </>
-    </Analytics.Provider>
+        <Modal />
+      </div>
+    </>
   );
 }
 

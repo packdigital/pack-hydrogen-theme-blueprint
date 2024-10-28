@@ -7,7 +7,7 @@ import type {
   CustomerAccessToken,
 } from '@shopify/hydrogen/storefront-api-types';
 
-import {PackEventName} from '~/components/PackAnalytics/constants';
+import {AnalyticsEvent} from '~/components/Analytics/constants';
 import {LOGGED_IN_REDIRECT_TO} from '~/lib/constants';
 import {setCustomerAccessTokenInLocalStorage} from '~/lib/customer';
 import {useLocale, usePreviewMode} from '~/hooks';
@@ -61,7 +61,7 @@ export function useCustomerRegister() {
 
   useEffect(() => {
     if (customer) {
-      publish(PackEventName.CUSTOMER_REGISTERED, {customer});
+      publish(AnalyticsEvent.CUSTOMER_REGISTERED, {customer});
       buyerIdentityUpdate({
         customerAccessToken: customerAccessToken.accessToken,
       });

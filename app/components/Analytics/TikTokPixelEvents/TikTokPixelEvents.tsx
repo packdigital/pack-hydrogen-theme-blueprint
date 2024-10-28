@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 
-import {PackEventName} from '../constants';
+import {AnalyticsEvent} from '../constants';
 
 import {viewProductEvent, addToCartEvent, ANALYTICS_NAME} from './events';
 
@@ -68,10 +68,10 @@ export function TikTokPixelEvents({
     }
     /* register analytics events only until script is ready */
     if (!scriptLoaded) return;
-    subscribe(PackEventName.PRODUCT_VIEWED, (data: Data) => {
+    subscribe(AnalyticsEvent.PRODUCT_VIEWED, (data: Data) => {
       viewProductEvent({...data, tiktokPixelId, customer, debug});
     });
-    subscribe(PackEventName.PRODUCT_ADD_TO_CART, (data: Data) => {
+    subscribe(AnalyticsEvent.PRODUCT_ADD_TO_CART, (data: Data) => {
       addToCartEvent({...data, tiktokPixelId, customer, debug});
     });
     ready();

@@ -1,5 +1,5 @@
 import {memo} from 'react';
-import {Analytics, useAnalytics} from '@shopify/hydrogen';
+import {Analytics as HydrogenAnalytics, useAnalytics} from '@shopify/hydrogen';
 import {useCart} from '@shopify/hydrogen-react';
 
 import {
@@ -9,7 +9,7 @@ import {
   useRootLoaderData,
 } from '~/hooks';
 
-import {PackEventName} from './constants';
+import {AnalyticsEvent} from './constants';
 import {ElevarEvents} from './ElevarEvents';
 import {FueledEvents} from './FueledEvents';
 import {GA4Events} from './GA4Events';
@@ -20,7 +20,7 @@ const DEBUG =
   typeof document !== 'undefined' &&
   window.ENV?.PUBLIC_PACK_ANALYTICS_DEBUG === 'true';
 
-export const PackAnalytics = memo(() => {
+export const Analytics = memo(() => {
   const {ENV} = useRootLoaderData();
   const {register, subscribe} = useAnalytics();
   const {isCartReady} = useGlobal();
@@ -87,8 +87,8 @@ export const PackAnalytics = memo(() => {
       )}
 
       {isCartReady && !customerPending && (
-        <Analytics.CustomView
-          type={PackEventName.CUSTOMER}
+        <HydrogenAnalytics.CustomView
+          type={AnalyticsEvent.CUSTOMER}
           customData={{customer, cart}}
         />
       )}

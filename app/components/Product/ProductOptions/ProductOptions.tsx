@@ -2,7 +2,7 @@ import {useCallback, useMemo} from 'react';
 import {useAnalytics} from '@shopify/hydrogen';
 import {useProduct} from '@shopify/hydrogen-react';
 
-import {PackEventName} from '~/components/PackAnalytics/constants';
+import {AnalyticsEvent} from '~/components/Analytics/constants';
 import {useColorSwatches} from '~/hooks';
 
 import {ProductOptionValues} from './ProductOptionValues';
@@ -18,7 +18,7 @@ export function ProductOptions({
 
   const handleSelect: OnSelect = useCallback(
     ({selectedVariant, optionName, optionValue, fromGrouping = false}) => {
-      publish(PackEventName.PRODUCT_VARIANT_SELECTED, {
+      publish(AnalyticsEvent.PRODUCT_VARIANT_SELECTED, {
         selectedVariant,
         optionName,
         optionValue,

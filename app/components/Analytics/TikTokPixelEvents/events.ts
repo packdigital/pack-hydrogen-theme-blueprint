@@ -1,71 +1,86 @@
-import {PackEventName} from '../constants';
+import {AnalyticsEvent} from '../constants';
 
-export const ANALYTICS_NAME = 'MetaPixelEvents';
+export const ANALYTICS_NAME = 'TikTokPixelEvents';
 
 const logSubscription = ({
   data,
-  packEventName,
+  analyticsEvent,
 }: {
   data: Record<string, any>;
-  packEventName: string;
+  analyticsEvent: string;
 }) => {
   console.log(
-    `${ANALYTICS_NAME}: 📥 subscribed to analytics for \`${packEventName}\`:`,
+    `${ANALYTICS_NAME}: 📥 subscribed to analytics for \`${analyticsEvent}\`:`,
     data,
   );
 };
 
 const logError = ({
-  packEventName,
+  analyticsEvent,
   message = 'Unknown error',
 }: {
-  packEventName: string;
+  analyticsEvent: string;
   message?: string | unknown;
 }) => {
   console.error(
-    `${ANALYTICS_NAME}: ❌ error from \`${packEventName}\`: ${message}`,
+    `${ANALYTICS_NAME}: ❌ error from \`${analyticsEvent}\`: ${message}`,
   );
 };
 
 const emitEvent = ({
+  tiktokPixelId,
   eventName,
   parameters,
+  customer,
   debug,
   onEmit,
 }: {
+  tiktokPixelId: string;
   eventName: string;
   parameters?: Record<string, any>;
+  customer?: Record<string, any> | null;
   debug?: boolean;
   onEmit?: (event: Record<string, any>) => void;
 }) => {
   try {
-    if (window.fbq) {
-      window.fbq('track', eventName, parameters);
+    if (!tiktokPixelId) {
+      throw new Error('`tiktokPixelId` is required.');
+    }
+    if (window.ttq) {
+      if (customer) {
+        window.ttq.identify({
+          external_id: customer.id?.split('/').pop() || '',
+          email: customer.email || '',
+        });
+      }
+      window.ttq.instance(tiktokPixelId).track('track', eventName, parameters);
     } else {
-      throw new Error('`window.fbq` is not defined.');
+      throw new Error('`window.ttq` is not defined.');
     }
     if (debug)
       console.log(
-        `MetaPixelEvents: 🚀 event emitted for \`${eventName}\`:`,
+        `${ANALYTICS_NAME}: 🚀 event emitted for \`${eventName}\`:`,
         parameters || {},
       );
     if (typeof onEmit === 'function') onEmit({eventName, parameters});
   } catch (error) {
     logError({
-      packEventName: 'emitEvent',
+      analyticsEvent: 'emitEvent',
       message: error instanceof Error ? error.message : error,
     });
   }
 };
 
 const viewProductEvent = ({
+  tiktokPixelId,
   debug,
   ...data
-}: Record<string, any> & {debug?: boolean}) => {
-  const packEventName = PackEventName.PRODUCT_VIEWED;
+}: Record<string, any> & {tiktokPixelId: string; debug?: boolean}) => {
+  const analyticsEvent = AnalyticsEvent.PRODUCT_VIEWED;
   try {
-    if (debug) logSubscription({data, packEventName});
+    if (debug) logSubscription({data, analyticsEvent});
 
+    const {customer} = data;
     const {product} = data.customData;
     if (!product)
       throw new Error('`product` parameter is missing in `customData`.');
@@ -80,24 +95,25 @@ const viewProductEvent = ({
       value: Number(product.priceRange?.minVariantPrice?.amount),
     };
 
-    emitEvent({eventName, parameters, debug});
+    emitEvent({tiktokPixelId, eventName, parameters, customer, debug});
   } catch (error) {
     logError({
-      packEventName,
+      analyticsEvent,
       message: error instanceof Error ? error.message : error,
     });
   }
 };
 
 const addToCartEvent = ({
+  tiktokPixelId,
   debug,
   ...data
-}: Record<string, any> & {debug?: boolean}) => {
-  const packEventName = PackEventName.PRODUCT_ADD_TO_CART;
+}: Record<string, any> & {tiktokPixelId: string; debug?: boolean}) => {
+  const analyticsEvent = AnalyticsEvent.PRODUCT_ADD_TO_CART;
   try {
-    if (debug) logSubscription({data, packEventName});
+    if (debug) logSubscription({data, analyticsEvent});
 
-    const {cart, currentLine} = data;
+    const {cart, currentLine, customer} = data;
     if (!cart || !currentLine)
       throw new Error('`cart` and/or `currentLine` parameters are missing.');
 
@@ -114,10 +130,10 @@ const addToCartEvent = ({
       currency: currencyCode,
     };
 
-    emitEvent({eventName, parameters, debug});
+    emitEvent({tiktokPixelId, eventName, parameters, customer, debug});
   } catch (error) {
     logError({
-      packEventName,
+      analyticsEvent,
       message: error instanceof Error ? error.message : error,
     });
   }

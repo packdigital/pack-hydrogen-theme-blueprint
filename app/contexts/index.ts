@@ -1,3 +1,4 @@
+export * from './AnalyticsProvider';
 export * from './ContextsProvider';
 export * from './GlobalProvider';
 export * from './GroupingsProvider';

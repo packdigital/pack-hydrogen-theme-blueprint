@@ -1,6 +1,7 @@
 export * from './Account';
 export * from './AccountLayout';
 export * from './AddToCart';
+export * from './Analytics';
 export * from './Animations';
 export * from './BackInStockModal';
 export * from './Badges';
@@ -17,7 +18,6 @@ export * from './Layout';
 export * from './Link';
 export * from './Markdown';
 export * from './Modal';
-export * from './PackAnalytics';
 export * from './Pagination';
 export * from './Product';
 export * from './ProductItem';
