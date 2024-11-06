@@ -1,5 +1,6 @@
 import type {ReactNode} from 'react';
 
+import {AnalyticsProvider} from './AnalyticsProvider';
 import {GlobalProvider} from './GlobalProvider';
 import {GroupingsProvider} from './GroupingsProvider';
 import {MenuProvider} from './MenuProvider';
@@ -12,7 +13,9 @@ export function ContextsProvider({children}: {children: ReactNode}) {
       <GlobalProvider>
         <MenuProvider>
           <PromobarProvider>
-            <GroupingsProvider>{children}</GroupingsProvider>
+            <GroupingsProvider>
+              <AnalyticsProvider>{children}</AnalyticsProvider>
+            </GroupingsProvider>
           </PromobarProvider>
         </MenuProvider>
       </GlobalProvider>

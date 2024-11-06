@@ -35,7 +35,7 @@ export function ProductMediaThumbnail({
           altText: alt || image?.altText,
         }}
         aspectRatio="1/1"
-        width="80"
+        width="80px"
         loading={index < 6 ? 'eager' : 'lazy'}
       />
 

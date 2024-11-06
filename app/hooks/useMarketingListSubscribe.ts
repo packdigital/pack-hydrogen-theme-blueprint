@@ -2,7 +2,7 @@ import {useCallback, useEffect, useRef, useState} from 'react';
 import {useFetcher} from '@remix-run/react';
 import {useAnalytics} from '@shopify/hydrogen';
 
-import {PackEventName} from '~/components/PackAnalytics/constants';
+import {AnalyticsEvent} from '~/components/Analytics/constants';
 import {useLocale} from '~/hooks';
 import type {CreateClientSubscriptionReturn} from '~/lib/klaviyo';
 
@@ -94,9 +94,13 @@ export function useMarketingListSubscribe({
         }, resetTimer);
       }
       if (fetcher.data.email)
-        publish(PackEventName.CUSTOMER_SUBSCRIBED, {email: fetcher.data.email});
+        publish(AnalyticsEvent.CUSTOMER_SUBSCRIBED, {
+          email: fetcher.data.email,
+        });
       if (fetcher.data.phone)
-        publish(PackEventName.CUSTOMER_SUBSCRIBED, {phone: fetcher.data.phone});
+        publish(AnalyticsEvent.CUSTOMER_SUBSCRIBED, {
+          phone: fetcher.data.phone,
+        });
     } else {
       setIsSubmitting(false);
       setMessage(fetcher.data.message);

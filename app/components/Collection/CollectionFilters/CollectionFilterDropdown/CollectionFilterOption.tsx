@@ -114,7 +114,7 @@ export function CollectionFilterOption({
               height: optionImage?.height,
             }}
             aspectRatio="1/1"
-            width="24"
+            width="24px"
             className="media-fill"
           />
         )}

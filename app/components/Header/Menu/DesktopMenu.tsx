@@ -91,7 +91,7 @@ export const DesktopMenu = memo(
                           height: image?.height,
                         }}
                         aspectRatio="16/9"
-                        width="400"
+                        width="400px"
                       />
 
                       <p className="mt-3 text-sm">{caption}</p>

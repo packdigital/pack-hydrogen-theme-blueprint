@@ -41,7 +41,7 @@ export function OrderItem({item}: {item: OrderLineItem}) {
               ? `${image.width}/${image.height}`
               : PRODUCT_IMAGE_ASPECT_RATIO
           }
-          width="48"
+          width="48px"
         />
 
         <div className="flex flex-1 flex-col items-start gap-2">

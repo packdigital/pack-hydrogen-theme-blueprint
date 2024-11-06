@@ -3,7 +3,7 @@ import {useAnalytics} from '@shopify/hydrogen';
 
 import {COLOR_OPTION_NAME, PRODUCT_IMAGE_ASPECT_RATIO} from '~/lib/constants';
 import {Image, Link} from '~/components';
-import {PackEventName} from '~/components/PackAnalytics/constants';
+import {AnalyticsEvent} from '~/components/Analytics/constants';
 import {useVariantPrices} from '~/hooks';
 
 import type {SearchItemProps} from './Search.types';
@@ -15,7 +15,7 @@ export const SearchItem = memo(
     const {publish, shop} = useAnalytics();
 
     const handleClick = useCallback(() => {
-      publish(PackEventName.PRODUCT_ITEM_CLICKED, {
+      publish(AnalyticsEvent.PRODUCT_ITEM_CLICKED, {
         listIndex: index,
         product,
         searchTerm,
@@ -62,7 +62,7 @@ export const SearchItem = memo(
                 ? `${image.width}/${image.height}`
                 : PRODUCT_IMAGE_ASPECT_RATIO
             }
-            width="88"
+            width="88px"
           />
         </div>
 

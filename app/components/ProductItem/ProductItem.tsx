@@ -5,7 +5,7 @@ import {useAnalytics} from '@shopify/hydrogen';
 import {COLOR_OPTION_NAME} from '~/lib/constants';
 import type {SelectedProduct, SelectedVariant} from '~/lib/types';
 import {Link} from '~/components';
-import {PackEventName} from '~/components/PackAnalytics/constants';
+import {AnalyticsEvent} from '~/components/Analytics/constants';
 import {useProductByHandle, useProductGroupingByHandle} from '~/hooks';
 
 import {ProductStars} from '../ProductStars';
@@ -86,7 +86,7 @@ export const ProductItem = memo(
     const title = selectedProduct?.title;
 
     const handleClick = useCallback(() => {
-      publish(PackEventName.PRODUCT_ITEM_CLICKED, {
+      publish(AnalyticsEvent.PRODUCT_ITEM_CLICKED, {
         listIndex: index,
         product: selectedProduct,
         selectedVariant,

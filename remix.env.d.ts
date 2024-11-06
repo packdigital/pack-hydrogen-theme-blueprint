@@ -19,7 +19,6 @@ declare global {
    * Declare expected Env parameter in fetch handler.
    */
   interface Env {
-    PACK_CONTENT_ENVIRONMENT?: string;
     PACK_PUBLIC_TOKEN: string;
     PACK_SECRET_TOKEN: string;
     PACK_STOREFRONT_ID: string;
@@ -28,6 +27,7 @@ declare global {
     PRIVATE_SHOPIFY_STORE_MULTIPASS_SECRET?: string;
     PRIVATE_STOREFRONT_API_TOKEN: string;
     PUBLIC_CHECKOUT_DOMAIN: string;
+    PUBLIC_PACK_CONTENT_ENVIRONMENT?: string;
     PUBLIC_STORE_DOMAIN: string;
     PUBLIC_STOREFRONT_API_TOKEN: string;
     PUBLIC_STOREFRONT_API_VERSION: string;

@@ -31,7 +31,7 @@ export async function loader({context, request}: LoaderFunctionArgs) {
     return compiledPages;
   };
   const productPages = await getProductPages({
-    first: 250,
+    first: 25,
     pages: null,
     cursor: null,
   });
@@ -49,6 +49,7 @@ export async function loader({context, request}: LoaderFunctionArgs) {
       'Content-Type': 'application/xml',
       'xml-version': '1.0',
       encoding: 'UTF-8',
+      'Cache-Control': `max-age=${60 * 60 * 24}`,
     },
   });
 }

@@ -51,7 +51,7 @@ export function CartUpsellItem({
               ? `${image.width}/${image.height}`
               : PRODUCT_IMAGE_ASPECT_RATIO
           }
-          width="40"
+          width="40px"
         />
       </Link>
 

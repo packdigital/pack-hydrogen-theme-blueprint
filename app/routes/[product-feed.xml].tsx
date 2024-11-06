@@ -133,6 +133,7 @@ export async function loader({context, request}: LoaderFunctionArgs) {
       'Content-Type': 'application/xml',
       'xml-version': '1.0',
       encoding: 'UTF-8',
+      'Cache-Control': `max-age=${60 * 60 * 24}`,
     },
   });
 }

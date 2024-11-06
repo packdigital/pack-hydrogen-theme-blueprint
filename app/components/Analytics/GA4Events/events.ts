@@ -1,6 +1,6 @@
 import {v4 as uuidv4} from 'uuid';
 
-import {PackEventName} from '../constants';
+import {AnalyticsEvent} from '../constants';
 
 import {
   flattenConnection,
@@ -12,7 +12,7 @@ import {
   mapProductItemProduct,
 } from './utils';
 
-export const ANALYTICS_NAME = 'FueledEvents';
+export const ANALYTICS_NAME = 'GA4Events';
 
 const PAGE_TYPES: Record<string, string> = {
   '/': 'home',
@@ -38,74 +38,74 @@ const PAGE_TYPES: Record<string, string> = {
 
 const logSubscription = ({
   data,
-  packEventName,
+  analyticsEvent,
 }: {
   data: Record<string, any>;
-  packEventName: string;
+  analyticsEvent: string;
 }) => {
   console.log(
-    `${ANALYTICS_NAME}: 📥 subscribed to analytics for \`${packEventName}\`:`,
+    `${ANALYTICS_NAME}: 📥 subscribed to analytics for \`${analyticsEvent}\`:`,
     data,
   );
 };
 
 const logError = ({
-  packEventName,
+  analyticsEvent,
   message = 'Unknown error',
 }: {
-  packEventName: string;
+  analyticsEvent: string;
   message?: string | unknown;
 }) => {
   console.error(
-    `${ANALYTICS_NAME}: ❌ error from \`${packEventName}\`: ${message}`,
+    `${ANALYTICS_NAME}: ❌ error from \`${analyticsEvent}\`: ${message}`,
   );
 };
 
-const dispatchEvent = ({
+const emitEvent = ({
   event,
   debug,
-  onDispatch,
+  onEmit,
 }: {
   event: Record<string, any>;
   debug?: boolean;
-  onDispatch?: (event: Record<string, any>) => void;
+  onEmit?: (event: Record<string, any>) => void;
 }) => {
   try {
-    const dispatchedEvent = {
+    const emittedEvent = {
       ...event,
       event_id: uuidv4(),
       event_time: new Date().toISOString(),
     } as Record<string, any>;
-    window.dispatchEvent(
-      new CustomEvent(dispatchedEvent.event, {
-        detail: dispatchedEvent,
-      }),
-    );
+    if (window.gtag) {
+      window.gtag('event', emittedEvent.event, emittedEvent);
+    } else {
+      throw new Error('`window.gtag` is not defined.');
+    }
     if (debug)
       console.log(
-        `${ANALYTICS_NAME}: 🚀 dispatched event listener for \`${dispatchedEvent.event}\`:`,
-        dispatchedEvent,
+        `${ANALYTICS_NAME}: 🚀 event emitted for \`${emittedEvent.event}\`:`,
+        emittedEvent,
       );
-    if (typeof onDispatch === 'function') onDispatch(dispatchedEvent);
+    if (typeof onEmit === 'function') onEmit(emittedEvent);
   } catch (error) {
     logError({
-      packEventName: 'dispatchEvent',
+      analyticsEvent: 'emitEvent',
       message: error instanceof Error ? error.message : error,
     });
   }
 };
 
 const customerEvent = ({
-  onDispatch,
+  onEmit,
   debug,
   ...data
 }: Record<string, any> & {
-  onDispatch?: (event: Record<string, any>) => void;
+  onEmit?: (event: Record<string, any>) => void;
   debug?: boolean;
 }) => {
-  const packEventName = PackEventName.CUSTOMER;
+  const analyticsEvent = AnalyticsEvent.CUSTOMER;
   try {
-    if (debug) logSubscription({data, packEventName});
+    if (debug) logSubscription({data, analyticsEvent});
 
     const {customer: providerCustomer, shop} = data;
     const {customer: customCustomer, cart} = data.customData;
@@ -123,7 +123,7 @@ const customerEvent = ({
       (previousPath?.startsWith('/collections') && previousPath) ||
       '';
     const event = {
-      event: 'dl_user_data',
+      event: 'user_data',
       user_properties: generateUserProperties({customer}),
       ecommerce: {
         currency_code: cart?.cost?.totalAmount?.currencyCode || shop?.currency,
@@ -134,10 +134,10 @@ const customerEvent = ({
         cart_total: cart?.cost?.totalAmount?.amount || '0.0',
       },
     };
-    dispatchEvent({event, onDispatch, debug});
+    emitEvent({event, onEmit, debug});
   } catch (error) {
     logError({
-      packEventName,
+      analyticsEvent,
       message: error instanceof Error ? error.message : error,
     });
   }
@@ -147,9 +147,9 @@ const viewPageEvent = ({
   debug,
   ...data
 }: Record<string, any> & {debug?: boolean}) => {
-  const packEventName = PackEventName.PAGE_VIEWED;
+  const analyticsEvent = AnalyticsEvent.PAGE_VIEWED;
   try {
-    if (debug) logSubscription({data, packEventName});
+    if (debug) logSubscription({data, analyticsEvent});
 
     const {url, customer} = data;
     if (!url) throw new Error('`url` parameter is missing.');
@@ -162,7 +162,7 @@ const viewPageEvent = ({
         PAGE_TYPES[pathname.split('/').slice(0, -1).join('/')] ||
         '';
     const event = {
-      event: 'dl_route_update',
+      event: 'route_update',
       user_properties: generateUserProperties({customer}),
       page: {
         path: pathname,
@@ -171,10 +171,10 @@ const viewPageEvent = ({
         search,
       },
     };
-    dispatchEvent({event, debug});
+    emitEvent({event, debug});
   } catch (error) {
     logError({
-      packEventName,
+      analyticsEvent,
       message: error instanceof Error ? error.message : error,
     });
   }
@@ -184,9 +184,9 @@ const viewProductEvent = ({
   debug,
   ...data
 }: Record<string, any> & {debug?: boolean}) => {
-  const packEventName = PackEventName.PRODUCT_VIEWED;
+  const analyticsEvent = AnalyticsEvent.PRODUCT_VIEWED;
   try {
-    if (debug) logSubscription({data, packEventName});
+    if (debug) logSubscription({data, analyticsEvent});
 
     const {customer, shop} = data;
     const {product, selectedVariant} = data.customData;
@@ -208,7 +208,7 @@ const viewProductEvent = ({
     const previousPath = sessionStorage.getItem('PREVIOUS_PATH');
     const list = previousPath?.startsWith('/collections') ? previousPath : '';
     const event = {
-      event: 'dl_view_item',
+      event: 'view_item',
       user_properties: generateUserProperties({customer}),
       ecommerce: {
         currency_code: variant.price?.currencyCode || shop?.currency,
@@ -218,10 +218,10 @@ const viewProductEvent = ({
         },
       },
     };
-    dispatchEvent({event, debug});
+    emitEvent({event, debug});
   } catch (error) {
     logError({
-      packEventName,
+      analyticsEvent,
       message: error instanceof Error ? error.message : error,
     });
   }
@@ -231,9 +231,9 @@ const viewCollectionEvent = ({
   debug,
   ...data
 }: Record<string, any> & {debug?: boolean}) => {
-  const packEventName = PackEventName.COLLECTION_VIEWED;
+  const analyticsEvent = AnalyticsEvent.COLLECTION_VIEWED;
   try {
-    if (debug) logSubscription({data, packEventName});
+    if (debug) logSubscription({data, analyticsEvent});
 
     const {customer, shop} = data;
     const {collection} = data.customData;
@@ -246,7 +246,7 @@ const viewCollectionEvent = ({
       : '';
     const products = flattenConnection(collection.products);
     const event = {
-      event: 'dl_view_item_list',
+      event: 'view_item_list',
       user_properties: generateUserProperties({customer}),
       ecommerce: {
         currency_code:
@@ -257,10 +257,10 @@ const viewCollectionEvent = ({
         products: products?.slice(0, 12).map(mapProductItemProduct(list)),
       },
     };
-    dispatchEvent({event, debug});
+    emitEvent({event, debug});
   } catch (error) {
     logError({
-      packEventName,
+      analyticsEvent,
       message: error instanceof Error ? error.message : error,
     });
   }
@@ -270,9 +270,9 @@ const viewSearchResultsEvent = ({
   debug,
   ...data
 }: Record<string, any> & {debug?: boolean}) => {
-  const packEventName = PackEventName.SEARCH_VIEWED;
+  const analyticsEvent = AnalyticsEvent.SEARCH_VIEWED;
   try {
-    if (debug) logSubscription({data, packEventName});
+    if (debug) logSubscription({data, analyticsEvent});
 
     const {searchResults, searchTerm, customer, shop} = data;
     if (!searchResults || !searchTerm)
@@ -281,7 +281,7 @@ const viewSearchResultsEvent = ({
       );
 
     const event = {
-      event: 'dl_view_search_results',
+      event: 'view_search_results',
       user_properties: generateUserProperties({customer}),
       ecommerce: {
         currency_code:
@@ -294,10 +294,10 @@ const viewSearchResultsEvent = ({
         products: searchResults.slice(0, 12).map(mapProductItemProduct()),
       },
     };
-    dispatchEvent({event, debug});
+    emitEvent({event, debug});
   } catch (error) {
     logError({
-      packEventName,
+      analyticsEvent,
       message: error instanceof Error ? error.message : error,
     });
   }
@@ -307,9 +307,9 @@ const viewCartEvent = ({
   debug,
   ...data
 }: Record<string, any> & {debug?: boolean}) => {
-  const packEventName = PackEventName.CART_VIEWED;
+  const analyticsEvent = AnalyticsEvent.CART_VIEWED;
   try {
-    if (debug) logSubscription({data, packEventName});
+    if (debug) logSubscription({data, analyticsEvent});
 
     const {cart: providerCart, customer, shop, url} = data;
     const {cart: customCart} = data.customData;
@@ -329,7 +329,7 @@ const viewCartEvent = ({
       (previousPath?.startsWith('/collections') && previousPath) ||
       '';
     const event = {
-      event: 'dl_view_cart',
+      event: 'view_cart',
       user_properties: generateUserProperties({customer}),
       ecommerce: {
         currency_code: cart?.cost?.totalAmount?.currencyCode || shop?.currency,
@@ -342,10 +342,10 @@ const viewCartEvent = ({
         cart_count: cart?.totalQuantity || 0,
       },
     };
-    dispatchEvent({event, debug});
+    emitEvent({event, debug});
   } catch (error) {
     logError({
-      packEventName,
+      analyticsEvent,
       message: error instanceof Error ? error.message : error,
     });
   }
@@ -355,9 +355,9 @@ const addToCartEvent = ({
   debug,
   ...data
 }: Record<string, any> & {debug?: boolean}) => {
-  const packEventName = PackEventName.PRODUCT_ADD_TO_CART;
+  const analyticsEvent = AnalyticsEvent.PRODUCT_ADD_TO_CART;
   try {
-    if (debug) logSubscription({data, packEventName});
+    if (debug) logSubscription({data, analyticsEvent});
 
     const {cart, currentLine, customer, shop} = data;
     if (!cart || !currentLine)
@@ -370,7 +370,7 @@ const addToCartEvent = ({
       (previousPath?.startsWith('/collections') && previousPath) ||
       '';
     const event = {
-      event: 'dl_add_to_cart',
+      event: 'add_to_cart',
       user_properties: generateUserProperties({customer}),
       ecommerce: {
         currency_code: cart.cost?.totalAmount?.currencyCode || shop?.currency,
@@ -383,10 +383,10 @@ const addToCartEvent = ({
         cart_count: cart.totalQuantity,
       },
     };
-    dispatchEvent({event, debug});
+    emitEvent({event, debug});
   } catch (error) {
     logError({
-      packEventName,
+      analyticsEvent,
       message: error instanceof Error ? error.message : error,
     });
   }
@@ -396,9 +396,9 @@ const removeFromCartEvent = ({
   debug,
   ...data
 }: Record<string, any> & {debug?: boolean}) => {
-  const packEventName = PackEventName.PRODUCT_REMOVED_FROM_CART;
+  const analyticsEvent = AnalyticsEvent.PRODUCT_REMOVED_FROM_CART;
   try {
-    if (debug) logSubscription({data, packEventName});
+    if (debug) logSubscription({data, analyticsEvent});
 
     const {cart, prevLine, customer, shop} = data;
     if (!cart || !prevLine)
@@ -411,7 +411,7 @@ const removeFromCartEvent = ({
       (previousPath?.startsWith('/collections') && previousPath) ||
       '';
     const event = {
-      event: 'dl_remove_from_cart',
+      event: 'remove_from_cart',
       user_properties: generateUserProperties({customer}),
       ecommerce: {
         currency_code: cart.cost?.totalAmount?.currencyCode || shop?.currency,
@@ -424,10 +424,10 @@ const removeFromCartEvent = ({
         cart_count: cart.totalQuantity,
       },
     };
-    dispatchEvent({event, debug});
+    emitEvent({event, debug});
   } catch (error) {
     logError({
-      packEventName,
+      analyticsEvent,
       message: error instanceof Error ? error.message : error,
     });
   }
@@ -437,9 +437,9 @@ const clickProductItemEvent = ({
   debug,
   ...data
 }: Record<string, any> & {debug?: boolean}) => {
-  const packEventName = PackEventName.PRODUCT_ITEM_CLICKED;
+  const analyticsEvent = AnalyticsEvent.PRODUCT_ITEM_CLICKED;
   try {
-    if (debug) logSubscription({data, packEventName});
+    if (debug) logSubscription({data, analyticsEvent});
 
     const {product, listIndex, searchTerm, customer, shop} = data;
     let {selectedVariant} = data;
@@ -465,7 +465,7 @@ const clickProductItemEvent = ({
     };
 
     const event = {
-      event: 'dl_select_item',
+      event: 'select_item',
       user_properties: generateUserProperties({customer}),
       ecommerce: {
         currency_code: variant.price?.currencyCode || shop?.currency,
@@ -479,10 +479,10 @@ const clickProductItemEvent = ({
         },
       },
     };
-    dispatchEvent({event, debug});
+    emitEvent({event, debug});
   } catch (error) {
     logError({
-      packEventName,
+      analyticsEvent,
       message: error instanceof Error ? error.message : error,
     });
   }
@@ -492,16 +492,15 @@ const clickProductVariantEvent = ({
   debug,
   ...data
 }: Record<string, any> & {debug?: boolean}) => {
-  const packEventName = PackEventName.PRODUCT_VARIANT_SELECTED;
+  const analyticsEvent = AnalyticsEvent.PRODUCT_VARIANT_SELECTED;
   try {
-    if (debug) logSubscription({data, packEventName});
+    if (debug) logSubscription({data, analyticsEvent});
 
     const {
       selectedVariant,
       optionName,
       optionValue,
       fromGrouping,
-      fromProductHandle,
       customer,
       shop,
     } = data;
@@ -529,14 +528,13 @@ const clickProductVariantEvent = ({
           optionName,
           optionValue: optionValue?.name,
           fromGrouping: fromGrouping || false,
-          fromProductHandle,
         },
       },
     };
-    dispatchEvent({event, debug});
+    emitEvent({event, debug});
   } catch (error) {
     logError({
-      packEventName,
+      analyticsEvent,
       message: error instanceof Error ? error.message : error,
     });
   }
@@ -546,21 +544,21 @@ const customerLogInEvent = ({
   debug,
   ...data
 }: Record<string, any> & {debug?: boolean}) => {
-  const packEventName = PackEventName.CUSTOMER_LOGGED_IN;
+  const analyticsEvent = AnalyticsEvent.CUSTOMER_LOGGED_IN;
   try {
-    if (debug) logSubscription({data, packEventName});
+    if (debug) logSubscription({data, analyticsEvent});
 
     const {customer} = data;
     if (!customer) throw new Error('`customer` parameter is missing.');
 
     const event = {
-      event: 'dl_login',
+      event: 'login',
       user_properties: generateUserProperties({customer}),
     };
-    dispatchEvent({event, debug});
+    emitEvent({event, debug});
   } catch (error) {
     logError({
-      packEventName,
+      analyticsEvent,
       message: error instanceof Error ? error.message : error,
     });
   }
@@ -570,21 +568,21 @@ const customerRegisterEvent = ({
   debug,
   ...data
 }: Record<string, any> & {debug?: boolean}) => {
-  const packEventName = PackEventName.CUSTOMER_REGISTERED;
+  const analyticsEvent = AnalyticsEvent.CUSTOMER_REGISTERED;
   try {
-    if (debug) logSubscription({data, packEventName});
+    if (debug) logSubscription({data, analyticsEvent});
 
     const {customer} = data;
     if (!customer) throw new Error('`customer` parameter is missing.');
 
     const event = {
-      event: 'dl_sign_up',
+      event: 'sign_up',
       user_properties: generateUserProperties({customer}),
     };
-    dispatchEvent({event, debug});
+    emitEvent({event, debug});
   } catch (error) {
     logError({
-      packEventName,
+      analyticsEvent,
       message: error instanceof Error ? error.message : error,
     });
   }
@@ -594,9 +592,9 @@ const customerSubscribeEvent = ({
   debug,
   ...data
 }: Record<string, any> & {debug?: boolean}) => {
-  const packEventName = PackEventName.CUSTOMER_SUBSCRIBED;
+  const analyticsEvent = AnalyticsEvent.CUSTOMER_SUBSCRIBED;
   try {
-    if (debug) logSubscription({data, packEventName});
+    if (debug) logSubscription({data, analyticsEvent});
 
     const {email, phone} = data;
     if (!email && !phone)
@@ -604,23 +602,23 @@ const customerSubscribeEvent = ({
 
     if (email) {
       const event = {
-        event: 'dl_subscribe',
+        event: 'subscribe',
         lead_type: 'email',
         user_properties: {customer_email: email},
       };
-      dispatchEvent({event, debug});
+      emitEvent({event, debug});
     }
     if (phone) {
       const event = {
-        event: 'dl_subscribe',
+        event: 'subscribe',
         lead_type: 'phone',
         user_properties: {customer_phone: phone},
       };
-      dispatchEvent({event, debug});
+      emitEvent({event, debug});
     }
   } catch (error) {
     logError({
-      packEventName,
+      analyticsEvent,
       message: error instanceof Error ? error.message : error,
     });
   }
@@ -634,7 +632,7 @@ export {
   customerLogInEvent,
   customerRegisterEvent,
   customerSubscribeEvent,
-  dispatchEvent,
+  emitEvent,
   removeFromCartEvent,
   viewCartEvent,
   viewCollectionEvent,
