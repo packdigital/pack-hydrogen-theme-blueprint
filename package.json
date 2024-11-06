@@ -2,7 +2,7 @@
   "name": "hydrogen-starter",
   "private": true,
   "sideEffects": false,
-  "version": "1.9.5",
+  "version": "1.9.6",
   "scripts": {
     "dev": "shopify hydrogen dev --port 8080",
     "build": "shopify hydrogen build",
