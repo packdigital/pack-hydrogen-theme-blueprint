@@ -10,6 +10,7 @@ export function useCartLinePrices({line}: {line: CartLine}) {
   const {currency} = useLocale();
 
   const discountAmount = useMemo(() => {
+    if (!discountAllocations) return 0;
     return discountAllocations.reduce((acc: number, discount) => {
       if (discount?.discountedAmount?.amount) {
         return acc + Number(discount.discountedAmount.amount);

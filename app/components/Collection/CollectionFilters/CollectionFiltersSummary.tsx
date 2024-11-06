@@ -10,7 +10,7 @@ export const CollectionFiltersSummary = memo(
     className = '',
     hideClear = false,
   }: {
-    className: string;
+    className?: string;
     hideClear?: boolean;
   }) => {
     const {activeFilterValues, removeFilter, clearFilters} =
