@@ -45,7 +45,7 @@ export const CartLine = memo(({closeCart, line}: CartLineProps) => {
               ? `${image.width}/${image.height}`
               : PRODUCT_IMAGE_ASPECT_RATIO
           }
-          width="88"
+          width="88px"
           className="bg-offWhite"
         />
       </Link>

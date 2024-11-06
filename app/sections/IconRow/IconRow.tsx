@@ -46,7 +46,7 @@ export function IconRow({cms}: {cms: IconRowCms}) {
                         }}
                         className="bg-transparent"
                         aspectRatio="1/1"
-                        width="48"
+                        width="48px"
                       />
                     )}
 

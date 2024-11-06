@@ -62,7 +62,7 @@ export const SearchItem = memo(
                 ? `${image.width}/${image.height}`
                 : PRODUCT_IMAGE_ASPECT_RATIO
             }
-            width="88"
+            width="88px"
           />
         </div>
 

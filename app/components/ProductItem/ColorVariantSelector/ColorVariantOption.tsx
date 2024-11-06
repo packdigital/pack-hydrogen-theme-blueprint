@@ -49,7 +49,7 @@ export function ColorVariantOption({
               width: optionImage?.width,
               height: optionImage?.height,
             }}
-            width="24"
+            width="24px"
             aspectRatio="1/1"
             className="media-fill"
           />

@@ -49,7 +49,7 @@ export function InnerColorOptionValue({
             height: optionImage?.height,
           }}
           aspectRatio="1/1"
-          width="32"
+          width="32px"
           className="media-fill"
         />
       )}
