@@ -79,7 +79,7 @@ export default {
         token: env.PACK_SECRET_TOKEN,
         storeId: env.PACK_STOREFRONT_ID,
         session: packSession,
-        contentEnvironment: env.PACK_CONTENT_ENVIRONMENT,
+        contentEnvironment: env.PUBLIC_PACK_CONTENT_ENVIRONMENT,
         defaultThemeData,
       });
 
