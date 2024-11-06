@@ -60,15 +60,7 @@ export function GlobalProvider({children}: {children: ReactNode}) {
     }
   }, [cartIsIdle]);
 
-  return (
-    <Context.Provider value={value}>
-      <SettingsProvider>
-        <MenuProvider>
-          <PromobarProvider>{children}</PromobarProvider>
-        </MenuProvider>
-      </SettingsProvider>
-    </Context.Provider>
-  );
+  return <Context.Provider value={value}>{children}</Context.Provider>;
 }
 
 export const useGlobalContext = () => useContext(Context);
