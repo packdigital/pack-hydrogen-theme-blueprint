@@ -3,7 +3,6 @@ import {useCart} from '@shopify/hydrogen-react';
 import type {ReactNode} from 'react';
 
 import type {Action, Dispatch, GlobalContext, GlobalState} from '~/lib/types';
-import {MenuProvider, PromobarProvider, SettingsProvider} from '~/contexts';
 
 const Context = createContext({state: {}, actions: {}} as GlobalContext);
 
