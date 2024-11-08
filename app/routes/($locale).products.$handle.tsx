@@ -47,7 +47,8 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
 
   // set selected options from the query string
   searchParams.forEach((value, name) => {
-    if (name === 'variant') return;
+    if (name === 'variant' || name === 'srsltid' || name.startsWith('utm_'))
+      return;
     selectedOptions.push({name, value});
   });
 
