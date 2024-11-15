@@ -1,6 +1,8 @@
+import { useEffect } from 'react';
 import {
   isRouteErrorResponse,
   Outlet,
+  useLocation,
   useMatches,
   useRouteError,
 } from '@remix-run/react';
@@ -157,6 +159,20 @@ export const meta = ({matches}: MetaArgs<typeof loader>) => {
 };
 
 export default function App() {
+  const location = useLocation();
+
+   // scroll to hash on navigation
+   useEffect(() => {
+    if (location.hash) {
+      setTimeout(() => {
+        const element = document.getElementById(location.hash.substring(1));
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 0);
+    }
+  }, [location]);
+
   return (
     <Document>
       <Outlet />
