@@ -93,10 +93,14 @@ export function useMarketingListSubscribe({
           setSubmitted(false);
         }, resetTimer);
       }
-      if (fetcher.data.email)
+      if (fetcher.data.email) {
         publish(AnalyticsEvent.CUSTOMER_SUBSCRIBED, {
           email: fetcher.data.email,
         });
+        window.klaviyo?.identify({
+          email: fetcher.data.email,
+        });
+      }
       if (fetcher.data.phone)
         publish(AnalyticsEvent.CUSTOMER_SUBSCRIBED, {
           phone: fetcher.data.phone,
