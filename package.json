@@ -3,6 +3,7 @@
   "private": true,
   "sideEffects": false,
   "version": "1.9.7",
+  "type": "module",
   "scripts": {
     "dev": "shopify hydrogen dev --port 8080",
     "build": "shopify hydrogen build",
