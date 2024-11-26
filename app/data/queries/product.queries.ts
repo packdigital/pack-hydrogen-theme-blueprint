@@ -48,6 +48,21 @@ export const PRODUCT_PAGE_QUERY = `#graphql
   ${SECTION_FRAGMENT}
 ` as const;
 
+export const CMS_PRODUCT_QUERY = `#graphql
+  query ProductPage($handle: String!, $version: Version) {
+    productPage: productPageByHandle(handle: $handle, version: $version) {
+      seo {
+        noIndex
+      }
+      sourceProduct {
+        data {
+          status
+        }
+      }
+    }
+  }
+` as const;
+
 export const CMS_PRODUCTS_QUERY = `#graphql
   query GetBackpackCmsProductPages($first: Int, $cursor: String) {
     productPages(first: $first, after: $cursor, version: PUBLISHED) {

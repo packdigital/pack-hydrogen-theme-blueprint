@@ -46,6 +46,16 @@ export const COLLECTION_PAGE_QUERY = `#graphql
   ${SECTION_FRAGMENT}
 ` as const;
 
+export const CMS_COLLECTION_QUERY = `#graphql
+  query CollectionPage($handle: String!, $version: Version) {
+    collectionPage: collectionPageByHandle(handle: $handle, version: $version) {
+      seo {
+        noIndex
+      }
+    }
+  }
+` as const;
+
 export const CMS_COLLECTIONS_QUERY = `#graphql
   query GetBackpackCmsCollectionPages($first: Int, $cursor: String) {
     collectionPages(first: $first, after: $cursor, version: PUBLISHED) {
