@@ -121,6 +121,9 @@ export async function loader({context, request}: LoaderFunctionArgs) {
   const consent = {
     checkoutDomain: env.PUBLIC_CHECKOUT_DOMAIN,
     storefrontAccessToken: env.PUBLIC_STOREFRONT_API_TOKEN,
+    withPrivacyBanner: true,
+    country: context.storefront.i18n.country,
+    language: context.storefront.i18n.language,
   };
   const shopAnalytics = getShopAnalytics({
     storefront,
