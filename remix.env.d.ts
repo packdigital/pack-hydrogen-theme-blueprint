@@ -52,6 +52,8 @@ declare global {
     // Fueled
     fueled?: any;
     fueledConfig?: Record<string, any>;
+    // Klaviyo
+    klaviyo?: any;
   }
 }
 
