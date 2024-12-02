@@ -166,8 +166,8 @@ export function MenuProvider({children}: {children: ReactNode}) {
   const iframesShouldBeHidden = state.iframesHidden || state.mobileMenuOpen;
 
   useEffect(() => {
-    if (state.iframesHidden && !isReady) setIsReady(true);
-  }, [state.iframesHidden]);
+    if (iframesShouldBeHidden && !isReady) setIsReady(true);
+  }, [iframesShouldBeHidden]);
 
   useEffect(() => {
     if (!isReady) return;
