@@ -78,7 +78,9 @@
     "postcss-preset-env": "^10.1.1",
     "prettier": "^3.4.1",
     "tailwindcss": "^3.4.15",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "vite": "5.4.11",
+    "vite-tsconfig-paths": "^4.3.1"
   },
   "engines": {
     "node": ">=18.0.0"

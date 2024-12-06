@@ -1,12 +1,6 @@
 import {useMemo} from 'react';
 import type {ReactNode} from 'react';
-import {
-  Links,
-  LiveReload,
-  Meta,
-  Scripts,
-  ScrollRestoration,
-} from '@remix-run/react';
+import {Links, Meta, Scripts, ScrollRestoration} from '@remix-run/react';
 import {CartProvider, ShopifyProvider} from '@shopify/hydrogen-react';
 import {PreviewProvider} from '@pack/react';
 
@@ -98,7 +92,6 @@ export function Document({children, title}: DocumentProps) {
           }}
         />
         <Scripts />
-        <LiveReload />
       </body>
     </html>
   );

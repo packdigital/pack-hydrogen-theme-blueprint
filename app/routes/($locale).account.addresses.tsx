@@ -6,11 +6,11 @@ import type {
 } from '@shopify/remix-oxygen';
 import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 
+import {redirectLinkIfLoggedOut} from '~/lib/customer';
 import {
   customerAddressesAction,
   customerAddressesLoader,
-  redirectLinkIfLoggedOut,
-} from '~/lib/customer';
+} from '~/lib/customer/servers/addresses.server';
 import {getAccountSeo} from '~/lib/utils';
 import {CustomerAccountLayout, Addresses} from '~/components';
 

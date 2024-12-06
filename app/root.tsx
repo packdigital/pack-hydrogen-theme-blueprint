@@ -18,7 +18,8 @@ import {
 } from '@shopify/hydrogen';
 
 import {ApplicationError, Document, NotFound, ServerError} from '~/components';
-import {customerGetAction, validateCustomerAccessToken} from '~/lib/customer';
+import {validateCustomerAccessToken} from '~/lib/customer';
+import {customerGetAction} from '~/lib/customer/servers/customer.server';
 import {
   getCookieDomain,
   getPublicEnvs,
@@ -30,7 +31,7 @@ import {
 import {registerSections} from '~/sections';
 import {registerStorefrontSettings} from '~/settings';
 import {seoPayload} from '~/lib/seo.server';
-import styles from '~/styles/app.css';
+import styles from '~/styles/app.css?url';
 
 registerSections();
 registerStorefrontSettings();
