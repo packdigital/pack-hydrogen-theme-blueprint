@@ -8,7 +8,7 @@ import {
  * BACKPACK API QUERIES -------------------------------------------------------
  */
 
-export const PRODUCT_PAGE_QUERY = `#graphql
+export const PRODUCT_PAGE_QUERY = `
   query ProductPage($handle: String!, $version: Version) {
     productPage: productPageByHandle(handle: $handle, version: $version) {
       id
@@ -48,8 +48,8 @@ export const PRODUCT_PAGE_QUERY = `#graphql
   ${SECTION_FRAGMENT}
 ` as const;
 
-export const CMS_PRODUCT_QUERY = `#graphql
-  query ProductPage($handle: String!, $version: Version) {
+export const CMS_PRODUCT_QUERY = `
+  query CmsProductPage($handle: String!, $version: Version) {
     productPage: productPageByHandle(handle: $handle, version: $version) {
       seo {
         noIndex
@@ -63,7 +63,7 @@ export const CMS_PRODUCT_QUERY = `#graphql
   }
 ` as const;
 
-export const CMS_PRODUCTS_QUERY = `#graphql
+export const CMS_PRODUCTS_QUERY = `
   query GetBackpackCmsProductPages($first: Int, $cursor: String) {
     productPages(first: $first, after: $cursor, version: PUBLISHED) {
       pageInfo {

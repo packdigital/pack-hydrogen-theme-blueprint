@@ -50,10 +50,12 @@
     "uuid": "^11.0.3"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^5.0.3",
     "@remix-run/dev": "^2.15.0",
     "@remix-run/eslint-config": "^2.15.0",
     "@remix-run/node": "^2.15.0",
     "@shopify/eslint-plugin": "^46.0.0",
+    "@shopify/hydrogen-codegen": "^0.3.2",
     "@shopify/oxygen-workers-types": "^4.1.6",
     "@shopify/prettier-config": "^1.1.2",
     "@types/eslint": "^8.4.10",
