@@ -8,10 +8,8 @@ import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 
 import {CustomerAccountLayout, Profile} from '~/components';
 import {getAccountSeo} from '~/lib/utils';
-import {
-  customerUpdateProfileAction,
-  redirectLinkIfLoggedOut,
-} from '~/lib/customer';
+import {redirectLinkIfLoggedOut} from '~/lib/customer';
+import {customerUpdateProfileAction} from '~/lib/customer/servers/profile.server';
 
 export async function action({request, context}: ActionFunctionArgs) {
   const {data, status} = await customerUpdateProfileAction({request, context});

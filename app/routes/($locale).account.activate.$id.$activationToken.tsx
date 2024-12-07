@@ -8,7 +8,8 @@ import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 
 import {Activate, GuestAccountLayout} from '~/components';
 import {getAccountSeo} from '~/lib/utils';
-import {customerActivateAction, redirectLinkIfLoggedIn} from '~/lib/customer';
+import {redirectLinkIfLoggedIn} from '~/lib/customer';
+import {customerActivateAction} from '~/lib/customer/servers/activate.server';
 
 export async function action({request, context}: ActionFunctionArgs) {
   const {data, status} = await customerActivateAction({request, context});

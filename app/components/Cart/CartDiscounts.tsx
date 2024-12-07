@@ -26,7 +26,7 @@ export const CartDiscounts = memo(() => {
   const handleUpdateCode = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      const code = e.currentTarget.code.value;
+      const code = e.currentTarget?.code.value;
       if (!code) return;
       if (codes.map((c) => c.toLowerCase()).includes(code.toLowerCase())) {
         setMessage('Discount code is already applied.');

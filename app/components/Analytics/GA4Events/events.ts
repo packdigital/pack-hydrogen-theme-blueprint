@@ -122,11 +122,15 @@ const customerEvent = ({
       (windowPathname.startsWith('/collections') && windowPathname) ||
       (previousPath?.startsWith('/collections') && previousPath) ||
       '';
+    const cartCurrencyCode = cart?.cost?.totalAmount?.currencyCode;
     const event = {
       event: 'user_data',
       user_properties: generateUserProperties({customer}),
       ecommerce: {
-        currency_code: cart?.cost?.totalAmount?.currencyCode || shop?.currency,
+        currencyCode:
+          cartCurrencyCode && cartCurrencyCode !== 'XXX'
+            ? cartCurrencyCode
+            : shop?.currency,
         cart_contents: {
           products:
             flattenConnection(cart?.lines)?.map(mapCartLine(list)) || [],

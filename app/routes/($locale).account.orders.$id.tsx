@@ -8,11 +8,11 @@ import type {
 
 import {CustomerAccountLayout, Order} from '~/components';
 import {getAccountSeo} from '~/lib/utils';
+import {redirectLinkIfLoggedOut} from '~/lib/customer';
 import {
   customerOrderAction,
   customerOrderLoader,
-  redirectLinkIfLoggedOut,
-} from '~/lib/customer';
+} from '~/lib/customer/servers/order.server';
 
 export async function action({request, context, params}: ActionFunctionArgs) {
   const {data, status} = await customerOrderAction({request, context, params});

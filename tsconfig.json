@@ -1,12 +1,14 @@
 {
   "include": ["./**/*.d.ts", "./**/*.ts", "./**/*.tsx"],
+  "exclude": ["node_modules", "dist"],
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
     "isolatedModules": true,
     "esModuleInterop": true,
     "jsx": "react-jsx",
-    "moduleResolution": "node",
+    "moduleResolution": "Bundler",
     "resolveJsonModule": true,
+    "module": "ESNext",
     "target": "ES2022",
     "strict": true,
     "allowJs": true,
@@ -14,6 +16,8 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "types": [
+      "@remix-run/node",
+      "vite/client",
       "@shopify/oxygen-workers-types",
       "@types/gtag.js",
       "@types/grecaptcha"

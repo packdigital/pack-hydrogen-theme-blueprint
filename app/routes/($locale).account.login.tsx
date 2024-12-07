@@ -6,10 +6,8 @@ import type {
 } from '@shopify/remix-oxygen';
 import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 
-import {
-  customerLoginRegisterAction,
-  redirectLinkIfLoggedIn,
-} from '~/lib/customer';
+import {redirectLinkIfLoggedIn} from '~/lib/customer';
+import {customerLoginRegisterAction} from '~/lib/customer/servers/login-register.server';
 import {getAccountSeo} from '~/lib/utils';
 import {GuestAccountLayout, Login} from '~/components';
 

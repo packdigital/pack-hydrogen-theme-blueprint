@@ -28,7 +28,7 @@ export function useCustomerLogOut() {
       method: 'POST',
       action: `${pathPrefix}/account/logout`,
     });
-  }, []);
+  }, [buyerIdentityUpdate]);
 
   return {customerLogOut};
 }

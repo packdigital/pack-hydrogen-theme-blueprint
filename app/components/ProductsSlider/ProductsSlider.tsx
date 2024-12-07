@@ -50,7 +50,7 @@ export function ProductsSlider({
             }
             className={`relative mt-10 w-full ${maxWidthClass} ${
               sliderStyle === 'fullBleedWithGradient'
-                ? 'before:swiper-offset-gradient-270-left after:swiper-offset-gradient-270-right'
+                ? 'swiper-offset-gradient-270-left swiper-offset-gradient-270-right'
                 : ''
             }`}
             grabCursor

@@ -36,11 +36,11 @@ export function useCustomerCreateAddress() {
       if (status.started) return;
       setErrors([]);
 
-      if (!e.currentTarget.country.value) {
+      if (!e.currentTarget.country?.value) {
         setErrors(['Missing country']);
         return;
       }
-      if (!e.currentTarget.province.value) {
+      if (!e.currentTarget.province?.value) {
         setErrors(['Missing state/province']);
         return;
       }

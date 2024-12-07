@@ -2,7 +2,7 @@ import {Outlet} from '@remix-run/react';
 import {json, redirect} from '@shopify/remix-oxygen';
 import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 
-import {customerGetAction} from '~/lib/customer';
+import {customerGetAction} from '~/lib/customer/servers/customer.server';
 import {pathWithoutLocalePrefix} from '~/lib/utils';
 import {LOGGED_OUT_REDIRECT_TO, LOGGED_IN_REDIRECT_TO} from '~/lib/constants';
 

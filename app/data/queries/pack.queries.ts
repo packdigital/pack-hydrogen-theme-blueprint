@@ -2,7 +2,7 @@
  * BACKPACK API QUERIES -------------------------------------------------------
  */
 
-export const SITE_SETTINGS_QUERY = `#graphql
+export const SITE_SETTINGS_QUERY = `
   query SiteSettings($version: Version) {
     siteSettings(version: $version) {
       id
@@ -21,7 +21,7 @@ export const SITE_SETTINGS_QUERY = `#graphql
   }
 ` as const;
 
-export const PRODUCT_GROUPINGS_QUERY = `#graphql
+export const PRODUCT_GROUPINGS_QUERY = `
   query ProductGroupings($first: Int!, $after: String) {
     groups(first: $first, after: $after) {
       pageInfo {
@@ -52,7 +52,7 @@ export const PRODUCT_GROUPINGS_QUERY = `#graphql
   }
 ` as const;
 
-export const SECTION_FRAGMENT = `#graphql
+export const SECTION_FRAGMENT = `
   fragment SectionFragment on Section {
     id
     title

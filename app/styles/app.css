@@ -369,20 +369,10 @@
       items-center;
   }
   .swiper-offset-gradient-270-left {
-    background: linear-gradient(
-      270deg,
-      var(--background) 0%,
-      rgba(255, 255, 255, 0) 100%
-    );
-    @apply pointer-events-none absolute bottom-0 left-[-8px] top-0 z-10 h-full w-[5.9375rem] -rotate-180 opacity-[60] lg:w-[8.125rem];
+    @apply before:pointer-events-none before:absolute before:bottom-0 before:left-[-8px] before:top-0 before:z-10 before:h-full before:w-[5.9375rem] before:-rotate-180 before:opacity-[60] before:lg:w-[8.125rem] before:bg-[linear-gradient(270deg,var(--background)_0%,rgba(255,255,255,0)_100%)];
   }
   .swiper-offset-gradient-270-right {
-    background: linear-gradient(
-      270deg,
-      var(--background) 0%,
-      rgba(255, 255, 255, 0) 100%
-    );
-    @apply pointer-events-none absolute bottom-0 right-[-8px] top-0 z-10 h-full w-[5.9375rem] opacity-[60] lg:w-[8.125rem];
+    @apply after:pointer-events-none after:absolute after:bottom-0 after:right-[-8px] after:top-0 after:z-10 after:h-full after:w-[5.9375rem] after:opacity-[60] after:lg:w-[8.125rem] after:bg-[linear-gradient(270deg,var(--background)_0%,rgba(255,255,255,0)_100%)];
   }
   .active-bullet-black .swiper-pagination-bullet-active {
     @apply bg-black;

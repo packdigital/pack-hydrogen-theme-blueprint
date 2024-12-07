@@ -1,9 +1,9 @@
-import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import {parseGid} from '@shopify/hydrogen-react';
+import {XMLBuilder} from 'fast-xml-parser';
+import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import type {Product} from '@shopify/hydrogen/storefront-api-types';
 
 import {PRODUCT_FEED_QUERY} from '~/data/queries';
-import {getPrimaryDomain} from '~/lib/utils';
 
 const SAFE_XML: Record<string, string> = {
   '&': '&amp;',
@@ -18,81 +18,10 @@ const formatStr = (str = '') =>
     return acc + (SAFE_XML[char] || char);
   }, '');
 
-const generatedProductFeed = (products: Product[], siteUrl: string) => {
-  return `
-    <rss xmlns:g="http://base.google.com/ns/1.0" version="2.0">
-      <channel>
-        <link>${siteUrl}</link>
-        ${products
-          .map((product) => {
-            try {
-              if (!product.variants.nodes.length) return '';
-              if (product.handle === 'gift-card' || product.isGiftCard)
-                return '';
-              return product.variants.nodes.map((variant) => {
-                const imageLink =
-                  variant.image?.url || product.featuredImage?.url;
-                const variantUrlParams = variant.selectedOptions
-                  .map(({name, value}) => {
-                    return `${encodeURI(name)}=${encodeURI(value)}`;
-                  })
-                  .join('&amp;');
-                const link = `${siteUrl}/products/${product.handle}?${variantUrlParams}`;
-
-                return `
-                  <item>
-                    <g:id>${parseGid(variant.id).id}</g:id>
-                    <g:product_type>${formatStr(
-                      product.productType,
-                    )}</g:product_type>
-                    <g:gtin>${variant.sku}</g:gtin>
-                    <g:link>${link}</g:link>
-                    <g:brand>${formatStr(product.vendor)}</g:brand>
-                    <g:condition>${`new`}</g:condition>
-                    <g:availability>${
-                      variant.availableForSale ? 'in stock' : 'out of stock'
-                    }</g:availability>
-                    <g:shipping_weight>${`${variant.weight} ${variant.weightUnit}`}</g:shipping_weight>
-                    <g:title>${formatStr(product.title)}</g:title>
-                    <g:description>${formatStr(
-                      product.description?.slice(0, 256),
-                    )}</g:description>
-                    <g:price>${variant.price.amount}</g:price>
-                    <g:item_group_id>${product.id
-                      .split('/')
-                      .pop()}</g:item_group_id>
-                    ${
-                      imageLink
-                        ? `<g:image_link>${imageLink}</g:image_link>`
-                        : ''
-                    }
-                    ${variant.selectedOptions
-                      .map(({name, value}) => {
-                        const formattedName = formatStr(name).replaceAll(
-                          /\s/g,
-                          '_',
-                        );
-                        return `<g:${formattedName}>${formatStr(
-                          value,
-                        )}</g:${formattedName}>`;
-                      })
-                      .join('')}
-                  </item>
-                `;
-              });
-            } catch (error) {
-              return '';
-            }
-          })
-          .join('')}
-      </channel>
-    </rss>
-  `;
-};
-
 export async function loader({context, request}: LoaderFunctionArgs) {
   const {storefront} = context;
-  const PRIMARY_DOMAIN = getPrimaryDomain({context, request});
+
+  const baseUrl = new URL(request.url).origin;
 
   const getAllProducts = async ({
     products,
@@ -128,7 +57,64 @@ export async function loader({context, request}: LoaderFunctionArgs) {
     cursor: null,
   });
 
-  return new Response(generatedProductFeed(products, PRIMARY_DOMAIN), {
+  const xmlToBuild = {
+    rss: {
+      '@_xmlns:g': 'http://base.google.com/ns/1.0',
+      '@_version': '2.0',
+      channel: {
+        link: baseUrl,
+        item: products.reduce((acc: Record<string, string>[], product) => {
+          try {
+            if (!product.variants.nodes.length) return acc;
+            if (product.handle === 'gift-card' || product.isGiftCard)
+              return acc;
+            const items = product.variants.nodes.map((variant) => {
+              const imageLink =
+                variant.image?.url || product.featuredImage?.url;
+              const variantUrlParams = variant.selectedOptions
+                .map(({name, value}) => {
+                  return `${encodeURI(name)}=${encodeURI(value)}`;
+                })
+                .join('&amp;');
+              const link = `${baseUrl}/products/${product.handle}?${variantUrlParams}`;
+              return {
+                'g:id': parseGid(variant.id).id,
+                'g:product_type': formatStr(product.productType),
+                'g:gtin': variant.sku,
+                'g:link': link,
+                'g:brand': formatStr(product.vendor),
+                'g:condition': 'new',
+                'g:availability': variant.availableForSale
+                  ? 'in stock'
+                  : 'out of stock',
+                'g:shipping_weight': `${variant.weight} ${variant.weightUnit}`,
+                'g:title': formatStr(product.title),
+                'g:description': formatStr(product.description?.slice(0, 256)),
+                'g:price': variant.price.amount,
+                'g:item_group_id': product.id.split('/').pop(),
+                ...(imageLink ? {'g:image_link': imageLink} : {}),
+                ...variant.selectedOptions.reduce((acc, {name, value}) => {
+                  const formattedName = formatStr(name).replaceAll(/\s/g, '_');
+                  return {
+                    ...acc,
+                    [`g:${formattedName}`]: formatStr(value),
+                  };
+                }, {}),
+              };
+            });
+            return [...acc, ...items];
+          } catch (error) {
+            return acc;
+          }
+        }, []),
+      },
+    },
+  };
+
+  const xmlBuilder = new XMLBuilder({ignoreAttributes: false});
+  const productFeedXml = xmlBuilder.build(xmlToBuild);
+
+  return new Response(productFeedXml, {
     headers: {
       'Content-Type': 'application/xml',
       'xml-version': '1.0',

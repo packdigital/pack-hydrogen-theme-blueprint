@@ -18,7 +18,8 @@ import {
 } from '@shopify/hydrogen';
 
 import {ApplicationError, Document, NotFound, ServerError} from '~/components';
-import {customerGetAction, validateCustomerAccessToken} from '~/lib/customer';
+import {validateCustomerAccessToken} from '~/lib/customer';
+import {customerGetAction} from '~/lib/customer/servers/customer.server';
 import {
   getCookieDomain,
   getPublicEnvs,
@@ -30,7 +31,7 @@ import {
 import {registerSections} from '~/sections';
 import {registerStorefrontSettings} from '~/settings';
 import {seoPayload} from '~/lib/seo.server';
-import styles from '~/styles/app.css';
+import styles from '~/styles/app.css?url';
 
 registerSections();
 registerStorefrontSettings();
@@ -121,6 +122,9 @@ export async function loader({context, request}: LoaderFunctionArgs) {
   const consent = {
     checkoutDomain: env.PUBLIC_CHECKOUT_DOMAIN,
     storefrontAccessToken: env.PUBLIC_STOREFRONT_API_TOKEN,
+    withPrivacyBanner: true,
+    country: context.storefront.i18n.country,
+    language: context.storefront.i18n.language,
   };
   const shopAnalytics = getShopAnalytics({
     storefront,

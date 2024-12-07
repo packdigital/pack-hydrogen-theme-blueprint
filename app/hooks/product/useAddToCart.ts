@@ -121,7 +121,13 @@ export function useAddToCart({
 
   useEffect(() => {
     if (!error) return;
-    console.error('@shopify/hydrogen-react:useCart', error);
+    if (Array.isArray(error)) {
+      error.forEach((e) => {
+        console.error('@shopify/hydrogen-react:useCart', e.message);
+      });
+    } else {
+      console.error('@shopify/hydrogen-react:useCart', error);
+    }
   }, [error]);
 
   return {

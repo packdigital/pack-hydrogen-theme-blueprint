@@ -4,7 +4,7 @@ import {SECTION_FRAGMENT} from './pack.queries';
  * BACKPACK API QUERIES -------------------------------------------------------
  */
 
-export const ARTICLE_QUERY = `#graphql
+export const ARTICLE_QUERY = `
   query Article($handle: String!, $version: Version, $cursor: String) {
     article: articleByHandle(handle: $handle, version: $version) {
       id
@@ -57,8 +57,8 @@ export const ARTICLE_QUERY = `#graphql
   ${SECTION_FRAGMENT}
 ` as const;
 
-export const CMS_ARTICLES_QUERY = `#graphql
-  query GetBackpackCmsCollectionPages($first: Int, $cursor: String) {
+export const CMS_ARTICLES_QUERY = `
+  query GetBackpackCmsArticlePages($first: Int, $cursor: String) {
     articles(first: $first, after: $cursor, version: PUBLISHED) {
       pageInfo {
         hasNextPage
