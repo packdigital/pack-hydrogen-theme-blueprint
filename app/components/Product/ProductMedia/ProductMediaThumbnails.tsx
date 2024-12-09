@@ -12,7 +12,7 @@ interface ProductMediaThumbnailsProps {
   media: MediaEdge['node'][];
   productTitle: string;
   setActiveIndex: (index: number) => void;
-  swiper: SwiperClass;
+  swiper: SwiperClass | null;
 }
 
 export function ProductMediaThumbnails({
@@ -68,7 +68,6 @@ export function ProductMediaThumbnails({
         onSlideChange={(_swiper) => {
           if (!swiper) return;
           setActiveIndex(_swiper.realIndex);
-          swiper.slideTo(_swiper.realIndex);
         }}
         navigation={{
           nextEl: '.swiper-button-next',

@@ -13,6 +13,7 @@ import {AnalyticsEvent} from './constants';
 import {ElevarEvents} from './ElevarEvents';
 import {FueledEvents} from './FueledEvents';
 import {GA4Events} from './GA4Events';
+import {KlaviyoEvents} from './KlaviyoEvents';
 import {MetaPixelEvents} from './MetaPixelEvents';
 import {TikTokPixelEvents} from './TikTokPixelEvents';
 
@@ -31,6 +32,7 @@ export const Analytics = memo(() => {
   const enabledFueled = false;
   const enabledElevar = !!ENV.PUBLIC_ELEVAR_SIGNING_KEY;
   const enabledGA4 = !!ENV.PUBLIC_GA4_TAG_ID;
+  const enabledKlaviyo = !!ENV.PUBLIC_KLAVIYO_API_KEY;
   const enabledMetaPixel = !!ENV.PUBLIC_META_PIXEL_ID;
   const enabledTikTokPixel = !!ENV.PUBLIC_TIKTOK_PIXEL_ID;
 
@@ -62,6 +64,16 @@ export const Analytics = memo(() => {
           ga4TagId={ENV.PUBLIC_GA4_TAG_ID}
           register={register}
           subscribe={subscribe}
+          debug={DEBUG}
+        />
+      )}
+
+      {enabledKlaviyo && (
+        <KlaviyoEvents
+          klaviyoApiKey={ENV.PUBLIC_KLAVIYO_API_KEY}
+          register={register}
+          subscribe={subscribe}
+          customer={customer}
           debug={DEBUG}
         />
       )}

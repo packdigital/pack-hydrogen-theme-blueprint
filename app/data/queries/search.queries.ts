@@ -73,7 +73,7 @@ export const PRODUCTS_SEARCH_QUERY = `#graphql
 ` as const;
 
 export const PRODUCTS_SEARCH_FILTERS_QUERY = `#graphql
-  query ProductsSearch(
+  query ProductsSearchFilters(
     $country: CountryCode
     $language: LanguageCode
     $searchTerm: String!

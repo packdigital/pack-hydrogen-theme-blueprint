@@ -3,7 +3,7 @@ import {useFetcher} from '@remix-run/react';
 import type {Customer} from '@shopify/hydrogen/storefront-api-types';
 
 import {getCustomerAccessTokenFromLocalStorage} from '~/lib/customer';
-import {useGlobal, useLocale} from '~/hooks';
+import {usePreviewMode, useLocale} from '~/hooks';
 
 /*
  * When in customizer, customer is managed through local storage and
@@ -11,7 +11,7 @@ import {useGlobal, useLocale} from '~/hooks';
  */
 
 export function usePreviewModeCustomerFetch(fetchDependency: any) {
-  const {isPreviewModeEnabled, setPreviewModeCustomer} = useGlobal();
+  const {isPreviewModeEnabled, setPreviewModeCustomer} = usePreviewMode();
   const {pathPrefix} = useLocale();
   const fetcher = useFetcher<{customer: Customer | null | undefined}>();
 

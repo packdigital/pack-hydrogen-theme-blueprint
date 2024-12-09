@@ -1,4 +1,3 @@
-/// <reference types="@remix-run/dev" />
 /// <reference types="@shopify/remix-oxygen" />
 /// <reference types="@shopify/oxygen-workers-types" />
 
@@ -52,6 +51,8 @@ declare global {
     // Fueled
     fueled?: any;
     fueledConfig?: Record<string, any>;
+    // Klaviyo
+    klaviyo?: any;
   }
 }
 

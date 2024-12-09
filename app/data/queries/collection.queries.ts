@@ -5,7 +5,7 @@ import {PRODUCT_ITEM_FRAGMENT} from './product.queries';
  * BACKPACK API QUERIES -------------------------------------------------------
  */
 
-export const COLLECTION_PAGE_QUERY = `#graphql
+export const COLLECTION_PAGE_QUERY = `
   query CollectionPage($handle: String!, $version: Version) {
     collectionPage: collectionPageByHandle(handle: $handle, version: $version) {
       id
@@ -46,7 +46,17 @@ export const COLLECTION_PAGE_QUERY = `#graphql
   ${SECTION_FRAGMENT}
 ` as const;
 
-export const CMS_COLLECTIONS_QUERY = `#graphql
+export const CMS_COLLECTION_QUERY = `
+  query CmsCollectionPage($handle: String!, $version: Version) {
+    collectionPage: collectionPageByHandle(handle: $handle, version: $version) {
+      seo {
+        noIndex
+      }
+    }
+  }
+` as const;
+
+export const CMS_COLLECTIONS_QUERY = `
   query GetBackpackCmsCollectionPages($first: Int, $cursor: String) {
     collectionPages(first: $first, after: $cursor, version: PUBLISHED) {
       pageInfo {

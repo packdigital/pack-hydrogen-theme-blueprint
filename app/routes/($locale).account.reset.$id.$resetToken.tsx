@@ -6,7 +6,7 @@ import type {
 } from '@shopify/remix-oxygen';
 import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 
-import {customerPasswordResetAction} from '~/lib/customer';
+import {customerPasswordResetAction} from '~/lib/customer/servers/reset.server';
 import {getAccountSeo} from '~/lib/utils';
 import {GuestAccountLayout, ResetPassword} from '~/components';
 

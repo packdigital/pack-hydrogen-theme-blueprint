@@ -1,8 +1,9 @@
-/** @type {import('tailwindcss').Config} */
+import headlessuiPlugin from '@headlessui/tailwindcss';
 
 // default config: https://github.com/tailwindlabs/tailwindcss/blob/master/stubs/defaultConfig.stub.js
 
-module.exports = {
+/** @type {import('tailwindcss').Config} */
+export default {
   content: ['./app/**/*.{js,ts,jsx,tsx}'],
   theme: {
     screens: {
@@ -84,5 +85,5 @@ module.exports = {
       },
     },
   },
-  plugins: [require('@headlessui/tailwindcss')],
+  plugins: [headlessuiPlugin],
 };

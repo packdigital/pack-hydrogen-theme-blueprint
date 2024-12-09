@@ -1,42 +1,48 @@
+import {getSitemapIndex} from '@shopify/hydrogen';
+import {XMLParser, XMLBuilder} from 'fast-xml-parser';
 import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 
-import {getPrimaryDomain} from '~/lib/utils';
+type SitemapTypes = Parameters<typeof getSitemapIndex>[0]['types'];
 
-const SITEMAP_FILENAMES = [
-  'sitemap_static.xml',
-  'sitemap_pages.xml',
-  'sitemap_blogs.xml',
-  'sitemap_articles.xml',
-  'sitemap_products.xml',
-  'sitemap_collections.xml',
-];
+export const SHOPIFY_TEMPLATE_TYPES = ['products', 'collections'];
+export const PACK_NATIVE_TEMPLATE_TYPES = ['pages', 'blogs', 'articles'];
 
-const generatedSitemapIndex = (filenames: string[], siteUrl: string) => {
-  return `
-    <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-      ${filenames
-        .map((filename) => {
-          return `
-            <sitemap>
-              <loc>${siteUrl}/${filename}</loc>
-            </sitemap>
-          `;
-        })
-        .join('')}
-    </sitemapindex>
-  `;
-};
+export async function loader({
+  request,
+  context: {storefront},
+}: LoaderFunctionArgs) {
+  const response = await getSitemapIndex({
+    storefront,
+    request,
+    types: SHOPIFY_TEMPLATE_TYPES as SitemapTypes,
+  });
 
-export async function loader({context, request}: LoaderFunctionArgs) {
-  const PRIMARY_DOMAIN = getPrimaryDomain({context, request});
-  const sitemapIndex = generatedSitemapIndex(SITEMAP_FILENAMES, PRIMARY_DOMAIN);
+  const shopifySitemapIndexXml = await response.clone().text();
+  const xmlParser = new XMLParser({ignoreAttributes: false});
+  const xml = xmlParser.parse(shopifySitemapIndexXml);
 
-  return new Response(sitemapIndex, {
+  const baseUrl = new URL(request.url).origin;
+  const sitemaps = Array.isArray(xml.sitemapindex.sitemap)
+    ? [...xml.sitemapindex.sitemap]
+    : [xml.sitemapindex.sitemap];
+
+  PACK_NATIVE_TEMPLATE_TYPES.forEach((type) => {
+    sitemaps.push({
+      loc: `${baseUrl}/${type}/1`,
+    });
+  });
+
+  xml.sitemapindex.sitemap = sitemaps;
+
+  const xmlBuilder = new XMLBuilder({ignoreAttributes: false});
+  const sitemapIndexXml = xmlBuilder.build({sitemapindex: xml.sitemapindex});
+
+  return new Response(sitemapIndexXml, {
     headers: {
       'Content-Type': 'application/xml',
+      'Cache-Control': `max-age=${60 * 60 * 24}`,
       'xml-version': '1.0',
       encoding: 'UTF-8',
-      'Cache-Control': `max-age=${60 * 60 * 24}`,
     },
   });
 }

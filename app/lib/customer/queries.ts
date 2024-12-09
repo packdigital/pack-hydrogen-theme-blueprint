@@ -35,11 +35,17 @@ const METAFIELD_QUERY = `#graphql
     customer(customerAccessToken: $customerAccessToken) {
       id
       metafield(namespace: $namespace, key: $key){
-        ...Metafield
+        createdAt
+        description
+        id
+        key
+        namespace
+        type
+        updatedAt
+        value
       }
     }
   }
-  ${fragments.metafield}
 `;
 
 const ORDER_QUERY = `#graphql

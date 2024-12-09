@@ -321,7 +321,7 @@ const CUSTOMER_FULL = `#graphql
 `;
 
 const CUSTOMER_ADDRESSES = `#graphql
-  fragment Customer on Customer {
+  fragment CustomerAddresses on Customer {
     addresses(first: 50) {
       edges {
         node {
@@ -334,7 +334,7 @@ const CUSTOMER_ADDRESSES = `#graphql
 `;
 
 const CUSTOMER_ORDERS = `#graphql
-  fragment Customer on Customer {
+  fragment CustomerOrders on Customer {
     orders(first: 10) {
       edges {
         node {
