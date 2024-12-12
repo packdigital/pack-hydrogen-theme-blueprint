@@ -18,9 +18,11 @@ import {KlaviyoEvents} from './KlaviyoEvents';
 import {MetaPixelEvents} from './MetaPixelEvents';
 import {TikTokPixelEvents} from './TikTokPixelEvents';
 
-const DEBUG =
-  typeof document !== 'undefined' &&
-  window.ENV?.PUBLIC_PACK_ANALYTICS_DEBUG === 'true';
+// const DEBUG =
+//   typeof document !== 'undefined' &&
+//   window.ENV?.PUBLIC_PACK_ANALYTICS_DEBUG === 'true';
+
+const DEBUG = true;
 
 export const Analytics = memo(() => {
   const {ENV} = useRootLoaderData();

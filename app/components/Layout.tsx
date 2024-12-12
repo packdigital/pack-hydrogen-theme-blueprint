@@ -1,5 +1,9 @@
 import clsx from 'clsx';
 import type {ReactNode} from 'react';
+import {useCallback} from 'react';
+
+import {useAnalytics} from '@shopify/hydrogen';
+import {PackTestProvider} from '@pack/hydrogen';
 
 import {Analytics} from '~/components/Analytics';
 import {Cart} from '~/components/Cart';
@@ -8,6 +12,7 @@ import {Header} from '~/components/Header';
 import {Modal} from '~/components/Modal';
 import {ProductModal} from '~/components/Product/ProductModal';
 import {Search} from '~/components/Search';
+import {AnalyticsEvent} from '~/components/Analytics/constants';
 import {
   useCartAddDiscountUrl,
   usePromobar,
@@ -25,32 +30,52 @@ export function Layout({children}: {children: ReactNode}) {
     <>
       <Analytics />
 
-      <div
-        className="flex h-[var(--viewport-height)] flex-col"
-        data-comp={Layout.displayName}
-      >
-        <Header />
-
-        <main
-          role="main"
-          id="mainContent"
-          className={clsx('grow', mainPaddingTopClass)}
+      <TestLayoutComponent>
+        <div
+          className="flex h-[var(--viewport-height)] flex-col"
+          data-comp={Layout.displayName}
         >
-          {children}
-        </main>
+          <Header />
 
-        <Footer />
+          <main
+            role="main"
+            id="mainContent"
+            className={clsx('grow', mainPaddingTopClass)}
+          >
+            {children}
+          </main>
 
-        <ProductModal />
+          <Footer />
 
-        <Cart />
+          <ProductModal />
 
-        <Search />
+          <Cart />
 
-        <Modal />
-      </div>
+          <Search />
+
+          <Modal />
+        </div>
+      </TestLayoutComponent>
     </>
   );
 }
+
+const TestLayoutComponent = ({children}: {children: ReactNode}) => {
+  const {publish} = useAnalytics();
+
+  const handleTestExpose = useCallback(
+    (test: any) => {
+      console.log('==== I HAVE BEEN EXPOSED!!!', test);
+      publish(AnalyticsEvent.EXPERIMENT_EXPOSED, {test});
+    },
+    [publish],
+  );
+
+  return (
+    <PackTestProvider testExposureCallback={handleTestExpose}>
+      {children}
+    </PackTestProvider>
+  );
+};
 
 Layout.displayName = 'Layout';

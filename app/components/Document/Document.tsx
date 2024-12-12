@@ -2,7 +2,8 @@ import {useMemo} from 'react';
 import type {ReactNode} from 'react';
 import {Links, Meta, Scripts, ScrollRestoration} from '@remix-run/react';
 import {CartProvider, ShopifyProvider} from '@shopify/hydrogen-react';
-import {PreviewProvider} from '@pack/react';
+import {PackProvider} from '@pack/react';
+import {PackTestProvider} from '@pack/hydrogen';
 
 import {ContextsProvider} from '~/contexts';
 import {CART_FRAGMENT} from '~/data/graphql/storefront/cart';
@@ -20,12 +21,12 @@ interface DocumentProps {
 
 export function Document({children, title}: DocumentProps) {
   const {
-    customizerMeta,
     ENV,
-    isPreviewModeEnabled,
     siteSettings,
     siteTitle,
     url,
+    packCustomizerMeta,
+    packIsPreviewMode,
   } = useRootLoaderData();
   const locale = useLocale();
   const keywords =
@@ -75,15 +76,15 @@ export function Document({children, title}: DocumentProps) {
         >
           <CartProvider cartFragment={CART_FRAGMENT}>
             <ContextsProvider>
-              <PreviewProvider
-                customizerMeta={customizerMeta}
-                isPreviewModeEnabled={isPreviewModeEnabled}
+              <PackProvider
+                customizerMeta={packCustomizerMeta}
+                isPreviewModeEnabled={packIsPreviewMode}
                 siteSettings={siteSettings}
               >
                 <Layout key={`${locale.language}-${locale.country}`}>
                   {children}
                 </Layout>
-              </PreviewProvider>
+              </PackProvider>
             </ContextsProvider>
           </CartProvider>
         </ShopifyProvider>

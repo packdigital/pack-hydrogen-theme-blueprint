@@ -12,6 +12,8 @@ node_modules
 .env
 .shopify
 .hydrogen
+.yalc
+yalc.lock
 
 # IntelliJ
 .idea
