@@ -25,6 +25,8 @@ export const getPage = async ({
   query: string;
 }) => {
   const {pack, storefront} = context;
+  let capturedPackTestInfo: any = null;
+
   const getPageWithAllSections = async ({
     accumulatedPage,
     cursor,
@@ -32,7 +34,7 @@ export const getPage = async ({
     accumulatedPage: Page | null;
     cursor: string | null;
   }): Promise<Page> => {
-    const {data} = await pack.query(query, {
+    const {data, packTestInfo} = await pack.query(query, {
       variables: {
         handle,
         cursor,
@@ -41,6 +43,11 @@ export const getPage = async ({
       },
       cache: storefront.CacheLong(),
     });
+
+    // Capture packTestInfo from the first call
+    if (!capturedPackTestInfo) {
+      capturedPackTestInfo = packTestInfo;
+    }
 
     if (!data?.[pageKey]) throw new Response(null, {status: 404});
 
@@ -65,7 +72,7 @@ export const getPage = async ({
     accumulatedPage: null,
     cursor: null,
   });
-  return {[pageKey]: page};
+  return {[pageKey]: page, packTestInfo: capturedPackTestInfo};
 };
 
 const SESSION_COOKIE = 'pack_session';

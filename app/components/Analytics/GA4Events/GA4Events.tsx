@@ -16,6 +16,7 @@ import {
   customerLogInEvent,
   customerRegisterEvent,
   customerSubscribeEvent,
+  experimentExposedEvent,
   ANALYTICS_NAME,
 } from './events';
 
@@ -90,6 +91,10 @@ export function GA4Events({
     }
     /* register analytics events only until script is ready */
     if (!scriptLoaded) return;
+
+    subscribe(AnalyticsEvent.EXPERIMENT_EXPOSED, (data: Data) => {
+      experimentExposedEvent({...data, customer, debug});
+    });
     subscribe(AnalyticsEvent.PAGE_VIEWED, (data: Data) => {
       viewPageEvent({...data, customer, debug});
     });

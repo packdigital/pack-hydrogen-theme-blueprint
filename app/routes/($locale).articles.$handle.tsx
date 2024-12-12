@@ -4,6 +4,7 @@ import {redirect} from '@shopify/remix-oxygen';
 import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 import {RenderSections} from '@pack/react';
 import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
+import {PackTestRoute} from '@pack/hydrogen';
 
 import {ARTICLE_PAGE_QUERY} from '~/data/graphql/pack/article-page';
 import {getPage, getShop, getSiteSettings} from '~/lib/utils';
@@ -18,12 +19,12 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
 
   if (!handle) throw new Response(null, {status: 404});
 
-  const {article} = await (getPage({
+  const {article, packTestInfo} = await getPage({
     context,
     handle,
     pageKey: 'article',
     query: ARTICLE_PAGE_QUERY,
-  }) as Promise<{article: ArticlePage}>);
+  });
 
   if (!article) throw new Response(null, {status: 404});
 
@@ -53,6 +54,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
       article,
       seo,
       url: request.url,
+      packTestInfo,
     };
   }
 }
@@ -76,27 +78,30 @@ export default function ArticleRoute() {
   }, [atDate]);
 
   return (
-    <div className="py-contained" data-comp={ArticleRoute.displayName}>
-      <section
-        className="px-contained mb-8 flex flex-col items-center gap-3 text-center md:mb-10"
-        data-comp="article-header"
-      >
-        <p className="text-sm md:text-base">
-          {article.author ? `${article.author} | ` : ''}
-          {date}
-        </p>
-
-        <h1 className="text-h2 max-w-[60rem]">{article.title}</h1>
-
-        {article.category && (
-          <p className="btn-text flex h-8 items-center justify-center rounded-full bg-neutralLighter px-4 text-text">
-            {article.category}
+    <>
+      <PackTestRoute />
+      <div className="py-contained" data-comp={ArticleRoute.displayName}>
+        <section
+          className="px-contained mb-8 flex flex-col items-center gap-3 text-center md:mb-10"
+          data-comp="article-header"
+        >
+          <p className="text-sm md:text-base">
+            {article.author ? `${article.author} | ` : ''}
+            {date}
           </p>
-        )}
-      </section>
 
-      <RenderSections content={article} />
-    </div>
+          <h1 className="text-h2 max-w-[60rem]">{article.title}</h1>
+
+          {article.category && (
+            <p className="btn-text flex h-8 items-center justify-center rounded-full bg-lightGray px-4 text-text">
+              {article.category}
+            </p>
+          )}
+        </section>
+
+        <RenderSections content={article} />
+      </div>
+    </>
   );
 }
 
