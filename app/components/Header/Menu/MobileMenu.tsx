@@ -148,7 +148,7 @@ export const MobileMenu = memo(
                     return (
                       <SwiperSlide key={index}>
                         <ProductItem
-                          handle={product.handle}
+                          handle={product?.handle}
                           index={index}
                           onClick={handleCloseMobileMenu}
                           swatchesMap={swatchesMap}
