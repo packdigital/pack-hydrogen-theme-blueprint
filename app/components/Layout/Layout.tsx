@@ -1,6 +1,11 @@
 import type {ReactNode} from 'react';
+import {useCallback} from 'react';
+
+import {useAnalytics} from '@shopify/hydrogen';
+import {PackTestProvider} from '@pack/hydrogen';
 
 import {Analytics, Cart, Footer, Header, Modal, Search} from '~/components';
+import {AnalyticsEvent} from '~/components/Analytics/constants';
 import {usePreviewModeCustomerInit} from '~/lib/customer';
 import {
   useCartAddDiscountUrl,
@@ -17,31 +22,50 @@ export function Layout({children}: {children: ReactNode}) {
   return (
     <>
       <Analytics />
-
-      <div
-        className="flex h-[var(--viewport-height)] flex-col"
-        data-comp={Layout.displayName}
-      >
-        <Header />
-
-        <main
-          role="main"
-          id="mainContent"
-          className={`grow ${mainPaddingTopClass}`}
+      <TestLayoutComponent>
+        <div
+          className="flex h-[var(--viewport-height)] flex-col"
+          data-comp={Layout.displayName}
         >
-          {children}
-        </main>
+          <Header />
 
-        <Footer />
+          <main
+            role="main"
+            id="mainContent"
+            className={`grow ${mainPaddingTopClass}`}
+          >
+            {children}
+          </main>
 
-        <Cart />
+          <Footer />
 
-        <Search />
+          <Cart />
 
-        <Modal />
-      </div>
+          <Search />
+
+          <Modal />
+        </div>
+      </TestLayoutComponent>
     </>
   );
 }
+
+const TestLayoutComponent = ({children}: {children: ReactNode}) => {
+  const {publish} = useAnalytics();
+
+  const handleTestExpose = useCallback(
+    (test: any) => {
+      console.log('==== I HAVE BEEN EXPOSED!!!', test);
+      publish(AnalyticsEvent.EXPERIMENT_EXPOSED, {test});
+    },
+    [publish],
+  );
+
+  return (
+    <PackTestProvider testExposureCallback={handleTestExpose}>
+      {children}
+    </PackTestProvider>
+  );
+};
 
 Layout.displayName = 'Layout';

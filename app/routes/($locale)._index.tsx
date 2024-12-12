@@ -3,6 +3,7 @@ import {json} from '@shopify/remix-oxygen';
 import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 import {RenderSections} from '@pack/react';
+import {PackTestRoute} from '@pack/hydrogen';
 
 import {getShop, getSiteSettings} from '~/lib/utils';
 import {PAGE_QUERY} from '~/data/queries';
@@ -23,7 +24,7 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
     throw new Response(null, {status: 404});
   }
 
-  const {data} = await context.pack.query(PAGE_QUERY, {
+  const {data, packTestInfo} = await context.pack.query(PAGE_QUERY, {
     variables: {handle: '/'},
     cache: context.storefront.CacheLong(),
   });
@@ -44,6 +45,7 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
     page: data.page,
     seo,
     url: request.url,
+    packTestInfo,
   });
 }
 
@@ -54,5 +56,10 @@ export const meta = ({matches}: MetaArgs<typeof loader>) => {
 export default function Index() {
   const {page} = useLoaderData<typeof loader>();
 
-  return <RenderSections content={page} />;
+  return (
+    <>
+      <PackTestRoute />
+      <RenderSections content={page} />;
+    </>
+  );
 }

@@ -4,6 +4,7 @@ import {json} from '@shopify/remix-oxygen';
 import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 import {RenderSections} from '@pack/react';
+import {PackTestRoute} from '@pack/hydrogen';
 
 import {ARTICLE_QUERY} from '~/data/queries';
 import {getShop, getSiteSettings} from '~/lib/utils';
@@ -14,7 +15,7 @@ export const headers = routeHeaders;
 
 export async function loader({params, context, request}: LoaderFunctionArgs) {
   const {handle} = params;
-  const {data} = await context.pack.query(ARTICLE_QUERY, {
+  const {data, packTestInfo} = await context.pack.query(ARTICLE_QUERY, {
     variables: {handle},
     cache: context.storefront.CacheLong(),
   });
@@ -36,6 +37,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     article: data.article,
     seo,
     url: request.url,
+    packTestInfo,
   });
 }
 
@@ -58,27 +60,30 @@ export default function ArticleRoute() {
   }, [atDate]);
 
   return (
-    <div className="py-contained" data-comp={ArticleRoute.displayName}>
-      <section
-        className="px-contained mb-8 flex flex-col items-center gap-3 text-center md:mb-10"
-        data-comp="article-header"
-      >
-        <p className="text-sm md:text-base">
-          {article.author ? `${article.author} | ` : ''}
-          {date}
-        </p>
-
-        <h1 className="text-h2 max-w-[60rem]">{article.title}</h1>
-
-        {article.category && (
-          <p className="btn-text flex h-8 items-center justify-center rounded-full bg-lightGray px-4 text-text">
-            {article.category}
+    <>
+      <PackTestRoute />
+      <div className="py-contained" data-comp={ArticleRoute.displayName}>
+        <section
+          className="px-contained mb-8 flex flex-col items-center gap-3 text-center md:mb-10"
+          data-comp="article-header"
+        >
+          <p className="text-sm md:text-base">
+            {article.author ? `${article.author} | ` : ''}
+            {date}
           </p>
-        )}
-      </section>
 
-      <RenderSections content={article} />
-    </div>
+          <h1 className="text-h2 max-w-[60rem]">{article.title}</h1>
+
+          {article.category && (
+            <p className="btn-text flex h-8 items-center justify-center rounded-full bg-lightGray px-4 text-text">
+              {article.category}
+            </p>
+          )}
+        </section>
+
+        <RenderSections content={article} />
+      </div>
+    </>
   );
 }
 

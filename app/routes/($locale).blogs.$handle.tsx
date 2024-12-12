@@ -3,6 +3,7 @@ import {json} from '@shopify/remix-oxygen';
 import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 import {RenderSections} from '@pack/react';
+import {PackTestRoute} from '@pack/hydrogen';
 
 import {BLOG_QUERY} from '~/data/queries';
 import {getShop, getSiteSettings} from '~/lib/utils';
@@ -14,6 +15,7 @@ export const headers = routeHeaders;
 
 export async function loader({params, context, request}: LoaderFunctionArgs) {
   const {handle} = params;
+  let packTestInfoData = null;
 
   // if the number of articles is in the several of hundreds, consider paginating the query
   const getBlogWithAllArticles = async ({
@@ -23,7 +25,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     blog: BlogPage | null;
     cursor: string | null;
   }): Promise<BlogPage> => {
-    const {data} = await context.pack.query(BLOG_QUERY, {
+    const {data, packTestInfo} = await context.pack.query(BLOG_QUERY, {
       variables: {
         first: 250,
         handle,
@@ -33,6 +35,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     });
     if (!data?.blog) throw new Response(null, {status: 404});
 
+    packTestInfoData = packTestInfo;
     const queriedBlog = data.blog;
     const queriedBlogArticles = queriedBlog.articles;
 
@@ -87,6 +90,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     blog: blogWithSortedArticles,
     seo,
     url: request.url,
+    packTestInfo: packTestInfoData,
   });
 }
 
@@ -98,9 +102,12 @@ export default function BlogRoute() {
   const {blog} = useLoaderData<typeof loader>();
 
   return (
-    <div data-comp={BlogRoute.displayName}>
-      <RenderSections content={blog} />
-    </div>
+    <>
+      <PackTestRoute />
+      <div data-comp={BlogRoute.displayName}>
+        <RenderSections content={blog} />
+      </div>
+    </>
   );
 }
 

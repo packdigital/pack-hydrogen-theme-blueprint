@@ -16,9 +16,11 @@ import {GA4Events} from './GA4Events';
 import {MetaPixelEvents} from './MetaPixelEvents';
 import {TikTokPixelEvents} from './TikTokPixelEvents';
 
-const DEBUG =
-  typeof document !== 'undefined' &&
-  window.ENV?.PUBLIC_PACK_ANALYTICS_DEBUG === 'true';
+// const DEBUG =
+//   typeof document !== 'undefined' &&
+//   window.ENV?.PUBLIC_PACK_ANALYTICS_DEBUG === 'true';
+
+const DEBUG = true;
 
 export const Analytics = memo(() => {
   const {ENV} = useRootLoaderData();
@@ -30,7 +32,8 @@ export const Analytics = memo(() => {
 
   const enabledFueled = false;
   const enabledElevar = !!ENV.PUBLIC_ELEVAR_SIGNING_KEY;
-  const enabledGA4 = !!ENV.PUBLIC_GA4_TAG_ID;
+  // const enabledGA4 = !!ENV.PUBLIC_GA4_TAG_ID;
+  const enabledGA4 = true;
   const enabledMetaPixel = !!ENV.PUBLIC_META_PIXEL_ID;
   const enabledTikTokPixel = !!ENV.PUBLIC_TIKTOK_PIXEL_ID;
 

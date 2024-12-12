@@ -624,6 +624,37 @@ const customerSubscribeEvent = ({
   }
 };
 
+const experimentExposedEvent = ({
+  debug,
+  ...data
+}: Record<string, any> & {debug?: boolean}) => {
+  const analyticsEvent = AnalyticsEvent.EXPERIMENT_EXPOSED;
+
+  try {
+    if (debug) logSubscription({data, analyticsEvent});
+
+    const {test, customer} = data;
+
+    if (!test) throw new Error('`test` parameter is missing.');
+
+    const event = {
+      event: 'view_experiment',
+      user_properties: generateUserProperties({customer}),
+      experiment_id: test?.id,
+      experiment_name: test?.handle,
+      experiment_variant_id: test?.testVariant.id,
+      experiment_variation: test?.testVariant.handle,
+    };
+
+    emitEvent({event, debug});
+  } catch (error) {
+    logError({
+      analyticsEvent,
+      message: error instanceof Error ? error.message : error,
+    });
+  }
+};
+
 export {
   addToCartEvent,
   clickProductItemEvent,
@@ -632,6 +663,7 @@ export {
   customerLogInEvent,
   customerRegisterEvent,
   customerSubscribeEvent,
+  experimentExposedEvent,
   emitEvent,
   removeFromCartEvent,
   viewCartEvent,
