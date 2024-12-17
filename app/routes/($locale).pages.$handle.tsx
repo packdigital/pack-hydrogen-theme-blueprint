@@ -3,6 +3,7 @@ import {useLoaderData} from '@remix-run/react';
 import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 import {RenderSections} from '@pack/react';
+import {PackTestRoute} from '@pack/hydrogen';
 
 import {getShop, getSiteSettings} from '~/lib/utils';
 import {PAGE_QUERY} from '~/data/queries';
@@ -13,7 +14,7 @@ export const headers = routeHeaders;
 
 export async function loader({context, params, request}: LoaderFunctionArgs) {
   const {handle} = params;
-  const {data} = await context.pack.query(PAGE_QUERY, {
+  const {data, packTestInfo} = await context.pack.query(PAGE_QUERY, {
     variables: {handle},
     cache: context.storefront.CacheLong(),
   });
@@ -37,6 +38,7 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
     page: data.page,
     seo,
     url: request.url,
+    packTestInfo,
   });
 }
 
@@ -48,9 +50,12 @@ export default function PageRoute() {
   const {page} = useLoaderData<typeof loader>();
 
   return (
-    <div data-comp={PageRoute.displayName}>
-      <RenderSections content={page} />
-    </div>
+    <>
+      <PackTestRoute />
+      <div data-comp={PageRoute.displayName}>
+        <RenderSections content={page} />
+      </div>
+    </>
   );
 }
 

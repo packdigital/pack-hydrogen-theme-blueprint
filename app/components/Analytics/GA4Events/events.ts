@@ -642,8 +642,8 @@ const experimentExposedEvent = ({
       user_properties: generateUserProperties({customer}),
       experiment_id: test?.id,
       experiment_name: test?.handle,
-      experiment_variant_id: test?.testVariant.id,
-      experiment_variation: test?.testVariant.handle,
+      experiment_variant_id: test?.testVariant?.id,
+      experiment_variation: test?.testVariant?.handle,
     };
 
     emitEvent({event, debug});

@@ -9,7 +9,6 @@ import {
 } from '@remix-run/react';
 import {CartProvider, ShopifyProvider} from '@shopify/hydrogen-react';
 import {PackProvider} from '@pack/react';
-import {PackTestProvider} from '@pack/hydrogen';
 
 import {ContextsProvider} from '~/contexts';
 import {CART_FRAGMENT} from '~/data/queries';
