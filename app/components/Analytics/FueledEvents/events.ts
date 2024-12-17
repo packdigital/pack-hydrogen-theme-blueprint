@@ -657,8 +657,8 @@ const experimentExposedEvent = ({
       experiment: {
         experiment_id: test?.id,
         experiment_name: test?.handle,
-        experiment_variant_id: test?.testVariant.id,
-        experiment_variation: test?.testVariant.handle,
+        experiment_variant_id: test?.testVariant?.id,
+        experiment_variation: test?.testVariant?.handle,
       },
     };
     dispatchEvent({event, debug});

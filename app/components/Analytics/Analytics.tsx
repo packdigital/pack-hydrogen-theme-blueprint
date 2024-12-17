@@ -1,33 +1,34 @@
-import {memo} from 'react';
-import {Analytics as HydrogenAnalytics, useAnalytics} from '@shopify/hydrogen';
-import {useCart} from '@shopify/hydrogen-react';
+import { memo } from "react";
+import {
+  Analytics as HydrogenAnalytics,
+  useAnalytics,
+} from "@shopify/hydrogen";
+import { useCart } from "@shopify/hydrogen-react";
 
 import {
   useCustomer,
   useGlobal,
   usePathStorage,
   useRootLoaderData,
-} from '~/hooks';
+} from "~/hooks";
 
-import {AnalyticsEvent} from './constants';
-import {BlotoutEvents} from './BlotoutEvents';
-import {ElevarEvents} from './ElevarEvents';
-import {FueledEvents} from './FueledEvents';
-import {GA4Events} from './GA4Events';
-import {KlaviyoEvents} from './KlaviyoEvents';
-import {MetaPixelEvents} from './MetaPixelEvents';
-import {TikTokPixelEvents} from './TikTokPixelEvents';
+import { AnalyticsEvent } from "./constants";
+import { BlotoutEvents } from "./BlotoutEvents";
+import { ElevarEvents } from "./ElevarEvents";
+import { FueledEvents } from "./FueledEvents";
+import { GA4Events } from "./GA4Events";
+import { KlaviyoEvents } from "./KlaviyoEvents";
+import { MetaPixelEvents } from "./MetaPixelEvents";
+import { TikTokPixelEvents } from "./TikTokPixelEvents";
 
-// const DEBUG =
-//   typeof document !== 'undefined' &&
-//   window.ENV?.PUBLIC_PACK_ANALYTICS_DEBUG === 'true';
-
-const DEBUG = true;
+const DEBUG =
+  typeof document !== "undefined" &&
+  window.ENV?.PUBLIC_PACK_ANALYTICS_DEBUG === "true";
 
 export const Analytics = memo(() => {
-  const {ENV} = useRootLoaderData();
-  const {register, subscribe} = useAnalytics();
-  const {isCartReady} = useGlobal();
+  const { ENV } = useRootLoaderData();
+  const { register, subscribe } = useAnalytics();
+  const { isCartReady } = useGlobal();
   const cart = useCart();
   const customer = useCustomer();
   usePathStorage();
@@ -40,7 +41,7 @@ export const Analytics = memo(() => {
   const enabledMetaPixel = !!ENV.PUBLIC_META_PIXEL_ID;
   const enabledTikTokPixel = !!ENV.PUBLIC_TIKTOK_PIXEL_ID;
 
-  const customerPending = typeof customer === 'undefined';
+  const customerPending = typeof customer === "undefined";
 
   return (
     <>
@@ -115,7 +116,7 @@ export const Analytics = memo(() => {
       {isCartReady && !customerPending && (
         <HydrogenAnalytics.CustomView
           type={AnalyticsEvent.CUSTOMER}
-          customData={{customer, cart}}
+          customData={{ customer, cart }}
         />
       )}
     </>

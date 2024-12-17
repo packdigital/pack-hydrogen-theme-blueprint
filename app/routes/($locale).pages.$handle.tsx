@@ -2,6 +2,7 @@ import {useLoaderData} from '@remix-run/react';
 import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 import {RenderSections} from '@pack/react';
 import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
+import {PackTestRoute} from '@pack/hydrogen';
 
 import {getPage, getShop, getSiteSettings} from '~/lib/utils';
 import {PAGE_QUERY} from '~/data/graphql/pack/page';
@@ -16,7 +17,7 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
 
   if (!handle) throw new Response(null, {status: 404});
 
-  const [{page}, shop, siteSettings] = await Promise.all([
+  const [{page, packTestInfo}, shop, siteSettings] = await Promise.all([
     getPage({context, handle, pageKey: 'page', query: PAGE_QUERY}),
     getShop(context),
     getSiteSettings(context),
@@ -46,6 +47,7 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
     productsMap,
     seo,
     url: request.url,
+    packTestInfo,
   };
 }
 
@@ -57,9 +59,12 @@ export default function PageRoute() {
   const {page} = useLoaderData<typeof loader>();
 
   return (
-    <div data-comp={PageRoute.displayName}>
-      <RenderSections content={page} />
-    </div>
+    <>
+      <PackTestRoute />
+      <div data-comp={PageRoute.displayName}>
+        <RenderSections content={page} />
+      </div>
+    </>
   );
 }
 
