@@ -1,5 +1,6 @@
+// @ts-ignore
 // Virtual entry point for the app
-import * as remixBuild from '@remix-run/dev/server-build';
+import * as remixBuild from 'virtual:remix/server-build';
 import {
   createCartHandler,
   cartGetIdDefault,
@@ -73,6 +74,12 @@ export default {
       /**
        * Create Pack client.
        */
+
+      // check if the PACK_SECRET_TOKEN is set
+      if (!env.PACK_SECRET_TOKEN) {
+        throw new Error('PACK_SECRET_TOKEN environment variable is not set');
+      }
+
       const pack = createPackClient({
         cache,
         waitUntil,

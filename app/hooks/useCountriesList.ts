@@ -16,7 +16,9 @@ const getCountries = async ({
   firstCountries: string[];
 }) => {
   try {
-    const data = await import('country-region-data/data.json');
+    const data = await import(
+      /* @vite-ignore */ 'country-region-data/data.json'
+    );
     const initialDataList = data.default;
     const firstCountriesMap = firstCountries.reduce(
       (acc: Record<string, any>, value) => {

@@ -5,6 +5,7 @@ import {usePreviewModeCustomerInit} from '~/lib/customer';
 import {
   useCartAddDiscountUrl,
   usePromobar,
+  useScrollToHashOnNavigation,
   useSetViewportHeightCssVar,
 } from '~/hooks';
 
@@ -12,6 +13,7 @@ export function Layout({children}: {children: ReactNode}) {
   const {mainPaddingTopClass} = usePromobar();
   useCartAddDiscountUrl();
   usePreviewModeCustomerInit();
+  useScrollToHashOnNavigation();
   useSetViewportHeightCssVar();
 
   return (

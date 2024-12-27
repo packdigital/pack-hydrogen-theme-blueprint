@@ -331,12 +331,16 @@ const viewCartEvent = ({
         window.location.pathname) ||
       (previousPath?.startsWith('/collections') && previousPath) ||
       '';
+    const cartCurrencyCode = cart?.cost?.totalAmount?.currencyCode;
     const event = {
       event: 'dl_view_cart',
       user_properties: generateUserProperties({customer}),
       cart_total: cart?.cost?.totalAmount?.amount || '0.0',
       ecommerce: {
-        currencyCode: cart?.cost?.totalAmount?.currencyCode || shop?.currency,
+        currencyCode:
+          cartCurrencyCode && cartCurrencyCode !== 'XXX'
+            ? cartCurrencyCode
+            : shop?.currency,
         actionField: {list: 'Shopping Cart'},
         impressions:
           flattenConnection(cart?.lines)?.slice(0, 7).map(mapCartLine(list)) ||
