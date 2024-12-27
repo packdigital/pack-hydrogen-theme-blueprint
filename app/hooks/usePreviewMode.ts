@@ -1,7 +1,7 @@
 import {useMemo} from 'react';
 
+import {useSettingsContext} from '~/contexts/SettingsProvider/useSettingsContext';
 import type {SettingsContext} from '~/lib/types';
-import {useSettingsContext} from '~/contexts';
 
 /**
  * Hook for PreviewMode context from SettingsProvider

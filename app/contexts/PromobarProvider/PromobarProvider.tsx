@@ -1,14 +1,9 @@
-import {createContext, useContext, useMemo, useReducer} from 'react';
+import {useMemo, useReducer} from 'react';
 import type {ReactNode} from 'react';
 
-import type {
-  Action,
-  Dispatch,
-  PromobarContext,
-  PromobarState,
-} from '~/lib/types';
+import type {Action, Dispatch, PromobarState} from '~/lib/types';
 
-const Context = createContext({state: {}, actions: {}} as PromobarContext);
+import {Context} from './usePromobarContext';
 
 const promobarState = {
   promobarOpen: true,
@@ -39,5 +34,3 @@ export function PromobarProvider({children}: {children: ReactNode}) {
 
   return <Context.Provider value={value}>{children}</Context.Provider>;
 }
-
-export const usePromobarContext = () => useContext(Context);

@@ -1,16 +1,9 @@
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useReducer,
-  useState,
-} from 'react';
+import {useEffect, useMemo, useReducer, useState} from 'react';
 import type {ReactNode} from 'react';
 
-import type {Action, Dispatch, MenuContext, MenuState} from '~/lib/types';
+import type {Action, Dispatch, MenuState} from '~/lib/types';
 
-const Context = createContext({state: {}, actions: {}} as MenuContext);
+import {Context} from './useMenuContext';
 
 const defaultModal = {children: null, props: {}};
 
@@ -185,5 +178,3 @@ export function MenuProvider({children}: {children: ReactNode}) {
 
   return <Context.Provider value={value}>{children}</Context.Provider>;
 }
-
-export const useMenuContext = () => useContext(Context);

@@ -2,10 +2,10 @@ import {useCallback, useEffect, useState} from 'react';
 import {useFetcher} from '@remix-run/react';
 import type {Product} from '@shopify/hydrogen/storefront-api-types';
 
-import {useGroupingsContext} from '~/contexts';
+import {useGroupingsContext} from '~/contexts/GroupingsProvider/useGroupingsContext';
 import {formatGroupingWithOptions} from '~/lib/utils';
-import type {Group} from '~/lib/types';
 import {useLocale} from '~/hooks';
+import type {Group} from '~/lib/types';
 
 /**
  * Get product grouping object by handle from cache

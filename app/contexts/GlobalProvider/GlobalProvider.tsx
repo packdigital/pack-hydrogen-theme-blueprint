@@ -1,10 +1,10 @@
-import {createContext, useContext, useEffect, useMemo, useReducer} from 'react';
+import {useEffect, useMemo, useReducer} from 'react';
 import {useCart} from '@shopify/hydrogen-react';
 import type {ReactNode} from 'react';
 
-import type {Action, Dispatch, GlobalContext, GlobalState} from '~/lib/types';
+import type {Action, Dispatch, GlobalState} from '~/lib/types';
 
-const Context = createContext({state: {}, actions: {}} as GlobalContext);
+import {Context} from './useGlobalContext';
 
 const globalState = {
   isCartReady: false,
@@ -61,5 +61,3 @@ export function GlobalProvider({children}: {children: ReactNode}) {
 
   return <Context.Provider value={value}>{children}</Context.Provider>;
 }
-
-export const useGlobalContext = () => useContext(Context);

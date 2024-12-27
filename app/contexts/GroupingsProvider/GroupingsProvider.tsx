@@ -1,5 +1,5 @@
 import type {ReactNode} from 'react';
-import {createContext, useContext, useEffect, useMemo, useReducer} from 'react';
+import {useEffect, useMemo, useReducer} from 'react';
 
 import type {
   Action,
@@ -7,12 +7,11 @@ import type {
   Group,
   GroupingIndexesMap,
   ProductGroupings,
-  GroupingsContext,
   GroupingsState,
 } from '~/lib/types';
-import {useRootLoaderData} from '~/hooks';
+import {useRootLoaderData} from '~/hooks/useRootLoaderData';
 
-const Context = createContext({state: {}, actions: {}} as GroupingsContext);
+import {Context} from './useGroupingsContext';
 
 const reducer = (state: GroupingsState, action: Action) => {
   switch (action.type) {
@@ -79,5 +78,3 @@ export function GroupingsProvider({children}: {children: ReactNode}) {
 
   return <Context.Provider value={value}>{children}</Context.Provider>;
 }
-
-export const useGroupingsContext = () => useContext(Context);

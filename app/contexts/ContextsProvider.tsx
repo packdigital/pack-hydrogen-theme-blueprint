@@ -1,11 +1,11 @@
 import type {ReactNode} from 'react';
 
 import {AnalyticsProvider} from './AnalyticsProvider';
-import {GlobalProvider} from './GlobalProvider';
-import {GroupingsProvider} from './GroupingsProvider';
-import {MenuProvider} from './MenuProvider';
-import {PromobarProvider} from './PromobarProvider';
-import {SettingsProvider} from './SettingsProvider';
+import {GlobalProvider} from './GlobalProvider/GlobalProvider';
+import {GroupingsProvider} from './GroupingsProvider/GroupingsProvider';
+import {MenuProvider} from './MenuProvider/MenuProvider';
+import {PromobarProvider} from './PromobarProvider/PromobarProvider';
+import {SettingsProvider} from './SettingsProvider/SettingsProvider';
 
 export function ContextsProvider({children}: {children: ReactNode}) {
   return (

@@ -1,7 +1,7 @@
 import {useMemo} from 'react';
 import {useSiteSettings} from '@pack/react';
 
-import {useSettingsContext} from '~/contexts';
+import {useSettingsContext} from '~/contexts/SettingsProvider/useSettingsContext';
 import type {Settings} from '~/lib/types';
 
 /**
