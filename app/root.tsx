@@ -123,8 +123,8 @@ export async function loader({context, request}: LoaderFunctionArgs) {
     checkoutDomain: env.PUBLIC_CHECKOUT_DOMAIN,
     storefrontAccessToken: env.PUBLIC_STOREFRONT_API_TOKEN,
     withPrivacyBanner: true,
-    country: context.storefront.i18n.country,
-    language: context.storefront.i18n.language,
+    country: storefront.i18n.country,
+    language: storefront.i18n.language,
   };
   const shopAnalytics = getShopAnalytics({
     storefront,

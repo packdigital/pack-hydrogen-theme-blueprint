@@ -1,5 +1,5 @@
-import type {SerializeFrom} from '@shopify/remix-oxygen';
 import {useMatches} from '@remix-run/react';
+import type {SerializeFrom} from '@shopify/remix-oxygen';
 
 import type {loader} from '~/root';
 
