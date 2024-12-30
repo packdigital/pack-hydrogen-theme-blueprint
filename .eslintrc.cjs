@@ -32,7 +32,16 @@ module.exports = {
     'jest/no-deprecated-functions': 'off',
     'react-refresh/only-export-components': [
       'error',
-      {allowExportNames: ['meta', 'links', 'headers', 'loader', 'action']},
+      {
+        allowExportNames: [
+          'meta',
+          'links',
+          'headers',
+          'loader',
+          'action',
+          'shouldRevalidate',
+        ],
+      },
     ],
     'tailwindcss/no-custom-classname': [
       'warn',
