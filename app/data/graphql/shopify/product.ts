@@ -31,19 +31,6 @@ export const OPTION_FRAGMENT = `#graphql
   }
 `;
 
-export const METAFIELD_FRAGMENT = `#graphql
-fragment MetafieldFragment on Metafield {
-    createdAt
-    description
-    id
-    key
-    namespace
-    type
-    updatedAt
-    value
-  }
-`;
-
 export const VARIANT_FRAGMENT = `#graphql
   fragment VariantFragment on ProductVariant {
     id
@@ -333,11 +320,17 @@ export const PRODUCT_METAFIELDS_QUERY = `#graphql
   ) @inContext(country: $country, language: $language) {
     product(handle: $handle) {
       metafields(identifiers: {key: $key, namespace: $namespace}) {
-        ...MetafieldFragment
+        createdAt
+        description
+        id
+        key
+        namespace
+        type
+        updatedAt
+        value
       }
     }
   }
-  ${METAFIELD_FRAGMENT}
 ` as const;
 
 // Docs: https://shopify.dev/docs/api/storefront/latest/queries/products

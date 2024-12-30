@@ -1,7 +1,7 @@
 import {json} from '@shopify/remix-oxygen';
 import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 
-import {PRODUCT_RECOMMENDATIONS_QUERY} from '~/data/queries';
+import {PRODUCT_RECOMMENDATIONS_QUERY} from '~/data/graphql/shopify/product';
 
 // docs: https://shopify.dev/docs/api/storefront/latest/queries/productRecommendations
 

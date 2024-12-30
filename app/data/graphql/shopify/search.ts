@@ -70,33 +70,6 @@ export const PRODUCTS_SEARCH_QUERY = `#graphql
   ${PRODUCT_ITEM_FRAGMENT}
 ` as const;
 
-export const PRODUCTS_SEARCH_FILTERS_QUERY = `#graphql
-  query ProductsSearchFilters(
-    $country: CountryCode
-    $language: LanguageCode
-    $searchTerm: String!
-  ) @inContext(country: $country, language: $language) {
-    search(
-      first: 1,
-      query: $searchTerm,
-      types: PRODUCT,
-    ) {
-      filters: productFilters {
-        id
-        label
-        type
-        values {
-          id
-          label
-          count
-          input
-        }
-      }
-    }
-  }
-
-` as const;
-
 // Docs: https://shopify.dev/docs/api/storefront/latest/queries/predictiveSearch
 
 const PREDICTIVE_COLLECTION_FRAGMENT = `#graphql

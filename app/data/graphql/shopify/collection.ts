@@ -91,3 +91,27 @@ export const COLLECTION_QUERY = `#graphql
   }
   ${COLLECTION_FRAGMENT}
 ` as const;
+
+export const COLLECTION_FILTERS_QUERY = `#graphql
+  query CollectionFilters(
+    $handle: String!,
+    $country: CountryCode,
+    $language: LanguageCode
+  ) @inContext(country: $country, language: $language) {
+    collection(handle: $handle) {
+      products(first: 1) {
+        filters {
+          id
+          label
+          type
+          values {
+            id
+            label
+            count
+            input
+          }
+        }
+      }
+    }
+  }
+` as const;
