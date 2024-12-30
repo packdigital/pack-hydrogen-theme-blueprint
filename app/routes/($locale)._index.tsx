@@ -5,7 +5,7 @@ import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 import {RenderSections} from '@pack/react';
 
 import {getShop, getSiteSettings} from '~/lib/utils';
-import {PAGE_QUERY} from '~/data/queries';
+import {PAGE_QUERY} from '~/data/graphql/pack/page';
 import {routeHeaders} from '~/data/cache';
 import {seoPayload} from '~/lib/seo.server';
 

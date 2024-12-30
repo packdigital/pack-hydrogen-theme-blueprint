@@ -4,7 +4,7 @@ import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 import {RenderSections} from '@pack/react';
 
-import {BLOG_QUERY} from '~/data/queries';
+import {BLOG_PAGE_QUERY} from '~/data/graphql/pack/blog-page';
 import {getShop, getSiteSettings} from '~/lib/utils';
 import type {BlogPage} from '~/lib/types';
 import {routeHeaders} from '~/data/cache';
@@ -23,7 +23,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     blog: BlogPage | null;
     cursor: string | null;
   }): Promise<BlogPage> => {
-    const {data} = await context.pack.query(BLOG_QUERY, {
+    const {data} = await context.pack.query(BLOG_PAGE_QUERY, {
       variables: {
         first: 250,
         handle,

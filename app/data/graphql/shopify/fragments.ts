@@ -1,0 +1,293 @@
+import {
+  SELLING_PLAN_ALLOCATION_FRAGMENT,
+  SELLING_PLAN_GROUP_FRAGMENT,
+} from './sellingPlans';
+
+// Docs: https://shopify.dev/docs/api/storefront/latest/queries/product
+
+export const OPTION_FRAGMENT = `#graphql
+  fragment OptionFragment on ProductOption {
+    id
+    name
+    optionValues {
+      id
+      name
+      swatch {
+        color
+        image {
+          mediaContentType
+          previewImage {
+            height
+            id
+            url
+            width
+            altText
+          }
+          id
+          alt
+        }
+      }
+    }
+  }
+`;
+
+export const METAFIELD_FRAGMENT = `#graphql
+fragment MetafieldFragment on Metafield {
+    createdAt
+    description
+    id
+    key
+    namespace
+    type
+    updatedAt
+    value
+  }
+`;
+
+export const VARIANT_FRAGMENT = `#graphql
+  fragment VariantFragment on ProductVariant {
+    id
+    title
+    availableForSale
+    sku
+    weight
+    weightUnit
+    image {
+      altText
+      height
+      id
+      url
+      width
+    }
+    price {
+      currencyCode
+      amount
+    }
+    sellingPlanAllocations(first: 10) {
+      edges {
+        node {
+          ... on SellingPlanAllocation {
+            ...SellingPlanAllocationFragment
+          }
+        }
+      }
+    }
+    compareAtPrice {
+      currencyCode
+      amount
+    }
+    selectedOptions {
+      name
+      value
+    }
+    product {
+      handle
+      id
+      productType
+      title
+      tags
+    }
+  }
+  ${SELLING_PLAN_ALLOCATION_FRAGMENT}
+` as const;
+
+export const PRODUCT_FRAGMENT = `#graphql
+  fragment ProductFragment on Product {
+    id
+    title
+    handle
+    vendor
+    descriptionHtml
+    productType
+    publishedAt
+    tags
+    collections(first: 250) {
+      nodes {
+        handle
+      }
+    }
+    featuredImage {
+      altText
+      height
+      id
+      url
+      width
+    }
+    priceRange {
+      maxVariantPrice {
+        amount
+        currencyCode
+      }
+      minVariantPrice {
+        amount
+        currencyCode
+      }
+    }
+    media(first: 250) {
+      nodes {
+        alt
+        id
+        mediaContentType
+        previewImage {
+          altText
+          height
+          id
+          url
+          width
+          }
+        ... on Video {
+          sources {
+            height
+            url
+            width
+            mimeType
+          }
+        }
+        ... on ExternalVideo {
+          originUrl
+          alt
+          embedUrl
+          host
+          id
+          mediaContentType
+          previewImage {
+            altText
+            height
+            id
+            url
+            width
+          }
+        }
+        ... on Model3d {
+          id
+          alt
+          mediaContentType
+          sources {
+            filesize
+            format
+            mimeType
+            url
+          }
+          previewImage {
+            altText
+            height
+            id
+            url
+            width
+          }
+        }
+      }
+    }
+    options {
+      ...OptionFragment
+    }
+    selectedVariant: variantBySelectedOptions(selectedOptions: $selectedOptions) {
+      ... on ProductVariant {
+          ...VariantFragment
+        }
+    }
+    sellingPlanGroups(first: 10) {
+      edges {
+        node {
+          ... on SellingPlanGroup {
+            ...SellingPlanGroupFragment
+          }
+        }
+      }
+    }
+    variants(first: 250) {
+      nodes {
+        ... on ProductVariant {
+          ...VariantFragment
+        }
+      }
+    }
+    seo {
+      description
+      title
+    }
+  }
+  ${VARIANT_FRAGMENT}
+  ${SELLING_PLAN_GROUP_FRAGMENT}
+  ${OPTION_FRAGMENT}
+` as const;
+
+export const PRODUCT_ITEM_FRAGMENT = `#graphql
+  fragment ProductItemFragment on Product {
+    id
+    title
+    handle
+    vendor
+    description
+    productType
+    createdAt
+    publishedAt
+    tags
+    collections(first: 10) {
+      nodes {
+        handle
+      }
+    }
+    featuredImage {
+      altText
+      height
+      id
+      url
+      width
+    }
+    priceRange {
+      maxVariantPrice {
+        amount
+        currencyCode
+      }
+      minVariantPrice {
+        amount
+        currencyCode
+      }
+    }
+    media(first: 10) {
+      nodes {
+        alt
+        id
+        mediaContentType
+        previewImage {
+          altText
+          height
+          id
+          url
+          width
+        }
+        ... on Video {
+          sources {
+            height
+            url
+            width
+            mimeType
+          }
+        }
+      }
+    }
+    options {
+      ...OptionFragment
+    }
+    sellingPlanGroups(first: 10) {
+      edges {
+        node {
+          ... on SellingPlanGroup {
+            ...SellingPlanGroupFragment
+          }
+        }
+      }
+    }
+    variants(first: 100) {
+      nodes {
+        ... on ProductVariant {
+            ...VariantFragment
+          }
+      }
+    }
+  }
+  ${VARIANT_FRAGMENT}
+  ${SELLING_PLAN_GROUP_FRAGMENT}
+  ${OPTION_FRAGMENT}
+` as const;

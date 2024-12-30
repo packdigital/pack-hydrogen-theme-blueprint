@@ -1,7 +1,7 @@
 import {json} from '@shopify/remix-oxygen';
 import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 
-import {BLOG_QUERY} from '~/data/queries';
+import {BLOG_PAGE_QUERY} from '~/data/graphql/pack/blog-page';
 import {routeHeaders} from '~/data/cache';
 import type {BlogPage} from '~/lib/types';
 
@@ -26,7 +26,7 @@ export async function loader({context, request}: LoaderFunctionArgs) {
     blog: BlogPage | null;
     cursor: string | null;
   }): Promise<BlogPage> => {
-    const {data} = await context.pack.query(BLOG_QUERY, {
+    const {data} = await context.pack.query(BLOG_PAGE_QUERY, {
       variables: {
         first: 250,
         handle,

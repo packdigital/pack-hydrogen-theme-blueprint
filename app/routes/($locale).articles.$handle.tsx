@@ -5,7 +5,7 @@ import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 import {RenderSections} from '@pack/react';
 
-import {ARTICLE_QUERY} from '~/data/queries';
+import {ARTICLE_PAGE_QUERY} from '~/data/graphql/pack/article-page';
 import {getShop, getSiteSettings} from '~/lib/utils';
 import {routeHeaders} from '~/data/cache';
 import {seoPayload} from '~/lib/seo.server';
@@ -14,7 +14,7 @@ export const headers = routeHeaders;
 
 export async function loader({params, context, request}: LoaderFunctionArgs) {
   const {handle, locale} = params;
-  const {data} = await context.pack.query(ARTICLE_QUERY, {
+  const {data} = await context.pack.query(ARTICLE_PAGE_QUERY, {
     variables: {handle},
     cache: context.storefront.CacheLong(),
   });

@@ -5,7 +5,7 @@ import {CartProvider, ShopifyProvider} from '@shopify/hydrogen-react';
 import {PreviewProvider} from '@pack/react';
 
 import {ContextsProvider} from '~/contexts';
-import {CART_FRAGMENT} from '~/data/queries';
+import {CART_FRAGMENT} from '~/data/graphql/shopify/cart';
 import {Layout} from '~/components';
 import {useLocale, useRootLoaderData} from '~/hooks';
 

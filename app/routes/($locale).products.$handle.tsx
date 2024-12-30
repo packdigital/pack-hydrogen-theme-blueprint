@@ -12,11 +12,8 @@ import {
   getShop,
   getSiteSettings,
 } from '~/lib/utils';
-import {
-  PRODUCT_PAGE_QUERY,
-  PRODUCT_QUERY,
-  PRODUCTS_QUERY,
-} from '~/data/queries';
+import {PRODUCT_PAGE_QUERY} from '~/data/graphql/pack/product-page';
+import {PRODUCT_QUERY, PRODUCTS_QUERY} from '~/data/graphql/shopify/product';
 import {Product} from '~/components';
 import {routeHeaders} from '~/data/cache';
 import {seoPayload} from '~/lib/seo.server';
