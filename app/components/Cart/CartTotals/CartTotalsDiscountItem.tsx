@@ -29,7 +29,7 @@ export function CartTotalsDiscountItem({
           <Svg
             className="w-4"
             src="/svgs/discount.svg#discount"
-            title="Close"
+            title="Discount"
             viewBox="0 0 24 24"
           />
         )}
