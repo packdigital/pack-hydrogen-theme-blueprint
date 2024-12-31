@@ -1,22 +1,13 @@
-import {SECTION_FRAGMENT} from './pack.queries';
+import {SECTION_FRAGMENT} from './settings';
 
-/*
- * BACKPACK API QUERIES -------------------------------------------------------
- */
-
-export const ARTICLE_QUERY = `
-  query Article($handle: String!, $version: Version, $cursor: String) {
-    article: articleByHandle(handle: $handle, version: $version) {
+export const PAGE_QUERY = `
+  query Page($handle: String!, $version: Version, $cursor: String) {
+    page: pageByHandle(handle: $handle, version: $version) {
       id
       title
       handle
       description
       status
-      author
-      category
-      tags
-      excerpt
-      bodyHtml
       seo {
         title
         description
@@ -24,11 +15,6 @@ export const ARTICLE_QUERY = `
         keywords
         noFollow
         noIndex
-      }
-      blog {
-        handle
-        title
-        description
       }
       sections(first: 25, after: $cursor) {
         nodes {
@@ -48,7 +34,6 @@ export const ARTICLE_QUERY = `
         createdAt
         updatedAt
       }
-      firstPublishedAt
       publishedAt
       createdAt
       updatedAt
@@ -57,9 +42,9 @@ export const ARTICLE_QUERY = `
   ${SECTION_FRAGMENT}
 ` as const;
 
-export const CMS_ARTICLES_QUERY = `
-  query GetBackpackCmsArticlePages($first: Int, $cursor: String) {
-    articles(first: $first, after: $cursor, version: PUBLISHED) {
+export const CMS_PAGES_QUERY = `
+  query GetBackpackCmsPages($first: Int, $cursor: String) {
+    pages(first: $first, after: $cursor, version: PUBLISHED) {
       pageInfo {
         hasNextPage
         endCursor

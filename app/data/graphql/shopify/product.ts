@@ -1,94 +1,7 @@
-import {SECTION_FRAGMENT} from './pack.queries';
 import {
   SELLING_PLAN_ALLOCATION_FRAGMENT,
   SELLING_PLAN_GROUP_FRAGMENT,
-} from './sellingPlans.queries';
-
-/*
- * BACKPACK API QUERIES -------------------------------------------------------
- */
-
-export const PRODUCT_PAGE_QUERY = `
-  query ProductPage($handle: String!, $version: Version) {
-    productPage: productPageByHandle(handle: $handle, version: $version) {
-      id
-      title
-      handle
-      status
-      sections(first: 25) {
-        nodes {
-          ...SectionFragment
-        }
-        pageInfo {
-          hasNextPage
-          endCursor
-        }
-      }
-      seo {
-        title
-        image
-        keywords
-        noFollow
-        noIndex
-      }
-      template {
-        id
-        title
-        type
-        status
-        publishedAt
-        createdAt
-        updatedAt
-      }
-      publishedAt
-      createdAt
-      updatedAt
-    }
-  }
-  ${SECTION_FRAGMENT}
-` as const;
-
-export const CMS_PRODUCT_QUERY = `
-  query CmsProductPage($handle: String!, $version: Version) {
-    productPage: productPageByHandle(handle: $handle, version: $version) {
-      seo {
-        noIndex
-      }
-      sourceProduct {
-        data {
-          status
-        }
-      }
-    }
-  }
-` as const;
-
-export const CMS_PRODUCTS_QUERY = `
-  query GetBackpackCmsProductPages($first: Int, $cursor: String) {
-    productPages(first: $first, after: $cursor, version: PUBLISHED) {
-      pageInfo {
-        hasNextPage
-        endCursor
-      }
-      nodes {
-        id
-        handle
-        seo {
-          noIndex
-        }
-        sourceProduct {
-          data {
-            status
-          }
-        }
-      }
-    }
-  }
-` as const;
-
-/*
- * STOREFRONT API QUERIES -----------------------------------------------------
- */
+} from './sellingPlans';
 
 // Docs: https://shopify.dev/docs/api/storefront/latest/queries/product
 
@@ -115,19 +28,6 @@ export const OPTION_FRAGMENT = `#graphql
         }
       }
     }
-  }
-`;
-
-export const METAFIELD_FRAGMENT = `#graphql
-fragment MetafieldFragment on Metafield {
-    createdAt
-    description
-    id
-    key
-    namespace
-    type
-    updatedAt
-    value
   }
 `;
 
@@ -420,12 +320,20 @@ export const PRODUCT_METAFIELDS_QUERY = `#graphql
   ) @inContext(country: $country, language: $language) {
     product(handle: $handle) {
       metafields(identifiers: {key: $key, namespace: $namespace}) {
-        ...MetafieldFragment
+        createdAt
+        description
+        id
+        key
+        namespace
+        type
+        updatedAt
+        value
       }
     }
   }
-  ${METAFIELD_FRAGMENT}
 ` as const;
+
+// Docs: https://shopify.dev/docs/api/storefront/latest/queries/products
 
 export const PRODUCTS_QUERY = `#graphql
   query Products(
@@ -475,6 +383,8 @@ export const PRODUCT_FEED_QUERY = `#graphql
   }
   ${PRODUCT_ITEM_FRAGMENT}
 ` as const;
+
+// Docs: https://shopify.dev/docs/api/storefront/latest/queries/productRecommendations
 
 export const PRODUCT_RECOMMENDATIONS_QUERY = `#graphql
   query ProductRecommendations(

@@ -14,6 +14,7 @@ module.exports = {
       parser: '@typescript-eslint/parser',
     },
   ],
+  plugins: ['react-refresh'],
   rules: {
     'no-console': 'off',
     'no-inline-styles': 'off',
@@ -29,6 +30,19 @@ module.exports = {
     '@typescript-eslint/no-non-null-asserted-optional-chain': 'off',
     'no-case-declarations': 'off',
     'jest/no-deprecated-functions': 'off',
+    'react-refresh/only-export-components': [
+      'error',
+      {
+        allowExportNames: [
+          'meta',
+          'links',
+          'headers',
+          'loader',
+          'action',
+          'shouldRevalidate',
+        ],
+      },
+    ],
     'tailwindcss/no-custom-classname': [
       'warn',
       {whitelist: ['theme-\\S+', 'swiper-\\S+']},

@@ -4,11 +4,9 @@ import {useAnalytics} from '@shopify/hydrogen';
 
 import {COLOR_OPTION_NAME} from '~/lib/constants';
 import type {SelectedProduct, SelectedVariant} from '~/lib/types';
-import {Link} from '~/components';
+import {Link, ProductStars} from '~/components';
 import {AnalyticsEvent} from '~/components/Analytics/constants';
 import {useProductByHandle, useProductGroupingByHandle} from '~/hooks';
-
-import {ProductStars} from '../ProductStars';
 
 import {ColorVariantSelector} from './ColorVariantSelector';
 import {ProductItemMedia} from './ProductItemMedia/ProductItemMedia';

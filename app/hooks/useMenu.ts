@@ -1,7 +1,7 @@
 import {useMemo} from 'react';
 
+import {useMenuContext} from '~/contexts/MenuProvider/useMenuContext';
 import type {MenuContext} from '~/lib/types';
-import {useMenuContext} from '~/contexts';
 
 /**
  * Hook for Menu Provider, e.g. e.g. cartOpen, searchOpen, etc.

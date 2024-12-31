@@ -1,9 +1,10 @@
 import type {ContainerSettings} from '~/settings/container';
 import type {ImageCms} from '~/lib/types';
 
-interface Image {
+interface Media {
   alt: string;
   image: ImageCms;
+  video: ImageCms;
   platform: string;
   url: string;
 }
@@ -11,10 +12,12 @@ interface Image {
 interface Section {
   fullBleed: boolean;
   fullWidth: boolean;
+  aspectRatio: string;
+  gridGap: string;
 }
 
-export interface SocialImagesGridCms {
-  images: Image[];
+export interface SocialMediaGridCms {
+  media: Media[];
   section: Section;
   container: ContainerSettings;
 }

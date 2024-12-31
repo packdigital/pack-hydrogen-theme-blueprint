@@ -1,7 +1,3 @@
-/*
- * STOREFRONT API QUERIES -----------------------------------------------------
- */
-
 // Docs: https://shopify.dev/docs/api/storefront/latest/objects/Shop
 
 export const LAYOUT_QUERY = `#graphql

@@ -1,7 +1,7 @@
 import {json} from '@shopify/remix-oxygen';
 import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 
-import {PRODUCTS_SEARCH_QUERY} from '~/data/queries';
+import {PRODUCTS_SEARCH_QUERY} from '~/data/graphql/shopify/search';
 import {getSiteSettings} from '~/lib/utils';
 
 export async function loader({request, context}: LoaderFunctionArgs) {

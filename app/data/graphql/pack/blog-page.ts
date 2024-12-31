@@ -1,10 +1,6 @@
-import {SECTION_FRAGMENT} from './pack.queries';
+import {SECTION_FRAGMENT} from './settings';
 
-/*
- * BACKPACK API QUERIES -------------------------------------------------------
- */
-
-export const BLOG_QUERY = `
+export const BLOG_PAGE_QUERY = `
   query Blog($first: Int!, $handle: String!, $version: Version, $cursor: String) {
     blog: blogByHandle(handle: $handle, version: $version) {
       id

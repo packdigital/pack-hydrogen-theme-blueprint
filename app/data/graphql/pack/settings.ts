@@ -1,7 +1,3 @@
-/*
- * BACKPACK API QUERIES -------------------------------------------------------
- */
-
 export const SITE_SETTINGS_QUERY = `
   query SiteSettings($version: Version) {
     siteSettings(version: $version) {

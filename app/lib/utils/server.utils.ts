@@ -7,13 +7,10 @@ import type {
 } from '@shopify/hydrogen/storefront-api-types';
 
 import {
-  COLLECTION_FILTERS_QUERY,
-  LAYOUT_QUERY,
-  METAFIELD_FRAGMENT,
   PRODUCT_GROUPINGS_QUERY,
-  PRODUCTS_SEARCH_FILTERS_QUERY,
   SITE_SETTINGS_QUERY,
-} from '~/data/queries';
+} from '~/data/graphql/pack/settings';
+import {LAYOUT_QUERY} from '~/data/graphql/shopify/shop';
 import {PRICE_FILTER_ID} from '~/lib/constants';
 import type {ActiveFilterValue} from '~/components/Collection/CollectionFilters/CollectionFilters.types';
 import type {Group, RootSiteSettings, Seo} from '~/lib/types';
@@ -153,7 +150,32 @@ export const getFilters = async ({
   if (enabledFilters) {
     if (searchTerm) {
       const defaultFiltersData = await storefront.query(
-        PRODUCTS_SEARCH_FILTERS_QUERY,
+        `#graphql
+          query ProductsSearchFilters(
+            $country: CountryCode
+            $language: LanguageCode
+            $searchTerm: String!
+          ) @inContext(country: $country, language: $language) {
+            search(
+              first: 1,
+              query: $searchTerm,
+              types: PRODUCT,
+            ) {
+              filters: productFilters {
+                id
+                label
+                type
+                values {
+                  id
+                  label
+                  count
+                  input
+                }
+              }
+            }
+          }
+
+        `,
         {
           variables: {
             searchTerm,
@@ -166,7 +188,29 @@ export const getFilters = async ({
       defaultFilters = defaultFiltersData.search?.filters;
     } else if (handle) {
       const defaultFiltersData = await storefront.query(
-        COLLECTION_FILTERS_QUERY,
+        `#graphql
+          query CollectionFilters(
+            $handle: String!,
+            $country: CountryCode,
+            $language: LanguageCode
+          ) @inContext(country: $country, language: $language) {
+            collection(handle: $handle) {
+              products(first: 1) {
+                filters {
+                  id
+                  label
+                  type
+                  values {
+                    id
+                    label
+                    count
+                    input
+                  }
+                }
+              }
+            }
+          }
+        `,
         {
           variables: {
             handle,
@@ -264,13 +308,19 @@ export const getMetafields = async (
             metafields_${index}: metafields(
               identifiers: {key: "${key}", namespace: "${namespace}"}
             ) {
-              ...MetafieldFragment
+                createdAt
+                description
+                id
+                key
+                namespace
+                type
+                updatedAt
+                value
             }
           `,
         )}
       }
     }
-    ${METAFIELD_FRAGMENT}
   `;
 
   const {product} = await storefront.query(PRODUCT_METAFIELDS_QUERY, {

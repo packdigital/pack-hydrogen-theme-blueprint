@@ -1,8 +1,4 @@
-import {OPTION_FRAGMENT} from './product.queries';
-
-/*
- * STOREFRONT API QUERIES -----------------------------------------------------
- */
+import {OPTION_FRAGMENT} from './product';
 
 // Docs: https://shopify.dev/docs/api/storefront/latest/objects/Cart
 

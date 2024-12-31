@@ -21,10 +21,12 @@ export interface ImageCms {
   format?: string;
   height?: number;
   id?: string;
+  mediaType?: string;
   previewSrc?: string;
   size?: number;
-  src: string;
+  src?: string;
   type?: string;
+  url?: string;
   width?: number;
 }
 

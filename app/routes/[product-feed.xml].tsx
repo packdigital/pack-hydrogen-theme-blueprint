@@ -3,7 +3,7 @@ import {XMLBuilder} from 'fast-xml-parser';
 import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import type {Product} from '@shopify/hydrogen/storefront-api-types';
 
-import {PRODUCT_FEED_QUERY} from '~/data/queries';
+import {PRODUCT_FEED_QUERY} from '~/data/graphql/shopify/product';
 
 const SAFE_XML: Record<string, string> = {
   '&': '&amp;',

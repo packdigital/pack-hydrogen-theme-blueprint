@@ -1,7 +1,7 @@
 import {useMemo} from 'react';
 
+import {useGlobalContext} from '~/contexts/GlobalProvider/useGlobalContext';
 import type {GlobalContext} from '~/lib/types';
-import {useGlobalContext} from '~/contexts';
 
 /**
  * Hook for Global Provider, e.g. isCartReady

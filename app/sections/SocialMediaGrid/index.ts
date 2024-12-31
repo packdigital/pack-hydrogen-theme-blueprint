@@ -1,0 +1,1 @@
+export {SocialMediaGrid} from './SocialMediaGrid';

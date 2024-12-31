@@ -1,14 +1,12 @@
 import {memo} from 'react';
-import {Swiper, SwiperSlide} from 'swiper/react';
-import {A11y} from 'swiper/modules';
 
 import {Link, Drawer, Svg} from '~/components';
-import {useColorSwatches, useMenu, useSettings} from '~/hooks';
+import {useMenu, useSettings} from '~/hooks';
 
-import {ProductItem} from '../../ProductItem';
 import type {UseMobileMenuReturn} from '../useMobileMenu';
 
 import {MobileSubmenu} from './MobileSubmenu';
+import {MobileMenuProductsSlider} from './MobileMenuProductsSlider';
 
 type MobileMenuProps = Pick<
   UseMobileMenuReturn,
@@ -27,16 +25,12 @@ export const MobileMenu = memo(
   }: MobileMenuProps) => {
     const {header} = useSettings();
     const {openSearch} = useMenu();
-    const swatchesMap = useColorSwatches();
 
     const {
       links: additionalLinks,
       navItems,
       productsSlider,
     } = {...header?.menu};
-    const {products, heading: productsHeading} = {
-      ...productsSlider,
-    };
 
     return (
       <Drawer
@@ -131,33 +125,11 @@ export const MobileMenu = memo(
               </ul>
             </nav>
 
-            {products?.length > 0 && (
-              <div className="mb-8">
-                <h3 className="text-h5 mb-2 px-4">{productsHeading}</h3>
-
-                <Swiper
-                  modules={[A11y]}
-                  slidesPerView={1.3}
-                  spaceBetween={16}
-                  slidesOffsetBefore={16}
-                  slidesOffsetAfter={16}
-                  grabCursor
-                  className="mb-5"
-                >
-                  {products.map(({product}, index) => {
-                    return (
-                      <SwiperSlide key={index}>
-                        <ProductItem
-                          handle={product.handle}
-                          index={index}
-                          onClick={handleCloseMobileMenu}
-                          swatchesMap={swatchesMap}
-                        />
-                      </SwiperSlide>
-                    );
-                  })}
-                </Swiper>
-              </div>
+            {productsSlider?.products?.length > 0 && (
+              <MobileMenuProductsSlider
+                handleCloseMobileMenu={handleCloseMobileMenu}
+                productsSlider={productsSlider}
+              />
             )}
 
             {additionalLinks?.length > 0 && (

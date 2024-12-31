@@ -1,5 +1,5 @@
 import {PROMOBAR_HEIGHT_MOBILE, PROMOBAR_HEIGHT_DESKTOP} from '~/lib/constants';
-import {usePromobarContext} from '~/contexts';
+import {usePromobarContext} from '~/contexts/PromobarProvider/usePromobarContext';
 import {useSettings} from '~/hooks';
 
 export interface UsePromobarReturn {

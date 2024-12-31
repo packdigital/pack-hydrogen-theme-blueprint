@@ -1,16 +1,11 @@
-import {createContext, useContext, useMemo, useReducer} from 'react';
+import {useMemo, useReducer} from 'react';
 import type {ReactNode} from 'react';
 import type {Customer} from '@shopify/hydrogen-react/storefront-api-types';
 
-import type {
-  Action,
-  Dispatch,
-  SettingsContext,
-  SettingsState,
-} from '~/lib/types';
+import type {Action, Dispatch, SettingsState} from '~/lib/types';
 import {useRootLoaderData} from '~/hooks';
 
-const Context = createContext({state: {}, actions: {}} as SettingsContext);
+import {Context} from './useSettingsContext';
 
 const settingsState = {
   isPreviewModeEnabled: false,
@@ -49,5 +44,3 @@ export function SettingsProvider({children}: {children: ReactNode}) {
 
   return <Context.Provider value={value}>{children}</Context.Provider>;
 }
-
-export const useSettingsContext = () => useContext(Context);

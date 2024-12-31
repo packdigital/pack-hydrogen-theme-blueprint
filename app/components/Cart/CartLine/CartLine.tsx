@@ -99,7 +99,7 @@ export const CartLine = memo(({closeCart, line}: CartLineProps) => {
                         <Svg
                           className="w-3.5 pt-0.5"
                           src="/svgs/discount.svg#discount"
-                          title="Close"
+                          title="Discount"
                           viewBox="0 0 24 24"
                         />
                       )}

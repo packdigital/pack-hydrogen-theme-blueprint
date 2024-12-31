@@ -20,7 +20,7 @@ import {PressSlider} from './PressSlider';
 import {ProductRecommendationsSlider} from './ProductRecommendationsSlider';
 import {ProductReviews} from './ProductReviews';
 import {ProductsSlider} from './ProductsSlider';
-import {SocialImagesGrid} from './SocialImagesGrid';
+import {SocialMediaGrid} from './SocialMediaGrid';
 import {TabbedTilesSlider} from './TabbedTilesSlider';
 import {TestimonialSlider} from './TestimonialSlider';
 import {TextBlock} from './TextBlock';
@@ -50,7 +50,7 @@ export function registerSections() {
   registerSection(TabbedTilesSlider, {name: 'tabbed-tiles-slider'});
   registerSection(TilesSlider, {name: 'tiles-slider'});
   registerSection(TilesStack, {name: 'tiles-stack'});
-  registerSection(SocialImagesGrid, {name: 'social-images-grid'});
+  registerSection(SocialMediaGrid, {name: 'social-media-grid'});
 
   /* Media ---------- */
   registerSection(Image, {name: 'image'});
