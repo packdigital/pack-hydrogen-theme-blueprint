@@ -38,7 +38,7 @@ export function SocialMediaGrid({cms}: {cms: SocialMediaGridCms}) {
                   to={item.url}
                   newTab
                 >
-                  <div className={`relative bg-offWhite ${aspectRatio}`}>
+                  <div className={`relative bg-neutralLightest ${aspectRatio}`}>
                     {inView && (
                       <>
                         {videoUrl ? (

@@ -1,6 +1,6 @@
 import type {Swatch} from '~/lib/types';
 
-import {COLORS} from './common';
+import {COLOR_PICKER_DEFAULTS, COLOR_SCHEMA_DEFAULT_VALUE} from './common';
 
 export interface ProductSettings {
   addToCart: {
@@ -157,40 +157,40 @@ export default {
             {
               label: 'Background Color',
               name: 'bgColor',
-              component: 'select',
-              options: COLORS,
+              component: 'color',
+              colors: COLOR_PICKER_DEFAULTS,
             },
             {
               label: 'Text Color',
               name: 'textColor',
-              component: 'select',
-              options: COLORS,
+              component: 'color',
+              colors: COLOR_PICKER_DEFAULTS,
             },
           ],
           defaultItem: {
-            bgColor: 'var(--black)',
-            textColor: 'var(--white)',
+            bgColor: COLOR_SCHEMA_DEFAULT_VALUE.black,
+            textColor: COLOR_SCHEMA_DEFAULT_VALUE.white,
           },
           defaultValue: [
             {
               tag: 'Draft',
-              bgColor: 'var(--mediumGray)',
-              textColor: 'var(--white)',
+              bgColor: COLOR_SCHEMA_DEFAULT_VALUE.neutralLight,
+              textColor: COLOR_SCHEMA_DEFAULT_VALUE.white,
             },
             {
               tag: 'Best Seller',
-              bgColor: 'var(--black)',
-              textColor: 'var(--white)',
+              bgColor: COLOR_SCHEMA_DEFAULT_VALUE.black,
+              textColor: COLOR_SCHEMA_DEFAULT_VALUE.white,
             },
             {
               tag: 'New',
-              bgColor: 'var(--secondary)',
-              textColor: 'var(--white)',
+              bgColor: COLOR_SCHEMA_DEFAULT_VALUE.secondary,
+              textColor: COLOR_SCHEMA_DEFAULT_VALUE.white,
             },
             {
               tag: 'Sale',
-              bgColor: 'var(--primary)',
-              textColor: 'var(--white)',
+              bgColor: COLOR_SCHEMA_DEFAULT_VALUE.primary,
+              textColor: COLOR_SCHEMA_DEFAULT_VALUE.white,
             },
           ],
         },

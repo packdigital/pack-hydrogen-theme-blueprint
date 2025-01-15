@@ -9,7 +9,6 @@ export function Container({
 }) {
   const {
     bgColor,
-    bgColorCustom,
     tabletDesktopPaddingTop,
     tabletDesktopPaddingBottom,
     tabletDesktopMarginBottom,
@@ -22,7 +21,7 @@ export function Container({
   return (
     <div
       className={`relative ${paddingClasses} ${marginClasses}`}
-      style={{backgroundColor: bgColorCustom || bgColor}}
+      style={{backgroundColor: bgColor}}
     >
       {children}
     </div>

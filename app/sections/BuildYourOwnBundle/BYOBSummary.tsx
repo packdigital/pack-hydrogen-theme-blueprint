@@ -76,7 +76,7 @@ export function BYOBSummary({
       {/* Mobile open summary button */}
       <button
         id="byob-summary-mobile-toggle"
-        className="text-h6 relative flex h-16 w-full items-center justify-between gap-4 bg-darkGray px-8 py-5 text-white md:hidden"
+        className="text-h6 relative flex h-16 w-full items-center justify-between gap-4 bg-neutralDarker px-8 py-5 text-white md:hidden"
         type="button"
         onClick={() => {
           setMobileSummaryOpen(!mobileSummaryOpen);
@@ -110,7 +110,7 @@ export function BYOBSummary({
       </button>
 
       <div className={`flex max-h-full flex-1 flex-col`}>
-        <div className="w-full bg-offWhite max-md:hidden">
+        <div className="w-full bg-neutralLightest max-md:hidden">
           <BYOBSummaryHeader
             addToCartUnlocked={addToCartUnlocked}
             heading={heading}
@@ -119,7 +119,7 @@ export function BYOBSummary({
           />
         </div>
 
-        <div className="overflow-hidden border-b border-border bg-offWhite max-md:flex-1">
+        <div className="overflow-hidden border-b border-border bg-neutralLightest max-md:flex-1">
           <ul
             className={`scrollbar-hide grid h-auto max-h-full grid-cols-1 overflow-y-auto px-8 xl:px-[60px] ${
               mobileSummaryOpen && bundle[0]
@@ -143,7 +143,7 @@ export function BYOBSummary({
                   >
                     <div
                       className={`flex size-[28px] items-center justify-center rounded-[50%] transition ${
-                        isActive ? 'bg-secondary' : 'bg-mediumGray'
+                        isActive ? 'bg-secondary' : 'bg-neutralLight'
                       }`}
                     >
                       {isActive ? (
@@ -180,7 +180,7 @@ export function BYOBSummary({
                           className={`relative text-center text-sm ${
                             index === arr.length - 1
                               ? 'z-[1] text-white after:absolute after:left-1/2 after:top-1/2 after:z-[-1] after:h-[calc(100%+8px)] after:w-[calc(100%+32px)] after:origin-center after:-translate-x-1/2 after:-translate-y-1/2 after:rounded-full after:bg-primary after:transition'
-                              : 'text-darkGray'
+                              : 'text-neutralDarker'
                           }`}
                         >
                           {message}
@@ -280,7 +280,7 @@ function BYOBSummaryHeader({
       {addToCartUnlocked && (
         <div className="flex flex-col items-end">
           <p>{prices.total}</p>
-          <p className="text-darkGray line-through">{prices.compareAtTotal}</p>
+          <p className="text-neutralDarker line-through">{prices.compareAtTotal}</p>
         </div>
       )}
     </div>

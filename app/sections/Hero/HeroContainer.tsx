@@ -87,7 +87,7 @@ export function HeroContainer({children, cms}: HeroContainerProps) {
       )}
 
       <div
-        className={`relative mx-auto flex w-full flex-col bg-offWhite ${nativeAspectRatiosClass} ${heightContainerClasses} ${maxWidthContainerClass}`}
+        className={`relative mx-auto flex w-full flex-col bg-neutralLightest ${nativeAspectRatiosClass} ${heightContainerClasses} ${maxWidthContainerClass}`}
       >
         {children}
       </div>

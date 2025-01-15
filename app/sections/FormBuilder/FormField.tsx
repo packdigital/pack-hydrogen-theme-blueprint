@@ -219,7 +219,7 @@ export function FormField({field}: Record<string, any>) {
       </label>
 
       {infoMessage && (
-        <p className="mt-2 text-xs text-mediumDarkGray xs:text-sm">
+        <p className="mt-2 text-xs text-neutralMedium xs:text-sm">
           {infoMessage}
         </p>
       )}

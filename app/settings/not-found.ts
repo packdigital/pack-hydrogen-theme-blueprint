@@ -1,7 +1,8 @@
 import type {BannerCms} from '~/sections/Banner/Banner.types';
 import {
   BUTTONS,
-  COLORS,
+  COLOR_PICKER_DEFAULTS,
+  COLOR_SCHEMA_DEFAULT_VALUE,
   FLEX_POSITIONS,
   OBJECT_POSITIONS,
 } from '~/settings/common';
@@ -80,8 +81,8 @@ const text = {
     {
       label: 'Text Color',
       name: 'color',
-      component: 'select',
-      options: COLORS,
+      component: 'color',
+      colors: COLOR_PICKER_DEFAULTS,
     },
     {
       label: 'Buttons',
@@ -115,7 +116,7 @@ const text = {
   ],
   defaultValue: {
     heading: 'Page Not Found',
-    color: 'var(--white)',
+    color: COLOR_SCHEMA_DEFAULT_VALUE.white,
     buttons: [
       {
         link: {
@@ -232,8 +233,8 @@ export default {
         {
           label: 'Background Color (if no image)',
           name: 'bgColor',
-          component: 'select',
-          options: COLORS,
+          component: 'color',
+          colors: COLOR_PICKER_DEFAULTS,
           description:
             'Note: in order to observe changes in a 404 page in customizer, you need to save then redirect back to a 404 page',
         },
@@ -434,7 +435,7 @@ export default {
       ],
       defaultValue: {
         aboveTheFold: true,
-        bgColor: 'var(--off-white)',
+        bgColor: COLOR_SCHEMA_DEFAULT_VALUE.neutralLightest,
         fullWidth: true,
         fullBleed: true,
       },

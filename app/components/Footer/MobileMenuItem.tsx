@@ -14,7 +14,7 @@ export function MobileMenuItem({
   item: Settings['footer']['menu']['menuItems'][number];
 }) {
   return (
-    <Disclosure as="div" className="border-b border-b-mediumGray">
+    <Disclosure as="div" className="border-b border-b-neutralLight">
       {({open}) => (
         <>
           <DisclosureButton

@@ -103,7 +103,7 @@ export function CollectionFilterDropdown({
               <h3 className="text-nav">{filter.label}</h3>
 
               {totalSelectedOptions > 0 && (
-                <p className="ml-1 text-2xs text-mediumDarkGray">
+                <p className="ml-1 text-2xs text-neutralMedium">
                   ({totalSelectedOptions})
                 </p>
               )}

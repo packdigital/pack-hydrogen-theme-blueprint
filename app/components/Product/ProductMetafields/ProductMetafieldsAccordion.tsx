@@ -26,7 +26,7 @@ export function ProductMetafieldsAccordion({
         <>
           <DisclosureButton
             aria-label={`${open ? 'Close' : 'Open'} accordion for ${title}`}
-            className="flex h-14 w-full items-center justify-between gap-x-4 bg-offWhite p-4"
+            className="flex h-14 w-full items-center justify-between gap-x-4 bg-neutralLightest p-4"
             type="button"
           >
             <span className="text-sm font-bold">{title}</span>

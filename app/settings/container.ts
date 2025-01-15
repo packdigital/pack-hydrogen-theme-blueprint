@@ -1,8 +1,7 @@
-import {COLORS} from './common';
+import {COLOR_PICKER_DEFAULTS, COLOR_SCHEMA_DEFAULT_VALUE} from './common';
 
 export interface ContainerSettings {
   bgColor?: string;
-  bgColorCustom?: string;
   tabletDesktopPaddingTop?: string;
   tabletDesktopPaddingBottom?: string;
   tabletDesktopMarginBottom?: string;
@@ -18,17 +17,11 @@ export const containerSettings = (defaults?: ContainerSettings) => ({
   description: 'Background color, padding, bottom margin',
   fields: [
     {
-      label: 'Background Color (Theme)',
+      label: 'Background Color',
       name: 'bgColor',
-      component: 'select',
-      options: COLORS,
-      defaultValue: defaults?.bgColor || 'var(--background)',
-    },
-    {
-      label: 'Background Color (Custom)',
-      name: 'bgColorCustom',
       component: 'color',
-      description: 'Overrides the selected theme color',
+      options: COLOR_PICKER_DEFAULTS,
+      defaultValue: defaults?.bgColor || COLOR_SCHEMA_DEFAULT_VALUE.background,
     },
     {
       label: 'Top Padding (tablet/desktop)',

@@ -1,6 +1,7 @@
 import {
   BUTTONS,
-  COLORS,
+  COLOR_PICKER_DEFAULTS,
+  COLOR_SCHEMA_DEFAULT_VALUE,
   FLEX_POSITIONS,
   OBJECT_POSITIONS,
 } from '~/settings/common';
@@ -73,8 +74,8 @@ const text = {
     {
       label: 'Text Color',
       name: 'color',
-      component: 'select',
-      options: COLORS,
+      component: 'color',
+      colors: COLOR_PICKER_DEFAULTS,
     },
     {
       label: 'Buttons',
@@ -108,7 +109,7 @@ const text = {
   ],
   defaultValue: {
     heading: 'Banner Heading',
-    color: 'var(--white)',
+    color: COLOR_SCHEMA_DEFAULT_VALUE.white,
   },
 };
 
@@ -420,7 +421,7 @@ export function Schema() {
           fullBleed: true,
         },
       },
-      containerSettings({bgColor: 'var(--off-white)'}),
+      containerSettings({bgColor: COLOR_SCHEMA_DEFAULT_VALUE.neutralLightest}),
     ],
   };
 }

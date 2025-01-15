@@ -26,13 +26,13 @@ export const Image = forwardRef(
         data={data}
         aspectRatio={aspectRatio}
         width={width}
-        className={`bg-offWhite object-cover ${className}`}
+        className={`bg-neutralLightest object-cover ${className}`}
         {...props}
       />
     ) : (
       <div
         ref={ref}
-        className={`relative overflow-hidden bg-offWhite ${className}`}
+        className={`relative overflow-hidden bg-neutralLightest ${className}`}
         style={{aspectRatio, width}}
       >
         {withLoadingAnimation && <div className="loading-shimmer opacity-60" />}

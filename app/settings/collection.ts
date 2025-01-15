@@ -1,6 +1,6 @@
 import type {ImageCms, LinkCms} from '~/lib/types';
 
-import {COLORS} from './common';
+import {COLOR_PICKER_DEFAULTS, COLOR_SCHEMA_DEFAULT_VALUE} from './common';
 
 interface PromoTile {
   position: number;
@@ -310,8 +310,8 @@ export default {
                     {
                       label: 'Background Color',
                       name: 'bgColor',
-                      component: 'select',
-                      options: COLORS,
+                      component: 'color',
+                      colors: COLOR_PICKER_DEFAULTS,
                     },
                     {
                       label: 'Image Alt',
@@ -370,8 +370,8 @@ export default {
                     {
                       label: 'Text Color',
                       name: 'textColor',
-                      component: 'select',
-                      options: COLORS,
+                      component: 'color',
+                      colors: COLOR_PICKER_DEFAULTS,
                     },
                   ],
                 },
@@ -379,12 +379,15 @@ export default {
               defaultItem: {
                 position: 5,
                 aspectRatio: 'aspect-[3/4]',
-                background: {bgColor: 'var(--off-white)', darkOverlay: false},
+                background: {
+                  bgColor: COLOR_SCHEMA_DEFAULT_VALUE.neutralLightest,
+                  darkOverlay: false,
+                },
                 text: {
                   heading: 'Promo Tile Heading',
                   subtext:
                     'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-                  textColor: 'var(--text)',
+                  textColor: COLOR_SCHEMA_DEFAULT_VALUE.text,
                 },
               },
             },
@@ -406,12 +409,15 @@ export default {
               {
                 position: 5,
                 aspectRatio: 'aspect-[3/4]',
-                background: {bgColor: 'var(--off-white)', darkOverlay: false},
+                background: {
+                  bgColor: COLOR_SCHEMA_DEFAULT_VALUE.neutralLightest,
+                  darkOverlay: false,
+                },
                 text: {
                   heading: 'Promo Tile Heading',
                   subtext:
                     'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-                  textColor: 'var(--text)',
+                  textColor: COLOR_SCHEMA_DEFAULT_VALUE.text,
                 },
               },
             ],

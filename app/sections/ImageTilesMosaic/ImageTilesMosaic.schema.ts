@@ -1,6 +1,7 @@
 import {
   BUTTONS,
-  COLORS,
+  COLOR_PICKER_DEFAULTS,
+  COLOR_SCHEMA_DEFAULT_VALUE,
   CONTENT_ALIGN,
   FLEX_POSITIONS,
   HEADING_SIZES,
@@ -545,9 +546,9 @@ export function Schema() {
           {
             label: 'Heading Text Color',
             name: 'textColor',
-            component: 'select',
-            options: COLORS,
-            defaultValue: 'var(--text)',
+            component: 'color',
+            colors: COLOR_PICKER_DEFAULTS,
+            defaultValue: COLOR_SCHEMA_DEFAULT_VALUE.text,
           },
           {
             label: 'Full Width',

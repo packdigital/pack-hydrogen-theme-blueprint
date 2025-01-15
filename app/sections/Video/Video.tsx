@@ -34,7 +34,9 @@ export function Video({cms}: {cms: VideoCms}) {
           newTab={isLink ? content?.link?.newTab : false}
           type={isLink ? content?.link?.type : undefined}
         >
-          <div className={`relative bg-offWhite md:hidden ${aspectMobile}`}>
+          <div
+            className={`relative bg-neutralLightest md:hidden ${aspectMobile}`}
+          >
             {srcMobile && (
               <VideoElement
                 playOptions={play}
@@ -46,7 +48,7 @@ export function Video({cms}: {cms: VideoCms}) {
           </div>
 
           <div
-            className={`relative hidden bg-offWhite md:block ${aspectDesktop}`}
+            className={`relative hidden bg-neutralLightest md:block ${aspectDesktop}`}
           >
             {srcDesktop && (
               <VideoElement

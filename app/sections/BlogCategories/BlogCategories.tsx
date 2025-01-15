@@ -49,7 +49,9 @@ export function BlogCategories({cms}: {cms: BlogCategoriesCms}) {
               <li key={index}>
                 <button
                   className={`btn-text flex h-8 items-center justify-center rounded-full px-4 transition ${
-                    isActive ? 'bg-black text-white' : 'bg-lightGray text-text'
+                    isActive
+                      ? 'bg-black text-white'
+                      : 'bg-neutralLighter text-text'
                   }`}
                   onClick={() => handleCategoryClick(category)}
                   type="button"

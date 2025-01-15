@@ -61,7 +61,7 @@ export function Select({
             className={`truncate ${selectedClass} ${
               selectedOption?.label
                 ? 'text-text'
-                : placeholderClass || 'text-mediumDarkGray'
+                : placeholderClass || 'text-neutralMedium'
             }`}
           >
             {selectedOption?.label || placeholder}
@@ -86,7 +86,7 @@ export function Select({
         leaveTo="transform scale-95 opacity-0"
       >
         <ListboxOptions
-          className={`absolute left-1/2 z-10 flex max-h-72 w-full -translate-x-1/2 flex-col gap-0 overflow-hidden overflow-y-auto rounded border border-mediumGray bg-background py-2 text-base ${
+          className={`absolute left-1/2 z-10 flex max-h-72 w-full -translate-x-1/2 flex-col gap-0 overflow-hidden overflow-y-auto rounded border border-neutralLight bg-background py-2 text-base ${
             openFrom === 'top'
               ? 'bottom-[calc(100%+0.5rem)]'
               : 'top-[calc(100%+0.5rem)]'
@@ -102,8 +102,8 @@ export function Select({
               >
                 {({selected}) => (
                   <div
-                    className={`cursor-pointer px-5 py-1.5 transition md:hover:bg-offWhite ${
-                      selected ? 'bg-lightGray' : ''
+                    className={`cursor-pointer px-5 py-1.5 transition md:hover:bg-neutralLightest ${
+                      selected ? 'bg-neutralLighter' : ''
                     }`}
                   >
                     {option.label}

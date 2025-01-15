@@ -26,7 +26,7 @@ export function BlogGridItem({
   return (
     <div>
       <Link aria-label={article.title} to={url} tabIndex={-1}>
-        <div className="relative mb-4 aspect-[3/2] bg-offWhite">
+        <div className="relative mb-4 aspect-[3/2] bg-neutralLightest">
           {article.seo?.image && (
             <Image
               data={{
@@ -42,7 +42,7 @@ export function BlogGridItem({
       </Link>
 
       <div className="flex flex-col items-start gap-2">
-        <p className="text-sm text-mediumDarkGray">
+        <p className="text-sm text-neutralMedium">
           {article.author ? `${article.author} | ` : ''}
           {date}
         </p>

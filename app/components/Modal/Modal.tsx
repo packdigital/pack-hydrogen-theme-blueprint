@@ -46,7 +46,7 @@ export const Modal = memo(() => {
           >
             <button
               aria-label="Close modal"
-              className="absolute right-0 top-0  z-10 flex size-7 items-center justify-center bg-offWhite"
+              className="absolute right-0 top-0  z-10 flex size-7 items-center justify-center bg-neutralLightest"
               onClick={closeModal}
               type="button"
             >

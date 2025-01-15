@@ -1,5 +1,6 @@
 import {
-  COLORS,
+  COLOR_PICKER_DEFAULTS,
+  COLOR_SCHEMA_DEFAULT_VALUE,
   CONTENT_ALIGN,
   CROP_POSITIONS,
   HEADING_SIZES,
@@ -146,8 +147,8 @@ export function Schema() {
           {
             label: 'Text Color',
             name: 'textColor',
-            component: 'select',
-            options: COLORS,
+            component: 'color',
+            colors: COLOR_PICKER_DEFAULTS,
           },
           {
             label: 'Tile Text Alignment',
@@ -174,7 +175,7 @@ export function Schema() {
         ],
         defaultValue: {
           aspectRatio: 'aspect-[5/4]',
-          textColor: 'var(--text)',
+          textColor: COLOR_SCHEMA_DEFAULT_VALUE.text,
           textAlign: 'text-left items-start',
           tileHeadingSize: 'text-h4',
           fullWidth: false,

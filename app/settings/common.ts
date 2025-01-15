@@ -1,3 +1,40 @@
+/* Common default values for color schema field */
+export const COLOR_SCHEMA_DEFAULT_VALUE = {
+  white: '#ffffff',
+  neutralLightest: '#f9f9f9',
+  neutralLighter: '#d4d4d4',
+  neutralLight: '#a3a3a3',
+  neutralMedium: '#737373',
+  neutralDark: '#525252',
+  neutralDarker: '#404040',
+  neutralDarkest: '#171717',
+  black: '#000000',
+  background: '#FFFFFF',
+  border: '#e8e8e8',
+  text: '#000000',
+  primary: '#008464',
+  secondary: '#8164bf',
+  /* Add additional common default schema values here */
+};
+
+/* Array of theme color hex codes for the color picker */
+export const COLOR_PICKER_DEFAULTS = [
+  '#008464',
+  '#8164bf',
+  '#189cc5',
+  '#4a69d4',
+  '#ffffff',
+  '#f9f9f9',
+  '#e8e8e8',
+  '#d4d4d4',
+  '#a3a3a3',
+  '#737373',
+  '#525252',
+  '#404040',
+  '#171717',
+  '#000000',
+];
+
 /*
  * Update button styles and class names as per project's theme
  */
@@ -8,69 +45,6 @@ export const BUTTONS = [
   {label: 'Inverse Light', value: 'btn-inverse-light'},
   {label: 'Inverse Dark', value: 'btn-inverse-dark'},
 ];
-
-/*
- * Update color labels and values as per project's theme
- * IMPORTANT: Do not string interpolate values; Tailwind requires absolute values
- */
-
-export const COLORS = [
-  {label: 'Background', value: 'var(--background)'},
-  {label: 'Text', value: 'var(--text)'},
-  {label: 'Border', value: 'var(--border)'},
-  {label: 'Primary', value: 'var(--primary)'},
-  {label: 'Secondary', value: 'var(--secondary)'},
-  {label: 'Accent 1', value: 'var(--accent1)'},
-  {label: 'Accent 2', value: 'var(--accent2)'},
-  {label: 'Black', value: 'var(--black)'},
-  {label: 'Off Black', value: 'var(--off-black)'},
-  {label: 'Dark Gray', value: 'var(--dark-gray)'},
-  {label: 'Medium Dark Gray', value: 'var(--medium-dark-gray)'},
-  {label: 'Gray', value: 'var(--medium-gray)'},
-  {label: 'Light Gray', value: 'var(--light-gray)'},
-  {label: 'Off White', value: 'var(--off-white)'},
-  {label: 'White', value: 'var(--white)'},
-  {label: 'Transparent', value: 'transparent'},
-];
-
-export const TEXT_COLORS = {
-  mobile: [
-    {label: 'Background', value: 'text-[var(--background)]'},
-    {label: 'Text', value: 'text-[var(--text)]'},
-    {label: 'Border', value: 'text-[var(--border)]'},
-    {label: 'Primary', value: 'text-[var(--primary)]'},
-    {label: 'Secondary', value: 'text-[var(--secondary)]'},
-    {label: 'Accent 1', value: 'text-[var(--accent1)]'},
-    {label: 'Accent 2', value: 'text-[var(--accent2)]'},
-    {label: 'Black', value: 'text-[var(--black)]'},
-    {label: 'Off Black', value: 'text-[var(--off-black)]'},
-    {label: 'Dark Gray', value: 'text-[var(--dark-gray)]'},
-    {label: 'Medium Dark Gray', value: 'text-[var(--medium-dark-gray)]'},
-    {label: 'Gray', value: 'text-[var(--medium-gray)]'},
-    {label: 'Light Gray', value: 'text-[var(--light-gray)]'},
-    {label: 'Off White', value: 'text-[var(--off-white)]'},
-    {label: 'White', value: 'text-[var(--white)]'},
-    {label: 'Transparent', value: 'text-transparent'},
-  ],
-  desktop: [
-    {label: 'Background', value: 'md:text-[var(--background)]'},
-    {label: 'Text', value: 'md:text-[var(--text)]'},
-    {label: 'Border', value: 'md:text-[var(--border)]'},
-    {label: 'Primary', value: 'md:text-[var(--primary)]'},
-    {label: 'Secondary', value: 'md:text-[var(--secondary)]'},
-    {label: 'Accent 1', value: 'md:text-[var(--accent1)]'},
-    {label: 'Accent 2', value: 'md:text-[var(--accent2)]'},
-    {label: 'Black', value: 'md:text-[var(--black)]'},
-    {label: 'Off Black', value: 'md:text-[var(--off-black)]'},
-    {label: 'Dark Gray', value: 'md:text-[var(--dark-gray)]'},
-    {label: 'Medium Dark Gray', value: 'md:text-[var(--medium-dark-gray)]'},
-    {label: 'Gray', value: 'md:text-[var(--medium-gray)]'},
-    {label: 'Light Gray', value: 'md:text-[var(--light-gray)]'},
-    {label: 'Off White', value: 'md:text-[var(--off-white)]'},
-    {label: 'White', value: 'md:text-[var(--white)]'},
-    {label: 'Transparent', value: 'md:text-transparent'},
-  ],
-};
 
 export const FLEX_POSITIONS = {
   mobile: [

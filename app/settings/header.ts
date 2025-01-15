@@ -1,6 +1,6 @@
 import type {ImageCms, LinkCms, ProductCms} from '~/lib/types';
 
-import {COLORS} from './common';
+import {COLOR_PICKER_DEFAULTS, COLOR_SCHEMA_DEFAULT_VALUE} from './common';
 
 export interface HeaderSettings {
   promobar: {
@@ -244,16 +244,16 @@ export default {
         {
           label: 'Background Color',
           name: 'bgColor',
-          component: 'select',
-          options: COLORS,
-          defaultValue: 'var(--primary)',
+          component: 'color',
+          colors: COLOR_PICKER_DEFAULTS,
+          defaultValue: COLOR_SCHEMA_DEFAULT_VALUE.primary,
         },
         {
           label: 'Text Color',
           name: 'color',
-          component: 'select',
-          options: COLORS,
-          defaultValue: 'var(--white)',
+          component: 'color',
+          colors: COLOR_PICKER_DEFAULTS,
+          defaultValue: COLOR_SCHEMA_DEFAULT_VALUE.white,
         },
         {
           label: 'Messages',

@@ -24,7 +24,7 @@ export function VideoEmbed({cms}: {cms: VideoEmbedCms}) {
         ref={inViewRef}
       >
         <div
-          className={`mx-auto bg-offWhite ${maxWidth} ${aspectRatio}`}
+          className={`mx-auto bg-neutralLightest ${maxWidth} ${aspectRatio}`}
           dangerouslySetInnerHTML={{__html: inView ? embed : ''}}
         />
       </div>

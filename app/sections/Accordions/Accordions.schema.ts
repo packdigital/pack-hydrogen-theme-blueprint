@@ -1,4 +1,7 @@
-import {COLORS} from '~/settings/common';
+import {
+  COLOR_PICKER_DEFAULTS,
+  COLOR_SCHEMA_DEFAULT_VALUE,
+} from '~/settings/common';
 import {containerSettings} from '~/settings/container';
 
 export function Schema() {
@@ -60,16 +63,16 @@ export function Schema() {
       {
         label: 'Accordion Header Background Color',
         name: 'headerBgColor',
-        component: 'select',
-        options: COLORS,
-        defaultValue: 'var(--off-white)',
+        component: 'color',
+        colors: COLOR_PICKER_DEFAULTS,
+        defaultValue: COLOR_SCHEMA_DEFAULT_VALUE.neutralLightest,
       },
       {
         label: 'Accordion Header Text Color',
         name: 'headerTextColor',
-        component: 'select',
-        options: COLORS,
-        defaultValue: 'var(--text)',
+        component: 'color',
+        colors: COLOR_PICKER_DEFAULTS,
+        defaultValue: COLOR_SCHEMA_DEFAULT_VALUE.text,
       },
       containerSettings(),
     ],

@@ -53,7 +53,7 @@ export function ProductHeader({
 
       <div className="mt-2 flex min-h-6 gap-2">
         {compareAtPrice && (
-          <p className="text-mediumDarkGray line-through">{compareAtPrice}</p>
+          <p className="text-neutralMedium line-through">{compareAtPrice}</p>
         )}
         <p>{price}</p>
       </div>

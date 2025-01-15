@@ -1,6 +1,7 @@
 import {
   BUTTONS,
-  COLORS,
+  COLOR_PICKER_DEFAULTS,
+  COLOR_SCHEMA_DEFAULT_VALUE,
   CONTENT_ALIGN,
   CROP_POSITIONS,
   FLEX_POSITIONS,
@@ -449,8 +450,8 @@ export function Schema() {
           {
             label: 'Heading Text Color',
             name: 'textColor',
-            component: 'select',
-            options: COLORS,
+            component: 'color',
+            colors: COLOR_PICKER_DEFAULTS,
           },
           {
             label: 'Full Width',
@@ -465,7 +466,7 @@ export function Schema() {
         ],
         defaultValue: {
           aspectRatio: 'aspect-[1/1]',
-          textColor: 'var(--text)',
+          textColor: COLOR_SCHEMA_DEFAULT_VALUE.text,
           fullWidth: false,
         },
       },

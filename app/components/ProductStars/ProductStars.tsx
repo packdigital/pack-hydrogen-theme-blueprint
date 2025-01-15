@@ -50,7 +50,7 @@ export const ProductStars = memo(({id}: {id: string}) => {
         <>
           <ReviewStars rating={reviewAggregate.rating} size="small" />
 
-          <p className="text-2xs text-mediumDarkGray underline underline-offset-[3px]">
+          <p className="text-2xs text-neutralMedium underline underline-offset-[3px]">
             ({reviewAggregate.count} Reviews)
           </p>
         </>

@@ -15,7 +15,7 @@ export function ProductOptionValuesLabel({
     openModal(
       <div>
         <h2 className="text-h3 mb-6 text-center">Size Guide</h2>
-        <div className="h-[30rem] bg-offWhite" />
+        <div className="h-[30rem] bg-neutralLightest" />
       </div>,
     );
   }, []);
@@ -26,7 +26,7 @@ export function ProductOptionValuesLabel({
         <h3 className="text-nav leading-6">{name}</h3>
 
         {selectedValue && (
-          <p className="text-base text-mediumDarkGray">{selectedValue}</p>
+          <p className="text-base text-neutralMedium">{selectedValue}</p>
         )}
       </div>
 

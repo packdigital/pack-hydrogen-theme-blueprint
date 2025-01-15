@@ -71,7 +71,7 @@ export function OrderItem({item}: {item: OrderLineItem}) {
             {discountedPrice && (
               <Money
                 as="p"
-                className="text-mediumDarkGray line-through"
+                className="text-neutralMedium line-through"
                 data={discountedPrice}
               />
             )}
@@ -91,7 +91,7 @@ export function OrderItem({item}: {item: OrderLineItem}) {
         {discountedPrice && (
           <Money
             as="p"
-            className="text-mediumDarkGray line-through"
+            className="text-neutralMedium line-through"
             data={discountedPrice}
           />
         )}
@@ -106,7 +106,7 @@ export function OrderItem({item}: {item: OrderLineItem}) {
         {discountedPrice && (
           <Money
             as="p"
-            className="text-mediumDarkGray line-through"
+            className="text-neutralMedium line-through"
             data={discountedPrice}
           />
         )}

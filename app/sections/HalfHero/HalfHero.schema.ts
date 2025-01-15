@@ -1,4 +1,9 @@
-import {BUTTONS, COLORS, CROP_POSITIONS} from '~/settings/common';
+import {
+  BUTTONS,
+  COLOR_PICKER_DEFAULTS,
+  COLOR_SCHEMA_DEFAULT_VALUE,
+  CROP_POSITIONS,
+} from '~/settings/common';
 import {containerSettings} from '~/settings/container';
 
 const media = {
@@ -242,8 +247,8 @@ const content = {
     {
       label: 'Text Color',
       name: 'color',
-      component: 'select',
-      options: COLORS,
+      component: 'color',
+      colors: COLOR_PICKER_DEFAULTS,
     },
     {
       label: 'Content Alignment (tablet/desktop)',
@@ -292,7 +297,7 @@ const content = {
         style: 'btn-primary',
       },
     ],
-    color: 'var(--text)',
+    color: COLOR_SCHEMA_DEFAULT_VALUE.text,
     alignmentDesktop: 'md:text-left md:items-start',
     maxWidthDesktop: 'md:max-w-[30rem] lg:max-w-[38rem]',
     alignmentMobile: 'text-left items-start',

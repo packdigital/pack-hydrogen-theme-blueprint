@@ -19,7 +19,7 @@ export const Footer = memo(() => {
     >
       <div className="mx-auto grid max-w-[var(--content-max-width)] grid-cols-1 md:grid-cols-[1fr_300px] md:gap-x-5 md:gap-y-10 xl:grid-cols-[200px_1fr_300px]">
         <div className="order-1 col-span-1 w-full md:col-span-2 xl:col-span-1">
-          <div className="flex gap-6 border-b border-b-mediumGray px-4 pb-8 md:border-none md:p-0 xl:flex-col">
+          <div className="flex gap-6 border-b border-b-neutralLight px-4 pb-8 md:border-none md:p-0 xl:flex-col">
             <Link to="/" aria-label="Go to home page">
               <Svg
                 className="w-12 text-current"
