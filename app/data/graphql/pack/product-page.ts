@@ -54,26 +54,3 @@ export const CMS_PRODUCT_QUERY = `
     }
   }
 ` as const;
-
-export const CMS_PRODUCTS_QUERY = `
-  query GetBackpackCmsProductPages($first: Int, $cursor: String) {
-    productPages(first: $first, after: $cursor, version: PUBLISHED) {
-      pageInfo {
-        hasNextPage
-        endCursor
-      }
-      nodes {
-        id
-        handle
-        seo {
-          noIndex
-        }
-        sourceProduct {
-          data {
-            status
-          }
-        }
-      }
-    }
-  }
-` as const;
