@@ -32,7 +32,7 @@
             "enabled": true,
             "minCartSpend": 100,
             "progressMessage": "You're only {{amount}} away from free shipping!",
-            "progressBarColor": "var(--primary)",
+            "progressBarColor": "#008464",
             "qualifiedMessage": "You've qualified for free shipping!"
           }
         },
@@ -120,7 +120,7 @@
             ],
             "heading": "Stay Connected"
           },
-          "bgColor": "var(--black)",
+          "bgColor": "#000000",
           "marketing": {
             "enabled": true,
             "heading": "Stay In Touch",
@@ -128,7 +128,7 @@
             "buttonText": "Sign Up",
             "placeholder": "Enter your email..."
           },
-          "textColor": "var(--white)"
+          "textColor": "#FFFFFF"
         },
         "header": {
           "menu": {
@@ -238,11 +238,11 @@
             }
           ],
           "promobar": {
-            "color": "var(--white)",
+            "color": "#FFFFFF",
             "delay": 5000,
             "speed": 500,
             "effect": "fade",
-            "bgColor": "var(--primary)",
+            "bgColor": "#008464",
             "enabled": true,
             "autohide": true,
             "messages": [
@@ -395,7 +395,7 @@
         },
         "notFound": {
           "text": {
-            "color": "var(--white)",
+            "color": "#FFFFFF",
             "buttons": [
               {
                 "link": {
@@ -435,7 +435,7 @@
               "aspectRatio": "max-md:aspect-[3/1]",
               "staticHeight": "max-md:h-[31.25rem]"
             },
-            "bgColor": "var(--off-white)",
+            "bgColor": "#FFFFFF",
             "desktop": {
               "maxHeight": "",
               "minHeight": "",
@@ -453,7 +453,7 @@
         },
         "not-found": {
           "text": {
-            "color": "var(--white)",
+            "color": "#FFFFFF",
             "buttons": [
               {
                 "link": {
@@ -493,7 +493,7 @@
               "aspectRatio": "max-md:aspect-[3/1]",
               "staticHeight": "max-md:h-[31.25rem]"
             },
-            "bgColor": "var(--off-white)",
+            "bgColor": "#FFFFFF",
             "desktop": {
               "maxHeight": "",
               "minHeight": "",
@@ -564,15 +564,15 @@
                 "effect": "fade",
                 "autoplay": false,
                 "pagination": true,
-                "activeBulletColor": "var(--medium-gray)"
+                "activeBulletColor": "#A3A3A3"
               },
               "slides": [
                 {
                   "text": {
                     "heading": "All new products\nthis season",
                     "subheading": "New styles and new fits",
-                    "colorMobile": "max-md:text-[var(--white)]",
-                    "colorDesktop": "md:text-[var(--white)]",
+                    "colorMobile": "max-md:text-[#FFFFFF]",
+                    "colorDesktop": "md:text-[#FFFFFF]",
                     "superheading": "New Collection",
                     "hideHeadingMobile": false,
                     "hideHeadingDesktop": false
@@ -752,7 +752,7 @@
                 "tilesPerViewTablet": 2.4,
                 "tilesPerViewMobile": 1.4,
                 "aspectRatio": "aspect-[3/4]",
-                "textColor": "var(--text)",
+                "textColor": "#000000",
                 "textAlign": "text-left items-start",
                 "tileHeadingSize": "text-h4",
                 "buttonStyle": "btn-primary",
@@ -842,7 +842,7 @@
                 "mediaOrderDesktop": "1"
               },
               "content": {
-                "color": "var(--text)",
+                "color": "#000000",
                 "buttons": [
                   {
                     "link": {
@@ -861,7 +861,7 @@
                 "alignmentDesktop": "md:text-left md:items-start"
               },
               "section": {
-                "bgColor": "var(--background)",
+                "bgColor": "#FFFFFF",
                 "fullBleed": true,
                 "fullWidth": true,
                 "aboveTheFold": false,
@@ -903,7 +903,7 @@
                 "mediaOrderDesktop": "2"
               },
               "content": {
-                "color": "var(--text)",
+                "color": "#000000",
                 "buttons": [
                   {
                     "link": {
@@ -922,7 +922,7 @@
                 "alignmentDesktop": "md:text-left md:items-start"
               },
               "section": {
-                "bgColor": "var(--background)",
+                "bgColor": "#FFFFFF",
                 "fullBleed": true,
                 "fullWidth": true,
                 "aboveTheFold": false,
@@ -991,9 +991,9 @@
                 }
               ],
               "section": {
-                "bgColor": "var(--background)",
+                "bgColor": "#FFFFFF",
                 "fullWidth": false,
-                "textColor": "var(--text)"
+                "textColor": "#000000"
               },
               "_template": "press-slider",
               "id": "default-press-slider-data",
@@ -1030,7 +1030,7 @@
               },
               "section": {
                 "aspectRatio": "aspect-[5/4]",
-                "textColor": "var(--text)",
+                "textColor": "#000000",
                 "textAlign": "text-left items-start",
                 "tileHeadingSize": "text-h4",
                 "fullWidth": false
@@ -1049,11 +1049,11 @@
             "data": {
               "heading": "Customer Reviews",
               "section": {
-                "bgColor": "var(--black)",
+                "bgColor": "#000000",
                 "fullWidth": false,
-                "textColor": "var(--white)",
-                "reviewStarColor": "var(--accent1)",
-                "sliderPaginationBulletColor": "var(--white)"
+                "textColor": "#FFFFFF",
+                "reviewStarColor": "#008464",
+                "sliderPaginationBulletColor": "#FFFFFF"
               },
               "_template": "testimonial-slider",
               "id": "default-testimonial-slider-data",
@@ -1155,7 +1155,7 @@
                 "tilesPerViewTablet": 2.4,
                 "tilesPerViewMobile": 1.4,
                 "aspectRatio": "aspect-[3/4]",
-                "textColor": "var(--text)",
+                "textColor": "#000000",
                 "fullWidth": false
              },
               "_template": "image-tiles",
@@ -1282,15 +1282,15 @@
                 "effect": "fade",
                 "autoplay": true,
                 "pagination": true,
-                "activeBulletColor": "var(--white)"
+                "activeBulletColor": "#FFFFFF"
               },
               "slides": [
                 {
                   "text": {
                     "heading": "Blog",
                     "subheading": "",
-                    "colorMobile": "max-md:text-[var(--white)]",
-                    "colorDesktop": "md:text-[var(--white)]",
+                    "colorMobile": "max-md:text-[#FFFFFF]",
+                    "colorDesktop": "md:text-[#FFFFFF]",
                     "superheading": "",
                     "hideHeadingMobile": false,
                     "hideHeadingDesktop": false
