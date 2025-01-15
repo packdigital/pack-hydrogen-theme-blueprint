@@ -32,7 +32,9 @@ export function QuantitySelector({
         className={`relative size-8 rounded-full border border-border transition disabled:opacity-50 ${
           hideButtons ? 'invisible' : ''
         } ${
-          disableDecrement ? 'cursor-not-allowed' : 'md:hover:border-mediumGray'
+          disableDecrement
+            ? 'cursor-not-allowed'
+            : 'md:hover:border-neutralLight'
         }`}
         disabled={disabled || isUpdating || disableDecrement}
         onClick={handleDecrement}
@@ -58,10 +60,12 @@ export function QuantitySelector({
         aria-label={`Increase quantity of ${productTitle} by 1 to ${
           quantity + 1
         }`}
-        className={`relative size-8 rounded-full border border-border transition disabled:opacity-50 md:hover:border-mediumGray ${
+        className={`relative size-8 rounded-full border border-border transition disabled:opacity-50 md:hover:border-neutralLight ${
           hideButtons ? 'invisible' : ''
         } ${
-          disableIncrement ? 'cursor-not-allowed' : 'md:hover:border-mediumGray'
+          disableIncrement
+            ? 'cursor-not-allowed'
+            : 'md:hover:border-neutralLight'
         }`}
         disabled={disabled || isUpdating || disableIncrement}
         onClick={handleIncrement}

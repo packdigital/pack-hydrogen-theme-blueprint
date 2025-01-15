@@ -8,8 +8,10 @@ import type {HeroSlideProps} from './Hero.types';
 
 export function HeroSlide({
   aboveTheFold,
+  index,
   isActiveSlide,
   isFirstSlide,
+  sectionId,
   slide,
 }: HeroSlideProps) {
   const {image, video} = slide;
@@ -26,22 +28,25 @@ export function HeroSlide({
     }
   }, [isActiveSlide]);
 
+  const hasMobileVideo = video?.videoMobile?.mediaType === 'VIDEO';
+  const hasDesktopVideo = video?.videoDesktop?.mediaType === 'VIDEO';
+
   return (
     <div className="relative size-full">
       <div className="relative size-full overflow-hidden md:hidden">
-        {video?.srcMobile && (
+        {hasMobileVideo && (
           <HeroVideo
             isVisible={isVisible}
-            posterSrc={video.posterMobile?.src}
-            videoSrc={video.srcMobile}
+            posterUrl={video.posterMobile?.url}
+            video={video.videoMobile}
           />
         )}
 
-        {image?.imageMobile?.src && !video?.srcMobile && (
+        {image?.imageMobile?.url && !hasMobileVideo && (
           <Image
             data={{
               altText: image.imageMobile.altText || image.alt,
-              url: mounted ? image.imageMobile.src : '',
+              url: mounted ? image.imageMobile.url : '',
             }}
             className={`media-fill ${image.positionMobile}`}
             loading={aboveTheFold && isFirstSlide ? 'eager' : 'lazy'}
@@ -51,19 +56,19 @@ export function HeroSlide({
       </div>
 
       <div className="relative hidden size-full overflow-hidden md:block">
-        {video?.srcDesktop && (
+        {hasDesktopVideo && (
           <HeroVideo
             isVisible={isVisible}
-            posterSrc={video.posterDesktop?.src}
-            videoSrc={video.srcDesktop}
+            posterUrl={video.posterDesktop?.url}
+            video={video.videoDesktop}
           />
         )}
 
-        {image?.imageDesktop?.src && !video?.srcDesktop && (
+        {image?.imageDesktop?.url && !hasDesktopVideo && (
           <Image
             data={{
               altText: image.imageDesktop.altText || image.alt,
-              url: mounted ? image.imageDesktop.src : '',
+              url: mounted ? image.imageDesktop.url : '',
             }}
             className={`media-fill ${image.positionDesktop}`}
             loading={aboveTheFold && isFirstSlide ? 'eager' : 'lazy'}
@@ -74,8 +79,10 @@ export function HeroSlide({
 
       <HeroContent
         aboveTheFold={aboveTheFold}
+        index={index}
         isActiveSlide={isActiveSlide}
         isFirstSlide={isFirstSlide}
+        sectionId={sectionId}
         slide={slide}
       />
     </div>

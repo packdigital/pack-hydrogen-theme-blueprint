@@ -126,7 +126,7 @@ export const MultiRangeSlider = ({
         </label>
 
         <div className="relative w-full">
-          <div className="absolute z-[1] h-1 w-full rounded-[3px] bg-lightGray"></div>
+          <div className="absolute z-[1] h-1 w-full rounded-[3px] bg-neutralLighter"></div>
           <div
             ref={range}
             className="absolute z-[2] h-1 rounded-[3px] bg-black"

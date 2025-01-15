@@ -46,7 +46,7 @@ export const CollectionFiltersSummary = memo(
           return (
             <li key={index} className="max-w-full">
               <button
-                className="flex max-w-full items-center rounded-full bg-offWhite py-2 pl-2.5 pr-3 text-xs transition md:hover:bg-lightGray"
+                className="flex max-w-full items-center rounded-full bg-neutralLightest py-2 pl-2.5 pr-3 text-xs transition md:hover:bg-neutralLighter"
                 onClick={() => {
                   removeFilter(id);
                 }}

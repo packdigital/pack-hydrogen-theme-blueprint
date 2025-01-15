@@ -2,7 +2,7 @@ import type {ContainerSettings} from '~/settings/container';
 import type {
   AspectRatio,
   Crop,
-  ImageCms as ImageType,
+  MediaCms as ImageType,
   LinkCms,
 } from '~/lib/types';
 
@@ -26,7 +26,7 @@ interface Content {
   link: LinkCms;
 }
 
-export interface ImageCms {
+export interface MediaCms {
   content: Content;
   image: Image;
   section: Section;

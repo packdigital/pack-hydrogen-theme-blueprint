@@ -51,7 +51,7 @@ export const CollectionMobileFilters = memo(
             {totalFilters ? (
               <CollectionFiltersSummary hideClear />
             ) : (
-              <p className="text-sm leading-8 text-mediumDarkGray">
+              <p className="text-sm leading-8 text-neutralMedium">
                 No filters selected yet
               </p>
             )}

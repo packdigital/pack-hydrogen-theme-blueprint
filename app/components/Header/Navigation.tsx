@@ -70,7 +70,7 @@ export const Navigation = memo(
                     <Link
                       aria-label={item.navItem?.text}
                       className={`group relative flex cursor-pointer items-center px-4 transition ${
-                        isHovered ? 'bg-offWhite' : 'bg-background'
+                        isHovered ? 'bg-neutralLightest' : 'bg-background'
                       }`}
                       to={item.navItem?.url}
                       onClick={handleDesktopMenuClose}

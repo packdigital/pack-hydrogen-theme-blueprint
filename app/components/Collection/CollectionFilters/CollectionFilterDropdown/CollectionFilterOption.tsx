@@ -33,7 +33,7 @@ export function CollectionFilterOption({
     const imageFromCms = swatchFromCms?.image;
     const imageFromShopify = color.swatch?.image?.previewImage;
     optionImage = imageFromShopify || imageFromCms;
-    optionImageUrl = imageFromShopify?.url || imageFromCms?.src;
+    optionImageUrl = optionImage?.url;
   }
 
   const checkmarkColor = useMemo(() => {
@@ -82,9 +82,9 @@ export function CollectionFilterOption({
   return (
     <button
       aria-label={`Add ${label} to filters`}
-      className={`group flex gap-3 px-4 text-left text-base transition max-md:h-10 max-md:w-full max-md:items-center md:gap-2 hover:md:text-text disabled:hover:md:text-mediumDarkGray ${
+      className={`group flex gap-3 px-4 text-left text-base transition max-md:h-10 max-md:w-full max-md:items-center md:gap-2 hover:md:text-text disabled:hover:md:text-neutralMedium ${
         disabled ? 'cursor-not-allowed opacity-60' : ''
-      } ${isActive ? 'text-text max-md:font-bold' : 'text-mediumDarkGray'}`}
+      } ${isActive ? 'text-text max-md:font-bold' : 'text-neutralMedium'}`}
       disabled={disabled}
       onClick={() => {
         if (isActive) {

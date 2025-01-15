@@ -78,7 +78,7 @@ export function FormBuilder({cms}: {cms: FormBuilderCms}) {
   }, [recaptchaEnabled]);
 
   useLoadScript(
-    {id: 'recaptcha-script', src: 'https://www.google.com/recaptcha/api.js'},
+    {id: 'recaptcha-script', url: 'https://www.google.com/recaptcha/api.js'},
     'head',
   );
 

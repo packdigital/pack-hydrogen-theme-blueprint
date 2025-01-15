@@ -1,6 +1,6 @@
 import type {LinkCms, ProductCms} from '~/lib/types';
 
-import {COLORS} from './common';
+import {COLOR_PICKER_DEFAULTS, COLOR_SCHEMA_DEFAULT_VALUE} from './common';
 
 export interface CartSettings {
   heading: string;
@@ -142,8 +142,8 @@ export default {
         {
           label: 'Progress Bar Color',
           name: 'progressBarColor',
-          component: 'select',
-          options: COLORS,
+          component: 'color',
+          colors: COLOR_PICKER_DEFAULTS,
         },
       ],
       defaultValue: {
@@ -151,7 +151,7 @@ export default {
         minCartSpend: 100,
         progressMessage: `You're only {{amount}} away from free shipping!`,
         qualifiedMessage: `You've qualified for free shipping!`,
-        progressBarColor: 'var(--primary)',
+        progressBarColor: COLOR_SCHEMA_DEFAULT_VALUE.primary,
       },
     },
     {

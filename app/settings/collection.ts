@@ -1,6 +1,6 @@
-import type {ImageCms, LinkCms} from '~/lib/types';
+import type {MediaCms, LinkCms} from '~/lib/types';
 
-import {COLORS} from './common';
+import {COLOR_PICKER_DEFAULTS, COLOR_SCHEMA_DEFAULT_VALUE} from './common';
 
 interface PromoTile {
   position: number;
@@ -9,9 +9,8 @@ interface PromoTile {
   background: {
     bgColor: string;
     alt: string;
-    image: ImageCms;
-    videoSrc: string;
-    videoPoster: ImageCms;
+    media: MediaCms;
+    videoPoster: MediaCms;
     darkOverlay: boolean;
   };
   text: {
@@ -305,39 +304,33 @@ export default {
                   label: 'Background Settings',
                   name: 'background',
                   component: 'group',
-                  description: 'Background color, image, video, dark overlay',
+                  description: 'Background color, media, dark overlay',
                   fields: [
                     {
                       label: 'Background Color',
                       name: 'bgColor',
-                      component: 'select',
-                      options: COLORS,
+                      component: 'color',
+                      colors: COLOR_PICKER_DEFAULTS,
                     },
                     {
-                      label: 'Image Alt',
+                      label: 'Media Alt',
                       name: 'alt',
                       component: 'text',
                       description:
-                        'Alt text set in media manager for selected image(s) will take priority. Re-add image(s) if alt text was set in media manager after selection.',
+                        'Alt text set in media manager for selected media(s) will take priority. Re-add media(s) if alt text was set in media manager after selection.',
                     },
                     {
-                      label: 'Image',
-                      name: 'image',
+                      label: 'Media',
+                      name: 'media',
                       component: 'image',
                       description: 'Overrides background color',
-                    },
-                    {
-                      label: 'Video URL',
-                      name: 'videoSrc',
-                      component: 'text',
-                      description:
-                        'Overrides image. Autoplays once in view. Must be a direct link, not a share link',
                     },
                     {
                       label: 'Video Poster Image',
                       name: 'videoPoster',
                       component: 'image',
-                      description: 'First frame of video while video loads',
+                      description:
+                        'Applicable if media is video. First frame of video while video loads when in view',
                     },
                     {
                       label: 'Dark Overlay',
@@ -370,8 +363,8 @@ export default {
                     {
                       label: 'Text Color',
                       name: 'textColor',
-                      component: 'select',
-                      options: COLORS,
+                      component: 'color',
+                      colors: COLOR_PICKER_DEFAULTS,
                     },
                   ],
                 },
@@ -379,12 +372,15 @@ export default {
               defaultItem: {
                 position: 5,
                 aspectRatio: 'aspect-[3/4]',
-                background: {bgColor: 'var(--off-white)', darkOverlay: false},
+                background: {
+                  bgColor: COLOR_SCHEMA_DEFAULT_VALUE.neutralLightest,
+                  darkOverlay: false,
+                },
                 text: {
                   heading: 'Promo Tile Heading',
                   subtext:
                     'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-                  textColor: 'var(--text)',
+                  textColor: COLOR_SCHEMA_DEFAULT_VALUE.text,
                 },
               },
             },
@@ -406,12 +402,15 @@ export default {
               {
                 position: 5,
                 aspectRatio: 'aspect-[3/4]',
-                background: {bgColor: 'var(--off-white)', darkOverlay: false},
+                background: {
+                  bgColor: COLOR_SCHEMA_DEFAULT_VALUE.neutralLightest,
+                  darkOverlay: false,
+                },
                 text: {
                   heading: 'Promo Tile Heading',
                   subtext:
                     'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-                  textColor: 'var(--text)',
+                  textColor: COLOR_SCHEMA_DEFAULT_VALUE.text,
                 },
               },
             ],

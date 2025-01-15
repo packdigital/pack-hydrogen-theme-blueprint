@@ -1,13 +1,13 @@
 import type {ContainerSettings} from '~/settings/container';
-import type {ImageCms, LinkCms} from '~/lib/types';
+import type {MediaCms, LinkCms} from '~/lib/types';
 
 interface Media {
   title: string;
-  srcDesktop: string;
-  posterDesktop: ImageCms;
+  videoDesktop: MediaCms;
+  posterDesktop: MediaCms;
   aspectDesktop: string;
-  srcMobile: string;
-  posterMobile: ImageCms;
+  videoMobile: MediaCms;
+  posterMobile: MediaCms;
   aspectMobile: string;
 }
 
@@ -39,7 +39,7 @@ export interface VideoCms {
 
 export interface VideoElementProps {
   playOptions: Play;
-  posterSrc: string;
+  posterUrl?: string;
   title: string;
-  videoSrc: string;
+  video: MediaCms;
 }

@@ -1,4 +1,7 @@
-import {COLORS} from '~/settings/common';
+import {
+  COLOR_PICKER_DEFAULTS,
+  COLOR_SCHEMA_DEFAULT_VALUE,
+} from '~/settings/common';
 import {containerSettings} from '~/settings/container';
 
 export function Schema() {
@@ -43,7 +46,7 @@ export function Schema() {
         defaultItem: {
           alt: 'Press logo',
           image: {
-            src: 'https://cdn.shopify.com/s/files/1/0629/5519/2520/files/forbes-logo-small.png?v=1702422887',
+            url: 'https://cdn.shopify.com/s/files/1/0629/5519/2520/files/forbes-logo-small.png?v=1702422887',
             aspectRatio: 3.8,
           },
           quote:
@@ -53,7 +56,7 @@ export function Schema() {
           {
             alt: 'Press logo',
             image: {
-              src: 'https://cdn.shopify.com/s/files/1/0629/5519/2520/files/forbes-logo-small.png?v=1702422887',
+              url: 'https://cdn.shopify.com/s/files/1/0629/5519/2520/files/forbes-logo-small.png?v=1702422887',
               aspectRatio: 3.8,
             },
             quote:
@@ -62,7 +65,7 @@ export function Schema() {
           {
             alt: 'Press logo',
             image: {
-              src: 'https://cdn.shopify.com/s/files/1/0629/5519/2520/files/vanity-fair-logo-small.png?v=1702422889',
+              url: 'https://cdn.shopify.com/s/files/1/0629/5519/2520/files/vanity-fair-logo-small.png?v=1702422889',
               aspectRatio: 4.3,
             },
             quote:
@@ -71,7 +74,7 @@ export function Schema() {
           {
             alt: 'Press logo',
             image: {
-              src: 'https://cdn.shopify.com/s/files/1/0629/5519/2520/files/forbes-logo-small.png?v=1702422887',
+              url: 'https://cdn.shopify.com/s/files/1/0629/5519/2520/files/forbes-logo-small.png?v=1702422887',
               aspectRatio: 3.8,
             },
             quote:
@@ -80,7 +83,7 @@ export function Schema() {
           {
             alt: 'Press logo',
             image: {
-              src: 'https://cdn.shopify.com/s/files/1/0629/5519/2520/files/vanity-fair-logo-small.png?v=1702422889',
+              url: 'https://cdn.shopify.com/s/files/1/0629/5519/2520/files/vanity-fair-logo-small.png?v=1702422889',
               aspectRatio: 4.3,
             },
             quote:
@@ -89,7 +92,7 @@ export function Schema() {
           {
             alt: 'Press logo',
             image: {
-              src: 'https://cdn.shopify.com/s/files/1/0629/5519/2520/files/forbes-logo-small.png?v=1702422887',
+              url: 'https://cdn.shopify.com/s/files/1/0629/5519/2520/files/forbes-logo-small.png?v=1702422887',
               aspectRatio: 3.8,
             },
             quote:
@@ -98,7 +101,7 @@ export function Schema() {
           {
             alt: 'Press logo',
             image: {
-              src: 'https://cdn.shopify.com/s/files/1/0629/5519/2520/files/vanity-fair-logo-small.png?v=1702422889',
+              url: 'https://cdn.shopify.com/s/files/1/0629/5519/2520/files/vanity-fair-logo-small.png?v=1702422889',
               aspectRatio: 4.3,
             },
             quote:
@@ -125,13 +128,13 @@ export function Schema() {
           {
             label: 'Text Color',
             name: 'textColor',
-            component: 'select',
-            options: COLORS,
+            component: 'color',
+            colors: COLOR_PICKER_DEFAULTS,
           },
         ],
         defaultValue: {
           fullWidth: false,
-          textColor: 'var(--text)',
+          textColor: COLOR_SCHEMA_DEFAULT_VALUE.text,
         },
       },
       containerSettings(),

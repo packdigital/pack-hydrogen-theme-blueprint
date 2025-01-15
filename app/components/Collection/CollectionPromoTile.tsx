@@ -12,9 +12,10 @@ export function CollectionPromoTile({tile}: CollectionPromoTileProps) {
   });
 
   const {aspectRatio = 'aspect-[3/4]', background, link, text} = tile;
-  const {alt, bgColor, darkOverlay, image, videoPoster, videoSrc} = {
+  const {alt, bgColor, darkOverlay, media, videoPoster} = {
     ...background,
   };
+  const hasVideo = media?.mediaType === 'VIDEO';
 
   return (
     <Link
@@ -28,12 +29,12 @@ export function CollectionPromoTile({tile}: CollectionPromoTileProps) {
       <div
         className={`relative ${aspectRatio} overflow-hidden`}
         style={{
-          backgroundColor: image ? 'var(--off-white)' : bgColor,
+          backgroundColor: media ? 'var(--off-white)' : bgColor,
         }}
       >
         {inView && (
           <>
-            {videoSrc && (
+            {hasVideo && (
               <video
                 autoPlay
                 className="absolute inset-0 size-full object-cover"
@@ -41,20 +42,20 @@ export function CollectionPromoTile({tile}: CollectionPromoTileProps) {
                 loop
                 muted
                 playsInline
-                poster={videoPoster?.src}
-                key={videoSrc}
+                poster={videoPoster?.url}
+                key={media.url}
               >
-                <source src={videoSrc} type="video/mp4" />
+                <source src={media.url} type={media.format} />
               </video>
             )}
 
-            {image?.src && !videoSrc && (
+            {media?.url && !hasVideo && (
               <Image
                 data={{
-                  altText: image.altText || alt,
-                  url: image.src,
-                  width: image.width,
-                  height: image.height,
+                  altText: media.altText || alt,
+                  url: media.url,
+                  width: media.width,
+                  height: media.height,
                 }}
                 aspectRatio={getAspectRatioFromClass(aspectRatio)}
                 className="media-fill"
@@ -62,7 +63,7 @@ export function CollectionPromoTile({tile}: CollectionPromoTileProps) {
               />
             )}
 
-            {(videoSrc || image?.src) && darkOverlay && (
+            {(hasVideo || media?.url) && darkOverlay && (
               <div className="pointer-events-none absolute inset-0 size-full bg-[rgba(0,0,0,0.2)]" />
             )}
           </>

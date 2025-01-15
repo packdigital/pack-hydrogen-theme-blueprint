@@ -73,7 +73,7 @@ export function ServerError({error}: ServerErrorProps) {
               test
             </pre>
 
-            <p className="mt-4 text-xs text-mediumDarkGray">
+            <p className="mt-4 text-xs text-neutralMedium">
               This page can only load until the server side error is resolved.
             </p>
           </div>

@@ -21,7 +21,7 @@ export function BYOBSubnav({
             return (
               <li key={index}>
                 <button
-                  className={`text-nav relative z-[1] px-3 py-1 after:absolute after:left-0 after:top-0 after:z-[-1] after:size-full after:origin-center after:rounded-full after:bg-lightGray after:transition ${
+                  className={`text-nav relative z-[1] px-3 py-1 after:absolute after:left-0 after:top-0 after:z-[-1] after:size-full after:origin-center after:rounded-full after:bg-neutralLighter after:transition ${
                     isActiveTab ? 'after:scale-100' : 'after:scale-0'
                   }`}
                   onClick={() => {

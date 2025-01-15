@@ -83,7 +83,7 @@ export const CartUpsell = memo(({closeCart, settings}: CartUpsellProps) => {
           >
             <h3 className="px-5 text-center text-xs font-normal">{message}</h3>
 
-            <div className="absolute right-4 top-1/2 -translate-y-1/2 text-mediumDarkGray">
+            <div className="absolute right-4 top-1/2 -translate-y-1/2 text-neutralMedium">
               {open ? (
                 <Svg
                   className="w-4 text-current"

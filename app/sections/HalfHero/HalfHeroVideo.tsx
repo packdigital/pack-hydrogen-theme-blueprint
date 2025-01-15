@@ -9,10 +9,10 @@ import type {HalfHeroVideoProps} from './HalfHero.types';
 
 export function HalfHeroVideo({
   autoplay,
-  posterSrc,
+  posterUrl,
   sound,
+  video,
   videoAlt,
-  videoSrc,
 }: HalfHeroVideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const {ref, inView} = useInView({
@@ -41,11 +41,11 @@ export function HalfHeroVideo({
           loop={autoplay || !sound}
           muted={autoplay || !sound}
           playsInline
-          poster={posterSrc}
+          poster={posterUrl}
           ref={videoRef}
-          key={videoSrc}
+          key={video?.url}
         >
-          {videoSrc && <source src={videoSrc} type="video/mp4" />}
+          {video?.url && <source src={video.url} type={video.format} />}
         </video>
       )}
 

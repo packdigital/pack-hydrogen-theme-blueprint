@@ -131,7 +131,7 @@ export const ProductItem = memo(
             <h3 className="min-h-6 text-base">{title}</h3>
           </Link>
 
-          {color && <p className="text-sm text-mediumDarkGray">{color}</p>}
+          {color && <p className="text-sm text-neutralMedium">{color}</p>}
 
           <ProductItemPrice selectedVariant={selectedVariant} />
 

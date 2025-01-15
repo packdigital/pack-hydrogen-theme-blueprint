@@ -36,11 +36,11 @@ export function IconRow({cms}: {cms: IconRowCms}) {
                     key={index}
                     className="flex max-w-64 grow basis-1/2 flex-col items-center p-4 text-center md:basis-1/6"
                   >
-                    {image?.src && (
+                    {image?.url && (
                       <Image
                         data={{
                           altText: image.altText || alt || label,
-                          url: image.src,
+                          url: image.url,
                           width: image.width,
                           height: image.height,
                         }}
@@ -50,7 +50,7 @@ export function IconRow({cms}: {cms: IconRowCms}) {
                       />
                     )}
 
-                    {icon !== 'none' && !image?.src && (
+                    {icon !== 'none' && !image?.url && (
                       <Svg
                         className="w-12"
                         src={`/svgs/icons/${icon}.svg#${icon}`}

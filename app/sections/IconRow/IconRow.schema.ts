@@ -1,4 +1,7 @@
-import {COLORS} from '~/settings/common';
+import {
+  COLOR_PICKER_DEFAULTS,
+  COLOR_SCHEMA_DEFAULT_VALUE,
+} from '~/settings/common';
 import {containerSettings} from '~/settings/container';
 
 export function Schema() {
@@ -80,14 +83,14 @@ export function Schema() {
           {
             label: 'Text Color',
             name: 'textColor',
-            component: 'select',
-            options: COLORS,
+            component: 'color',
+            colors: COLOR_PICKER_DEFAULTS,
           },
           {
             label: 'Icon Color',
             name: 'iconColor',
-            component: 'select',
-            options: COLORS,
+            component: 'color',
+            colors: COLOR_PICKER_DEFAULTS,
           },
           {
             label: 'Full Width',
@@ -101,9 +104,9 @@ export function Schema() {
           },
         ],
         defaultValue: {
-          bgColor: 'var(--off-white)',
-          textColor: 'var(--text)',
-          iconColor: 'var(--primary)',
+          bgColor: COLOR_SCHEMA_DEFAULT_VALUE.neutralLightest,
+          textColor: COLOR_SCHEMA_DEFAULT_VALUE.text,
+          iconColor: COLOR_SCHEMA_DEFAULT_VALUE.primary,
           fullWidth: false,
         },
       },

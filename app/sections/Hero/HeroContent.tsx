@@ -6,8 +6,10 @@ import type {HeroSlideProps} from './Hero.types';
 
 export function HeroContent({
   aboveTheFold,
+  index,
   isActiveSlide,
   isFirstSlide,
+  sectionId,
   slide,
 }: HeroSlideProps) {
   const {button, content, text} = slide;
@@ -45,7 +47,6 @@ export function HeroContent({
   const hiddenButtonClasses = `${
     button?.hideButtonsMobile ? 'max-md:hidden' : ''
   } ${button?.hideButtonsDesktop ? 'md:hidden' : ''}`;
-  const textColorClasses = `${colorMobile} ${colorDesktop}`;
 
   const headingWithBreaks = useMemo(() => {
     const splitHeading = heading?.split('\n');
@@ -57,16 +58,30 @@ export function HeroContent({
     }, []);
   }, [heading]);
 
+  const heroTextColorClass = `theme-hero-text-${sectionId}${index}`;
+
   return (
     <div
       className={`absolute inset-0 flex size-full p-4 md:p-8 xl:p-12 ${positionClasses} ${darkOverlayClass} ${
         isActiveSlide ? 'pointer-events-auto' : 'pointer-events-none'
       }`}
     >
+      <style>
+        {`.${heroTextColorClass} {
+            @media (max-width: 767px) {
+              color: ${colorMobile};
+            }
+            @media (min-width: 768px) {
+              color: ${colorDesktop};
+            }
+          }
+        `}
+      </style>
+
       <div
-        className={`relative flex flex-col gap-6 ${alignmentClasses} ${maxWidthContentClasses} ${textColorClasses}`}
+        className={`relative flex flex-col gap-6 ${alignmentClasses} ${maxWidthContentClasses}`}
       >
-        <div className={hiddenHeadingClasses}>
+        <div className={`${heroTextColorClass} ${hiddenHeadingClasses}`}>
           {superheading && (
             <p className="text-superheading max-lg:mb-1">{superheading}</p>
           )}

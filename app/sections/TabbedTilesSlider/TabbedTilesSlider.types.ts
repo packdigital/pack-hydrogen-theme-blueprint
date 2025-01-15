@@ -1,5 +1,5 @@
 import type {ContainerSettings} from '~/settings/container';
-import type {ImageCms, LinkCms} from '~/lib/types';
+import type {MediaCms, LinkCms} from '~/lib/types';
 
 interface Header {
   heading: string;
@@ -20,7 +20,7 @@ interface Section {
 }
 
 interface Tile {
-  image: ImageCms;
+  image: MediaCms;
   title: string;
   url: string;
 }

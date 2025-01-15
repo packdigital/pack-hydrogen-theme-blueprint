@@ -44,7 +44,7 @@ export const SearchItem = memo(
         onClick={handleClick}
       >
         <div
-          className="bg-offWhite"
+          className="bg-neutralLightest"
           style={{
             aspectRatio:
               image?.width && image?.height
@@ -70,12 +70,12 @@ export const SearchItem = memo(
           <div>
             <h4 className="text-h6">{product.title}</h4>
 
-            <p className="min-h-5 text-sm text-mediumDarkGray">{color}</p>
+            <p className="min-h-5 text-sm text-neutralMedium">{color}</p>
           </div>
 
           <div className="flex flex-wrap gap-x-1.5">
             {compareAtPrice && (
-              <p className="text-sm text-mediumDarkGray line-through">
+              <p className="text-sm text-neutralMedium line-through">
                 {compareAtPrice}
               </p>
             )}

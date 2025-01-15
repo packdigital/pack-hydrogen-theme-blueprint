@@ -92,7 +92,7 @@ export function CartUpsellItem({
 
           <div className="flex flex-1 flex-wrap justify-end gap-x-1">
             {compareAtPrice && (
-              <p className="text-xs text-mediumDarkGray line-through">
+              <p className="text-xs text-neutralMedium line-through">
                 {compareAtPrice}
               </p>
             )}

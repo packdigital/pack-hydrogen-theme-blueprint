@@ -82,7 +82,7 @@ export const CartDiscounts = memo(() => {
         </label>
         <button
           type="submit"
-          className="h-full border-l border-border px-2 text-sm transition md:hover:bg-offWhite"
+          className="h-full border-l border-border px-2 text-sm transition md:hover:bg-neutralLightest"
         >
           Apply
         </button>
@@ -100,7 +100,7 @@ export const CartDiscounts = memo(() => {
             return (
               <li key={code}>
                 <button
-                  className="flex max-w-full items-center gap-1 rounded-full bg-offWhite py-2 pl-2.5 pr-3 text-xs uppercase transition md:hover:bg-lightGray"
+                  className="flex max-w-full items-center gap-1 rounded-full bg-neutralLightest py-2 pl-2.5 pr-3 text-xs uppercase transition md:hover:bg-neutralLighter"
                   onClick={() => handleClearCode(code)}
                   type="button"
                 >

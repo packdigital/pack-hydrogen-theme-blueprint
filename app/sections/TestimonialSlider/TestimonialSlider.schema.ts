@@ -1,4 +1,7 @@
-import {COLORS} from '~/settings/common';
+import {
+  COLOR_PICKER_DEFAULTS,
+  COLOR_SCHEMA_DEFAULT_VALUE,
+} from '~/settings/common';
 import {containerSettings} from '~/settings/container';
 
 export function Schema() {
@@ -108,27 +111,27 @@ export function Schema() {
           {
             label: 'Text Color',
             name: 'textColor',
-            component: 'select',
-            options: COLORS,
+            component: 'color',
+            colors: COLOR_PICKER_DEFAULTS,
           },
           {
             label: 'Slider Pagination Bullet Color',
             name: 'sliderPaginationBulletColor',
-            component: 'select',
-            options: COLORS,
+            component: 'color',
+            colors: COLOR_PICKER_DEFAULTS,
           },
           {
             label: 'Review Star Color',
             name: 'reviewStarColor',
-            component: 'select',
-            options: COLORS,
+            component: 'color',
+            colors: COLOR_PICKER_DEFAULTS,
           },
         ],
         defaultValue: {
           fullWidth: false,
-          textColor: 'var(--black)',
-          sliderPaginationBulletColor: 'var(--black))',
-          reviewStarColor: 'var(--accent1)',
+          textColor: COLOR_SCHEMA_DEFAULT_VALUE.black,
+          sliderPaginationBulletColor: COLOR_SCHEMA_DEFAULT_VALUE.black,
+          reviewStarColor: COLOR_SCHEMA_DEFAULT_VALUE.primary,
         },
       },
       containerSettings(),

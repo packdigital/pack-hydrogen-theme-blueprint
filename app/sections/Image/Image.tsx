@@ -2,12 +2,12 @@ import {useMemo} from 'react';
 
 import {Container, Image as ImageComponent, Link, Markdown} from '~/components';
 
-import type {ImageCms} from './Image.types';
+import type {MediaCms} from './Image.types';
 import {Schema} from './Image.schema';
 
 const FALLBACK_ASPECT_RATIO = '16/9';
 
-export function Image({cms}: {cms: ImageCms}) {
+export function Image({cms}: {cms: MediaCms}) {
   const {content, image, section} = cms;
   const {
     alt,
@@ -44,7 +44,7 @@ export function Image({cms}: {cms: ImageCms}) {
           <ImageComponent
             data={{
               altText: imageMobile?.altText || alt,
-              url: imageMobile?.src,
+              url: imageMobile?.url,
               width: imageMobile?.width,
               height: imageMobile?.height,
             }}
@@ -63,7 +63,7 @@ export function Image({cms}: {cms: ImageCms}) {
           <ImageComponent
             data={{
               altText: imageDesktop?.altText || alt,
-              url: imageDesktop?.src,
+              url: imageDesktop?.url,
               width: imageDesktop?.width,
               height: imageDesktop?.height,
             }}

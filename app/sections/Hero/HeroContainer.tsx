@@ -1,5 +1,3 @@
-import kebabCase from 'lodash/kebabCase';
-
 import type {HeroContainerProps} from './Hero.types';
 
 const FALLBACK_DESKTOP_HEIGHT_CLASS = 'md:h-[43.75rem]';
@@ -10,7 +8,8 @@ const FALLBACK_MOBILE_ASPECT_RATIO_CLASS = 'max-md:aspect-[3/4]';
 const FALLBACK_MOBILE_ASPECT_RATIO = '3 / 4';
 
 export function HeroContainer({children, cms}: HeroContainerProps) {
-  const {section, slides} = cms;
+  const {section, slides, id, clientId} = cms;
+  const sectionId = id || clientId;
 
   const maxWidthContainerClass = section?.fullWidth
     ? 'max-w-none'
@@ -27,12 +26,14 @@ export function HeroContainer({children, cms}: HeroContainerProps) {
     desktopIsAspectRatioType && desktopIsNativeAspectRatio;
   const usesMobileNativeAspectRatio =
     mobileIsAspectRatioType && mobileIsNativeAspectRatio;
-  const desktopNativeAspectRatio = slides?.[0]?.video?.srcDesktop
-    ? slides?.[0]?.video?.posterDesktop?.aspectRatio
-    : slides?.[0]?.image?.imageDesktop?.aspectRatio;
-  const mobileNativeAspectRatio = slides?.[0]?.video?.srcMobile
-    ? slides?.[0]?.video?.posterMobile?.aspectRatio
-    : slides?.[0]?.image?.imageMobile?.aspectRatio;
+  const desktopNativeAspectRatio =
+    slides?.[0]?.video?.videoDesktop?.mediaType === 'VIDEO'
+      ? slides?.[0]?.video?.posterDesktop?.aspectRatio
+      : slides?.[0]?.image?.imageDesktop?.aspectRatio;
+  const mobileNativeAspectRatio =
+    slides?.[0]?.video?.videoMobile?.mediaType === 'VIDEO'
+      ? slides?.[0]?.video?.posterMobile?.aspectRatio
+      : slides?.[0]?.image?.imageMobile?.aspectRatio;
 
   const heightClassesDesktop = desktopIsAspectRatioType
     ? `${
@@ -51,9 +52,7 @@ export function HeroContainer({children, cms}: HeroContainerProps) {
   const heightContainerClasses = `${heightClassesMobile} ${heightClassesDesktop}`;
 
   /* unique class name is important to not override other banner aspect ratios */
-  const nativeAspectRatiosClass = `hero-native-aspect-ratios-${kebabCase(
-    cms.sectionName,
-  )}-${cms.sectionVisibility}`;
+  const nativeAspectRatiosClass = `hero-native-aspect-ratios-${sectionId}`;
 
   return (
     <div className={`${fullBleedClass}`}>
@@ -87,7 +86,7 @@ export function HeroContainer({children, cms}: HeroContainerProps) {
       )}
 
       <div
-        className={`relative mx-auto flex w-full flex-col bg-offWhite ${nativeAspectRatiosClass} ${heightContainerClasses} ${maxWidthContainerClass}`}
+        className={`relative mx-auto flex w-full flex-col bg-neutralLightest ${nativeAspectRatiosClass} ${heightContainerClasses} ${maxWidthContainerClass}`}
       >
         {children}
       </div>

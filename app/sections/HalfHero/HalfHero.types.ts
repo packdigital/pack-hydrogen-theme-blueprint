@@ -1,25 +1,21 @@
-import type {Crop, ImageCms} from '~/lib/types';
+import type {Crop, MediaCms} from '~/lib/types';
 import type {ContainerSettings} from '~/settings/container';
 
 interface Image {
   alt: string;
-  imageDesktop: ImageCms;
-  imageMobile: ImageCms;
+  imageDesktop: MediaCms;
+  imageMobile: MediaCms;
   cropDesktop: Crop;
   cropMobile: Crop;
 }
 
 interface Video {
   autoplay: boolean;
-  posterDesktop: {
-    src: string;
-  };
-  posterMobile: {
-    src: string;
-  };
+  posterDesktop: MediaCms;
+  posterMobile: MediaCms;
   sound: boolean;
-  srcDesktop: string;
-  srcMobile: string;
+  videoDesktop: MediaCms;
+  videoMobile: MediaCms;
 }
 
 interface Media {
@@ -72,8 +68,8 @@ export interface HalfHeroContentProps {
 
 export interface HalfHeroVideoProps {
   autoplay?: boolean;
-  posterSrc?: string;
+  posterUrl?: string;
   sound?: boolean;
+  video: MediaCms;
   videoAlt?: string;
-  videoSrc: string;
 }

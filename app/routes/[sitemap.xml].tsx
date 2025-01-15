@@ -28,7 +28,7 @@ export async function loader({
 
   PACK_NATIVE_TEMPLATE_TYPES.forEach((type) => {
     sitemaps.push({
-      loc: `${baseUrl}/${type}/1`,
+      loc: `${baseUrl}/sitemap/${type}/1.xml`,
     });
   });
 

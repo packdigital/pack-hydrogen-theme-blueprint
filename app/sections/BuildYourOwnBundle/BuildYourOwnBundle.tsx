@@ -150,7 +150,7 @@ export function BuildYourOwnBundle({cms}: {cms: BuildYourOwnBundleCms}) {
             return (
               <div key={index}>
                 {hasProductGroupings && (
-                  <div className="px-contained border-b border-border bg-offWhite py-5">
+                  <div className="px-contained border-b border-border bg-neutralLightest py-5">
                     <h2 className="text-h4">{name}</h2>
                   </div>
                 )}

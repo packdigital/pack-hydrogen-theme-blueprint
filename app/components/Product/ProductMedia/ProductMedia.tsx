@@ -56,7 +56,7 @@ export function ProductMedia({
     <div className="grid grid-cols-1 justify-between gap-4 lg:grid-cols-[80px_calc(100%-100px)] xl:gap-5">
       <div className="order-1 lg:order-2">
         <div
-          className="relative md:bg-offWhite"
+          className="relative md:bg-neutralLightest"
           // for a static/consistent aspect ratio, delete style below and add 'aspect-[var(--product-image-aspect-ratio)]' to className
           // set var(--product-image-aspect-ratio) in styles/app.css
           style={{

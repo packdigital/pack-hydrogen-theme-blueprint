@@ -46,7 +46,7 @@ export const CartLine = memo(({closeCart, line}: CartLineProps) => {
               : PRODUCT_IMAGE_ASPECT_RATIO
           }
           width="88px"
-          className="bg-offWhite"
+          className="bg-neutralLightest"
         />
       </Link>
 
@@ -61,7 +61,7 @@ export const CartLine = memo(({closeCart, line}: CartLineProps) => {
           </Link>
 
           {merchandise.title !== 'Default Title' && (
-            <p className="text-sm text-mediumDarkGray">{merchandise.title}</p>
+            <p className="text-sm text-neutralMedium">{merchandise.title}</p>
           )}
 
           <button
@@ -103,7 +103,7 @@ export const CartLine = memo(({closeCart, line}: CartLineProps) => {
                           viewBox="0 0 24 24"
                         />
                       )}
-                      <p className="flex-1 pb-1 text-xs text-mediumDarkGray">
+                      <p className="flex-1 pb-1 text-xs text-neutralMedium">
                         {discount.title || discount.code}
                       </p>
                     </div>
@@ -113,7 +113,7 @@ export const CartLine = memo(({closeCart, line}: CartLineProps) => {
 
             <div className="flex flex-wrap justify-end gap-x-2">
               {compareAtPrice && (
-                <p className="text-mediumDarkGray line-through">
+                <p className="text-neutralMedium line-through">
                   {compareAtPrice}
                 </p>
               )}

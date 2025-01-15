@@ -18,12 +18,13 @@
   --accent2: #4a69d4;
 
   --black: #000000;
-  --off-black: #101010;
-  --dark-gray: #484848;
-  --medium-dark-gray: #707070;
-  --medium-gray: #c0c0c0;
-  --light-gray: #e8e8e8;
-  --off-white: #f9f9f9;
+  --neutral-darkest: #171717;
+  --neutral-darker: #404040;
+  --neutral-dark: #525252;
+  --neutral-medium: #737373;
+  --neutral-light: #a3a3a3;
+  --neutral-lighter: #d4d4d4;
+  --neutral-lightest: #f9f9f9;
   --white: #ffffff;
   --overlay: rgba(0,0,0,0.3);
 
@@ -260,11 +261,11 @@
       transition-colors
       disabled:cursor-not-allowed
       disabled:border-border
-      disabled:bg-lightGray
-      disabled:text-mediumDarkGray
+      disabled:bg-neutralLighter
+      disabled:text-neutralMedium
       disabled:hover:border-border
-      disabled:hover:bg-lightGray
-      disabled:hover:text-mediumDarkGray
+      disabled:hover:bg-neutralLighter
+      disabled:hover:text-neutralMedium
       [&>p]:truncate;
   }
   .btn-primary {
@@ -304,7 +305,7 @@
       md:hover:text-[var(--inverse-dark-btn-hover-text-color)];
   }
   .btn-select {
-    @apply relative flex h-12 items-center justify-center overflow-hidden rounded border border-border bg-white px-5 py-3 text-sm text-text transition md:hover:bg-offWhite;
+    @apply relative flex h-12 items-center justify-center overflow-hidden rounded border border-border bg-white px-5 py-3 text-sm text-text transition md:hover:bg-neutralLightest;
   }
   /* underline specific */
   .hover-text-underline {
@@ -378,7 +379,7 @@
     @apply bg-black;
   }
   .loading-shimmer {
-    @apply pointer-events-none absolute inset-0 -translate-x-full animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-lightGray to-transparent;
+    @apply pointer-events-none absolute inset-0 -translate-x-full animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-neutralLighter to-transparent;
   }
   /* multi-range slider style */
   .range-thumb {
@@ -391,11 +392,11 @@
   }
   /* For Chrome browsers */
   .range-thumb::-webkit-slider-thumb {
-    @apply pointer-events-auto relative mt-[4px] h-3 w-3 cursor-pointer rounded-full border-none bg-offWhite shadow-[0_0_1px_1px_#ced4da];
+    @apply pointer-events-auto relative mt-[4px] h-3 w-3 cursor-pointer rounded-full border-none bg-neutralLightest shadow-[0_0_1px_1px_#ced4da];
   }
   /* For Firefox browsers */
   .range-thumb::-moz-range-thumb {
-    @apply pointer-events-auto relative mt-[4px] h-3 w-3 cursor-pointer rounded-full border-none bg-offWhite shadow-[0_0_1px_1px_#ced4da];
+    @apply pointer-events-auto relative mt-[4px] h-3 w-3 cursor-pointer rounded-full border-none bg-neutralLightest shadow-[0_0_1px_1px_#ced4da];
   }
 }
 

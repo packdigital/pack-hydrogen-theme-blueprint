@@ -1,6 +1,7 @@
 import {
   BUTTONS,
-  COLORS,
+  COLOR_PICKER_DEFAULTS,
+  COLOR_SCHEMA_DEFAULT_VALUE,
   CONTENT_ALIGN,
   CROP_POSITIONS,
   HEADING_SIZES,
@@ -13,7 +14,7 @@ const defaultTab = {
     {
       alt: 'Man in white and light tan outfit',
       image: {
-        src: 'https://cdn.shopify.com/s/files/1/0671/5074/1778/files/man-in-white-and-light-tan-outfit.jpg?v=1672348139',
+        url: 'https://cdn.shopify.com/s/files/1/0671/5074/1778/files/man-in-white-and-light-tan-outfit.jpg?v=1672348139',
       },
       crop: 'center',
       heading: 'Headline',
@@ -23,7 +24,7 @@ const defaultTab = {
     {
       alt: 'Man in brown coat sitting down',
       image: {
-        src: 'https://cdn.shopify.com/s/files/1/0671/5074/1778/files/austin-wade-d2s8NQ6WD24-unsplash.jpg?v=1672348122',
+        url: 'https://cdn.shopify.com/s/files/1/0671/5074/1778/files/austin-wade-d2s8NQ6WD24-unsplash.jpg?v=1672348122',
       },
       crop: 'center',
       heading: 'Headline',
@@ -33,7 +34,7 @@ const defaultTab = {
     {
       alt: 'Man in gray sweater and tan coat',
       image: {
-        src: 'https://cdn.shopify.com/s/files/1/0671/5074/1778/files/man-poses-in-light-colored-overcoat.jpg?v=1672348143',
+        url: 'https://cdn.shopify.com/s/files/1/0671/5074/1778/files/man-poses-in-light-colored-overcoat.jpg?v=1672348143',
       },
       crop: 'center',
       heading: 'Headline',
@@ -137,7 +138,7 @@ export function Schema() {
             defaultItem: {
               alt: 'Man in white and light tan outfit',
               image: {
-                src: 'https://cdn.shopify.com/s/files/1/0671/5074/1778/files/man-in-white-and-light-tan-outfit.jpg?v=1672348139',
+                url: 'https://cdn.shopify.com/s/files/1/0671/5074/1778/files/man-in-white-and-light-tan-outfit.jpg?v=1672348139',
               },
               crop: 'center',
               heading: 'Headline',
@@ -204,8 +205,8 @@ export function Schema() {
           {
             label: 'Text Color',
             name: 'textColor',
-            component: 'select',
-            options: COLORS,
+            component: 'color',
+            colors: COLOR_PICKER_DEFAULTS,
           },
           {
             label: 'Tile Text Alignment',
@@ -241,7 +242,7 @@ export function Schema() {
           tilesPerViewTablet: 2.4,
           tilesPerViewMobile: 1.4,
           aspectRatio: 'aspect-[3/4]',
-          textColor: 'var(--text)',
+          textColor: COLOR_SCHEMA_DEFAULT_VALUE.text,
           textAlign: 'text-left items-start',
           tileHeadingSize: 'text-h4',
           buttonStyle: 'btn-primary',

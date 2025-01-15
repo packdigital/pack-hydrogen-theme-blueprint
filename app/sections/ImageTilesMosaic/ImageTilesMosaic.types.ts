@@ -1,5 +1,5 @@
 import type {ContainerSettings} from '~/settings/container';
-import type {ImageCms, LinkCms} from '~/lib/types';
+import type {MediaCms, LinkCms} from '~/lib/types';
 
 interface Header {
   heading: string;
@@ -16,7 +16,7 @@ interface Content {
 
 interface Tile {
   alt: string;
-  image: ImageCms;
+  image: MediaCms;
   positionDesktop: string;
   positionMobile: string;
   heading: string;

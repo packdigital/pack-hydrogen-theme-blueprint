@@ -1,6 +1,6 @@
 import type {LinkCms} from '~/lib/types';
 
-import {COLORS} from './common';
+import {COLOR_PICKER_DEFAULTS, COLOR_SCHEMA_DEFAULT_VALUE} from './common';
 
 export interface FooterSettings {
   bgColor: string;
@@ -46,16 +46,16 @@ export default {
     {
       label: 'Background Color',
       name: 'bgColor',
-      component: 'select',
-      options: COLORS,
-      defaultValue: 'var(--black)',
+      component: 'color',
+      colors: COLOR_PICKER_DEFAULTS,
+      defaultValue: COLOR_SCHEMA_DEFAULT_VALUE.black,
     },
     {
       label: 'Text Color',
       name: 'textColor',
-      component: 'select',
-      options: COLORS,
-      defaultValue: 'var(--white)',
+      component: 'color',
+      colors: COLOR_PICKER_DEFAULTS,
+      defaultValue: COLOR_SCHEMA_DEFAULT_VALUE.white,
     },
     {
       label: 'Email Marketing',

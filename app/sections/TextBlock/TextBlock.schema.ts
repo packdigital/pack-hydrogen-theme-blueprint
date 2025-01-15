@@ -1,4 +1,8 @@
-import {BUTTONS, COLORS} from '~/settings/common';
+import {
+  BUTTONS,
+  COLOR_PICKER_DEFAULTS,
+  COLOR_SCHEMA_DEFAULT_VALUE,
+} from '~/settings/common';
 import {containerSettings} from '~/settings/container';
 
 export function Schema() {
@@ -76,8 +80,8 @@ export function Schema() {
           {
             label: 'Text Color',
             name: 'textColor',
-            component: 'select',
-            options: COLORS,
+            component: 'color',
+            colors: COLOR_PICKER_DEFAULTS,
           },
           {
             label: 'Full Width',
@@ -92,7 +96,7 @@ export function Schema() {
         ],
         defaultValue: {
           aboveTheFold: false,
-          textColor: 'var(--text)',
+          textColor: COLOR_SCHEMA_DEFAULT_VALUE.text,
           fullWidth: false,
         },
       },

@@ -28,7 +28,7 @@ export function TilesSliderTile({
         <Image
           data={{
             altText: item.image?.altText || item.alt,
-            url: item.image?.src,
+            url: item.image?.url,
             width: item.image?.width,
             height: item.image?.height,
           }}

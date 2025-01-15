@@ -85,7 +85,7 @@ export function MobileSubmenu({
                       <Image
                         data={{
                           altText: image?.altText || alt,
-                          url: image?.src,
+                          url: image?.url,
                           width: image?.width,
                           height: image?.height,
                         }}

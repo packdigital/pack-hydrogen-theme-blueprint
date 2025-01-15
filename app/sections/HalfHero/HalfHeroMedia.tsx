@@ -13,24 +13,27 @@ export function HalfHeroMedia({
 }: HalfHeroMediaProps) {
   const {image, video} = {...media};
 
+  const hasMobileVideo = video?.videoMobile?.mediaType === 'VIDEO';
+  const hasDesktopVideo = video?.videoDesktop?.mediaType === 'VIDEO';
+
   return (
     <div className="absolute inset-0 size-full">
       <div className="relative size-full overflow-hidden md:hidden">
-        {video?.srcMobile && (
+        {hasMobileVideo && (
           <HalfHeroVideo
             autoplay={video.autoplay}
-            posterSrc={video.posterMobile?.src}
+            posterUrl={video.posterMobile?.url}
             sound={video.sound}
+            video={video.videoMobile}
             videoAlt={videoAlt}
-            videoSrc={video.srcMobile}
           />
         )}
 
-        {!video?.srcMobile && (
+        {!hasMobileVideo && (
           <Image
             data={{
               altText: image?.imageMobile?.altText || image?.alt,
-              url: image?.imageMobile?.src,
+              url: image?.imageMobile?.url,
               width: image?.imageMobile?.width,
               height: image?.imageMobile?.height,
             }}
@@ -44,21 +47,21 @@ export function HalfHeroMedia({
       </div>
 
       <div className="relative hidden size-full overflow-hidden md:block">
-        {video?.srcDesktop && (
+        {hasDesktopVideo && (
           <HalfHeroVideo
             autoplay={video.autoplay}
-            posterSrc={video.posterDesktop?.src}
+            posterUrl={video.posterDesktop?.url}
             sound={video.sound}
+            video={video.videoDesktop}
             videoAlt={videoAlt}
-            videoSrc={video.srcDesktop}
           />
         )}
 
-        {!video?.srcDesktop && (
+        {!hasDesktopVideo && (
           <Image
             data={{
               altText: image?.imageDesktop?.altText || image?.alt,
-              url: image?.imageDesktop?.src,
+              url: image?.imageDesktop?.url,
               width: image?.imageDesktop?.width,
               height: image?.imageDesktop?.height,
             }}

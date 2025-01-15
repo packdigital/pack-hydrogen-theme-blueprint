@@ -39,7 +39,7 @@ export function HalfHero({cms}: {cms: HalfHeroCms}) {
           className={`relative mx-auto grid grid-cols-1 items-center md:grid-cols-2 ${maxWidthContainerClass}`}
         >
           <div
-            className={`relative w-full bg-offWhite max-md:before:float-left ${aspectMobile} ${fillClass} ${mediaOrderClasses}`}
+            className={`relative w-full bg-neutralLightest max-md:before:float-left ${aspectMobile} ${fillClass} ${mediaOrderClasses}`}
           >
             <HalfHeroMedia
               aboveTheFold={section?.aboveTheFold}

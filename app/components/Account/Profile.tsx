@@ -76,7 +76,7 @@ export function Profile() {
         <label htmlFor="email" className="col-span-2">
           <span className="input-label">Email</span>
           <input
-            className="input-text text-mediumDarkGray"
+            className="input-text text-neutralMedium"
             disabled
             id="email"
             name="email"

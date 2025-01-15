@@ -35,7 +35,7 @@ export function ProductItemMedia({
 
   return (
     <div
-      className="group/media relative overflow-hidden bg-offWhite before:via-[black-100/10]"
+      className="group/media relative overflow-hidden bg-neutralLightest before:via-[black-100/10]"
       // for a static/consistent aspect ratio, delete style below and add 'aspect-[var(--product-image-aspect-ratio)]' to className
       // set var(--product-image-aspect-ratio) in styles/app.css
       style={{
