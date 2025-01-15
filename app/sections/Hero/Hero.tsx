@@ -7,7 +7,8 @@ import {HeroSlider} from './HeroSlider';
 import {Schema} from './Hero.schema';
 
 export function Hero({cms}: {cms: HeroCms}) {
-  const {section, slider, slides, id: sectionId} = cms;
+  const {section, slider, slides, id, clientId} = cms;
+  const sectionId = id || clientId;
 
   return (
     <Container container={cms.container}>

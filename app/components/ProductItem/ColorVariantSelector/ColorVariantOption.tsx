@@ -28,7 +28,7 @@ export function ColorVariantOption({
   const imageFromCms = swatchFromCms?.image;
   const imageFromShopify = color.swatch?.image?.previewImage;
   const optionImage = imageFromShopify || imageFromCms;
-  const optionImageUrl = imageFromShopify?.url || imageFromCms?.src;
+  const optionImageUrl = optionImage?.url;
 
   return (
     <div className="group/color relative">

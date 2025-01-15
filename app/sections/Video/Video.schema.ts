@@ -12,7 +12,7 @@ export function Schema() {
         label: 'Media Settings',
         name: 'media',
         component: 'group',
-        description: 'Video url, poster image, aspect ratio',
+        description: 'Video, poster image, aspect ratio',
         fields: [
           {
             label: 'Video Title',
@@ -20,10 +20,9 @@ export function Schema() {
             component: 'text',
           },
           {
-            label: 'Video URL (tablet/desktop)',
-            name: 'srcDesktop',
-            component: 'text',
-            description: 'Must be a direct link, not a share link',
+            label: 'Video (tablet/desktop)',
+            name: 'videoDesktop',
+            component: 'image',
           },
           {
             label: 'Poster Image (tablet/desktop)',
@@ -51,10 +50,9 @@ export function Schema() {
             ],
           },
           {
-            label: 'Video URL (mobile)',
-            name: 'srcMobile',
-            component: 'text',
-            description: 'Must be a direct link, not a share link',
+            label: 'Video (mobile)',
+            name: 'videoMobile',
+            component: 'image',
           },
           {
             label: 'Poster Image (mobile)',

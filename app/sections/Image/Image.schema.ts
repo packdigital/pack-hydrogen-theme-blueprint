@@ -78,12 +78,12 @@ export function Schema() {
         defaultValue: {
           alt: 'Rack of green t-shirts',
           imageDesktop: {
-            src: 'https://cdn.shopify.com/s/files/1/0671/5074/1778/files/keagan-henman-xPJYL0l5Ii8-unsplash_20_281_29.jpg?v=1672349016',
+            url: 'https://cdn.shopify.com/s/files/1/0671/5074/1778/files/keagan-henman-xPJYL0l5Ii8-unsplash_20_281_29.jpg?v=1672349016',
           },
           aspectDesktop: 'native',
           cropDesktop: 'center',
           imageMobile: {
-            src: 'https://cdn.shopify.com/s/files/1/0671/5074/1778/files/keagan-henman-xPJYL0l5Ii8-unsplash_20_281_29.jpg?v=1672349016',
+            url: 'https://cdn.shopify.com/s/files/1/0671/5074/1778/files/keagan-henman-xPJYL0l5Ii8-unsplash_20_281_29.jpg?v=1672349016',
           },
           aspectMobile: 'native',
           positionMobile: 'object-center',

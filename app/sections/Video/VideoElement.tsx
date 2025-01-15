@@ -7,9 +7,9 @@ import type {VideoElementProps} from './Video.types';
 
 export function VideoElement({
   playOptions,
-  posterSrc,
+  posterUrl,
   title,
-  videoSrc,
+  video,
 }: VideoElementProps) {
   const {autoplay, loop, pauseAndPlay, sound, controls} = {...playOptions};
 
@@ -44,11 +44,11 @@ export function VideoElement({
             }
           }}
           playsInline
-          poster={posterSrc}
+          poster={posterUrl}
           ref={videoRef}
-          key={videoSrc}
+          key={video?.url}
         >
-          {videoSrc && <source src={videoSrc} type="video/mp4" />}
+          {video?.url && <source src={video.url} type={video.format} />}
         </video>
       )}
 

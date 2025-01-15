@@ -170,7 +170,7 @@
                     },
                     "image": {
                       "id": "gid://shopify/MediaImage/27033190039752",
-                      "src": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/man-with-shoes-up-front.jpg?v=1700370673",
+                      "url": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/man-with-shoes-up-front.jpg?v=1700370673",
                       "size": 547636,
                       "type": "file",
                       "width": 3000,
@@ -191,7 +191,7 @@
                     },
                     "image": {
                       "id": "gid://shopify/MediaImage/27033190105288",
-                      "src": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/rack-of-button-ups.jpg?v=1700370678",
+                      "url": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/rack-of-button-ups.jpg?v=1700370678",
                       "size": 587381,
                       "type": "file",
                       "width": 3000,
@@ -410,10 +410,10 @@
           "image": {
             "alt": "Rack of green t-shirts",
             "imageMobile": {
-              "src": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/keagan-henman-xPJYL0l5Ii8-unsplash_20_281_29.jpg?v=1672349016"
+              "url": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/keagan-henman-xPJYL0l5Ii8-unsplash_20_281_29.jpg?v=1672349016"
             },
             "imageDesktop": {
-              "src": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/keagan-henman-xPJYL0l5Ii8-unsplash_20_281_29.jpg?v=1672349016"
+              "url": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/keagan-henman-xPJYL0l5Ii8-unsplash_20_281_29.jpg?v=1672349016"
             },
             "positionMobile": "object-center",
             "positionDesktop": "md:object-center"
@@ -468,10 +468,10 @@
           "image": {
             "alt": "Rack of green t-shirts",
             "imageMobile": {
-              "src": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/keagan-henman-xPJYL0l5Ii8-unsplash_20_281_29.jpg?v=1672349016"
+              "url": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/keagan-henman-xPJYL0l5Ii8-unsplash_20_281_29.jpg?v=1672349016"
             },
             "imageDesktop": {
-              "src": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/keagan-henman-xPJYL0l5Ii8-unsplash_20_281_29.jpg?v=1672349016"
+              "url": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/keagan-henman-xPJYL0l5Ii8-unsplash_20_281_29.jpg?v=1672349016"
             },
             "positionMobile": "object-center",
             "positionDesktop": "md:object-center"
@@ -581,7 +581,7 @@
                     "alt": "Three men outside wearing outerwear",
                     "imageMobile": {
                       "id": "gid://shopify/MediaImage/27076979032264",
-                      "src": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/men-posing-in-outerwear.jpg?v=1701459236",
+                      "url": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/men-posing-in-outerwear.jpg?v=1701459236",
                       "size": 550781,
                       "type": "file",
                       "width": 3000,
@@ -595,7 +595,7 @@
                     },
                     "imageDesktop": {
                       "id": "gid://shopify/MediaImage/27076979032264",
-                      "src": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/men-posing-in-outerwear.jpg?v=1701459236",
+                      "url": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/men-posing-in-outerwear.jpg?v=1701459236",
                       "size": 550781,
                       "type": "file",
                       "width": 3000,
@@ -675,7 +675,7 @@
                         "type": "isExternal"
                       },
                       "image": {
-                        "src": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/man-in-white-and-light-tan-outfit.jpg?v=1672348139"
+                        "url": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/man-in-white-and-light-tan-outfit.jpg?v=1672348139"
                       },
                       "heading": "Headline",
                       "position": "object-center",
@@ -688,7 +688,7 @@
                         "type": "isExternal"
                       },
                       "image": {
-                        "src": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/austin-wade-d2s8NQ6WD24-unsplash.jpg?v=1672348122"
+                        "url": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/austin-wade-d2s8NQ6WD24-unsplash.jpg?v=1672348122"
                       },
                       "heading": "Headline",
                       "position": "object-center",
@@ -701,7 +701,7 @@
                         "type": "isExternal"
                       },
                       "image": {
-                        "src": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/man-poses-in-light-colored-overcoat.jpg?v=1672348143"
+                        "url": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/man-poses-in-light-colored-overcoat.jpg?v=1672348143"
                       },
                       "heading": "Headline",
                       "position": "object-center",
@@ -715,7 +715,7 @@
                     {
                       "alt": "Man in brown coat sitting down",
                       "image": {
-                        "src": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/austin-wade-d2s8NQ6WD24-unsplash.jpg?v=1672348122"
+                        "url": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/austin-wade-d2s8NQ6WD24-unsplash.jpg?v=1672348122"
                       },
                       "heading": "Headline",
                       "position": "object-center",
@@ -724,7 +724,7 @@
                     {
                       "alt": "Man in gray sweater and tan coat",
                       "image": {
-                        "src": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/man-poses-in-light-colored-overcoat.jpg?v=1672348143"
+                        "url": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/man-poses-in-light-colored-overcoat.jpg?v=1672348143"
                       },
                       "heading": "Headline",
                       "position": "object-center",
@@ -733,7 +733,7 @@
                     {
                       "alt": "Man in white and light tan outfit",
                       "image": {
-                        "src": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/man-in-white-and-light-tan-outfit.jpg?v=1672348139"
+                        "url": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/man-in-white-and-light-tan-outfit.jpg?v=1672348139"
                       },
                       "heading": "Headline",
                       "position": "object-center",
@@ -823,10 +823,10 @@
                 "image": {
                   "alt": "Man with backpack crossing the street",
                   "imageMobile": {
-                    "src": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/mad-rabbit-tattoo-tn1yJqxNj-8-unsplash.jpg?v=1672787927"
+                    "url": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/mad-rabbit-tattoo-tn1yJqxNj-8-unsplash.jpg?v=1672787927"
                   },
                   "imageDesktop": {
-                    "src": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/mad-rabbit-tattoo-tn1yJqxNj-8-unsplash.jpg?v=1672787927"
+                    "url": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/mad-rabbit-tattoo-tn1yJqxNj-8-unsplash.jpg?v=1672787927"
                   },
                   "positionMobile": "object-center",
                   "positionDesktop": "md:object-center"
@@ -884,10 +884,10 @@
                 "image": {
                   "alt": "Man with backpack crossing the street",
                   "imageMobile": {
-                    "src": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/mad-rabbit-tattoo-tn1yJqxNj-8-unsplash.jpg?v=1672787927"
+                    "url": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/mad-rabbit-tattoo-tn1yJqxNj-8-unsplash.jpg?v=1672787927"
                   },
                   "imageDesktop": {
-                    "src": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/mad-rabbit-tattoo-tn1yJqxNj-8-unsplash.jpg?v=1672787927"
+                    "url": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/mad-rabbit-tattoo-tn1yJqxNj-8-unsplash.jpg?v=1672787927"
                   },
                   "positionMobile": "object-center",
                   "positionDesktop": "md:object-center"
@@ -944,7 +944,7 @@
                 {
                   "alt": "Press logo",
                   "image": {
-                    "src": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/forbes-logo-small.png?v=1702422887",
+                    "url": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/forbes-logo-small.png?v=1702422887",
                     "aspectRatio": 3.8
                   },
                   "quote": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt."
@@ -952,7 +952,7 @@
                 {
                   "alt": "Press logo",
                   "image": {
-                    "src": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/vanity-fair-logo-small.png?v=1702422889",
+                    "url": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/vanity-fair-logo-small.png?v=1702422889",
                     "aspectRatio": 4.3
                   },
                   "quote": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."
@@ -960,7 +960,7 @@
                 {
                   "alt": "Press logo",
                   "image": {
-                    "src": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/forbes-logo-small.png?v=1702422887",
+                    "url": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/forbes-logo-small.png?v=1702422887",
                     "aspectRatio": 3.8
                   },
                   "quote": "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore."
@@ -968,7 +968,7 @@
                 {
                   "alt": "Press logo",
                   "image": {
-                    "src": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/vanity-fair-logo-small.png?v=1702422889",
+                    "url": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/vanity-fair-logo-small.png?v=1702422889",
                     "aspectRatio": 4.3
                   },
                   "quote": "Excepteur sint occaecat cupidatat non proident, sunt in culpa."
@@ -976,7 +976,7 @@
                 {
                   "alt": "Press logo",
                   "image": {
-                    "src": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/forbes-logo-small.png?v=1702422887",
+                    "url": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/forbes-logo-small.png?v=1702422887",
                     "aspectRatio": 3.8
                   },
                   "quote": "Sed ut perspiciatis unde omnis iste natus error sit voluptatem."
@@ -984,7 +984,7 @@
                 {
                   "alt": "Press logo",
                   "image": {
-                    "src": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/vanity-fair-logo-small.png?v=1702422889",
+                    "url": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/vanity-fair-logo-small.png?v=1702422889",
                     "aspectRatio": 4.3
                   },
                   "quote": "Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit."
@@ -1010,7 +1010,7 @@
                   "alt": "Rack of green t-shirts",
                   "crop": "center",
                   "image": {
-                    "src": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/keagan-henman-xPJYL0l5Ii8-unsplash_20_281_29.jpg?v=1672349016"
+                    "url": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/keagan-henman-xPJYL0l5Ii8-unsplash_20_281_29.jpg?v=1672349016"
                   },
                   "heading": "Headline",
                   "description": "Nulla vitae elit libero, a pharetra augue."
@@ -1019,7 +1019,7 @@
                   "alt": "Dark orange jacket on a hanger",
                   "crop": "center",
                   "image": {
-                    "src": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/tobias-tullius-Fg15LdqpWrs-unsplash.jpg?v=1672348152"
+                    "url": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/tobias-tullius-Fg15LdqpWrs-unsplash.jpg?v=1672348152"
                   },
                   "heading": "Headline",
                   "description": "Nulla vitae elit libero, a pharetra augue."
@@ -1091,7 +1091,7 @@
                 {
                   "alt": "Man in white and light tan outfit",
                   "image": {
-                    "src": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/man-in-white-and-light-tan-outfit.jpg?v=1672348139"
+                    "url": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/man-in-white-and-light-tan-outfit.jpg?v=1672348139"
                   },
                   "buttons": [
                     {
@@ -1107,7 +1107,7 @@
                 {
                   "alt": "Man in brown coat sitting down",
                   "image": {
-                    "src": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/austin-wade-d2s8NQ6WD24-unsplash.jpg?v=1672348122"
+                    "url": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/austin-wade-d2s8NQ6WD24-unsplash.jpg?v=1672348122"
                   },
                   "buttons": [
                     {
@@ -1123,7 +1123,7 @@
                 {
                   "alt": "Man in gray sweater and tan coat",
                   "image": {
-                    "src": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/man-poses-in-light-colored-overcoat.jpg?v=1672348143"
+                    "url": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/man-poses-in-light-colored-overcoat.jpg?v=1672348143"
                   },
                   "buttons": [
                     {
@@ -1299,7 +1299,7 @@
                     "alt": "Three men outside wearing outerwear",
                     "imageMobile": {
                       "id": "gid://shopify/MediaImage/27033190072520",
-                      "src": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/outfit-flatlay.webp?v=1700370675",
+                      "url": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/outfit-flatlay.webp?v=1700370675",
                       "size": 183848,
                       "type": "file",
                       "width": 3000,
@@ -1313,7 +1313,7 @@
                     },
                     "imageDesktop": {
                       "id": "gid://shopify/MediaImage/27033190072520",
-                      "src": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/outfit-flatlay.webp?v=1700370675",
+                      "url": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/outfit-flatlay.webp?v=1700370675",
                       "size": 183848,
                       "type": "file",
                       "width": 3000,

@@ -2,7 +2,7 @@ import {useEffect, useRef} from 'react';
 
 import type {HeroVideoProps} from './Hero.types';
 
-export function HeroVideo({isVisible, posterSrc, videoSrc}: HeroVideoProps) {
+export function HeroVideo({isVisible, posterUrl, video}: HeroVideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -21,11 +21,11 @@ export function HeroVideo({isVisible, posterSrc, videoSrc}: HeroVideoProps) {
       loop
       muted
       playsInline
-      poster={posterSrc}
+      poster={posterUrl}
       ref={videoRef}
-      key={videoSrc}
+      key={video?.url}
     >
-      {videoSrc && <source src={videoSrc} type="video/mp4" />}
+      {video?.url && <source src={video.url} type={video.format} />}
     </video>
   ) : null;
 }

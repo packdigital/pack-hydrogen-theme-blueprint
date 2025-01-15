@@ -47,15 +47,14 @@ const image = {
 const video = {
   label: 'Video Settings',
   name: 'video',
-  description: 'Video link, poster image',
+  description: 'Video, poster image',
   component: 'group',
   fields: [
     {
-      label: 'Video URL (tablet/desktop)',
-      name: 'srcDesktop',
-      component: 'text',
-      description:
-        'Overrides tablet/desktop image option. Must be a direct link, not a share link',
+      label: 'Video (tablet/desktop)',
+      name: 'videoDesktop',
+      component: 'image',
+      description: 'Overrides tablet/desktop image option',
     },
     {
       label: 'Poster Image (tablet/desktop)',
@@ -64,11 +63,10 @@ const video = {
       description: 'First frame of video while video loads',
     },
     {
-      label: 'Video URL (mobile)',
-      name: 'srcMobile',
-      component: 'text',
-      description:
-        'Overrides mobile image option. Must be a direct link, not a share link',
+      label: 'Video (mobile)',
+      name: 'videoMobile',
+      component: 'image',
+      description: 'Overrides mobile image option',
     },
     {
       label: 'Poster Image (mobile)',
@@ -282,11 +280,11 @@ const defaultSlide = {
   image: {
     alt: 'Three men outside wearing outerwear',
     imageDesktop: {
-      src: 'https://cdn.shopify.com/s/files/1/0671/5074/1778/files/tanya-pro-J2Cr4cBnN-0-unsplash_20_281_29.jpg?v=1672724643',
+      url: 'https://cdn.shopify.com/s/files/1/0671/5074/1778/files/tanya-pro-J2Cr4cBnN-0-unsplash_20_281_29.jpg?v=1672724643',
     },
     positionDesktop: 'md:object-center',
     imageMobile: {
-      src: 'https://cdn.shopify.com/s/files/1/0671/5074/1778/files/tanya-pro-J2Cr4cBnN-0-unsplash_20_281_29.jpg?v=1672724643',
+      url: 'https://cdn.shopify.com/s/files/1/0671/5074/1778/files/tanya-pro-J2Cr4cBnN-0-unsplash_20_281_29.jpg?v=1672724643',
     },
     positionMobile: 'object-center',
   },

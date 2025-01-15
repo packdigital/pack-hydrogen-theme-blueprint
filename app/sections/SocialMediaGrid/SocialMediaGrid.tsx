@@ -57,7 +57,7 @@ export function SocialMediaGrid({cms}: {cms: SocialMediaGridCms}) {
                           <Image
                             data={{
                               altText: image?.altText || item.alt,
-                              url: image?.src,
+                              url: image?.url,
                               width: image?.width,
                               height: image?.height,
                             }}

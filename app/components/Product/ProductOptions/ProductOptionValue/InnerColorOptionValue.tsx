@@ -33,7 +33,7 @@ export function InnerColorOptionValue({
   const imageFromCms = swatch?.image;
   const imageFromShopify = optionValue.swatch?.image?.previewImage;
   const optionImage = imageFromShopify || imageFromCms;
-  const optionImageUrl = imageFromShopify?.url || imageFromCms?.src;
+  const optionImageUrl = optionImage?.url;
 
   return (
     <div

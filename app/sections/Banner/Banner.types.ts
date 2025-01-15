@@ -1,14 +1,14 @@
 import type {ReactNode} from 'react';
 
 import type {ContainerSettings} from '~/settings/container';
-import type {ImageCms, LinkCms} from '~/lib/types';
+import type {MediaCms, LinkCms} from '~/lib/types';
 
 export interface BannerCms {
   image: {
     alt: string;
-    imageDesktop: ImageCms;
+    imageDesktop: MediaCms;
     positionDesktop: string;
-    imageMobile: ImageCms;
+    imageMobile: MediaCms;
     positionMobile: string;
   };
   text: {
@@ -19,6 +19,12 @@ export interface BannerCms {
       link: LinkCms;
       style: string;
     }[];
+  };
+  video: {
+    videoDesktop: MediaCms;
+    posterDesktop: MediaCms;
+    videoMobile: MediaCms;
+    posterMobile: MediaCms;
   };
   content: {
     darkOverlay: boolean;
@@ -50,14 +56,20 @@ export interface BannerCms {
     };
   };
   container: ContainerSettings;
-  sectionName: string;
-  sectionVisibility: string;
+  id: string;
+  clientId: string;
 }
 
 export interface BannerContentProps {
   aboveTheFold: boolean | undefined;
   content: BannerCms['content'];
   text: BannerCms['text'];
+}
+
+export interface BannerVideoProps {
+  aboveTheFold: boolean | undefined;
+  posterUrl?: string;
+  video: MediaCms;
 }
 
 export interface BannerContainerProps {

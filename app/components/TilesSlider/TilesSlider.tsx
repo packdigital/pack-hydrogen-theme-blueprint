@@ -4,6 +4,7 @@ import type {SwiperClass} from 'swiper/react';
 import {Swiper, SwiperSlide} from 'swiper/react';
 
 import {Spinner} from '~/components';
+import type {MediaCms} from '~/lib/types';
 
 import {TilesSliderTile} from './TilesSliderTile';
 
@@ -14,9 +15,7 @@ interface TilesSliderProps {
   textAlign?: string;
   tileHeadingSize?: string;
   tiles: {
-    image: {
-      src: string;
-    };
+    image: MediaCms;
     title: string;
     url: string;
   }[];

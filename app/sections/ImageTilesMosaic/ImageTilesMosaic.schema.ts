@@ -38,7 +38,7 @@ const DEFAULT_PRIMARY_TILE = {
   aspectRatioMobile: 'max-md:aspect-[4/3]',
   alt: 'Man in white and light tan outfit',
   image: {
-    src: 'https://cdn.shopify.com/s/files/1/0671/5074/1778/files/man-in-white-and-light-tan-outfit.jpg?v=1672348139',
+    url: 'https://cdn.shopify.com/s/files/1/0671/5074/1778/files/man-in-white-and-light-tan-outfit.jpg?v=1672348139',
   },
   positionDesktop: 'md:object-center',
   positionMobile: 'object-center',
@@ -59,7 +59,7 @@ const DEFAULT_SECONDARY_TILES = [
     aspectRatioMobile: 'max-md:aspect-[4/3]',
     alt: 'Man crossing the street',
     image: {
-      src: 'https://cdn.shopify.com/s/files/1/0629/5519/2520/files/man-crossing-street.jpg?v=1700370669',
+      url: 'https://cdn.shopify.com/s/files/1/0629/5519/2520/files/man-crossing-street.jpg?v=1700370669',
     },
     positionDesktop: 'md:object-center',
     positionMobile: 'object-center',
@@ -78,7 +78,7 @@ const DEFAULT_SECONDARY_TILES = [
     aspectRatioMobile: 'max-md:aspect-[4/3]',
     alt: 'Man with beanie and his feet propped up',
     image: {
-      src: 'https://cdn.shopify.com/s/files/1/0629/5519/2520/files/man-with-shoes-up-front.jpg?v=1700370673',
+      url: 'https://cdn.shopify.com/s/files/1/0629/5519/2520/files/man-with-shoes-up-front.jpg?v=1700370673',
     },
     positionDesktop: 'md:object-center',
     positionMobile: 'object-center',
@@ -97,7 +97,7 @@ const DEFAULT_SECONDARY_TILES = [
     aspectRatioMobile: 'max-md:aspect-[4/3]',
     alt: 'Man in gray sweater and tan coat',
     image: {
-      src: 'https://cdn.shopify.com/s/files/1/0671/5074/1778/files/man-poses-in-light-colored-overcoat.jpg?v=1672348143',
+      url: 'https://cdn.shopify.com/s/files/1/0671/5074/1778/files/man-poses-in-light-colored-overcoat.jpg?v=1672348143',
     },
     positionDesktop: 'md:object-center',
     positionMobile: 'object-center',
@@ -327,7 +327,7 @@ export function Schema() {
               aspectRatioMobile: 'max-md:aspect-[4/3]',
               alt: 'Man in white and light tan outfit',
               image: {
-                src: 'https://cdn.shopify.com/s/files/1/0671/5074/1778/files/man-in-white-and-light-tan-outfit.jpg?v=1672348139',
+                url: 'https://cdn.shopify.com/s/files/1/0671/5074/1778/files/man-in-white-and-light-tan-outfit.jpg?v=1672348139',
               },
               positionDesktop: 'md:object-center',
               positionMobile: 'object-center',

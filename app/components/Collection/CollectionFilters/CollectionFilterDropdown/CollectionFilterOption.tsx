@@ -33,7 +33,7 @@ export function CollectionFilterOption({
     const imageFromCms = swatchFromCms?.image;
     const imageFromShopify = color.swatch?.image?.previewImage;
     optionImage = imageFromShopify || imageFromCms;
-    optionImageUrl = imageFromShopify?.url || imageFromCms?.src;
+    optionImageUrl = optionImage?.url;
   }
 
   const checkmarkColor = useMemo(() => {

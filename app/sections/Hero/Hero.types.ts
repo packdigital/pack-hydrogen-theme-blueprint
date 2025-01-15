@@ -1,7 +1,7 @@
 import type {ReactNode} from 'react';
 
 import type {ContainerSettings} from '~/settings/container';
-import type {ImageCms, LinkCms} from '~/lib/types';
+import type {MediaCms, LinkCms} from '~/lib/types';
 
 interface Section {
   aboveTheFold: boolean;
@@ -57,25 +57,19 @@ interface Button {
 
 interface Image {
   alt: string;
-  imageDesktop: ImageCms;
-  imageMobile: ImageCms;
+  imageDesktop: MediaCms;
+  imageMobile: MediaCms;
   positionDesktop: string;
   positionMobile: string;
 }
 
 interface Video {
   autoplay: boolean;
-  posterDesktop: {
-    src: string;
-    aspectRatio: string;
-  };
-  posterMobile: {
-    src: string;
-    aspectRatio: string;
-  };
+  posterDesktop: MediaCms;
+  posterMobile: MediaCms;
   sound: boolean;
-  srcDesktop: string;
-  srcMobile: string;
+  videoDesktop: MediaCms;
+  videoMobile: MediaCms;
 }
 
 interface Slider {
@@ -95,13 +89,12 @@ interface Slide {
 }
 
 export interface HeroCms {
-  id: string;
   section: Section;
   slider: Slider;
   slides: Slide[];
   container: ContainerSettings;
-  sectionName: string;
-  sectionVisibility: string;
+  id: string;
+  clientId: string;
 }
 
 export interface HeroSlideProps {
@@ -122,8 +115,8 @@ export interface HeroSliderProps {
 
 export interface HeroVideoProps {
   isVisible?: boolean;
-  posterSrc?: string;
-  videoSrc?: string;
+  posterUrl?: string;
+  video?: MediaCms;
 }
 
 export interface HeroContainerProps {

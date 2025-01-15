@@ -1,5 +1,5 @@
 import type {ContainerSettings} from '~/settings/container';
-import type {ImageCms} from '~/lib/types';
+import type {MediaCms} from '~/lib/types';
 
 interface Section {
   fullWidth: boolean;
@@ -8,7 +8,7 @@ interface Section {
 
 interface Slide {
   alt: string;
-  image: ImageCms;
+  image: MediaCms;
   quote: string;
 }
 
@@ -20,7 +20,7 @@ export interface PressSliderCms {
 
 export interface PressSliderThumbProps {
   alt?: string;
-  image?: ImageCms;
+  image?: MediaCms;
   isActive?: boolean;
   onClick?: () => void;
 }

@@ -2,11 +2,16 @@ import {Container, Image} from '~/components';
 
 import {BannerContainer} from './BannerContainer';
 import {BannerContent} from './BannerContent';
-import type {BannerCms} from './Banner.types';
+import {BannerVideo} from './BannerVideo';
 import {Schema} from './Banner.schema';
+import type {BannerCms} from './Banner.types';
 
 export function Banner({cms}: {cms: BannerCms}) {
-  const {content, container, image, section, text} = cms;
+  console.log('cms', cms);
+  const {content, container, image, section, text, video} = cms;
+
+  const hasMobileVideo = video?.videoMobile?.mediaType === 'VIDEO';
+  const hasDesktopVideo = video?.videoDesktop?.mediaType === 'VIDEO';
 
   return (
     <Container
@@ -18,11 +23,19 @@ export function Banner({cms}: {cms: BannerCms}) {
     >
       <BannerContainer cms={cms}>
         <div className="absolute inset-0 size-full overflow-hidden md:hidden">
-          {image?.imageMobile?.src && (
+          {hasMobileVideo && (
+            <BannerVideo
+              aboveTheFold={section?.aboveTheFold}
+              posterUrl={video?.posterMobile?.url}
+              video={video?.videoMobile}
+            />
+          )}
+
+          {image?.imageMobile?.url && !hasMobileVideo && (
             <Image
               data={{
                 altText: image.imageMobile.altText || image.alt,
-                url: image.imageMobile.src,
+                url: image.imageMobile.url,
                 width: image.imageMobile.width,
                 height: image.imageMobile.height,
               }}
@@ -34,11 +47,19 @@ export function Banner({cms}: {cms: BannerCms}) {
         </div>
 
         <div className="absolute inset-0 hidden size-full overflow-hidden md:block">
-          {image?.imageDesktop?.src && (
+          {hasDesktopVideo && (
+            <BannerVideo
+              aboveTheFold={section?.aboveTheFold}
+              posterUrl={video?.posterDesktop?.url}
+              video={video?.videoDesktop}
+            />
+          )}
+
+          {image?.imageDesktop?.url && !hasDesktopVideo && (
             <Image
               data={{
                 altText: image.imageDesktop.altText || image.alt,
-                url: image.imageDesktop.src,
+                url: image.imageDesktop.url,
                 width: image.imageDesktop.width,
                 height: image.imageDesktop.height,
               }}

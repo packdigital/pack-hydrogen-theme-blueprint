@@ -1,10 +1,10 @@
 import type {ContainerSettings} from '~/settings/container';
-import type {ImageCms} from '~/lib/types';
+import type {MediaCms} from '~/lib/types';
 
 interface Media {
   alt: string;
-  image: ImageCms;
-  video: ImageCms;
+  image: MediaCms;
+  video: MediaCms;
   platform: string;
   url: string;
 }

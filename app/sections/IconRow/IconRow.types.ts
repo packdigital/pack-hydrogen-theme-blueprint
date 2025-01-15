@@ -1,9 +1,9 @@
 import type {ContainerSettings} from '~/settings/container';
-import type {ImageCms} from '~/lib/types';
+import type {MediaCms} from '~/lib/types';
 
 interface Icon {
   icon: string;
-  image?: ImageCms;
+  image?: MediaCms;
   alt?: string;
   label?: string;
 }

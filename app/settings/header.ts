@@ -1,4 +1,4 @@
-import type {ImageCms, LinkCms, ProductCms} from '~/lib/types';
+import type {MediaCms, LinkCms, ProductCms} from '~/lib/types';
 
 import {COLOR_PICKER_DEFAULTS, COLOR_SCHEMA_DEFAULT_VALUE} from './common';
 
@@ -25,7 +25,7 @@ export interface HeaderSettings {
       mainLink: LinkCms;
       imageLinks: {
         alt: string;
-        image: ImageCms;
+        image: MediaCms;
         caption: string;
         link: LinkCms;
       }[];

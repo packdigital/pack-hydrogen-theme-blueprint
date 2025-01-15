@@ -45,14 +45,47 @@ const image = {
   defaultValue: {
     alt: 'Rack of green t-shirts',
     imageDesktop: {
-      src: 'https://cdn.shopify.com/s/files/1/0671/5074/1778/files/keagan-henman-xPJYL0l5Ii8-unsplash_20_281_29.jpg?v=1672349016',
+      url: 'https://cdn.shopify.com/s/files/1/0671/5074/1778/files/keagan-henman-xPJYL0l5Ii8-unsplash_20_281_29.jpg?v=1672349016',
     },
     positionDesktop: 'md:object-center',
     imageMobile: {
-      src: 'https://cdn.shopify.com/s/files/1/0671/5074/1778/files/keagan-henman-xPJYL0l5Ii8-unsplash_20_281_29.jpg?v=1672349016',
+      url: 'https://cdn.shopify.com/s/files/1/0671/5074/1778/files/keagan-henman-xPJYL0l5Ii8-unsplash_20_281_29.jpg?v=1672349016',
     },
     positionMobile: 'object-center',
   },
+};
+
+const video = {
+  label: 'Video Settings',
+  name: 'video',
+  description: 'Video, poster image',
+  component: 'group',
+  fields: [
+    {
+      label: 'Video (tablet/desktop)',
+      name: 'videoDesktop',
+      component: 'image',
+      description: 'Overrides tablet/desktop image option',
+    },
+    {
+      label: 'Poster Image (tablet/desktop)',
+      name: 'posterDesktop',
+      component: 'image',
+      description: 'First frame of video while video loads',
+    },
+    {
+      label: 'Video (mobile)',
+      name: 'videoMobile',
+      component: 'image',
+      description: 'Overrides mobile image option',
+    },
+    {
+      label: 'Poster Image (mobile)',
+      name: 'posterMobile',
+      component: 'image',
+      description: 'First frame of video while video loads',
+    },
+  ],
 };
 
 const text = {
@@ -208,6 +241,7 @@ export function Schema() {
       'https://cdn.shopify.com/s/files/1/0629/5519/2520/files/banner-preview.jpg?v=1708133574',
     fields: [
       image,
+      video,
       text,
       content,
       {

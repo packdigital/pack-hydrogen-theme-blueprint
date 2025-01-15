@@ -86,7 +86,7 @@ export const DesktopMenu = memo(
                       <Image
                         data={{
                           altText: image?.altText || alt,
-                          url: image?.src,
+                          url: image?.url,
                           width: image?.width,
                           height: image?.height,
                         }}

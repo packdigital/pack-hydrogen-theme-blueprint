@@ -8,10 +8,10 @@ export function Video({cms}: {cms: VideoCms}) {
   const {content, media, play, section} = cms;
   const {
     title,
-    srcDesktop,
+    videoDesktop,
     posterDesktop,
     aspectDesktop,
-    srcMobile,
+    videoMobile,
     posterMobile,
     aspectMobile,
   } = {
@@ -37,12 +37,12 @@ export function Video({cms}: {cms: VideoCms}) {
           <div
             className={`relative bg-neutralLightest md:hidden ${aspectMobile}`}
           >
-            {srcMobile && (
+            {videoMobile?.mediaType === 'VIDEO' && (
               <VideoElement
                 playOptions={play}
-                posterSrc={posterMobile?.src}
+                posterUrl={posterMobile?.url}
                 title={title}
-                videoSrc={srcMobile}
+                video={videoMobile}
               />
             )}
           </div>
@@ -50,12 +50,12 @@ export function Video({cms}: {cms: VideoCms}) {
           <div
             className={`relative hidden bg-neutralLightest md:block ${aspectDesktop}`}
           >
-            {srcDesktop && (
+            {videoDesktop?.mediaType === 'VIDEO' && (
               <VideoElement
                 playOptions={play}
-                posterSrc={posterDesktop?.src}
+                posterUrl={posterDesktop?.url}
                 title={title}
-                videoSrc={srcDesktop}
+                video={videoDesktop}
               />
             )}
           </div>

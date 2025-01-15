@@ -1,5 +1,3 @@
-import kebabCase from 'lodash/kebabCase';
-
 import type {BannerContainerProps} from './Banner.types';
 
 const FALLBACK_DESKTOP_HEIGHT_CLASS = 'md:h-[18.75rem]';
@@ -10,7 +8,8 @@ const FALLBACK_MOBILE_ASPECT_RATIO_CLASS = 'max-md:aspect-[3/1]';
 const FALLBACK_MOBILE_ASPECT_RATIO = '3 / 1';
 
 export function BannerContainer({children, cms}: BannerContainerProps) {
-  const {section, image} = cms;
+  const {section, image, id, clientId} = cms;
+  const sectionId = id || clientId;
 
   // container
   const maxWidthContainerClass = section?.fullWidth
@@ -48,9 +47,7 @@ export function BannerContainer({children, cms}: BannerContainerProps) {
   const heightContainerClasses = `${heightClassesMobile} ${heightClassesDesktop}`;
 
   /* unique class name is important to not override other banner aspect ratios */
-  const nativeAspectRatiosClass = `banner-native-aspect-ratios-${kebabCase(
-    cms.sectionName,
-  )}-${cms.sectionVisibility}`;
+  const nativeAspectRatiosClass = `banner-native-aspect-ratios-${sectionId}`;
 
   return (
     <div className={`${fullBleedClass}`}>

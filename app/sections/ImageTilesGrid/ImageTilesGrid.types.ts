@@ -1,5 +1,5 @@
 import type {ContainerSettings} from '~/settings/container';
-import type {Crop, ImageCms, LinkCms} from '~/lib/types';
+import type {Crop, MediaCms, LinkCms} from '~/lib/types';
 
 interface Header {
   heading: string;
@@ -23,7 +23,7 @@ interface Tile {
     link?: LinkCms;
   }[];
   heading?: string;
-  image?: ImageCms;
+  image?: MediaCms;
 }
 
 interface ViewportSettings {

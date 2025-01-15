@@ -1,4 +1,4 @@
-import type {Crop, ImageCms, LinkCms} from '~/lib/types';
+import type {Crop, MediaCms, LinkCms} from '~/lib/types';
 import type {ContainerSettings} from '~/settings/container';
 
 interface Header {
@@ -20,7 +20,7 @@ interface Tile {
   crop: Crop;
   description: string;
   heading: string;
-  image: ImageCms;
+  image: MediaCms;
   link: LinkCms;
 }
 

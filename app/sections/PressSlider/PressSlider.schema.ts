@@ -46,7 +46,7 @@ export function Schema() {
         defaultItem: {
           alt: 'Press logo',
           image: {
-            src: 'https://cdn.shopify.com/s/files/1/0629/5519/2520/files/forbes-logo-small.png?v=1702422887',
+            url: 'https://cdn.shopify.com/s/files/1/0629/5519/2520/files/forbes-logo-small.png?v=1702422887',
             aspectRatio: 3.8,
           },
           quote:
@@ -56,7 +56,7 @@ export function Schema() {
           {
             alt: 'Press logo',
             image: {
-              src: 'https://cdn.shopify.com/s/files/1/0629/5519/2520/files/forbes-logo-small.png?v=1702422887',
+              url: 'https://cdn.shopify.com/s/files/1/0629/5519/2520/files/forbes-logo-small.png?v=1702422887',
               aspectRatio: 3.8,
             },
             quote:
@@ -65,7 +65,7 @@ export function Schema() {
           {
             alt: 'Press logo',
             image: {
-              src: 'https://cdn.shopify.com/s/files/1/0629/5519/2520/files/vanity-fair-logo-small.png?v=1702422889',
+              url: 'https://cdn.shopify.com/s/files/1/0629/5519/2520/files/vanity-fair-logo-small.png?v=1702422889',
               aspectRatio: 4.3,
             },
             quote:
@@ -74,7 +74,7 @@ export function Schema() {
           {
             alt: 'Press logo',
             image: {
-              src: 'https://cdn.shopify.com/s/files/1/0629/5519/2520/files/forbes-logo-small.png?v=1702422887',
+              url: 'https://cdn.shopify.com/s/files/1/0629/5519/2520/files/forbes-logo-small.png?v=1702422887',
               aspectRatio: 3.8,
             },
             quote:
@@ -83,7 +83,7 @@ export function Schema() {
           {
             alt: 'Press logo',
             image: {
-              src: 'https://cdn.shopify.com/s/files/1/0629/5519/2520/files/vanity-fair-logo-small.png?v=1702422889',
+              url: 'https://cdn.shopify.com/s/files/1/0629/5519/2520/files/vanity-fair-logo-small.png?v=1702422889',
               aspectRatio: 4.3,
             },
             quote:
@@ -92,7 +92,7 @@ export function Schema() {
           {
             alt: 'Press logo',
             image: {
-              src: 'https://cdn.shopify.com/s/files/1/0629/5519/2520/files/forbes-logo-small.png?v=1702422887',
+              url: 'https://cdn.shopify.com/s/files/1/0629/5519/2520/files/forbes-logo-small.png?v=1702422887',
               aspectRatio: 3.8,
             },
             quote:
@@ -101,7 +101,7 @@ export function Schema() {
           {
             alt: 'Press logo',
             image: {
-              src: 'https://cdn.shopify.com/s/files/1/0629/5519/2520/files/vanity-fair-logo-small.png?v=1702422889',
+              url: 'https://cdn.shopify.com/s/files/1/0629/5519/2520/files/vanity-fair-logo-small.png?v=1702422889',
               aspectRatio: 4.3,
             },
             quote:

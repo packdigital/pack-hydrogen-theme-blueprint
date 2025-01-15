@@ -17,11 +17,11 @@ export function PressSliderThumb({
         style={{aspectRatio: image?.aspectRatio}}
         type="button"
       >
-        {image?.src && (
+        {image?.url && (
           <Image
             data={{
               altText: image.altText || alt,
-              url: image.src,
+              url: image.url,
               width: image.width,
               height: image.height,
             }}

@@ -58,6 +58,8 @@ export function HeroContent({
     }, []);
   }, [heading]);
 
+  const heroTextColorClass = `theme-hero-text-${sectionId}${index}`;
+
   return (
     <div
       className={`absolute inset-0 flex size-full p-4 md:p-8 xl:p-12 ${positionClasses} ${darkOverlayClass} ${
@@ -65,7 +67,7 @@ export function HeroContent({
       }`}
     >
       <style>
-        {`.theme-hero-text-${sectionId}${index} {
+        {`.${heroTextColorClass} {
             @media (max-width: 767px) {
               color: ${colorMobile};
             }
@@ -79,9 +81,7 @@ export function HeroContent({
       <div
         className={`relative flex flex-col gap-6 ${alignmentClasses} ${maxWidthContentClasses}`}
       >
-        <div
-          className={`theme-hero-text-${sectionId}${index} ${hiddenHeadingClasses}`}
-        >
+        <div className={`${heroTextColorClass} ${hiddenHeadingClasses}`}>
           {superheading && (
             <p className="text-superheading max-lg:mb-1">{superheading}</p>
           )}
