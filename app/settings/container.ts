@@ -20,7 +20,7 @@ export const containerSettings = (defaults?: ContainerSettings) => ({
       label: 'Background Color',
       name: 'bgColor',
       component: 'color',
-      options: COLOR_PICKER_DEFAULTS,
+      colors: COLOR_PICKER_DEFAULTS,
       defaultValue: defaults?.bgColor || COLOR_SCHEMA_DEFAULT_VALUE.background,
     },
     {
