@@ -7,7 +7,6 @@ import {Schema} from './Banner.schema';
 import type {BannerCms} from './Banner.types';
 
 export function Banner({cms}: {cms: BannerCms}) {
-  console.log('cms', cms);
   const {content, container, image, section, text, video} = cms;
 
   const hasMobileVideo = video?.videoMobile?.mediaType === 'VIDEO';
