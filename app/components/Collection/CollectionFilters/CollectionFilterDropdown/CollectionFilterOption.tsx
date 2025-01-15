@@ -42,8 +42,10 @@ export function CollectionFilterOption({
     return isLightHexColor(optionColor) ? 'text-black' : 'text-white';
   }, [isColor, optionColor]);
 
-  const colorBackground = optionColor || 'var(--off-white)';
-  const nonColorBackground = isActive ? 'var(--black)' : 'var(--off-white)';
+  const colorBackground = optionColor || 'var(--neutral-lightest)';
+  const nonColorBackground = isActive
+    ? 'var(--black)'
+    : 'var(--neutral-lightest)';
   const disabled = !count;
 
   if (isPrice) {

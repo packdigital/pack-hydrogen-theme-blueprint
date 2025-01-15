@@ -50,7 +50,7 @@ export function QuantitySelector({
 
       <div className="relative flex flex-1 items-center justify-center">
         {isUpdating ? (
-          <Spinner color="var(--medium-gray)" width="20" />
+          <Spinner color="var(--neutral-light)" width="20" />
         ) : (
           <p className="w-full text-center outline-none">{quantity}</p>
         )}

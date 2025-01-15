@@ -29,7 +29,7 @@ export function CollectionPromoTile({tile}: CollectionPromoTileProps) {
       <div
         className={`relative ${aspectRatio} overflow-hidden`}
         style={{
-          backgroundColor: media ? 'var(--off-white)' : bgColor,
+          backgroundColor: media ? 'var(--neutral-lightest)' : bgColor,
         }}
       >
         {inView && (
