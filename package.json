@@ -24,7 +24,7 @@
     "@pack/client": "^1.0.1",
     "@pack/hydrogen": "^1.0.6",
     "@pack/react": "^0.1.4",
-    "@remix-run/react": "^2.15.2",
+    "@remix-run/react": "2.15.2",
     "@shopify/cli": "^3.72.2",
     "@shopify/cli-hydrogen": "^9.0.3",
     "@shopify/hydrogen": "^2024.10.1",

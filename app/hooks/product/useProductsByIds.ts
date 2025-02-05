@@ -49,7 +49,7 @@ export function useProductsByIds(
       '!fetcher.data?.products:',
       !fetcher.data?.products,
     );
-    console.log('mm');
+    // console.log('mm');
     if (!ids?.length || !fetcher.data?.products) return [];
     const productsById = fetcher.data.products.reduce(
       (acc: Record<string, Product>, product) => {
