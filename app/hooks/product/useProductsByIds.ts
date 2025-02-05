@@ -41,6 +41,15 @@ export function useProductsByIds(
   }, [fetchOnMount, idsString]);
 
   return useMemo(() => {
+    console.log(
+      'fetcher:',
+      fetcher,
+      '!ids?.length:',
+      !ids?.length,
+      '!fetcher.data?.products:',
+      !fetcher.data?.products,
+    );
+    console.log('mm');
     if (!ids?.length || !fetcher.data?.products) return [];
     const productsById = fetcher.data.products.reduce(
       (acc: Record<string, Product>, product) => {
