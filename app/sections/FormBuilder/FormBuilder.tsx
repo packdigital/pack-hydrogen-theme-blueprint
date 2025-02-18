@@ -19,10 +19,14 @@ export function FormBuilder({cms}: {cms: FormBuilderCms}) {
   const [captchaLoaded, setCaptchaLoaded] = useState(false);
 
   const renderCaptcha =
-    typeof document !== 'undefined' && window.grecaptcha?.render;
+    typeof window !== 'undefined' &&
+    typeof document !== 'undefined' &&
+    window?.grecaptcha?.render;
   const captchaReady = typeof renderCaptcha === 'function';
   const recaptchaEnabled =
-    cms.recaptchaEnabled && !!window.ENV?.PUBLIC_RECAPTCHA_SITE_KEY;
+    typeof window !== 'undefined' &&
+    cms.recaptchaEnabled &&
+    !!window?.ENV?.PUBLIC_RECAPTCHA_SITE_KEY;
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
