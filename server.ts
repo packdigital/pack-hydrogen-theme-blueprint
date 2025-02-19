@@ -82,6 +82,7 @@ export default {
 
       const pack = createPackClient({
         cache,
+        request,
         waitUntil,
         token: env.PACK_SECRET_TOKEN,
         storeId: env.PACK_STOREFRONT_ID,
