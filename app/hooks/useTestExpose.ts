@@ -35,19 +35,19 @@ export function useTestExpose() {
     }
   };
 
-  if (ENV?.PUBLIC_ONETRUST_DATA_DOMAIN_SCRIPT) {
-    useEffect(() => {
-      const checkConsent = (event: any) => {
-        setHasUserConsent(
-          [...(event.detail || [])].includes(AB_TEST_COOKIE_GROUP),
-        );
-      };
-      window.addEventListener('OneTrustGroupsUpdated', checkConsent);
-      return () => {
-        window.removeEventListener('OneTrustGroupsUpdated', checkConsent);
-      };
-    }, []);
-  }
+  // OneTrust listener, PUBLIC_ONETRUST_DATA_DOMAIN_SCRIPT must be set in .env
+  useEffect(() => {
+    if (!ENV.PUBLIC_ONETRUST_DATA_DOMAIN_SCRIPT) return;
+    const checkConsent = (event: any) => {
+      setHasUserConsent(
+        [...(event.detail || [])].includes(AB_TEST_COOKIE_GROUP),
+      );
+    };
+    window.addEventListener('OneTrustGroupsUpdated', checkConsent);
+    return () => {
+      window.removeEventListener('OneTrustGroupsUpdated', checkConsent);
+    };
+  }, []);
 
   // https://shopify.dev/docs/api/customer-privacy#use-an-event-listener
   useEffect(() => {
