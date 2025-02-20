@@ -1,13 +1,15 @@
-import {useEffect, useState, useRef} from 'react';
-import {useAnalytics} from '@shopify/hydrogen';
+import { useEffect, useState, useRef } from 'react';
+import { useAnalytics } from '@shopify/hydrogen';
 
 import { AnalyticsEvent } from '~/components/Analytics/constants';
+import { useRootLoaderData } from './useRootLoaderData';
 
 const AB_TEST_COOKIE_GROUP = 'C0003'; // Functional
 
 export function useTestExpose() {
+  const { ENV } = useRootLoaderData();
   const [hasUserConsent, setHasUserConsent] = useState<boolean>(false);
-  const {publish} = useAnalytics();
+  const { publish } = useAnalytics();
 
   const publishRef = useRef(publish);
 
@@ -33,17 +35,20 @@ export function useTestExpose() {
     }
   };
 
-  useEffect(() => {
-    const checkConsent = (event: any) => {
-      setHasUserConsent(
-        [...(event.detail || [])].includes(AB_TEST_COOKIE_GROUP),
-      );
-    };
-    window.addEventListener('OneTrustGroupsUpdated', checkConsent);
-    return () => {
-      window.removeEventListener('OneTrustGroupsUpdated', checkConsent);
-    };
-  }, []);
+  if (ENV?.PUBLIC_ONETRUST_DATA_DOMAIN_SCRIPT) {
+    console.log('OneTrust script loaded');
+    useEffect(() => {
+      const checkConsent = (event: any) => {
+        setHasUserConsent(
+          [...(event.detail || [])].includes(AB_TEST_COOKIE_GROUP),
+        );
+      };
+      window.addEventListener('OneTrustGroupsUpdated', checkConsent);
+      return () => {
+        window.removeEventListener('OneTrustGroupsUpdated', checkConsent);
+      };
+    }, []);
+  }
 
   // https://shopify.dev/docs/api/customer-privacy#use-an-event-listener
   useEffect(() => {
@@ -70,5 +75,5 @@ export function useTestExpose() {
     console.log('hasUserConsent', hasUserConsent);
   }, [hasUserConsent]);
 
-  return {handleTestExpose, hasUserConsent};
+  return { handleTestExpose, hasUserConsent };
 }
