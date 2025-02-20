@@ -28,31 +28,28 @@ export const Scripts = memo(() => {
   );
 
   // OneTrust scripts, PUBLIC_ONETRUST_DATA_DOMAIN_SCRIPT must be set in .env
+  useLoadScript(
+    {
+      id: 'onetrust-script',
+      src: 'https://cdn.cookielaw.org/scripttemplates/otSDKStub.js',
+      async: true,
+      type: 'text/javascript',
+      charset: 'UTF-8',
+      'data-domain-script': ENV.PUBLIC_ONETRUST_DATA_DOMAIN_SCRIPT,
+    },
+    'head',
+    !!ENV.PUBLIC_ONETRUST_DATA_DOMAIN_SCRIPT,
+  );
 
-  if (ENV?.PUBLIC_ONETRUST_DATA_DOMAIN_SCRIPT) {
-    useLoadScript(
-      {
-        id: 'onetrust-script',
-        src: 'https://cdn.cookielaw.org/scripttemplates/otSDKStub.js',
-        async: true,
-        type: 'text/javascript',
-        charset: 'UTF-8',
-        'data-domain-script': ENV.PUBLIC_ONETRUST_DATA_DOMAIN_SCRIPT
-      },
-      'body',
-    );
-
-    useLoadScript(
-      {
-        id: 'onetrust-inline-script',
-        innerHTML: `
-        function OptanonWrapper() { }
-      `,
-        type: 'text/javascript',
-      },
-      'body',
-    );
-  }
+  useLoadScript(
+    {
+      id: 'onetrust-inline-script',
+      innerHTML: 'function OptanonWrapper() { }',
+      type: 'text/javascript',
+    },
+    'head',
+    !!ENV.PUBLIC_ONETRUST_DATA_DOMAIN_SCRIPT,
+  );
 
   // ↓ Other third party scripts ↓
 
