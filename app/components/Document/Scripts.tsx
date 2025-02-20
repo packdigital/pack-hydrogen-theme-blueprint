@@ -30,7 +30,6 @@ export const Scripts = memo(() => {
   // OneTrust scripts, PUBLIC_ONETRUST_DATA_DOMAIN_SCRIPT must be set in .env
 
   if (ENV?.PUBLIC_ONETRUST_DATA_DOMAIN_SCRIPT) {
-    console.log('OneTrust script loaded 2');
     useLoadScript(
       {
         id: 'onetrust-script',

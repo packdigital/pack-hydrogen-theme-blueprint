@@ -36,7 +36,6 @@ export function useTestExpose() {
   };
 
   if (ENV?.PUBLIC_ONETRUST_DATA_DOMAIN_SCRIPT) {
-    console.log('OneTrust script loaded');
     useEffect(() => {
       const checkConsent = (event: any) => {
         setHasUserConsent(
