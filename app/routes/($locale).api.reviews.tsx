@@ -1,4 +1,4 @@
-import {json} from '@shopify/remix-oxygen';
+import {data as dataWithOptions} from '@shopify/remix-oxygen';
 import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 
 /*
@@ -35,7 +35,7 @@ export async function loader({request, context}: LoaderFunctionArgs) {
   const reviewsAction = actions[action];
 
   if (!reviewsAction) {
-    return json(
+    return dataWithOptions(
       {error: `/api/reviews: Unsupported action \`${action}\``},
       {status: 400},
     );
@@ -44,7 +44,7 @@ export async function loader({request, context}: LoaderFunctionArgs) {
   const productId = String(searchParams.get('productId') || '');
 
   if (!productId) {
-    return json(
+    return dataWithOptions(
       {error: '/api/reviews: Missing `productId` parameter'},
       {status: 400},
     );
@@ -56,11 +56,11 @@ export async function loader({request, context}: LoaderFunctionArgs) {
   const data = await reviewsAction({productId, platformKey});
 
   if (!data || data.error) {
-    return json(
+    return dataWithOptions(
       {error: data.error || '/api/reviews: Something went wrong'},
       {status: 500},
     );
   }
 
-  return json({...data});
+  return data;
 }

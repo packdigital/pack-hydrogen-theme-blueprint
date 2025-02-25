@@ -1,4 +1,3 @@
-import {json} from '@shopify/remix-oxygen';
 import {useLoaderData} from '@remix-run/react';
 import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 import {
@@ -96,14 +95,14 @@ export async function loader({request, context}: LoaderFunctionArgs) {
     url: request.url,
   });
 
-  return json({
+  return {
     activeFilterValues,
     analytics,
     collection,
     searchTerm,
     seo,
     url: request.url,
-  });
+  };
 }
 
 export const meta = ({matches}: MetaArgs<typeof loader>) => {

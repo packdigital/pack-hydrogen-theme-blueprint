@@ -1,4 +1,4 @@
-import {json, redirect} from '@shopify/remix-oxygen';
+import {data as dataWithOptions, redirect} from '@shopify/remix-oxygen';
 import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 import type {
   ActionFunctionArgs,
@@ -17,7 +17,7 @@ import {
 
 export async function action({request, context, params}: ActionFunctionArgs) {
   const {data, status} = await customerOrderAction({request, context, params});
-  return json(data, {status});
+  return dataWithOptions(data, {status});
 }
 
 export async function loader({request, context, params}: LoaderFunctionArgs) {
@@ -26,7 +26,7 @@ export async function loader({request, context, params}: LoaderFunctionArgs) {
   const {data, status} = await customerOrderLoader({request, context, params});
   const analytics = {pageType: AnalyticsPageType.customersOrder};
   const seo = await getAccountSeo(context, 'Order');
-  return json({...data, analytics, seo}, {status});
+  return dataWithOptions({...data, analytics, seo}, {status});
 }
 
 export const meta = ({matches}: MetaArgs<typeof loader>) => {

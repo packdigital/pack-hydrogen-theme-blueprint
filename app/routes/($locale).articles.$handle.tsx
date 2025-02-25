@@ -1,6 +1,6 @@
 import {useMemo} from 'react';
 import {useLoaderData} from '@remix-run/react';
-import {json, redirect} from '@shopify/remix-oxygen';
+import {redirect} from '@shopify/remix-oxygen';
 import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 import {RenderSections} from '@pack/react';
@@ -40,12 +40,12 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
       url: request.url,
     });
 
-    return json({
+    return {
       analytics,
       article: data.article,
       seo,
       url: request.url,
-    });
+    };
   }
 }
 

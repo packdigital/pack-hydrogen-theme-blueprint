@@ -1,5 +1,5 @@
 import {Outlet} from '@remix-run/react';
-import {json, redirect} from '@shopify/remix-oxygen';
+import {data as dataWithOptions, redirect} from '@shopify/remix-oxygen';
 import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 
 import {customerGetAction} from '~/lib/customer/servers/customer.server';
@@ -29,11 +29,11 @@ export async function loader({request, context, params}: LoaderFunctionArgs) {
   }
 
   if (!isLoggedIn) {
-    return json({
+    return {
       isLoggedIn: false,
       customer: null,
       url: request.url,
-    });
+    };
   }
 
   try {
@@ -41,7 +41,7 @@ export async function loader({request, context, params}: LoaderFunctionArgs) {
     if (!data?.customer) {
       throw new Error('Customer not found');
     }
-    return json(
+    return dataWithOptions(
       {
         isLoggedIn: true,
         customer: data.customer,

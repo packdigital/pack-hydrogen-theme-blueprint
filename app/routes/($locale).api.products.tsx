@@ -1,4 +1,3 @@
-import {json} from '@shopify/remix-oxygen';
 import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import type {ProductSortKeys} from '@shopify/hydrogen/storefront-api-types';
 
@@ -26,5 +25,5 @@ export async function loader({request, context}: LoaderFunctionArgs) {
     count,
   });
 
-  return json({totalProducts: products?.length ?? 0, products});
+  return {totalProducts: products?.length ?? 0, products};
 }

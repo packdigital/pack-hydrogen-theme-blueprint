@@ -1,4 +1,4 @@
-import {json} from '@shopify/remix-oxygen';
+import {data as dataWithOptions} from '@shopify/remix-oxygen';
 import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 
 import {getMetafields} from '~/lib/utils';
@@ -11,7 +11,7 @@ export async function loader({request, context}: LoaderFunctionArgs) {
   const handle = String(searchParams.get('handle') || '');
 
   if (!handle)
-    return json(
+    return dataWithOptions(
       {product: null, errors: ['Missing `handle` parameter']},
       {status: 400},
     );
@@ -24,7 +24,7 @@ export async function loader({request, context}: LoaderFunctionArgs) {
     try {
       parsedMetafields = JSON.parse(metafieldQueries);
     } catch (error) {
-      return json(
+      return dataWithOptions(
         {metafields: null, errors: ['Invalid `metafieldQueries` parameter']},
         {status: 400},
       );
@@ -33,7 +33,7 @@ export async function loader({request, context}: LoaderFunctionArgs) {
       handle,
       metafieldQueries: parsedMetafields,
     });
-    return json({metafields});
+    return {metafields};
   }
 
   /* Product query by handle */
@@ -46,5 +46,5 @@ export async function loader({request, context}: LoaderFunctionArgs) {
     cache: storefront.CacheShort(),
   });
 
-  return json({product});
+  return {product};
 }

@@ -1,4 +1,4 @@
-import {json} from '@shopify/remix-oxygen';
+import {data as dataWithOptions} from '@shopify/remix-oxygen';
 import type {
   ActionFunctionArgs,
   LoaderFunctionArgs,
@@ -14,13 +14,13 @@ import {ResetPassword} from '~/components/Account';
 export async function action({request, context}: ActionFunctionArgs) {
   const {data, status} = await customerPasswordResetAction({request, context});
   const seo = await getAccountSeo(context, 'Reset Password');
-  return json({...data, seo}, {status});
+  return dataWithOptions({...data, seo}, {status});
 }
 
 export async function loader({context}: LoaderFunctionArgs) {
   const analytics = {pageType: AnalyticsPageType.customersResetPassword};
   const seo = await getAccountSeo(context, 'Register');
-  return json({analytics, seo});
+  return {analytics, seo};
 }
 
 export const meta = ({matches}: MetaArgs<typeof loader>) => {

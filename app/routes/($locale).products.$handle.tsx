@@ -1,6 +1,5 @@
 import {useLoaderData} from '@remix-run/react';
 import {ProductProvider} from '@shopify/hydrogen-react';
-import {json} from '@shopify/remix-oxygen';
 import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 import {Analytics, AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 import type {ShopifyAnalyticsProduct} from '@shopify/hydrogen';
@@ -149,7 +148,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     url: request.url,
   });
 
-  return json({
+  return {
     analytics,
     product,
     productPage,
@@ -157,7 +156,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     seo,
     storeDomain,
     url: request.url,
-  });
+  };
 }
 
 export const meta = ({matches}: MetaArgs<typeof loader>) => {

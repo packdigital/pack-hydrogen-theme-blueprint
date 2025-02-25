@@ -1,4 +1,3 @@
-import {json} from '@shopify/remix-oxygen';
 import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 
@@ -16,7 +15,7 @@ export async function loader({context, request}: LoaderFunctionArgs) {
     shop,
     siteSettings,
   });
-  return json({analytics, seo, url: request.url});
+  return {analytics, seo, url: request.url};
 }
 
 export const meta = ({matches}: MetaArgs<typeof loader>) => {

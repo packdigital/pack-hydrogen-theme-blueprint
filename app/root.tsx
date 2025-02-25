@@ -5,7 +5,7 @@ import {
   useRouteError,
 } from '@remix-run/react';
 import type {ShouldRevalidateFunction} from '@remix-run/react';
-import {defer} from '@shopify/remix-oxygen';
+import {data as dataWithOptions} from '@shopify/remix-oxygen';
 import type {
   LinksFunction,
   LoaderFunctionArgs,
@@ -138,7 +138,7 @@ export async function loader({context, request}: LoaderFunctionArgs) {
   const ENV = await getPublicEnvs({context, request});
   const SITE_TITLE = siteSettings?.data?.siteSettings?.seo?.title || shop.name;
 
-  return defer(
+  return dataWithOptions(
     {
       analytics,
       consent,

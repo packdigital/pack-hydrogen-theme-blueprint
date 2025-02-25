@@ -1,4 +1,4 @@
-import {json, redirect} from '@shopify/remix-oxygen';
+import {data as dataWithOptions, redirect} from '@shopify/remix-oxygen';
 import type {
   ActionFunctionArgs,
   LoaderFunctionArgs,
@@ -16,9 +16,9 @@ export async function action({request, context}: ActionFunctionArgs) {
   const {data, status} = await customerUpdateProfileAction({request, context});
   if (data.customerAccessToken) {
     context.session.set('customerAccessToken', data.customerAccessToken);
-    return json(data, {status});
+    return dataWithOptions(data, {status});
   }
-  return json(data, {status});
+  return dataWithOptions(data, {status});
 }
 
 export async function loader({context, params}: LoaderFunctionArgs) {
@@ -26,7 +26,7 @@ export async function loader({context, params}: LoaderFunctionArgs) {
   if (redirectLink) return redirect(redirectLink);
   const analytics = {pageType: AnalyticsPageType.customersAccount};
   const seo = await getAccountSeo(context, 'Profile');
-  return json({analytics, seo});
+  return {analytics, seo};
 }
 
 export const meta = ({matches}: MetaArgs<typeof loader>) => {

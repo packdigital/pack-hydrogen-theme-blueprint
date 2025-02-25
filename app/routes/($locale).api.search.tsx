@@ -1,4 +1,3 @@
-import {json} from '@shopify/remix-oxygen';
 import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 
 import {PRODUCTS_SEARCH_QUERY} from '~/data/graphql/shopify/search';
@@ -17,11 +16,11 @@ export async function loader({request, context}: LoaderFunctionArgs) {
   );
 
   if (!searchTerm || searchTerm.length < characterMin)
-    return json({
+    return {
       searchResults: {results: null, totalResults: 0},
       searchTerm,
       searchTypes: ['PRODUCT'],
-    });
+    };
 
   const count = Number(searchParams.get('count')) || 10;
 
@@ -35,12 +34,12 @@ export async function loader({request, context}: LoaderFunctionArgs) {
     cache: storefront.CacheShort(),
   });
 
-  return json({
+  return {
     searchResults: {
       results: search.nodes || null,
       totalResults: search.totalCount ?? 0,
     },
     searchTerm,
     searchTypes: ['PRODUCT'],
-  });
+  };
 }

@@ -1,5 +1,4 @@
 import {useLoaderData} from '@remix-run/react';
-import {json} from '@shopify/remix-oxygen';
 import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 import {RenderSections} from '@pack/react';
@@ -82,12 +81,12 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     url: request.url,
   });
 
-  return json({
+  return {
     analytics,
     blog: blogWithSortedArticles,
     seo,
     url: request.url,
-  });
+  };
 }
 
 export const meta = ({matches}: MetaArgs<typeof loader>) => {
