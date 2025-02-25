@@ -24,12 +24,6 @@ export const headers = routeHeaders;
 export async function loader({params, context, request}: LoaderFunctionArgs) {
   const {handle} = params;
   const {pack, storefront} = context;
-  const pageData = await pack.query(COLLECTION_PAGE_QUERY, {
-    variables: {handle},
-    cache: storefront.CacheLong(),
-  });
-
-  const collectionPage = pageData.data?.collectionPage;
 
   const searchParams = new URL(request.url).searchParams;
   const siteSettings = await getSiteSettings(context);
@@ -57,22 +51,30 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     pageBy: resultsPerPage,
   });
 
-  const {collection} = await storefront.query(COLLECTION_QUERY, {
-    variables: {
-      handle,
-      sortKey,
-      reverse,
-      filters,
-      country: storefront.i18n.country,
-      language: storefront.i18n.language,
-      ...paginationVariables,
-    },
-    cache: storefront.CacheShort(),
-  });
+  const [pageData, {collection}, shop] = await Promise.all([
+    pack.query(COLLECTION_PAGE_QUERY, {
+      variables: {handle},
+      cache: storefront.CacheLong(),
+    }),
+    storefront.query(COLLECTION_QUERY, {
+      variables: {
+        handle,
+        sortKey,
+        reverse,
+        filters,
+        country: storefront.i18n.country,
+        language: storefront.i18n.language,
+        ...paginationVariables,
+      },
+      cache: storefront.CacheShort(),
+    }),
+    getShop(context),
+  ]);
+
+  const collectionPage = pageData.data?.collectionPage;
 
   if (!collection) throw new Response(null, {status: 404});
 
-  const shop = await getShop(context);
   const analytics = {
     pageType: AnalyticsPageType.collection,
     collectionHandle: handle,

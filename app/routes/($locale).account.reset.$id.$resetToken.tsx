@@ -13,13 +13,12 @@ import {ResetPassword} from '~/components/Account';
 
 export async function action({request, context}: ActionFunctionArgs) {
   const {data, status} = await customerPasswordResetAction({request, context});
-  const seo = await getAccountSeo(context, 'Reset Password');
-  return dataWithOptions({...data, seo}, {status});
+  return dataWithOptions(data, {status});
 }
 
 export async function loader({context}: LoaderFunctionArgs) {
   const analytics = {pageType: AnalyticsPageType.customersResetPassword};
-  const seo = await getAccountSeo(context, 'Register');
+  const seo = await getAccountSeo(context, 'Reset Password');
   return {analytics, seo};
 }
 

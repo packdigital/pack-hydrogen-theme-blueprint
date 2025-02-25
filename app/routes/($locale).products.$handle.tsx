@@ -30,12 +30,6 @@ export const headers = routeHeaders;
 export async function loader({params, context, request}: LoaderFunctionArgs) {
   const {handle} = params;
   const {storefront} = context;
-  const pageData = await context.pack.query(PRODUCT_PAGE_QUERY, {
-    variables: {handle},
-    cache: context.storefront.CacheLong(),
-  });
-
-  const productPage = pageData?.data?.productPage;
 
   const storeDomain = storefront.getShopifyDomain();
   const searchParams = new URL(request.url).searchParams;
@@ -48,15 +42,34 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     selectedOptions.push({name, value});
   });
 
-  let {product: queriedProduct} = await storefront.query(PRODUCT_QUERY, {
-    variables: {
-      handle,
-      selectedOptions,
-      country: storefront.i18n.country,
-      language: storefront.i18n.language,
-    },
-    cache: storefront.CacheShort(),
-  });
+  const [
+    pageData,
+    {product: storefrontProduct},
+    productGroupings,
+    shop,
+    siteSettings,
+  ] = await Promise.all([
+    context.pack.query(PRODUCT_PAGE_QUERY, {
+      variables: {handle},
+      cache: context.storefront.CacheLong(),
+    }),
+    storefront.query(PRODUCT_QUERY, {
+      variables: {
+        handle,
+        selectedOptions,
+        country: storefront.i18n.country,
+        language: storefront.i18n.language,
+      },
+      cache: storefront.CacheShort(),
+    }),
+    getProductGroupings(context),
+    getShop(context),
+    getSiteSettings(context),
+  ]);
+
+  let queriedProduct = storefrontProduct;
+
+  const productPage = pageData?.data?.productPage;
 
   if (!queriedProduct) throw new Response(null, {status: 404});
 
@@ -67,8 +80,6 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     });
     queriedProduct = {...queriedProduct, metafields};
   }
-
-  const productGroupings = await getProductGroupings(context);
 
   const grouping: Group | undefined = [...(productGroupings || [])].find(
     (grouping: Group) => {
@@ -137,8 +148,6 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     products: [productAnalytics],
     totalValue: Number(selectedVariant?.price?.amount || 0),
   };
-  const shop = await getShop(context);
-  const siteSettings = await getSiteSettings(context);
   const seo = seoPayload.product({
     product,
     selectedVariant,

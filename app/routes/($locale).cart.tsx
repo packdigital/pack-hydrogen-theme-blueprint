@@ -7,8 +7,10 @@ import {seoPayload} from '~/lib/seo.server';
 import type {Page} from '~/lib/types';
 
 export async function loader({context, request}: LoaderFunctionArgs) {
-  const shop = await getShop(context);
-  const siteSettings = await getSiteSettings(context);
+  const [shop, siteSettings] = await Promise.all([
+    getShop(context),
+    getSiteSettings(context),
+  ]);
   const analytics = {pageType: AnalyticsPageType.cart};
   const seo = seoPayload.page({
     page: {title: 'Cart'} as Page,

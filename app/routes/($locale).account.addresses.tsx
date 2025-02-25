@@ -23,9 +23,11 @@ export async function action({request, context}: ActionFunctionArgs) {
 export async function loader({context, params}: LoaderFunctionArgs) {
   const redirectLink = await redirectLinkIfLoggedOut({context, params});
   if (redirectLink) return redirect(redirectLink);
-  const {data, status} = await customerAddressesLoader({context});
+  const [{data, status}, seo] = await Promise.all([
+    customerAddressesLoader({context}),
+    getAccountSeo(context, 'Addresses'),
+  ]);
   const analytics = {pageType: AnalyticsPageType.customersAddresses};
-  const seo = await getAccountSeo(context, 'Addresses');
   return dataWithOptions({...data, analytics, seo}, {status});
 }
 

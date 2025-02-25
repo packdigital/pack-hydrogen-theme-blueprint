@@ -23,9 +23,11 @@ export async function action({request, context, params}: ActionFunctionArgs) {
 export async function loader({request, context, params}: LoaderFunctionArgs) {
   const redirectLink = await redirectLinkIfLoggedOut({context, params});
   if (redirectLink) return redirect(redirectLink);
-  const {data, status} = await customerOrderLoader({request, context, params});
+  const [{data, status}, seo] = await Promise.all([
+    customerOrderLoader({request, context, params}),
+    getAccountSeo(context, 'Order'),
+  ]);
   const analytics = {pageType: AnalyticsPageType.customersOrder};
-  const seo = await getAccountSeo(context, 'Order');
   return dataWithOptions({...data, analytics, seo}, {status});
 }
 

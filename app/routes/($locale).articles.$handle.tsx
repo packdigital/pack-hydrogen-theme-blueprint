@@ -30,8 +30,10 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     return redirect(newPath, 301);
   } else {
     // If the article exists but has no blog, don't redirect
-    const shop = await getShop(context);
-    const siteSettings = await getSiteSettings(context);
+    const [shop, siteSettings] = await Promise.all([
+      getShop(context),
+      getSiteSettings(context),
+    ]);
     const analytics = {pageType: AnalyticsPageType.article};
     const seo = seoPayload.article({
       page: data.article,

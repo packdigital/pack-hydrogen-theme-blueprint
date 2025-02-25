@@ -48,18 +48,21 @@ export async function loader({request, context}: LoaderFunctionArgs) {
     pageBy: resultsPerPage,
   });
 
-  const {search} = await storefront.query(PRODUCTS_SEARCH_QUERY, {
-    variables: {
-      searchTerm,
-      sortKey,
-      reverse,
-      filters,
-      country: storefront.i18n.country,
-      language: storefront.i18n.language,
-      ...paginationVariables,
-    },
-    cache: storefront.CacheShort(),
-  });
+  const [{search}, shop] = await Promise.all([
+    storefront.query(PRODUCTS_SEARCH_QUERY, {
+      variables: {
+        searchTerm,
+        sortKey,
+        reverse,
+        filters,
+        country: storefront.i18n.country,
+        language: storefront.i18n.language,
+        ...paginationVariables,
+      },
+      cache: storefront.CacheShort(),
+    }),
+    getShop(context),
+  ]);
 
   const productsLength = search.nodes.length;
 
@@ -85,7 +88,6 @@ export async function loader({request, context}: LoaderFunctionArgs) {
     searchTerm,
   } as CollectionType & {searchTerm: string};
 
-  const shop = await getShop(context);
   const analytics = {pageType: AnalyticsPageType.search};
   const seo = seoPayload.search({
     search: collection,

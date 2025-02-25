@@ -26,8 +26,8 @@ export async function action({request, context}: ActionFunctionArgs) {
 export async function loader({context, params}: LoaderFunctionArgs) {
   const redirectLink = await redirectLinkIfLoggedIn({context, params});
   if (redirectLink) return redirect(redirectLink);
-  const analytics = {pageType: AnalyticsPageType.customersLogin};
   const seo = await getAccountSeo(context, 'Login');
+  const analytics = {pageType: AnalyticsPageType.customersLogin};
   return {analytics, seo};
 }
 

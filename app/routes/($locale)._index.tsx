@@ -22,15 +22,17 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
     throw new Response(null, {status: 404});
   }
 
-  const {data} = await context.pack.query(PAGE_QUERY, {
-    variables: {handle: '/'},
-    cache: context.storefront.CacheLong(),
-  });
+  const [{data}, shop, siteSettings] = await Promise.all([
+    context.pack.query(PAGE_QUERY, {
+      variables: {handle: '/'},
+      cache: context.storefront.CacheLong(),
+    }),
+    getShop(context),
+    getSiteSettings(context),
+  ]);
 
   if (!data?.page) throw new Response(null, {status: 404});
 
-  const shop = await getShop(context);
-  const siteSettings = await getSiteSettings(context);
   const analytics = {pageType: AnalyticsPageType.home};
   const seo = seoPayload.home({
     page: data.page,

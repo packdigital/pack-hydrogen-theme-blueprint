@@ -12,15 +12,18 @@ export const headers = routeHeaders;
 
 export async function loader({context, params, request}: LoaderFunctionArgs) {
   const {handle} = params;
-  const {data} = await context.pack.query(PAGE_QUERY, {
-    variables: {handle},
-    cache: context.storefront.CacheLong(),
-  });
+
+  const [{data}, shop, siteSettings] = await Promise.all([
+    context.pack.query(PAGE_QUERY, {
+      variables: {handle},
+      cache: context.storefront.CacheLong(),
+    }),
+    getShop(context),
+    getSiteSettings(context),
+  ]);
 
   if (!data?.page) throw new Response(null, {status: 404});
 
-  const shop = await getShop(context);
-  const siteSettings = await getSiteSettings(context);
   const isPolicy = handle?.includes('privacy') || handle?.includes('policy');
   const analytics = {
     pageType: isPolicy ? AnalyticsPageType.policy : AnalyticsPageType.page,
