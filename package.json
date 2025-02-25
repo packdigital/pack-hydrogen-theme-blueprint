@@ -21,9 +21,10 @@
   "dependencies": {
     "@headlessui/react": "^2.2.0",
     "@headlessui/tailwindcss": "^0.2.1",
-    "@pack/client": "^1.0.1",
-    "@pack/hydrogen": "^1.0.6",
-    "@pack/react": "^0.1.4",
+    "@pack/client": "^1.0.2",
+    "@pack/hydrogen": "^1.0.8",
+    "@pack/react": "^2.1.4",
+    "@pack/types": "^0.0.2",
     "@remix-run/react": "^2.15.2",
     "@shopify/cli": "^3.72.2",
     "@shopify/cli-hydrogen": "^9.0.3",
