@@ -1,4 +1,4 @@
-import {Container} from '~/components';
+import {Container} from '~/components/Container';
 
 import {Accordion} from './Accordion';
 import type {AccordionsCms} from './Accordions.types';

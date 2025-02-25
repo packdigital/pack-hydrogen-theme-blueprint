@@ -6,7 +6,8 @@ import type {
   MetaArgs,
 } from '@shopify/remix-oxygen';
 
-import {CustomerAccountLayout, Order} from '~/components';
+import {CustomerAccountLayout} from '~/components/AccountLayout';
+import {Order} from '~/components/Account';
 import {getAccountSeo} from '~/lib/utils';
 import {redirectLinkIfLoggedOut} from '~/lib/customer';
 import {

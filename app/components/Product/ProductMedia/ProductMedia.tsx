@@ -4,7 +4,7 @@ import {Swiper, SwiperSlide} from 'swiper/react';
 import {A11y, Pagination} from 'swiper/modules';
 import type {Image} from '@shopify/hydrogen/storefront-api-types';
 
-import {Badges} from '~/components';
+import {Badges} from '~/components/Badges';
 import type {ProductWithGrouping, SelectedVariant} from '~/lib/types';
 
 import {ProductImage} from './ProductImage';

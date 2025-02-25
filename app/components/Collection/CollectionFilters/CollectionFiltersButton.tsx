@@ -1,4 +1,4 @@
-import {Svg} from '~/components';
+import {Svg} from '~/components/Svg';
 
 interface CollectionFiltersButtonProps {
   desktopFiltersOpen: boolean;

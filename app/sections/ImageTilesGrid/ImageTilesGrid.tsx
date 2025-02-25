@@ -1,8 +1,8 @@
-import {Container} from '~/components';
+import {Container} from '~/components/Container';
 
-import type {ImageTilesGridCms} from './ImageTilesGrid.types';
 import {ImageTilesGridItem} from './ImageTilesGridItem';
 import {Schema} from './ImageTilesGrid.schema';
+import type {ImageTilesGridCms} from './ImageTilesGrid.types';
 
 export function ImageTilesGrid({cms}: {cms: ImageTilesGridCms}) {
   const {content, header, section, tiles} = cms;

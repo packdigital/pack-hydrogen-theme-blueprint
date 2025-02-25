@@ -1,4 +1,4 @@
-import {ProductStars} from '~/components';
+import {ProductStars} from '~/components/ProductStars';
 import {useMatchMedia, useVariantPrices} from '~/hooks';
 
 import type {ProductHeaderProps} from './Product.types';

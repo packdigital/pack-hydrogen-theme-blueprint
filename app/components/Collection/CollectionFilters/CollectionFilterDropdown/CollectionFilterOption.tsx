@@ -2,7 +2,8 @@ import {useMemo} from 'react';
 
 import {COLOR_OPTION_NAME, PRICE_FILTER_ID} from '~/lib/constants';
 import {isLightHexColor} from '~/lib/utils';
-import {Image, Svg} from '~/components';
+import {Image} from '~/components/Image';
+import {Svg} from '~/components/Svg';
 
 import type {CollectionFilterOptionProps} from '../CollectionFilters.types';
 

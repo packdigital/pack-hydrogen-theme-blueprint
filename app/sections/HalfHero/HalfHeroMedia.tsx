@@ -1,5 +1,5 @@
 import {getAspectRatioFromPercentage} from '~/lib/utils';
-import {Image} from '~/components';
+import {Image} from '~/components/Image';
 
 import type {HalfHeroMediaProps} from './HalfHero.types';
 import {HalfHeroVideo} from './HalfHeroVideo';

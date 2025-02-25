@@ -7,7 +7,8 @@ import {
 import type {Metafield} from '@shopify/hydrogen/storefront-api-types';
 import startCase from 'lodash/startCase';
 
-import {Markdown, Svg} from '~/components';
+import {Markdown} from '~/components/Markdown';
+import {Svg} from '~/components/Svg';
 
 interface ProductMetafieldsAccordionProps {
   metafield: Metafield;

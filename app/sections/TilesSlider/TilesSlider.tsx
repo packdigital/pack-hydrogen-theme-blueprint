@@ -1,8 +1,6 @@
-import {
-  Container,
-  Link,
-  TilesSlider as TilesSliderComponent,
-} from '~/components';
+import {Container} from '~/components/Container';
+import {Link} from '~/components/Link';
+import {TilesSlider as TilesSliderComponent} from '~/components/TilesSlider';
 
 import type {TilesSliderCms} from './TilesSlider.types';
 import {Schema} from './TilesSlider.schema';

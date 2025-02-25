@@ -1,7 +1,10 @@
 import {Navigation, Pagination} from 'swiper/modules';
 import {Swiper, SwiperSlide} from 'swiper/react';
 
-import {Container, Link, ReviewStars, Svg} from '~/components';
+import {Container} from '~/components/Container';
+import {Link} from '~/components/Link';
+import {ReviewStars} from '~/components/ReviewStars';
+import {Svg} from '~/components/Svg';
 
 import {Schema} from './TestimonialSlider.schema';
 import type {TestimonialSliderCms} from './TestimonialSlider.types';

@@ -1,6 +1,6 @@
 import {useState} from 'react';
 
-import {Link} from '~/components';
+import {Link} from '~/components/Link';
 import {useSettings} from '~/hooks';
 
 import {ForgotPasswordForm} from '../Login/ForgotPasswordForm';

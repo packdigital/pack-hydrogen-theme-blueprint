@@ -17,7 +17,12 @@ import {
   ShopifySalesChannel,
 } from '@shopify/hydrogen';
 
-import {ApplicationError, Document, NotFound, ServerError} from '~/components';
+import {
+  ApplicationError,
+  Document,
+  NotFound,
+  ServerError,
+} from '~/components/Document';
 import {validateCustomerAccessToken} from '~/lib/customer';
 import {customerGetAction} from '~/lib/customer/servers/customer.server';
 import {

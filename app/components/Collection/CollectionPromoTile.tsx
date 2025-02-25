@@ -1,7 +1,8 @@
 import {useInView} from 'react-intersection-observer';
 
 import {getAspectRatioFromClass} from '~/lib/utils';
-import {Image, Link} from '~/components';
+import {Image} from '~/components/Image';
+import {Link} from '~/components/Link';
 
 import type {CollectionPromoTileProps} from './Collection.types';
 

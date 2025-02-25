@@ -2,7 +2,8 @@ import {Fragment, memo, useMemo} from 'react';
 import type {Product} from '@shopify/hydrogen/storefront-api-types';
 import {Pagination} from '@shopify/hydrogen';
 
-import {LoadingDots, ProductItem} from '~/components';
+import {LoadingDots} from '~/components/Animations';
+import {ProductItem} from '~/components/ProductItem';
 
 import type {CollectionGridProps} from './Collection.types';
 import {CollectionPromoTile} from './CollectionPromoTile';

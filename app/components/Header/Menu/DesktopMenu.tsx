@@ -1,6 +1,7 @@
 import {memo} from 'react';
 
-import {Image, Link} from '~/components';
+import {Image} from '~/components/Image';
+import {Link} from '~/components/Link';
 
 import type {UseDesktopMenuReturn} from '../useDesktopMenu';
 

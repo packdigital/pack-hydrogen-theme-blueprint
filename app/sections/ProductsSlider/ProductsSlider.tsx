@@ -1,13 +1,11 @@
 import {useMemo} from 'react';
 import {useInView} from 'react-intersection-observer';
 
-import {
-  Container,
-  ProductsSlider as ProductsSliderComponent,
-} from '~/components';
-import type {ProductsSliderCms} from '~/components';
-import type {ContainerSettings} from '~/settings/container';
+import {Container} from '~/components/Container';
+import {ProductsSlider as ProductsSliderComponent} from '~/components/ProductsSlider';
 import {useProductsByIds} from '~/hooks';
+import type {ContainerSettings} from '~/settings/container';
+import type {ProductsSliderCms} from '~/components/ProductsSlider';
 
 import {Schema} from './ProductsSlider.schema';
 

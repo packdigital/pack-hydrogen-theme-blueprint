@@ -1,6 +1,7 @@
 import {memo} from 'react';
 
-import {Link, Drawer} from '~/components';
+import {Link} from '~/components/Link';
+import {Drawer} from '~/components/Drawer';
 import {useMenu, usePrefixPathWithLocale} from '~/hooks';
 
 import {SearchInput} from './SearchInput';

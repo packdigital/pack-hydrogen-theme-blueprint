@@ -1,7 +1,8 @@
 import {useEffect, useState} from 'react';
 import {useNavigate} from '@remix-run/react';
 
-import {LoadingDots, Link} from '~/components';
+import {LoadingDots} from '~/components/Animations';
+import {Link} from '~/components/Link';
 import {useCustomerActivate} from '~/lib/customer';
 import {useLocale, useSettings} from '~/hooks';
 

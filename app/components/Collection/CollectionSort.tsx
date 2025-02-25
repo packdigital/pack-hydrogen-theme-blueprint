@@ -5,7 +5,8 @@ import type {
   SearchSortKeys,
 } from '@shopify/hydrogen/storefront-api-types';
 
-import {Select, Svg} from '~/components';
+import {Select} from '~/components/Select';
+import {Svg} from '~/components/Svg';
 
 import type {CollectionSortProps} from './Collection.types';
 

@@ -3,7 +3,7 @@ import type {SwiperProps} from 'swiper/react';
 import {Swiper, SwiperSlide} from 'swiper/react';
 import {A11y, EffectFade, Autoplay, Navigation} from 'swiper/modules';
 
-import {Link} from '~/components';
+import {Link} from '~/components/Link';
 import {useMatchMedia, useMenu, usePromobar, useSettings} from '~/hooks';
 
 export const Promobar = memo(() => {

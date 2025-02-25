@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 
-import {Container} from '~/components';
+import {Container} from '~/components/Container';
 
 import {MarketingEmailSignup} from './MarketingEmailSignup';
 import {MarketingPhoneSignup} from './MarketingPhoneSignup';

@@ -1,6 +1,6 @@
 import {useMemo} from 'react';
 
-import {Svg} from '~/components';
+import {Svg} from '~/components/Svg';
 
 import type {BYOBQuickShopOptionProps} from './BYOBProductItem.types';
 

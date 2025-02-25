@@ -1,6 +1,7 @@
 import {useMemo, useState} from 'react';
 
-import {QuantitySelector, Svg} from '~/components';
+import {QuantitySelector} from '~/components/QuantitySelector';
+import {Svg} from '~/components/Svg';
 
 import {BYOBQuickShopOptions} from './BYOBQuickShopOptions';
 import type {BYOBQuickShopProps} from './BYOBProductItem.types';

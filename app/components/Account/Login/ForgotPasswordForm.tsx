@@ -1,8 +1,8 @@
 import {useEffect, useState} from 'react';
 
-import {LoadingDots} from '~/components';
-import type {Settings} from '~/lib/types';
+import {LoadingDots} from '~/components/Animations';
 import {useCustomerPasswordRecover} from '~/lib/customer';
+import type {Settings} from '~/lib/types';
 
 interface ForgotPasswordFormProps {
   setIsForgotPassword: (isForgotPassword: boolean) => void;

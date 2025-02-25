@@ -3,10 +3,11 @@ import {useInView} from 'react-intersection-observer';
 import {useAnalytics} from '@shopify/hydrogen';
 
 import {COLOR_OPTION_NAME} from '~/lib/constants';
-import type {SelectedProduct, SelectedVariant} from '~/lib/types';
-import {Link, ProductStars} from '~/components';
+import {Link} from '~/components/Link';
+import {ProductStars} from '~/components/ProductStars';
 import {AnalyticsEvent} from '~/components/Analytics/constants';
 import {useProductByHandle, useProductGroupingByHandle} from '~/hooks';
+import type {SelectedProduct, SelectedVariant} from '~/lib/types';
 
 import {ColorVariantSelector} from './ColorVariantSelector';
 import {ProductItemMedia} from './ProductItemMedia/ProductItemMedia';

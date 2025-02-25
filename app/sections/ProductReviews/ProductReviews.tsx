@@ -1,9 +1,9 @@
 import {useLoaderData} from '@remix-run/react';
 import type {Product} from '@shopify/hydrogen/storefront-api-types';
 
-import {Container} from '~/components';
-import type {ContainerSettings} from '~/settings/container';
+import {Container} from '~/components/Container';
 import {useLoadScript, useRootLoaderData} from '~/hooks';
+import type {ContainerSettings} from '~/settings/container';
 
 import {Schema} from './ProductReviews.schema';
 

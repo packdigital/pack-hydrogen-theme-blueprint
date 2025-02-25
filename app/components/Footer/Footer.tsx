@@ -1,6 +1,8 @@
 import {memo} from 'react';
 
-import {CountrySelector, Link, Svg} from '~/components';
+import {CountrySelector} from '~/components/CountrySelector';
+import {Link} from '~/components/Link';
+import {Svg} from '~/components/Svg';
 import {useSettings} from '~/hooks';
 
 import {EmailSignup} from './EmailSignup';

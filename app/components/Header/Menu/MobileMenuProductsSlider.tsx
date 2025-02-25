@@ -2,7 +2,7 @@ import {useMemo} from 'react';
 import {Swiper, SwiperSlide} from 'swiper/react';
 import {A11y} from 'swiper/modules';
 
-import {ProductItem} from '~/components';
+import {ProductItem} from '~/components/ProductItem';
 import {useColorSwatches, useProductsByIds} from '~/hooks';
 import type {Settings} from '~/lib/types';
 

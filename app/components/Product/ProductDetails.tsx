@@ -1,6 +1,7 @@
 import {useCallback, useEffect, useState} from 'react';
 
-import {AddToCart, QuantitySelector} from '~/components';
+import {AddToCart} from '~/components/AddToCart';
+import {QuantitySelector} from '~/components/QuantitySelector';
 
 import {ProductOptions} from './ProductOptions';
 import type {ProductDetailsProps} from './Product.types';

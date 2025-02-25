@@ -1,10 +1,8 @@
 import {useProduct} from '@shopify/hydrogen-react';
 import {useInView} from 'react-intersection-observer';
 
-import {
-  Container,
-  ProductsSlider as ProductsSliderComponent,
-} from '~/components';
+import {Container} from '~/components/Container';
+import {ProductsSlider as ProductsSliderComponent} from '~/components/ProductsSlider';
 import type {ContainerSettings} from '~/settings/container';
 import type {ProductsSliderCms} from '~/components/ProductsSlider/ProductsSlider.types';
 import {useProductRecommendations} from '~/hooks';

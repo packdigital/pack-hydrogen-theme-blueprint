@@ -6,7 +6,7 @@ import {PreviewProvider} from '@pack/react';
 
 import {ContextsProvider} from '~/contexts';
 import {CART_FRAGMENT} from '~/data/graphql/shopify/cart';
-import {Layout} from '~/components';
+import {Layout} from '~/components/Layout';
 import {useLocale, useRootLoaderData} from '~/hooks';
 
 import {Favicon} from './Favicon';

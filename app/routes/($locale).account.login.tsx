@@ -9,7 +9,8 @@ import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 import {redirectLinkIfLoggedIn} from '~/lib/customer';
 import {customerLoginRegisterAction} from '~/lib/customer/servers/login-register.server';
 import {getAccountSeo} from '~/lib/utils';
-import {GuestAccountLayout, Login} from '~/components';
+import {GuestAccountLayout} from '~/components/AccountLayout';
+import {Login} from '~/components/Account';
 
 export async function action({request, context}: ActionFunctionArgs) {
   const {session} = context;

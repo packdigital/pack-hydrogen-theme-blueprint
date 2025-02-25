@@ -11,7 +11,7 @@ import {
 import {RenderSections} from '@pack/react';
 import type {ProductCollectionSortKeys} from '@shopify/hydrogen/storefront-api-types';
 
-import {Collection} from '~/components';
+import {Collection} from '~/components/Collection';
 import {COLLECTION_QUERY} from '~/data/graphql/shopify/collection';
 import {COLLECTION_PAGE_QUERY} from '~/data/graphql/pack/collection-page';
 import {getFilters, getShop, getSiteSettings} from '~/lib/utils';

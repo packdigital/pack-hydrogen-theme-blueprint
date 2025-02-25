@@ -1,9 +1,9 @@
 import {useState} from 'react';
 import {Autoplay, Thumbs} from 'swiper/modules';
-import type {SwiperClass} from 'swiper/react';
 import {Swiper, SwiperSlide} from 'swiper/react';
+import type {SwiperClass} from 'swiper/react';
 
-import {Container} from '~/components';
+import {Container} from '~/components/Container';
 
 import type {PressSliderCms} from './PressSlider.types';
 import {PressSliderThumb} from './PressSliderThumb';

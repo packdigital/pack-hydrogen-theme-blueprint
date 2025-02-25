@@ -1,4 +1,5 @@
-import {Spinner, Svg} from '~/components';
+import {Spinner} from '~/components/Animations';
+import {Svg} from '~/components/Svg';
 
 interface QuantitySelectorProps {
   disabled?: boolean;

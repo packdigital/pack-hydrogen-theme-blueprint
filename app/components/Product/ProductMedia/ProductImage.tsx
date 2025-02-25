@@ -1,6 +1,6 @@
 import type {Image as ImageType} from '@shopify/hydrogen/storefront-api-types';
 
-import {Image} from '~/components';
+import {Image} from '~/components/Image';
 import {PRODUCT_IMAGE_ASPECT_RATIO} from '~/lib/constants';
 
 interface ProductImageProps {

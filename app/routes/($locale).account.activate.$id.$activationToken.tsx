@@ -6,7 +6,8 @@ import type {
 } from '@shopify/remix-oxygen';
 import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 
-import {Activate, GuestAccountLayout} from '~/components';
+import {Activate} from '~/components/Account';
+import {GuestAccountLayout} from '~/components/AccountLayout';
 import {getAccountSeo} from '~/lib/utils';
 import {redirectLinkIfLoggedIn} from '~/lib/customer';
 import {customerActivateAction} from '~/lib/customer/servers/activate.server';

@@ -1,4 +1,6 @@
-import {Image, Link, Markdown} from '~/components';
+import {Image} from '~/components/Image';
+import {Link} from '~/components/Link';
+import {Markdown} from '~/components/Markdown';
 
 import {Schema} from './MetaobjectImage.schema';
 

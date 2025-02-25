@@ -6,7 +6,8 @@ import type {
 } from '@shopify/remix-oxygen';
 import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 
-import {CustomerAccountLayout, Profile} from '~/components';
+import {CustomerAccountLayout} from '~/components/AccountLayout';
+import {Profile} from '~/components/Account';
 import {getAccountSeo} from '~/lib/utils';
 import {redirectLinkIfLoggedOut} from '~/lib/customer';
 import {customerUpdateProfileAction} from '~/lib/customer/servers/profile.server';

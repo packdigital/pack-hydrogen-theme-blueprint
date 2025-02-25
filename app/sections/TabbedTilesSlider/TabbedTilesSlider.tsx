@@ -1,7 +1,9 @@
 import {Fragment, useState} from 'react';
 import {TabGroup, TabPanels, TabPanel} from '@headlessui/react';
 
-import {Container, Link, TilesSlider} from '~/components';
+import {Container} from '~/components/Container';
+import {Link} from '~/components/Link';
+import {TilesSlider} from '~/components/TilesSlider';
 
 import {Schema} from './TabbedTilesSlider.schema';
 import {TabbedTilesSliderTabs} from './TabbedTilesSliderTabs';

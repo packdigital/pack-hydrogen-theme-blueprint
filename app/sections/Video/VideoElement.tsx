@@ -1,7 +1,7 @@
 import {useRef, useState} from 'react';
 import {useInView} from 'react-intersection-observer';
 
-import {Svg} from '~/components';
+import {Svg} from '~/components/Svg';
 
 import type {VideoElementProps} from './Video.types';
 

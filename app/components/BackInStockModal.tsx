@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import {parseGid} from '@shopify/hydrogen';
 
-import {LoadingDots} from '~/components';
+import {LoadingDots} from '~/components/Animations';
 import {useBackInStock, useCustomer, useMenu, useSettings} from '~/hooks';
 import type {SelectedVariant} from '~/lib/types';
 

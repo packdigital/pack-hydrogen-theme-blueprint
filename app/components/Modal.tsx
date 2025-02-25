@@ -6,7 +6,7 @@ import {
   TransitionChild,
 } from '@headlessui/react';
 
-import {Svg} from '~/components';
+import {Svg} from '~/components/Svg';
 import {useMenu} from '~/hooks';
 
 export const Modal = memo(() => {

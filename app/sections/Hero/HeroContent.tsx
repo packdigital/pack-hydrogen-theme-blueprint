@@ -1,6 +1,6 @@
 import {useMemo} from 'react';
 
-import {Link} from '~/components';
+import {Link} from '~/components/Link';
 
 import type {HeroSlideProps} from './Hero.types';
 

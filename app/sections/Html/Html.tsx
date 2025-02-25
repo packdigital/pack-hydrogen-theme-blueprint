@@ -1,4 +1,4 @@
-import {Container} from '~/components';
+import {Container} from '~/components/Container';
 
 import type {HtmlCms} from './Html.types';
 import {Schema} from './Html.schema';

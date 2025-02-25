@@ -8,7 +8,8 @@ import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 
 import {customerPasswordResetAction} from '~/lib/customer/servers/reset.server';
 import {getAccountSeo} from '~/lib/utils';
-import {GuestAccountLayout, ResetPassword} from '~/components';
+import {GuestAccountLayout} from '~/components/AccountLayout';
+import {ResetPassword} from '~/components/Account';
 
 export async function action({request, context}: ActionFunctionArgs) {
   const {data, status} = await customerPasswordResetAction({request, context});

@@ -1,7 +1,7 @@
 import {useMemo} from 'react';
 import {useLocation} from '@remix-run/react';
 
-import {Link} from '~/components';
+import {Link} from '~/components/Link';
 
 import {InnerColorOptionValue} from './InnerColorOptionValue';
 import {InnerOptionValue} from './InnerOptionValue';

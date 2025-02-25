@@ -1,6 +1,11 @@
 import type {ReactNode} from 'react';
 
-import {Analytics, Cart, Footer, Header, Modal, Search} from '~/components';
+import {Analytics} from '~/components/Analytics';
+import {Cart} from '~/components/Cart';
+import {Footer} from '~/components/Footer';
+import {Header} from '~/components/Header';
+import {Modal} from '~/components/Modal';
+import {Search} from '~/components/Search';
 import {usePreviewModeCustomerInit} from '~/lib/customer';
 import {
   useCartAddDiscountUrl,

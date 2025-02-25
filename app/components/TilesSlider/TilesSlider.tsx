@@ -3,7 +3,7 @@ import type {LegacyRef} from 'react';
 import type {SwiperClass} from 'swiper/react';
 import {Swiper, SwiperSlide} from 'swiper/react';
 
-import {Spinner} from '~/components';
+import {Spinner} from '~/components/Animations';
 import type {MediaCms} from '~/lib/types';
 
 import {TilesSliderTile} from './TilesSliderTile';

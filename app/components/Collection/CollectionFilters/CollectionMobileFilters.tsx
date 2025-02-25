@@ -1,6 +1,6 @@
 import {memo} from 'react';
 
-import {Drawer} from '~/components';
+import {Drawer} from '~/components/Drawer';
 
 import {CollectionFilterDropdown} from './CollectionFilterDropdown';
 import {CollectionFiltersSummary} from './CollectionFiltersSummary';

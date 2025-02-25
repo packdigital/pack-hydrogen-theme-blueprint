@@ -2,7 +2,7 @@ import {json} from '@shopify/remix-oxygen';
 import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 
-import {CartPage} from '~/components';
+import {CartPage} from '~/components/Cart';
 import {getShop, getSiteSettings} from '~/lib/utils';
 import {seoPayload} from '~/lib/seo.server';
 import type {Page} from '~/lib/types';

@@ -12,7 +12,8 @@ import {
   customerAddressesLoader,
 } from '~/lib/customer/servers/addresses.server';
 import {getAccountSeo} from '~/lib/utils';
-import {CustomerAccountLayout, Addresses} from '~/components';
+import {CustomerAccountLayout} from '~/components/AccountLayout';
+import {Addresses} from '~/components/Account';
 
 export async function action({request, context}: ActionFunctionArgs) {
   const {data, status} = await customerAddressesAction({request, context});

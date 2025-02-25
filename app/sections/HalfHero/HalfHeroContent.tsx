@@ -1,6 +1,7 @@
 import {useMemo} from 'react';
 
-import {Link, Markdown} from '~/components';
+import {Link} from '~/components/Link';
+import {Markdown} from '~/components/Markdown';
 
 import type {HalfHeroContentProps} from './HalfHero.types';
 

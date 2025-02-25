@@ -1,7 +1,7 @@
 import {useCallback, useEffect, useMemo, useState} from 'react';
 import type {ProductVariant} from '@shopify/hydrogen-react/storefront-api-types';
 
-import {Container} from '~/components';
+import {Container} from '~/components/Container';
 import {useProductsByIds} from '~/hooks';
 import type {ProductCms} from '~/lib/types';
 

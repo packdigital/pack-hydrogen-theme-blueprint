@@ -1,7 +1,7 @@
 import {forwardRef, useRef} from 'react';
 import type {Video} from '@shopify/hydrogen-react/storefront-api-types';
 
-import {Image} from '~/components';
+import {Image} from '~/components/Image';
 
 import type {
   BYOBProductItemMediaProps,

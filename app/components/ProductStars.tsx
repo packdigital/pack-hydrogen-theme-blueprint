@@ -2,7 +2,7 @@ import {memo, useEffect, useState} from 'react';
 import {useFetcher} from '@remix-run/react';
 import {parseGid} from '@shopify/hydrogen';
 
-import {ReviewStars} from '~/components';
+import {ReviewStars} from '~/components/ReviewStars';
 import {useLocale} from '~/hooks';
 
 export const ProductStars = memo(({id}: {id: string}) => {

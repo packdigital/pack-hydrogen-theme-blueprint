@@ -1,7 +1,7 @@
 import {memo} from 'react';
 import startCase from 'lodash/startCase';
 
-import {Svg} from '~/components';
+import {Svg} from '~/components/Svg';
 
 import {useCollectionFilters} from './useCollectionFilters';
 

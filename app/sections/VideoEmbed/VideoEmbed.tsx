@@ -1,6 +1,6 @@
 import {useInView} from 'react-intersection-observer';
 
-import {Container} from '~/components';
+import {Container} from '~/components/Container';
 
 import {Schema} from './VideoEmbed.schema';
 import type {VideoEmbedCms} from './VideoEmbed.types';

@@ -1,6 +1,6 @@
 import type {Order} from '@shopify/hydrogen/storefront-api-types';
 
-import {Link} from '~/components';
+import {Link} from '~/components/Link';
 
 export function OrderAddressAndStatus({order}: {order: Order}) {
   const {financialStatus, fulfillmentStatus, shippingAddress, statusUrl} =

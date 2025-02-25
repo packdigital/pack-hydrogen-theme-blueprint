@@ -1,8 +1,8 @@
 import {memo} from 'react';
 
-import {LoadingDots} from '~/components';
-import type {Settings} from '~/lib/types';
+import {LoadingDots} from '~/components/Animations';
 import {useMarketingListSubscribe} from '~/hooks';
+import type {Settings} from '~/lib/types';
 
 /*
  * Env PRIVATE_KLAVIYO_API_KEY must be set locally and through the Hydrogen app

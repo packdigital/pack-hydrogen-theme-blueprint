@@ -1,5 +1,7 @@
 import {getAspectRatioFromClass} from '~/lib/utils';
-import {Image, Link, Svg} from '~/components';
+import {Image} from '~/components/Image';
+import {Link} from '~/components/Link';
+import {Svg} from '~/components/Svg';
 
 interface TilesSliderTileProps {
   aspectRatio: string;

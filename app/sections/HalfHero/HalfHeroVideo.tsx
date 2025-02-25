@@ -3,7 +3,7 @@
 import {useEffect, useRef, useState} from 'react';
 import {useInView} from 'react-intersection-observer';
 
-import {Svg} from '~/components';
+import {Svg} from '~/components/Svg';
 
 import type {HalfHeroVideoProps} from './HalfHero.types';
 

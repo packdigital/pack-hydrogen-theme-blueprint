@@ -8,7 +8,9 @@ import {
   Transition,
 } from '@headlessui/react';
 
-import {Link, Spinner, Svg} from '~/components';
+import {Link} from '~/components/Link';
+import {Spinner} from '~/components/Animations';
+import {Svg} from '~/components/Svg';
 import {useCustomer, useLocale, usePreviewMode, useSettings} from '~/hooks';
 import {useCustomerLogOut} from '~/lib/customer';
 import {LOGGED_OUT_REDIRECT_TO} from '~/lib/constants';

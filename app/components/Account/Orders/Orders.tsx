@@ -1,6 +1,7 @@
 import {useLocation} from '@remix-run/react';
 
-import {Link, Pagination} from '~/components';
+import {Link} from '~/components/Link';
+import {Pagination} from '~/components/Pagination';
 import {useCustomerOrders} from '~/lib/customer';
 import {usePagination, useSettings} from '~/hooks';
 
