@@ -1,6 +1,6 @@
 import {Analytics} from '@shopify/hydrogen';
 
-import {Link} from '~/components';
+import {Link} from '~/components/Link';
 import {useSettings} from '~/hooks';
 
 import {SearchItem} from './SearchItem';

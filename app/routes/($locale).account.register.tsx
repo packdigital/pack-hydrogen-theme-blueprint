@@ -1,4 +1,4 @@
-import {json, redirect} from '@shopify/remix-oxygen';
+import {data as dataWithOptions, redirect} from '@shopify/remix-oxygen';
 import type {
   ActionFunctionArgs,
   LoaderFunctionArgs,
@@ -9,7 +9,8 @@ import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 import {redirectLinkIfLoggedIn} from '~/lib/customer';
 import {customerLoginRegisterAction} from '~/lib/customer/servers/login-register.server';
 import {getAccountSeo} from '~/lib/utils';
-import {GuestAccountLayout, Register} from '~/components';
+import {GuestAccountLayout} from '~/components/AccountLayout';
+import {Register} from '~/components/Account';
 
 export async function action({request, context}: ActionFunctionArgs) {
   const {session} = context;
@@ -17,17 +18,17 @@ export async function action({request, context}: ActionFunctionArgs) {
   const customerAccessToken = data.customerAccessToken;
   if (customerAccessToken) {
     session.set('customerAccessToken', customerAccessToken);
-    return json(data);
+    return data;
   }
-  return json({...data}, {status});
+  return dataWithOptions(data, {status});
 }
 
 export async function loader({context, params}: LoaderFunctionArgs) {
   const redirectLink = await redirectLinkIfLoggedIn({context, params});
   if (redirectLink) return redirect(redirectLink);
-  const analytics = {pageType: AnalyticsPageType.customersRegister};
   const seo = await getAccountSeo(context, 'Register');
-  return json({analytics, seo});
+  const analytics = {pageType: AnalyticsPageType.customersRegister};
+  return {analytics, seo};
 }
 
 export const meta = ({matches}: MetaArgs<typeof loader>) => {

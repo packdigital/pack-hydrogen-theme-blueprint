@@ -1,6 +1,6 @@
 import {Fragment, useEffect, useRef, useState, useCallback} from 'react';
 
-import {Container} from '~/components';
+import {Container} from '~/components/Container';
 import {useLoadScript} from '~/hooks';
 
 import {FormField} from './FormField';

@@ -1,6 +1,7 @@
 import {useEffect, useMemo, useState} from 'react';
 
-import {Image, Svg} from '~/components';
+import {Image} from '~/components/Image';
+import {Svg} from '~/components/Svg';
 import {parseAsCurrency} from '~/lib/utils';
 import {PRODUCT_IMAGE_ASPECT_RATIO} from '~/lib/constants';
 import {useHideIframes, useLocale, usePromobar} from '~/hooks';
@@ -280,7 +281,9 @@ function BYOBSummaryHeader({
       {addToCartUnlocked && (
         <div className="flex flex-col items-end">
           <p>{prices.total}</p>
-          <p className="text-neutralDarker line-through">{prices.compareAtTotal}</p>
+          <p className="text-neutralDarker line-through">
+            {prices.compareAtTotal}
+          </p>
         </div>
       )}
     </div>

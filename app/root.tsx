@@ -5,7 +5,7 @@ import {
   useRouteError,
 } from '@remix-run/react';
 import type {ShouldRevalidateFunction} from '@remix-run/react';
-import {defer} from '@shopify/remix-oxygen';
+import {data as dataWithOptions} from '@shopify/remix-oxygen';
 import type {
   LinksFunction,
   LoaderFunctionArgs,
@@ -17,7 +17,12 @@ import {
   ShopifySalesChannel,
 } from '@shopify/hydrogen';
 
-import {ApplicationError, Document, NotFound, ServerError} from '~/components';
+import {
+  ApplicationError,
+  Document,
+  NotFound,
+  ServerError,
+} from '~/components/Document';
 import {validateCustomerAccessToken} from '~/lib/customer';
 import {customerGetAction} from '~/lib/customer/servers/customer.server';
 import {
@@ -88,9 +93,13 @@ export async function loader({context, request}: LoaderFunctionArgs) {
   const {storefront, session, oxygen, pack, env} = context;
   const isPreviewModeEnabled = pack.isPreviewModeEnabled();
 
-  const shop = await getShop(context);
-  const siteSettings = await getSiteSettings(context);
-  const customerAccessToken = await session.get('customerAccessToken');
+  const [shop, siteSettings, customerAccessToken, ENV] = await Promise.all([
+    getShop(context),
+    getSiteSettings(context),
+    session.get('customerAccessToken'),
+    getPublicEnvs({context, request}),
+  ]);
+
   const groupingsPromise = getProductGroupings(context);
 
   const {isLoggedIn, headers: headersWithAccessToken} =
@@ -130,10 +139,9 @@ export async function loader({context, request}: LoaderFunctionArgs) {
     storefront,
     publicStorefrontId: env.PUBLIC_STOREFRONT_ID,
   });
-  const ENV = await getPublicEnvs({context, request});
   const SITE_TITLE = siteSettings?.data?.siteSettings?.seo?.title || shop.name;
 
-  return defer(
+  return dataWithOptions(
     {
       analytics,
       consent,

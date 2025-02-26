@@ -1,7 +1,8 @@
 import {useMemo} from 'react';
 
+import {Image} from '~/components/Image';
+import {Link} from '~/components/Link';
 import type {Article} from '~/lib/types';
-import {Image, Link} from '~/components';
 
 export function BlogGridItem({
   article,

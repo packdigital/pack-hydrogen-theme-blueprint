@@ -1,4 +1,3 @@
-import {json} from '@shopify/remix-oxygen';
 import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import {getPaginationVariables} from '@shopify/hydrogen';
 import type {ProductCollectionSortKeys} from '@shopify/hydrogen/storefront-api-types';
@@ -45,5 +44,5 @@ export async function loader({context, request}: LoaderFunctionArgs) {
     cache: storefront.CacheShort(),
   });
 
-  return json({collection});
+  return {collection};
 }

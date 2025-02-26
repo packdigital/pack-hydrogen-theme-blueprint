@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 
-import {Image} from '~/components';
+import {Image} from '~/components/Image';
 
 import {HeroContent} from './HeroContent';
 import {HeroVideo} from './HeroVideo';

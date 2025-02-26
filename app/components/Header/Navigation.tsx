@@ -1,7 +1,8 @@
 import {memo} from 'react';
 import {useCart} from '@shopify/hydrogen-react';
 
-import {Link, Svg} from '~/components';
+import {Link} from '~/components/Link';
+import {Svg} from '~/components/Svg';
 import {useCustomer, useMenu, useSettings} from '~/hooks';
 
 import type {UseDesktopMenuReturn} from './useDesktopMenu';

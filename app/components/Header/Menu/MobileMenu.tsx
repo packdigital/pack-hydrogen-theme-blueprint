@@ -1,6 +1,8 @@
 import {memo} from 'react';
 
-import {Link, Drawer, Svg} from '~/components';
+import {Link} from '~/components/Link';
+import {Drawer} from '~/components/Drawer';
+import {Svg} from '~/components/Svg';
 import {useMenu, useSettings} from '~/hooks';
 
 import type {UseMobileMenuReturn} from '../useMobileMenu';

@@ -2,7 +2,8 @@ import {useMemo} from 'react';
 import {Money} from '@shopify/hydrogen-react';
 import type {OrderLineItem} from '@shopify/hydrogen/storefront-api-types';
 
-import {Image, Link} from '~/components';
+import {Image} from '~/components/Image';
+import {Link} from '~/components/Link';
 import {PRODUCT_IMAGE_ASPECT_RATIO} from '~/lib/constants';
 
 export function OrderItem({item}: {item: OrderLineItem}) {

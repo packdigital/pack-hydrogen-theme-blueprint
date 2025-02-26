@@ -1,4 +1,7 @@
-import {Container, Image, Markdown, Svg} from '~/components';
+import {Container} from '~/components/Container';
+import {Image} from '~/components/Image';
+import {Markdown} from '~/components/Markdown';
+import {Svg} from '~/components/Svg';
 
 import type {IconRowCms} from './IconRow.types';
 import {Schema} from './IconRow.schema';

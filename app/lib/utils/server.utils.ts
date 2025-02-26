@@ -19,15 +19,15 @@ export const getShop = async (context: AppLoadContext) => {
   const layout = await context.storefront.query(LAYOUT_QUERY, {
     cache: context.storefront.CacheShort(),
   });
-  return layout.shop;
+  return layout?.shop;
 };
 
 export const getSiteSettings = async (
   context: AppLoadContext,
 ): Promise<RootSiteSettings> => {
-  return (await context.pack.query(SITE_SETTINGS_QUERY, {
+  return context.pack.query(SITE_SETTINGS_QUERY, {
     cache: context.storefront.CacheLong(),
-  })) as RootSiteSettings;
+  }) as RootSiteSettings;
 };
 
 export const getProductGroupings = async (context: AppLoadContext) => {
@@ -68,8 +68,10 @@ export const getAccountSeo = async (
   context: AppLoadContext,
   accountTitle: string,
 ) => {
-  const shop = await getShop(context);
-  const siteSettings = await getSiteSettings(context);
+  const [shop, siteSettings] = await Promise.all([
+    getShop(context),
+    getSiteSettings(context),
+  ]);
   const {title: seoSiteTitle} = {
     ...siteSettings?.data?.siteSettings?.seo,
   } as Seo;

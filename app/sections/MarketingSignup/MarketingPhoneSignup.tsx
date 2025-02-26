@@ -1,6 +1,7 @@
 import {Fragment} from 'react';
 
-import {Link, LoadingDots} from '~/components';
+import {Link} from '~/components/Link';
+import {LoadingDots} from '~/components/Animations';
 import {useMarketingListSubscribe} from '~/hooks';
 
 import type {MarketingPhoneSignupProps} from './MarketingSignup.types';

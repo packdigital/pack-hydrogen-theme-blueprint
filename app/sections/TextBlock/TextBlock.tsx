@@ -1,4 +1,6 @@
-import {Container, Link, Markdown} from '~/components';
+import {Container} from '~/components/Container';
+import {Link} from '~/components/Link';
+import {Markdown} from '~/components/Markdown';
 
 import {Schema} from './TextBlock.schema';
 import type {TextBlockCms} from './TextBlock.types';

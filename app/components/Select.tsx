@@ -7,7 +7,7 @@ import {
   Transition,
 } from '@headlessui/react';
 
-import {Svg} from '~/components';
+import {Svg} from '~/components/Svg';
 
 interface Option {
   label: string;

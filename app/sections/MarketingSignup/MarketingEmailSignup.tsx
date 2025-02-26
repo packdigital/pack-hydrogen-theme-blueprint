@@ -1,6 +1,6 @@
 import {useEffect} from 'react';
 
-import {LoadingDots} from '~/components';
+import {LoadingDots} from '~/components/Animations';
 import {useMarketingListSubscribe} from '~/hooks';
 
 import type {MarketingEmailSignupProps} from './MarketingSignup.types';

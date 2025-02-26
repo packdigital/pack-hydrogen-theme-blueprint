@@ -2,7 +2,8 @@ import {memo, useCallback, useMemo} from 'react';
 import {useAnalytics} from '@shopify/hydrogen';
 
 import {COLOR_OPTION_NAME, PRODUCT_IMAGE_ASPECT_RATIO} from '~/lib/constants';
-import {Image, Link} from '~/components';
+import {Image} from '~/components/Image';
+import {Link} from '~/components/Link';
 import {AnalyticsEvent} from '~/components/Analytics/constants';
 import {useVariantPrices} from '~/hooks';
 

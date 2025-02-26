@@ -1,6 +1,6 @@
 import type {ProductOptionValue} from '@shopify/hydrogen-react/storefront-api-types';
 
-import {Image} from '~/components';
+import {Image} from '~/components/Image';
 import type {SwatchesMap} from '~/lib/types';
 
 interface ColorVariantOptionProps {

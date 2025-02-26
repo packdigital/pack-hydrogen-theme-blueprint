@@ -1,5 +1,4 @@
 import {useLoaderData} from '@remix-run/react';
-import {json} from '@shopify/remix-oxygen';
 import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 import {RenderSections} from '@pack/react';
@@ -54,10 +53,15 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     }
     return compiledBlog;
   };
-  const blog = await getBlogWithAllArticles({
-    blog: null,
-    cursor: null,
-  });
+
+  const [blog, shop, siteSettings] = await Promise.all([
+    getBlogWithAllArticles({
+      blog: null,
+      cursor: null,
+    }),
+    getShop(context),
+    getSiteSettings(context),
+  ]);
 
   if (!blog) throw new Response(null, {status: 404});
 
@@ -72,8 +76,6 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     },
   };
 
-  const shop = await getShop(context);
-  const siteSettings = await getSiteSettings(context);
   const analytics = {pageType: AnalyticsPageType.blog};
   const seo = seoPayload.blog({
     page: blogWithSortedArticles,
@@ -82,12 +84,12 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     url: request.url,
   });
 
-  return json({
+  return {
     analytics,
     blog: blogWithSortedArticles,
     seo,
     url: request.url,
-  });
+  };
 }
 
 export const meta = ({matches}: MetaArgs<typeof loader>) => {

@@ -1,6 +1,5 @@
 import {useMemo} from 'react';
 import {useLoaderData} from '@remix-run/react';
-import {json} from '@shopify/remix-oxygen';
 import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 import {RenderSections} from '@pack/react';
@@ -14,15 +13,18 @@ export const headers = routeHeaders;
 
 export async function loader({params, context, request}: LoaderFunctionArgs) {
   const {handle} = params;
-  const {data} = await context.pack.query(ARTICLE_PAGE_QUERY, {
-    variables: {handle},
-    cache: context.storefront.CacheLong(),
-  });
+
+  const [{data}, shop, siteSettings] = await Promise.all([
+    context.pack.query(ARTICLE_PAGE_QUERY, {
+      variables: {handle},
+      cache: context.storefront.CacheLong(),
+    }),
+    getShop(context),
+    getSiteSettings(context),
+  ]);
 
   if (!data.article) throw new Response(null, {status: 404});
 
-  const shop = await getShop(context);
-  const siteSettings = await getSiteSettings(context);
   const analytics = {pageType: AnalyticsPageType.article};
   const seo = seoPayload.article({
     page: data.article,
@@ -31,12 +33,12 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     url: request.url,
   });
 
-  return json({
+  return {
     analytics,
     article: data.article,
     seo,
     url: request.url,
-  });
+  };
 }
 
 export const meta = ({matches}: MetaArgs<typeof loader>) => {

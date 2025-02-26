@@ -1,6 +1,9 @@
 import {useInView} from 'react-intersection-observer';
 
-import {Container, Image, Link, Svg} from '~/components';
+import {Container} from '~/components/Container';
+import {Image} from '~/components/Image';
+import {Link} from '~/components/Link';
+import {Svg} from '~/components/Svg';
 
 import {Schema} from './SocialMediaGrid.schema';
 import type {SocialMediaGridCms} from './SocialMediaGrid.types';

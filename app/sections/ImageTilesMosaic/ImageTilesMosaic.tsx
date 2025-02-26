@@ -1,4 +1,4 @@
-import {Container} from '~/components';
+import {Container} from '~/components/Container';
 
 import type {ImageTilesMosaicCms} from './ImageTilesMosaic.types';
 import {ImageTilesMosaicItem} from './ImageTilesMosaicItem';

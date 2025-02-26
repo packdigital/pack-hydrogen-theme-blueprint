@@ -1,4 +1,4 @@
-import {json} from '@shopify/remix-oxygen';
+import {data as dataWithOptions} from '@shopify/remix-oxygen';
 import type {ActionFunctionArgs} from '@shopify/remix-oxygen';
 
 import {
@@ -24,7 +24,7 @@ export async function action({request, context}: ActionFunctionArgs) {
   const klaviyoAction = actions[action];
 
   if (!klaviyoAction) {
-    return json(
+    return dataWithOptions(
       {error: `/api/klaviyo: Unsupported action \`${action}\``},
       {status: 400},
     );
@@ -46,5 +46,5 @@ export async function action({request, context}: ActionFunctionArgs) {
     apiVersion,
   });
 
-  return json({...data}, {status: data?.status || 500});
+  return dataWithOptions({...data}, {status: data?.status || 500});
 }

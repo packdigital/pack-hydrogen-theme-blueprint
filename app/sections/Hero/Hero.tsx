@@ -1,10 +1,10 @@
-import {Container} from '~/components';
+import {Container} from '~/components/Container';
 
 import {HeroContainer} from './HeroContainer';
-import type {HeroCms} from './Hero.types';
 import {HeroSlide} from './HeroSlide';
 import {HeroSlider} from './HeroSlider';
 import {Schema} from './Hero.schema';
+import type {HeroCms} from './Hero.types';
 
 export function Hero({cms}: {cms: HeroCms}) {
   const {section, slider, slides, id, clientId} = cms;

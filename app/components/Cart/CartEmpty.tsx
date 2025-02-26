@@ -1,4 +1,4 @@
-import {Link} from '~/components';
+import {Link} from '~/components/Link';
 
 import type {CartEmptyProps} from './Cart.types';
 

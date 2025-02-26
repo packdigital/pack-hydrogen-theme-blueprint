@@ -1,6 +1,6 @@
 import {useMemo} from 'react';
 
-import {Image} from '~/components';
+import {Image} from '~/components/Image';
 import {isLightHexColor} from '~/lib/utils';
 
 import type {InnerColorOptionValueProps} from './ProductOptionValue.types';

@@ -1,6 +1,5 @@
 import {useMemo} from 'react';
 import {useLoaderData} from '@remix-run/react';
-import {json} from '@shopify/remix-oxygen';
 import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 import {
   Analytics,
@@ -11,7 +10,7 @@ import {
 import {RenderSections} from '@pack/react';
 import type {ProductCollectionSortKeys} from '@shopify/hydrogen/storefront-api-types';
 
-import {Collection} from '~/components';
+import {Collection} from '~/components/Collection';
 import {COLLECTION_QUERY} from '~/data/graphql/shopify/collection';
 import {COLLECTION_PAGE_QUERY} from '~/data/graphql/pack/collection-page';
 import {getFilters, getShop, getSiteSettings} from '~/lib/utils';
@@ -25,12 +24,6 @@ export const headers = routeHeaders;
 export async function loader({params, context, request}: LoaderFunctionArgs) {
   const {handle} = params;
   const {pack, storefront} = context;
-  const pageData = await pack.query(COLLECTION_PAGE_QUERY, {
-    variables: {handle},
-    cache: storefront.CacheLong(),
-  });
-
-  const collectionPage = pageData.data?.collectionPage;
 
   const searchParams = new URL(request.url).searchParams;
   const siteSettings = await getSiteSettings(context);
@@ -58,22 +51,30 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     pageBy: resultsPerPage,
   });
 
-  const {collection} = await storefront.query(COLLECTION_QUERY, {
-    variables: {
-      handle,
-      sortKey,
-      reverse,
-      filters,
-      country: storefront.i18n.country,
-      language: storefront.i18n.language,
-      ...paginationVariables,
-    },
-    cache: storefront.CacheShort(),
-  });
+  const [pageData, {collection}, shop] = await Promise.all([
+    pack.query(COLLECTION_PAGE_QUERY, {
+      variables: {handle},
+      cache: storefront.CacheLong(),
+    }),
+    storefront.query(COLLECTION_QUERY, {
+      variables: {
+        handle,
+        sortKey,
+        reverse,
+        filters,
+        country: storefront.i18n.country,
+        language: storefront.i18n.language,
+        ...paginationVariables,
+      },
+      cache: storefront.CacheShort(),
+    }),
+    getShop(context),
+  ]);
+
+  const collectionPage = pageData.data?.collectionPage;
 
   if (!collection) throw new Response(null, {status: 404});
 
-  const shop = await getShop(context);
   const analytics = {
     pageType: AnalyticsPageType.collection,
     collectionHandle: handle,
@@ -87,14 +88,14 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     url: request.url,
   });
 
-  return json({
+  return {
     activeFilterValues,
     analytics,
     collection,
     collectionPage,
     seo,
     url: request.url,
-  });
+  };
 }
 
 export const meta = ({matches}: MetaArgs<typeof loader>) => {

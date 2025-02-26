@@ -1,4 +1,4 @@
-import {json, redirect} from '@shopify/remix-oxygen';
+import {data as dataWithOptions, redirect} from '@shopify/remix-oxygen';
 import type {ActionFunctionArgs} from '@shopify/remix-oxygen';
 
 export async function action({request}: ActionFunctionArgs) {
@@ -14,7 +14,8 @@ export async function action({request}: ActionFunctionArgs) {
     headers = JSON.parse(headersString);
   } catch (error) {}
 
-  if (!to) return json({errors: ['Missing `to` in body']}, {status: 400});
+  if (!to)
+    return dataWithOptions({errors: ['Missing `to` in body']}, {status: 400});
 
   return status ? redirect(to, {status, headers}) : redirect(to, {headers});
 }

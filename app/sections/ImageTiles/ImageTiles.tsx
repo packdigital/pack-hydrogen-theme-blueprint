@@ -2,7 +2,8 @@ import {useState} from 'react';
 import type {SwiperClass} from 'swiper/react';
 import {Swiper, SwiperSlide} from 'swiper/react';
 
-import {Container, Spinner} from '~/components';
+import {Container} from '~/components/Container';
+import {Spinner} from '~/components/Animations';
 
 import type {ImageTilesCms} from './ImageTiles.types';
 import {ImageTile} from './ImageTile';

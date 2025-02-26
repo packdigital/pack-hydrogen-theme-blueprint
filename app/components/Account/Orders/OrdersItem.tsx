@@ -3,7 +3,7 @@ import startCase from 'lodash/startCase';
 import {Money} from '@shopify/hydrogen-react';
 import type {Order} from '@shopify/hydrogen/storefront-api-types';
 
-import {Link} from '~/components';
+import {Link} from '~/components/Link';
 
 export function OrdersItem({order}: {order: Order}) {
   const orderDate = useMemo(() => {

@@ -1,4 +1,3 @@
-import {json} from '@shopify/remix-oxygen';
 import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import type {
   PredictiveSearchResult,
@@ -36,7 +35,7 @@ export async function loader({request, params, context}: LoaderFunctionArgs) {
     request,
     context,
   });
-  return json(search);
+  return search;
 }
 
 async function fetchPredictiveSearchResults({

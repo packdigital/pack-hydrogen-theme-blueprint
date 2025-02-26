@@ -1,7 +1,7 @@
 import {useEffect, useRef, useState} from 'react';
 import {useLocation} from '@remix-run/react';
 
-import {LoadingDots} from '~/components';
+import {LoadingDots} from '~/components/Animations';
 import {useCustomer, useSettings} from '~/hooks';
 import {useCustomerUpdateProfile} from '~/lib/customer';
 

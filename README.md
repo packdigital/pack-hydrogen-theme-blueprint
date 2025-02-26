@@ -334,13 +334,13 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     totalValue: parseFloat(selectedVariant.price.amount),
   };
 
-  return defer({
+  return {
     product,
     productPage: data.productPage,
     selectedVariant,
     storeDomain,
     analytics,
-  });
+  };
 }
 ```
 

@@ -1,5 +1,5 @@
 import {useEffect} from 'react';
-import {json, redirect} from '@shopify/remix-oxygen';
+import {redirect} from '@shopify/remix-oxygen';
 import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 import {getSeoMeta} from '@shopify/hydrogen';
 import {useLoaderData, useNavigate} from '@remix-run/react';
@@ -29,11 +29,11 @@ export async function loader({request, params}: LoaderFunctionArgs) {
     return redirect(redirectUrl);
   }
 
-  return json({
+  return {
     code,
     redirectUrl,
     seo: {robots: {noIndex: true, noFollow: true}},
-  });
+  };
 }
 
 export const meta = ({matches}: MetaArgs<typeof loader>) => {

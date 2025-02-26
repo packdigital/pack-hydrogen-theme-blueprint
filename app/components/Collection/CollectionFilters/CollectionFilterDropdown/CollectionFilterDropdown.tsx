@@ -8,7 +8,7 @@ import {
 } from '@headlessui/react';
 
 import {PRICE_FILTER_ID} from '~/lib/constants';
-import {Svg} from '~/components';
+import {Svg} from '~/components/Svg';
 import {useSettings} from '~/hooks';
 
 import type {

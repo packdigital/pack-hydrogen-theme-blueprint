@@ -1,7 +1,7 @@
 import {useCallback} from 'react';
 import {useSearchParams} from '@remix-run/react';
 
-import {Container} from '~/components';
+import {Container} from '~/components/Container';
 import type {ContainerSettings} from '~/settings/container';
 
 import {Schema} from './BlogCategories.schema';

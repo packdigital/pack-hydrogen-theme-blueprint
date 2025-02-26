@@ -2,7 +2,7 @@ import {memo, useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {useCart} from '@shopify/hydrogen-react';
 import type {CartDiscountCode} from '@shopify/hydrogen/storefront-api-types';
 
-import {Svg} from '~/components';
+import {Svg} from '~/components/Svg';
 
 export const CartDiscounts = memo(() => {
   const formRef = useRef<HTMLFormElement>(null);

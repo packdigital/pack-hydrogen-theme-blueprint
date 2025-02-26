@@ -1,10 +1,11 @@
 import {useMemo} from 'react';
 import {useLoaderData, useLocation} from '@remix-run/react';
 
-import type {BlogPage} from '~/lib/types';
-import {Container, Pagination} from '~/components';
-import type {ContainerSettings} from '~/settings/container';
+import {Container} from '~/components/Container';
+import {Pagination} from '~/components/Pagination';
 import {usePagination} from '~/hooks';
+import type {ContainerSettings} from '~/settings/container';
+import type {BlogPage} from '~/lib/types';
 
 import {Schema} from './BlogGrid.schema';
 import {BlogGridItem} from './BlogGridItem';

@@ -5,7 +5,8 @@ import {
   Transition,
 } from '@headlessui/react';
 
-import {Markdown, Svg} from '~/components';
+import {Markdown} from '~/components/Markdown';
+import {Svg} from '~/components/Svg';
 
 import type {AccordionProps} from './Accordions.types';
 

@@ -1,4 +1,5 @@
-import {Container, Markdown as MarkdownComp} from '~/components';
+import {Container} from '~/components/Container';
+import {Markdown as MarkdownComp} from '~/components/Markdown';
 import type {ContainerSettings} from '~/settings/container';
 
 import {Schema} from './Markdown.schema';

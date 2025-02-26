@@ -4,7 +4,7 @@ import type {
   ProductVariant,
 } from '@shopify/hydrogen/storefront-api-types';
 
-import {AddToCart} from '~/components';
+import {AddToCart} from '~/components/AddToCart';
 import {COLOR_OPTION_NAME} from '~/lib/constants';
 import {useSettings} from '~/hooks';
 

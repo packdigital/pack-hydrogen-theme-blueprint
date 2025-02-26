@@ -1,6 +1,9 @@
 import {useMemo} from 'react';
 
-import {Container, Image as ImageComponent, Link, Markdown} from '~/components';
+import {Container} from '~/components/Container';
+import {Image as ImageComponent} from '~/components/Image';
+import {Link} from '~/components/Link';
+import {Markdown} from '~/components/Markdown';
 
 import type {MediaCms} from './Image.types';
 import {Schema} from './Image.schema';

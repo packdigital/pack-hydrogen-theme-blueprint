@@ -1,4 +1,5 @@
-import {Container, Link} from '~/components';
+import {Container} from '~/components/Container';
+import {Link} from '~/components/Link';
 
 import {Schema} from './Video.schema';
 import {VideoElement} from './VideoElement';

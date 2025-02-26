@@ -6,7 +6,7 @@ import type {
 } from '@shopify/hydrogen/storefront-api-types';
 
 import {prefixNonUsdDollar} from '~/hooks/product/useVariantPrices';
-import {Svg} from '~/components';
+import {Svg} from '~/components/Svg';
 
 export function CartTotalsDiscountItem({
   discount,

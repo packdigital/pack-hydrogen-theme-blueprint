@@ -1,4 +1,7 @@
-import {BackInStockModal, Image, Link, Spinner} from '~/components';
+import {BackInStockModal} from '~/components/BackInStockModal';
+import {Image} from '~/components/Image';
+import {Link} from '~/components/Link';
+import {Spinner} from '~/components/Animations';
 import {PRODUCT_IMAGE_ASPECT_RATIO} from '~/lib/constants';
 import {useAddToCart, useVariantPrices} from '~/hooks';
 

@@ -1,8 +1,8 @@
 import {useLocation, useParams} from '@remix-run/react';
 
-import {LoadingDots} from '~/components';
-import type {Settings} from '~/lib/types';
+import {LoadingDots} from '~/components/Animations';
 import {useCustomerRegister} from '~/lib/customer';
+import type {Settings} from '~/lib/types';
 
 export function RegisterForm({settings}: {settings: Settings['account']}) {
   const {pathname} = useLocation();

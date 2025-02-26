@@ -2,7 +2,8 @@ import {useRef} from 'react';
 import {useInView} from 'react-intersection-observer';
 import type {Video} from '@shopify/hydrogen/storefront-api-types';
 
-import {Badges, Image} from '~/components';
+import {Badges} from '~/components/Badges';
+import {Image} from '~/components/Image';
 import type {SelectedProduct, SelectedVariant} from '~/lib/types';
 
 import {ProductItemVideo} from './ProductItemVideo';

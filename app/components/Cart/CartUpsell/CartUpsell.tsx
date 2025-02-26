@@ -10,7 +10,7 @@ import {
 } from '@headlessui/react';
 import type {CartLine} from '@shopify/hydrogen/storefront-api-types';
 
-import {Svg} from '~/components';
+import {Svg} from '~/components/Svg';
 import {useProductsByIds, useProductRecommendations} from '~/hooks';
 
 import type {CartUpsellProps} from '../Cart.types';

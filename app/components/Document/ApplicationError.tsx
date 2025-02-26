@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 
-import {Svg} from '~/components';
+import {Svg} from '~/components/Svg';
 import {useRootLoaderData} from '~/hooks';
 
 const isDevelopment = process.env.NODE_ENV === 'development';

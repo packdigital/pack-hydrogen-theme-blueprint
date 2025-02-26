@@ -3,7 +3,8 @@ import type {
   SellingPlan,
 } from '@shopify/hydrogen/storefront-api-types';
 
-import {BackInStockModal, LoadingDots} from '~/components';
+import {BackInStockModal} from '~/components/BackInStockModal';
+import {LoadingDots} from '~/components/Animations';
 import {useAddToCart} from '~/hooks';
 import type {SelectedVariant} from '~/lib/types';
 

@@ -3,7 +3,8 @@ import {useCart} from '@shopify/hydrogen-react';
 import {Analytics} from '@shopify/hydrogen';
 import type {CartLine as CartLineType} from '@shopify/hydrogen/storefront-api-types';
 
-import {Drawer, Svg} from '~/components';
+import {Drawer} from '~/components/Drawer';
+import {Svg} from '~/components/Svg';
 import {useMenu, useSettings} from '~/hooks';
 
 import {CartDiscounts} from './CartDiscounts';

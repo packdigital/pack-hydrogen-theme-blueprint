@@ -1,4 +1,5 @@
 import {registerSection} from '@pack/react';
+import type {Section} from '@pack/types';
 
 import {Accordions} from './Accordions';
 import {Banner} from './Banner';
@@ -33,54 +34,58 @@ import {MetaobjectImage} from './MetaobjectImage';
 
 export function registerSections() {
   /* Text ---------- */
-  registerSection(TextBlock, {name: 'text-block'});
-  registerSection(Markdown, {name: 'markdown'});
-  registerSection(Accordions, {name: 'accordions'});
-  registerSection(IconRow, {name: 'icon-row'});
+  registerSection(TextBlock as Section, {name: 'text-block'});
+  registerSection(Markdown as Section, {name: 'markdown'});
+  registerSection(Accordions as Section, {name: 'accordions'});
+  registerSection(IconRow as Section, {name: 'icon-row'});
 
   /* Hero ---------- */
-  registerSection(Hero, {name: 'hero'});
-  registerSection(HalfHero, {name: 'half-hero'});
-  registerSection(Banner, {name: 'banner'});
+  registerSection(Hero as Section, {name: 'hero'});
+  registerSection(HalfHero as Section, {name: 'half-hero'});
+  registerSection(Banner as Section, {name: 'banner'});
 
   /* Featured Media ---------- */
-  registerSection(ImageTiles, {name: 'image-tiles'});
-  registerSection(ImageTilesGrid, {name: 'image-tiles-grid'});
-  registerSection(ImageTilesMosaic, {name: 'image-tiles-mosaic'});
-  registerSection(TabbedTilesSlider, {name: 'tabbed-tiles-slider'});
-  registerSection(TilesSlider, {name: 'tiles-slider'});
-  registerSection(TilesStack, {name: 'tiles-stack'});
-  registerSection(SocialMediaGrid, {name: 'social-media-grid'});
+  registerSection(ImageTiles as Section, {name: 'image-tiles'});
+  registerSection(ImageTilesGrid as Section, {name: 'image-tiles-grid'});
+  registerSection(ImageTilesMosaic as Section, {name: 'image-tiles-mosaic'});
+  registerSection(TabbedTilesSlider as Section, {name: 'tabbed-tiles-slider'});
+  registerSection(TilesSlider as Section, {name: 'tiles-slider'});
+  registerSection(TilesStack as Section, {name: 'tiles-stack'});
+  registerSection(SocialMediaGrid as Section, {name: 'social-media-grid'});
 
   /* Media ---------- */
-  registerSection(Image, {name: 'image'});
-  registerSection(Video, {name: 'video'});
-  registerSection(VideoEmbed, {name: 'video-embed'});
+  registerSection(Image as Section, {name: 'image'});
+  registerSection(Video as Section, {name: 'video'});
+  registerSection(VideoEmbed as Section, {name: 'video-embed'});
 
   /* Product ---------- */
-  registerSection(ProductsSlider, {name: 'products-slider'});
-  registerSection(ProductRecommendationsSlider, {
+  registerSection(ProductsSlider as Section, {name: 'products-slider'});
+  registerSection(ProductRecommendationsSlider as Section, {
     name: 'product-recommendations-slider',
   });
-  registerSection(BuildYourOwnBundle, {name: 'build-your-own-bundle'});
+  registerSection(BuildYourOwnBundle as Section, {
+    name: 'build-your-own-bundle',
+  });
 
   /* Reviews ---------- */
-  registerSection(PressSlider, {name: 'press-slider'});
-  registerSection(TestimonialSlider, {name: 'testimonial-slider'});
-  registerSection(ProductReviews, {name: 'product-reviews'});
+  registerSection(PressSlider as Section, {name: 'press-slider'});
+  registerSection(TestimonialSlider as Section, {name: 'testimonial-slider'});
+  registerSection(ProductReviews as Section, {name: 'product-reviews'});
 
   /* Form ---------- */
-  registerSection(FormBuilder, {name: 'form-builder'});
-  registerSection(MarketingSignup, {name: 'marketing-signup'});
+  registerSection(FormBuilder as Section, {name: 'form-builder'});
+  registerSection(MarketingSignup as Section, {name: 'marketing-signup'});
 
   /* HTML ---------- */
-  registerSection(Html, {name: 'html'});
+  registerSection(Html as Section, {name: 'html'});
 
   /* Blog ---------- */
-  registerSection(BlogCategories, {name: 'blog-categories'});
-  registerSection(BlogGrid, {name: 'blog-grid'});
+  registerSection(BlogCategories as Section, {name: 'blog-categories'});
+  registerSection(BlogGrid as Section, {name: 'blog-grid'});
 
   /* Metaobject example sections ---------- */
-  registerSection(MetaobjectTextBlock, {name: 'metaobject-text-block'});
-  registerSection(MetaobjectImage, {name: 'metaobject-image'});
+  registerSection(MetaobjectTextBlock as Section, {
+    name: 'metaobject-text-block',
+  });
+  registerSection(MetaobjectImage as Section, {name: 'metaobject-image'});
 }

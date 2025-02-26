@@ -1,4 +1,5 @@
-import {Container, Image} from '~/components';
+import {Container} from '~/components/Container';
+import {Image} from '~/components/Image';
 
 import {BannerContainer} from './BannerContainer';
 import {BannerContent} from './BannerContent';

@@ -1,8 +1,8 @@
 import {useLocation, useParams} from '@remix-run/react';
 
-import {LoadingDots} from '~/components';
-import type {Settings} from '~/lib/types';
+import {LoadingDots} from '~/components/Animations';
 import {useCustomerLogIn} from '~/lib/customer';
+import type {Settings} from '~/lib/types';
 
 interface LoginFormProps {
   setIsForgotPassword: (isForgotPassword: boolean) => void;

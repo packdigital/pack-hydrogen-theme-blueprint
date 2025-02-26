@@ -4,7 +4,10 @@ import type {SwiperClass} from 'swiper/react';
 import {Swiper, SwiperSlide} from 'swiper/react';
 import type {Product} from '@shopify/hydrogen/storefront-api-types';
 
-import {Link, ProductItem, Spinner, Svg} from '~/components';
+import {Link} from '~/components/Link';
+import {ProductItem} from '~/components/ProductItem';
+import {Spinner} from '~/components/Animations';
+import {Svg} from '~/components/Svg';
 import {useColorSwatches} from '~/hooks';
 
 import type {ProductsSliderCms} from './ProductsSlider.types';

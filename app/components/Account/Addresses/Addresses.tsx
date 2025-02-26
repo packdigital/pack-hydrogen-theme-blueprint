@@ -3,7 +3,7 @@ import {useLocation} from '@remix-run/react';
 import {flattenConnection} from '@shopify/hydrogen';
 import type {MailingAddress} from '@shopify/hydrogen/storefront-api-types';
 
-import {Pagination} from '~/components';
+import {Pagination} from '~/components/Pagination';
 import {useCustomer, usePagination, useSettings} from '~/hooks';
 
 import {AddressesItem} from './AddressesItem';

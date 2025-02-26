@@ -1,4 +1,4 @@
-import {Link} from '~/components';
+import {Link} from '~/components/Link';
 import type {Settings} from '~/lib/types';
 
 export function FooterLegal({settings}: {settings: Settings['footer']}) {

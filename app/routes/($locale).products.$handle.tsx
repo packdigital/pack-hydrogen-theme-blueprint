@@ -1,6 +1,5 @@
 import {useLoaderData} from '@remix-run/react';
 import {ProductProvider} from '@shopify/hydrogen-react';
-import {json} from '@shopify/remix-oxygen';
 import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 import {Analytics, AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 import type {ShopifyAnalyticsProduct} from '@shopify/hydrogen';
@@ -14,7 +13,7 @@ import {
 } from '~/lib/utils';
 import {PRODUCT_PAGE_QUERY} from '~/data/graphql/pack/product-page';
 import {PRODUCT_QUERY, PRODUCTS_QUERY} from '~/data/graphql/shopify/product';
-import {Product} from '~/components';
+import {Product} from '~/components/Product';
 import {routeHeaders} from '~/data/cache';
 import {seoPayload} from '~/lib/seo.server';
 import {useGlobal, useProductWithGrouping} from '~/hooks';
@@ -31,12 +30,6 @@ export const headers = routeHeaders;
 export async function loader({params, context, request}: LoaderFunctionArgs) {
   const {handle} = params;
   const {storefront} = context;
-  const pageData = await context.pack.query(PRODUCT_PAGE_QUERY, {
-    variables: {handle},
-    cache: context.storefront.CacheLong(),
-  });
-
-  const productPage = pageData?.data?.productPage;
 
   const storeDomain = storefront.getShopifyDomain();
   const searchParams = new URL(request.url).searchParams;
@@ -49,15 +42,34 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     selectedOptions.push({name, value});
   });
 
-  let {product: queriedProduct} = await storefront.query(PRODUCT_QUERY, {
-    variables: {
-      handle,
-      selectedOptions,
-      country: storefront.i18n.country,
-      language: storefront.i18n.language,
-    },
-    cache: storefront.CacheShort(),
-  });
+  const [
+    pageData,
+    {product: storefrontProduct},
+    productGroupings,
+    shop,
+    siteSettings,
+  ] = await Promise.all([
+    context.pack.query(PRODUCT_PAGE_QUERY, {
+      variables: {handle},
+      cache: context.storefront.CacheLong(),
+    }),
+    storefront.query(PRODUCT_QUERY, {
+      variables: {
+        handle,
+        selectedOptions,
+        country: storefront.i18n.country,
+        language: storefront.i18n.language,
+      },
+      cache: storefront.CacheShort(),
+    }),
+    getProductGroupings(context),
+    getShop(context),
+    getSiteSettings(context),
+  ]);
+
+  let queriedProduct = storefrontProduct;
+
+  const productPage = pageData?.data?.productPage;
 
   if (!queriedProduct) throw new Response(null, {status: 404});
 
@@ -68,8 +80,6 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     });
     queriedProduct = {...queriedProduct, metafields};
   }
-
-  const productGroupings = await getProductGroupings(context);
 
   const grouping: Group | undefined = [...(productGroupings || [])].find(
     (grouping: Group) => {
@@ -138,8 +148,6 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     products: [productAnalytics],
     totalValue: Number(selectedVariant?.price?.amount || 0),
   };
-  const shop = await getShop(context);
-  const siteSettings = await getSiteSettings(context);
   const seo = seoPayload.product({
     product,
     selectedVariant,
@@ -149,7 +157,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     url: request.url,
   });
 
-  return json({
+  return {
     analytics,
     product,
     productPage,
@@ -157,7 +165,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     seo,
     storeDomain,
     url: request.url,
-  });
+  };
 }
 
 export const meta = ({matches}: MetaArgs<typeof loader>) => {

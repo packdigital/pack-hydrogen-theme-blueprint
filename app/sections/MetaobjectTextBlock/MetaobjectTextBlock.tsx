@@ -1,4 +1,5 @@
-import {Link, Markdown} from '~/components';
+import {Link} from '~/components/Link';
+import {Markdown} from '~/components/Markdown';
 
 import {Schema} from './MetaobjectTextBlock.schema';
 

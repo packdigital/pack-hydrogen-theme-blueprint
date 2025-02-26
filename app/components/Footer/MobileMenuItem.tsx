@@ -5,8 +5,9 @@ import {
   Transition,
 } from '@headlessui/react';
 
+import {Link} from '~/components/Link';
+import {Svg} from '~/components/Svg';
 import type {Settings} from '~/lib/types';
-import {Link, Svg} from '~/components';
 
 export function MobileMenuItem({
   item,

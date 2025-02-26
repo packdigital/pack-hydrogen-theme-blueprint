@@ -24,6 +24,7 @@ export default defineConfig({
   ssr: {
     optimizeDeps: {
       include: [
+        '@pack/types',
         '@remix-run/dev/server-build',
         'cookie',
         'fast-deep-equal',

@@ -1,9 +1,10 @@
 import {useEffect, useMemo, useRef, useState} from 'react';
 import type {MailingAddress} from '@shopify/hydrogen/storefront-api-types';
 
-import {LoadingDots, Select} from '~/components';
-import type {Status} from '~/lib/types';
+import {LoadingDots} from '~/components/Animations';
+import {Select} from '~/components/Select';
 import {useCountriesList} from '~/hooks';
+import type {Status} from '~/lib/types';
 
 interface InitialAddressElements extends HTMLFormControlsCollection {
   firstName: HTMLInputElement;

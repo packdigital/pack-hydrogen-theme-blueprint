@@ -1,6 +1,9 @@
 import {memo, useMemo} from 'react';
 
-import {Image, Link, QuantitySelector, Svg} from '~/components';
+import {Image} from '~/components/Image';
+import {Link} from '~/components/Link';
+import {QuantitySelector} from '~/components/QuantitySelector';
+import {Svg} from '~/components/Svg';
 import {PRODUCT_IMAGE_ASPECT_RATIO} from '~/lib/constants';
 
 import type {CartLineProps} from '../Cart.types';

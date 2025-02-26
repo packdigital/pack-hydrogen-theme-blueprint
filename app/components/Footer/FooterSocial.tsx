@@ -1,4 +1,5 @@
-import {Link, Svg} from '~/components';
+import {Link} from '~/components/Link';
+import {Svg} from '~/components/Svg';
 import type {Settings} from '~/lib/types';
 
 export function FooterSocial({settings}: {settings: Settings['footer']}) {

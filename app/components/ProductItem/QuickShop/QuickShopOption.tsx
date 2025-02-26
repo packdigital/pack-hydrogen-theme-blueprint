@@ -4,7 +4,8 @@ import type {
   ProductOptionValue,
 } from '@shopify/hydrogen/storefront-api-types';
 
-import {BackInStockModal, Spinner} from '~/components';
+import {BackInStockModal} from '~/components/BackInStockModal';
+import {Spinner} from '~/components/Animations';
 import {useAddToCart} from '~/hooks';
 
 interface QuickShopOptionsProps {

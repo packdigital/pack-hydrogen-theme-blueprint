@@ -1,4 +1,4 @@
-import {json} from '@shopify/remix-oxygen';
+import {data as dataWithOptions} from '@shopify/remix-oxygen';
 import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 
 import {CACHE_LONG} from '~/data/cache';
@@ -14,7 +14,7 @@ export async function loader({context}: LoaderFunctionArgs) {
     cache: storefront.CacheLong(),
   });
 
-  return json(
+  return dataWithOptions(
     {
       ...localization,
     },

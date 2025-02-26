@@ -1,4 +1,5 @@
 import {registerStorefrontSettingsSchema} from '@pack/react';
+import type {SiteSetting} from '@pack/types';
 
 import account from './account';
 import analytics from './analytics';
@@ -23,16 +24,16 @@ import type {SearchSettings} from './search';
 
 export function registerStorefrontSettings() {
   registerStorefrontSettingsSchema([
-    account,
-    analytics,
-    cart,
-    collection,
-    footer,
-    header,
-    localization,
-    notFound,
-    product,
-    search,
+    account as SiteSetting,
+    analytics as SiteSetting,
+    cart as SiteSetting,
+    collection as SiteSetting,
+    footer as SiteSetting,
+    header as SiteSetting,
+    localization as SiteSetting,
+    notFound as SiteSetting,
+    product as SiteSetting,
+    search as SiteSetting,
   ]);
 }
 

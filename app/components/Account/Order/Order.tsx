@@ -1,6 +1,7 @@
 import {useMemo} from 'react';
 
-import {Link, Svg} from '~/components';
+import {Link} from '~/components/Link';
+import {Svg} from '~/components/Svg';
 import {useCustomerOrder} from '~/lib/customer';
 
 import {OrderAddressAndStatus} from './OrderAddressAndStatus';
