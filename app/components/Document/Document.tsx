@@ -7,6 +7,7 @@ import {PreviewProvider} from '@pack/react';
 import {ContextsProvider} from '~/contexts';
 import {CART_FRAGMENT} from '~/data/graphql/storefront/cart';
 import {Layout} from '~/components/Layout';
+import {DEFAULT_STOREFRONT_API_VERSION} from '~/lib/constants';
 import {useLocale, useRootLoaderData} from '~/hooks';
 
 import {Favicon} from './Favicon';
@@ -66,7 +67,9 @@ export function Document({children, title}: DocumentProps) {
         <ShopifyProvider
           storeDomain={`https://${ENV.PUBLIC_STORE_DOMAIN}`}
           storefrontToken={ENV.PUBLIC_STOREFRONT_API_TOKEN}
-          storefrontApiVersion={ENV.PUBLIC_STOREFRONT_API_VERSION || '2025-01'}
+          storefrontApiVersion={
+            ENV.PUBLIC_STOREFRONT_API_VERSION || DEFAULT_STOREFRONT_API_VERSION
+          }
           countryIsoCode={locale.country}
           languageIsoCode={locale.language}
         >
