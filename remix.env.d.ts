@@ -7,6 +7,7 @@ import type {Pack} from '@pack/hydrogen';
 import type {OxygenEnv} from '~/lib/utils';
 
 import type {HydrogenSession} from './server';
+import type {Admin} from '~/lib/admin-api-api';
 
 declare global {
   /**
@@ -22,6 +23,7 @@ declare global {
     PACK_SECRET_TOKEN: string;
     PACK_STOREFRONT_ID: string;
     PRIMARY_DOMAIN: string;
+    PRIVATE_ADMIN_API_TOKEN: string;
     PRIVATE_SHOPIFY_CHECKOUT_DOMAIN?: string;
     PRIVATE_SHOPIFY_STORE_MULTIPASS_SECRET?: string;
     PRIVATE_STOREFRONT_API_TOKEN: string;
@@ -63,6 +65,7 @@ declare module '@shopify/remix-oxygen' {
   export interface AppLoadContext {
     session: HydrogenSession;
     storefront: Storefront;
+    admin: Admin;
     env: Env;
     pack: Pack;
     oxygen: OxygenEnv;

@@ -16,6 +16,7 @@ import {createPackClient, PackSession, handleRequest} from '@pack/hydrogen';
 
 import {AppSession} from '~/lib/session.server';
 import {getLocaleFromRequest, getOxygenEnv} from '~/lib/utils';
+import {createAdminClient, getAdminHeaders} from '~/lib/admin-api';
 import defaultThemeData from '~/config/default-theme-data.json';
 
 /**
@@ -59,6 +60,19 @@ export default {
         storeDomain: env.PUBLIC_STORE_DOMAIN,
         storefrontId: env.PUBLIC_STOREFRONT_ID,
         storefrontHeaders: getStorefrontHeaders(request),
+      });
+
+      /**
+       * Create Admin API client.
+       */
+      const {admin} = createAdminClient({
+        cache,
+        waitUntil,
+        i18n: getLocaleFromRequest(request),
+        privateAdminToken: env.PRIVATE_ADMIN_API_TOKEN,
+        storeDomain: env.PUBLIC_STORE_DOMAIN,
+        storefrontId: env.PUBLIC_STOREFRONT_ID,
+        adminHeaders: getAdminHeaders(request),
       });
 
       /*
@@ -105,6 +119,7 @@ export default {
             waitUntil,
             session,
             storefront,
+            admin,
             cart,
             env,
             oxygen,
