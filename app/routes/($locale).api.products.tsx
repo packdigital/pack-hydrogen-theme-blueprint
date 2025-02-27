@@ -1,7 +1,7 @@
 import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import type {ProductSortKeys} from '@shopify/hydrogen/storefront-api-types';
 
-import {PRODUCTS_QUERY} from '~/data/graphql/shopify/product';
+import {PRODUCTS_QUERY} from '~/data/graphql/storefront/product';
 import {queryProducts} from '~/lib/products.server';
 
 // Docs: https://shopify.dev/docs/api/storefront/latest/queries/products

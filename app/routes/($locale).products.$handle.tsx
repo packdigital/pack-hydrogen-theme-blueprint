@@ -12,7 +12,7 @@ import {
   getSiteSettings,
 } from '~/lib/utils';
 import {PRODUCT_PAGE_QUERY} from '~/data/graphql/pack/product-page';
-import {PRODUCT_QUERY, PRODUCTS_QUERY} from '~/data/graphql/shopify/product';
+import {PRODUCT_QUERY, PRODUCTS_QUERY} from '~/data/graphql/storefront/product';
 import {Product} from '~/components/Product';
 import {routeHeaders} from '~/data/cache';
 import {seoPayload} from '~/lib/seo.server';

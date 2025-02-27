@@ -10,7 +10,7 @@ import {
   PRODUCT_GROUPINGS_QUERY,
   SITE_SETTINGS_QUERY,
 } from '~/data/graphql/pack/settings';
-import {LAYOUT_QUERY} from '~/data/graphql/shopify/shop';
+import {LAYOUT_QUERY} from '~/data/graphql/storefront/shop';
 import {PRICE_FILTER_ID} from '~/lib/constants';
 import type {ActiveFilterValue} from '~/components/Collection/CollectionFilters/CollectionFilters.types';
 import type {Group, RootSiteSettings, Seo} from '~/lib/types';

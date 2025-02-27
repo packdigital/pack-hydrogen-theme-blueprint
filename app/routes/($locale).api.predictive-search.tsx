@@ -5,7 +5,7 @@ import type {
   SearchQuerySuggestion,
 } from '@shopify/hydrogen/storefront-api-types';
 
-import {PREDICTIVE_SEARCH_QUERY} from '~/data/graphql/shopify/search';
+import {PREDICTIVE_SEARCH_QUERY} from '~/data/graphql/storefront/search';
 import {getSiteSettings} from '~/lib/utils';
 
 type PredictiveCollection = PredictiveSearchResult['collections'][number];
