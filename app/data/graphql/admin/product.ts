@@ -280,6 +280,7 @@ export const ADMIN_PRODUCT_ITEM_FRAGMENT = `
         }
       }
     }
+    ${ADMIN_PRODUCTS_METAFIELDS_QUERY_STRING}
     options(first: 50) {
       ...AdminOptionFragment
     }
