@@ -38,7 +38,7 @@ export function Product({product, initialSelectedVariant}: ProductProps) {
 
   // set variant url param on selected variant change unless has one variant
   useEffect(() => {
-    if (product.variants.nodes.length === 1 || !selectedVariant) return;
+    if (product.variants?.nodes.length === 1 || !selectedVariant) return;
 
     const {origin, search} = window.location;
 

@@ -291,7 +291,12 @@ export const getFilters = async ({
   return {activeFilterValues, filters};
 };
 
-/* Metafields graphql query */
+/*
+ * IMPORTANT: Update both metafields query strings together, one for Storefront
+ * API and Admin API
+ */
+
+/* Metafields graphql query with Storefront API */
 export const getMetafieldsQueryString = (
   identifiers: MetafieldIdentifier[] = [],
 ) => {
@@ -322,21 +327,79 @@ export const getMetafieldsQueryString = (
     }`;
 };
 
+/* Metafields graphql query with Admin API for draft products */
+export const ADMIN_PRODUCTS_METAFIELDS_QUERY_STRING = `
+  metafields(first: 50) {
+    nodes {
+      createdAt
+      description
+      id
+      key
+      namespace
+      type
+      updatedAt
+      value
+      references(first: 10) {
+        nodes {
+          ... on Metaobject {
+            fields {
+              key
+              type
+              value
+            }
+          }
+        }
+      }
+    }
+  }`;
+
 export const getMetafields = async (
   context: AppLoadContext,
   {
     handle,
+    isDraftProduct,
     identifiers,
   }: {
     handle: string | undefined;
+    isDraftProduct?: boolean;
     identifiers: MetafieldIdentifier[];
   },
 ): Promise<Record<string, Metafield | null> | null> => {
-  const {storefront} = context;
+  const {admin, storefront} = context;
 
   if (!handle || !identifiers?.length) return null;
 
-  const PRODUCT_METAFIELDS_QUERY = `#graphql
+  let metafields;
+
+  if (isDraftProduct) {
+    const ADMIN_PRODUCT_METAFIELDS_QUERY = `
+      query AdminProductMetafields(
+        $handle: String!
+      ) {
+        productByIdentifier(identifier: {handle: $handle}) {
+          ${ADMIN_PRODUCTS_METAFIELDS_QUERY_STRING}
+        }
+      }
+    `;
+
+    const {productByIdentifier: adminProduct} = await admin.query(
+      ADMIN_PRODUCT_METAFIELDS_QUERY,
+      {
+        variables: {
+          handle,
+        },
+        cache: admin.CacheShort(),
+      },
+    );
+
+    if (!adminProduct) return {};
+
+    metafields = parseMetafieldsFromProduct({
+      product: {...adminProduct, metafields: adminProduct.metafields?.nodes},
+      identifiers,
+    });
+  } else {
+    const PRODUCT_METAFIELDS_QUERY = `#graphql
       query ProductMetafields(
         $handle: String!
         $country: CountryCode
@@ -348,24 +411,25 @@ export const getMetafields = async (
       }
     `;
 
-  const {product: storefrontProduct} = await storefront.query(
-    PRODUCT_METAFIELDS_QUERY,
-    {
-      variables: {
-        handle,
-        country: storefront.i18n.country,
-        language: storefront.i18n.language,
+    const {product: storefrontProduct} = await storefront.query(
+      PRODUCT_METAFIELDS_QUERY,
+      {
+        variables: {
+          handle,
+          country: storefront.i18n.country,
+          language: storefront.i18n.language,
+        },
+        cache: storefront.CacheShort(),
       },
-      cache: storefront.CacheShort(),
-    },
-  );
+    );
 
-  if (!storefrontProduct) return {};
+    if (!storefrontProduct) return {};
 
-  const metafields = parseMetafieldsFromProduct({
-    product: storefrontProduct,
-    identifiers,
-  });
+    metafields = parseMetafieldsFromProduct({
+      product: storefrontProduct,
+      identifiers,
+    });
+  }
 
   return metafields;
 };

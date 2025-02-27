@@ -11,7 +11,7 @@ import type {SearchItemProps} from './Search.types';
 
 export const SearchItem = memo(
   ({closeSearch, index, item: product, searchTerm}: SearchItemProps) => {
-    const firstVariant = product.variants.nodes[0];
+    const firstVariant = product.variants?.nodes[0];
     const {price, compareAtPrice} = useVariantPrices(firstVariant);
     const {publish, shop} = useAnalytics();
 

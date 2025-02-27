@@ -1,14 +1,16 @@
 import {data as dataWithOptions} from '@shopify/remix-oxygen';
 import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 
-import {getMetafields} from '~/lib/utils';
+import {getMetafields, normalizeAdminProduct} from '~/lib/utils';
 import {PRODUCT_ITEM_QUERY} from '~/data/graphql/storefront/product';
+import {ADMIN_PRODUCT_ITEM_QUERY} from '~/data/graphql/admin/product';
 
 export async function loader({request, context}: LoaderFunctionArgs) {
-  const {storefront} = context;
+  const {admin, pack, storefront} = context;
   const url = new URL(request.url);
   const searchParams = new URLSearchParams(url.search);
   const handle = String(searchParams.get('handle') || '');
+  const isPreviewModeEnabled = pack.isPreviewModeEnabled();
 
   if (!handle)
     return dataWithOptions(
@@ -31,22 +33,56 @@ export async function loader({request, context}: LoaderFunctionArgs) {
         {status: 400},
       );
     }
+    let isDraftProduct = false;
+    if (isPreviewModeEnabled) {
+      const {productByIdentifier: adminProduct} = await admin.query(
+        `
+          query AdminProduct(
+            $handle: String!
+          ) {
+            productByIdentifier(identifier: {handle: $handle}) {
+              status
+            }
+          }
+        `,
+        {variables: {handle}, cache: admin.CacheShort()},
+      );
+      isDraftProduct = !!adminProduct && adminProduct.status === 'DRAFT';
+    }
     const metafields = await getMetafields(context, {
       handle,
+      isDraftProduct,
       identifiers: metafieldIdentifiers,
     });
     return {metafields};
   }
 
   /* Product query by handle */
-  const {product} = await storefront.query(PRODUCT_ITEM_QUERY, {
-    variables: {
-      handle,
-      country: storefront.i18n.country,
-      language: storefront.i18n.language,
+  let product = null;
+
+  const {product: storefrontProduct} = await storefront.query(
+    PRODUCT_ITEM_QUERY,
+    {
+      variables: {
+        handle,
+        country: storefront.i18n.country,
+        language: storefront.i18n.language,
+      },
+      cache: storefront.CacheShort(),
     },
-    cache: storefront.CacheShort(),
-  });
+  );
+  product = storefrontProduct;
+
+  if (isPreviewModeEnabled) {
+    if (!product) {
+      const {productByIdentifier: adminProduct} = await admin.query(
+        ADMIN_PRODUCT_ITEM_QUERY,
+        {variables: {handle}, cache: admin.CacheShort()},
+      );
+      if (!adminProduct) return;
+      product = normalizeAdminProduct(adminProduct);
+    }
+  }
 
   return {product};
 }

@@ -9,6 +9,10 @@ export type SelectedProduct = Product | null | undefined;
 
 export type SelectedVariant = ProductVariant | null | undefined;
 
+export type ProductWithStatus = Product & {
+  status: 'ACTIVE' | 'ARCHIVED' | 'DRAFT';
+};
+
 export type ParsedMetafields = Record<string, Metafield | null>;
 
 export type MetafieldIdentifier = {namespace?: string; key: string};

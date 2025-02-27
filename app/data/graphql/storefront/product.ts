@@ -54,11 +54,9 @@ export const VARIANT_FRAGMENT = `#graphql
       amount
     }
     sellingPlanAllocations(first: 10) {
-      edges {
-        node {
-          ... on SellingPlanAllocation {
-            ...SellingPlanAllocationFragment
-          }
+      nodes {
+        ... on SellingPlanAllocation {
+          ...SellingPlanAllocationFragment
         }
       }
     }
@@ -178,11 +176,9 @@ export const PRODUCT_FRAGMENT = `#graphql
         }
     }
     sellingPlanGroups(first: 10) {
-      edges {
-        node {
-          ... on SellingPlanGroup {
-            ...SellingPlanGroupFragment
-          }
+      nodes {
+        ... on SellingPlanGroup {
+          ...SellingPlanGroupFragment
         }
       }
     }
@@ -263,11 +259,9 @@ export const PRODUCT_ITEM_FRAGMENT = `#graphql
       ...OptionFragment
     }
     sellingPlanGroups(first: 10) {
-      edges {
-        node {
-          ... on SellingPlanGroup {
-            ...SellingPlanGroupFragment
-          }
+      nodes {
+        ... on SellingPlanGroup {
+          ...SellingPlanGroupFragment
         }
       }
     }

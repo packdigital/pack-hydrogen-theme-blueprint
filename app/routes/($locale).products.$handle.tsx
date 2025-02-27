@@ -5,9 +5,15 @@ import {RenderSections} from '@pack/react';
 import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 import type {ShopifyAnalyticsProduct} from '@shopify/hydrogen';
 
-import {getProductGroupings, getShop, getSiteSettings} from '~/lib/utils';
+import {
+  getProductGroupings,
+  getShop,
+  getSiteSettings,
+  normalizeAdminProduct,
+} from '~/lib/utils';
 import {getGrouping} from '~/lib/products.server';
 import {PRODUCT_PAGE_QUERY} from '~/data/graphql/pack/product-page';
+import {ADMIN_PRODUCT_QUERY} from '~/data/graphql/admin/product';
 import {PRODUCT_QUERY} from '~/data/graphql/storefront/product';
 import {Product} from '~/components/Product';
 import {routeHeaders} from '~/data/cache';
@@ -24,9 +30,10 @@ export const headers = routeHeaders;
 
 export async function loader({params, context, request}: LoaderFunctionArgs) {
   const {handle} = params;
-  const {storefront} = context;
+  const {admin, pack, storefront} = context;
 
   const storeDomain = storefront.getShopifyDomain();
+  const isPreviewModeEnabled = pack.isPreviewModeEnabled();
   const searchParams = new URL(request.url).searchParams;
   const selectedOptions: Record<string, any>[] = [];
 
@@ -62,9 +69,22 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     getSiteSettings(context),
   ]);
 
-  const queriedProduct = storefrontProduct;
+  let queriedProduct = storefrontProduct;
+  let productStatus = 'ACTIVE';
 
   const productPage = pageData?.data?.productPage;
+
+  if (isPreviewModeEnabled) {
+    if (!queriedProduct) {
+      const {productByIdentifier: adminProduct} = await admin.query(
+        ADMIN_PRODUCT_QUERY,
+        {variables: {handle}, cache: admin.CacheShort()},
+      );
+      if (!adminProduct) return;
+      queriedProduct = normalizeAdminProduct(adminProduct);
+      productStatus = adminProduct.status;
+    }
+  }
 
   if (!queriedProduct) throw new Response(null, {status: 404});
 
@@ -122,6 +142,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     analytics,
     product,
     productPage,
+    productStatus,
     selectedVariant,
     seo,
     storeDomain,

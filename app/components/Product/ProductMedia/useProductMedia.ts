@@ -69,7 +69,7 @@ export function useProductMedia({
   }, [hasMultiColorsNotFromGroup, mediaMapByAltText, selectedVariant?.id]);
 
   const media = useMemo(() => {
-    return mediaFromAltText || product.media.nodes;
+    return mediaFromAltText || product.media.nodes || [];
   }, [product.id, mediaFromAltText]);
 
   const initialIndex = useMemo(() => {
