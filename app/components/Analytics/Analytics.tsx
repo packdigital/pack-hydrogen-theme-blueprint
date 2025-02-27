@@ -10,6 +10,7 @@ import {
 } from '~/hooks';
 
 import {AnalyticsEvent} from './constants';
+import {BlotoutEvents} from './BlotoutEvents';
 import {ElevarEvents} from './ElevarEvents';
 import {FueledEvents} from './FueledEvents';
 import {GA4Events} from './GA4Events';
@@ -30,6 +31,7 @@ export const Analytics = memo(() => {
   usePathStorage();
 
   const enabledFueled = false;
+  const enabledBlotout = !!ENV.PUBLIC_BLOTOUT_EDGE_URL;
   const enabledElevar = !!ENV.PUBLIC_ELEVAR_SIGNING_KEY;
   const enabledGA4 = !!ENV.PUBLIC_GA4_TAG_ID;
   const enabledKlaviyo = !!ENV.PUBLIC_KLAVIYO_API_KEY;
@@ -71,6 +73,16 @@ export const Analytics = memo(() => {
       {enabledKlaviyo && (
         <KlaviyoEvents
           klaviyoApiKey={ENV.PUBLIC_KLAVIYO_API_KEY}
+          register={register}
+          subscribe={subscribe}
+          customer={customer}
+          debug={DEBUG}
+        />
+      )}
+
+      {enabledBlotout && (
+        <BlotoutEvents
+          blotoutEdgeUrl={ENV.PUBLIC_BLOTOUT_EDGE_URL}
           register={register}
           subscribe={subscribe}
           customer={customer}

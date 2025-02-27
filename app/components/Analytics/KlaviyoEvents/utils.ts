@@ -1,3 +1,8 @@
+import type {
+  CartLine,
+  ProductVariant,
+} from '@shopify/hydrogen/storefront-api-types';
+
 import {ANALYTICS_NAME} from './events';
 
 const STOREFRONT_NAME =
@@ -5,7 +10,7 @@ const STOREFRONT_NAME =
 
 export const mapProductPageVariant =
   (list = '') =>
-  (variant: Record<string, any>) => {
+  (variant: ProductVariant) => {
     try {
       if (!variant) return null;
 
@@ -44,7 +49,7 @@ export const mapProductPageVariant =
 
 export const mapCartLine =
   (list = '') =>
-  (line: Record<string, any> & {index?: number}, index = 0) => {
+  (line: CartLine & {index?: number}, index = 0) => {
     try {
       const {quantity, merchandise} = {...line};
       if (!merchandise) return null;
