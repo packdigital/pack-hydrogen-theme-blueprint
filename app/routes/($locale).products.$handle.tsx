@@ -1,9 +1,9 @@
 import {useLoaderData} from '@remix-run/react';
 import {ProductProvider} from '@shopify/hydrogen-react';
-import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 import {Analytics, AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
-import type {ShopifyAnalyticsProduct} from '@shopify/hydrogen';
 import {RenderSections} from '@pack/react';
+import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
+import type {ShopifyAnalyticsProduct} from '@shopify/hydrogen';
 
 import {
   getMetafields,
@@ -11,13 +11,14 @@ import {
   getShop,
   getSiteSettings,
 } from '~/lib/utils';
+import {getGrouping} from '~/lib/products.server';
 import {PRODUCT_PAGE_QUERY} from '~/data/graphql/pack/product-page';
-import {PRODUCT_QUERY, PRODUCTS_QUERY} from '~/data/graphql/storefront/product';
+import {PRODUCT_QUERY} from '~/data/graphql/storefront/product';
 import {Product} from '~/components/Product';
 import {routeHeaders} from '~/data/cache';
 import {seoPayload} from '~/lib/seo.server';
 import {useGlobal, useProductWithGrouping} from '~/hooks';
-import type {Group, ProductWithInitialGrouping} from '~/lib/types';
+import type {ProductWithInitialGrouping} from '~/lib/types';
 
 /*
  * Add metafield queries to the METAFIELD_QUERIES array to fetch desired metafields for product pages
@@ -81,43 +82,17 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     queriedProduct = {...queriedProduct, metafields};
   }
 
-  const grouping: Group | undefined = [...(productGroupings || [])].find(
-    (grouping: Group) => {
-      const groupingProducts = [
-        ...grouping.products,
-        ...grouping.subgroups.flatMap(({products}) => products),
-      ];
-      return groupingProducts.some(
-        (groupProduct) => groupProduct.handle === handle,
-      );
-    },
-  );
+  let grouping = undefined;
   let groupingProducts = undefined;
 
-  if (grouping) {
-    const productsToQuery = [
-      ...grouping.products,
-      ...grouping.subgroups.flatMap(({products}) => products),
-    ];
-
-    const idsQuery = productsToQuery
-      .map(({id}) => `id:${id?.split('/').pop()}`)
-      .join(' OR ');
-
-    const {products: groupingProductsEdge} = await storefront.query(
-      PRODUCTS_QUERY,
-      {
-        variables: {
-          query: idsQuery,
-          first: productsToQuery.length,
-          country: storefront.i18n.country,
-          language: storefront.i18n.language,
-        },
-        cache: storefront.CacheShort(),
-      },
-    );
-
-    groupingProducts = groupingProductsEdge.nodes;
+  if (productGroupings) {
+    const groupingData = await getGrouping({
+      context,
+      handle,
+      productGroupings,
+    });
+    grouping = groupingData.grouping;
+    groupingProducts = groupingData.groupingProducts;
   }
 
   const product = {
@@ -126,7 +101,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
       ? {
           initialGrouping: {
             ...grouping,
-            allProducts: [queriedProduct, ...groupingProducts],
+            allProducts: [queriedProduct, ...(groupingProducts || [])],
           },
         }
       : null),

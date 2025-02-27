@@ -2,6 +2,9 @@ import invariant from 'tiny-invariant';
 import type {AppLoadContext} from '@shopify/remix-oxygen';
 import type {Product} from '@shopify/hydrogen/storefront-api-types';
 
+import {PRODUCTS_QUERY} from '~/data/graphql/storefront/product';
+import type {Group} from '~/lib/types';
+
 const FIRST = 250;
 
 interface QueryProductsProps {
@@ -66,4 +69,50 @@ export const queryProducts = async ({
   invariant(products, 'No data returned from top search query');
 
   return {products, hasMoreProducts};
+};
+
+export const getGrouping = async ({
+  context,
+  handle,
+  productGroupings,
+}: {
+  context: AppLoadContext;
+  handle?: string;
+  productGroupings: Group[];
+}): Promise<{grouping?: Group; groupingProducts?: Product[]}> => {
+  let groupingProducts = undefined;
+
+  const grouping: Group | undefined = [...(productGroupings || [])].find(
+    (grouping: Group) => {
+      const groupingProducts = [
+        ...grouping.products,
+        ...grouping.subgroups.flatMap(({products}) => products),
+      ];
+      return groupingProducts.some(
+        (groupProduct) => groupProduct.handle === handle,
+      );
+    },
+  );
+
+  if (!grouping) return {grouping, groupingProducts};
+
+  const productsToQuery = [
+    ...grouping.products,
+    ...grouping.subgroups.flatMap(({products}) => products),
+  ];
+
+  const idsQuery = productsToQuery
+    .map(({id}) => `id:${id?.split('/').pop()}`)
+    .join(' OR ');
+
+  const {products: queriedGroupingProducts} = await queryProducts({
+    context,
+    query: PRODUCTS_QUERY,
+    variables: {query: idsQuery},
+    count: productsToQuery.length,
+  });
+
+  groupingProducts = queriedGroupingProducts;
+
+  return {grouping, groupingProducts};
 };
