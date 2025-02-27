@@ -12,7 +12,7 @@ import type {
 } from '@shopify/hydrogen/storefront-api-types';
 
 import {Collection} from '~/components/Collection';
-import {PRODUCTS_SEARCH_QUERY} from '~/data/graphql/shopify/search';
+import {PRODUCTS_SEARCH_QUERY} from '~/data/graphql/storefront/search';
 import {getFilters, getShop, getSiteSettings} from '~/lib/utils';
 import {seoPayload} from '~/lib/seo.server';
 import {useGlobal} from '~/hooks';

@@ -6,7 +6,11 @@ import {COLOR_OPTION_NAME} from '~/lib/constants';
 import {Link} from '~/components/Link';
 import {ProductStars} from '~/components/ProductStars';
 import {AnalyticsEvent} from '~/components/Analytics/constants';
-import {useProductByHandle, useProductGroupingByHandle} from '~/hooks';
+import {
+  useParsedProductMetafields,
+  useProductByHandle,
+  useProductGroupingByHandle,
+} from '~/hooks';
 import type {SelectedProduct, SelectedVariant} from '~/lib/types';
 
 import {ColorVariantSelector} from './ColorVariantSelector';
@@ -56,6 +60,9 @@ export const ProductItem = memo(
     const selectedVariant = useMemo((): SelectedVariant => {
       return variantFromColorSelector || selectedProduct?.variants?.nodes?.[0];
     }, [variantFromColorSelector, selectedProduct]);
+
+    /* Product metafields parsed into an object with metafields by `${namespace}.${key}` */
+    const metafields = useParsedProductMetafields(selectedProduct);
 
     const handle = passedHandle || initialProduct?.handle;
 

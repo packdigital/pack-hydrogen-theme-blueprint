@@ -1,37 +1,39 @@
 import {useLoaderData} from '@remix-run/react';
 import {ProductProvider} from '@shopify/hydrogen-react';
-import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 import {Analytics, AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
-import type {ShopifyAnalyticsProduct} from '@shopify/hydrogen';
 import {RenderSections} from '@pack/react';
+import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
+import type {ShopifyAnalyticsProduct} from '@shopify/hydrogen';
 
 import {
-  getMetafields,
   getProductGroupings,
   getShop,
   getSiteSettings,
+  normalizeAdminProduct,
 } from '~/lib/utils';
+import {getGrouping} from '~/lib/products.server';
 import {PRODUCT_PAGE_QUERY} from '~/data/graphql/pack/product-page';
-import {PRODUCT_QUERY, PRODUCTS_QUERY} from '~/data/graphql/shopify/product';
+import {ADMIN_PRODUCT_QUERY} from '~/data/graphql/admin/product';
+import {PRODUCT_QUERY} from '~/data/graphql/storefront/product';
 import {Product} from '~/components/Product';
 import {routeHeaders} from '~/data/cache';
 import {seoPayload} from '~/lib/seo.server';
 import {useGlobal, useProductWithGrouping} from '~/hooks';
-import type {Group, ProductWithInitialGrouping} from '~/lib/types';
-
-/*
- * Add metafield queries to the METAFIELD_QUERIES array to fetch desired metafields for product pages
- * e.g. [{namespace: 'global', key: 'description'}, {namespace: 'product', key: 'seasonal_colors'}]
- */
-const METAFIELD_QUERIES: {namespace: string; key: string}[] = [];
+import type {ProductWithInitialGrouping} from '~/lib/types';
 
 export const headers = routeHeaders;
 
+/*
+ * To add metafields to product object, update the PRODUCT_METAFIELDS_IDENTIFIERS
+ * constant under lib/constants/product.ts
+ */
+
 export async function loader({params, context, request}: LoaderFunctionArgs) {
   const {handle} = params;
-  const {storefront} = context;
+  const {admin, pack, storefront} = context;
 
   const storeDomain = storefront.getShopifyDomain();
+  const isPreviewModeEnabled = pack.isPreviewModeEnabled();
   const searchParams = new URL(request.url).searchParams;
   const selectedOptions: Record<string, any>[] = [];
 
@@ -68,56 +70,35 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
   ]);
 
   let queriedProduct = storefrontProduct;
+  let productStatus = 'ACTIVE';
 
   const productPage = pageData?.data?.productPage;
 
-  if (!queriedProduct) throw new Response(null, {status: 404});
-
-  if (METAFIELD_QUERIES?.length) {
-    const metafields = await getMetafields(context, {
-      handle,
-      metafieldQueries: METAFIELD_QUERIES,
-    });
-    queriedProduct = {...queriedProduct, metafields};
+  if (isPreviewModeEnabled) {
+    if (!queriedProduct) {
+      const {productByIdentifier: adminProduct} = await admin.query(
+        ADMIN_PRODUCT_QUERY,
+        {variables: {handle}, cache: admin.CacheShort()},
+      );
+      if (!adminProduct) return;
+      queriedProduct = normalizeAdminProduct(adminProduct);
+      productStatus = adminProduct.status;
+    }
   }
 
-  const grouping: Group | undefined = [...(productGroupings || [])].find(
-    (grouping: Group) => {
-      const groupingProducts = [
-        ...grouping.products,
-        ...grouping.subgroups.flatMap(({products}) => products),
-      ];
-      return groupingProducts.some(
-        (groupProduct) => groupProduct.handle === handle,
-      );
-    },
-  );
+  if (!queriedProduct) throw new Response(null, {status: 404});
+
+  let grouping = undefined;
   let groupingProducts = undefined;
 
-  if (grouping) {
-    const productsToQuery = [
-      ...grouping.products,
-      ...grouping.subgroups.flatMap(({products}) => products),
-    ];
-
-    const idsQuery = productsToQuery
-      .map(({id}) => `id:${id?.split('/').pop()}`)
-      .join(' OR ');
-
-    const {products: groupingProductsEdge} = await storefront.query(
-      PRODUCTS_QUERY,
-      {
-        variables: {
-          query: idsQuery,
-          first: productsToQuery.length,
-          country: storefront.i18n.country,
-          language: storefront.i18n.language,
-        },
-        cache: storefront.CacheShort(),
-      },
-    );
-
-    groupingProducts = groupingProductsEdge.nodes;
+  if (productGroupings) {
+    const groupingData = await getGrouping({
+      context,
+      handle,
+      productGroupings,
+    });
+    grouping = groupingData.grouping;
+    groupingProducts = groupingData.groupingProducts;
   }
 
   const product = {
@@ -126,7 +107,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
       ? {
           initialGrouping: {
             ...grouping,
-            allProducts: [queriedProduct, ...groupingProducts],
+            allProducts: [queriedProduct, ...(groupingProducts || [])],
           },
         }
       : null),
@@ -161,6 +142,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     analytics,
     product,
     productPage,
+    productStatus,
     selectedVariant,
     seo,
     storeDomain,

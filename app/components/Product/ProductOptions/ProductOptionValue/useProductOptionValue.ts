@@ -40,7 +40,7 @@ export function useProductOptionValue({
 
     // if product has no grouping, find match within product variants
     if (!product.grouping) {
-      return product.variants.nodes.find(({selectedOptions}) => {
+      return product.variants?.nodes.find(({selectedOptions}) => {
         const selectedOptionsMap = selectedOptions.reduce(
           (acc, {name: optionName, value}) => {
             return {...acc, [optionName]: value};
@@ -77,7 +77,7 @@ export function useProductOptionValue({
     if (!selectedProductFromOptions) return null;
 
     // find variant that matches all selected options from selected product
-    const selectedVariant = selectedProductFromOptions?.variants.nodes.find(
+    const selectedVariant = selectedProductFromOptions?.variants?.nodes.find(
       ({selectedOptions}) => {
         const selectedOptionsMap = selectedOptions.reduce(
           (acc, {name: optionName, value}) => {

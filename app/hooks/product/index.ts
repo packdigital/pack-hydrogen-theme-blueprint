@@ -1,5 +1,6 @@
 export {useAddToCart} from './useAddToCart';
 export {useColorSwatches} from './useColorSwatches';
+export {useParsedProductMetafields} from './useParsedProductMetafields';
 export {useProductByHandle} from './useProductByHandle';
 export {useProductGroupingByHandle} from './useProductGroupingByHandle';
 export {useProductMetafields} from './useProductMetafields';

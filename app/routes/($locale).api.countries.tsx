@@ -2,7 +2,7 @@ import {data as dataWithOptions} from '@shopify/remix-oxygen';
 import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 
 import {CACHE_LONG} from '~/data/cache';
-import {LOCALIZATION_QUERY} from '~/data/graphql/shopify/shop';
+import {LOCALIZATION_QUERY} from '~/data/graphql/storefront/shop';
 
 export async function loader({context}: LoaderFunctionArgs) {
   const {storefront} = context;

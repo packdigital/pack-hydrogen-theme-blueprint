@@ -3,7 +3,7 @@ import {XMLBuilder} from 'fast-xml-parser';
 import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import type {Product} from '@shopify/hydrogen/storefront-api-types';
 
-import {PRODUCT_FEED_QUERY} from '~/data/graphql/shopify/product';
+import {PRODUCT_FEED_QUERY} from '~/data/graphql/storefront/product';
 
 const SAFE_XML: Record<string, string> = {
   '&': '&amp;',
@@ -65,7 +65,7 @@ export async function loader({context, request}: LoaderFunctionArgs) {
         link: baseUrl,
         item: products.reduce((acc: Record<string, string>[], product) => {
           try {
-            if (!product.variants.nodes.length) return acc;
+            if (!product.variants?.nodes.length) return acc;
             if (product.handle === 'gift-card' || product.isGiftCard)
               return acc;
             const items = product.variants.nodes.map((variant) => {

@@ -188,7 +188,7 @@ function productJsonLd({
   url: Request['url'];
 }): SeoConfig<SeoProduct | BreadcrumbList>['jsonLd'] {
   const origin = new URL(url).origin;
-  const variants = product.variants.nodes;
+  const variants = product.variants?.nodes;
   const description = truncate(
     product?.seo?.description || product?.description,
   );

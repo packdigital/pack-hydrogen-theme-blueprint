@@ -163,7 +163,7 @@ export default {
                   name: 'product',
                   component: 'productSearch',
                   description:
-                    'If the selected product does display in the frontend, it may be not be active or on the Hydrogen sales channel.',
+                    'If the selected product does display in the frontend, check it is on the Hydrogen sales channel.',
                 },
               ],
             },

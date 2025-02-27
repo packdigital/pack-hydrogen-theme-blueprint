@@ -39,7 +39,7 @@ export function BYOBProductItem({
   const isSoldOut = useMemo(() => {
     return (
       !!product &&
-      product.variants.nodes.every((variant) => !variant.availableForSale)
+      product.variants?.nodes.every((variant) => !variant.availableForSale)
     );
   }, [product]);
 

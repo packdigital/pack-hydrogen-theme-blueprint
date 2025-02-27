@@ -2,7 +2,7 @@ import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import {getPaginationVariables} from '@shopify/hydrogen';
 import type {ProductCollectionSortKeys} from '@shopify/hydrogen/storefront-api-types';
 
-import {COLLECTION_QUERY} from '~/data/graphql/shopify/collection';
+import {COLLECTION_QUERY} from '~/data/graphql/storefront/collection';
 import {getSiteSettings} from '~/lib/utils';
 import {routeHeaders} from '~/data/cache';
 

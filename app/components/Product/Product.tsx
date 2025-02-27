@@ -2,7 +2,7 @@ import {useEffect, useMemo} from 'react';
 import {useProduct} from '@shopify/hydrogen-react';
 
 import {COLOR_OPTION_NAME} from '~/lib/constants';
-import {useLocale, useSettings} from '~/hooks';
+import {useLocale, useParsedProductMetafields, useSettings} from '~/hooks';
 import type {SelectedVariant} from '~/lib/types';
 
 import {ProductDetails} from './ProductDetails';
@@ -17,6 +17,8 @@ export function Product({product, initialSelectedVariant}: ProductProps) {
   };
   const {header, product: productSettings} = useSettings();
   const {pathPrefix} = useLocale();
+  /* Product metafields parsed into an object with metafields by `${namespace}.${key}` */
+  const metafields = useParsedProductMetafields(product);
 
   const selectedVariant = useMemo(() => {
     /* workaround because selected variant from useProduct hook is momentarily
@@ -36,7 +38,7 @@ export function Product({product, initialSelectedVariant}: ProductProps) {
 
   // set variant url param on selected variant change unless has one variant
   useEffect(() => {
-    if (product.variants.nodes.length === 1 || !selectedVariant) return;
+    if (product.variants?.nodes.length === 1 || !selectedVariant) return;
 
     const {origin, search} = window.location;
 
