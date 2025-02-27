@@ -5,12 +5,7 @@ import {RenderSections} from '@pack/react';
 import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 import type {ShopifyAnalyticsProduct} from '@shopify/hydrogen';
 
-import {
-  getMetafields,
-  getProductGroupings,
-  getShop,
-  getSiteSettings,
-} from '~/lib/utils';
+import {getProductGroupings, getShop, getSiteSettings} from '~/lib/utils';
 import {getGrouping} from '~/lib/products.server';
 import {PRODUCT_PAGE_QUERY} from '~/data/graphql/pack/product-page';
 import {PRODUCT_QUERY} from '~/data/graphql/storefront/product';
@@ -20,13 +15,12 @@ import {seoPayload} from '~/lib/seo.server';
 import {useGlobal, useProductWithGrouping} from '~/hooks';
 import type {ProductWithInitialGrouping} from '~/lib/types';
 
-/*
- * Add metafield queries to the METAFIELD_QUERIES array to fetch desired metafields for product pages
- * e.g. [{namespace: 'global', key: 'description'}, {namespace: 'product', key: 'seasonal_colors'}]
- */
-const METAFIELD_QUERIES: {namespace: string; key: string}[] = [];
-
 export const headers = routeHeaders;
+
+/*
+ * To add metafields to product object, update the PRODUCT_METAFIELDS_IDENTIFIERS
+ * constant under lib/constants/product.ts
+ */
 
 export async function loader({params, context, request}: LoaderFunctionArgs) {
   const {handle} = params;
@@ -68,19 +62,11 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     getSiteSettings(context),
   ]);
 
-  let queriedProduct = storefrontProduct;
+  const queriedProduct = storefrontProduct;
 
   const productPage = pageData?.data?.productPage;
 
   if (!queriedProduct) throw new Response(null, {status: 404});
-
-  if (METAFIELD_QUERIES?.length) {
-    const metafields = await getMetafields(context, {
-      handle,
-      metafieldQueries: METAFIELD_QUERIES,
-    });
-    queriedProduct = {...queriedProduct, metafields};
-  }
 
   let grouping = undefined;
   let groupingProducts = undefined;

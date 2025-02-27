@@ -1,3 +1,6 @@
+import {PRODUCT_METAFIELDS_IDENTIFIERS} from '~/lib/constants';
+import {getMetafieldsQueryString} from '~/lib/utils';
+
 import {
   SELLING_PLAN_ALLOCATION_FRAGMENT,
   SELLING_PLAN_GROUP_FRAGMENT,
@@ -28,7 +31,7 @@ export const OPTION_FRAGMENT = `#graphql
         }
       }
     }
-  }
+  } 
 `;
 
 export const VARIANT_FRAGMENT = `#graphql
@@ -165,6 +168,7 @@ export const PRODUCT_FRAGMENT = `#graphql
         }
       }
     }
+    ${getMetafieldsQueryString(PRODUCT_METAFIELDS_IDENTIFIERS)}
     options {
       ...OptionFragment
     }
@@ -254,6 +258,7 @@ export const PRODUCT_ITEM_FRAGMENT = `#graphql
         }
       }
     }
+    ${getMetafieldsQueryString(PRODUCT_METAFIELDS_IDENTIFIERS)}
     options {
       ...OptionFragment
     }
@@ -308,29 +313,6 @@ export const PRODUCT_ITEM_QUERY = `#graphql
     }
   }
   ${PRODUCT_ITEM_FRAGMENT}
-` as const;
-
-export const PRODUCT_METAFIELDS_QUERY = `#graphql
-  query ProductMetafields(
-    $handle: String!
-    $key: String!
-    $namespace: String
-    $country: CountryCode
-    $language: LanguageCode
-  ) @inContext(country: $country, language: $language) {
-    product(handle: $handle) {
-      metafields(identifiers: {key: $key, namespace: $namespace}) {
-        createdAt
-        description
-        id
-        key
-        namespace
-        type
-        updatedAt
-        value
-      }
-    }
-  }
 ` as const;
 
 // Docs: https://shopify.dev/docs/api/storefront/latest/queries/products

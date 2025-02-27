@@ -16,13 +16,15 @@ export async function loader({request, context}: LoaderFunctionArgs) {
       {status: 400},
     );
 
-  /* Product metafields query by metafieldQueries */
-  const metafieldQueries = String(searchParams.get('metafieldQueries') || '');
+  /* Product metafields identifiers by metafieldIdentifiers */
+  const metafieldIdentifiersString = String(
+    searchParams.get('metafieldIdentifiers') || '',
+  );
 
-  if (metafieldQueries) {
-    let parsedMetafields: {key: string; namespace: string}[] = [];
+  if (metafieldIdentifiersString) {
+    let metafieldIdentifiers: {key: string; namespace: string}[] = [];
     try {
-      parsedMetafields = JSON.parse(metafieldQueries);
+      metafieldIdentifiers = JSON.parse(metafieldIdentifiersString);
     } catch (error) {
       return dataWithOptions(
         {metafields: null, errors: ['Invalid `metafieldQueries` parameter']},
@@ -31,7 +33,7 @@ export async function loader({request, context}: LoaderFunctionArgs) {
     }
     const metafields = await getMetafields(context, {
       handle,
-      metafieldQueries: parsedMetafields,
+      identifiers: metafieldIdentifiers,
     });
     return {metafields};
   }

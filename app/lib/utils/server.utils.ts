@@ -13,7 +13,14 @@ import {
 import {LAYOUT_QUERY} from '~/data/graphql/storefront/shop';
 import {PRICE_FILTER_ID} from '~/lib/constants';
 import type {ActiveFilterValue} from '~/components/Collection/CollectionFilters/CollectionFilters.types';
-import type {Group, RootSiteSettings, Seo} from '~/lib/types';
+import type {
+  Group,
+  MetafieldIdentifier,
+  RootSiteSettings,
+  Seo,
+} from '~/lib/types';
+
+import {parseMetafieldsFromProduct} from './product.utils';
 
 export const getShop = async (context: AppLoadContext) => {
   const layout = await context.storefront.query(LAYOUT_QUERY, {
@@ -284,65 +291,81 @@ export const getFilters = async ({
   return {activeFilterValues, filters};
 };
 
+/* Metafields graphql query */
+export const getMetafieldsQueryString = (
+  identifiers: MetafieldIdentifier[] = [],
+) => {
+  const identifiersString = JSON.stringify(identifiers)
+    .replaceAll('"namespace"', 'namespace')
+    .replaceAll('"key"', 'key');
+  return `
+    metafields(identifiers: ${identifiersString}) {
+      createdAt
+      description
+      id
+      key
+      namespace
+      type
+      updatedAt
+      value
+      references(first: 10) {
+        nodes {
+          ... on Metaobject {
+            fields {
+              key
+              type
+              value
+            }
+          }
+        }
+      }
+    }`;
+};
+
 export const getMetafields = async (
   context: AppLoadContext,
   {
     handle,
-    metafieldQueries,
+    identifiers,
   }: {
     handle: string | undefined;
-    metafieldQueries: {key: string; namespace: string}[];
+    identifiers: MetafieldIdentifier[];
   },
 ): Promise<Record<string, Metafield | null> | null> => {
   const {storefront} = context;
 
-  if (!handle || !metafieldQueries?.length) return null;
+  if (!handle || !identifiers?.length) return null;
 
   const PRODUCT_METAFIELDS_QUERY = `#graphql
-    query product(
-      $handle: String!
-      $country: CountryCode
-      $language: LanguageCode
-    ) @inContext(country: $country, language: $language) {
-      product(handle: $handle) {
-        ${metafieldQueries.map(
-          ({key, namespace}, index) => `
-            metafields_${index}: metafields(
-              identifiers: {key: "${key}", namespace: "${namespace}"}
-            ) {
-                createdAt
-                description
-                id
-                key
-                namespace
-                type
-                updatedAt
-                value
-            }
-          `,
-        )}
+      query ProductMetafields(
+        $handle: String!
+        $country: CountryCode
+        $language: LanguageCode
+      ) @inContext(country: $country, language: $language) {
+        product(handle: $handle) {
+          ${getMetafieldsQueryString(identifiers)}
+        }
       }
-    }
-  `;
+    `;
 
-  const {product} = await storefront.query(PRODUCT_METAFIELDS_QUERY, {
-    variables: {
-      handle,
-      country: storefront.i18n.country,
-      language: storefront.i18n.language,
+  const {product: storefrontProduct} = await storefront.query(
+    PRODUCT_METAFIELDS_QUERY,
+    {
+      variables: {
+        handle,
+        country: storefront.i18n.country,
+        language: storefront.i18n.language,
+      },
+      cache: storefront.CacheShort(),
     },
-    cache: storefront.CacheShort(),
+  );
+
+  if (!storefrontProduct) return {};
+
+  const metafields = parseMetafieldsFromProduct({
+    product: storefrontProduct,
+    identifiers,
   });
 
-  const metafields = Object.entries({...product}).reduce(
-    (acc: Record<string, Metafield | null>, entry) => {
-      const [key, value] = entry as [string, Metafield[]];
-      const originalIndex = key.split('_').pop();
-      const query = metafieldQueries[Number(originalIndex)];
-      acc[`${query.namespace}.${query.key}`] = value?.[0] || null;
-      return acc;
-    },
-    {},
-  );
   return metafields;
 };

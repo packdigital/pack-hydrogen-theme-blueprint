@@ -2,11 +2,16 @@ import type {
   Product,
   ProductOptionValue,
   ProductVariant,
+  Metafield,
 } from '@shopify/hydrogen/storefront-api-types';
 
 export type SelectedProduct = Product | null | undefined;
 
 export type SelectedVariant = ProductVariant | null | undefined;
+
+export type ParsedMetafields = Record<string, Metafield | null>;
+
+export type MetafieldIdentifier = {namespace?: string; key: string};
 
 export interface OptionWithGroups {
   name: string;

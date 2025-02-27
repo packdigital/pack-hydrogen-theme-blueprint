@@ -1,13 +1,13 @@
 import {useEffect} from 'react';
 import {useFetcher} from '@remix-run/react';
-import type {Metafield} from '@shopify/hydrogen/storefront-api-types';
 
 import {useLocale} from '~/hooks';
+import type {MetafieldIdentifier, ParsedMetafields} from '~/lib/types';
 
 /**
  * Fetch specific metafields for a product
  * @param handle - The handle of the product
- * @param metafieldQueries - An array of objects with `key` and `namespace` properties
+ * @param metafieldIdentifiers - An array of objects with `key` and `namespace` properties
  * @param fetchOnMount - Determines when to fetch
  * @returns Oject with `${namespace}.${key}` as key and the value as the metafield
  * @example
@@ -19,33 +19,28 @@ import {useLocale} from '~/hooks';
  * ```
  */
 
-interface MetafieldQuery {
-  namespace: string;
-  key: string;
-}
-
 export function useProductMetafields(
   handle: string | undefined | null = '',
-  metafieldQueries: MetafieldQuery[] = [],
+  metafieldIdentifiers: MetafieldIdentifier[] = [],
   fetchOnMount = true,
-): Record<string, Metafield> | null {
+): ParsedMetafields | null {
   const {pathPrefix} = useLocale();
-  const metafieldQueriesString = JSON.stringify(metafieldQueries);
+  const metafieldIdentifiersString = JSON.stringify(metafieldIdentifiers);
   const fetcher = useFetcher<{
-    metafields: Record<string, Metafield> | null;
+    metafields: ParsedMetafields | null;
   }>({
-    key: `product-metafields:${handle}:${pathPrefix}:${metafieldQueriesString}`,
+    key: `product-metafields:${handle}:${pathPrefix}:${metafieldIdentifiersString}`,
   });
   const {metafields} = {...fetcher.data};
 
   useEffect(() => {
-    if (!fetchOnMount || !handle || !metafieldQueries?.length) return;
+    if (!fetchOnMount || !handle || !metafieldIdentifiers?.length) return;
     const searchParams = new URLSearchParams({
       handle,
-      metafieldQueries: metafieldQueriesString,
+      metafieldIdentifiers: metafieldIdentifiersString,
     });
     fetcher.load(`${pathPrefix}/api/product?${searchParams}`);
-  }, [fetchOnMount, handle, metafieldQueriesString]);
+  }, [fetchOnMount, handle, metafieldIdentifiersString]);
 
-  return metafields || null;
+  return (metafields as ParsedMetafields) || null;
 }
