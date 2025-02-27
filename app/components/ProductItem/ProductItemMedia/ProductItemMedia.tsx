@@ -4,7 +4,12 @@ import type {Video} from '@shopify/hydrogen/storefront-api-types';
 
 import {Badges} from '~/components/Badges';
 import {Image} from '~/components/Image';
-import type {SelectedProduct, SelectedVariant} from '~/lib/types';
+import {ProductDraftMediaOverlay} from '~/components/Product';
+import type {
+  ProductWithStatus,
+  SelectedProduct,
+  SelectedVariant,
+} from '~/lib/types';
 
 import {ProductItemVideo} from './ProductItemVideo';
 import {useProductItemMedia} from './useProductItemMedia';
@@ -105,6 +110,10 @@ export function ProductItemMedia({
         <div className="relative size-full overflow-hidden">
           <div className="loading-shimmer opacity-60" />
         </div>
+      )}
+
+      {(selectedProduct as ProductWithStatus).status === 'DRAFT' && (
+        <ProductDraftMediaOverlay />
       )}
 
       <div className="pointer-events-none absolute left-0 top-0 z-[1] p-2.5 xs:p-3 xl:p-4">

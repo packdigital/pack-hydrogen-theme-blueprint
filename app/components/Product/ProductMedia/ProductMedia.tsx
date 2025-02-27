@@ -5,11 +5,16 @@ import {A11y, Pagination} from 'swiper/modules';
 import type {Image} from '@shopify/hydrogen/storefront-api-types';
 
 import {Badges} from '~/components/Badges';
-import type {ProductWithGrouping, SelectedVariant} from '~/lib/types';
+import type {
+  ProductWithGrouping,
+  ProductWithStatus,
+  SelectedVariant,
+} from '~/lib/types';
 
 import {ProductImage} from './ProductImage';
 import {ProductMediaFile} from './ProductMediaFile';
 import {ProductMediaThumbnails} from './ProductMediaThumbnails';
+import {ProductDraftMediaOverlay} from './ProductDraftMediaOverlay';
 import {useProductMedia} from './useProductMedia';
 
 interface ProductMediaProps {
@@ -94,6 +99,10 @@ export function ProductMedia({
             })}
 
             <div className="active-bullet-black swiper-pagination !top-[calc(100%-8px)] flex w-full justify-center gap-2.5 md:hidden" />
+
+            {(product as ProductWithStatus).status === 'DRAFT' && (
+              <ProductDraftMediaOverlay />
+            )}
           </Swiper>
 
           {/* placeholder image while swiper inits */}
