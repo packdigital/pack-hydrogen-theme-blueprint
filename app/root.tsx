@@ -4,18 +4,23 @@ import {
   useMatches,
   useRouteError,
 } from '@remix-run/react';
-import type {ShouldRevalidateFunction} from '@remix-run/react';
 import {data as dataWithOptions} from '@shopify/remix-oxygen';
-import type {
-  LinksFunction,
-  LoaderFunctionArgs,
-  MetaArgs,
-} from '@shopify/remix-oxygen';
+import type {ShouldRevalidateFunction} from '@remix-run/react';
 import {
   getSeoMeta,
   getShopAnalytics,
   ShopifySalesChannel,
 } from '@shopify/hydrogen';
+import type {
+  LinksFunction,
+  LoaderFunctionArgs,
+  MetaArgs,
+} from '@shopify/remix-oxygen';
+import type {
+  Customer,
+  CustomerAccessToken,
+  Shop,
+} from '@shopify/hydrogen/storefront-api-types';
 
 import {
   ApplicationError,
@@ -36,6 +41,7 @@ import {
 import {registerSections} from '~/sections';
 import {registerStorefrontSettings} from '~/settings';
 import {seoPayload} from '~/lib/seo.server';
+import type {RootSiteSettings} from '~/lib/types';
 import styles from '~/styles/app.css?url';
 
 registerSections();
@@ -91,9 +97,14 @@ export const links: LinksFunction = () => {
 
 export async function loader({context, request}: LoaderFunctionArgs) {
   const {storefront, session, oxygen, pack, env} = context;
-  const isPreviewModeEnabled = pack.isPreviewModeEnabled();
+  const isPreviewModeEnabled = pack.isPreviewModeEnabled() as boolean;
 
-  const [shop, siteSettings, customerAccessToken, ENV] = await Promise.all([
+  const [shop, siteSettings, customerAccessToken, ENV]: [
+    Shop,
+    RootSiteSettings,
+    CustomerAccessToken | undefined,
+    Record<string, string>,
+  ] = await Promise.all([
     getShop(context),
     getSiteSettings(context),
     session.get('customerAccessToken'),
@@ -104,7 +115,7 @@ export async function loader({context, request}: LoaderFunctionArgs) {
 
   const {isLoggedIn, headers: headersWithAccessToken} =
     await validateCustomerAccessToken(session, customerAccessToken);
-  let customer = null;
+  let customer: Customer | null = null;
   if (isLoggedIn) {
     const {data: customerData} = await customerGetAction({context});
     if (customerData.customer) {
@@ -127,7 +138,7 @@ export async function loader({context, request}: LoaderFunctionArgs) {
     shop,
     siteSettings,
     url: request.url,
-  });
+  }) as Record<string, any>;
   const consent = {
     checkoutDomain: env.PUBLIC_CHECKOUT_DOMAIN,
     storefrontAccessToken: env.PUBLIC_STOREFRONT_API_TOKEN,

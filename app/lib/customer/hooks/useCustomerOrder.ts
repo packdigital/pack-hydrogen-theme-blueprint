@@ -8,7 +8,8 @@ import type {loader} from '~/routes/($locale).account.orders.$id';
 
 export function useCustomerOrder() {
   const {isPreviewModeEnabled} = usePreviewMode();
-  const {order, errors} = useLoaderData<typeof loader>();
+  const {order, errors} =
+    useLoaderData<ReturnType<typeof useLoaderData<typeof loader>>['data']>();
   const fetcher = useFetcher<{order: Order}>({key: 'orders'});
 
   useEffect(() => {
