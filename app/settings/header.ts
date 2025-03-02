@@ -40,6 +40,17 @@ export interface HeaderSettings {
     links: {
       link: LinkCms;
     }[];
+    bgColor: string;
+    textColor: string;
+    iconColor: string;
+    transparentNav: {
+      pageHandles: string[];
+      iconColor: string;
+      isChangeColorsOnScroll: boolean;
+      pixelOffsetChangeColors: number;
+      scrolledBgColor: string;
+      scrolledIconColor: string;
+    };
   };
 }
 
@@ -53,7 +64,8 @@ export default {
       label: 'Nav & Menu',
       name: 'menu',
       component: 'group',
-      description: 'Nav items, logo position, products slider, links',
+      description:
+        'Nav items, logo position, products slider, links, background color, icon color, transparent nav',
       fields: [
         {
           label: 'Nav Items',
@@ -82,7 +94,6 @@ export default {
                   component: 'link',
                 },
               ],
-              defaultItem: {},
             },
             {
               label: 'Menu Button',
@@ -120,7 +131,6 @@ export default {
                   component: 'link',
                 },
               ],
-              defaultItem: {},
             },
           ],
           defaultItem: {
@@ -137,7 +147,6 @@ export default {
             {label: 'Left', value: 'left'},
             {label: 'Center', value: 'center'},
           ],
-          defaultValue: 'left',
         },
         {
           label: 'Products Slider',
@@ -185,7 +194,84 @@ export default {
             },
           ],
         },
+        {
+          label: 'Navigation Background Color',
+          name: 'bgColor',
+          component: 'color',
+          colors: COLOR_PICKER_DEFAULTS,
+        },
+        {
+          label: 'Navigation Text Color',
+          name: 'textColor',
+          component: 'color',
+          colors: COLOR_PICKER_DEFAULTS,
+        },
+        {
+          label: 'Navigation Icon Color',
+          name: 'iconColor',
+          component: 'color',
+          colors: COLOR_PICKER_DEFAULTS,
+        },
+        {
+          label: 'Transparent Navigation',
+          name: 'transparentNav',
+          component: 'group',
+          description: 'Set a transparent navigation on selected pages',
+          fields: [
+            {
+              label: 'Page Handles',
+              name: 'pageHandles',
+              component: 'tags',
+              description:
+                'The navigation, except the logo and cart icon, will be transparent on these page handles. Applies only to page template types',
+            },
+            {
+              label: 'Transparent Navigation Icon Color',
+              name: 'iconColor',
+              component: 'color',
+              colors: COLOR_PICKER_DEFAULTS,
+            },
+            {
+              label: 'Change Colors on Scroll',
+              name: 'isChangeColorsOnScroll',
+              component: 'toggle',
+              toggleLabels: {
+                true: 'On',
+                false: 'Off',
+              },
+            },
+            {
+              label: 'Pixel Offset to Change Colors',
+              name: 'pixelOffsetChangeColors',
+              component: 'number',
+            },
+            {
+              label: 'Scrolled Background Color',
+              name: 'scrolledBgColor',
+              component: 'color',
+              colors: COLOR_PICKER_DEFAULTS,
+            },
+            {
+              label: 'Scrolled Icon Color',
+              name: 'scrolledIconColor',
+              component: 'color',
+              colors: COLOR_PICKER_DEFAULTS,
+            },
+          ],
+          defaultValue: {
+            iconColor: COLOR_SCHEMA_DEFAULT_VALUE.white,
+            isChangeColorsOnScroll: true,
+            pixelOffsetChangeColors: 100,
+            scrolledIconColor: COLOR_SCHEMA_DEFAULT_VALUE.text,
+          },
+        },
       ],
+      defaultValue: {
+        logoPositionDesktop: 'left',
+        bgColor: COLOR_SCHEMA_DEFAULT_VALUE.background,
+        textColor: COLOR_SCHEMA_DEFAULT_VALUE.text,
+        iconColor: COLOR_SCHEMA_DEFAULT_VALUE.text,
+      },
     },
     {
       label: 'Promobar',
@@ -201,7 +287,6 @@ export default {
             true: 'On',
             false: 'Off',
           },
-          defaultValue: true,
         },
         {
           label: 'Autohide',
@@ -213,7 +298,6 @@ export default {
             true: 'On',
             false: 'Off',
           },
-          defaultValue: true,
         },
         {
           label: 'Effect Between Transitions',
@@ -225,35 +309,30 @@ export default {
             {label: 'Horizontal Slide', value: 'slide-horizontal'},
             {label: 'Vertical Slide', value: 'slide-vertical'},
           ],
-          defaultValue: 'fade',
         },
         {
           label: 'Autoplay Delay',
           name: 'delay',
           component: 'number',
           description: 'Delay between transitions (in ms)',
-          defaultValue: 5000,
         },
         {
           label: 'Speed',
           name: 'speed',
           component: 'number',
           description: 'Duration of transition between slides (in ms)',
-          defaultValue: 500,
         },
         {
           label: 'Background Color',
           name: 'bgColor',
           component: 'color',
           colors: COLOR_PICKER_DEFAULTS,
-          defaultValue: COLOR_SCHEMA_DEFAULT_VALUE.primary,
         },
         {
           label: 'Text Color',
           name: 'color',
           component: 'color',
           colors: COLOR_PICKER_DEFAULTS,
-          defaultValue: COLOR_SCHEMA_DEFAULT_VALUE.white,
         },
         {
           label: 'Messages',
@@ -281,6 +360,14 @@ export default {
           },
         },
       ],
+      defaultValue: {
+        enabled: true,
+        effect: 'fade',
+        delay: 5000,
+        speed: 500,
+        bgColor: COLOR_SCHEMA_DEFAULT_VALUE.primary,
+        color: COLOR_SCHEMA_DEFAULT_VALUE.white,
+      },
     },
   ],
 };
