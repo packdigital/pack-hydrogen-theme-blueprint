@@ -122,7 +122,7 @@ export const PRODUCT_FRAGMENT = `#graphql
           id
           url
           width
-          }
+        }
         ... on Video {
           sources {
             height

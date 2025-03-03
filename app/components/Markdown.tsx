@@ -13,7 +13,7 @@ interface MarkdownProps {
 export const Markdown = forwardRef(
   (
     {centerAllText, children, components = {}}: MarkdownProps,
-    ref: React.LegacyRef<HTMLDivElement> | undefined,
+    ref: React.Ref<HTMLDivElement> | undefined,
   ) => {
     const pTextAlign = centerAllText ? '[&>p]:text-center' : '';
     const hTextAlign = centerAllText

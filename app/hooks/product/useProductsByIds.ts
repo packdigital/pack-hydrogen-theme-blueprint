@@ -21,7 +21,7 @@ export function useProductsByIds(
 ): Product[] {
   const {pathPrefix} = useLocale();
   const fetcher = useFetcher<{products: Product[]}>({
-    key: `products-from-handles:${ids.join(',')}:${pathPrefix}`,
+    key: `products-by-ids:${ids.join(',')}:${pathPrefix}`,
   });
 
   const idsString = JSON.stringify(ids);

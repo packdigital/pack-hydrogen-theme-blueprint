@@ -22,7 +22,7 @@ export function useCustomerPasswordReset() {
   });
 
   const resetUrl = useMemo(() => {
-    const baseUrl = `https://${ENV?.PUBLIC_STORE_DOMAIN}`;
+    const baseUrl = `https://${ENV.PUBLIC_STORE_DOMAIN}`;
     try {
       const newUrl = new URL(url);
       return `${baseUrl}${newUrl.pathname}`;

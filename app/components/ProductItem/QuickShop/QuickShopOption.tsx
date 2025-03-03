@@ -1,24 +1,16 @@
 import {useMemo} from 'react';
-import type {
-  Product,
-  ProductOptionValue,
-} from '@shopify/hydrogen/storefront-api-types';
 
 import {BackInStockModal} from '~/components/BackInStockModal';
 import {Spinner} from '~/components/Animations';
 import {useAddToCart} from '~/hooks';
 
-interface QuickShopOptionsProps {
-  optionName: string;
-  selectedProduct: Product;
-  optionValue: ProductOptionValue;
-}
+import type {QuickShopOptionProps} from '../ProductItem.types';
 
 export function QuickShopOption({
   optionName,
   selectedProduct,
   optionValue,
-}: QuickShopOptionsProps) {
+}: QuickShopOptionProps) {
   const variantToAdd = useMemo(() => {
     return selectedProduct.variants?.nodes?.find((variant) => {
       const variantOption = variant.selectedOptions?.find(

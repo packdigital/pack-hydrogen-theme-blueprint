@@ -6,14 +6,6 @@ import type {
 
 import {customerUpdateClient} from '~/lib/customer';
 
-const getFormError = (error: string | unknown, context: AppLoadContext) => {
-  if (context.storefront.isApiError(error)) {
-    return 'Something went wrong. Please try again later.';
-  } else {
-    return 'Sorry. We could not update your profile. Please try again later.';
-  }
-};
-
 interface Data {
   errors: string[] | null;
   customer: Customer | null;
@@ -101,7 +93,9 @@ export const customerUpdateProfileAction = async ({
   } catch (error) {
     console.error('customerUpdateProfileAction:error', error);
     data.errors = [error as string];
-    data.formErrors = [getFormError(error, context)];
+    data.formErrors = [
+      'Sorry. We could not update your profile. Please try again later.',
+    ];
     return {data, status: 500};
   }
 };

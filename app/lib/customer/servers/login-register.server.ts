@@ -13,28 +13,6 @@ import {getSiteSettings} from '~/lib/utils';
 
 const ACTIONS = ['login', 'register', 'recover-password'];
 
-const getLoginFormError = (
-  error: string | unknown,
-  context: AppLoadContext,
-) => {
-  if (context.storefront.isApiError(error)) {
-    return 'Something went wrong. Please try again later.';
-  } else {
-    return 'Sorry. We did not recognize either your email or password. Please try to sign in again or create a new account.';
-  }
-};
-
-const getRegisterFormError = (
-  error: string | unknown,
-  context: AppLoadContext,
-) => {
-  if (context.storefront.isApiError(error)) {
-    return 'Something went wrong. Please try again later.';
-  } else {
-    return 'Sorry. We could not create an account with this email. User might already exist, try to login instead.';
-  }
-};
-
 interface Data {
   customerAccessToken: CustomerAccessToken | null;
   customer: Customer | null;
@@ -199,9 +177,13 @@ export const customerLoginRegisterAction = async ({
       data.errors = [error as string];
     }
     if (action === 'login') {
-      data.loginFormErrors = [getLoginFormError(error, context)];
+      data.loginFormErrors = [
+        'Sorry. We did not recognize either your email or password. Please try to sign in again or create a new account.',
+      ];
     } else if (action === 'register') {
-      data.registerFormErrors = [getRegisterFormError(error, context)];
+      data.registerFormErrors = [
+        'Sorry. We could not create an account with this email. User might already exist, try to login instead.',
+      ];
     }
     return {data, status: 500};
   }

@@ -73,7 +73,7 @@ type LoadScriptParams = Parameters<typeof loadScript>;
  *    innerHTML: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':...`,
  *  },
  *  'head',
- *  !!ENV?.PUBLIC_GOOGLE_ID, // only load script if var is defined
+ *  !!ENV.PUBLIC_GOOGLE_ID, // only load script if var is defined
  * );
  * // or
  * const status = useLoadScript({

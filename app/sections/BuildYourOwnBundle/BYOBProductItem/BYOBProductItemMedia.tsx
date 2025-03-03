@@ -88,7 +88,7 @@ BYOBProductItemMedia.displayName = 'BYOBProductItemMedia';
 export const BYOBProductItemVideo = forwardRef(
   (
     {autoPlay = false, media}: BYOBProductItemVideoProps,
-    ref: React.LegacyRef<HTMLVideoElement> | undefined,
+    ref: React.Ref<HTMLVideoElement> | undefined,
   ) => {
     const {sources, previewImage} = media;
     const videoSources = sources?.filter(

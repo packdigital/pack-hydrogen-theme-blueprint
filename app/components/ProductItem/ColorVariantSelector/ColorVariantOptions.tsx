@@ -2,26 +2,11 @@ import {useMemo, useState} from 'react';
 import type {ProductOptionValue} from '@shopify/hydrogen-react/storefront-api-types';
 
 import {COLOR_OPTION_NAME} from '~/lib/constants';
-import type {
-  Group,
-  SelectedProduct,
-  SelectedVariant,
-  SwatchesMap,
-} from '~/lib/types';
+
+import type {ColorVariantOptionsProps} from '../ProductItem.types';
 
 import {ColorVariantOption} from './ColorVariantOption';
 import {useColorVariantOptions} from './useColorVariantOptions';
-
-interface ColorVariantOptionsProps {
-  enabledColorNameOnHover?: boolean;
-  grouping?: Group | null;
-  initialProduct: SelectedProduct;
-  initialProductColorOptions: ProductOptionValue[];
-  selectedVariant: SelectedVariant;
-  setProductFromColorSelector: (product: SelectedProduct) => void;
-  setVariantFromColorSelector: (variant: SelectedVariant) => void;
-  swatchesMap?: SwatchesMap;
-}
 
 export function ColorVariantOptions({
   enabledColorNameOnHover,

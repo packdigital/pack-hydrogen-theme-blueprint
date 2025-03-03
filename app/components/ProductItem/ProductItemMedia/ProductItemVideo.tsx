@@ -1,15 +1,11 @@
 import {forwardRef} from 'react';
-import type {Video} from '@shopify/hydrogen/storefront-api-types';
 
-interface ProductItemVideoProps {
-  autoPlay?: boolean;
-  media: Video;
-}
+import type {ProductItemVideoProps} from '../ProductItem.types';
 
 export const ProductItemVideo = forwardRef(
   (
     {autoPlay = false, media}: ProductItemVideoProps,
-    ref: React.LegacyRef<HTMLVideoElement> | undefined,
+    ref: React.Ref<HTMLVideoElement> | undefined,
   ) => {
     const {sources, previewImage} = media;
     const videoSources = sources?.filter(

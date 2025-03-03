@@ -1,20 +1,11 @@
 import {useEffect, useMemo, useState} from 'react';
-import type {
-  Product,
-  ProductVariant,
-} from '@shopify/hydrogen/storefront-api-types';
 
 import {COLOR_OPTION_NAME} from '~/lib/constants';
 import {useMenu} from '~/hooks';
 
-import {QuickShopOption} from './QuickShopOption';
+import type {QuickShopOptionsProps} from '../ProductItem.types';
 
-interface QuickShopOptionsProps {
-  quickShopMultiText: string;
-  quickShopMobileHidden?: boolean;
-  selectedProduct: Product;
-  selectedVariant: ProductVariant;
-}
+import {QuickShopOption} from './QuickShopOption';
 
 export function QuickShopOptions({
   quickShopMultiText,

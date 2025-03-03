@@ -1,4 +1,5 @@
 import {OPTION_FRAGMENT} from './product';
+import {SELLING_PLAN_ALLOCATION_FRAGMENT} from './sellingPlans';
 
 // Docs: https://shopify.dev/docs/api/storefront/latest/objects/Cart
 
@@ -107,6 +108,15 @@ export const CART_LINE_FRAGMENT = `#graphql
         selectedOptions {
           name
           value
+        }
+        sellingPlanAllocations(first: 10) {
+          edges {
+            node {
+              ... on SellingPlanAllocation {
+                ...SellingPlanAllocationFragment
+              }
+            }
+          }
         }
       }
     }
@@ -239,6 +249,15 @@ export const CART_LINE_COMPONENT_FRAGMENT = `#graphql
           name
           value
         }
+        sellingPlanAllocations(first: 10) {
+          edges {
+            node {
+              ... on SellingPlanAllocation {
+                ...SellingPlanAllocationFragment
+              }
+            }
+          }
+        }
       }
     }
     lineComponents {
@@ -346,6 +365,15 @@ export const CART_LINE_COMPONENT_FRAGMENT = `#graphql
             name
             value
           }
+          sellingPlanAllocations(first: 10) {
+            edges {
+              node {
+                ... on SellingPlanAllocation {
+                  ...SellingPlanAllocationFragment
+                }
+              }
+            }
+          }
         }
       }
     }
@@ -437,4 +465,5 @@ export const CART_FRAGMENT = `#graphql
   ${CART_LINE_FRAGMENT}
   ${CART_LINE_COMPONENT_FRAGMENT}
   ${OPTION_FRAGMENT}
+  ${SELLING_PLAN_ALLOCATION_FRAGMENT}
 ` as const;

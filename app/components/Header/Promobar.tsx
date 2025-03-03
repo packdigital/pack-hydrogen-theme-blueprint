@@ -91,9 +91,9 @@ export const Promobar = memo(() => {
         >
           {messages.map(({message, link}, index) => {
             return (
-              <SwiperSlide key={index} className="px-4">
+              <SwiperSlide key={index} className="px-contained">
                 <div
-                  className="px-contained flex min-h-full items-center justify-center text-center text-xs tracking-[0.04em] sm:text-sm"
+                  className="flex min-h-full items-center justify-center text-center text-xs tracking-[0.04em] sm:text-sm"
                   style={{color}}
                 >
                   <Link

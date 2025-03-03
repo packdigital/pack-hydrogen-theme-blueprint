@@ -2,18 +2,9 @@ import {useEffect, useState} from 'react';
 import type {SwiperClass} from 'swiper/react';
 import {Swiper, SwiperSlide} from 'swiper/react';
 import {Navigation} from 'swiper/modules';
-import type {MediaEdge} from '@shopify/hydrogen/storefront-api-types';
 
 import {ProductMediaThumbnail} from './ProductMediaThumbnail';
-
-interface ProductMediaThumbnailsProps {
-  activeIndex: number | null;
-  initialIndex: number;
-  media: MediaEdge['node'][];
-  productTitle: string;
-  setActiveIndex: (index: number) => void;
-  swiper: SwiperClass | null;
-}
+import type {ProductMediaThumbnailsProps} from './ProductMedia.types';
 
 export function ProductMediaThumbnails({
   activeIndex,

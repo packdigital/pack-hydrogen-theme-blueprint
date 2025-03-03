@@ -1,24 +1,10 @@
 import {useEffect, useMemo} from 'react';
 
 import {COLOR_OPTION_NAME} from '~/lib/constants';
-import type {
-  Group,
-  SelectedProduct,
-  SelectedVariant,
-  SwatchesMap,
-} from '~/lib/types';
+
+import type {ColorVariantSelectorProps} from '../ProductItem.types';
 
 import {ColorVariantOptions} from './ColorVariantOptions';
-
-interface ColorVariantSelectorProps {
-  enabledColorNameOnHover?: boolean;
-  grouping?: Group | null;
-  initialProduct: SelectedProduct;
-  selectedVariant: SelectedVariant;
-  setProductFromColorSelector: (product: SelectedProduct) => void;
-  setVariantFromColorSelector: (variant: SelectedVariant | undefined) => void;
-  swatchesMap?: SwatchesMap;
-}
 
 export function ColorVariantSelector({
   enabledColorNameOnHover,

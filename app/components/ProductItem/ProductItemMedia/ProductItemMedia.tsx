@@ -5,20 +5,12 @@ import type {Video} from '@shopify/hydrogen/storefront-api-types';
 import {Badges} from '~/components/Badges';
 import {Image} from '~/components/Image';
 import {ProductDraftMediaOverlay} from '~/components/Product';
-import type {
-  ProductWithStatus,
-  SelectedProduct,
-  SelectedVariant,
-} from '~/lib/types';
+import type {ProductWithStatus} from '~/lib/types';
+
+import type {ProductItemMediaProps} from '../ProductItem.types';
 
 import {ProductItemVideo} from './ProductItemVideo';
 import {useProductItemMedia} from './useProductItemMedia';
-
-export interface ProductItemMediaProps {
-  hasGrouping: boolean;
-  selectedProduct: SelectedProduct;
-  selectedVariant: SelectedVariant;
-}
 
 export function ProductItemMedia({
   hasGrouping,

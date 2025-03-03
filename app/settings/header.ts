@@ -134,7 +134,7 @@ export default {
             },
           ],
           defaultItem: {
-            menuItem: {text: 'Shop', url: '/collections/all'},
+            navItem: {text: 'Shop', url: '/collections/all'},
           },
         },
         {

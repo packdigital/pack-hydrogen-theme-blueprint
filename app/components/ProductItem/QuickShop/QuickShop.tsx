@@ -1,21 +1,12 @@
 import {useMemo} from 'react';
-import type {
-  Product,
-  ProductVariant,
-} from '@shopify/hydrogen/storefront-api-types';
 
 import {AddToCart} from '~/components/AddToCart';
 import {COLOR_OPTION_NAME} from '~/lib/constants';
 import {useSettings} from '~/hooks';
 
-import {QuickShopOptions} from './QuickShopOptions';
+import type {QuickShopProps} from '../ProductItem.types';
 
-interface QuickShopProps {
-  enabledColorSelector?: boolean;
-  quickShopMobileHidden?: boolean;
-  selectedProduct: Product | null | undefined;
-  selectedVariant: ProductVariant | null | undefined;
-}
+import {QuickShopOptions} from './QuickShopOptions';
 
 export function QuickShop({
   enabledColorSelector,

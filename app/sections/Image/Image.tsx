@@ -5,12 +5,12 @@ import {Image as ImageComponent} from '~/components/Image';
 import {Link} from '~/components/Link';
 import {Markdown} from '~/components/Markdown';
 
-import type {MediaCms} from './Image.types';
+import type {ImageCms} from './Image.types';
 import {Schema} from './Image.schema';
 
 const FALLBACK_ASPECT_RATIO = '16/9';
 
-export function Image({cms}: {cms: MediaCms}) {
+export function Image({cms}: {cms: ImageCms}) {
   const {content, image, section} = cms;
   const {
     alt,
