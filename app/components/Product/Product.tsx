@@ -14,6 +14,7 @@ import type {ProductProps} from './Product.types';
 export function Product({
   initialSelectedVariant,
   isModalProduct,
+  isSectionProduct,
   product,
 }: ProductProps) {
   const {selectedVariant: providerSelectedVariant} = useProduct() as {
@@ -44,6 +45,7 @@ export function Product({
   useEffect(() => {
     if (
       isModalProduct ||
+      isSectionProduct ||
       product.variants?.nodes.length === 1 ||
       !selectedVariant
     )
@@ -59,7 +61,7 @@ export function Product({
     const updatedUrl = `${origin}${pathPrefix}/products/${product.handle}?${params}`;
 
     window.history.replaceState(window.history.state, '', updatedUrl);
-  }, [isModalProduct, product.handle, selectedVariant?.id]);
+  }, [isModalProduct, isSectionProduct, product.handle, selectedVariant?.id]);
 
   const stickyPromobar =
     header?.promobar?.enabled && !header?.promobar?.autohide;

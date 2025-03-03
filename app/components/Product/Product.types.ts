@@ -5,6 +5,7 @@ import type {SelectedVariant, Settings} from '~/lib/types';
 export interface ProductProps {
   initialSelectedVariant?: SelectedVariant;
   isModalProduct?: boolean;
+  isSectionProduct?: boolean;
   product: Product;
 }
 

@@ -17,6 +17,7 @@ import {ImageTilesGrid} from './ImageTilesGrid';
 import {ImageTilesMosaic} from './ImageTilesMosaic';
 import {Markdown} from './Markdown';
 import {MarketingSignup} from './MarketingSignup';
+import {Product, PRODUCT_SECTION_KEY} from './Product';
 import {PressSlider} from './PressSlider';
 import {ProductRecommendationsSlider} from './ProductRecommendationsSlider';
 import {ProductReviews, PRODUCT_REVIEWS_KEY} from './ProductReviews';
@@ -63,6 +64,7 @@ export function registerSections() {
   registerSection(VideoEmbed as Section, {name: 'video-embed'});
 
   /* Product ---------- */
+  registerSection(Product as Section, {name: PRODUCT_SECTION_KEY});
   registerSection(ProductsSlider as Section, {name: 'products-slider'});
   registerSection(ProductRecommendationsSlider as Section, {
     name: 'product-recommendations-slider',
