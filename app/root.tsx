@@ -41,6 +41,7 @@ import {
 import {registerSections} from '~/sections';
 import {registerStorefrontSettings} from '~/settings';
 import {seoPayload} from '~/lib/seo.server';
+import {getModalProduct} from '~/lib/products.server';
 import type {RootSiteSettings} from '~/lib/types';
 import styles from '~/styles/app.css?url';
 
@@ -130,6 +131,12 @@ export async function loader({context, request}: LoaderFunctionArgs) {
   });
   const headers = headersWithPackCookie;
 
+  /* Get product if modalProduct url param is present */
+  const {modalProduct, modalSelectedVariant} = await getModalProduct({
+    context,
+    request,
+  });
+
   const analytics = {
     shopifySalesChannel: ShopifySalesChannel.hydrogen,
     shopId: shop.id,
@@ -163,6 +170,8 @@ export async function loader({context, request}: LoaderFunctionArgs) {
       ENV: {...ENV, SITE_TITLE} as Record<string, string>,
       groupingsPromise,
       isPreviewModeEnabled,
+      modalProduct,
+      modalSelectedVariant,
       oxygen,
       selectedLocale: storefront.i18n,
       seo,

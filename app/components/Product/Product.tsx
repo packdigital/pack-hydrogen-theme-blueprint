@@ -11,7 +11,11 @@ import {ProductHeader} from './ProductHeader';
 import {ProductMedia} from './ProductMedia';
 import type {ProductProps} from './Product.types';
 
-export function Product({product, initialSelectedVariant}: ProductProps) {
+export function Product({
+  initialSelectedVariant,
+  isModalProduct,
+  product,
+}: ProductProps) {
   const {selectedVariant: providerSelectedVariant} = useProduct() as {
     selectedVariant: SelectedVariant;
   };
@@ -38,7 +42,12 @@ export function Product({product, initialSelectedVariant}: ProductProps) {
 
   // set variant url param on selected variant change unless has one variant
   useEffect(() => {
-    if (product.variants?.nodes.length === 1 || !selectedVariant) return;
+    if (
+      isModalProduct ||
+      product.variants?.nodes.length === 1 ||
+      !selectedVariant
+    )
+      return;
 
     const {origin, search} = window.location;
 
@@ -50,7 +59,7 @@ export function Product({product, initialSelectedVariant}: ProductProps) {
     const updatedUrl = `${origin}${pathPrefix}/products/${product.handle}?${params}`;
 
     window.history.replaceState(window.history.state, '', updatedUrl);
-  }, [product.handle, selectedVariant?.id]);
+  }, [isModalProduct, product.handle, selectedVariant?.id]);
 
   const stickyPromobar =
     header?.promobar?.enabled && !header?.promobar?.autohide;
@@ -66,6 +75,7 @@ export function Product({product, initialSelectedVariant}: ProductProps) {
           {/* note: remove this component if mobile header shares same placement as desktop */}
           <ProductHeader
             isMobile
+            isModalProduct={isModalProduct}
             product={product}
             selectedVariant={selectedVariant}
             selectedVariantColor={selectedVariantColor}
@@ -73,7 +83,11 @@ export function Product({product, initialSelectedVariant}: ProductProps) {
           />
 
           <div>
-            <div className={`md:sticky ${stickyTopClass}`}>
+            <div
+              className={`md:sticky ${
+                isModalProduct ? 'md:top-10 lg:top-12' : stickyTopClass
+              }`}
+            >
               <ProductMedia
                 product={product}
                 selectedVariant={selectedVariant}
@@ -84,10 +98,13 @@ export function Product({product, initialSelectedVariant}: ProductProps) {
 
           <div className="max-md:px-4 md:pl-4 lg:pl-10 xl:pl-16">
             <div
-              className={`flex flex-col gap-y-4 md:sticky ${stickyTopClass}`}
+              className={`flex flex-col gap-y-4 md:sticky ${
+                isModalProduct ? 'md:top-10 lg:top-12' : stickyTopClass
+              }`}
             >
               {/* desktop header placement */}
               <ProductHeader
+                isModalProduct={isModalProduct}
                 product={product}
                 selectedVariant={selectedVariant}
                 selectedVariantColor={selectedVariantColor}
@@ -98,6 +115,7 @@ export function Product({product, initialSelectedVariant}: ProductProps) {
                 enabledQuantitySelector={
                   productSettings?.quantitySelector?.enabled
                 }
+                isModalProduct={isModalProduct}
                 product={product}
                 selectedVariant={selectedVariant}
               />

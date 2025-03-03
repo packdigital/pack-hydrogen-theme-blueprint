@@ -1,4 +1,7 @@
-import type {ProductOptionValue} from '@shopify/hydrogen/storefront-api-types';
+import type {
+  Product,
+  ProductOptionValue,
+} from '@shopify/hydrogen/storefront-api-types';
 
 import type {
   OptionWithGroups,
@@ -8,8 +11,12 @@ import type {
 } from '~/lib/types';
 
 export interface ProductOptionsProps {
-  product: ProductWithGrouping;
-  selectedVariant: SelectedVariant;
+  isModalProduct?: boolean;
+  isShoppableProductCard?: boolean;
+  product: Product;
+  selectedOptionsMap?: Record<string, string> | null;
+  setSelectedOption: (option: string, value: string) => void;
+  swatchesMap?: SwatchesMap;
 }
 
 export type OnSelect = ({
@@ -25,12 +32,13 @@ export type OnSelect = ({
 }) => void;
 
 export interface ProductOptionValuesProps {
+  isModalProduct?: boolean;
   onSelect?: OnSelect;
   option: OptionWithGroups;
   product: ProductWithGrouping;
   selectedOptionsMap?: Record<string, string> | null;
   setSelectedOption: (name: string, value: string) => void;
-  swatchesMap: SwatchesMap;
+  swatchesMap?: SwatchesMap;
 }
 
 export interface ProductOptionValuesLabelProps {

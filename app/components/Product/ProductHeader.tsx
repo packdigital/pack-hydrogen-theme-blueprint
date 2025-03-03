@@ -1,10 +1,15 @@
+import {useCallback} from 'react';
+
 import {ProductStars} from '~/components/ProductStars';
 import {useMatchMedia, useVariantPrices} from '~/hooks';
+import {HEADER_NAVIGATION, PRODUCT_MODAL_PANEL} from '~/lib/constants';
+import {PRODUCT_REVIEWS_KEY} from '~/sections/ProductReviews';
 
 import type {ProductHeaderProps} from './Product.types';
 
 export function ProductHeader({
   isMobile,
+  isModalProduct,
   product,
   selectedVariant,
   selectedVariantColor,
@@ -13,6 +18,29 @@ export function ProductHeader({
   const {price, compareAtPrice} = useVariantPrices(selectedVariant);
   const {enabledStarRating = true} = {...settings?.reviews};
   const isMobileViewport = useMatchMedia('(max-width: 767px)');
+
+  const handleScrollToReviews = useCallback(() => {
+    if (isModalProduct) {
+      const productModal = document.getElementById(PRODUCT_MODAL_PANEL);
+      const reviewsSection = productModal?.querySelector(
+        `[data-comp="${PRODUCT_REVIEWS_KEY}"]`,
+      );
+      reviewsSection?.scrollIntoView({behavior: 'smooth'});
+      return;
+    }
+
+    const reviewsSection = document.querySelector(
+      `[data-comp="${PRODUCT_REVIEWS_KEY}"]`,
+    );
+    if (!reviewsSection) return;
+
+    const header = document.querySelector(`[data-comp="${HEADER_NAVIGATION}"]`);
+    const headerHeight = header ? (header as HTMLElement).offsetHeight : 80;
+
+    const offsetTop = reviewsSection.getBoundingClientRect().top + headerHeight;
+    window.scrollTo({top: offsetTop, behavior: 'smooth'});
+  }, [isModalProduct]);
+
   const isVisibleHeader =
     (isMobile && isMobileViewport) || (!isMobile && !isMobileViewport);
 
@@ -27,9 +55,7 @@ export function ProductHeader({
         <div className="min-h-6">
           <button
             aria-label="Scroll to product reviews"
-            onClick={() => {
-              // scroll to reviews
-            }}
+            onClick={handleScrollToReviews}
             type="button"
           >
             <ProductStars id={product.id} />

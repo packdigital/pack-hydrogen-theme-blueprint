@@ -1,21 +1,31 @@
-import {useCallback, useEffect, useState} from 'react';
+import {useCallback, useEffect, useMemo, useState} from 'react';
+import {useProduct} from '@shopify/hydrogen-react';
 
 import {AddToCart} from '~/components/AddToCart';
 import {QuantitySelector} from '~/components/QuantitySelector';
+import {useColorSwatches} from '~/hooks';
 
 import {ProductOptions} from './ProductOptions';
 import type {ProductDetailsProps} from './Product.types';
 
 export function ProductDetails({
   enabledQuantitySelector,
+  isModalProduct,
   product,
   selectedVariant,
 }: ProductDetailsProps) {
+  const {setSelectedOption} = useProduct();
+  const swatchesMap = useColorSwatches();
+
   const [quantity, setQuantity] = useState(1);
 
-  const hideOptions =
-    product.variants?.nodes?.length === 1 &&
-    product.variants?.nodes?.[0]?.title === 'Default Title';
+  const selectedOptionsMap = useMemo(() => {
+    if (!selectedVariant) return null;
+    return selectedVariant.selectedOptions.reduce(
+      (acc: Record<string, string>, {name, value}) => ({...acc, [name]: value}),
+      {},
+    );
+  }, [selectedVariant]);
 
   const handleDecrement = useCallback(() => {
     if (quantity === 1) return;
@@ -33,10 +43,20 @@ export function ProductDetails({
     };
   }, [enabledQuantitySelector]);
 
+  const hideOptions =
+    product.variants?.nodes?.length === 1 &&
+    product.variants?.nodes?.[0]?.title === 'Default Title';
+
   return (
     <div className="flex flex-col gap-5">
       {!hideOptions && (
-        <ProductOptions product={product} selectedVariant={selectedVariant} />
+        <ProductOptions
+          isModalProduct={isModalProduct}
+          product={product}
+          selectedOptionsMap={selectedOptionsMap}
+          setSelectedOption={setSelectedOption}
+          swatchesMap={swatchesMap}
+        />
       )}
 
       <div className="flex items-center gap-4">

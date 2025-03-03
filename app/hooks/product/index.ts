@@ -4,6 +4,7 @@ export {useParsedProductMetafields} from './useParsedProductMetafields';
 export {useProductByHandle} from './useProductByHandle';
 export {useProductGroupingByHandle} from './useProductGroupingByHandle';
 export {useProductMetafields} from './useProductMetafields';
+export {useProductModal} from './useProductModal';
 export {useProductRecommendations} from './useProductRecommendations';
 export {useProductWithGrouping} from './useProductWithGrouping';
 export {useProductsByIds} from './useProductsByIds';

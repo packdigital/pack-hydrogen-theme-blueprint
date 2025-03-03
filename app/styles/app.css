@@ -398,6 +398,37 @@
   .range-thumb::-moz-range-thumb {
     @apply pointer-events-auto relative mt-[4px] h-3 w-3 cursor-pointer rounded-full border-none bg-neutralLightest shadow-[0_0_1px_1px_#ced4da];
   }
+  /* Shoppable social video */
+  .shoppable-video-hero-container {
+    container-type: size;
+    container-name: shoppable-video-hero-container;
+    width: 100%;
+  }
+  @container shoppable-video-hero-container (min-height: 600px) {
+    .video-ratio {
+      aspect-ratio: 9 / 16;
+    }
+  }
+  @container shoppable-video-hero-container (max-height: 599px) {
+    .video-ratio {
+      width: 100%;
+      height: auto;
+      aspect-ratio: unset;
+    }
+    .video-ratio video {
+      object-position: top;
+    }
+  }
+  @container shoppable-video-hero-container (max-width: 767px) {
+    .video-ratio {
+      width: 100%;
+      height: auto;
+      aspect-ratio: unset;
+    }
+    .video-ratio video {
+      object-position: top;
+    }
+  }
 }
 
 @layer utilities {
