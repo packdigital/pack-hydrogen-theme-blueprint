@@ -467,3 +467,15 @@ export const CART_FRAGMENT = `#graphql
   ${OPTION_FRAGMENT}
   ${SELLING_PLAN_ALLOCATION_FRAGMENT}
 ` as const;
+
+export const CART_ATTRIBUTES_QUERY = `#graphql
+  query ProductPage($id: ID!) {
+    cart: cart(id: $id) {
+      id
+      attributes {
+        key
+        value
+      }
+    }
+  }
+` as const;
