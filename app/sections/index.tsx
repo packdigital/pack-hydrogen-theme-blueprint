@@ -17,10 +17,15 @@ import {ImageTilesGrid} from './ImageTilesGrid';
 import {ImageTilesMosaic} from './ImageTilesMosaic';
 import {Markdown} from './Markdown';
 import {MarketingSignup} from './MarketingSignup';
+import {Product, PRODUCT_SECTION_KEY} from './Product';
 import {PressSlider} from './PressSlider';
 import {ProductRecommendationsSlider} from './ProductRecommendationsSlider';
-import {ProductReviews} from './ProductReviews';
+import {ProductReviews, PRODUCT_REVIEWS_KEY} from './ProductReviews';
 import {ProductsSlider} from './ProductsSlider';
+import {
+  ShoppableSocialVideo,
+  SHOPPABLE_SOCIAL_VIDEO_SECTION_KEY,
+} from './ShoppableSocialVideo';
 import {SocialMediaGrid} from './SocialMediaGrid';
 import {TabbedTilesSlider} from './TabbedTilesSlider';
 import {TestimonialSlider} from './TestimonialSlider';
@@ -59,9 +64,13 @@ export function registerSections() {
   registerSection(VideoEmbed as Section, {name: 'video-embed'});
 
   /* Product ---------- */
+  registerSection(Product as Section, {name: PRODUCT_SECTION_KEY});
   registerSection(ProductsSlider as Section, {name: 'products-slider'});
   registerSection(ProductRecommendationsSlider as Section, {
     name: 'product-recommendations-slider',
+  });
+  registerSection(ShoppableSocialVideo as Section, {
+    name: SHOPPABLE_SOCIAL_VIDEO_SECTION_KEY,
   });
   registerSection(BuildYourOwnBundle as Section, {
     name: 'build-your-own-bundle',
@@ -70,7 +79,7 @@ export function registerSections() {
   /* Reviews ---------- */
   registerSection(PressSlider as Section, {name: 'press-slider'});
   registerSection(TestimonialSlider as Section, {name: 'testimonial-slider'});
-  registerSection(ProductReviews as Section, {name: 'product-reviews'});
+  registerSection(ProductReviews as Section, {name: PRODUCT_REVIEWS_KEY});
 
   /* Form ---------- */
   registerSection(FormBuilder as Section, {name: 'form-builder'});

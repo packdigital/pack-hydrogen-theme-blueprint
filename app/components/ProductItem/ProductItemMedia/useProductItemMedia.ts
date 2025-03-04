@@ -6,7 +6,7 @@ import type {
 
 import {COLOR_OPTION_NAME} from '~/lib/constants';
 
-import type {ProductItemMediaProps} from './ProductItemMedia';
+import type {ProductItemMediaProps} from '../ProductItem.types';
 
 export function useProductItemMedia({
   hasGrouping,

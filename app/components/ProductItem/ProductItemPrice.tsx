@@ -1,9 +1,6 @@
-import type {SelectedVariant} from '~/lib/types';
 import {useVariantPrices} from '~/hooks';
 
-interface ProductItemPriceProps {
-  selectedVariant: SelectedVariant;
-}
+import type {ProductItemPriceProps} from './ProductItem.types';
 
 export function ProductItemPrice({selectedVariant}: ProductItemPriceProps) {
   const {price, compareAtPrice} = useVariantPrices(selectedVariant);

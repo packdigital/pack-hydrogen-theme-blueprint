@@ -5,6 +5,7 @@ import {Cart} from '~/components/Cart';
 import {Footer} from '~/components/Footer';
 import {Header} from '~/components/Header';
 import {Modal} from '~/components/Modal';
+import {ProductModal} from '~/components/Product/ProductModal';
 import {Search} from '~/components/Search';
 import {usePreviewModeCustomerInit} from '~/lib/customer';
 import {
@@ -40,6 +41,8 @@ export function Layout({children}: {children: ReactNode}) {
         </main>
 
         <Footer />
+
+        <ProductModal />
 
         <Cart />
 

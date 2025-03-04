@@ -1,9 +1,10 @@
 import {MediaFile} from '@shopify/hydrogen';
 import {useInView} from 'react-intersection-observer';
-import type {Image, MediaEdge} from '@shopify/hydrogen/storefront-api-types';
+import type {Image} from '@shopify/hydrogen/storefront-api-types';
 
 import {ProductImage} from './ProductImage';
 import {ProductVideo} from './ProductVideo';
+import type {ProductMediaFileProps} from './ProductMedia.types';
 
 type MediaFileData = React.ComponentProps<typeof MediaFile>['data'];
 type TypeName = MediaFileData['__typename'];
@@ -14,13 +15,6 @@ const TYPE_NAME_MAP: Record<string, TypeName> = {
   IMAGE: 'MediaImage',
   EXTERNAL_VIDEO: 'ExternalVideo',
 };
-
-interface ProductMediaFileProps {
-  alt: string;
-  media: MediaEdge['node'];
-  onLoad?: () => void;
-  priority?: boolean;
-}
 
 export function ProductMediaFile({
   alt,

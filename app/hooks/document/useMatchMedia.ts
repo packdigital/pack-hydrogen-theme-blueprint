@@ -3,8 +3,8 @@ import {useCallback, useEffect, useState} from 'react';
 /*
  * NOTE: do not use match media to dictate the layout or visual elements between
  * breakpoints, as it will cause hydration errors or layout shift and flashing
- * of changing content with SSG upon hydration INSTEAD: use Tailwind breakpoint
- * styling to avoid layout shift with SSG
+ * of changing content with SSR upon hydration INSTEAD: use Tailwind breakpoint
+ * styling to avoid layout shift with SSR
  */
 
 /**

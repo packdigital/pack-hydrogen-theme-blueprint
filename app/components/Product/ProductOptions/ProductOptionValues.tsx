@@ -8,6 +8,7 @@ import {ProductOptionValue} from './ProductOptionValue';
 import type {ProductOptionValuesProps} from './ProductOptions.types';
 
 export function ProductOptionValues({
+  isModalProduct,
   onSelect,
   option: initialOption,
   product,
@@ -67,6 +68,7 @@ export function ProductOptionValues({
                       <li key={optionValue.name}>
                         <ProductOptionValue
                           index={index}
+                          isModalProduct={isModalProduct}
                           name={name}
                           optimisticSelectedIndex={optimisticSelectedIndex}
                           product={product}
@@ -102,6 +104,7 @@ export function ProductOptionValues({
                 <li key={optionValue.name}>
                   <ProductOptionValue
                     index={index}
+                    isModalProduct={isModalProduct}
                     name={name}
                     optimisticSelectedIndex={optimisticSelectedIndex}
                     product={product}

@@ -5,23 +5,14 @@ import {A11y, Pagination} from 'swiper/modules';
 import type {Image} from '@shopify/hydrogen/storefront-api-types';
 
 import {Badges} from '~/components/Badges';
-import type {
-  ProductWithGrouping,
-  ProductWithStatus,
-  SelectedVariant,
-} from '~/lib/types';
+import type {ProductWithStatus} from '~/lib/types';
 
 import {ProductImage} from './ProductImage';
 import {ProductMediaFile} from './ProductMediaFile';
 import {ProductMediaThumbnails} from './ProductMediaThumbnails';
 import {ProductDraftMediaOverlay} from './ProductDraftMediaOverlay';
 import {useProductMedia} from './useProductMedia';
-
-interface ProductMediaProps {
-  product: ProductWithGrouping;
-  selectedVariant: SelectedVariant;
-  selectedVariantColor: string | null | undefined;
-}
+import type {ProductMediaProps} from './ProductMedia.types';
 
 export function ProductMedia({
   product,

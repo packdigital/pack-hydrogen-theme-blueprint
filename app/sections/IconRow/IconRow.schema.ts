@@ -104,7 +104,6 @@ export function Schema() {
           },
         ],
         defaultValue: {
-          bgColor: COLOR_SCHEMA_DEFAULT_VALUE.neutralLightest,
           textColor: COLOR_SCHEMA_DEFAULT_VALUE.text,
           iconColor: COLOR_SCHEMA_DEFAULT_VALUE.primary,
           fullWidth: false,

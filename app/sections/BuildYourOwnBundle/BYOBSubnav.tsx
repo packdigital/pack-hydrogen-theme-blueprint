@@ -1,4 +1,4 @@
-import {BYOB_SUBNAV_HEIGHT} from './BuildYourOwnBundle';
+import {BYOB_SUBNAV_HEIGHT} from './constants';
 import type {BYOBSubnavProps} from './BuildYourOwnBundle.types';
 
 export function BYOBSubnav({

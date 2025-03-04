@@ -1,23 +1,24 @@
-import {useCallback, useMemo} from 'react';
+import {useCallback} from 'react';
 import {useAnalytics} from '@shopify/hydrogen';
-import {useProduct} from '@shopify/hydrogen-react';
 
 import {AnalyticsEvent} from '~/components/Analytics/constants';
-import {useColorSwatches} from '~/hooks';
 
 import {ProductOptionValues} from './ProductOptionValues';
 import type {OnSelect, ProductOptionsProps} from './ProductOptions.types';
 
 export function ProductOptions({
+  isModalProduct,
+  isShoppableProductCard,
   product,
-  selectedVariant,
+  selectedOptionsMap,
+  setSelectedOption,
+  swatchesMap,
 }: ProductOptionsProps) {
-  const swatchesMap = useColorSwatches();
-  const {setSelectedOption} = useProduct();
   const {publish, shop} = useAnalytics();
 
   const handleSelect: OnSelect = useCallback(
     ({selectedVariant, optionName, optionValue, fromGrouping = false}) => {
+      if (isShoppableProductCard) return;
       publish(AnalyticsEvent.PRODUCT_VARIANT_SELECTED, {
         selectedVariant,
         optionName,
@@ -27,16 +28,8 @@ export function ProductOptions({
         shop,
       });
     },
-    [publish, product.handle],
+    [isShoppableProductCard, publish, product.handle],
   );
-
-  const selectedOptionsMap = useMemo(() => {
-    if (!selectedVariant) return null;
-    return selectedVariant.selectedOptions.reduce(
-      (acc: Record<string, string>, {name, value}) => ({...acc, [name]: value}),
-      {},
-    );
-  }, [selectedVariant]);
 
   return (
     <div className="flex flex-col">
@@ -47,6 +40,7 @@ export function ProductOptions({
             className="border-b border-b-border py-4 first:border-t first:border-t-border"
           >
             <ProductOptionValues
+              isModalProduct={isModalProduct}
               onSelect={handleSelect}
               option={option}
               product={product}

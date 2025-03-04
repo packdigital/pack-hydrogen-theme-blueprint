@@ -21,7 +21,7 @@
             "links": [
               {
                 "link": {
-                  "url": "/collections/men",
+                  "url": "/collections/all",
                   "text": "Continue Shopping"
                 }
               }
@@ -44,14 +44,14 @@
                 "links": [
                   {
                     "link": {
-                      "url": "/collections/men",
+                      "url": "/collections/all",
                       "text": "New Arrivals",
                       "type": "isExternal"
                     }
                   },
                   {
                     "link": {
-                      "url": "/collections/men",
+                      "url": "/collections/all",
                       "text": "All",
                       "type": "isExternal"
                     }
@@ -137,26 +137,26 @@
                 "links": [
                   {
                     "link": {
-                      "url": "/collections/men",
+                      "url": "/collections/all",
                       "text": "Best Sellers",
                       "type": "isExternal"
                     }
                   },
                   {
                     "link": {
-                      "url": "/collections/men",
+                      "url": "/collections/all",
                       "text": "New Arrivals",
                       "type": "isExternal"
                     }
                   }
                 ],
                 "mainLink": {
-                  "url": "/collections/men",
+                  "url": "/collections/all",
                   "text": "Shop All",
                   "type": "isExternal"
                 },
                 "navItem": {
-                  "url": "/collections/men",
+                  "url": "/collections/all",
                   "text": "Shop",
                   "type": "isExternal"
                 },
@@ -186,7 +186,7 @@
                   {
                     "alt": "jacket",
                     "link": {
-                      "url": "/collections/men",
+                      "url": "/collections/all",
                       "type": "isExternal"
                     },
                     "image": {
@@ -226,7 +226,7 @@
           "links": [
             {
               "link": {
-                "url": "/collections/men",
+                "url": "/collections/all",
                 "text": "Shop All"
               }
             },
@@ -614,7 +614,7 @@
                     "buttons": [
                       {
                         "link": {
-                          "url": "/collections/men",
+                          "url": "/collections/all",
                           "text": "Shop Now",
                           "type": "isExternal"
                         },
@@ -671,7 +671,7 @@
                     {
                       "alt": "Man in white and light tan outfit",
                       "link": {
-                        "url": "/collections/men",
+                        "url": "/collections/all",
                         "type": "isExternal"
                       },
                       "image": {
@@ -684,7 +684,7 @@
                     {
                       "alt": "Man in brown coat sitting down",
                       "link": {
-                        "url": "/collections/men",
+                        "url": "/collections/all",
                         "type": "isExternal"
                       },
                       "image": {
@@ -697,7 +697,7 @@
                     {
                       "alt": "Man in gray sweater and tan coat",
                       "link": {
-                        "url": "/collections/men",
+                        "url": "/collections/all",
                         "type": "isExternal"
                       },
                       "image": {
@@ -846,7 +846,7 @@
                 "buttons": [
                   {
                     "link": {
-                      "url": "/collections/men",
+                      "url": "/collections/all",
                       "text": "Shop Now",
                       "type": "isExternal"
                     },
@@ -907,7 +907,7 @@
                 "buttons": [
                   {
                     "link": {
-                      "url": "/collections/men",
+                      "url": "/collections/all",
                       "text": "Shop Now",
                       "type": "isExternal"
                     },

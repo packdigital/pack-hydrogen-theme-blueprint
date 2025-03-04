@@ -55,6 +55,9 @@ declare global {
     fueledConfig?: Record<string, any>;
     // Klaviyo
     klaviyo?: any;
+    // Blotout
+    edgetag?: Function;
+    OneTrust?: any;
   }
 }
 

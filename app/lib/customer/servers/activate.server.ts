@@ -2,17 +2,6 @@ import type {ActionFunctionArgs, AppLoadContext} from '@shopify/remix-oxygen';
 
 import {customerActivateClient} from '~/lib/customer';
 
-const getActivateFormError = (
-  error: string | unknown,
-  context: AppLoadContext,
-) => {
-  if (context.storefront.isApiError(error)) {
-    return 'Something went wrong. Please try again later.';
-  } else {
-    return 'Sorry. We could not activate your account.';
-  }
-};
-
 interface Data {
   errors: string[] | null;
   formErrors: string[] | null;
@@ -55,7 +44,7 @@ export const customerActivateAction = async ({
   } catch (error) {
     console.error('customerActivateAction:error', error);
     data.errors = [error as string];
-    data.formErrors = [getActivateFormError(error, context)];
+    data.formErrors = ['Sorry. We could not activate your account.'];
     return {data, status: 500};
   }
 };

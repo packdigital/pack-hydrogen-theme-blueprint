@@ -45,7 +45,7 @@ export interface QuickShopOptionsProps {
   selectedVariant: ProductVariant;
 }
 
-export interface QuickShopOptionsProps {
+export interface QuickShopOptionProps {
   optionName: string;
   selectedProduct: Product;
   optionValue: ProductOptionValue;

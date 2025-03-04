@@ -1,11 +1,13 @@
 import {PROMOBAR_HEIGHT_MOBILE, PROMOBAR_HEIGHT_DESKTOP} from '~/lib/constants';
 import {usePromobarContext} from '~/contexts/PromobarProvider/usePromobarContext';
+import {useSettingsContext} from '~/contexts/SettingsProvider/useSettingsContext';
 import {useSettings} from '~/hooks';
 
 export interface UsePromobarReturn {
   headerMobileHeightClass: string;
   headerDesktopHeightClass: string;
   headerHeightClass: string;
+  isTransparentNavPage: boolean;
   mainPaddingTopClass: string;
   menuMobileHeightClass: string;
   menuDesktopHeightClass: string;
@@ -18,40 +20,50 @@ export interface UsePromobarReturn {
 }
 
 export function usePromobar(): UsePromobarReturn {
-  const {state, actions} = usePromobarContext();
+  const {
+    state: {promobarOpen},
+    actions: {togglePromobar},
+  } = usePromobarContext();
+  const {
+    state: {isTransparentNavPage},
+  } = useSettingsContext();
   const {header} = useSettings();
   const {promobar} = {...header};
 
   const promobarDisabled =
-    !!promobar && (!promobar.enabled || !promobar.messages?.length);
+    isTransparentNavPage ||
+    (!!promobar && (!promobar.enabled || !promobar.messages?.length));
 
   const headerMobileHeightClass =
-    state.promobarOpen && !promobarDisabled
+    promobarOpen && !promobarDisabled
       ? 'max-md:h-[calc(var(--header-height-mobile)+var(--promobar-height-mobile))]'
       : 'max-md:h-[var(--header-height-mobile)]';
   const headerDesktopHeightClass =
-    state.promobarOpen && !promobarDisabled
+    promobarOpen && !promobarDisabled
       ? 'md:h-[calc(var(--header-height-desktop)+var(--promobar-height-desktop))]'
       : 'md:h-[var(--header-height-desktop)]';
   const headerHeightClass = `${headerMobileHeightClass} ${headerDesktopHeightClass}`;
 
   const menuMobileHeightClass =
-    state.promobarOpen && !promobarDisabled
+    promobarOpen && !promobarDisabled
       ? 'max-md:h-[calc(var(--viewport-height)-var(--header-height-mobile)-var(--promobar-height-mobile))]'
       : 'max-md:h-[calc(var(--viewport-height)-var(--header-height-mobile))]';
   const menuDesktopHeightClass =
-    state.promobarOpen && !promobarDisabled
+    promobarOpen && !promobarDisabled
       ? 'md:h-[calc(var(--viewport-height)-var(--header-height-desktop)-var(--promobar-height-desktop))]'
       : 'md:h-[calc(var(--viewport-height)-var(--header-height-desktop))]';
   const menuHeightClass = `${menuMobileHeightClass} ${menuDesktopHeightClass}`;
-  const mainPaddingTopClass = promobarDisabled
-    ? 'max-md:pt-[var(--header-height-mobile)] md:pt-[var(--header-height-desktop)]'
-    : 'max-md:pt-[calc(var(--header-height-mobile)+var(--promobar-height-mobile))] md:pt-[calc(var(--header-height-desktop)+var(--promobar-height-desktop))]';
+  const mainPaddingTopClass = !isTransparentNavPage
+    ? promobarDisabled
+      ? 'max-md:pt-[var(--header-height-mobile)] md:pt-[var(--header-height-desktop)]'
+      : 'max-md:pt-[calc(var(--header-height-mobile)+var(--promobar-height-mobile))] md:pt-[calc(var(--header-height-desktop)+var(--promobar-height-desktop))]'
+    : '';
 
   return {
     headerMobileHeightClass,
     headerDesktopHeightClass,
     headerHeightClass,
+    isTransparentNavPage,
     mainPaddingTopClass,
     menuMobileHeightClass,
     menuDesktopHeightClass,
@@ -59,7 +71,7 @@ export function usePromobar(): UsePromobarReturn {
     promobarDisabled,
     promobarHeightMobile: PROMOBAR_HEIGHT_MOBILE,
     promobarHeightDesktop: PROMOBAR_HEIGHT_DESKTOP,
-    promobarOpen: state.promobarOpen,
-    togglePromobar: actions.togglePromobar,
+    promobarOpen,
+    togglePromobar,
   };
 }

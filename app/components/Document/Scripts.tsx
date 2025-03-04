@@ -21,10 +21,10 @@ export const Scripts = memo(() => {
       new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
       j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-      })(window,document,'script','dataLayer', '${ENV?.PUBLIC_GTM_CONTAINER_ID}');`,
+      })(window,document,'script','dataLayer', '${ENV.PUBLIC_GTM_CONTAINER_ID}');`,
     },
     'body',
-    !!ENV?.PUBLIC_GTM_CONTAINER_ID,
+    !!ENV.PUBLIC_GTM_CONTAINER_ID,
   );
 
   // ↓ Other third party scripts ↓

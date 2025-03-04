@@ -26,16 +26,8 @@ const getAddressFromBody = (body?: FormData) => {
   };
 };
 
-const getFormError = (
-  error: string | unknown,
-  context: AppLoadContext,
-  message = 'We could not perform this address action',
-) => {
-  if (context.storefront.isApiError(error)) {
-    return 'Something went wrong. Please try again later.';
-  } else {
-    return `Sorry. ${message}. Please try again later.`;
-  }
+const getFormError = (message = 'We could not perform this address action') => {
+  return `Sorry. ${message}. Please try again later.`;
 };
 
 interface LoaderData {
@@ -225,17 +217,13 @@ export const customerAddressesAction = async ({
     console.error('customerOrdersLoader:error', error);
     data.errors = [error as string];
     if (!action) {
-      data.formErrors = [getFormError(error, context)];
+      data.formErrors = [getFormError()];
     }
     if (action === 'create-address') {
-      data.formErrors = [
-        getFormError(error, context, 'We could not create this address'),
-      ];
+      data.formErrors = [getFormError('We could not create this address')];
     }
     if (action === 'update-address') {
-      data.formErrors = [
-        getFormError(error, context, 'We could not update this address'),
-      ];
+      data.formErrors = [getFormError('We could not update this address')];
     }
     return {data, status: 500};
   }

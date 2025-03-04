@@ -11,6 +11,7 @@ import type {OnSelect} from '../ProductOptions.types';
 
 export interface ProductOptionValueProps {
   index: number;
+  isModalProduct?: boolean;
   name: string;
   onSelect?: OnSelect;
   optimisticSelectedIndex: number;
@@ -19,7 +20,7 @@ export interface ProductOptionValueProps {
   selectedOptionsMap?: Record<string, string> | null;
   setOptimisticSelectedIndex: (index: number) => void;
   setSelectedOption: (name: string, value: string) => void;
-  swatchesMap: SwatchesMap;
+  swatchesMap?: SwatchesMap;
 }
 
 export interface ProductOptionValueLinkProps {
@@ -27,6 +28,7 @@ export interface ProductOptionValueLinkProps {
   isAvailable: boolean;
   isColor: boolean;
   isDisabled: boolean;
+  isModalProduct?: boolean;
   isSelected: boolean;
   onSelect?: OnSelect;
   optimisticSelectedIndex: number;
@@ -35,6 +37,37 @@ export interface ProductOptionValueLinkProps {
   selectedVariantFromOptions: SelectedVariant;
   setOptimisticSelectedIndex: (index: number) => void;
   swatch?: Swatch | null;
+}
+
+export interface ProductOptionValueLinkIntermediaryProps {
+  index: number;
+  isAvailable: boolean;
+  isColor: boolean;
+  isDisabled: boolean;
+  isSelected: boolean;
+  isVisiblySelected: boolean;
+  onSelect?: OnSelect;
+  optionName: string;
+  optionValue: ProductOptionValue;
+  selectedVariantFromOptions: SelectedVariant;
+  setOptimisticSelectedIndex: (index: number) => void;
+  swatch?: Swatch | null;
+}
+
+export interface ProductOptionValueLinkComponentProps {
+  index: number;
+  isAvailable: boolean;
+  isColor: boolean;
+  isDisabled: boolean;
+  isSelected: boolean;
+  isVisiblySelected: boolean;
+  onSelect?: OnSelect;
+  optionName: string;
+  optionValue: ProductOptionValue;
+  selectedVariantFromOptions: SelectedVariant;
+  setOptimisticSelectedIndex: (index: number) => void;
+  swatch?: Swatch | null;
+  url: string | null;
 }
 
 export interface ProductOptionValueButtonProps {

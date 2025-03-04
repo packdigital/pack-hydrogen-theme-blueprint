@@ -94,10 +94,10 @@ export function Schema() {
           },
         ],
         defaultValue: {
-          enabledStarRating: false,
-          enabledColorSelector: false,
+          enabledStarRating: true,
+          enabledColorSelector: true,
           enabledColorNameOnHover: false,
-          enabledQuickShop: false,
+          enabledQuickShop: true,
           quickShopMobileHidden: true,
         },
       },

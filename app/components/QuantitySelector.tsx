@@ -2,6 +2,7 @@ import {Spinner} from '~/components/Animations';
 import {Svg} from '~/components/Svg';
 
 interface QuantitySelectorProps {
+  className?: string;
   disabled?: boolean;
   disableDecrement?: boolean;
   disableIncrement?: boolean;
@@ -14,6 +15,7 @@ interface QuantitySelectorProps {
 }
 
 export function QuantitySelector({
+  className = '',
   disabled = false,
   disableDecrement = false,
   disableIncrement = false,
@@ -25,7 +27,9 @@ export function QuantitySelector({
   quantity = 1,
 }: QuantitySelectorProps) {
   return (
-    <div className="flex w-full max-w-[6.5rem] items-center justify-between">
+    <div
+      className={`flex w-full max-w-[6.5rem] items-center justify-between ${className}`}
+    >
       <button
         aria-label={`Reduce quantity of ${productTitle} by 1 to ${
           quantity - 1

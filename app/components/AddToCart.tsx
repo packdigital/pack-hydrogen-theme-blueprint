@@ -1,3 +1,4 @@
+import {useEffect} from 'react';
 import type {
   AttributeInput,
   SellingPlan,
@@ -12,8 +13,12 @@ interface AddToCartProps {
   addToCartText?: string;
   attributes?: AttributeInput[];
   className?: string;
+  containerClassName?: string;
+  enabledInlinePrice?: boolean;
   isPdp?: boolean;
   quantity?: number;
+  onAddToCart?: () => void;
+  price?: string;
   selectedVariant: SelectedVariant;
   sellingPlanId?: SellingPlan['id'];
 }
@@ -22,8 +27,12 @@ export function AddToCart({
   addToCartText = '',
   attributes,
   className = '',
+  containerClassName = '',
+  enabledInlinePrice,
   isPdp = false,
   quantity = 1,
+  onAddToCart,
+  price,
   selectedVariant,
   sellingPlanId,
 }: AddToCartProps) {
@@ -45,11 +54,17 @@ export function AddToCart({
     sellingPlanId,
   });
 
+  useEffect(() => {
+    if (isAdded && onAddToCart) {
+      onAddToCart();
+    }
+  }, [isAdded, onAddToCart]);
+
   const isUpdatingClass = isAdding || cartIsUpdating ? 'cursor-default' : '';
   const isNotifyMeClass = isNotifyMe ? 'btn-inverse-dark' : 'btn-primary';
 
   return (
-    <div>
+    <div className={`${containerClassName}`}>
       <button
         aria-label={buttonText}
         className={`${isNotifyMeClass} relative w-full ${isUpdatingClass} ${className}`}
@@ -67,6 +82,11 @@ export function AddToCart({
       >
         <span className={`${isAdding || isAdded ? 'invisible' : 'visible'}`}>
           {buttonText}
+          {!isSoldOut && (
+            <span className="font-normal">
+              {enabledInlinePrice && price ? ` - ${price}` : ''}
+            </span>
+          )}
         </span>
 
         {isAdding && (

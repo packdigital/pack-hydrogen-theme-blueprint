@@ -6,17 +6,7 @@ import type {
   Image,
   Shop,
 } from '@shopify/hydrogen/storefront-api-types';
-import type {
-  Article as SeoArticle,
-  BreadcrumbList,
-  Blog as SeoBlog,
-  CollectionPage,
-  Offer,
-  Organization,
-  Product as SeoProduct,
-  SearchResultsPage,
-  WebPage,
-} from 'schema-dts';
+import type {CollectionPage, Offer, SearchResultsPage} from 'schema-dts';
 
 import type {
   ArticlePage,
@@ -99,7 +89,7 @@ function root({
   shop: Shop;
   siteSettings: RootSiteSettings;
   url: Request['url'];
-}): SeoConfig<Organization> {
+}): SeoConfig {
   const {title: seoSiteTitle, description: seoSiteDescription} = {
     ...siteSettings?.data?.siteSettings?.seo,
   } as Seo;
@@ -140,7 +130,7 @@ function home({
   page?: Page;
   shop: Shop;
   siteSettings: RootSiteSettings;
-}): SeoConfig<WebPage> {
+}): SeoConfig {
   const {title, description, media, robots} = getMeta({
     page,
     shop,
@@ -186,7 +176,7 @@ function productJsonLd({
   product: ProductRequiredFields;
   selectedVariant: SelectedVariantRequiredFields;
   url: Request['url'];
-}): SeoConfig<SeoProduct | BreadcrumbList>['jsonLd'] {
+}): SeoConfig['jsonLd'] {
   const origin = new URL(url).origin;
   const variants = product.variants?.nodes;
   const description = truncate(
@@ -259,7 +249,7 @@ function product({
   shop: Shop;
   siteSettings: RootSiteSettings;
   url: Request['url'];
-}): SeoConfig<SeoProduct | BreadcrumbList> {
+}): SeoConfig {
   const {title, description, media, robots} = getMeta({
     affixSiteTitleToSeoTitle: false,
     page,
@@ -293,7 +283,7 @@ function collectionJsonLd({
 }: {
   collection: CollectionRequiredFields;
   url: Request['url'];
-}): SeoConfig<CollectionPage | BreadcrumbList>['jsonLd'] {
+}): SeoConfig['jsonLd'] {
   const origin = new URL(url).origin;
   const itemListElement: CollectionPage['mainEntity'] =
     collection.products.nodes.slice(0, 10).map((product, index) => {
@@ -351,7 +341,7 @@ function collection({
   shop: Shop;
   siteSettings: RootSiteSettings;
   url: Request['url'];
-}): SeoConfig<CollectionPage | BreadcrumbList> {
+}): SeoConfig {
   const {title, description, media, robots} = getMeta({
     affixSiteTitleToSeoTitle: false,
     page,
@@ -386,7 +376,7 @@ function searchJsonLd({
 }: {
   search: SearchRequiredFields;
   url: Request['url'];
-}): SeoConfig<SearchResultsPage | BreadcrumbList>['jsonLd'] {
+}): SeoConfig['jsonLd'] {
   const origin = new URL(url).origin;
   const itemListElement: SearchResultsPage['mainEntity'] = search.products.nodes
     .slice(0, 10)
@@ -445,7 +435,7 @@ function search({
   shop: Shop;
   siteSettings: RootSiteSettings;
   url: Request['url'];
-}): SeoConfig<SearchResultsPage | BreadcrumbList> {
+}): SeoConfig {
   const {title, description, media, robots} = getMeta({
     page,
     resource: search,
@@ -471,7 +461,7 @@ function article({
   shop: Shop;
   siteSettings: RootSiteSettings;
   url: Request['url'];
-}): SeoConfig<SeoArticle> {
+}): SeoConfig {
   const {title, description, pageTitle, pageDescription, media, robots} =
     getMeta({
       page,
@@ -505,7 +495,7 @@ function blog({
   shop: Shop;
   siteSettings: RootSiteSettings;
   url: Request['url'];
-}): SeoConfig<SeoBlog> {
+}): SeoConfig {
   const {title, description, pageTitle, pageDescription, media, robots} =
     getMeta({
       page,
@@ -535,7 +525,7 @@ function page({
   page: Page;
   shop: Shop;
   siteSettings: RootSiteSettings;
-}): SeoConfig<WebPage> {
+}): SeoConfig {
   const {title, description, pageTitle, media, robots} = getMeta({
     page,
     shop,

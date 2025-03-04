@@ -10,3 +10,7 @@ export const PRODUCT_METAFIELDS_IDENTIFIERS = [] as MetafieldIdentifier[];
 /* Ensure updating this ratio as needed. Required format is 'width/height' */
 export const PRODUCT_IMAGE_ASPECT_RATIO: AspectRatio =
   '3/4'; /* Ensure this is equivalent to product-image-aspect-ratio in app.css */
+
+export const MODAL_PRODUCT_URL_PARAM = 'modalProduct';
+
+export const PRODUCT_MODAL_PANEL = 'product-modal-panel';

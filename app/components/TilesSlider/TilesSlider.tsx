@@ -1,5 +1,4 @@
 import {useState, forwardRef} from 'react';
-import type {LegacyRef} from 'react';
 import type {SwiperClass} from 'swiper/react';
 import {Swiper, SwiperSlide} from 'swiper/react';
 
@@ -37,7 +36,7 @@ export const TilesSlider = forwardRef(
       tilesPerViewTablet = 2.4,
       tilesPerViewMobile = 1.4,
     }: TilesSliderProps,
-    ref: LegacyRef<HTMLDivElement> | undefined,
+    ref: React.Ref<HTMLDivElement> | undefined,
   ) => {
     const [swiper, setSwiper] = useState<SwiperClass | null>(null);
 

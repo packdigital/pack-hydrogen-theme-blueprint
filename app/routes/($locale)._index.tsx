@@ -1,7 +1,7 @@
 import {useLoaderData} from '@remix-run/react';
-import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 import {RenderSections} from '@pack/react';
+import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 
 import {getShop, getSiteSettings} from '~/lib/utils';
 import {PAGE_QUERY} from '~/data/graphql/pack/page';
@@ -11,7 +11,8 @@ import {seoPayload} from '~/lib/seo.server';
 export const headers = routeHeaders;
 
 export async function loader({context, params, request}: LoaderFunctionArgs) {
-  const {language, country} = context.storefront.i18n;
+  const {storefront, pack} = context;
+  const {language, country} = storefront.i18n;
 
   if (
     params.locale &&
@@ -23,9 +24,9 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
   }
 
   const [{data}, shop, siteSettings] = await Promise.all([
-    context.pack.query(PAGE_QUERY, {
+    pack.query(PAGE_QUERY, {
       variables: {handle: '/'},
-      cache: context.storefront.CacheLong(),
+      cache: storefront.CacheLong(),
     }),
     getShop(context),
     getSiteSettings(context),

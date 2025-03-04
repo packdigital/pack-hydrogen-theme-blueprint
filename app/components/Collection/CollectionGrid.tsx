@@ -29,6 +29,13 @@ export const CollectionGrid = memo(
       return products;
     }, [JSON.stringify(products.pageInfo)]);
 
+    const promoTilesByPosition = useMemo(() => {
+      return promoTiles?.reduce((acc, tile) => {
+        acc[tile.position] = tile;
+        return acc;
+      }, {} as Record<number, (typeof promoTiles)[0]>);
+    }, [promoTiles]);
+
     return (
       <Pagination connection={connection}>
         {({nodes, isLoading, PreviousLink, NextLink}) => {
@@ -60,9 +67,7 @@ export const CollectionGrid = memo(
                 } md:px-0`}
               >
                 {productNodes.map((product, index) => {
-                  const promoTile = promoTiles?.find(
-                    ({position}) => position === index + 1,
-                  );
+                  const promoTile = promoTilesByPosition?.[index + 1];
                   return (
                     <Fragment key={product.id}>
                       {promoTile && (

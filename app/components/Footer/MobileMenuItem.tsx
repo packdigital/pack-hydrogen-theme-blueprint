@@ -1,10 +1,6 @@
-import {
-  Disclosure,
-  DisclosureButton,
-  DisclosurePanel,
-  Transition,
-} from '@headlessui/react';
+import {Disclosure, DisclosureButton, DisclosurePanel} from '@headlessui/react';
 
+import {Expand} from '~/components/Expand';
 import {Link} from '~/components/Link';
 import {Svg} from '~/components/Svg';
 import type {Settings} from '~/lib/types';
@@ -34,15 +30,7 @@ export function MobileMenuItem({
             />
           </DisclosureButton>
 
-          <Transition
-            show={open}
-            enter="transition duration-100 ease-out"
-            enterFrom="transform scale-97 opacity-0"
-            enterTo="transform scale-100 opacity-100"
-            leave="transition duration-75 ease-out"
-            leaveFrom="transform scale-100 opacity-100"
-            leaveTo="transform scale-97 opacity-0"
-          >
+          <Expand open={open}>
             <DisclosurePanel
               as="ul"
               className="flex flex-col items-start gap-2 px-4 pb-6"
@@ -65,7 +53,7 @@ export function MobileMenuItem({
                 );
               })}
             </DisclosurePanel>
-          </Transition>
+          </Expand>
         </>
       )}
     </Disclosure>

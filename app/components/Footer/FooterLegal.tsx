@@ -1,14 +1,19 @@
+import {useMemo} from 'react';
+
 import {Link} from '~/components/Link';
 import type {Settings} from '~/lib/types';
 
 export function FooterLegal({settings}: {settings: Settings['footer']}) {
   const {links, copyrightNotice} = {...settings?.legal};
 
+  const copyrightNoticeWithYear = useMemo(() => {
+    const currentYear = new Date().getFullYear();
+    return copyrightNotice?.replace('{{year}}', currentYear.toString());
+  }, [copyrightNotice]);
+
   return (
     <div className="flex flex-col gap-x-4 gap-y-1 text-base text-current md:flex-row md:p-0 md:text-sm">
-      <p>
-        Copyright © {new Date().getFullYear()} {copyrightNotice}
-      </p>
+      <p>{copyrightNoticeWithYear}</p>
 
       <ul className="flex flex-wrap gap-x-4 gap-y-1">
         {links?.map(({link}, index) => {

@@ -9,12 +9,11 @@ import {BYOBProductItem} from './BYOBProductItem';
 import {BYOBSummary} from './BYOBSummary';
 import {BYOBSubnav} from './BYOBSubnav';
 import {Schema} from './BuildYourOwnBundle.schema';
+import {BYOB_SUBNAV_HEIGHT} from './constants';
 import type {
   BuildYourOwnBundleCms,
   BundleMapById,
 } from './BuildYourOwnBundle.types';
-
-export const BYOB_SUBNAV_HEIGHT = 48;
 
 export function BuildYourOwnBundle({cms}: {cms: BuildYourOwnBundleCms}) {
   const {productGroupings, tiers, defaultHeading, preselects} = cms;

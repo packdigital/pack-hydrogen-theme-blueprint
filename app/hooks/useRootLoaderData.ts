@@ -1,9 +1,11 @@
+import type {useLoaderData} from '@remix-run/react';
 import {useMatches} from '@remix-run/react';
-import type {SerializeFrom} from '@shopify/remix-oxygen';
 
 import type {loader} from '~/root';
 
-export type RootLoaderData = SerializeFrom<typeof loader>;
+export type RootLoaderData = ReturnType<
+  typeof useLoaderData<typeof loader>
+>['data'];
 
 export function useRootLoaderData(): RootLoaderData {
   const [root, layout, child] = useMatches();

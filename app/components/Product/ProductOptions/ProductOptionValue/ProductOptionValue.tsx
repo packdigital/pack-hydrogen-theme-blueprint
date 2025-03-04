@@ -8,6 +8,7 @@ import type {ProductOptionValueProps} from './ProductOptionValue.types';
 export const ProductOptionValue = memo(
   ({
     index,
+    isModalProduct,
     name,
     onSelect,
     optimisticSelectedIndex,
@@ -40,6 +41,7 @@ export const ProductOptionValue = memo(
         isAvailable={isAvailable}
         isColor={isColor}
         isDisabled={isDisabled}
+        isModalProduct={isModalProduct}
         isSelected={isSelected}
         onSelect={onSelect}
         optimisticSelectedIndex={optimisticSelectedIndex}

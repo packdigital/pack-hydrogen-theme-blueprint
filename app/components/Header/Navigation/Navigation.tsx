@@ -1,12 +1,15 @@
 import {memo} from 'react';
-import {useCart} from '@shopify/hydrogen-react';
 
 import {Link} from '~/components/Link';
 import {Svg} from '~/components/Svg';
+import {HEADER_NAVIGATION} from '~/lib/constants';
 import {useCustomer, useMenu, useSettings} from '~/hooks';
 
-import type {UseDesktopMenuReturn} from './useDesktopMenu';
-import type {UseMobileMenuReturn} from './useMobileMenu';
+import type {UseDesktopMenuReturn} from '../useDesktopMenu';
+import type {UseMobileMenuReturn} from '../useMobileMenu';
+
+import {NavigationCart} from './NavigationCart';
+import {NavigationLogo} from './NavigationLogo';
 
 type NavigationProps = Pick<
   UseMobileMenuReturn,
@@ -30,11 +33,18 @@ export const Navigation = memo(
     desktopMenuContent,
     mobileMenuOpen,
   }: NavigationProps) => {
-    const {totalQuantity = 0} = useCart();
     const customer = useCustomer();
-    const {openCart, openSearch} = useMenu();
+    const {openSearch} = useMenu();
     const {header} = useSettings();
-    const {logoPositionDesktop, navItems} = {...header?.menu};
+    const {
+      bgColor = 'var(--background)',
+      textColor = 'var(--text)',
+      iconColor = 'var(--text)',
+      logoPositionDesktop,
+      navItems,
+    } = {
+      ...header?.menu,
+    };
     const gridColsClassDesktop =
       logoPositionDesktop === 'center'
         ? 'lg:grid-cols-[1fr_auto_1fr]'
@@ -46,17 +56,12 @@ export const Navigation = memo(
 
     return (
       <div
-        className={`px-contained relative z-[1] grid flex-1 grid-cols-[1fr_auto_1fr] gap-4 border-b border-b-border bg-background transition md:gap-8 ${gridColsClassDesktop}`}
+        className={`px-contained relative z-[1] grid flex-1 grid-cols-[1fr_auto_1fr] gap-4 border-b border-b-border transition md:gap-8 ${gridColsClassDesktop}`}
+        data-comp={HEADER_NAVIGATION}
+        style={{backgroundColor: bgColor, color: textColor}}
       >
         <div className={`order-2 flex items-center ${logoOrderClassDesktop}`}>
-          <Link aria-label="Go to homepage" to="/">
-            <Svg
-              className="h-8 text-text"
-              src="/svgs/pack-logo.svg#pack-logo"
-              title="Storefront logo"
-              viewBox="0 0 44 34"
-            />
-          </Link>
+          <NavigationLogo color={iconColor} />
         </div>
 
         <div className={`order-1 flex items-center ${menuOrderClassDesktop}`}>
@@ -70,15 +75,15 @@ export const Navigation = memo(
                   <li key={index} className="flex">
                     <Link
                       aria-label={item.navItem?.text}
-                      className={`group relative flex cursor-pointer items-center px-4 transition ${
-                        isHovered ? 'bg-neutralLightest' : 'bg-background'
-                      }`}
+                      className="group relative flex cursor-pointer items-center px-4 transition"
                       to={item.navItem?.url}
                       onClick={handleDesktopMenuClose}
                       onMouseEnter={() => handleDesktopMenuHoverIn(index)}
                       onMouseLeave={handleDesktopMenuHoverOut}
                     >
-                      <p className="text-nav">{item.navItem?.text}</p>
+                      <p className="text-nav text-current">
+                        {item.navItem?.text}
+                      </p>
 
                       <div
                         className={`absolute left-0 top-[calc(100%_-_2px)] h-[3px] w-full origin-center scale-0 border-t-2 border-t-primary bg-transparent transition after:w-full group-hover:scale-100 ${
@@ -102,18 +107,19 @@ export const Navigation = memo(
                 if (mobileMenuOpen) handleCloseMobileMenu();
                 else handleOpenMobileMenu();
               }}
+              style={{color: iconColor}}
               type="button"
             >
               {mobileMenuOpen ? (
                 <Svg
-                  className="w-full text-text"
+                  className="w-full text-current"
                   src="/svgs/close.svg#close"
                   title="Close"
                   viewBox="0 0 24 24"
                 />
               ) : (
                 <Svg
-                  className="w-full text-text"
+                  className="w-full text-current"
                   src="/svgs/menu.svg#menu"
                   title="Navigation"
                   viewBox="0 0 24 24"
@@ -125,10 +131,11 @@ export const Navigation = memo(
               aria-label="Open search"
               className="block w-5 md:hidden"
               onClick={openSearch}
+              style={{color: iconColor}}
               type="button"
             >
               <Svg
-                className="w-full text-text"
+                className="w-full text-current"
                 src="/svgs/search.svg#search"
                 title="Search"
                 viewBox="0 0 24 24"
@@ -142,10 +149,11 @@ export const Navigation = memo(
             aria-label="Open search"
             className="hidden w-5 md:block"
             onClick={openSearch}
+            style={{color: iconColor}}
             type="button"
           >
             <Svg
-              className="w-full text-text"
+              className="w-full text-current"
               src="/svgs/search.svg#search"
               title="Search"
               viewBox="0 0 24 24"
@@ -154,35 +162,18 @@ export const Navigation = memo(
 
           <Link
             aria-label="Go to account page"
+            style={{color: iconColor}}
             to={customer ? `/account/orders` : `/account/login`}
           >
             <Svg
-              className="w-5 text-text"
+              className="w-5 text-current"
               src="/svgs/account.svg#account"
               title="Account"
               viewBox="0 0 24 24"
             />
           </Link>
 
-          <div className="relative flex items-center">
-            <button
-              aria-label="Open cart"
-              className="w-5"
-              onClick={openCart}
-              type="button"
-            >
-              <Svg
-                className="w-full text-text"
-                src="/svgs/cart.svg#cart"
-                title="Cart"
-                viewBox="0 0 24 24"
-              />
-            </button>
-
-            <p className="text-label-sm w-4 whitespace-nowrap pl-px font-bold">
-              ({totalQuantity || 0})
-            </p>
-          </div>
+          <NavigationCart color={iconColor} />
         </div>
       </div>
     );

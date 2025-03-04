@@ -1,12 +1,8 @@
-import {
-  Disclosure,
-  DisclosureButton,
-  DisclosurePanel,
-  Transition,
-} from '@headlessui/react';
+import {Disclosure, DisclosureButton, DisclosurePanel} from '@headlessui/react';
 import type {Metafield} from '@shopify/hydrogen/storefront-api-types';
 import startCase from 'lodash/startCase';
 
+import {Expand} from '~/components/Expand';
 import {Markdown} from '~/components/Markdown';
 import {Svg} from '~/components/Svg';
 
@@ -49,22 +45,14 @@ export function ProductMetafieldsAccordion({
             )}
           </DisclosureButton>
 
-          <Transition
-            show={open}
-            enter="transition duration-100 ease-out"
-            enterFrom="transform scale-97 opacity-0"
-            enterTo="transform scale-100 opacity-100"
-            leave="transition duration-75 ease-out"
-            leaveFrom="transform scale-100 opacity-100"
-            leaveTo="transform scale-97 opacity-0"
-          >
+          <Expand open={open}>
             <DisclosurePanel
               className="px-4 pt-4 [&_h1]:mb-3 [&_h1]:text-sm [&_h2]:mb-3 [&_h2]:text-sm [&_h3]:mb-3 [&_h3]:text-sm [&_h4]:mb-3 [&_h4]:text-sm [&_h5]:mb-3 [&_h5]:text-sm [&_h6]:mb-3 [&_h6]:text-sm [&_ol]:!pl-4 [&_ol]:text-sm [&_p]:mb-3 [&_p]:text-sm [&_ul]:!pl-4 [&_ul]:text-sm"
               static
             >
               <Markdown>{value}</Markdown>
             </DisclosurePanel>
-          </Transition>
+          </Expand>
         </>
       )}
     </Disclosure>

@@ -24,6 +24,7 @@ export default defineConfig({
   ssr: {
     optimizeDeps: {
       include: [
+        'hex-to-rgba',
         '@pack/types',
         '@remix-run/dev/server-build',
         'cookie',

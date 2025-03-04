@@ -7,6 +7,7 @@ import {getShop, getSiteSettings} from '~/lib/utils';
 import {PAGE_QUERY} from '~/data/graphql/pack/page';
 import {routeHeaders} from '~/data/cache';
 import {seoPayload} from '~/lib/seo.server';
+import {getProductsMapForPage} from '~/lib/products.server';
 
 export const headers = routeHeaders;
 
@@ -24,6 +25,12 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
 
   if (!data?.page) throw new Response(null, {status: 404});
 
+  /* Certain product sections require fetching products before page load */
+  const productsMap = await getProductsMapForPage({
+    context,
+    page: data.page,
+  });
+
   const isPolicy = handle?.includes('privacy') || handle?.includes('policy');
   const analytics = {
     pageType: isPolicy ? AnalyticsPageType.policy : AnalyticsPageType.page,
@@ -37,6 +44,7 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
   return {
     analytics,
     page: data.page,
+    productsMap,
     seo,
     url: request.url,
   };
