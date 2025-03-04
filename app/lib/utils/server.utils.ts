@@ -371,7 +371,7 @@ export const getMetafields = async (
 
   let metafields;
 
-  if (isDraftProduct) {
+  if (admin && isDraftProduct) {
     const ADMIN_PRODUCT_METAFIELDS_QUERY = `
       query AdminProductMetafields(
         $handle: String!

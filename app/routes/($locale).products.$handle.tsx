@@ -74,7 +74,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
 
   const productPage = pageData?.data?.productPage;
 
-  if (isPreviewModeEnabled) {
+  if (admin && isPreviewModeEnabled) {
     if (!queriedProduct) {
       const {productByIdentifier: adminProduct} = await admin.query(
         ADMIN_PRODUCT_QUERY,
