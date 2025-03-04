@@ -32,7 +32,7 @@ export async function loader({request, context}: LoaderFunctionArgs) {
     count,
   });
 
-  if (isPreviewModeEnabled) {
+  if (admin && isPreviewModeEnabled) {
     let queryIds = query.split(' OR ');
     queryIds = reverse ? [...queryIds].reverse() : queryIds;
 

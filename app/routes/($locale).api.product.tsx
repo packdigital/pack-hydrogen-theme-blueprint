@@ -34,7 +34,7 @@ export async function loader({request, context}: LoaderFunctionArgs) {
       );
     }
     let isDraftProduct = false;
-    if (isPreviewModeEnabled) {
+    if (admin && isPreviewModeEnabled) {
       const {productByIdentifier: adminProduct} = await admin.query(
         `
           query AdminProduct(
@@ -73,7 +73,7 @@ export async function loader({request, context}: LoaderFunctionArgs) {
   );
   product = storefrontProduct;
 
-  if (isPreviewModeEnabled) {
+  if (admin && isPreviewModeEnabled) {
     if (!product) {
       const {productByIdentifier: adminProduct} = await admin.query(
         ADMIN_PRODUCT_ITEM_QUERY,

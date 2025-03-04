@@ -33,7 +33,7 @@ export default {
        * Open a cache instance in the worker and a custom session instance.
        */
       if (!env?.SESSION_SECRET) {
-        throw new Error('SESSION_SECRET environment variable is not set');
+        throw new Error('`SESSION_SECRET` environment variable is not set.');
       }
 
       const waitUntil = (p: Promise<any>) => executionContext.waitUntil(p);
@@ -65,15 +65,23 @@ export default {
       /**
        * Create Admin API client.
        */
-      const {admin} = createAdminClient({
-        cache,
-        waitUntil,
-        i18n: getLocaleFromRequest(request),
-        privateAdminToken: env.PRIVATE_ADMIN_API_TOKEN,
-        storeDomain: env.PUBLIC_STORE_DOMAIN,
-        storefrontId: env.PUBLIC_STOREFRONT_ID,
-        adminHeaders: getAdminHeaders(request),
-      });
+      let admin = undefined;
+      if (env.PRIVATE_ADMIN_API_TOKEN) {
+        const {admin: adminClient} = createAdminClient({
+          cache,
+          waitUntil,
+          i18n: getLocaleFromRequest(request),
+          privateAdminToken: env.PRIVATE_ADMIN_API_TOKEN,
+          storeDomain: env.PUBLIC_STORE_DOMAIN,
+          storefrontId: env.PUBLIC_STOREFRONT_ID,
+          adminHeaders: getAdminHeaders(request),
+        });
+        admin = adminClient;
+      } else {
+        console.warn(
+          '`PRIVATE_ADMIN_API_TOKEN` environment variable is not set. Admin API features will be disabled, including previewing draft products while in the customizer.',
+        );
+      }
 
       /*
        * Create cart handler.
@@ -91,7 +99,7 @@ export default {
 
       // check if the PACK_SECRET_TOKEN is set
       if (!env.PACK_SECRET_TOKEN) {
-        throw new Error('PACK_SECRET_TOKEN environment variable is not set');
+        throw new Error('`PACK_SECRET_TOKEN` environment variable is not set.');
       }
 
       const pack = createPackClient({
@@ -144,7 +152,7 @@ export default {
       return response;
     } catch (error) {
       console.error(error);
-      return new Response('An unexpected error occurred', {status: 500});
+      return new Response('An unexpected error occurred.', {status: 500});
     }
   },
 };

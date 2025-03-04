@@ -128,7 +128,7 @@ export const getGrouping = async ({
 
   groupingProducts = queriedGroupingProducts;
 
-  if (isPreviewModeEnabled) {
+  if (admin && isPreviewModeEnabled) {
     if (queriedGroupingProducts?.length !== productsToQuery.length) {
       const groupingProductsById = queriedGroupingProducts?.reduce(
         (acc: Record<string, Product>, product) => {
@@ -191,7 +191,7 @@ export const getModalProduct = async ({
     });
     queriedProduct = storefrontProduct;
 
-    if (isPreviewModeEnabled && !queriedProduct) {
+    if (admin && isPreviewModeEnabled && !queriedProduct) {
       const {productByIdentifier: adminProduct} = await admin.query(
         ADMIN_PRODUCT_QUERY,
         {variables: {handle}, cache: admin.CacheShort()},
@@ -285,7 +285,7 @@ export const getProductsMapForPage = async ({
       count: productIds.length,
     });
 
-    if (isPreviewModeEnabled) {
+    if (admin && isPreviewModeEnabled) {
       if (products?.length !== productIds.length) {
         const productsById = products?.reduce((acc, product) => {
           if (product.id) acc[product.id] = product;
