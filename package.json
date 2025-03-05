@@ -2,7 +2,7 @@
   "name": "hydrogen-starter",
   "private": true,
   "sideEffects": false,
-  "version": "1.12.1",
+  "version": "1.12.2",
   "type": "module",
   "scripts": {
     "dev": "shopify hydrogen dev --port 8080",
@@ -19,6 +19,7 @@
   ],
   "prettier": "@shopify/prettier-config",
   "dependencies": {
+    "@fingerprintjs/botd": "^1.9.1",
     "@headlessui/react": "^2.2.0",
     "@headlessui/tailwindcss": "^0.2.2",
     "@pack/client": "^1.0.2",
