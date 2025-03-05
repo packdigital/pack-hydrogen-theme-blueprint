@@ -469,7 +469,7 @@ export const CART_FRAGMENT = `#graphql
 ` as const;
 
 export const CART_ATTRIBUTES_QUERY = `#graphql
-  query ProductPage($id: ID!) {
+  query CartAttributes($id: ID!) {
     cart: cart(id: $id) {
       id
       attributes {
