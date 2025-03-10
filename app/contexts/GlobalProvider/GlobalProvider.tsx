@@ -1,13 +1,17 @@
 import {useEffect, useMemo, useReducer} from 'react';
 import {useCart} from '@shopify/hydrogen-react';
+import {load} from '@fingerprintjs/botd';
 import type {ReactNode} from 'react';
 
 import type {Action, Dispatch, GlobalState} from '~/lib/types';
 
 import {Context} from './useGlobalContext';
 
+const botdPromise = load();
+
 const globalState = {
   isCartReady: false,
+  isBot: false,
 };
 
 const reducer = (state: GlobalState, action: Action) => {
@@ -17,6 +21,11 @@ const reducer = (state: GlobalState, action: Action) => {
         ...state,
         isCartReady: action.payload,
       };
+    case 'SET_IS_BOT':
+      return {
+        ...state,
+        isBot: action.payload,
+      };
     default:
       throw new Error(`Invalid Context action of type: ${action.type}`);
   }
@@ -25,6 +34,9 @@ const reducer = (state: GlobalState, action: Action) => {
 const actions = (dispatch: Dispatch) => ({
   setIsCartReady: (isReady: boolean) => {
     dispatch({type: 'SET_IS_CART_READY', payload: isReady});
+  },
+  setIsBot: (isBot: boolean) => {
+    dispatch({type: 'SET_IS_BOT', payload: isBot});
   },
 });
 
@@ -58,6 +70,12 @@ export function GlobalProvider({children}: {children: ReactNode}) {
       }, 1000);
     }
   }, [cartIsIdle]);
+
+  useEffect(() => {
+    botdPromise
+      .then((botd) => botd.detect())
+      .then((result) => value.actions.setIsBot(result.bot));
+  }, [botdPromise]);
 
   return <Context.Provider value={value}>{children}</Context.Provider>;
 }
