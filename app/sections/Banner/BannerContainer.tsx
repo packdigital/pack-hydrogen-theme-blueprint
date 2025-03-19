@@ -8,7 +8,7 @@ const FALLBACK_MOBILE_ASPECT_RATIO_CLASS = 'max-md:aspect-[3/1]';
 const FALLBACK_MOBILE_ASPECT_RATIO = '3 / 1';
 
 export function BannerContainer({children, cms}: BannerContainerProps) {
-  const {section, image, id, clientId} = cms;
+  const {section, image, id, clientId, video} = cms;
   const sectionId = id || clientId;
 
   // container
@@ -28,6 +28,14 @@ export function BannerContainer({children, cms}: BannerContainerProps) {
     desktopIsAspectRatioType && desktopIsNativeAspectRatio;
   const usesMobileNativeAspectRatio =
     mobileIsAspectRatioType && mobileIsNativeAspectRatio;
+  const desktopNativeAspectRatio =
+    video?.videoDesktop?.mediaType === 'VIDEO'
+      ? video?.videoDesktop?.aspectRatio
+      : image?.imageDesktop?.aspectRatio;
+  const mobileNativeAspectRatio =
+    video?.videoMobile?.mediaType === 'VIDEO'
+      ? video?.videoMobile?.aspectRatio
+      : image?.imageMobile?.aspectRatio;
 
   // height
   const heightClassesDesktop = desktopIsAspectRatioType
@@ -59,7 +67,7 @@ export function BannerContainer({children, cms}: BannerContainerProps) {
                   usesMobileNativeAspectRatio
                     ? `@media (max-width: 767px) {
                         aspect-ratio: ${
-                          image?.imageMobile?.aspectRatio ||
+                          mobileNativeAspectRatio ||
                           FALLBACK_MOBILE_ASPECT_RATIO
                         };
                       }`
@@ -69,7 +77,7 @@ export function BannerContainer({children, cms}: BannerContainerProps) {
                   usesDesktopNativeAspectRatio
                     ? `@media (min-width: 768px) {
                         aspect-ratio: ${
-                          image?.imageDesktop?.aspectRatio ||
+                          desktopNativeAspectRatio ||
                           FALLBACK_DESKTOP_ASPECT_RATIO
                         };
                       }`

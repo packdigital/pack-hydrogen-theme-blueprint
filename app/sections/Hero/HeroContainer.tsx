@@ -28,11 +28,11 @@ export function HeroContainer({children, cms}: HeroContainerProps) {
     mobileIsAspectRatioType && mobileIsNativeAspectRatio;
   const desktopNativeAspectRatio =
     slides?.[0]?.video?.videoDesktop?.mediaType === 'VIDEO'
-      ? slides?.[0]?.video?.posterDesktop?.aspectRatio
+      ? slides?.[0]?.video?.videoDesktop?.aspectRatio
       : slides?.[0]?.image?.imageDesktop?.aspectRatio;
   const mobileNativeAspectRatio =
     slides?.[0]?.video?.videoMobile?.mediaType === 'VIDEO'
-      ? slides?.[0]?.video?.posterMobile?.aspectRatio
+      ? slides?.[0]?.video?.videoMobile?.aspectRatio
       : slides?.[0]?.image?.imageMobile?.aspectRatio;
 
   const heightClassesDesktop = desktopIsAspectRatioType

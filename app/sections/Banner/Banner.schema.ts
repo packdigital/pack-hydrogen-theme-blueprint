@@ -314,7 +314,7 @@ export function Schema() {
                 label: 'Aspect Ratio',
                 name: 'aspectRatio',
                 component: 'select',
-                description: `If enabled, hero set to width:height ratio.\nNative Aspect Ratio will use the aspect ratio from the image.`,
+                description: `If enabled, hero set to width:height ratio.\nNative Aspect Ratio will use the aspect ratio from the image or video.`,
                 options: [
                   {label: 'Native Aspect Ratio', value: 'native'},
                   {label: '5:1', value: 'md:aspect-[5/1]'},
@@ -329,7 +329,8 @@ export function Schema() {
                 label: 'Aspect Ratio Min Height',
                 name: 'minHeight',
                 component: 'select',
-                description: 'Min height on desktop regardless of aspect ratio',
+                description:
+                  'Min height on tablet/desktop regardless of aspect ratio',
                 options: [
                   {label: 'None', value: ''},
                   {label: '200px', value: 'md:min-h-[12.5rem]'},
@@ -342,7 +343,8 @@ export function Schema() {
                 label: 'Aspect Ratio Max Height',
                 name: 'maxHeight',
                 component: 'select',
-                description: 'Max height aspect ratio can grow to on desktop',
+                description:
+                  'Max height aspect ratio can grow to on tablet/desktop',
                 options: [
                   {label: 'None', value: ''},
                   {label: '200px', value: 'md:max-h-[12.5rem]'},
@@ -397,7 +399,7 @@ export function Schema() {
                 label: 'Aspect Ratio',
                 name: 'aspectRatio',
                 component: 'select',
-                description: `If enabled, hero set to width:height ratio.\nNative Aspect Ratio will use the aspect ratio from the image.`,
+                description: `If enabled, hero set to width:height ratio.\nNative Aspect Ratio will use the aspect ratio from the image or video.`,
                 options: [
                   {label: 'Native Aspect Ratio', value: 'native'},
                   {label: '3:1', value: 'max-md:aspect-[3/1]'},
