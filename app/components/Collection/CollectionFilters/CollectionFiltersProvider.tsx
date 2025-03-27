@@ -44,6 +44,8 @@ export function CollectionFiltersProvider({
         }${value}`;
         searchParams.set(key, newParamValue);
       }
+      searchParams.delete('cursor');
+      searchParams.delete('direction');
       setSearchParams(searchParams);
     },
     [activeFilterValues, searchParams],
