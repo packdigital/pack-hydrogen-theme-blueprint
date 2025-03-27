@@ -121,6 +121,10 @@ export const CollectionSort = memo(
         } else {
           searchParams.delete('reverse');
         }
+
+        searchParams.delete('direction');
+        searchParams.delete('cursor');
+
         setSearchParams(searchParams, {
           preventScrollReset: false,
         });
