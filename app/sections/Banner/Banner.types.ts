@@ -56,8 +56,6 @@ export interface BannerCms {
     };
   };
   container: ContainerSettings;
-  id: string;
-  clientId: string;
 }
 
 export interface BannerContentProps {

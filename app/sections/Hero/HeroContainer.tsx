@@ -1,3 +1,6 @@
+import {useRef} from 'react';
+import {v4 as uuidv4} from 'uuid';
+
 import type {HeroContainerProps} from './Hero.types';
 
 const FALLBACK_DESKTOP_HEIGHT_CLASS = 'md:h-[43.75rem]';
@@ -8,8 +11,8 @@ const FALLBACK_MOBILE_ASPECT_RATIO_CLASS = 'max-md:aspect-[3/4]';
 const FALLBACK_MOBILE_ASPECT_RATIO = '3 / 4';
 
 export function HeroContainer({children, cms}: HeroContainerProps) {
-  const {section, slides, id, clientId} = cms;
-  const sectionId = id || clientId;
+  const randomId = useRef(uuidv4()).current;
+  const {section, slides} = cms;
 
   const maxWidthContainerClass = section?.fullWidth
     ? 'max-w-none'
@@ -52,7 +55,7 @@ export function HeroContainer({children, cms}: HeroContainerProps) {
   const heightContainerClasses = `${heightClassesMobile} ${heightClassesDesktop}`;
 
   /* unique class name is important to not override other hero aspect ratios */
-  const nativeAspectRatiosClass = `hero-native-aspect-ratios-${sectionId}`;
+  const nativeAspectRatiosClass = `hero-native-aspect-ratios-${randomId}`;
 
   return (
     <div className={`${fullBleedClass}`}>

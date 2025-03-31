@@ -8,10 +8,8 @@ import type {HeroSlideProps} from './Hero.types';
 
 export function HeroSlide({
   aboveTheFold,
-  index,
   isActiveSlide,
   isFirstSlide,
-  sectionId,
   slide,
 }: HeroSlideProps) {
   const {image, video} = slide;
@@ -79,10 +77,8 @@ export function HeroSlide({
 
       <HeroContent
         aboveTheFold={aboveTheFold}
-        index={index}
         isActiveSlide={isActiveSlide}
         isFirstSlide={isFirstSlide}
-        sectionId={sectionId}
         slide={slide}
       />
     </div>
