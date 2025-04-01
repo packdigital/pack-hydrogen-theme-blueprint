@@ -110,17 +110,21 @@ const addToCartEvent = ({
   try {
     if (debug) logSubscription({data, analyticsEvent});
 
-    const {currentLine, customer} = data;
+    const {currentLine, customer, prevLine} = data;
     if (!currentLine)
       throw new Error('`cart` and/or `currentLine` parameters are missing.');
 
+    const lineAdded = {
+      ...currentLine,
+      quantity: (currentLine.quantity || 1) - (prevLine?.quantity || 0),
+    };
     const previousPath = sessionStorage.getItem('PREVIOUS_PATH');
     const windowPathname = pathWithoutLocalePrefix(window.location.pathname);
     const list =
       (windowPathname.startsWith('/collections') && windowPathname) ||
       (previousPath?.startsWith('/collections') && previousPath) ||
       '';
-    const productProps = mapCartLine(list)(currentLine);
+    const productProps = mapCartLine(list)(lineAdded);
     emitEvent({
       email: customer?.email,
       event: 'Added to Cart',

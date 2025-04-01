@@ -363,10 +363,14 @@ const addToCartEvent = ({
   try {
     if (debug) logSubscription({data, analyticsEvent});
 
-    const {cart, currentLine, customer, shop} = data;
+    const {cart, currentLine, customer, prevLine, shop} = data;
     if (!cart || !currentLine)
       throw new Error('`cart` and/or `currentLine` parameters are missing.');
 
+    const lineAdded = {
+      ...currentLine,
+      quantity: (currentLine.quantity || 1) - (prevLine?.quantity || 0),
+    };
     const previousPath = sessionStorage.getItem('PREVIOUS_PATH');
     const list =
       (window.location.pathname.startsWith('/collections') &&
@@ -380,7 +384,7 @@ const addToCartEvent = ({
         currency_code: cart.cost?.totalAmount?.currencyCode || shop?.currency,
         add: {
           actionField: {list},
-          products: [currentLine].map(mapCartLine(list)),
+          products: [lineAdded].map(mapCartLine(list)),
         },
         cart_id: cart.id?.split('/').pop(),
         cart_total: cart.cost?.totalAmount?.amount || '0.0',
@@ -404,10 +408,14 @@ const removeFromCartEvent = ({
   try {
     if (debug) logSubscription({data, analyticsEvent});
 
-    const {cart, prevLine, customer, shop} = data;
+    const {cart, currentLine, customer, prevLine, shop} = data;
     if (!cart || !prevLine)
       throw new Error('`cart` and/or `prevLine` parameters are missing.');
 
+    const lineRemoved = {
+      ...prevLine,
+      quantity: (prevLine.quantity || 1) - (currentLine?.quantity || 0),
+    };
     const previousPath = sessionStorage.getItem('PREVIOUS_PATH');
     const list =
       (window.location.pathname.startsWith('/collections') &&
@@ -421,7 +429,7 @@ const removeFromCartEvent = ({
         currency_code: cart.cost?.totalAmount?.currencyCode || shop?.currency,
         remove: {
           actionField: {list},
-          products: [prevLine].map(mapCartLine(list)),
+          products: [lineRemoved].map(mapCartLine(list)),
         },
         cart_id: cart.id?.split('/').pop(),
         cart_total: cart.cost?.totalAmount?.amount || '0.0',
