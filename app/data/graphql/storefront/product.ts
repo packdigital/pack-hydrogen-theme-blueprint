@@ -309,6 +309,21 @@ export const PRODUCT_ITEM_QUERY = `#graphql
   ${PRODUCT_ITEM_FRAGMENT}
 ` as const;
 
+export const PRODUCT_OPTIONS_QUERY = `#graphql
+  query ProductOptions(
+    $handle: String!
+    $country: CountryCode
+    $language: LanguageCode
+  ) @inContext(country: $country, language: $language) {
+    product(handle: $handle) {
+      options {
+        ...OptionFragment
+      }
+    }
+  }
+  ${OPTION_FRAGMENT}
+` as const;
+
 // Docs: https://shopify.dev/docs/api/storefront/latest/queries/products
 
 export const PRODUCTS_QUERY = `#graphql
