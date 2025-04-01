@@ -1,10 +1,11 @@
 import type {ReactNode} from 'react';
-import {createContext, useCallback, useContext, useMemo} from 'react';
+import {useCallback, useMemo} from 'react';
 import {useSearchParams} from '@remix-run/react';
 import type {Filter} from '@shopify/hydrogen/storefront-api-types';
 
 import {PRICE_FILTER_ID} from '~/lib/constants';
 
+import {Context} from './useCollectionFiltersContext';
 import type {ActiveFilterValue} from './CollectionFilters.types';
 
 const getFilterKeyValueFromId = (id: string) => {
@@ -13,8 +14,6 @@ const getFilterKeyValueFromId = (id: string) => {
   const value = splitId.slice(-1)[0];
   return [key, value];
 };
-
-const Context = createContext({state: {}, actions: {}});
 
 export function CollectionFiltersProvider({
   activeFilterValues,
@@ -44,6 +43,8 @@ export function CollectionFiltersProvider({
         }${value}`;
         searchParams.set(key, newParamValue);
       }
+      searchParams.delete('cursor');
+      searchParams.delete('direction');
       setSearchParams(searchParams);
     },
     [activeFilterValues, searchParams],
@@ -87,5 +88,3 @@ export function CollectionFiltersProvider({
 
   return <Context.Provider value={value}>{children}</Context.Provider>;
 }
-
-export const useCollectionFiltersContext = () => useContext(Context);

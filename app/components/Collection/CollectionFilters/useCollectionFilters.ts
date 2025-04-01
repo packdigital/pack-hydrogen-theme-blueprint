@@ -1,4 +1,4 @@
-import {useCollectionFiltersContext} from './CollectionFiltersProvider';
+import {useCollectionFiltersContext} from './useCollectionFiltersContext';
 import type {ContextProviderValue} from './CollectionFilters.types';
 
 export function useCollectionFilters() {
