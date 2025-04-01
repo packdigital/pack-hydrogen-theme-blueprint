@@ -145,18 +145,22 @@ const addToCartEvent = ({
   try {
     if (debug) logSubscription({data, packEventName});
 
-    const {currentLine} = data;
+    const {currentLine, prevLine} = data;
     if (!currentLine)
       throw new Error('`cart` and/or `currentLine` parameters are missing.');
 
-    const contents = [currentLine].map(edgeTagMapCartLine);
+    const lineAdded = {
+      ...currentLine,
+      quantity: (currentLine.quantity || 1) - (prevLine?.quantity || 0),
+    };
+    const contents = [lineAdded].map(edgeTagMapCartLine);
 
     if (!window.edgetag) throw new Error('`edgetag` is not defined.');
 
     window.edgetag('tag', 'AddToCart', {
       contents,
-      currency: currentLine.cost?.totalAmount?.currencyCode,
-      value: Number(currentLine.cost?.totalAmount?.amount),
+      currency: lineAdded.cost?.totalAmount?.currencyCode,
+      value: Number(lineAdded.cost?.totalAmount?.amount),
     });
 
     if (debug)

@@ -113,11 +113,11 @@ const addToCartEvent = ({
   try {
     if (debug) logSubscription({data, analyticsEvent});
 
-    const {cart, currentLine, customer} = data;
+    const {cart, currentLine, prevLine} = data;
     if (!cart || !currentLine)
       throw new Error('`cart` and/or `currentLine` parameters are missing.');
 
-    const {quantity} = currentLine;
+    const quantity = (currentLine.quantity || 1) - (prevLine?.quantity || 0);
     const {product} = currentLine.merchandise;
     const {amount, currencyCode} = currentLine.cost.totalAmount;
 
