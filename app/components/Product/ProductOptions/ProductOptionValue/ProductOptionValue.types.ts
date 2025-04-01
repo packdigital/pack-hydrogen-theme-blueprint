@@ -15,11 +15,14 @@ export interface ProductOptionValueProps {
   name: string;
   onSelect?: OnSelect;
   optimisticSelectedIndex: number;
+  optimisticSelectedSubgroupIndex?: number;
   optionValue: ProductOptionValue;
   product: ProductWithGrouping;
   selectedOptionsMap?: Record<string, string> | null;
   setOptimisticSelectedIndex: (index: number) => void;
+  setOptimisticSelectedSubgroupIndex?: (index: number) => void;
   setSelectedOption: (name: string, value: string) => void;
+  subgroupIndex?: number;
   swatchesMap?: SwatchesMap;
 }
 
@@ -32,10 +35,13 @@ export interface ProductOptionValueLinkProps {
   isSelected: boolean;
   onSelect?: OnSelect;
   optimisticSelectedIndex: number;
+  optimisticSelectedSubgroupIndex?: number;
   optionName: string;
   optionValue: ProductOptionValue;
   selectedVariantFromOptions: SelectedVariant;
   setOptimisticSelectedIndex: (index: number) => void;
+  setOptimisticSelectedSubgroupIndex?: (index: number) => void;
+  subgroupIndex?: number;
   swatch?: Swatch | null;
 }
 
@@ -51,6 +57,8 @@ export interface ProductOptionValueLinkIntermediaryProps {
   optionValue: ProductOptionValue;
   selectedVariantFromOptions: SelectedVariant;
   setOptimisticSelectedIndex: (index: number) => void;
+  setOptimisticSelectedSubgroupIndex?: (index: number) => void;
+  subgroupIndex?: number;
   swatch?: Swatch | null;
 }
 
@@ -66,6 +74,8 @@ export interface ProductOptionValueLinkComponentProps {
   optionValue: ProductOptionValue;
   selectedVariantFromOptions: SelectedVariant;
   setOptimisticSelectedIndex: (index: number) => void;
+  setOptimisticSelectedSubgroupIndex?: (index: number) => void;
+  subgroupIndex?: number;
   swatch?: Swatch | null;
   url: string | null;
 }

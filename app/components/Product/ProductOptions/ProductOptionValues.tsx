@@ -24,6 +24,8 @@ export function ProductOptionValues({
    */
   const [optimisticSelectedIndex, setOptimisticSelectedIndex] =
     useState<number>(-1);
+  const [optimisticSelectedSubgroupIndex, setOptimisticSelectedSubgroupIndex] =
+    useState<number>(0);
 
   const option = useMemo((): OptionWithGroups | undefined => {
     return product.grouping
@@ -34,9 +36,12 @@ export function ProductOptionValues({
   }, [product]);
 
   useEffect(() => {
-    // reset optimisticSelectedIndex after navigation
+    // reset optimisticSelectedIndex and optimisticSelectedSubgroupIndex after navigation
     if (optimisticSelectedIndex > -1) {
       setOptimisticSelectedIndex(-1);
+    }
+    if (optimisticSelectedSubgroupIndex > 0) {
+      setOptimisticSelectedSubgroupIndex(0);
     }
   }, [pathname]);
 
@@ -47,7 +52,7 @@ export function ProductOptionValues({
     <div>
       {hasSubgroups && (
         <div className="flex flex-col gap-2">
-          {option?.groups?.map((group, index) => {
+          {option?.groups?.map((group, groupIndex) => {
             if (!group.optionValues.length) return null;
 
             const selectedColor = selectedOptionsMap?.[name];
@@ -56,30 +61,37 @@ export function ProductOptionValues({
             );
 
             return (
-              <div key={index}>
+              <div key={groupIndex}>
                 <ProductOptionValuesLabel
                   name={group.name}
                   selectedValue={groupHasSelectedColor ? selectedColor : null}
                 />
 
                 <ul className="flex flex-wrap gap-2">
-                  {group.optionValues.map((optionValue, index) => {
+                  {group.optionValues.map((optionValue, optionValueIndex) => {
                     return (
                       <li key={optionValue.name}>
                         <ProductOptionValue
-                          index={index}
+                          index={optionValueIndex}
                           isModalProduct={isModalProduct}
                           name={name}
+                          onSelect={onSelect}
                           optimisticSelectedIndex={optimisticSelectedIndex}
+                          optimisticSelectedSubgroupIndex={
+                            optimisticSelectedSubgroupIndex
+                          }
+                          optionValue={optionValue}
                           product={product}
                           selectedOptionsMap={selectedOptionsMap}
                           setOptimisticSelectedIndex={
                             setOptimisticSelectedIndex
                           }
+                          setOptimisticSelectedSubgroupIndex={
+                            setOptimisticSelectedSubgroupIndex
+                          }
                           setSelectedOption={setSelectedOption}
+                          subgroupIndex={groupIndex}
                           swatchesMap={swatchesMap}
-                          optionValue={optionValue}
-                          onSelect={onSelect}
                         />
                       </li>
                     );
