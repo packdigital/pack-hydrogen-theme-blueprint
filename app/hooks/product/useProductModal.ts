@@ -9,10 +9,12 @@ import {MODAL_PRODUCT_URL_PARAM} from '~/lib/constants';
 
 export function useProductModal(
   {
+    isShoppableProductItem = true,
     product,
     selectedVariant,
     additionalParams,
   }: {
+    isShoppableProductItem?: boolean;
     product?: Product | null;
     selectedVariant?: ProductVariant | null;
     additionalParams?: Record<string, string>;
@@ -21,6 +23,7 @@ export function useProductModal(
   const [searchParams, setSearchParams] = useSearchParams();
 
   const openProductUrl = useMemo(() => {
+    if (!isShoppableProductItem) return '';
     const handle = selectedVariant?.product?.handle || product?.handle;
     if (!handle) return '';
     const variantParams = new URLSearchParams();
@@ -39,6 +42,7 @@ export function useProductModal(
     }
     return `?${newSearchParams}`;
   }, [
+    isShoppableProductItem,
     product?.handle,
     selectedVariant?.id,
     searchParams,

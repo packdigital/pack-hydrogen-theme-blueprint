@@ -53,7 +53,7 @@ export function Schema({template}: {template: string}) {
         name: 'products',
         component: 'group-list',
         description:
-          'Products must be both active and on the Hydrogen sales channel to display',
+          'If the selected product does display in the frontend, check it is on the Hydrogen sales channel.',
         itemProps: {
           label: '{{item.product.handle}}',
         },

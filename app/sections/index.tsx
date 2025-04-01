@@ -22,6 +22,7 @@ import {PressSlider} from './PressSlider';
 import {ProductRecommendationsSlider} from './ProductRecommendationsSlider';
 import {ProductReviews, PRODUCT_REVIEWS_KEY} from './ProductReviews';
 import {ProductsSlider} from './ProductsSlider';
+import {ShoppableProductsGrid} from './ShoppableProductsGrid';
 import {
   ShoppableSocialVideo,
   SHOPPABLE_SOCIAL_VIDEO_SECTION_KEY,
@@ -71,6 +72,9 @@ export function registerSections() {
   });
   registerSection(ShoppableSocialVideo as Section, {
     name: SHOPPABLE_SOCIAL_VIDEO_SECTION_KEY,
+  });
+  registerSection(ShoppableProductsGrid as Section, {
+    name: 'shoppable-products-grid',
   });
   registerSection(BuildYourOwnBundle as Section, {
     name: 'build-your-own-bundle',
