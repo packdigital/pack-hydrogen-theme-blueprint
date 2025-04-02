@@ -17,20 +17,20 @@ type NavigationProps = Pick<
 > &
   Pick<
     UseDesktopMenuReturn,
+    | 'desktopMenuIndex'
     | 'handleDesktopMenuClose'
     | 'handleDesktopMenuHoverIn'
     | 'handleDesktopMenuHoverOut'
-    | 'desktopMenuContent'
   >;
 
 export const Navigation = memo(
   ({
+    desktopMenuIndex,
     handleCloseMobileMenu,
-    handleOpenMobileMenu,
     handleDesktopMenuClose,
     handleDesktopMenuHoverIn,
     handleDesktopMenuHoverOut,
-    desktopMenuContent,
+    handleOpenMobileMenu,
     mobileMenuOpen,
   }: NavigationProps) => {
     const customer = useCustomer();
@@ -68,8 +68,7 @@ export const Navigation = memo(
           <nav className="hidden h-full lg:flex">
             <ul className="flex">
               {navItems?.map((item, index) => {
-                const isHovered =
-                  item.navItem?.text === desktopMenuContent?.navItem?.text;
+                const isHovered = index === desktopMenuIndex;
 
                 return (
                   <li key={index} className="flex">

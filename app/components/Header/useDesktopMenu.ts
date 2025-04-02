@@ -1,19 +1,12 @@
 import {
   useCallback,
   // useEffect,
-  useMemo,
   useState,
 } from 'react';
 
-import {
-  // useBodyScrollLock,
-  // useMenu,
-  useSettings,
-} from '~/hooks';
-import type {Settings} from '~/lib/types';
+// import {useBodyScrollLock, useMenu} from '~/hooks';
 
 export interface UseDesktopMenuReturn {
-  desktopMenuContent: Settings['header']['menu']['navItems'][number] | null;
   desktopMenuIndex: number | null;
   /* Desktop menu based on hover ----------------------------------------------- */
   handleDesktopMenuClose: () => void;
@@ -36,8 +29,6 @@ export interface UseDesktopMenuReturn {
  */
 
 export function useDesktopMenu(): UseDesktopMenuReturn {
-  const {header} = useSettings();
-  const {navItems} = {...header?.menu};
   const [desktopMenuIndex, setDesktopMenuIndex] = useState<number | null>(null);
 
   // /* Additional hooks for desktop menu based on click ------------------------- */
@@ -47,12 +38,6 @@ export function useDesktopMenu(): UseDesktopMenuReturn {
   //   null,
   // );
   // /* -------------------------------------------------------------------------- */
-
-  const desktopMenuContent = useMemo(() => {
-    return typeof desktopMenuIndex === 'number'
-      ? navItems?.[desktopMenuIndex] || null
-      : null;
-  }, [desktopMenuIndex, navItems]);
 
   /* Desktop menu based on hover ----------------------------------------------- */
   const clearUnHoverTimer = useCallback(() => {
@@ -118,7 +103,6 @@ export function useDesktopMenu(): UseDesktopMenuReturn {
 
   return {
     desktopMenuIndex,
-    desktopMenuContent,
     /* Desktop menu based on hover --------------------------------------------- */
     handleDesktopMenuClose,
     handleDesktopMenuStayOpen,

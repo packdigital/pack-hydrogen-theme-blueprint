@@ -15,15 +15,15 @@ type MobileMenuProps = Pick<
   | 'handleCloseMobileMenu'
   | 'handleMobileSubmenu'
   | 'mobileMenuOpen'
-  | 'mobileSubmenuContent'
+  | 'mobileSubmenuIndex'
 >;
 
 export const MobileMenu = memo(
   ({
     handleCloseMobileMenu,
-    mobileMenuOpen,
-    mobileSubmenuContent,
     handleMobileSubmenu,
+    mobileMenuOpen,
+    mobileSubmenuIndex,
   }: MobileMenuProps) => {
     const {header} = useSettings();
     const {openSearch} = useMenu();
@@ -33,6 +33,16 @@ export const MobileMenu = memo(
       navItems,
       productsSlider,
     } = {...header?.menu};
+    const activeSubmenu =
+      typeof mobileSubmenuIndex === 'number'
+        ? navItems?.[mobileSubmenuIndex]
+        : null;
+    const activeSubmenuHasContent = Boolean(
+      activeSubmenu &&
+        (activeSubmenu.imageLinks?.length > 0 ||
+          activeSubmenu.links?.length > 0 ||
+          !!activeSubmenu.mainLink?.text),
+    );
 
     return (
       <Drawer
@@ -41,11 +51,13 @@ export const MobileMenu = memo(
         onClose={handleCloseMobileMenu}
         open={mobileMenuOpen}
         openFrom="left"
+        unmount={false}
         heading={
           <Link
             aria-label="Go to homepage"
-            to="/"
+            inert={!mobileMenuOpen}
             onClick={handleCloseMobileMenu}
+            to="/"
           >
             <Svg
               className="h-8 text-text"
@@ -59,6 +71,7 @@ export const MobileMenu = memo(
           <button
             aria-label="Open search drawer"
             className="absolute right-4 top-1/2 -translate-y-1/2"
+            inert={!mobileMenuOpen}
             onClick={() => {
               handleCloseMobileMenu();
               openSearch();
@@ -77,7 +90,7 @@ export const MobileMenu = memo(
         <div className="relative w-full flex-1 overflow-x-hidden">
           <div
             className={`scrollbar-hide size-full overflow-y-auto ${
-              mobileSubmenuContent ? 'invisible' : 'visible'
+              activeSubmenuHasContent ? 'invisible' : 'visible'
             }`}
           >
             <nav className="mb-8 flex">
@@ -95,6 +108,7 @@ export const MobileMenu = memo(
                         <button
                           aria-label={item.navItem?.text}
                           className="flex h-14 w-full items-center justify-between gap-5 p-4"
+                          inert={!mobileMenuOpen}
                           onClick={() => handleMobileSubmenu(index)}
                           type="button"
                         >
@@ -113,9 +127,10 @@ export const MobileMenu = memo(
                         <Link
                           aria-label={item.navItem?.text}
                           className="text-nav flex h-14 w-full items-center p-4"
-                          to={item.navItem?.url}
-                          onClick={handleCloseMobileMenu}
+                          inert={!mobileMenuOpen}
                           newTab={item.navItem?.newTab}
+                          onClick={handleCloseMobileMenu}
+                          to={item.navItem?.url}
                           type={item.navItem?.type}
                         >
                           {item.navItem?.text}
@@ -127,7 +142,7 @@ export const MobileMenu = memo(
               </ul>
             </nav>
 
-            {productsSlider?.products?.length > 0 && (
+            {mobileMenuOpen && productsSlider?.products?.length > 0 && (
               <MobileMenuProductsSlider
                 handleCloseMobileMenu={handleCloseMobileMenu}
                 productsSlider={productsSlider}
@@ -135,30 +150,35 @@ export const MobileMenu = memo(
             )}
 
             {additionalLinks?.length > 0 && (
-              <ul className="mb-8 flex flex-col gap-1 px-5">
-                {additionalLinks.map(({link}, index) => {
-                  return (
-                    <li key={index}>
-                      <Link
-                        aria-label={link?.text}
-                        to={link?.url}
-                        onClick={handleCloseMobileMenu}
-                        newTab={link?.newTab}
-                        type={link?.type}
-                      >
-                        {link?.text}
-                      </Link>
-                    </li>
-                  );
-                })}
-              </ul>
+              <nav className="mb-8">
+                <ul className="flex flex-col gap-1 px-5">
+                  {additionalLinks.map(({link}, index) => {
+                    return (
+                      <li key={index}>
+                        <Link
+                          aria-label={link?.text}
+                          inert={!mobileMenuOpen}
+                          newTab={link?.newTab}
+                          onClick={handleCloseMobileMenu}
+                          to={link?.url}
+                          type={link?.type}
+                        >
+                          {link?.text}
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </nav>
             )}
           </div>
 
           <MobileSubmenu
+            activeSubmenuHasContent={activeSubmenuHasContent}
             handleCloseMobileMenu={handleCloseMobileMenu}
             handleMobileSubmenu={handleMobileSubmenu}
-            mobileSubmenuContent={mobileSubmenuContent}
+            mobileSubmenuIndex={mobileSubmenuIndex}
+            navItems={navItems}
           />
         </div>
       </Drawer>
