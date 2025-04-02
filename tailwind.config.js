@@ -70,21 +70,10 @@ export default {
             animationTimingFunction: 'cubic-bezier(0, 0, 0.2, 1)',
           },
         },
-        flash: {
-          '0%, 100%': {
-            opacity: 1,
-          },
-          '50%': {
-            opacity: 0.1,
-          },
-        },
-        shimmer: {
-          '100%': {
-            transform: 'translateX(100%)',
-          },
-        },
+        flash: {'0%, 100%': {opacity: 1}, '50%': {opacity: 0.1}},
+        shimmer: {'100%': {transform: 'translateX(100%)'}},
       },
     },
   },
-  plugins: [headlessuiPlugin],
+  plugins: [headlessuiPlugin, require('@tailwindcss/typography')],
 };
