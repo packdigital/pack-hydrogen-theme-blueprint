@@ -105,7 +105,7 @@ export const CountrySelector = memo(
             label: countries?.[pathPrefix || 'default']?.label || label,
             value: pathPrefix,
           }}
-          placeholderClassName="text-text"
+          placeholderClass="text-text"
           openFrom={openFrom}
         />
       </div>
