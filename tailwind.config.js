@@ -75,5 +75,12 @@ export default {
       },
     },
   },
-  plugins: [headlessuiPlugin, require('@tailwindcss/typography')],
+  plugins: [
+    headlessuiPlugin,
+    // @tailwindcss/typography plugin is used for styling rich text content
+    // in the RichText section component (/app/sections/RichText)
+    // Customize styles in tailwind.config.js or via CSS
+    // See docs at https://github.com/tailwindlabs/tailwindcss-typography for extending styles
+    require('@tailwindcss/typography'),
+  ],
 };
