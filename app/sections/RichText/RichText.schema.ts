@@ -4,7 +4,7 @@ export function Schema() {
     label: 'Rich Text',
     key: 'rich-text',
     previewSrc:
-      'https://cdn.shopify.com/s/files/1/0629/5519/2520/files/CleanShot_2025-04-02_at_15.41.14_2x_fb5c3681-5504-4c2f-96a7-2766dc5980ea.png?v=1743633705',
+      'https://cdn.shopify.com/s/files/1/0629/5519/2520/files/CleanShot_2025-04-02_at_15.55.30_2x_02bc36ac-3561-4b4b-8c14-c1045d38b6ba.png?v=1743634551',
     fields: [
       {
         label: 'Rich Text Field',
