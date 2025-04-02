@@ -19,6 +19,7 @@ export interface ProductItemProps {
   enabledStarRating?: boolean;
   handle?: string;
   index: number;
+  isShoppableProductItem?: boolean;
   onClick?: () => void;
   priority?: boolean;
   product?: Product | null;

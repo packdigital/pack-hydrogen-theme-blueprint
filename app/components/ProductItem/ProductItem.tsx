@@ -10,6 +10,7 @@ import {
   useParsedProductMetafields,
   useProductByHandle,
   useProductGroupingByHandle,
+  useProductModal,
 } from '~/hooks';
 import type {SelectedProduct, SelectedVariant} from '~/lib/types';
 
@@ -27,6 +28,7 @@ export const ProductItem = memo(
     enabledStarRating,
     handle: passedHandle,
     index,
+    isShoppableProductItem = false,
     onClick,
     priority,
     product: passedProduct,
@@ -70,13 +72,14 @@ export const ProductItem = memo(
       enabledColorSelector && (priority || inView) ? handle : null,
     );
 
-    const color = useMemo(() => {
-      return selectedVariant?.selectedOptions.find(
-        (option) => option.name === COLOR_OPTION_NAME,
-      )?.value;
-    }, [selectedVariant]);
+    const {openProductUrl} = useProductModal({
+      isShoppableProductItem,
+      product: selectedProduct,
+      selectedVariant,
+    });
 
     const productUrl = useMemo(() => {
+      if (openProductUrl) return openProductUrl;
       const productHandle = selectedVariant?.product?.handle;
       if (!productHandle) return '';
       const searchParams = new URLSearchParams();
@@ -87,6 +90,12 @@ export const ProductItem = memo(
       return `/products/${productHandle}${
         searchParams ? `?${searchParams}` : ''
       }`;
+    }, [openProductUrl, selectedVariant]);
+
+    const color = useMemo(() => {
+      return selectedVariant?.selectedOptions.find(
+        (option) => option.name === COLOR_OPTION_NAME,
+      )?.value;
     }, [selectedVariant]);
 
     const title = selectedProduct?.title;

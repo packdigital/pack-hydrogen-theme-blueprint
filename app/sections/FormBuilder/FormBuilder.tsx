@@ -1,7 +1,7 @@
 import {Fragment, useEffect, useRef, useState, useCallback} from 'react';
 
 import {Container} from '~/components/Container';
-import {useLoadScript} from '~/hooks';
+import {useLoadScript, useRootLoaderData} from '~/hooks';
 
 import {FormField} from './FormField';
 import type {FormBuilderCms} from './FormBuilder.types';
@@ -11,6 +11,7 @@ import {useForm} from './useForm';
 export function FormBuilder({cms}: {cms: FormBuilderCms}) {
   const formRef = useRef<HTMLFormElement>(null);
   const captchaRef = useRef(null);
+  const {ENV} = useRootLoaderData();
 
   const {endpoint, heading, fields, section, submitText} = cms;
   const {parsedFields} = useForm({fields});
@@ -19,10 +20,12 @@ export function FormBuilder({cms}: {cms: FormBuilderCms}) {
   const [captchaLoaded, setCaptchaLoaded] = useState(false);
 
   const renderCaptcha =
-    typeof document !== 'undefined' && window.grecaptcha?.render;
+    typeof window !== 'undefined' && typeof document !== 'undefined'
+      ? window.grecaptcha?.render
+      : undefined;
   const captchaReady = typeof renderCaptcha === 'function';
   const recaptchaEnabled =
-    cms.recaptchaEnabled && !!window.ENV?.PUBLIC_RECAPTCHA_SITE_KEY;
+    cms.recaptchaEnabled && !!ENV.PUBLIC_RECAPTCHA_SITE_KEY;
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
@@ -52,7 +55,7 @@ export function FormBuilder({cms}: {cms: FormBuilderCms}) {
     try {
       if (!captchaReady || !recaptchaEnabled) return;
       renderCaptcha('form-captcha-widget', {
-        sitekey: window.ENV?.PUBLIC_RECAPTCHA_SITE_KEY,
+        sitekey: ENV.PUBLIC_RECAPTCHA_SITE_KEY,
       });
     } catch (error) {
       console.error(error);

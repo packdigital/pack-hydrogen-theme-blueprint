@@ -6,6 +6,7 @@ import type {AspectRatio} from '~/lib/types';
 type ImageProps = React.ComponentProps<typeof HydrogenImage> & {
   aspectRatio?: AspectRatio | undefined;
   withLoadingAnimation?: boolean;
+  withBackgroundColor?: boolean;
 };
 
 export const Image = forwardRef(
@@ -16,6 +17,7 @@ export const Image = forwardRef(
       data,
       width,
       withLoadingAnimation = true, // adds a loading shimmer animation if data.url is undefined
+      withBackgroundColor = true, // adds a placeholder background color before image loads
       ...props
     }: ImageProps,
     ref: React.Ref<HTMLImageElement>,
@@ -26,7 +28,9 @@ export const Image = forwardRef(
         data={data}
         aspectRatio={aspectRatio}
         width={width}
-        className={`bg-neutralLightest object-cover ${className}`}
+        className={`object-cover ${
+          withBackgroundColor ? 'bg-neutralLightest' : 'bg-transparent'
+        } ${className}`}
         {...props}
       />
     ) : (

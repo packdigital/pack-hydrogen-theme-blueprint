@@ -12,11 +12,14 @@ export const ProductOptionValue = memo(
     name,
     onSelect,
     optimisticSelectedIndex,
+    optimisticSelectedSubgroupIndex,
     optionValue,
     product,
     selectedOptionsMap,
     setOptimisticSelectedIndex,
+    setOptimisticSelectedSubgroupIndex,
     setSelectedOption,
+    subgroupIndex,
     swatchesMap,
   }: ProductOptionValueProps) => {
     const {
@@ -45,11 +48,14 @@ export const ProductOptionValue = memo(
         isSelected={isSelected}
         onSelect={onSelect}
         optimisticSelectedIndex={optimisticSelectedIndex}
-        selectedVariantFromOptions={selectedVariantFromOptions}
-        setOptimisticSelectedIndex={setOptimisticSelectedIndex}
-        swatch={swatch}
+        optimisticSelectedSubgroupIndex={optimisticSelectedSubgroupIndex}
         optionName={name}
         optionValue={optionValue}
+        selectedVariantFromOptions={selectedVariantFromOptions}
+        setOptimisticSelectedIndex={setOptimisticSelectedIndex}
+        setOptimisticSelectedSubgroupIndex={setOptimisticSelectedSubgroupIndex}
+        subgroupIndex={subgroupIndex}
+        swatch={swatch}
       />
     ) : (
       <ProductOptionValueButton
@@ -58,11 +64,11 @@ export const ProductOptionValue = memo(
         isDisabled={isDisabled}
         isSelected={isSelected}
         onSelect={onSelect}
+        optionName={name}
+        optionValue={optionValue}
         selectedVariantFromOptions={selectedVariantFromOptions}
         setSelectedOption={setSelectedOption}
         swatch={swatch}
-        optionName={name}
-        optionValue={optionValue}
       />
     );
   },

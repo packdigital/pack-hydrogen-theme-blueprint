@@ -93,22 +93,17 @@ export interface HeroCms {
   slider: Slider;
   slides: Slide[];
   container: ContainerSettings;
-  id: string;
-  clientId: string;
 }
 
 export interface HeroSlideProps {
   aboveTheFold?: boolean;
-  index: number;
   isActiveSlide?: boolean;
   isFirstSlide?: boolean;
-  sectionId: string;
   slide: Slide;
 }
 
 export interface HeroSliderProps {
   aboveTheFold?: boolean;
-  sectionId: string;
   slider: Slider;
   slides: Slide[];
 }

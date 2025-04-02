@@ -21,13 +21,19 @@ export function ProductOptionValueLink({
   isSelected,
   onSelect,
   optimisticSelectedIndex,
+  optimisticSelectedSubgroupIndex = 0,
   optionName,
   optionValue,
   selectedVariantFromOptions,
   setOptimisticSelectedIndex,
+  setOptimisticSelectedSubgroupIndex,
+  subgroupIndex,
   swatch,
 }: ProductOptionValueLinkProps) {
-  const isOptimisticSelected = index === optimisticSelectedIndex;
+  const isOptimisticSelected = setOptimisticSelectedSubgroupIndex
+    ? subgroupIndex === optimisticSelectedSubgroupIndex &&
+      index === optimisticSelectedIndex
+    : index === optimisticSelectedIndex;
   const isVisiblySelected =
     isOptimisticSelected || (isSelected && optimisticSelectedIndex === -1);
 
@@ -43,6 +49,8 @@ export function ProductOptionValueLink({
       optionValue={optionValue}
       selectedVariantFromOptions={selectedVariantFromOptions}
       setOptimisticSelectedIndex={setOptimisticSelectedIndex}
+      setOptimisticSelectedSubgroupIndex={setOptimisticSelectedSubgroupIndex}
+      subgroupIndex={subgroupIndex}
       swatch={swatch}
     />
   ) : (
@@ -58,6 +66,8 @@ export function ProductOptionValueLink({
       optionValue={optionValue}
       selectedVariantFromOptions={selectedVariantFromOptions}
       setOptimisticSelectedIndex={setOptimisticSelectedIndex}
+      setOptimisticSelectedSubgroupIndex={setOptimisticSelectedSubgroupIndex}
+      subgroupIndex={subgroupIndex}
       swatch={swatch}
     />
   );
@@ -75,6 +85,8 @@ function ProductOptionValuePdpLink({
   optionValue,
   selectedVariantFromOptions,
   setOptimisticSelectedIndex,
+  setOptimisticSelectedSubgroupIndex,
+  subgroupIndex,
   swatch,
 }: ProductOptionValueLinkIntermediaryProps) {
   const {search} = useLocation();
@@ -103,6 +115,8 @@ function ProductOptionValuePdpLink({
       optionValue={optionValue}
       selectedVariantFromOptions={selectedVariantFromOptions}
       setOptimisticSelectedIndex={setOptimisticSelectedIndex}
+      setOptimisticSelectedSubgroupIndex={setOptimisticSelectedSubgroupIndex}
+      subgroupIndex={subgroupIndex}
       swatch={swatch}
       url={url}
     />
@@ -120,6 +134,8 @@ function ProductOptionValueModalLink({
   optionValue,
   selectedVariantFromOptions,
   setOptimisticSelectedIndex,
+  setOptimisticSelectedSubgroupIndex,
+  subgroupIndex,
   swatch,
 }: ProductOptionValueLinkIntermediaryProps) {
   const {openProductUrl} = useProductModal({
@@ -138,6 +154,8 @@ function ProductOptionValueModalLink({
       optionValue={optionValue}
       selectedVariantFromOptions={selectedVariantFromOptions}
       setOptimisticSelectedIndex={setOptimisticSelectedIndex}
+      setOptimisticSelectedSubgroupIndex={setOptimisticSelectedSubgroupIndex}
+      subgroupIndex={subgroupIndex}
       swatch={swatch}
       url={openProductUrl}
     />
@@ -156,6 +174,8 @@ function ProductOptionValueLinkComponent({
   optionValue,
   selectedVariantFromOptions,
   setOptimisticSelectedIndex,
+  setOptimisticSelectedSubgroupIndex,
+  subgroupIndex = 0,
   swatch,
   url,
 }: ProductOptionValueLinkComponentProps) {
@@ -171,6 +191,9 @@ function ProductOptionValueLinkComponent({
           return;
         }
         setOptimisticSelectedIndex(index);
+        if (typeof setOptimisticSelectedSubgroupIndex === 'function') {
+          setOptimisticSelectedSubgroupIndex(subgroupIndex);
+        }
         if (typeof onSelect === 'function') {
           onSelect({
             selectedVariant: selectedVariantFromOptions,

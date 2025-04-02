@@ -1,3 +1,6 @@
+import {useRef} from 'react';
+import {v4 as uuidv4} from 'uuid';
+
 import type {BannerContainerProps} from './Banner.types';
 
 const FALLBACK_DESKTOP_HEIGHT_CLASS = 'md:h-[18.75rem]';
@@ -8,8 +11,8 @@ const FALLBACK_MOBILE_ASPECT_RATIO_CLASS = 'max-md:aspect-[3/1]';
 const FALLBACK_MOBILE_ASPECT_RATIO = '3 / 1';
 
 export function BannerContainer({children, cms}: BannerContainerProps) {
-  const {section, image, id, clientId} = cms;
-  const sectionId = id || clientId;
+  const randomId = useRef(uuidv4()).current;
+  const {section, image, video} = cms;
 
   // container
   const maxWidthContainerClass = section?.fullWidth
@@ -28,6 +31,14 @@ export function BannerContainer({children, cms}: BannerContainerProps) {
     desktopIsAspectRatioType && desktopIsNativeAspectRatio;
   const usesMobileNativeAspectRatio =
     mobileIsAspectRatioType && mobileIsNativeAspectRatio;
+  const desktopNativeAspectRatio =
+    video?.videoDesktop?.mediaType === 'VIDEO'
+      ? video?.videoDesktop?.aspectRatio
+      : image?.imageDesktop?.aspectRatio;
+  const mobileNativeAspectRatio =
+    video?.videoMobile?.mediaType === 'VIDEO'
+      ? video?.videoMobile?.aspectRatio
+      : image?.imageMobile?.aspectRatio;
 
   // height
   const heightClassesDesktop = desktopIsAspectRatioType
@@ -47,7 +58,7 @@ export function BannerContainer({children, cms}: BannerContainerProps) {
   const heightContainerClasses = `${heightClassesMobile} ${heightClassesDesktop}`;
 
   /* unique class name is important to not override other banner aspect ratios */
-  const nativeAspectRatiosClass = `banner-native-aspect-ratios-${sectionId}`;
+  const nativeAspectRatiosClass = `banner-native-aspect-ratios-${randomId}`;
 
   return (
     <div className={`${fullBleedClass}`}>
@@ -59,7 +70,7 @@ export function BannerContainer({children, cms}: BannerContainerProps) {
                   usesMobileNativeAspectRatio
                     ? `@media (max-width: 767px) {
                         aspect-ratio: ${
-                          image?.imageMobile?.aspectRatio ||
+                          mobileNativeAspectRatio ||
                           FALLBACK_MOBILE_ASPECT_RATIO
                         };
                       }`
@@ -69,7 +80,7 @@ export function BannerContainer({children, cms}: BannerContainerProps) {
                   usesDesktopNativeAspectRatio
                     ? `@media (min-width: 768px) {
                         aspect-ratio: ${
-                          image?.imageDesktop?.aspectRatio ||
+                          desktopNativeAspectRatio ||
                           FALLBACK_DESKTOP_ASPECT_RATIO
                         };
                       }`

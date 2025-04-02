@@ -4,7 +4,7 @@ import {
   useMatches,
   useRouteError,
 } from '@remix-run/react';
-import {data as dataWithOptions} from '@shopify/remix-oxygen';
+import {data as dataWithOptions, redirect} from '@shopify/remix-oxygen';
 import type {ShouldRevalidateFunction} from '@remix-run/react';
 import {
   getSeoMeta,
@@ -36,6 +36,7 @@ import {
   getProductGroupings,
   getShop,
   getSiteSettings,
+  redirectLinkToBuyerLocale,
   setPackCookie,
 } from '~/lib/utils';
 import {registerSections} from '~/sections';
@@ -99,6 +100,16 @@ export const links: LinksFunction = () => {
 export async function loader({context, request}: LoaderFunctionArgs) {
   const {storefront, session, oxygen, pack, env} = context;
   const isPreviewModeEnabled = pack.isPreviewModeEnabled() as boolean;
+
+  /*
+   * Redirect to the correct locale if the buyer's country is different from the
+   * current locale. Occurs only once per cookie session
+   */
+  if (storefront.i18n.country !== oxygen.buyer.country) {
+    const redirectedLink = await redirectLinkToBuyerLocale({context, request});
+    if (redirectedLink)
+      return redirect(redirectedLink.to, redirectedLink.options);
+  }
 
   const [shop, siteSettings, customerAccessToken, ENV]: [
     Shop,

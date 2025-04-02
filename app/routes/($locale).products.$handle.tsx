@@ -11,7 +11,7 @@ import {
   getSiteSettings,
   normalizeAdminProduct,
 } from '~/lib/utils';
-import {getGrouping} from '~/lib/products.server';
+import {getGrouping, getSelectedProductOptions} from '~/lib/products.server';
 import {PRODUCT_PAGE_QUERY} from '~/data/graphql/pack/product-page';
 import {ADMIN_PRODUCT_QUERY} from '~/data/graphql/admin/product';
 import {PRODUCT_QUERY} from '~/data/graphql/storefront/product';
@@ -34,14 +34,10 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
 
   const storeDomain = storefront.getShopifyDomain();
   const isPreviewModeEnabled = pack.isPreviewModeEnabled();
-  const searchParams = new URL(request.url).searchParams;
-  const selectedOptions: Record<string, any>[] = [];
-
-  // set selected options from the query string
-  searchParams.forEach((value, name) => {
-    if (name === 'variant' || name === 'srsltid' || name.startsWith('utm_'))
-      return;
-    selectedOptions.push({name, value});
+  const selectedOptions = await getSelectedProductOptions({
+    handle,
+    context,
+    request,
   });
 
   const [

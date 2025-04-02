@@ -5,7 +5,11 @@ import type {
   ProductVariant,
 } from '@shopify/hydrogen/storefront-api-types';
 
-import {PRODUCT_QUERY, PRODUCTS_QUERY} from '~/data/graphql/storefront/product';
+import {
+  PRODUCT_OPTIONS_QUERY,
+  PRODUCT_QUERY,
+  PRODUCTS_QUERY,
+} from '~/data/graphql/storefront/product';
 import {
   ADMIN_PRODUCT_ITEM_BY_ID_QUERY,
   ADMIN_PRODUCT_QUERY,
@@ -15,6 +19,50 @@ import {SHOPPABLE_SOCIAL_VIDEO_SECTION_KEY} from '~/sections/ShoppableSocialVide
 import {PRODUCT_SECTION_KEY} from '~/sections/Product';
 import {MODAL_PRODUCT_URL_PARAM} from '~/lib/constants';
 import type {Group, Page, ProductWithInitialGrouping} from '~/lib/types';
+
+export const getSelectedProductOptions = async ({
+  handle,
+  context,
+  request,
+}: {
+  handle?: string;
+  context: AppLoadContext;
+  request: Request;
+}) => {
+  const {storefront} = context;
+  const searchParams = new URL(request.url).searchParams;
+  const selectedOptions: Record<string, any>[] = [];
+
+  if (searchParams.size) {
+    // Query for product's options
+    const {product: productWithOptions} = await storefront.query(
+      PRODUCT_OPTIONS_QUERY,
+      {
+        variables: {
+          handle,
+          country: storefront.i18n.country,
+          language: storefront.i18n.language,
+        },
+        cache: storefront.CacheShort(),
+      },
+    );
+    if (productWithOptions) {
+      const optionsTable = Object.values({
+        ...productWithOptions.options,
+      } as Product['options']).reduce((acc: Record<string, string>, option) => {
+        return {...acc, [option.name.toLowerCase()]: option.name};
+      }, {});
+      // Set selected options from the query string
+      searchParams.forEach((value, name) => {
+        // Filter out non-option search params
+        if (!optionsTable[name.toLowerCase()]) return;
+        selectedOptions.push({name, value});
+      });
+    }
+  }
+
+  return selectedOptions;
+};
 
 const FIRST = 250;
 

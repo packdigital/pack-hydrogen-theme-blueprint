@@ -1,0 +1,1 @@
+export {ShoppableProductsGrid} from './ShoppableProductsGrid';
