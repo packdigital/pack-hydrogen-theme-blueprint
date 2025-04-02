@@ -4,11 +4,20 @@ import {Link} from '~/components/Link';
 import {Svg} from '~/components/Svg';
 
 export const NavigationLogo = memo(
-  ({className = '', color}: {className?: string; color?: string}) => {
+  ({
+    className = '',
+    color,
+    handleCloseMobileMenu,
+  }: {
+    className?: string;
+    color?: string;
+    handleCloseMobileMenu: () => void;
+  }) => {
     return (
       <Link
         aria-label="Go to homepage"
         className={`text-text ${className}`}
+        onClick={handleCloseMobileMenu}
         style={{color}}
         to="/"
       >

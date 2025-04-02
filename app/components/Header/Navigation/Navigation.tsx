@@ -61,7 +61,10 @@ export const Navigation = memo(
         style={{backgroundColor: bgColor, color: textColor}}
       >
         <div className={`order-2 flex items-center ${logoOrderClassDesktop}`}>
-          <NavigationLogo color={iconColor} />
+          <NavigationLogo
+            color={iconColor}
+            handleCloseMobileMenu={handleCloseMobileMenu}
+          />
         </div>
 
         <div className={`order-1 flex items-center ${menuOrderClassDesktop}`}>
