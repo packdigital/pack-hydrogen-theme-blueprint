@@ -10,34 +10,37 @@ import {Svg} from '~/components/Svg';
 
 /**
  * Drawer component that opens on user click.
- * @param heading - string. Shown at the top of the drawer.
- * @param open - boolean state. if true opens the drawer.
- * @param onClose - function should set the open state.
- * @param openFrom - right, left
  * @param ariaName - name of drawer for aria-label
- * @param secondHeaderElement - react node. Shown at the top right of the drawer.
  * @param children - react children node.
+ * @param heading - string. Shown at the top of the drawer.
+ * @param onClose - function should set the open state.
+ * @param open - boolean. If true, opens the drawer.
+ * @param openFrom - right, left
+ * @param secondHeaderElement - react node. Shown at the top right of the drawer.
+ * @param unmount - boolean. Whether the content should unmounted or hidden based on the open/closed state.
  */
 
 interface DrawerProps {
+  ariaName?: string;
+  children: React.ReactNode;
   className?: string;
   heading?: React.ReactNode | string;
-  open: boolean;
   onClose: () => void;
+  open: boolean;
   openFrom?: 'right' | 'left';
-  ariaName?: string;
   secondHeaderElement?: React.ReactNode;
-  children: React.ReactNode;
+  unmount?: boolean;
 }
 
 export function Drawer({
+  ariaName = 'drawer',
   className = '',
   heading,
-  open,
   onClose,
+  open,
   openFrom = 'right',
-  ariaName = 'drawer',
   secondHeaderElement,
+  unmount = true,
   children,
 }: DrawerProps) {
   const offScreen = {
@@ -46,10 +49,11 @@ export function Drawer({
   };
 
   return (
-    <Transition appear show={open} as={Fragment}>
+    <Transition appear show={open} as={Fragment} unmount={unmount}>
       <Dialog
         as="div"
         className={`relative z-50 ${className}`}
+        unmount={unmount}
         onClose={onClose}
       >
         {/* Overlay */}
@@ -80,9 +84,11 @@ export function Drawer({
                 leave="transform transition ease-in-out duration-200"
                 leaveFrom="translate-x-0"
                 leaveTo={offScreen[openFrom]}
+                unmount={unmount}
               >
                 <DialogPanel
                   as="aside"
+                  data-comp={Drawer.displayName}
                   className="flex h-[var(--viewport-height)] w-screen flex-col justify-between overflow-hidden bg-background align-middle shadow-xl transition-all md:max-w-[var(--drawer-width)]"
                 >
                   {/* Drawer header */}
@@ -90,6 +96,7 @@ export function Drawer({
                     <button
                       aria-label={`Close ${ariaName}`}
                       className="absolute left-4 top-1/2 -translate-y-1/2"
+                      inert={!open}
                       onClick={onClose}
                       type="button"
                     >
