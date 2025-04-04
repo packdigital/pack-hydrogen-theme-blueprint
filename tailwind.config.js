@@ -70,21 +70,17 @@ export default {
             animationTimingFunction: 'cubic-bezier(0, 0, 0.2, 1)',
           },
         },
-        flash: {
-          '0%, 100%': {
-            opacity: 1,
-          },
-          '50%': {
-            opacity: 0.1,
-          },
-        },
-        shimmer: {
-          '100%': {
-            transform: 'translateX(100%)',
-          },
-        },
+        flash: {'0%, 100%': {opacity: 1}, '50%': {opacity: 0.1}},
+        shimmer: {'100%': {transform: 'translateX(100%)'}},
       },
     },
   },
-  plugins: [headlessuiPlugin],
+  plugins: [
+    headlessuiPlugin,
+    // @tailwindcss/typography plugin is used for styling rich text content
+    // in the RichText section component (/app/sections/RichText)
+    // Customize styles in tailwind.config.js or via CSS
+    // See docs at https://github.com/tailwindlabs/tailwindcss-typography for extending styles
+    require('@tailwindcss/typography'),
+  ],
 };

@@ -39,6 +39,7 @@ export default defineConfig({
         'react-markdown',
         'remark-gfm',
         'remark-breaks',
+        'html-react-parser',
       ],
     },
   },
@@ -50,6 +51,7 @@ export default defineConfig({
       'react-intersection-observer',
       'swiper/modules',
       'swiper/react',
+      'html-react-parser',
     ],
   },
   build: {
