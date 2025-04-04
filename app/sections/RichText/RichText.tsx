@@ -1,6 +1,4 @@
-import DOMPurify from 'dompurify';
-import parse from 'html-react-parser';
-import {useMemo} from 'react';
+import {useEffect, useState} from 'react';
 
 import {Schema} from './RichText.schema';
 
@@ -8,38 +6,29 @@ type RichTextCms = {richtext: string};
 
 export function RichText({cms}: {cms: RichTextCms}) {
   const richtext = cms?.richtext || '';
+  const [sanitizedHtml, setSanitizedHtml] = useState(richtext);
 
-  // Use useMemo to avoid unnecessary re-renders
-  const content = useMemo(() => {
-    if (!richtext) {
-      return null;
-    }
-
-    try {
-      // Only run DOMPurify in browser environments
-      let sanitizedHtml = richtext;
-      if (typeof window !== 'undefined') {
-        sanitizedHtml = DOMPurify.sanitize(richtext, {
+  // Client-side only sanitization
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      import('dompurify').then((DOMPurify) => {
+        const clean = DOMPurify.default.sanitize(richtext, {
           USE_PROFILES: {html: true},
         });
-      }
-
-      // Parse the sanitized HTML into React components
-      return parse(sanitizedHtml);
-    } catch (error) {
-      console.error('Error parsing rich text:', error);
-      return richtext;
+        setSanitizedHtml(clean);
+      });
     }
   }, [richtext]);
 
-  if (!content) {
+  if (!richtext) {
     return null;
   }
 
   return (
-    <div className="px-contained py-contained prose lg:prose-xl mx-auto">
-      {content}
-    </div>
+    <div
+      className="px-contained py-contained prose lg:prose-xl mx-auto"
+      dangerouslySetInnerHTML={{__html: sanitizedHtml}}
+    />
   );
 }
 

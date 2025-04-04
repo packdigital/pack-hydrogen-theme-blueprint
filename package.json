@@ -39,7 +39,6 @@
     "fast-xml-parser": "^4.5.0",
     "graphql": "^16.10.0",
     "hex-to-rgba": "^2.0.1",
-    "html-react-parser": "^5.1.8",
     "isbot": "^5.1.6",
     "lodash": "^4.17.21",
     "markdown-to-jsx": "^7.4.7",
