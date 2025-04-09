@@ -65,6 +65,7 @@ export function Drawer({
           leave="ease-out duration-200"
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
+          unmount={unmount}
         >
           <div className="fixed inset-0 bg-overlay" />
         </TransitionChild>
