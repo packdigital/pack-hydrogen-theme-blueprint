@@ -85,6 +85,7 @@ export const ADMIN_PRODUCT_FRAGMENT = `
     handle
     status
     vendor
+    description
     descriptionHtml
     productType
     publishedAt
