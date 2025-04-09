@@ -105,7 +105,10 @@ export async function loader({context, request}: LoaderFunctionArgs) {
    * Redirect to the correct locale if the buyer's country is different from the
    * current locale. Occurs only once per cookie session
    */
-  if (storefront.i18n.country !== oxygen.buyer.country) {
+  if (
+    storefront.i18n.country !== oxygen.buyer.country &&
+    !isPreviewModeEnabled
+  ) {
     const redirectedLink = await redirectLinkToBuyerLocale({context, request});
     if (redirectedLink)
       return redirect(redirectedLink.to, redirectedLink.options);
