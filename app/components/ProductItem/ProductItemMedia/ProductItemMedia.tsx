@@ -104,7 +104,7 @@ export function ProductItemMedia({
         </div>
       )}
 
-      {(selectedProduct as ProductWithStatus).status === 'DRAFT' && (
+      {(selectedProduct as ProductWithStatus)?.status === 'DRAFT' && (
         <ProductDraftMediaOverlay />
       )}
 
