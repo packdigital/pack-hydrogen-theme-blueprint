@@ -22,6 +22,7 @@ import {PressSlider} from './PressSlider';
 import {ProductRecommendationsSlider} from './ProductRecommendationsSlider';
 import {ProductReviews, PRODUCT_REVIEWS_KEY} from './ProductReviews';
 import {ProductsSlider} from './ProductsSlider';
+import {RichText} from './RichText';
 import {ShoppableProductsGrid} from './ShoppableProductsGrid';
 import {
   ShoppableSocialVideo,
@@ -41,6 +42,7 @@ import {MetaobjectImage} from './MetaobjectImage';
 export function registerSections() {
   /* Text ---------- */
   registerSection(TextBlock as Section, {name: 'text-block'});
+  registerSection(RichText as Section, {name: 'rich-text'});
   registerSection(Markdown as Section, {name: 'markdown'});
   registerSection(Accordions as Section, {name: 'accordions'});
   registerSection(IconRow as Section, {name: 'icon-row'});
