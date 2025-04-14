@@ -21,6 +21,8 @@ import {seoPayload} from '~/lib/seo.server';
 import {useGlobal, useProductWithGrouping} from '~/hooks';
 import type {ProductWithInitialGrouping} from '~/lib/types';
 
+import {BYOP_PRODUCT_HANDLE} from 'modules/brilliant/BuildYourOwnPack/BuildYourPackConfig';
+
 export const headers = routeHeaders;
 
 /*
@@ -165,10 +167,13 @@ export default function ProductRoute() {
       initialVariantId={initialSelectedVariant?.id || null}
     >
       <div data-comp={ProductRoute.displayName}>
-        <Product
-          product={product}
-          initialSelectedVariant={initialSelectedVariant}
-        />
+        {/* BRILLIANT - */}
+        {!BYOP_PRODUCT_HANDLE.includes(product?.handle) && (
+          <Product
+            product={product}
+            initialSelectedVariant={initialSelectedVariant}
+          />
+        )}
 
         {productPage && <RenderSections content={productPage} />}
       </div>

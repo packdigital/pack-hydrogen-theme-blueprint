@@ -6,6 +6,7 @@ import {Banner} from './Banner';
 import {BlogCategories} from './BlogCategories';
 import {BlogGrid} from './BlogGrid';
 import {BuildYourOwnBundle} from './BuildYourOwnBundle';
+import {BuildYourOwnPack} from '../../modules/brilliant/BuildYourOwnPack';
 import {FormBuilder} from './FormBuilder';
 import {HalfHero} from './HalfHero';
 import {Hero} from './Hero';
@@ -81,6 +82,8 @@ export function registerSections() {
   registerSection(BuildYourOwnBundle as Section, {
     name: 'build-your-own-bundle',
   });
+
+  registerSection(BuildYourOwnPack as Section, {name: 'build-your-own-pack'});
 
   /* Reviews ---------- */
   registerSection(PressSlider as Section, {name: 'press-slider'});
