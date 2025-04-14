@@ -3,10 +3,12 @@
  */
 module.exports = {
   extends: [
-    '@remix-run/eslint-config',
+    'eslint:recommended',
+    'plugin:react/recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:tailwindcss/recommended',
     'plugin:hydrogen/recommended',
     'plugin:hydrogen/typescript',
-    'plugin:tailwindcss/recommended',
   ],
   overrides: [
     {
@@ -14,11 +16,12 @@ module.exports = {
       parser: '@typescript-eslint/parser',
     },
   ],
-  plugins: ['react-refresh'],
+  plugins: ['react-refresh', 'import'],
   rules: {
     'no-console': 'off',
     'no-inline-styles': 'off',
-    'react-hooks/exhaustive-deps': 'off',
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'warn',
     'react/forbid-prop-types': 'off',
     'react/no-array-index-key': 'off',
     'react/prop-types': 'off',
@@ -43,6 +46,7 @@ module.exports = {
         ],
       },
     ],
+    'prettier/prettier': ['error', {endOfLine: 'auto'}],
     'tailwindcss/no-custom-classname': [
       'warn',
       {whitelist: ['theme-\\S+', 'swiper-\\S+']},
@@ -72,6 +76,7 @@ module.exports = {
          */
         groups: ['builtin', 'external', 'internal', 'parent', 'sibling'],
         'newlines-between': 'always',
+        alphabetize: {order: 'asc', caseInsensitive: true},
       },
     ],
   },
