@@ -1,14 +1,13 @@
 import {memo} from 'react';
 
+import {EmailSignup} from './EmailSignup';
+import {FooterLegal} from './FooterLegal';
+import {FooterMenu} from './FooterMenu';
+
 import {CountrySelector} from '~/components/CountrySelector';
 import {Link} from '~/components/Link';
 import {Svg} from '~/components/Svg';
 import {useSettings} from '~/hooks';
-
-import {EmailSignup} from './EmailSignup';
-import {FooterLegal} from './FooterLegal';
-import {FooterMenu} from './FooterMenu';
-import {FooterSocial} from './FooterSocial';
 
 export const Footer = memo(() => {
   const {footer, localization} = useSettings();
@@ -21,17 +20,18 @@ export const Footer = memo(() => {
     >
       <div className="mx-auto grid max-w-[var(--content-max-width)] grid-cols-1 md:grid-cols-[1fr_300px] md:gap-x-5 md:gap-y-10 xl:grid-cols-[200px_1fr_300px]">
         <div className="order-1 col-span-1 w-full md:col-span-2 xl:col-span-1">
-          <div className="flex gap-6 border-b border-b-neutralLight px-4 pb-8 md:border-none md:p-0 xl:flex-col">
-            <Link to="/" aria-label="Go to home page">
+          <div className="flex items-center gap-6 border-b border-b-neutralLight px-4 pb-8 md:border-none md:p-0 xl:flex-col">
+            <Link to="/" aria-label="Go to home page" className="">
               <Svg
-                className="w-12 text-current"
-                src="/svgs/pack-logo.svg#pack-logo"
-                title="Storefront logo"
-                viewBox="0 0 44 34"
+                className="h-24 text-current"
+                src="/svgs/brilliant-layers-logo.svg#brilliant-layers-logo"
+                title="Brilliant Layers logo"
+                viewBox="0 0 200 180"
               />
+              <h5 className="text-center">Brilliant Layers</h5>
             </Link>
 
-            <FooterSocial settings={footer} />
+            {/*<FooterSocial settings={footer} />*/}
           </div>
         </div>
 

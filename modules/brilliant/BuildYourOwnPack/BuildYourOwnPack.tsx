@@ -1,22 +1,22 @@
-import {useCart} from '@shopify/hydrogen-react';
-import {useCallback, useEffect, useMemo, useState} from 'react';
 import {useLocation} from '@remix-run/react';
+import {useCart} from '@shopify/hydrogen-react';
 import type {ProductVariant} from '@shopify/hydrogen-react/storefront-api-types';
+import {useCallback, useEffect, useMemo, useState} from 'react';
 
-import {Container} from '~/components/Container';
-import {useProductsByIds, useProductByHandle} from '~/hooks';
-import type {ProductCms} from '~/lib/types';
-
-import {BYOPProductItem} from './BYOPProductItem';
-import {BYOPSummary} from './BYOPSummary';
-import {BYOPSubnav} from './BYOPSubnav';
 import {Schema} from './BuildYourOwnPack.schema';
 import type {
   BuildYourOwnPackCms,
   BundleMapById,
 } from './BuildYourOwnPack.types';
 import {BYOP_SUBNAV_HEIGHT, BYOP_PRODUCT_HANDLE} from './BuildYourPackConfig';
+import {BYOPProductItem} from './BYOPProductItem';
+import {BYOPSubnav} from './BYOPSubnav';
+import {BYOPSummary} from './BYOPSummary';
 import {BYOPTierSelector} from './BYOPTierSelector';
+
+import {Container} from '~/components/Container';
+import {useProductsByIds, useProductByHandle} from '~/hooks';
+import type {ProductCms} from '~/lib/types';
 
 export function BuildYourOwnPack({cms}: {cms: BuildYourOwnPackCms}) {
   const {productGroupings, defaultHeading, preselects} = cms;
@@ -74,7 +74,9 @@ export function BuildYourOwnPack({cms}: {cms: BuildYourOwnPackCms}) {
             ? parseInt(qtyAttr.value, 10) || 1
             : 1; // Default to 1 if missing
 
-          return Array.from({length: quantity}, () => ({id: attr.value ?? ''}));
+          return Array.from({length: quantity}, () => ({
+            id: attr?.value ?? '',
+          }));
         }) || [];
 
     return itemsToEdit;
@@ -153,7 +155,7 @@ export function BuildYourOwnPack({cms}: {cms: BuildYourOwnPackCms}) {
       //trim the bundle to match the count
       setBundle(bundle.slice(0, Number(variant.title)));
     },
-    [setSelectedVariant, bundle, selectedVariant],
+    [setSelectedVariant, bundle],
   );
 
   const handleRemoveFromBundle = useCallback(

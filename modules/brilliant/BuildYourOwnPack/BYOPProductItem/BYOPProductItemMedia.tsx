@@ -1,12 +1,12 @@
-import {forwardRef, useRef} from 'react';
 import type {Video} from '@shopify/hydrogen-react/storefront-api-types';
-
-import {Image} from '~/components/Image';
+import {forwardRef, useRef} from 'react';
 
 import type {
   BYOPProductItemMediaProps,
   BYOPProductItemVideoProps,
 } from './BYOPProductItem.types';
+
+import {Image} from '~/components/Image';
 
 export function BYOPProductItemMedia({
   media,
@@ -44,6 +44,7 @@ export function BYOPProductItemMedia({
                 ...primaryMedia.previewImage,
                 altText: productTitle,
               }}
+              aspectRatio="5/4"
               className="media-fill rounded-t-md border-b-2 border-gray-200"
               loading="eager"
               sizes="(max-width: 768px) 100vw, 50vw"

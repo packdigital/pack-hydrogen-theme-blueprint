@@ -32,3 +32,8 @@
   --inverse-dark-btn-hover-border-color: #2563eb;
   --inverse-dark-btn-hover-text-color: #ffffff;
 }
+
+hr {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}

@@ -1,5 +1,5 @@
-import {BYOP_SUBNAV_HEIGHT} from './BuildYourPackConfig';
 import type {BYOPSubnavProps} from './BuildYourOwnPack.types';
+import {BYOP_SUBNAV_HEIGHT} from './BuildYourPackConfig';
 
 export function BYOPSubnav({
   activeTabIndex,

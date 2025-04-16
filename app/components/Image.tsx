@@ -1,5 +1,5 @@
-import {forwardRef} from 'react';
 import {Image as HydrogenImage} from '@shopify/hydrogen-react';
+import {forwardRef} from 'react';
 
 import type {AspectRatio} from '~/lib/types';
 

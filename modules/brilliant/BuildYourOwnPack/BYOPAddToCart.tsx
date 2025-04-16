@@ -1,12 +1,11 @@
 import {useLocation, useNavigate} from '@remix-run/react';
-import {useCallback, useEffect, useMemo, useState} from 'react';
 import {useCart} from '@shopify/hydrogen-react';
+import {useCallback, useEffect, useMemo, useState} from 'react';
+
+import type {BYOPAddToCartProps} from './BuildYourOwnPack.types';
 
 import {LoadingDots} from '~/components/Animations/LoadingDots';
 import {useMenu} from '~/hooks';
-
-import type {BYOPAddToCartProps} from './BuildYourOwnPack.types';
-import {ProductVariant} from '@shopify/hydrogen-react/storefront-api-types';
 
 export function BYOPAddToCart({
   addToCartUnlocked,
@@ -63,7 +62,7 @@ export function BYOPAddToCart({
       },
       {},
     );
-  }, [bundle?.length]);
+  }, [bundle]);
 
   const handleAddToCart = useCallback(() => {
     if (!addToCartUnlocked || isAdding || cartIsUpdating) return;
@@ -122,12 +121,14 @@ export function BYOPAddToCart({
       ]);
     }
   }, [
-    bundle,
     addToCartUnlocked,
     isAdding,
-    linesAdd,
+    cartIsUpdating,
     linesToAddByVariantId,
-    status,
+    selectedVariant?.id,
+    clid,
+    linesUpdate,
+    linesAdd,
   ]);
 
   useEffect(() => {
@@ -138,7 +139,15 @@ export function BYOPAddToCart({
       navigate(location.pathname);
       setTimeout(() => setIsAdded(false), 1000);
     }
-  }, [cartId, status, linesToAddByVariantId, isAdding]);
+  }, [
+    cartId,
+    status,
+    linesToAddByVariantId,
+    isAdding,
+    openCart,
+    navigate,
+    location.pathname,
+  ]);
 
   useEffect(() => {
     if (!error) return;

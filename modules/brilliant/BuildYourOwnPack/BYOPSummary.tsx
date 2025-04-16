@@ -1,12 +1,11 @@
 import {useEffect, useMemo, useState} from 'react';
 
+import type {BYOPSummaryProps} from './BuildYourOwnPack.types';
+import {BYOPAddToCart} from './BYOPAddToCart';
+
 import {Image} from '~/components/Image';
 import {Svg} from '~/components/Svg';
-import {PRODUCT_IMAGE_ASPECT_RATIO} from '~/lib/constants';
 import {useHideIframes, useLocale, usePromobar} from '~/hooks';
-
-import {BYOPAddToCart} from './BYOPAddToCart';
-import type {BYOPSummaryProps} from './BuildYourOwnPack.types';
 
 export function BYOPSummary({
   bundle,
@@ -48,7 +47,7 @@ export function BYOPSummary({
       : optionsLength > bundle.length
         ? `Choose ${optionsLength - bundle.length} more`
         : `${bundle.length} of ${optionsLength} selected`;
-  }, [optionsLength, bundle.length]);
+  }, [bundle.length, selectedVariant, optionsLength]);
 
   /*
   const prices = useMemo(() => {
@@ -162,12 +161,12 @@ export function BYOPSummary({
                   {isActive && (
                     <button
                       aria-label="Remove from bundle"
-                      className="absolute -right-2 -top-2 flex size-8 items-center justify-center rounded-[50%] bg-blue-600"
+                      className="absolute right-2 top-2 z-10 size-3 items-center justify-center"
                       type="button"
                       onClick={() => handleRemoveFromBundle(index)}
                     >
                       <Svg
-                        className="w-2.5 text-white"
+                        className="w-2.5 text-blue-600"
                         src="/svgs/close.svg#close"
                         viewBox="0 0 24 24"
                       />
@@ -175,21 +174,20 @@ export function BYOPSummary({
                   )}
 
                   {isActive ? (
-                    <div className="flex grow items-center  p-2 ">
-                      <div className="flex size-[50px] overflow-hidden rounded-full ">
-                        <Image
-                          data={{
-                            altText: variant.product.title,
-                            url: variant.image?.url,
-                            width: variant.image?.width,
-                            height: variant.image?.height,
-                          }}
-                          aspectRatio={PRODUCT_IMAGE_ASPECT_RATIO}
-                          width="50px"
-                          className="rounded-full"
-                        />
-                      </div>
-                      <div className="flex grow p-1">
+                    <div className="flex grow items-center p-2 ">
+                      <Image
+                        data={{
+                          altText: variant.product.title,
+                          url: variant.image?.url,
+                          width: variant.image?.width,
+                          height: variant.image?.height,
+                        }}
+                        aspectRatio={'1/1'}
+                        width="40px"
+                        className="aspect-square size-[40px] rounded-full object-cover"
+                      />
+
+                      <div className="flex grow p-2">
                         <h3 className="text-sm">{variant.product.title}</h3>
                       </div>
                     </div>

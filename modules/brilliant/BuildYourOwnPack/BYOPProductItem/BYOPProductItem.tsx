@@ -1,13 +1,13 @@
+import type {ProductVariant} from '@shopify/hydrogen-react/storefront-api-types';
 import {useEffect, useMemo, useState} from 'react';
 import {useInView} from 'react-intersection-observer';
-import type {ProductVariant} from '@shopify/hydrogen-react/storefront-api-types';
-
-import {COLOR_OPTION_NAME} from '~/lib/constants';
-import {useProductByHandle} from '~/hooks';
 
 import type {BYOPProductItemProps} from './BYOPProductItem.types';
-import {BYOPQuickShop} from './BYOPQuickShop';
 import {BYOPProductItemMedia} from './BYOPProductItemMedia';
+import {BYOPQuickShop} from './BYOPQuickShop';
+
+import {useProductByHandle} from '~/hooks';
+import {COLOR_OPTION_NAME} from '~/lib/constants';
 
 export function BYOPProductItem({
   bundle,
@@ -53,7 +53,7 @@ export function BYOPProductItem({
   useEffect(() => {
     if (!product) return;
     setSelectedVariant(product?.variants?.nodes?.[0]);
-  }, [product?.id]);
+  }, [product]);
 
   // grid-cols-2 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4
 

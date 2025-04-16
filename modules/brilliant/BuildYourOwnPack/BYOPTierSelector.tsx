@@ -1,10 +1,10 @@
-import {useCallback} from 'react';
 import type {ProductVariant} from '@shopify/hydrogen-react/storefront-api-types';
+import {useCallback} from 'react';
 
 interface BYOPTierSelectorProps {
   variants: ProductVariant[];
   handleSelect: (variant: ProductVariant) => void;
-  selectedVariant: ProductVariant;
+  selectedVariant: ProductVariant | undefined;
 }
 
 export const BYOPTierSelector: React.FC<BYOPTierSelectorProps> = ({
@@ -25,17 +25,6 @@ export const BYOPTierSelector: React.FC<BYOPTierSelectorProps> = ({
 
   return (
     <div className="flex w-full flex-col justify-center ">
-      <div className="flex justify-center">
-        <div className="text-center">
-          <h2 className="text-h2">Build your own pack</h2>
-          <p className="max-w-2xl py-2">
-            Discover the ultimate joy with our 3D printed, articulated mini
-            animal figures. Jiggle Pets are perfect for collectors, kids, and
-            anyone who loves adorable and fun toys! Choose your own pack of 6,
-            12, or 25, and create a delightful, jiggly menagerie.
-          </p>
-        </div>
-      </div>
       <div className="my-3 flex grow flex-wrap items-end justify-center gap-8">
         {variants.map((variant, index) => (
           <div
