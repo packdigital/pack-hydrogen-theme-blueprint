@@ -13,10 +13,10 @@ export const NavigationLogo = memo(
         to="/"
       >
         <Svg
-          className="h-8 text-current"
-          src="/svgs/pack-logo.svg#pack-logo"
-          title="Storefront logo"
-          viewBox="0 0 44 34"
+          className="h-14 text-current"
+          src="/svgs/brilliant-layers-logo.svg#brilliant-layers-logo"
+          title="Brilliant Layers logo"
+          viewBox="0 0 180 180"
         />
       </Link>
     );

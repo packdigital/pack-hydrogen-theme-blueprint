@@ -4,7 +4,6 @@ import {
   useMatches,
   useRouteError,
 } from '@remix-run/react';
-import {data as dataWithOptions, redirect} from '@shopify/remix-oxygen';
 import type {ShouldRevalidateFunction} from '@remix-run/react';
 import {
   getSeoMeta,
@@ -12,15 +11,16 @@ import {
   ShopifySalesChannel,
 } from '@shopify/hydrogen';
 import type {
-  LinksFunction,
-  LoaderFunctionArgs,
-  MetaArgs,
-} from '@shopify/remix-oxygen';
-import type {
   Customer,
   CustomerAccessToken,
   Shop,
 } from '@shopify/hydrogen/storefront-api-types';
+import {data as dataWithOptions, redirect} from '@shopify/remix-oxygen';
+import type {
+  LinksFunction,
+  LoaderFunctionArgs,
+  MetaArgs,
+} from '@shopify/remix-oxygen';
 
 import {
   ApplicationError,
@@ -30,6 +30,9 @@ import {
 } from '~/components/Document';
 import {validateCustomerAccessToken} from '~/lib/customer';
 import {customerGetAction} from '~/lib/customer/servers/customer.server';
+import {getModalProduct} from '~/lib/products.server';
+import {seoPayload} from '~/lib/seo.server';
+import type {RootSiteSettings} from '~/lib/types';
 import {
   getCookieDomain,
   getPublicEnvs,
@@ -41,10 +44,8 @@ import {
 } from '~/lib/utils';
 import {registerSections} from '~/sections';
 import {registerStorefrontSettings} from '~/settings';
-import {seoPayload} from '~/lib/seo.server';
-import {getModalProduct} from '~/lib/products.server';
-import type {RootSiteSettings} from '~/lib/types';
 import styles from '~/styles/app.css?url';
+import blueTheme from '~/styles/blue-theme.css?url';
 
 registerSections();
 registerStorefrontSettings();
@@ -70,6 +71,7 @@ export const shouldRevalidate: ShouldRevalidateFunction = ({
 export const links: LinksFunction = () => {
   return [
     {rel: 'stylesheet', href: styles},
+    {rel: 'stylesheet', href: blueTheme},
     {
       rel: 'stylesheet',
       href: 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css',

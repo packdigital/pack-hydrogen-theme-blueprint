@@ -32,7 +32,7 @@ export function ProductOptionValueButton({
       }}
       type="button"
     >
-      {isColor ? (
+      {/* - BRILLIANT - isColor ? (
         <InnerColorOptionValue
           isAvailable={isAvailable}
           isDisabled={isDisabled}
@@ -47,7 +47,14 @@ export function ProductOptionValueButton({
           isSelected={isSelected}
           optionValue={optionValue}
         />
-      )}
+      )*/}
+
+      <InnerOptionValue
+        isAvailable={isAvailable}
+        isDisabled={isDisabled}
+        isSelected={isSelected}
+        optionValue={optionValue}
+      />
     </button>
   );
 }

@@ -1,17 +1,17 @@
-import {useMemo} from 'react';
-import type {ReactNode} from 'react';
+import {PreviewProvider} from '@pack/react';
 import {Links, Meta, Scripts, ScrollRestoration} from '@remix-run/react';
 import {CartProvider, ShopifyProvider} from '@shopify/hydrogen-react';
-import {PreviewProvider} from '@pack/react';
-
-import {ContextsProvider} from '~/contexts';
-import {CART_FRAGMENT} from '~/data/graphql/storefront/cart';
-import {Layout} from '~/components/Layout';
-import {DEFAULT_STOREFRONT_API_VERSION} from '~/lib/constants';
-import {useLocale, useRootLoaderData} from '~/hooks';
+import {useMemo} from 'react';
+import type {ReactNode} from 'react';
 
 import {Favicon} from './Favicon';
 import {Scripts as RootScripts} from './Scripts';
+
+import {Layout} from '~/components/Layout';
+import {ContextsProvider} from '~/contexts';
+import {CART_FRAGMENT} from '~/data/graphql/storefront/cart';
+import {useLocale, useRootLoaderData} from '~/hooks';
+import {DEFAULT_STOREFRONT_API_VERSION} from '~/lib/constants';
 
 interface DocumentProps {
   children: ReactNode;
@@ -45,7 +45,7 @@ export function Document({children, title}: DocumentProps) {
   }, [url]);
 
   return (
-    <html lang={locale.language}>
+    <html lang={locale.language} data-theme="blue">
       <head>
         {title && <title>{title}</title>}
         <meta charSet="utf-8" />

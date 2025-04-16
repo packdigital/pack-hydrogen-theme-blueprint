@@ -1,16 +1,16 @@
 import {memo, useMemo} from 'react';
 
-import {Image} from '~/components/Image';
-import {Link} from '~/components/Link';
-import {QuantitySelector} from '~/components/QuantitySelector';
-import {Svg} from '~/components/Svg';
-import {PRODUCT_IMAGE_ASPECT_RATIO} from '~/lib/constants';
-
 import type {CartLineProps} from '../Cart.types';
 
 import {useCartLine} from './useCartLine';
 import {useCartLineImage} from './useCartLineImage';
 import {useCartLinePrices} from './useCartLinePrices';
+
+import {Image} from '~/components/Image';
+import {Link} from '~/components/Link';
+import {QuantitySelector} from '~/components/QuantitySelector';
+import {Svg} from '~/components/Svg';
+import {PRODUCT_IMAGE_ASPECT_RATIO} from '~/lib/constants';
 
 export const CartLine = memo(({closeCart, line}: CartLineProps) => {
   const {discountAllocations, quantity, merchandise} = line;
@@ -27,8 +27,14 @@ export const CartLine = memo(({closeCart, line}: CartLineProps) => {
     merchandise.selectedOptions.forEach(({name, value}) => {
       searchParams.set(name, value);
     });
+
+    //BRILLIANT - include cartLineId as clid for BUNDLES editing
+    searchParams.set('clid', line.id);
+    //BRILLIANT -  Attach a timestamp to distinguish new requests in BYOB
+    searchParams.set('ts', String(Date.now()));
+
     return `/products/${merchandise.product.handle}?${searchParams}`;
-  }, [merchandise.id]);
+  }, [line.id, merchandise.product.handle, merchandise.selectedOptions]);
 
   return (
     <div className="relative grid grid-cols-[auto_1fr] items-center gap-3 p-4 ">
@@ -66,6 +72,19 @@ export const CartLine = memo(({closeCart, line}: CartLineProps) => {
           {merchandise.title !== 'Default Title' && (
             <p className="text-sm text-neutralMedium">{merchandise.title}</p>
           )}
+
+          {/* BRILLIANT - ADDS line items FOR BYOP */}
+          <ul>
+            {line.attributes
+              .filter((attr) => /^_item_\d+_title$/.test(attr?.key))
+              .map((attr) => {
+                return (
+                  <li key={attr.key} className="text-sm">
+                    {attr.value}
+                  </li>
+                );
+              })}
+          </ul>
 
           <button
             aria-label={`Remove ${merchandise.product.title} from cart`}
