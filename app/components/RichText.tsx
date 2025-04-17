@@ -1,4 +1,4 @@
-import {forwardRef, useEffect, useState} from 'react';
+import {forwardRef} from 'react';
 
 interface RichTextProps {
   centerAllText?: boolean;
