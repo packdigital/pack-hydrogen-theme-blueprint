@@ -4,31 +4,102 @@ import headlessuiPlugin from '@headlessui/tailwindcss';
 
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: ['class'],
   content: ['./app/**/*.{js,ts,jsx,tsx}'],
   theme: {
     screens: {
-      xs: '30rem', // 480px
-      sm: '40rem', // 640px
-      md: '48rem', // 768px
-      lg: '64rem', // 1024px
-      xl: '80rem', // 1280px
-      '2xl': '96rem', // 1536px
+      xs: '30rem',
+      sm: '40rem',
+      md: '48rem',
+      lg: '64rem',
+      xl: '80rem',
+      '2xl': '96rem',
     },
     fontSize: {
-      '2xs': ['0.625rem', {lineHeight: '1rem'}], // 10px
-      xs: ['0.75rem', {lineHeight: '1rem'}], // 12px
-      sm: ['0.875rem', {lineHeight: '1.25rem'}], // 14px
-      base: ['1rem', {lineHeight: '1.5rem'}], // 16px
-      lg: ['1.125rem', {lineHeight: '1.75rem'}], // 18px
-      xl: ['1.25rem', {lineHeight: '1.75rem'}], // 20px
-      '2xl': ['1.5rem', {lineHeight: '2rem'}], // 24px
-      '3xl': ['1.875rem', {lineHeight: '2.25rem'}], // 30px
-      '4xl': ['2.25rem', {lineHeight: '2.5rem'}], // 36px
-      '5xl': ['3rem', {lineHeight: '1.25'}], // 48px
-      '6xl': ['3.75rem', {lineHeight: '1.25'}], // 60px
-      '7xl': ['4.5rem', {lineHeight: '1.25'}], // 72px
-      '8xl': ['6rem', {lineHeight: '1.25'}], // 96px
-      '9xl': ['8rem', {lineHeight: '1.25'}], // 128px
+      '2xs': [
+        '0.625rem',
+        {
+          lineHeight: '1rem',
+        },
+      ],
+      xs: [
+        '0.75rem',
+        {
+          lineHeight: '1rem',
+        },
+      ],
+      sm: [
+        '0.875rem',
+        {
+          lineHeight: '1.25rem',
+        },
+      ],
+      base: [
+        '1rem',
+        {
+          lineHeight: '1.5rem',
+        },
+      ],
+      lg: [
+        '1.125rem',
+        {
+          lineHeight: '1.75rem',
+        },
+      ],
+      xl: [
+        '1.25rem',
+        {
+          lineHeight: '1.75rem',
+        },
+      ],
+      '2xl': [
+        '1.5rem',
+        {
+          lineHeight: '2rem',
+        },
+      ],
+      '3xl': [
+        '1.875rem',
+        {
+          lineHeight: '2.25rem',
+        },
+      ],
+      '4xl': [
+        '2.25rem',
+        {
+          lineHeight: '2.5rem',
+        },
+      ],
+      '5xl': [
+        '3rem',
+        {
+          lineHeight: '1.25',
+        },
+      ],
+      '6xl': [
+        '3.75rem',
+        {
+          lineHeight: '1.25',
+        },
+      ],
+      '7xl': [
+        '4.5rem',
+        {
+          lineHeight: '1.25',
+        },
+      ],
+      '8xl': [
+        '6rem',
+        {
+          lineHeight: '1.25',
+        },
+      ],
+      '9xl': [
+        '8rem',
+        {
+          lineHeight: '1.25',
+        },
+      ],
     },
     extend: {
       fontFamily: {
@@ -36,8 +107,14 @@ export default {
         heading: ['Poppins', 'sans-serif'],
       },
       colors: {
-        primary: 'var(--primary)',
-        secondary: 'var(--secondary)',
+        primary: {
+          DEFAULT: 'hsl(var(--primary))',
+          foreground: 'hsl(var(--primary-foreground))',
+        },
+        secondary: {
+          DEFAULT: 'hsl(var(--secondary))',
+          foreground: 'hsl(var(--secondary-foreground))',
+        },
         accent1: 'var(--accent1)',
         accent2: 'var(--accent2)',
         black: 'var(--black)',
@@ -50,9 +127,39 @@ export default {
         neutralLightest: 'var(--neutral-lightest)',
         white: 'var(--white)',
         text: 'var(--text)',
-        background: 'var(--background)',
-        border: 'var(--border)',
+        background: 'hsl(var(--background))',
+        border: 'hsl(var(--border))',
         overlay: 'var(--overlay)',
+        foreground: 'hsl(var(--foreground))',
+        card: {
+          DEFAULT: 'hsl(var(--card))',
+          foreground: 'hsl(var(--card-foreground))',
+        },
+        popover: {
+          DEFAULT: 'hsl(var(--popover))',
+          foreground: 'hsl(var(--popover-foreground))',
+        },
+        muted: {
+          DEFAULT: 'hsl(var(--muted))',
+          foreground: 'hsl(var(--muted-foreground))',
+        },
+        accent: {
+          DEFAULT: 'hsl(var(--accent))',
+          foreground: 'hsl(var(--accent-foreground))',
+        },
+        destructive: {
+          DEFAULT: 'hsl(var(--destructive))',
+          foreground: 'hsl(var(--destructive-foreground))',
+        },
+        input: 'hsl(var(--input))',
+        ring: 'hsl(var(--ring))',
+        chart: {
+          1: 'hsl(var(--chart-1))',
+          2: 'hsl(var(--chart-2))',
+          3: 'hsl(var(--chart-3))',
+          4: 'hsl(var(--chart-4))',
+          5: 'hsl(var(--chart-5))',
+        },
       },
       animation: {
         'spin-fast': 'spin 0.75s linear infinite',
@@ -84,7 +191,12 @@ export default {
           },
         },
       },
+      borderRadius: {
+        lg: 'var(--radius)',
+        md: 'calc(var(--radius) - 2px)',
+        sm: 'calc(var(--radius) - 4px)',
+      },
     },
   },
-  plugins: [headlessuiPlugin],
+  plugins: [headlessuiPlugin, require('tailwindcss-animate')],
 };
