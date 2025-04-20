@@ -45,7 +45,7 @@ export function BYOPProductItemMedia({
                 altText: productTitle,
               }}
               aspectRatio="5/4"
-              className="media-fill rounded-t-md border-b-2 border-gray-200"
+              className="media-fill rounded-md"
               loading="eager"
               sizes="(max-width: 768px) 100vw, 50vw"
             />
@@ -67,7 +67,7 @@ export function BYOPProductItemMedia({
                 ...hoverMedia.previewImage,
                 altText: productTitle,
               }}
-              className="media-fill"
+              className="media-fill rounded-md"
               sizes="(min-width: 1280px) 20vw, (min-width: 768px) 30vw, 45vw"
             />
           )}

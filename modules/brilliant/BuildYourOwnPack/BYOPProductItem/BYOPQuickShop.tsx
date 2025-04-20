@@ -1,10 +1,9 @@
 import {useMemo, useState} from 'react';
 
+import type {BYOPQuickShopProps} from './BYOPProductItem.types';
+
 import {QuantitySelector} from '~/components/QuantitySelector';
 import {Svg} from '~/components/Svg';
-
-import {BYOPQuickShopOptions} from './BYOPQuickShopOptions';
-import type {BYOPQuickShopProps} from './BYOPProductItem.types';
 
 export function BYOPQuickShop({
   bundle,
@@ -23,7 +22,7 @@ export function BYOPQuickShop({
       ...selectedVariant,
       image: selectedVariant.image || product?.featuredImage,
     };
-  }, [selectedVariant?.id]);
+  }, [product?.featuredImage, selectedVariant]);
 
   const quantityInBundle = useMemo(() => {
     return bundle.filter(
@@ -52,16 +51,16 @@ export function BYOPQuickShop({
       }, 0) === 1 || false;
 
     return hasOnlySingleValueOptions || hasOnlyOneOptionWithMultipleValues;
-  }, [product?.id]);
+  }, [product]);
 
   const hasOneVariant = product?.variants?.nodes?.length === 1;
 
   return qualifiesForQuickShop ? (
-    <div className="flex size-full justify-center">
+    <div className="flex flex-row justify-between gap-2">
       {!quantityInBundle && hasOneVariant && (
         <button
           aria-label={`Add one ${product?.title} to your bundle`}
-          className="btn-primary !size-12 !p-0"
+          className="btn-primary size-9 p-2"
           disabled={!variantToAdd || incrementDisabled}
           onClick={() => {
             if (variantToAdd) handleAddToBundle(variantToAdd);
@@ -94,19 +93,8 @@ export function BYOPQuickShop({
         </button>
       )}
 
-      {optionsVisible && (
-        <BYOPQuickShopOptions
-          bundle={bundle}
-          bundleMapById={bundleMapById}
-          handleRemoveFromBundle={handleRemoveFromBundle}
-          handleAddToBundle={handleAddToBundle}
-          incrementDisabled={incrementDisabled}
-          product={product}
-        />
-      )}
-
       {quantityInBundle > 0 && !optionsVisible && (
-        <div className="flex size-full items-center justify-center">
+        <div className="flex items-center justify-center">
           <QuantitySelector
             disableIncrement={incrementDisabled}
             productTitle={product?.title}

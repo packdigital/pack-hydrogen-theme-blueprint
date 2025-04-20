@@ -6,6 +6,8 @@ import type {BYOPProductItemProps} from './BYOPProductItem.types';
 import {BYOPProductItemMedia} from './BYOPProductItemMedia';
 import {BYOPQuickShop} from './BYOPQuickShop';
 
+import {Button} from '~/components/ui/button';
+import {Card, CardContent} from '~/components/ui/card';
 import {useProductByHandle} from '~/hooks';
 import {COLOR_OPTION_NAME} from '~/lib/constants';
 
@@ -46,59 +48,35 @@ export function BYOPProductItem({
   /* Default BYOB item logic only set up for selecting the first variant
    * if an options selector is needed, change selectedVariant to a useState and add in an options selector below
    */
-  const isSecondCol = index % 2 === 1;
-  const isThirdCol = index % 3 === 2;
-  const isFourthCol = index % 4 === 3;
 
   useEffect(() => {
     if (!product) return;
     setSelectedVariant(product?.variants?.nodes?.[0]);
   }, [product]);
 
-  // grid-cols-2 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4
-
   return (
-    <div
-      className={`flex h-full flex-col rounded-lg border-2 border-gray-200`}
-      ref={ref}
-    >
-      <BYOPProductItemMedia
-        media={product?.media?.nodes}
-        productTitle={product?.title}
-      />
-
-      <div className="flex flex-1 flex-col justify-between gap-2.5 px-2.5 pb-5 pt-2.5">
-        <div className="text-center">
-          <h3 className="text-h5">{product?.title}</h3>
-
-          {primaryOptionValue && (
-            <p className="text-sm">{primaryOptionValue.name}</p>
-          )}
-        </div>
-
-        <div className="flex min-h-12 w-full flex-col items-center">
-          {isSoldOut ? (
-            <button
-              disabled
-              type="button"
-              className="btn-primary !h-12 !py-0 text-sm"
-            >
-              Sold Out
-            </button>
-          ) : (
-            <BYOPQuickShop
-              bundle={bundle}
-              bundleMapById={bundleMapById}
-              incrementDisabled={incrementDisabled}
-              handleRemoveFromBundle={handleRemoveFromBundle}
-              handleAddToBundle={handleAddToBundle}
-              product={product}
-              selectedVariant={selectedVariant}
-            />
-          )}
-        </div>
+    <Card className={`flex h-full flex-col overflow-hidden`} ref={ref}>
+      <div className="p-2">
+        <BYOPProductItemMedia
+          media={product?.media?.nodes}
+          productTitle={product?.title}
+        />
       </div>
-    </div>
+      <CardContent className="p-2 md:p-3">
+        <div className="flex items-center justify-between">
+          <h3 className="text-base font-medium">{product?.title}</h3>
+          <BYOPQuickShop
+            bundle={bundle}
+            bundleMapById={bundleMapById}
+            incrementDisabled={incrementDisabled}
+            handleRemoveFromBundle={handleRemoveFromBundle}
+            handleAddToBundle={handleAddToBundle}
+            product={product}
+            selectedVariant={selectedVariant}
+          />
+        </div>
+      </CardContent>
+    </Card>
   );
 }
 
