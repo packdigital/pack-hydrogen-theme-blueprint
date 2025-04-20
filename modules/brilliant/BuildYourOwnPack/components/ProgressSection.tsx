@@ -1,3 +1,4 @@
+import {ProductVariant} from '@shopify/hydrogen-react/storefront-api-types';
 import {useMemo} from 'react';
 
 import {Button} from '~/components/ui/button';
@@ -13,21 +14,11 @@ export function ProgressSection({
   className?: string;
   viewBundleSelection: (val: boolean) => void;
   selectedCount: number;
-  selectedBundle:
-    | {
-        size: number;
-        title: string;
-      }
-    | undefined;
+  selectedBundle: ProductVariant | undefined;
 }) {
   const bundleSize = useMemo(
-    () => selectedBundle?.size || 0,
-    [selectedBundle?.size],
-  );
-
-  const bundleTitle = useMemo(
-    () => selectedBundle?.title || '',
-    [selectedBundle?.title],
+    () => Number(selectedBundle?.selectedOptions[0].value) || 0,
+    [selectedBundle?.selectedOptions],
   );
 
   const progressPercentage = useMemo(() => {
@@ -37,12 +28,11 @@ export function ProgressSection({
 
   return (
     <div className={cn('', className)}>
-      <div className="flex items-center justify-between bg-secondary p-4">
+      <div className="flex items-center justify-between bg-muted p-4">
         <div className="grow px-6 py-2">
           <div className="mb-1 flex justify-between">
-            <span>{bundleTitle}</span>
-            <span>
-              {selectedCount} of {bundleSize} selected
+            <span className="font-semibold">
+              Your Selection: {selectedCount} of {bundleSize}
             </span>
             <span className="text-lg font-semibold">
               {Math.round(progressPercentage)}% complete
@@ -51,7 +41,9 @@ export function ProgressSection({
           <Progress value={progressPercentage} className="h-4" />
         </div>
         <div className="">
-          <Button onClick={() => viewBundleSelection}>View Selected</Button>
+          <Button onClick={() => viewBundleSelection(true)}>
+            View Selected Items
+          </Button>
         </div>
       </div>
     </div>

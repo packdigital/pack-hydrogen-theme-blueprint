@@ -1,7 +1,7 @@
 import {memo, useEffect} from 'react';
+import {A11y, EffectFade, Autoplay, Navigation} from 'swiper/modules';
 import type {SwiperProps} from 'swiper/react';
 import {Swiper, SwiperSlide} from 'swiper/react';
-import {A11y, EffectFade, Autoplay, Navigation} from 'swiper/modules';
 
 import {Link} from '~/components/Link';
 import {useMatchMedia, useMenu, usePromobar, useSettings} from '~/hooks';
@@ -73,14 +73,14 @@ export const Promobar = memo(() => {
     return () => {
       window.removeEventListener('scroll', setPromobarVisibility);
     };
-  }, [autohide, promobarHeight, promobarOpen]);
+  }, [autohide, promobarHeight, promobarOpen, togglePromobar]);
 
   return (
     <div
       className={`overflow-hidden transition-[height] ease-out ${
         promobarOpen && !promobarDisabled
           ? 'duration-300 max-md:h-[var(--promobar-height-mobile)] md:h-[var(--promobar-height-desktop)]'
-          : 'h-0 duration-[50ms]'
+          : 'duration-[50ms] h-0'
       }`}
       style={{backgroundColor: bgColor}}
     >

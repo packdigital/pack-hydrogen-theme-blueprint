@@ -13,17 +13,17 @@
   --popover: 0 0% 100%;
   --popover-foreground: 222.2 84% 4.9%;
 
-  /* Primary Blue Theme */
-  --primary: 217 91% 60%;
+  /* Primary Blue Theme - Darkened */
+  --primary: 217 91% 45%;
   --primary-foreground: 210 40% 98%;
 
-  /* Secondary & UI Colors */
-  --secondary: 210 40% 96.1%;
-  --secondary-foreground: 222.2 47.4% 11.2%;
-  --muted: 210 40% 96.1%;
-  --muted-foreground: 215.4 16.3% 46.9%;
-  --accent: 210 40% 96.1%;
-  --accent-foreground: 222.2 47.4% 11.2%;
+  /* Secondary & UI Colors - Darker than Primary */
+  --secondary: 217 91% 35%;
+  --secondary-foreground: 210 40% 98%;
+  --muted: 0 0% 95%;
+  --muted-foreground: 0 0% 30%;
+  --accent: 217 91% 35%;
+  --accent-foreground: 210 40% 98%;
 
   /* Status Colors */
   --destructive: 0 84.2% 60.2%;
@@ -113,16 +113,16 @@
   --popover: 222.2 47.4% 11.2%;
   --popover-foreground: 210 40% 98%;
 
-  /* Dark Mode Blue Theme */
-  --primary: 217 91% 65%;
+  /* Dark Mode Blue Theme - Darkened */
+  --primary: 217 91% 50%;
   --primary-foreground: 222.2 47.4% 11.2%;
 
-  /* Secondary & UI Colors */
-  --secondary: 217.2 32.6% 17.5%;
+  /* Secondary & UI Colors - Darker than Primary */
+  --secondary: 217 91% 40%;
   --secondary-foreground: 210 40% 98%;
-  --muted: 217.2 32.6% 17.5%;
+  --muted: 217 91% 40%;
   --muted-foreground: 215 20.2% 65.1%;
-  --accent: 217.2 32.6% 17.5%;
+  --accent: 217 91% 40%;
   --accent-foreground: 210 40% 98%;
 
   /* Status Colors */

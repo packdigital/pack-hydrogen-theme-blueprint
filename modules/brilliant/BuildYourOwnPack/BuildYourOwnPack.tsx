@@ -13,21 +13,14 @@ import {BYOPProductItem} from './BYOPProductItem';
 import {BYOPSubnav} from './BYOPSubnav';
 import {BYOPSummary} from './BYOPSummary';
 import {BYOPTierSelector} from './BYOPTierSelector';
+import {DesktopBundleSelector} from './components/BundleSelector/DesktopBundleSelector';
+import {MobileBundleSelector} from './components/BundleSelector/MobileBundleSelector';
 import {BundleSheet} from './components/BundleSheet';
 import {ProgressSection} from './components/ProgressSection';
 
 import {Container} from '~/components/Container';
 import {useProductsByIds, useProductByHandle} from '~/hooks';
 import type {ProductCms} from '~/lib/types';
-
-const tierMap: Record<number, {title: string; size: number}> = {
-  6: {
-    title: 'Small Pack of Six',
-    size: 6,
-  },
-  14: {title: 'Medium', size: 14},
-  30: {title: 'Large', size: 30},
-};
 
 export function BuildYourOwnPack({cms}: {cms: BuildYourOwnPackCms}) {
   const {productGroupings, defaultHeading, preselects} = cms;
@@ -224,68 +217,38 @@ export function BuildYourOwnPack({cms}: {cms: BuildYourOwnPackCms}) {
     return bundle.length;
   }, [bundle.length]);
 
-  //The selected product variant bundle mapped to our extra values
-  const selectedBundle = useMemo(() => {
-    const bundleId: string =
-      selectedVariantBundle?.selectedOptions.find(
-        (option) => option.name === 'Size',
-      )?.value || '';
-
-    if (!bundleId) {
-      return;
-    }
-
-    return {
-      size: tierMap[Number(bundleId)].size,
-      title: tierMap[Number(bundleId)].title,
-    };
-  }, [selectedVariantBundle?.selectedOptions]);
-
   return (
     <Container container={cms.container}>
       <BundleSheet open={bundleSheetOpen} onOpenChange={setBundleSheetOpen} />
+
+      <div>
+        <DesktopBundleSelector
+          className="p-6"
+          selectedBundle={selectedVariantBundle}
+          availableBundles={variants}
+          onBundleSelect={setSelectedVariantBundle}
+        />
+      </div>
+
       <ProgressSection
         className="p-6"
         viewBundleSelection={setBundleSheetOpen}
         selectedCount={selectedCount}
-        selectedBundle={selectedBundle}
+        selectedBundle={selectedVariantBundle}
       />
+
+    
 
       <div
         /* if changing px width of second grid column, e.g. md:grid-cols-[1fr_360px],
          * also change corresponding breakpoint max width in BYOBSubnav, e.g. md:max-w-[calc(100vw-360px)] */
-        className="w-full max-md:flex max-md:flex-col md:grid md:grid-cols-[1fr_360px] xl:grid-cols-[1fr_420px]"
+        className=""
       >
-        <div className="order-1 max-md:sticky max-md:top-[var(--header-height-mobile)] max-md:z-[2] md:hidden">
-          {hasProductGroupings && (
-            <BYOPSubnav
-              activeTabIndex={activeTabIndex}
-              productGroupings={productGroupings}
-              setActiveTabIndex={setActiveTabIndex}
-            />
-          )}
-        </div>
-
         <div className="relative bg-background max-md:order-3">
-          <BYOPTierSelector
-            variants={variants}
-            handleSelect={handleTierChange}
-            selectedVariant={selectedVariantBundle}
-          />
-
           <div
             id="byob-grid-anchor"
             className="pointer-events-none absolute left-0 max-md:bottom-[calc(100%+132px+var(--byob-subnav-height))] md:bottom-[calc(100%+20px+var(--byob-subnav-height))]"
           />
-
-          {hasProductGroupings && (
-            <BYOPSubnav
-              activeTabIndex={activeTabIndex}
-              productGroupings={productGroupings}
-              setActiveTabIndex={setActiveTabIndex}
-              className="max-md:hidden md:sticky md:top-[var(--header-height-desktop)]"
-            />
-          )}
 
           {productGroupings?.map(({name, products}, index) => {
             if (
@@ -325,7 +288,7 @@ export function BuildYourOwnPack({cms}: {cms: BuildYourOwnPackCms}) {
         </div>
 
         {/*bg-background max-md:sticky max-md:top-[calc(var(--header-height-mobile)+var(--byob-subnav-height))] max-md:z-[1] max-md:order-2" */}
-        <div className="bg-background max-md:sticky max-md:top-[calc(var(--header-height-mobile)+var(--byob-subnav-height))] max-md:z-[1] max-md:order-2">
+        <div>
           <BYOPSummary
             bundle={bundle}
             defaultHeading={defaultHeading}
