@@ -45,7 +45,6 @@ import {
 import {registerSections} from '~/sections';
 import {registerStorefrontSettings} from '~/settings';
 import styles from '~/styles/app.css?url';
-import blueTheme from '~/styles/blue-theme.css?url';
 
 registerSections();
 registerStorefrontSettings();
@@ -71,7 +70,6 @@ export const shouldRevalidate: ShouldRevalidateFunction = ({
 export const links: LinksFunction = () => {
   return [
     {rel: 'stylesheet', href: styles},
-    {rel: 'stylesheet', href: blueTheme},
     {
       rel: 'stylesheet',
       href: 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css',

@@ -5,7 +5,7 @@ import headlessuiPlugin from '@headlessui/tailwindcss';
 /** @type {import('tailwindcss').Config} */
 export default {
   darkMode: ['class'],
-  content: ['./app/**/*.{js,ts,jsx,tsx}'],
+  content: ['./app/**/*.{js,jsx,ts,tsx}'],
   theme: {
     screens: {
       xs: '30rem',

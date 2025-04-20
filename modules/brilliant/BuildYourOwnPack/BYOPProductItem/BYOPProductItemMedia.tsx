@@ -18,7 +18,7 @@ export function BYOPProductItemMedia({
 
   return (
     <div
-      className="group/media relative aspect-[var(--product-image-aspect-ratio)] h-80"
+      className="group/media relative aspect-[var(--product-image-aspect-ratio)] w-full"
       onMouseEnter={() => {
         if (hoverMedia?.mediaContentType !== 'VIDEO') return;
         hoverVideoRef.current?.play();
@@ -30,7 +30,7 @@ export function BYOPProductItemMedia({
     >
       {primaryMedia && (
         <div
-          className={`${
+          className={`absolute inset-0 ${
             hoverMedia
               ? 'opacity-100 transition duration-300 md:group-hover/media:opacity-0'
               : ''
@@ -39,22 +39,24 @@ export function BYOPProductItemMedia({
           {primaryMedia.mediaContentType === 'VIDEO' ? (
             <BYOPProductItemVideo autoPlay media={primaryMedia as Video} />
           ) : (
-            <Image
-              data={{
-                ...primaryMedia.previewImage,
-                altText: productTitle,
-              }}
-              aspectRatio="5/4"
-              className="media-fill rounded-md"
-              loading="eager"
-              sizes="(max-width: 768px) 100vw, 50vw"
-            />
+            <div className="size-full">
+              <Image
+                data={{
+                  ...primaryMedia.previewImage,
+                  altText: productTitle,
+                }}
+                aspectRatio="5/4"
+                className="size-full rounded-md object-cover"
+                loading="eager"
+                sizes="(max-width: 768px) 100vw, 50vw"
+              />
+            </div>
           )}
         </div>
       )}
 
       {hoverMedia && (
-        <div className="hidden opacity-0 transition duration-300 md:block md:group-hover/media:opacity-100">
+        <div className="absolute inset-0 hidden opacity-0 transition duration-300 md:block md:group-hover/media:opacity-100">
           {hoverMedia.mediaContentType === 'VIDEO' ? (
             <BYOPProductItemVideo
               autoPlay={false}
@@ -62,14 +64,16 @@ export function BYOPProductItemMedia({
               ref={hoverVideoRef}
             />
           ) : (
-            <Image
-              data={{
-                ...hoverMedia.previewImage,
-                altText: productTitle,
-              }}
-              className="media-fill rounded-md"
-              sizes="(min-width: 1280px) 20vw, (min-width: 768px) 30vw, 45vw"
-            />
+            <div className="size-full">
+              <Image
+                data={{
+                  ...hoverMedia.previewImage,
+                  altText: productTitle,
+                }}
+                className="size-full rounded-md object-cover"
+                sizes="(min-width: 1280px) 20vw, (min-width: 768px) 30vw, 45vw"
+              />
+            </div>
           )}
         </div>
       )}
@@ -105,7 +109,7 @@ export const BYOPProductItemVideo = forwardRef(
         loop
         controls={false}
         poster={previewImage?.url}
-        className="absolute inset-0 size-full"
+        className="size-full rounded-md object-cover"
         key={JSON.stringify(videoSources)}
       >
         {videoSources?.length

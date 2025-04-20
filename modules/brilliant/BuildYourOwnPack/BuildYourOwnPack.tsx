@@ -13,13 +13,27 @@ import {BYOPProductItem} from './BYOPProductItem';
 import {BYOPSubnav} from './BYOPSubnav';
 import {BYOPSummary} from './BYOPSummary';
 import {BYOPTierSelector} from './BYOPTierSelector';
+import {BundleSheet} from './components/BundleSheet';
+import {ProgressSection} from './components/ProgressSection';
 
 import {Container} from '~/components/Container';
 import {useProductsByIds, useProductByHandle} from '~/hooks';
 import type {ProductCms} from '~/lib/types';
 
+const tierMap: Record<number, {title: string; size: number}> = {
+  6: {
+    title: 'Small Pack of Six',
+    size: 6,
+  },
+  14: {title: 'Medium', size: 14},
+  30: {title: 'Large', size: 30},
+};
+
 export function BuildYourOwnPack({cms}: {cms: BuildYourOwnPackCms}) {
   const {productGroupings, defaultHeading, preselects} = cms;
+
+  //Bundles information
+  const [bundleSheetOpen, setBundleSheetOpen] = useState(false);
 
   //Get all our variant information
   const packProduct = useProductByHandle(BYOP_PRODUCT_HANDLE);
@@ -33,12 +47,13 @@ export function BuildYourOwnPack({cms}: {cms: BuildYourOwnPackCms}) {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   const [bundle, setBundle] = useState<ProductVariant[]>([]);
   //Default to the first variant
-  const [selectedVariant, setSelectedVariant] = useState<ProductVariant>();
+  const [selectedVariantBundle, setSelectedVariantBundle] =
+    useState<ProductVariant>();
 
   //Added this as sometimes i wasnt getting the variant pre-selected?
   useEffect(() => {
     if (variants[0]) {
-      setSelectedVariant(variants[0]);
+      setSelectedVariantBundle(variants[0]);
     }
   }, [variants]);
 
@@ -94,7 +109,7 @@ export function BuildYourOwnPack({cms}: {cms: BuildYourOwnPackCms}) {
     );
 
     if (cartVariant) {
-      setSelectedVariant(cartVariant);
+      setSelectedVariantBundle(cartVariant);
     }
   }, [clid, lines, ts, variants]);
 
@@ -147,15 +162,16 @@ export function BuildYourOwnPack({cms}: {cms: BuildYourOwnPackCms}) {
 
   const hasProductGroupings = productGroupings?.length > 1;
   const incrementDisabled =
-    !!selectedVariant && bundle.length >= Number(selectedVariant.title); //in our variants, size options value is the title
+    !!selectedVariantBundle &&
+    bundle.length >= Number(selectedVariantBundle.title); //in our variants, size options value is the title
 
   const handleTierChange = useCallback(
     (variant: ProductVariant) => {
-      setSelectedVariant(variant);
+      setSelectedVariantBundle(variant);
       //trim the bundle to match the count
       setBundle(bundle.slice(0, Number(variant.title)));
     },
-    [setSelectedVariant, bundle],
+    [setSelectedVariantBundle, bundle],
   );
 
   const handleRemoveFromBundle = useCallback(
@@ -203,8 +219,38 @@ export function BuildYourOwnPack({cms}: {cms: BuildYourOwnPackCms}) {
     );
   }, [hasProductGroupings]);
 
+  //Selected Items in Bundle Count
+  const selectedCount = useMemo(() => {
+    return bundle.length;
+  }, [bundle.length]);
+
+  //The selected product variant bundle mapped to our extra values
+  const selectedBundle = useMemo(() => {
+    const bundleId: string =
+      selectedVariantBundle?.selectedOptions.find(
+        (option) => option.name === 'Size',
+      )?.value || '';
+
+    if (!bundleId) {
+      return;
+    }
+
+    return {
+      size: tierMap[Number(bundleId)].size,
+      title: tierMap[Number(bundleId)].title,
+    };
+  }, [selectedVariantBundle?.selectedOptions]);
+
   return (
     <Container container={cms.container}>
+      <BundleSheet open={bundleSheetOpen} onOpenChange={setBundleSheetOpen} />
+      <ProgressSection
+        className="p-6"
+        viewBundleSelection={setBundleSheetOpen}
+        selectedCount={selectedCount}
+        selectedBundle={selectedBundle}
+      />
+
       <div
         /* if changing px width of second grid column, e.g. md:grid-cols-[1fr_360px],
          * also change corresponding breakpoint max width in BYOBSubnav, e.g. md:max-w-[calc(100vw-360px)] */
@@ -224,7 +270,7 @@ export function BuildYourOwnPack({cms}: {cms: BuildYourOwnPackCms}) {
           <BYOPTierSelector
             variants={variants}
             handleSelect={handleTierChange}
-            selectedVariant={selectedVariant}
+            selectedVariant={selectedVariantBundle}
           />
 
           <div
@@ -285,7 +331,7 @@ export function BuildYourOwnPack({cms}: {cms: BuildYourOwnPackCms}) {
             defaultHeading={defaultHeading}
             handleRemoveFromBundle={handleRemoveFromBundle}
             clid={clid}
-            selectedVariant={selectedVariant}
+            selectedVariant={selectedVariantBundle}
           />
         </div>
       </div>
