@@ -42,10 +42,10 @@ export function Document({children, title}: DocumentProps) {
     } catch (error) {
       return undefined;
     }
-  }, [url]);
+  }, [ENV.PRIMARY_DOMAIN, url]);
 
   return (
-    <html lang={locale.language} data-theme="blue">
+    <html lang={locale.language}>
       <head>
         {title && <title>{title}</title>}
         <meta charSet="utf-8" />
