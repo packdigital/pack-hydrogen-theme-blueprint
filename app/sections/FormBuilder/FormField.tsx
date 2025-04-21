@@ -55,16 +55,15 @@ export function FormField({field}: Record<string, any>) {
 
   const isNotFullWidth = isCheckbox || isRadio || isFileType || isCheckboxType;
 
-  const inputClass =
-    'w-full rounded border border-border p-3 text-base !min-w-0';
-  const labelClass = 'font-sans font-bold text-sm block m-0';
+  const inputClass = 'input-text';
+  const labelClass = 'input-label p-0';
   const selectClass = `appearance-none bg-[url('/svgs/chevron-down.svg')] bg-[length:1rem_1rem] bg-[calc(100%-0.75rem)] bg-no-repeat ${inputClass}`;
   const halfWidthSpan =
     column === 1 ? 'col-span-2 xs:col-[1]' : 'col-span-2 xs:col-[2]';
 
   return (
     <div
-      className={`flex flex-col ${
+      className={`flex flex-col self-end ${
         halfWidth ? halfWidthSpan : 'col-[1_/_span_2]'
       } ${isNotFullWidth ? 'items-start' : 'items-stretch'}`}
       key={name}
@@ -109,21 +108,17 @@ export function FormField({field}: Record<string, any>) {
             name={name}
             placeholder={placeholder}
             required={required}
-            type="textarea"
           />
         )}
 
         {isCheckbox && (
-          <>
-            <input
-              id={name}
-              name={name}
-              required={required}
-              type="checkbox"
-              value="yes"
-            />
-            <div type="hidden" name={name} value="no" />
-          </>
+          <input
+            id={name}
+            name={name}
+            required={required}
+            type="checkbox"
+            value="yes"
+          />
         )}
 
         {isMultiCheckbox && (
@@ -144,7 +139,6 @@ export function FormField({field}: Record<string, any>) {
                   type="checkbox"
                   value="yes"
                 />
-                <div type="hidden" name={value} value="no" />
                 {value}
               </label>
             ))}

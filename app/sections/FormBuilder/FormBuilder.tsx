@@ -28,14 +28,14 @@ export function FormBuilder({cms}: {cms: FormBuilderCms}) {
     cms.recaptchaEnabled && !!ENV.PUBLIC_RECAPTCHA_SITE_KEY;
 
   const handleSubmit = useCallback(
-    async (e: React.FormEvent<HTMLFormElement>) => {
+    async (e: React.FormEvent<HTMLButtonElement>) => {
       try {
         setErrors([]);
         const formIsValid = formRef.current?.checkValidity();
         if (!recaptchaEnabled || !captchaLoaded || !formIsValid) return;
         e.preventDefault();
         // Check if captcha is verified if captcha was originally rendered
-        const captchaResponse = await window.grecaptcha?.getResponse();
+        const captchaResponse = window.grecaptcha?.getResponse();
         if (!captchaResponse) {
           setErrors(['Please verify you are not a robot']);
           return;
@@ -100,8 +100,8 @@ export function FormBuilder({cms}: {cms: FormBuilderCms}) {
             method="POST"
             ref={formRef}
           >
-            {parsedFields?.map((field) => (
-              <Fragment key={field.name}>
+            {parsedFields?.map((field, index) => (
+              <Fragment key={index}>
                 <FormField field={field} />
               </Fragment>
             ))}
@@ -114,9 +114,7 @@ export function FormBuilder({cms}: {cms: FormBuilderCms}) {
               )}
 
               <button
-                className={`btn-primary mt-4 w-auto max-w-48 ${
-                  endpoint ? 'cursor-pointer' : 'cursor-not-allowed'
-                }`}
+                className="btn-primary mt-4 w-auto max-w-48"
                 disabled={!endpoint}
                 onClick={handleSubmit}
                 type="submit"

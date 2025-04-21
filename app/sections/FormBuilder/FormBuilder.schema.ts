@@ -51,6 +51,17 @@ const inputField = (type) => ({
       label: 'Half Width',
       name: 'halfWidth',
       component: 'toggle',
+      description: 'Not applicable to viewports below 480px',
+      toggleLabels: {
+        true: 'On',
+        false: 'Off',
+      },
+    },
+    {
+      label: 'New Line if Half Width',
+      name: 'newLineIfHalfWidth',
+      component: 'toggle',
+      description: 'If half width, field will always start on a new line',
       toggleLabels: {
         true: 'On',
         false: 'Off',
@@ -138,6 +149,17 @@ const multiChoiceField = (type) => ({
       label: 'Half Width',
       name: 'halfWidth',
       component: 'toggle',
+      description: 'Not applicable to viewports below 480px',
+      toggleLabels: {
+        true: 'On',
+        false: 'Off',
+      },
+    },
+    {
+      label: 'New Line if Half Width',
+      name: 'newLineIfHalfWidth',
+      component: 'toggle',
+      description: 'If half width, field will always start on a new line',
       toggleLabels: {
         true: 'On',
         false: 'Off',
@@ -208,6 +230,17 @@ const countryField = {
       label: 'Half Width',
       name: 'halfWidth',
       component: 'toggle',
+      description: 'Not applicable to viewports below 480px',
+      toggleLabels: {
+        true: 'On',
+        false: 'Off',
+      },
+    },
+    {
+      label: 'New Line if Half Width',
+      name: 'newLineIfHalfWidth',
+      component: 'toggle',
+      description: 'If half width, field will always start on a new line',
       toggleLabels: {
         true: 'On',
         false: 'Off',
@@ -278,6 +311,17 @@ const checkboxField = {
       label: 'Half Width',
       name: 'halfWidth',
       component: 'toggle',
+      description: 'Not applicable to viewports below 480px',
+      toggleLabels: {
+        true: 'On',
+        false: 'Off',
+      },
+    },
+    {
+      label: 'New Line if Half Width',
+      name: 'newLineIfHalfWidth',
+      component: 'toggle',
+      description: 'If half width, field will always start on a new line',
       toggleLabels: {
         true: 'On',
         false: 'Off',
@@ -330,6 +374,17 @@ const fileField = {
       label: 'Half Width',
       name: 'halfWidth',
       component: 'toggle',
+      description: 'Not applicable to viewports below 480px',
+      toggleLabels: {
+        true: 'On',
+        false: 'Off',
+      },
+    },
+    {
+      label: 'New Line if Half Width',
+      name: 'newLineIfHalfWidth',
+      component: 'toggle',
+      description: 'If half width, field will always start on a new line',
       toggleLabels: {
         true: 'On',
         false: 'Off',
