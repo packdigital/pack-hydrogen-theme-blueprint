@@ -62,8 +62,10 @@ export interface HalfHeroMediaProps {
 }
 
 export interface HalfHeroContentProps {
-  aboveTheFold: boolean;
-  content: Content;
+  aboveTheFold?: boolean;
+  content?: Content;
+  fullBleed?: boolean;
+  mediaOrderDesktop?: string;
 }
 
 export interface HalfHeroVideoProps {

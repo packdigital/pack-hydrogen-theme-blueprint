@@ -56,6 +56,8 @@ export function HalfHero({cms}: {cms: HalfHeroCms}) {
             <HalfHeroContent
               aboveTheFold={section?.aboveTheFold}
               content={content}
+              fullBleed={section?.fullBleed}
+              mediaOrderDesktop={mediaOrderDesktop}
             />
           </div>
         </div>
