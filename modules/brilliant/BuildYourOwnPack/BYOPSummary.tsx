@@ -49,31 +49,8 @@ export function BYOPSummary({
         : `${bundle.length} of ${optionsLength} selected`;
   }, [bundle.length, selectedVariant, optionsLength]);
 
-  /*
   const prices = useMemo(() => {
-    if (!activeTier || activeTier.type === 'none' || !addToCartUnlocked) {
-      return {compareAtTotal: '', total: ''};
-    }
-    const compareAtTotal = bundle.reduce((acc, variant) => {
-      return acc + Number(variant.price.amount);
-    }, 0);
-    let total;
-    if (activeTier.type === 'buyXGetYFree') {
-      const cheapestVariant = bundle.reduce((acc, variant) => {
-        return acc.price.amount < variant.price.amount ? acc : variant;
-      }, bundle[0]);
-      total = compareAtTotal - Number(cheapestVariant.price.amount);
-    } else {
-      total = compareAtTotal - (compareAtTotal * activeTier.percent) / 100;
-    }
-    return {
-      compareAtTotal: parseAsCurrency(compareAtTotal, locale),
-      total: parseAsCurrency(total, locale),
-    };
-  }, [addToCartUnlocked, bundle, activeTier, locale]);
-  */
-  const prices = useMemo(() => {
-    if (!selectedVariant?.price) return {total: '0.00?'};
+    if (!selectedVariant?.price) return {total: '0.00'};
     return {total: selectedVariant?.price.amount};
   }, [selectedVariant?.price]);
 
@@ -82,6 +59,8 @@ export function BYOPSummary({
       setMobileSummaryOpen(true);
     }
   }, [bundle.length, optionsLength]);
+
+  const safeBundle = Array.isArray(bundle) ? bundle : [];
 
   return (
     <div
@@ -111,7 +90,7 @@ export function BYOPSummary({
           <div className="flex items-center gap-1">
             <span className="font-bold">Your Bundle</span>
             <span className="text-sm font-normal">
-              ({bundle.length}/{optionsLength})
+              ({safeBundle.length}/{optionsLength})
             </span>
           </div>
 
@@ -140,15 +119,15 @@ export function BYOPSummary({
         <div className="overflow-hidden max-md:flex-1 ">
           <div
             className={`scrollbar-hide grid h-auto max-h-full grid-cols-2 gap-4 overflow-y-auto p-2 xl:px-[20px] ${
-              mobileSummaryOpen && bundle[0]
+              mobileSummaryOpen && safeBundle[0]
                 ? 'max-md:pb-5 max-md:pt-10 md:py-5'
-                : mobileSummaryOpen || bundle[0]
+                : mobileSummaryOpen || safeBundle[0]
                   ? 'py-5'
                   : 'pb-5'
             }`}
           >
             {tierOptions?.map(({message}, index) => {
-              const variant = bundle[index];
+              const variant = safeBundle[index];
               const isActive = !!variant;
               return (
                 <div
@@ -177,10 +156,10 @@ export function BYOPSummary({
                     <div className="flex grow items-center p-2 ">
                       <Image
                         data={{
-                          altText: variant.product.title,
-                          url: variant.image?.url,
-                          width: variant.image?.width,
-                          height: variant.image?.height,
+                          altText: variant.product?.title || '',
+                          url: variant.image?.url || '',
+                          width: variant.image?.width || 0,
+                          height: variant.image?.height || 0,
                         }}
                         aspectRatio={'1/1'}
                         width="40px"
@@ -188,7 +167,9 @@ export function BYOPSummary({
                       />
 
                       <div className="flex grow p-2">
-                        <h3 className="text-sm">{variant.product.title}</h3>
+                        <h3 className="text-sm">
+                          {variant.product?.title || ''}
+                        </h3>
                       </div>
                     </div>
                   ) : (
@@ -216,7 +197,7 @@ export function BYOPSummary({
           </div>
 
           <BYOPAddToCart
-            bundle={bundle}
+            bundle={safeBundle}
             addToCartUnlocked={addToCartUnlocked}
             total={prices.total}
             clid={clid}

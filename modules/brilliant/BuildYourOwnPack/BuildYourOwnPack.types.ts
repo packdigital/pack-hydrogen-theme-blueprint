@@ -1,11 +1,9 @@
 import type {ProductVariant} from '@shopify/hydrogen-react/storefront-api-types';
 
-import type {ContainerSettings} from '~/settings/container';
 import type {ProductCms} from '~/lib/types';
+import type {ContainerSettings} from '~/settings/container';
 
-import type {TBYOP_TIER} from './BuildYourPackConfig';
-
-interface ProductGrouping {
+export interface ProductGrouping {
   name: string;
   products: {
     product: ProductCms;

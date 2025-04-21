@@ -9,7 +9,7 @@ import type {
 import type {BundleMapById} from '../BuildYourOwnPack.types';
 
 type Bundle = ProductVariant[];
-type HandleRemoveFromBundle = (index: number) => void;
+type HandleRemoveFromBundle = (id: string) => void;
 type HandleAddToBundle = (variant: ProductVariant) => void;
 
 export interface BYOPProductItemProps {

@@ -1,5 +1,10 @@
-import type {Video} from '@shopify/hydrogen-react/storefront-api-types';
-import {forwardRef, useRef} from 'react';
+import type {
+  ExternalVideo,
+  MediaImage,
+  Model3d,
+  Video,
+} from '@shopify/hydrogen-react/storefront-api-types';
+import {forwardRef, useMemo, useRef} from 'react';
 
 import type {
   BYOPProductItemMediaProps,
@@ -9,24 +14,31 @@ import type {
 import {Image} from '~/components/Image';
 
 export function BYOPProductItemMedia({
-  media,
-  productTitle,
+  media = [],
+  productTitle = '',
 }: BYOPProductItemMediaProps) {
   const hoverVideoRef = useRef<HTMLVideoElement>(null);
 
-  const [primaryMedia, hoverMedia] = [...(media || [])];
+  // Ensure media is always an array
+  const safeMedia = useMemo(() => (Array.isArray(media) ? media : []), [media]);
+
+  const [primaryMedia, hoverMedia] = [...safeMedia];
+
+  const handleMouseEnter = () => {
+    if (hoverMedia?.mediaContentType !== 'VIDEO') return;
+    hoverVideoRef.current?.play();
+  };
+
+  const handleMouseLeave = () => {
+    if (hoverMedia?.mediaContentType !== 'VIDEO') return;
+    hoverVideoRef.current?.pause();
+  };
 
   return (
     <div
       className="group/media relative aspect-[var(--product-image-aspect-ratio)] w-full"
-      onMouseEnter={() => {
-        if (hoverMedia?.mediaContentType !== 'VIDEO') return;
-        hoverVideoRef.current?.play();
-      }}
-      onMouseLeave={() => {
-        if (hoverMedia?.mediaContentType !== 'VIDEO') return;
-        hoverVideoRef.current?.pause();
-      }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       {primaryMedia && (
         <div
@@ -43,7 +55,10 @@ export function BYOPProductItemMedia({
               <Image
                 data={{
                   ...primaryMedia.previewImage,
-                  altText: productTitle,
+                  altText: productTitle || 'Product image',
+                  url: primaryMedia.previewImage?.url || '',
+                  width: primaryMedia.previewImage?.width || 0,
+                  height: primaryMedia.previewImage?.height || 0,
                 }}
                 aspectRatio="5/4"
                 className="size-full rounded-md object-cover"
@@ -68,7 +83,10 @@ export function BYOPProductItemMedia({
               <Image
                 data={{
                   ...hoverMedia.previewImage,
-                  altText: productTitle,
+                  altText: productTitle || 'Product hover image',
+                  url: hoverMedia.previewImage?.url || '',
+                  width: hoverMedia.previewImage?.width || 0,
+                  height: hoverMedia.previewImage?.height || 0,
                 }}
                 className="size-full rounded-md object-cover"
                 sizes="(min-width: 1280px) 20vw, (min-width: 768px) 30vw, 45vw"
@@ -95,7 +113,9 @@ export const BYOPProductItemVideo = forwardRef(
     {autoPlay = false, media}: BYOPProductItemVideoProps,
     ref: React.LegacyRef<HTMLVideoElement> | undefined,
   ) => {
-    const {sources, previewImage} = media;
+    if (!media) return null;
+
+    const {sources = [], previewImage} = media;
     const videoSources = sources?.filter(
       ({mimeType}) => mimeType === 'video/mp4',
     );
@@ -108,7 +128,7 @@ export const BYOPProductItemVideo = forwardRef(
         playsInline
         loop
         controls={false}
-        poster={previewImage?.url}
+        poster={previewImage?.url || ''}
         className="size-full rounded-md object-cover"
         key={JSON.stringify(videoSources)}
       >
@@ -117,8 +137,8 @@ export const BYOPProductItemVideo = forwardRef(
               return (
                 <source
                   key={source.url}
-                  src={source.url}
-                  type={source.mimeType}
+                  src={source.url || ''}
+                  type={source.mimeType || 'video/mp4'}
                 />
               );
             })

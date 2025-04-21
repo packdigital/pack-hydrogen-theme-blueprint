@@ -31,8 +31,8 @@ export function DesktopBundleSelector({
 
   return (
     <section className="mx-auto hidden justify-center md:container md:block">
-      <div className={cn('', className)}>
-        <div className="grid gap-4 md:grid-cols-3 ">
+      <div className={cn('w-full', className)}>
+        <div className="grid gap-4 md:grid-cols-3">
           {mappedVariants.map((bundle, index) => (
             <BundleOption
               bundle={bundle}
@@ -49,12 +49,10 @@ export function DesktopBundleSelector({
 
 export function BundleOption({
   bundle,
-  key,
   selectedBundledId,
   onBundleSelect,
 }: {
   bundle: ProductVariant;
-  key: number;
   selectedBundledId: string | undefined;
   onBundleSelect: (bundle: ProductVariant) => void;
 }) {
@@ -66,13 +64,14 @@ export function BundleOption({
     };
   }, [bundle.title]);
 
+  const isSelected = selectedBundledId === bundle.id;
+
   return (
     <Card
-      key={key}
-      className={`cursor-pointer transition-all hover:border-primary ${
-        selectedBundledId === bundle.id
-          ? 'border-primary ring-2 ring-primary'
-          : ''
+      className={`cursor-pointer overflow-hidden rounded-md border transition-all hover:border-blue-600  ${
+        isSelected
+          ? 'border-2 border-blue-600 ring-2 ring-blue-600 '
+          : 'border-gray-200'
       }`}
       onClick={() => onBundleSelect(bundle)}
       onKeyDown={(e) => {
@@ -85,20 +84,24 @@ export function BundleOption({
     >
       <CardContent className="p-4">
         <div className="flex items-start gap-3">
-          <div className="mt-1 shrink-0 rounded-full bg-primary/10 p-2">
-            <Gift className="size-10 text-primary" />
+          <div className="mt-1 shrink-0 rounded-full bg-blue-100 p-2 ">
+            <Gift className="size-10 text-blue-600" />
           </div>
           <div className="flex-1">
-            <div className="mb-1 flex items-center justify-between">
-              <h3 className="text-base font-bold">{bundleDetails.title}</h3>
+            <div className="mb-1 flex items-center justify-between ">
+              <h3 className="text-base font-bold text-gray-900">
+                {bundleDetails.title}
+              </h3>
             </div>
-            <div className="mb-1 flex items-baseline gap-1">
-              <span className="text-xl font-bold">${bundle.price.amount}</span>
-              <span className="text-sm font-medium !text-green-600">
+            <div className="mb-1 flex items-baseline gap-1 ">
+              <span className="text-xl font-bold text-gray-900">
+                ${bundle.price.amount}
+              </span>
+              <span className="text-sm font-medium text-green-600">
                 Save ${bundleDetails.savings}
               </span>
             </div>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-gray-500">
               {bundle.selectedOptions[0].value} adorable pets included
             </p>
           </div>

@@ -14,7 +14,7 @@ import {COLOR_OPTION_NAME} from '~/lib/constants';
 export function BYOPProductItem({
   bundle,
   bundleMapById,
-  handle,
+  handle = '',
   index,
   incrementDisabled,
   handleRemoveFromBundle,
@@ -24,16 +24,17 @@ export function BYOPProductItem({
     rootMargin: '400px',
     triggerOnce: true,
   });
+
   const product = useProductByHandle(handle, inView);
 
   const [selectedVariant, setSelectedVariant] = useState<
     ProductVariant | undefined
-  >(product?.variants?.nodes?.[0]);
+  >(undefined);
 
   const primaryOptionValue = useMemo(() => {
     if (!product) return null;
     return (
-      product.options.find((option) => option.name === COLOR_OPTION_NAME)
+      product.options?.find((option) => option.name === COLOR_OPTION_NAME)
         ?.optionValues?.[0] || null
     );
   }, [product]);
@@ -41,7 +42,7 @@ export function BYOPProductItem({
   const isSoldOut = useMemo(() => {
     return (
       !!product &&
-      product.variants.nodes.every((variant) => !variant.availableForSale)
+      product.variants?.nodes.every((variant) => !variant.availableForSale)
     );
   }, [product]);
 
@@ -50,25 +51,31 @@ export function BYOPProductItem({
    */
 
   useEffect(() => {
-    if (!product) return;
-    setSelectedVariant(product?.variants?.nodes?.[0]);
+    if (!product?.variants?.nodes?.length) return;
+    setSelectedVariant(product.variants.nodes[0]);
   }, [product]);
+
+  // Ensure bundle is always an array
+  const safeBundle = Array.isArray(bundle) ? bundle : [];
+
+  // Make sure we have a valid handle
+  if (!handle) return null;
 
   return (
     <Card className={`flex h-full flex-col overflow-hidden`} ref={ref}>
       <div className="p-2">
         <BYOPProductItemMedia
           media={product?.media?.nodes}
-          productTitle={product?.title}
+          productTitle={product?.title || ''}
         />
       </div>
       <CardContent className="p-2 md:p-3">
         <div className="flex items-center justify-between">
-          <h3 className="text-base font-medium">{product?.title}</h3>
+          <h3 className="text-base font-medium">{product?.title || ''}</h3>
           <BYOPQuickShop
-            bundle={bundle}
-            bundleMapById={bundleMapById}
-            incrementDisabled={incrementDisabled}
+            bundle={safeBundle}
+            bundleMapById={bundleMapById || {}}
+            incrementDisabled={!!incrementDisabled}
             handleRemoveFromBundle={handleRemoveFromBundle}
             handleAddToBundle={handleAddToBundle}
             product={product}

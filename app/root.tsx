@@ -69,6 +69,12 @@ export const shouldRevalidate: ShouldRevalidateFunction = ({
 
 export const links: LinksFunction = () => {
   return [
+    // Preload Tailwind CSS to ensure it's available immediately
+    {
+      rel: 'preload',
+      href: styles,
+      as: 'style',
+    },
     {rel: 'stylesheet', href: styles},
     {
       rel: 'stylesheet',

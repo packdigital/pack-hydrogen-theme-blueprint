@@ -1,4 +1,4 @@
-import {MappedSelectedBundle} from '../../BuildYourOwnPack';
+import {ProductVariant} from '@shopify/hydrogen-react/storefront-api-types';
 
 import {cn} from '~/lib/utils';
 
@@ -7,7 +7,7 @@ export function MobileBundleSelector({
   selectedBundle,
 }: {
   className: string;
-  selectedBundle: MappedSelectedBundle | undefined;
+  selectedBundle: ProductVariant | undefined;
 }) {
   return (
     <div className={cn('', className)}>

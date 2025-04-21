@@ -8,8 +8,8 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
   plugins: [
-    hydrogen(),
     oxygen(),
+    hydrogen(),
     remix({
       presets: [hydrogen.preset()],
       ignoredRouteFiles: ['**/.*'],
@@ -23,6 +23,18 @@ export default defineConfig({
     }),
     tsconfigPaths(),
   ],
+  server: {
+    watch: {
+      usePolling: false,
+      interval: 0,
+      binaryInterval: 0,
+      awaitWriteFinish: false,
+    },
+    hmr: {
+      overlay: true,
+      timeout: 5000,
+    },
+  },
   ssr: {
     optimizeDeps: {
       include: [
@@ -55,13 +67,11 @@ export default defineConfig({
     ],
   },
   build: {
-    // Allow a strict Content-Security-Policy
-    // withtout inlining assets as base64:
     assetsInlineLimit: 0,
   },
   resolve: {
     alias: {
-      '~': path.resolve(__dirname, 'app'), // 👈 crucial
+      '~': path.resolve(__dirname, 'app'),
     },
   },
 });

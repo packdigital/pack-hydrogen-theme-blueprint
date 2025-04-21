@@ -25,8 +25,13 @@ export function BYOPAddToCart({
 
   const cartIsUpdating = status === 'creating' || status === 'updating';
 
+  const safeBundle = useMemo(
+    () => (Array.isArray(bundle) ? bundle : []),
+    [bundle],
+  );
+
   const linesToAddByVariantId = useMemo(() => {
-    return bundle.reduce(
+    return safeBundle.reduce(
       (
         acc: Record<
           string,
@@ -39,14 +44,16 @@ export function BYOPAddToCart({
         >,
         variant,
       ) => {
+        if (!variant || !variant.id || !variant.product) return acc;
+
         if (acc[variant.id]) {
           return {
             ...acc,
             [variant.id]: {
               ...acc[variant.id],
               quantity: acc[variant.id].quantity + 1,
-              title: variant.product.title,
-              productId: variant.product.id,
+              title: variant.product.title || '',
+              productId: variant.product.id || '',
             },
           };
         }
@@ -55,17 +62,23 @@ export function BYOPAddToCart({
           [variant.id]: {
             merchandiseId: variant.id,
             quantity: 1,
-            title: variant.product.title,
-            productId: variant.product.id,
+            title: variant.product.title || '',
+            productId: variant.product.id || '',
           },
         };
       },
       {},
     );
-  }, [bundle]);
+  }, [safeBundle]);
 
   const handleAddToCart = useCallback(() => {
-    if (!addToCartUnlocked || isAdding || cartIsUpdating) return;
+    if (
+      !addToCartUnlocked ||
+      isAdding ||
+      cartIsUpdating ||
+      !selectedVariant?.id
+    )
+      return;
     setIsAdding(true);
 
     const bundleItems = Object.values(linesToAddByVariantId).flatMap(
@@ -155,13 +168,13 @@ export function BYOPAddToCart({
   }, [error]);
 
   const formattedPrice = useMemo(() => {
-    if (!selectedVariant) return '0.00?';
-    if (!selectedVariant.price.amount) return '$0?';
+    if (!selectedVariant) return '$0.00';
+    if (!selectedVariant.price?.amount) return '$0.00';
     const price = parseFloat(selectedVariant.price.amount);
 
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: selectedVariant.price.currencyCode,
+      currency: selectedVariant.price.currencyCode || 'USD',
       minimumFractionDigits: price % 1 === 0 ? 0 : 2, // Hide cents if whole number
     }).format(price);
   }, [selectedVariant]);

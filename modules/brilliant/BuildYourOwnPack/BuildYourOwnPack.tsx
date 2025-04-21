@@ -9,13 +9,11 @@ import type {
   BundleMapById,
 } from './BuildYourOwnPack.types';
 import {BYOP_SUBNAV_HEIGHT, BYOP_PRODUCT_HANDLE} from './BuildYourPackConfig';
-import {BYOPProductItem} from './BYOPProductItem';
-import {BYOPSubnav} from './BYOPSubnav';
+import {BYOPProductItem} from './BYOPProductItem/BYOPProductItem';
 import {BYOPSummary} from './BYOPSummary';
-import {BYOPTierSelector} from './BYOPTierSelector';
 import {DesktopBundleSelector} from './components/BundleSelector/DesktopBundleSelector';
-import {MobileBundleSelector} from './components/BundleSelector/MobileBundleSelector';
 import {BundleSheet} from './components/BundleSheet';
+import {ProductGrid} from './components/ProductGrid';
 import {ProgressSection} from './components/ProgressSection';
 
 import {Container} from '~/components/Container';
@@ -23,32 +21,24 @@ import {useProductsByIds, useProductByHandle} from '~/hooks';
 import type {ProductCms} from '~/lib/types';
 
 export function BuildYourOwnPack({cms}: {cms: BuildYourOwnPackCms}) {
-  const {productGroupings, defaultHeading, preselects} = cms;
-
-  //Bundles information
-  const [bundleSheetOpen, setBundleSheetOpen] = useState(false);
+  const {productGroupings = [], defaultHeading = ''} = cms || {};
 
   //Get all our variant information
   const packProduct = useProductByHandle(BYOP_PRODUCT_HANDLE);
-  const variants = useMemo((): ProductVariant[] => {
+
+  //used to be called variants
+  const availableBundles = useMemo((): ProductVariant[] => {
     if (!packProduct) return [];
     if (packProduct?.variants && packProduct.variants?.nodes.length === 0)
       return [];
     return packProduct.variants.nodes;
   }, [packProduct]);
 
-  const [activeTabIndex, setActiveTabIndex] = useState(0);
-  const [bundle, setBundle] = useState<ProductVariant[]>([]);
   //Default to the first variant
-  const [selectedVariantBundle, setSelectedVariantBundle] =
-    useState<ProductVariant>();
-
-  //Added this as sometimes i wasnt getting the variant pre-selected?
-  useEffect(() => {
-    if (variants[0]) {
-      setSelectedVariantBundle(variants[0]);
-    }
-  }, [variants]);
+  const [selectedBundle, setSelectedBundle] = useState<ProductVariant>();
+  const [selectedItems, setSelectedItems] = useState<ProductVariant[]>([]);
+  //Bundles Sheet State - Loads View of all selected items in a side/bottom drawer
+  const [bundleSheetOpen, setBundleSheetOpen] = useState(false);
 
   //Before trying to set any preselect items check if we have a clid and get our cartLineItems
   const location = useLocation();
@@ -58,9 +48,17 @@ export function BuildYourOwnPack({cms}: {cms: BuildYourOwnPackCms}) {
 
   const {lines} = useCart();
 
+  //Added this as sometimes i wasnt getting the variant pre-selected?
+  useEffect(() => {
+    if (availableBundles[0]) {
+      setSelectedBundle(availableBundles[0]);
+    }
+  }, [availableBundles]);
+
+  //TS (timestmap) should help keep things in sync
   useEffect(() => {
     if (!clid || !lines) return;
-    setBundle([]);
+    setSelectedItems([]);
   }, [ts, clid, lines]);
 
   const chosenItems = useMemo((): {id: string}[] => {
@@ -97,16 +95,14 @@ export function BuildYourOwnPack({cms}: {cms: BuildYourOwnPackCms}) {
     const cartLine = lines?.find((line) => line?.id === clid);
     if (!cartLine) return;
 
-    const cartVariant = variants.find(
+    const cartVariant = availableBundles.find(
       (variant) => variant.id === cartLine.merchandise?.id,
     );
 
     if (cartVariant) {
-      setSelectedVariantBundle(cartVariant);
+      setSelectedBundle(cartVariant);
     }
-  }, [clid, lines, ts, variants]);
-
-  useEffect(() => {});
+  }, [clid, lines, ts, availableBundles]);
 
   //PRESELECTS DRIVEN FROM CMS
   const validPreselectedIds = useMemo((): string[] => {
@@ -130,8 +126,10 @@ export function BuildYourOwnPack({cms}: {cms: BuildYourOwnPackCms}) {
     }, []);
   }, [chosenItems, productGroupings]);
 
+  const preselectedProducts = useProductsByIds(validPreselectedIds);
+
   const bundleMapById = useMemo(() => {
-    return bundle.reduce((acc: BundleMapById, variant, index) => {
+    return selectedItems.reduce((acc: BundleMapById, variant, index) => {
       if (acc[variant.id]) {
         return {
           ...acc,
@@ -149,42 +147,36 @@ export function BuildYourOwnPack({cms}: {cms: BuildYourOwnPackCms}) {
         },
       };
     }, {});
-  }, [bundle]);
+  }, [selectedItems]);
 
-  const preselectedProducts = useProductsByIds(validPreselectedIds);
-
-  const hasProductGroupings = productGroupings?.length > 1;
   const incrementDisabled =
-    !!selectedVariantBundle &&
-    bundle.length >= Number(selectedVariantBundle.title); //in our variants, size options value is the title
+    !!selectedBundle && selectedItems.length >= Number(selectedBundle.title); //in our variants, size options value is the title
 
   const handleTierChange = useCallback(
     (variant: ProductVariant) => {
-      setSelectedVariantBundle(variant);
+      setSelectedBundle(variant);
       //trim the bundle to match the count
-      setBundle(bundle.slice(0, Number(variant.title)));
+      setSelectedItems(selectedItems.slice(0, Number(variant.title)));
     },
-    [setSelectedVariantBundle, bundle],
+    [selectedItems],
   );
 
-  const handleRemoveFromBundle = useCallback(
-    (index: number) => {
-      if (index < 0) return;
-      setBundle((prevBundle) => {
-        return prevBundle.filter((_, i) => i !== index);
-      });
-    },
-    [setBundle],
-  );
+  const handleRemoveFromBundle = useCallback((id: string) => {
+    if (!id) return;
+    setSelectedItems((prevItems) => {
+      const firstMatch = prevItems.findIndex((item) => id === item.id);
+      return prevItems.filter((_, index) => index !== firstMatch);
+    });
+  }, []);
 
   const handleAddToBundle = useCallback(
     (product: ProductVariant) => {
       if (incrementDisabled) return;
-      setBundle((prevBundle) => {
+      setSelectedItems((prevBundle) => {
         return [...prevBundle, product];
       });
     },
-    [incrementDisabled, setBundle],
+    [incrementDisabled],
   );
 
   useEffect(() => {
@@ -199,10 +191,11 @@ export function BuildYourOwnPack({cms}: {cms: BuildYourOwnPackCms}) {
     );
 
     if (availableVariants.length) {
-      setBundle(availableVariants);
+      setSelectedItems(availableVariants);
     }
   }, [preselectedProducts, clid, ts]);
 
+  /*
   // Set CSS variable for mobile subnav height based on whether product groupings exist
   useEffect(() => {
     const subnavHeight = `${BYOP_SUBNAV_HEIGHT}px`;
@@ -211,91 +204,71 @@ export function BuildYourOwnPack({cms}: {cms: BuildYourOwnPackCms}) {
       hasProductGroupings ? subnavHeight : '0px',
     );
   }, [hasProductGroupings]);
+  */
 
   //Selected Items in Bundle Count
   const selectedCount = useMemo(() => {
-    return bundle.length;
-  }, [bundle.length]);
+    return selectedItems.length;
+  }, [selectedItems.length]);
+
+  const products = useMemo(() => {
+    if (!productGroupings?.length) {
+      return [];
+    }
+    return (
+      productGroupings.flatMap((grouping) => {
+        return grouping.products?.flatMap(({product}) => product) || [];
+      }) || []
+    );
+  }, [productGroupings]);
+
+  // If no container is provided, return null on both server and client
+  if (!cms?.container) {
+    return null;
+  }
 
   return (
     <Container container={cms.container}>
-      <BundleSheet open={bundleSheetOpen} onOpenChange={setBundleSheetOpen} />
-
-      <div>
-        <DesktopBundleSelector
-          className="p-6"
-          selectedBundle={selectedVariantBundle}
-          availableBundles={variants}
-          onBundleSelect={setSelectedVariantBundle}
-        />
-      </div>
-
-      <ProgressSection
-        className="p-6"
-        viewBundleSelection={setBundleSheetOpen}
-        selectedCount={selectedCount}
-        selectedBundle={selectedVariantBundle}
-      />
-
-    
-
-      <div
-        /* if changing px width of second grid column, e.g. md:grid-cols-[1fr_360px],
-         * also change corresponding breakpoint max width in BYOBSubnav, e.g. md:max-w-[calc(100vw-360px)] */
-        className=""
-      >
-        <div className="relative bg-background max-md:order-3">
-          <div
-            id="byob-grid-anchor"
-            className="pointer-events-none absolute left-0 max-md:bottom-[calc(100%+132px+var(--byob-subnav-height))] md:bottom-[calc(100%+20px+var(--byob-subnav-height))]"
+      {/* Use a single column layout structure for consistency between server and client */}
+      <div className="flex w-full flex-col">
+        {/* Top section with selection tools */}
+        <div className="mx-auto w-9/12">
+          <BundleSheet
+            open={bundleSheetOpen}
+            onOpenChange={setBundleSheetOpen}
           />
 
-          {productGroupings?.map(({name, products}, index) => {
-            if (
-              hasProductGroupings &&
-              activeTabIndex !== 0 &&
-              activeTabIndex !== index + 1
-            )
-              return null;
-            return (
-              <div key={index}>
-                {hasProductGroupings && (
-                  <div className="px-contained border-b border-border bg-neutralLightest py-5">
-                    <h2 className="text-h4">{name}</h2>
-                  </div>
-                )}
+          <div className="mb-4">
+            <DesktopBundleSelector
+              className="p-6"
+              selectedBundle={selectedBundle}
+              availableBundles={availableBundles}
+              onBundleSelect={handleTierChange}
+            />
+          </div>
 
-                <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                  {products?.map(({product}, productIndex) => {
-                    return product ? (
-                      <li className="p-4" key={productIndex}>
-                        <BYOPProductItem
-                          bundle={bundle}
-                          bundleMapById={bundleMapById}
-                          handle={product.handle}
-                          index={productIndex}
-                          incrementDisabled={incrementDisabled}
-                          handleRemoveFromBundle={handleRemoveFromBundle}
-                          handleAddToBundle={handleAddToBundle}
-                        />
-                      </li>
-                    ) : null;
-                  })}
-                </ul>
-              </div>
-            );
-          })}
-        </div>
+          <div className="mb-4">
+            <ProgressSection
+              className="p-6"
+              viewBundleSelection={setBundleSheetOpen}
+              selectedCount={selectedCount}
+              selectedBundle={selectedBundle}
+            />
+          </div>
 
-        {/*bg-background max-md:sticky max-md:top-[calc(var(--header-height-mobile)+var(--byob-subnav-height))] max-md:z-[1] max-md:order-2" */}
-        <div>
-          <BYOPSummary
-            bundle={bundle}
-            defaultHeading={defaultHeading}
-            handleRemoveFromBundle={handleRemoveFromBundle}
-            clid={clid}
-            selectedVariant={selectedVariantBundle}
-          />
+          <div className="mb-8">
+            <ProductGrid
+              className="p-6"
+              products={products}
+              selectedCount={selectedCount}
+              selectedBundle={selectedBundle}
+              bundleProducts={selectedItems}
+              bundleMapById={bundleMapById}
+              incrementDisabled={incrementDisabled}
+              handleRemoveFromBundle={handleRemoveFromBundle}
+              handleAddToBundle={handleAddToBundle}
+            />
+          </div>
         </div>
       </div>
     </Container>

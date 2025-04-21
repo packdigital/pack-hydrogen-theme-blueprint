@@ -27,21 +27,27 @@ export function ProgressSection({
   }, [bundleSize, selectedCount]);
 
   return (
-    <div className={cn('', className)}>
-      <div className="flex items-center justify-between bg-muted p-4">
+    <div className={cn('w-full', className)}>
+      <div className="flex items-center justify-between rounded-md bg-gray-100 p-4">
         <div className="grow px-6 py-2">
           <div className="mb-1 flex justify-between">
-            <span className="font-semibold">
+            <span className="font-semibold text-gray-900">
               Your Selection: {selectedCount} of {bundleSize}
             </span>
-            <span className="text-lg font-semibold">
+            <span className="text-lg font-semibold text-gray-900">
               {Math.round(progressPercentage)}% complete
             </span>
           </div>
-          <Progress value={progressPercentage} className="h-4" />
+          <Progress
+            value={progressPercentage}
+            className="h-4 w-full overflow-hidden rounded-md bg-gray-200"
+          />
         </div>
-        <div className="">
-          <Button onClick={() => viewBundleSelection(true)}>
+        <div>
+          <Button
+            onClick={() => viewBundleSelection(true)}
+            className="rounded-md bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700"
+          >
             View Selected Items
           </Button>
         </div>

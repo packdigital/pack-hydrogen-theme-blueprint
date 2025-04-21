@@ -12,7 +12,8 @@
     "format": "prettier --write --ignore-unknown .",
     "format:check": "prettier --check --ignore-unknown .",
     "typecheck": "tsc --noEmit",
-    "codegen": "shopify hydrogen codegen"
+    "codegen": "shopify hydrogen codegen",
+    "clean-restart": "rimraf node_modules/.vite && npm run dev"
   },
   "browserslist": [
     "defaults"
@@ -93,6 +94,7 @@
     "postcss-import": "^16.1.0",
     "postcss-preset-env": "^10.1.5",
     "prettier": "^3.5.3",
+    "rimraf": "^6.0.1",
     "tailwindcss": "3.4.17",
     "typescript": "^5.8.2",
     "vite": "5.4.11",

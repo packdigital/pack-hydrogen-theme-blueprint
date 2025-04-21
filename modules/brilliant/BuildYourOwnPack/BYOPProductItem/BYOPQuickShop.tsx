@@ -1,4 +1,4 @@
-import {useMemo, useState} from 'react';
+import {useCallback, useMemo, useState} from 'react';
 
 import type {BYOPQuickShopProps} from './BYOPProductItem.types';
 
@@ -6,15 +6,21 @@ import {QuantitySelector} from '~/components/QuantitySelector';
 import {Svg} from '~/components/Svg';
 
 export function BYOPQuickShop({
-  bundle,
-  bundleMapById,
+  bundle = [],
+  bundleMapById = {},
   handleAddToBundle,
   handleRemoveFromBundle,
-  incrementDisabled,
+  incrementDisabled = false,
   product,
   selectedVariant,
 }: BYOPQuickShopProps) {
   const [optionsVisible, setOptionsVisible] = useState(false);
+
+  // Ensure bundle is always an array
+  const safeBundle = useMemo(
+    () => (Array.isArray(bundle) ? bundle : []),
+    [bundle],
+  );
 
   const variantToAdd = useMemo(() => {
     if (!selectedVariant) return undefined;
@@ -25,29 +31,29 @@ export function BYOPQuickShop({
   }, [product?.featuredImage, selectedVariant]);
 
   const quantityInBundle = useMemo(() => {
-    return bundle.filter(
-      (variant) => variant.product.handle === product?.handle,
+    return safeBundle.filter(
+      (variant) => variant?.product?.handle === product?.handle,
     ).length;
-  }, [bundle, product]);
+  }, [safeBundle, product]);
 
   const variantInBundle = bundleMapById[selectedVariant?.id || ''];
 
   const lastBundleIndexOfVariant =
-    variantInBundle?.indexes[variantInBundle?.indexes.length - 1] || -1;
+    variantInBundle?.indexes?.[variantInBundle?.indexes?.length - 1] || -1;
 
   const qualifiesForQuickShop = useMemo(() => {
     if (!product) return false;
 
-    const initialOptions = product.options;
-    const options = initialOptions;
+    const options = product.options || [];
 
     const hasOnlySingleValueOptions =
       options?.every((option) => {
-        return option.optionValues.length === 1;
+        return option.optionValues?.length === 1;
       }) || false;
+
     const hasOnlyOneOptionWithMultipleValues =
       options?.reduce((acc, option) => {
-        return acc + (option.optionValues.length > 1 ? 1 : 0);
+        return acc + (option.optionValues?.length > 1 ? 1 : 0);
       }, 0) === 1 || false;
 
     return hasOnlySingleValueOptions || hasOnlyOneOptionWithMultipleValues;
@@ -55,15 +61,28 @@ export function BYOPQuickShop({
 
   const hasOneVariant = product?.variants?.nodes?.length === 1;
 
+  const handleAdd = useCallback(() => {
+    if (variantToAdd && handleAddToBundle) handleAddToBundle(variantToAdd);
+  }, [handleAddToBundle, variantToAdd]);
+
+  const handleRemove = useCallback(() => {
+    if (variantToAdd && handleRemoveFromBundle)
+      handleRemoveFromBundle(variantToAdd.id);
+  }, [handleRemoveFromBundle, variantToAdd]);
+
+  // If no product is available yet, render null
+  if (!product) return null;
+
   return qualifiesForQuickShop ? (
     <div className="flex flex-row justify-between gap-2">
       {!quantityInBundle && hasOneVariant && (
         <button
-          aria-label={`Add one ${product?.title} to your bundle`}
+          aria-label={`Add one ${product?.title || 'item'} to your bundle`}
           className="btn-primary size-9 p-2"
           disabled={!variantToAdd || incrementDisabled}
           onClick={() => {
-            if (variantToAdd) handleAddToBundle(variantToAdd);
+            if (variantToAdd && handleAddToBundle)
+              handleAddToBundle(variantToAdd);
           }}
           type="button"
         >
@@ -78,7 +97,7 @@ export function BYOPQuickShop({
 
       {!quantityInBundle && product && !hasOneVariant && !optionsVisible && (
         <button
-          aria-label={`Add one ${product?.title} to your bundle`}
+          aria-label={`Add one ${product?.title || 'item'} to your bundle`}
           className="btn-primary !size-12 !p-0"
           disabled={!variantToAdd || incrementDisabled}
           onClick={() => setOptionsVisible(true)}
@@ -97,14 +116,10 @@ export function BYOPQuickShop({
         <div className="flex items-center justify-center">
           <QuantitySelector
             disableIncrement={incrementDisabled}
-            productTitle={product?.title}
+            productTitle={product?.title || 'item'}
             quantity={quantityInBundle}
-            handleDecrement={() =>
-              handleRemoveFromBundle(lastBundleIndexOfVariant)
-            }
-            handleIncrement={() => {
-              if (variantToAdd) handleAddToBundle(variantToAdd);
-            }}
+            handleDecrement={handleRemove}
+            handleIncrement={handleAdd}
           />
         </div>
       )}
