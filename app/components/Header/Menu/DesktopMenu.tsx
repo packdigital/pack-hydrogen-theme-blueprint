@@ -52,6 +52,7 @@ export const DesktopMenu = memo(
           return (
             <nav
               key={index}
+              inert={!isActiveMenu}
               className={`mx-auto grid max-w-[70rem] grid-cols-[12rem_1fr] gap-5 p-8 md:p-12 ${
                 !isActiveMenu ? 'hidden' : ''
               }`}
@@ -64,7 +65,6 @@ export const DesktopMenu = memo(
                         <Link
                           aria-label={link?.text}
                           className="hover-text-underline"
-                          inert={!isActiveMenu}
                           newTab={link?.newTab}
                           onClick={handleDesktopMenuClose}
                           to={link?.url}
@@ -81,7 +81,6 @@ export const DesktopMenu = memo(
                   <Link
                     aria-label={mainLink.text}
                     className="btn-primary mt-5"
-                    inert={!isActiveMenu}
                     newTab={mainLink.newTab}
                     onClick={handleDesktopMenuClose}
                     to={mainLink.url}
@@ -99,7 +98,6 @@ export const DesktopMenu = memo(
                       <li key={index}>
                         <Link
                           aria-label={caption}
-                          inert={!isActiveMenu}
                           newTab={link?.newTab}
                           onClick={handleDesktopMenuClose}
                           to={link?.url}

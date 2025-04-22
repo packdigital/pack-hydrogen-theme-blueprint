@@ -97,7 +97,6 @@ export function Drawer({
                     <button
                       aria-label={`Close ${ariaName}`}
                       className="absolute left-4 top-1/2 -translate-y-1/2"
-                      inert={!open}
                       onClick={onClose}
                       type="button"
                     >

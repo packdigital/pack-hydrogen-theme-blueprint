@@ -55,7 +55,6 @@ export const MobileMenu = memo(
         heading={
           <Link
             aria-label="Go to homepage"
-            inert={!mobileMenuOpen}
             onClick={handleCloseMobileMenu}
             to="/"
           >
@@ -71,7 +70,6 @@ export const MobileMenu = memo(
           <button
             aria-label="Open search drawer"
             className="absolute right-4 top-1/2 -translate-y-1/2"
-            inert={!mobileMenuOpen}
             onClick={() => {
               handleCloseMobileMenu();
               openSearch();
@@ -108,7 +106,6 @@ export const MobileMenu = memo(
                         <button
                           aria-label={item.navItem?.text}
                           className="flex h-14 w-full items-center justify-between gap-5 p-4"
-                          inert={!mobileMenuOpen}
                           onClick={() => handleMobileSubmenu(index)}
                           type="button"
                         >
@@ -127,7 +124,6 @@ export const MobileMenu = memo(
                         <Link
                           aria-label={item.navItem?.text}
                           className="text-nav flex h-14 w-full items-center p-4"
-                          inert={!mobileMenuOpen}
                           newTab={item.navItem?.newTab}
                           onClick={handleCloseMobileMenu}
                           to={item.navItem?.url}
@@ -157,7 +153,6 @@ export const MobileMenu = memo(
                       <li key={index}>
                         <Link
                           aria-label={link?.text}
-                          inert={!mobileMenuOpen}
                           newTab={link?.newTab}
                           onClick={handleCloseMobileMenu}
                           to={link?.url}
