@@ -24,6 +24,7 @@ export default defineConfig({
   ssr: {
     optimizeDeps: {
       include: [
+        '@headlessui/react',
         'react-fast-marquee',
         'hex-to-rgba',
         '@pack/types',
