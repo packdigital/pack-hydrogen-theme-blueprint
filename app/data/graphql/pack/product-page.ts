@@ -18,6 +18,7 @@ export const PRODUCT_PAGE_QUERY = `
       }
       seo {
         title
+        description
         image
         keywords
         noFollow

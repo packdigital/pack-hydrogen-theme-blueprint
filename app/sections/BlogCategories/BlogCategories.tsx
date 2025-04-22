@@ -1,5 +1,6 @@
 import {useCallback} from 'react';
 import {useSearchParams} from '@remix-run/react';
+import clsx from 'clsx';
 
 import {Container} from '~/components/Container';
 import type {ContainerSettings} from '~/settings/container';
@@ -48,11 +49,12 @@ export function BlogCategories({cms}: {cms: BlogCategoriesCms}) {
             return (
               <li key={index}>
                 <button
-                  className={`btn-text flex h-8 items-center justify-center rounded-full px-4 transition ${
+                  className={clsx(
+                    'btn-text flex h-8 items-center justify-center rounded-full px-4 transition',
                     isActive
                       ? 'bg-black text-white'
-                      : 'bg-neutralLighter text-text'
-                  }`}
+                      : 'bg-neutralLighter text-text',
+                  )}
                   onClick={() => handleCategoryClick(category)}
                   type="button"
                 >

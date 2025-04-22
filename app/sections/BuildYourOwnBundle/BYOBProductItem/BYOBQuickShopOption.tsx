@@ -1,4 +1,5 @@
 import {useMemo} from 'react';
+import clsx from 'clsx';
 
 import {Svg} from '~/components/Svg';
 
@@ -64,7 +65,12 @@ export function BYOBQuickShopOption({
     >
       <button
         aria-label={optionValue.name}
-        className={`relative flex size-full items-center justify-center overflow-hidden whitespace-nowrap px-1 text-center text-sm transition disabled:cursor-not-allowed disabled:md:hover:bg-background disabled:md:hover:text-text ${selectedClass} ${validClass} ${unavailableClass}`}
+        className={clsx(
+          'relative flex size-full items-center justify-center overflow-hidden whitespace-nowrap px-1 text-center text-sm transition disabled:cursor-not-allowed disabled:md:hover:bg-background disabled:md:hover:text-text',
+          selectedClass,
+          validClass,
+          unavailableClass,
+        )}
         disabled={
           disabled || isSoldOut || (incrementDisabled && !variantInBundle)
         }
@@ -87,7 +93,7 @@ export function BYOBQuickShopOption({
         <>
           <button
             aria-label={`Remove ${variantToAdd?.title} from bundle by 1`}
-            className={`absolute left-0 top-0 flex h-1/2 w-full items-center justify-center border-b border-text bg-background text-text disabled:cursor-not-allowed disabled:text-neutralLight md:hover:bg-black md:hover:text-white disabled:md:hover:bg-background disabled:md:hover:text-neutralLight`}
+            className="absolute left-0 top-0 flex h-1/2 w-full items-center justify-center border-b border-text bg-background text-text disabled:cursor-not-allowed disabled:text-neutralLight md:hover:bg-black md:hover:text-white disabled:md:hover:bg-background disabled:md:hover:text-neutralLight"
             disabled={bundle?.length === 0}
             onClick={() => {
               if (variantInBundle) {

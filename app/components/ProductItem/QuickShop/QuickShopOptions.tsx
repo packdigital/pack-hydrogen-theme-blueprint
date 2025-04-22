@@ -1,4 +1,5 @@
 import {useEffect, useMemo, useState} from 'react';
+import clsx from 'clsx';
 
 import {COLOR_OPTION_NAME} from '~/lib/constants';
 import {useMenu} from '~/hooks';
@@ -39,9 +40,10 @@ export function QuickShopOptions({
       <p className="btn-text truncate px-3">{option.text}</p>
 
       <ul
-        className={`invisible absolute inset-0 grid size-full bg-background group-focus/quickshop:visible md:group-hover/quickshop:visible ${
-          optionsVisible ? 'max-md:visible' : ''
-        }`}
+        className={clsx(
+          'invisible absolute inset-0 grid size-full bg-background group-focus/quickshop:visible md:group-hover/quickshop:visible',
+          optionsVisible && 'max-md:visible',
+        )}
         style={{
           gridTemplateColumns: `repeat(${option.optionValues.length}, 1fr)`,
         }}
@@ -65,9 +67,10 @@ export function QuickShopOptions({
       {!quickShopMobileHidden && (
         <button
           aria-label="Show quick add options"
-          className={`absolute inset-0 z-[1] size-full md:hidden ${
-            optionsVisible ? 'hidden' : ''
-          }`}
+          className={clsx(
+            'absolute inset-0 z-[1] size-full md:hidden',
+            optionsVisible && 'hidden',
+          )}
           onClick={() => setOptionsVisible(!optionsVisible)}
           type="button"
         />

@@ -1,3 +1,5 @@
+import clsx from 'clsx';
+
 import {Image} from '~/components/Image';
 
 import type {ColorVariantOptionProps} from '../ProductItem.types';
@@ -25,9 +27,10 @@ export function ColorVariantOption({
     <div className="group/color relative">
       <button
         aria-label={`Select ${color.name} color variant`}
-        className={`relative flex size-4 items-center justify-center overflow-hidden rounded-[50%] border border-border transition md:hover:border-text ${
-          isActive ? 'border-text' : ''
-        }`}
+        className={clsx(
+          'relative flex size-4 items-center justify-center overflow-hidden rounded-[50%] border border-border transition md:hover:border-text',
+          isActive && 'border-text',
+        )}
         onClick={onClick}
         style={{backgroundColor: optionColor}}
         type="button"
@@ -47,9 +50,10 @@ export function ColorVariantOption({
         )}
 
         <div
-          className={`media-fill rounded-[50%] border-white transition-[border-width] duration-100 ${
-            isActive ? 'border-2' : 'border-0'
-          }`}
+          className={clsx(
+            'media-fill rounded-[50%] border-white transition-[border-width] duration-100',
+            isActive ? 'border-2' : 'border-0',
+          )}
         />
       </button>
 

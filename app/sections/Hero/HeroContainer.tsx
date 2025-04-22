@@ -1,5 +1,4 @@
-import {useRef} from 'react';
-import {v4 as uuidv4} from 'uuid';
+import clsx from 'clsx';
 
 import type {HeroContainerProps} from './Hero.types';
 
@@ -10,8 +9,7 @@ const FALLBACK_MOBILE_HEIGHT_CLASS = 'max-md:h-[31.25rem]';
 const FALLBACK_MOBILE_ASPECT_RATIO_CLASS = 'max-md:aspect-[3/4]';
 const FALLBACK_MOBILE_ASPECT_RATIO = '3 / 4';
 
-export function HeroContainer({children, cms}: HeroContainerProps) {
-  const randomId = useRef(uuidv4()).current;
+export function HeroContainer({children, cms, sectionId}: HeroContainerProps) {
   const {section, slides} = cms;
 
   const maxWidthContainerClass = section?.fullWidth
@@ -55,10 +53,10 @@ export function HeroContainer({children, cms}: HeroContainerProps) {
   const heightContainerClasses = `${heightClassesMobile} ${heightClassesDesktop}`;
 
   /* unique class name is important to not override other hero aspect ratios */
-  const nativeAspectRatiosClass = `hero-native-aspect-ratios-${randomId}`;
+  const nativeAspectRatiosClass = `hero-native-aspect-ratios-${sectionId}`;
 
   return (
-    <div className={`${fullBleedClass}`}>
+    <div className={clsx(fullBleedClass)}>
       {/* For dynamic media queries, it must be done outside of tailwind using a style block */}
       {(usesDesktopNativeAspectRatio || usesMobileNativeAspectRatio) && (
         <style>
@@ -89,7 +87,12 @@ export function HeroContainer({children, cms}: HeroContainerProps) {
       )}
 
       <div
-        className={`relative mx-auto flex w-full flex-col bg-neutralLightest ${nativeAspectRatiosClass} ${heightContainerClasses} ${maxWidthContainerClass}`}
+        className={clsx(
+          'relative mx-auto flex w-full flex-col bg-neutralLightest',
+          nativeAspectRatiosClass,
+          heightContainerClasses,
+          maxWidthContainerClass,
+        )}
       >
         {children}
       </div>

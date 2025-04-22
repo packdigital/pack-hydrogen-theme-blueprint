@@ -1,3 +1,5 @@
+import clsx from 'clsx';
+
 import {Image} from '~/components/Image';
 
 import type {PressSliderThumbProps} from './PressSlider.types';
@@ -26,17 +28,19 @@ export function PressSliderThumb({
               height: image.height,
             }}
             width="128px"
-            className={`bg-transparent transition ${
-              isActive ? 'opacity-100' : 'opacity-30'
-            }`}
+            className={clsx(
+              'bg-transparent transition',
+              isActive ? 'opacity-100' : 'opacity-30',
+            )}
           />
         )}
       </button>
 
       <div
-        className={`absolute bottom-0 left-0 h-px w-full origin-center bg-current transition ${
-          isActive ? 'scale-100' : 'scale-0'
-        }`}
+        className={clsx(
+          'absolute bottom-0 left-0 h-px w-full origin-center bg-current transition',
+          isActive ? 'scale-100' : 'scale-0',
+        )}
       />
     </div>
   );

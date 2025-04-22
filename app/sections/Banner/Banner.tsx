@@ -1,3 +1,6 @@
+import clsx from 'clsx';
+import kebabCase from 'lodash/kebabCase';
+
 import {Container} from '~/components/Container';
 import {Image} from '~/components/Image';
 
@@ -9,6 +12,9 @@ import type {BannerCms} from './Banner.types';
 
 export function Banner({cms}: {cms: BannerCms}) {
   const {content, container, image, section, text, video} = cms;
+  // Section name temporarily used as section id until cms supports ids.
+  // To avoid styling conflicts between 2+ banners on the same page, ensure section names are unique
+  const sectionId = kebabCase(cms.sectionName);
 
   const hasMobileVideo = video?.videoMobile?.mediaType === 'VIDEO';
   const hasDesktopVideo = video?.videoDesktop?.mediaType === 'VIDEO';
@@ -21,7 +27,7 @@ export function Banner({cms}: {cms: BannerCms}) {
         bgColor: container?.bgColor || section?.bgColor,
       }}
     >
-      <BannerContainer cms={cms}>
+      <BannerContainer cms={cms} sectionId={sectionId}>
         <div className="absolute inset-0 size-full overflow-hidden md:hidden">
           {hasMobileVideo && (
             <BannerVideo
@@ -39,7 +45,7 @@ export function Banner({cms}: {cms: BannerCms}) {
                 width: image.imageMobile.width,
                 height: image.imageMobile.height,
               }}
-              className={`media-fill ${image.positionMobile}`}
+              className={clsx('media-fill', image.positionMobile)}
               loading="eager"
               sizes="100vw"
             />
@@ -63,7 +69,7 @@ export function Banner({cms}: {cms: BannerCms}) {
                 width: image.imageDesktop.width,
                 height: image.imageDesktop.height,
               }}
-              className={`media-fill ${image.positionDesktop}`}
+              className={clsx('media-fill', image.positionDesktop)}
               loading="eager"
               sizes="100vw"
             />

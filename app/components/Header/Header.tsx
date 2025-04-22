@@ -1,4 +1,5 @@
 import {memo} from 'react';
+import clsx from 'clsx';
 
 import {usePromobar} from '~/hooks';
 
@@ -17,7 +18,10 @@ export const Header = memo(() => {
   if (isTransparentNavPage) {
     return (
       <header
-        className={`fixed inset-x-0 top-0 z-20 flex flex-col transition-[height] duration-300 ease-out ${headerHeightClass}`}
+        className={clsx(
+          'fixed inset-x-0 top-0 z-20 flex flex-col transition-[height] duration-300 ease-out',
+          headerHeightClass,
+        )}
       >
         <TransparentNavigation />
       </header>
@@ -26,7 +30,10 @@ export const Header = memo(() => {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-20 flex flex-col bg-background transition-[height] duration-300 ease-out ${headerHeightClass}`}
+      className={clsx(
+        'fixed inset-x-0 top-0 z-20 flex flex-col bg-background transition-[height] duration-300 ease-out',
+        headerHeightClass,
+      )}
     >
       <Promobar />
 

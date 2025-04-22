@@ -1,5 +1,6 @@
 import {useCart} from '@shopify/hydrogen-react';
 import {Analytics} from '@shopify/hydrogen';
+import clsx from 'clsx';
 import type {CartLine as CartLineType} from '@shopify/hydrogen/storefront-api-types';
 
 import {useGlobal, useSettings} from '~/hooks';
@@ -28,17 +29,19 @@ export function CartPage() {
         <h1 className="text-h2 mb-4 px-4">{heading || 'My Cart'}</h1>
 
         <div
-          className={`grid gap-x-4 md:grid-flow-col-dense md:grid-rows-[auto_1fr] md:gap-y-4 ${
+          className={clsx(
+            'grid gap-x-4 md:grid-flow-col-dense md:grid-rows-[auto_1fr] md:gap-y-4',
             hasCartLines
               ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-[3fr_2fr]'
-              : 'grid-cols-1'
-          }`}
+              : 'grid-cols-1',
+          )}
         >
           <div className="md:row-span-2">
             <ul
-              className={`relative border-y border-border ${
-                hasCartLines ? '' : 'min-h-80 py-12 md:min-h-[30rem]'
-              }`}
+              className={clsx(
+                'relative border-y border-border',
+                !hasCartLines && 'min-h-80 py-12 md:min-h-[30rem]',
+              )}
             >
               {hasCartLines ? (
                 cartLines.map((line) => {

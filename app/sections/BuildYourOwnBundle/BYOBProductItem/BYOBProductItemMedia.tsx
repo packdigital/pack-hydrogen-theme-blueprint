@@ -1,4 +1,5 @@
 import {forwardRef, useRef} from 'react';
+import clsx from 'clsx';
 import type {Video} from '@shopify/hydrogen-react/storefront-api-types';
 
 import {Image} from '~/components/Image';
@@ -30,11 +31,10 @@ export function BYOBProductItemMedia({
     >
       {primaryMedia && (
         <div
-          className={`${
-            hoverMedia
-              ? 'opacity-100 transition duration-300 md:group-hover/media:opacity-0'
-              : ''
-          }`}
+          className={clsx(
+            hoverMedia &&
+              'opacity-100 transition duration-300 md:group-hover/media:opacity-0',
+          )}
         >
           {primaryMedia.mediaContentType === 'VIDEO' ? (
             <BYOBProductItemVideo autoPlay media={primaryMedia as Video} />

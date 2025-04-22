@@ -1,7 +1,7 @@
 import {Disclosure, DisclosureButton, DisclosurePanel} from '@headlessui/react';
 
 import {Expand} from '~/components/Expand';
-import {Markdown} from '~/components/Markdown';
+import {RichText} from '~/components/RichText';
 import {Svg} from '~/components/Svg';
 
 import type {AccordionProps} from './Accordions.types';
@@ -44,7 +44,7 @@ export function Accordion({
 
           <Expand open={open}>
             <DisclosurePanel className="p-4 xs:px-6" static>
-              <Markdown>{body}</Markdown>
+              <RichText>{body}</RichText>
             </DisclosurePanel>
           </Expand>
         </>

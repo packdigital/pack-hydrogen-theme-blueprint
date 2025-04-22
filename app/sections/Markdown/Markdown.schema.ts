@@ -19,21 +19,40 @@ export function Schema() {
         defaultValue: `**Lorem ipsum dolor sit amet**, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea _commodo consequat_.`,
       },
       {
-        label: 'Center All Text',
-        name: 'centerAllText',
-        component: 'toggle',
-        toggleLabels: {
-          true: 'On',
-          false: 'Off',
-        },
-        defaultValue: false,
-      },
-      {
         label: 'Section Settings',
         name: 'section',
         component: 'group',
-        description: 'Max content width, text color',
+        description: 'Center text, max content width, text color',
         fields: [
+          {
+            label: 'Center All Text',
+            name: 'centerAllText',
+            component: 'toggle',
+            toggleLabels: {
+              true: 'On',
+              false: 'Off',
+            },
+          },
+          {
+            label: 'Horizontal Padding',
+            name: 'hasXPadding',
+            component: 'toggle',
+            description: 'Adds default horizontal padding around section',
+            toggleLabels: {
+              true: 'On',
+              false: 'Off',
+            },
+          },
+          {
+            label: 'Vertical Padding',
+            name: 'hasYPadding',
+            component: 'toggle',
+            description: 'Adds default vertical padding around section',
+            toggleLabels: {
+              true: 'On',
+              false: 'Off',
+            },
+          },
           {
             label: 'Max Content Width',
             name: 'maxWidth',
@@ -70,6 +89,9 @@ export function Schema() {
           },
         ],
         defaultValue: {
+          centerAllText: false,
+          hasXPadding: true,
+          hasYPadding: true,
           maxWidth: 'max-w-[60rem]',
           textColor: COLOR_SCHEMA_DEFAULT_VALUE.text,
         },

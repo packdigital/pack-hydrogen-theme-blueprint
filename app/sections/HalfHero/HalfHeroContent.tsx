@@ -1,11 +1,17 @@
 import {useMemo} from 'react';
+import clsx from 'clsx';
 
 import {Link} from '~/components/Link';
-import {Markdown} from '~/components/Markdown';
+import {RichText} from '~/components/RichText';
 
 import type {HalfHeroContentProps} from './HalfHero.types';
 
-export function HalfHeroContent({aboveTheFold, content}: HalfHeroContentProps) {
+export function HalfHeroContent({
+  aboveTheFold,
+  content,
+  fullBleed,
+  mediaOrderDesktop,
+}: HalfHeroContentProps) {
   const {
     alignmentDesktop,
     alignmentMobile,
@@ -16,22 +22,34 @@ export function HalfHeroContent({aboveTheFold, content}: HalfHeroContentProps) {
     subtext,
     superheading,
   } = {...content};
-  const alignmentClasses = `${alignmentMobile} ${alignmentDesktop}`;
 
   const headingWithBreaks = useMemo(() => {
     const splitHeading = heading?.split('\n');
     if (splitHeading?.length === 1) return heading;
-    return splitHeading?.reduce((acc: JSX.Element[], line, index, arr) => {
-      acc.push(<span key={index}>{line}</span>);
-      if (index < arr.length - 1) acc.push(<br key={`br${index}`} />);
-      return acc;
-    }, []);
+    return splitHeading?.reduce(
+      (acc: React.JSX.Element[], line, index, arr) => {
+        acc.push(<span key={index}>{line}</span>);
+        if (index < arr.length - 1) acc.push(<br key={`br${index}`} />);
+        return acc;
+      },
+      [],
+    );
   }, [heading]);
 
   return (
-    <div className="px-contained py-contained w-full">
+    <div
+      className={clsx(
+        'px-contained py-contained w-full',
+        fullBleed ? '' : mediaOrderDesktop === '2' ? 'md:!pl-0' : 'md:!pr-0',
+      )}
+    >
       <div
-        className={`mx-auto flex flex-col gap-4 ${alignmentClasses} ${maxWidthDesktop}`}
+        className={clsx(
+          'mx-auto flex flex-col gap-4',
+          alignmentMobile,
+          alignmentDesktop,
+          maxWidthDesktop,
+        )}
         style={{color}}
       >
         <div>
@@ -46,20 +64,16 @@ export function HalfHeroContent({aboveTheFold, content}: HalfHeroContentProps) {
           )}
         </div>
 
-        {subtext && (
-          <div className="[&_a]:underline [&_h1]:text-base [&_h2]:text-base [&_h3]:text-base [&_h4]:text-base [&_h5]:text-base [&_h6]:text-base [&_p]:text-base">
-            <Markdown>{subtext}</Markdown>
-          </div>
-        )}
+        {subtext && <RichText>{subtext}</RichText>}
 
-        {buttons?.length > 0 && (
+        {buttons && buttons.length > 0 && (
           <ul className="mt-4 flex flex-col justify-center gap-4 xs:flex-row">
             {buttons.slice(0, 2).map(({link, style}, index) => {
               return (
                 <li key={index}>
                   <Link
                     aria-label={link?.text}
-                    className={style}
+                    className={clsx(style)}
                     to={link?.url}
                     newTab={link?.newTab}
                     type={link?.type}

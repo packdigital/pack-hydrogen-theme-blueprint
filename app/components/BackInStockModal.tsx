@@ -1,5 +1,6 @@
 import {useEffect, useState} from 'react';
 import {parseGid} from '@shopify/hydrogen';
+import clsx from 'clsx';
 
 import {LoadingDots} from '~/components/Animations';
 import {useBackInStock, useCustomer, useMenu, useSettings} from '~/hooks';
@@ -77,7 +78,7 @@ export function BackInStockModal({selectedVariant}: BackInStockModalProps) {
           className="btn-primary mt-3 max-md:w-full"
           type="submit"
         >
-          <span className={`${isSubmitting ? 'invisible' : 'visible'}`}>
+          <span className={clsx(isSubmitting ? 'invisible' : 'visible')}>
             {submitText}
           </span>
 

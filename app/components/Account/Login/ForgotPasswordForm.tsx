@@ -1,4 +1,5 @@
 import {useEffect, useState} from 'react';
+import clsx from 'clsx';
 
 import {LoadingDots} from '~/components/Animations';
 import {useCustomerPasswordRecover} from '~/lib/customer';
@@ -61,12 +62,13 @@ export function ForgotPasswordForm({
 
         <button
           aria-label="Submit email for password recovery"
-          className={`btn-primary mt-3 min-w-40 self-center ${
-            status.started ? 'cursor-default' : ''
-          }`}
+          className={clsx(
+            'btn-primary mt-3 min-w-40 self-center',
+            status.started && 'cursor-default',
+          )}
           type="submit"
         >
-          <span className={`${status.started ? 'invisible' : 'visible'}`}>
+          <span className={clsx(status.started ? 'invisible' : 'visible')}>
             {submitText}
           </span>
 

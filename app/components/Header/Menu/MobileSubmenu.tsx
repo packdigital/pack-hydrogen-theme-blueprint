@@ -1,3 +1,5 @@
+import clsx from 'clsx';
+
 import {Image} from '~/components/Image';
 import {Link} from '~/components/Link';
 import {Svg} from '~/components/Svg';
@@ -22,9 +24,10 @@ export function MobileSubmenu({
 }: MobileSubmenuProps) {
   return (
     <div
-      className={`scrollbar-hide absolute left-0 top-0 z-[1] size-full bg-background ${
-        activeSubmenuHasContent ? 'visible' : 'invisible'
-      }`}
+      className={clsx(
+        'scrollbar-hide absolute left-0 top-0 z-[1] size-full bg-background',
+        activeSubmenuHasContent ? 'visible' : 'invisible',
+      )}
     >
       {navItems?.map(({imageLinks, links, mainLink, navItem}, index) => {
         const isActiveSubmenu = mobileSubmenuIndex === index;
@@ -34,15 +37,16 @@ export function MobileSubmenu({
 
         return (
           <nav
-            className={`scrollbar-hide size-full overflow-y-auto ${
-              !isActiveSubmenu ? 'hidden' : ''
-            }`}
+            className={clsx(
+              'scrollbar-hide size-full overflow-y-auto',
+              !isActiveSubmenu && 'hidden',
+            )}
+            inert={!isActiveSubmenu}
             key={index}
           >
             <button
               aria-label="Go back to main menu"
               className="sticky top-0 z-[1] flex h-14 w-full items-center justify-between gap-4 border-b border-b-border bg-background p-4"
-              inert={!isActiveSubmenu}
               onClick={() => handleMobileSubmenu(null)}
               type="button"
             >
@@ -64,7 +68,6 @@ export function MobileSubmenu({
                       <Link
                         aria-label={link?.text}
                         className="hover-text-underline"
-                        inert={!isActiveSubmenu}
                         newTab={link?.newTab}
                         onClick={handleCloseMobileMenu}
                         to={link?.url}
@@ -81,7 +84,6 @@ export function MobileSubmenu({
                 <Link
                   aria-label={mainLink.text}
                   className="btn-primary mb-8"
-                  inert={!isActiveSubmenu}
                   newTab={mainLink.newTab}
                   onClick={handleCloseMobileMenu}
                   to={mainLink.url}
@@ -98,7 +100,6 @@ export function MobileSubmenu({
                       <li key={index}>
                         <Link
                           aria-label={caption}
-                          inert={!isActiveSubmenu}
                           newTab={link?.newTab}
                           onClick={handleCloseMobileMenu}
                           to={link?.url}

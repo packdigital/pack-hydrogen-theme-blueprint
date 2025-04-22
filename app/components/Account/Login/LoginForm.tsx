@@ -1,4 +1,5 @@
 import {useLocation, useParams} from '@remix-run/react';
+import clsx from 'clsx';
 
 import {LoadingDots} from '~/components/Animations';
 import {useCustomerLogIn} from '~/lib/customer';
@@ -62,12 +63,13 @@ export function LoginForm({setIsForgotPassword, settings}: LoginFormProps) {
 
         <button
           aria-label="Log in to your account"
-          className={`btn-primary mt-3 w-full min-w-40 self-center md:w-auto ${
-            status.started ? 'cursor-default' : ''
-          }`}
+          className={clsx(
+            'btn-primary mt-3 w-full min-w-40 self-center md:w-auto',
+            status.started && 'cursor-default',
+          )}
           type="submit"
         >
-          <span className={`${status.started ? 'invisible' : 'visible'}`}>
+          <span className={clsx(status.started ? 'invisible' : 'visible')}>
             {submitText}
           </span>
 

@@ -1,5 +1,6 @@
 import {useRef} from 'react';
 import {useInView} from 'react-intersection-observer';
+import clsx from 'clsx';
 import type {Video} from '@shopify/hydrogen/storefront-api-types';
 
 import {Badges} from '~/components/Badges';
@@ -54,11 +55,10 @@ export function ProductItemMedia({
     >
       {primaryMedia && (
         <div
-          className={`${
-            hoverMedia
-              ? 'opacity-100 transition duration-300 md:group-hover/media:opacity-0'
-              : ''
-          }`}
+          className={clsx(
+            hoverMedia &&
+              'opacity-100 transition duration-300 md:group-hover/media:opacity-0',
+          )}
         >
           {primaryMedia.mediaContentType === 'VIDEO' ? (
             <ProductItemVideo autoPlay media={primaryMedia as Video} />
@@ -104,7 +104,7 @@ export function ProductItemMedia({
         </div>
       )}
 
-      {(selectedProduct as ProductWithStatus).status === 'DRAFT' && (
+      {(selectedProduct as ProductWithStatus)?.status === 'DRAFT' && (
         <ProductDraftMediaOverlay />
       )}
 

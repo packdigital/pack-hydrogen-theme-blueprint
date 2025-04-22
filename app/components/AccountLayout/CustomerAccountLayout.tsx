@@ -7,6 +7,7 @@ import {
   MenuItem,
   Transition,
 } from '@headlessui/react';
+import clsx from 'clsx';
 
 import {Link} from '~/components/Link';
 import {Spinner} from '~/components/Animations';
@@ -139,9 +140,10 @@ export function CustomerAccountLayout({children}: {children: React.ReactNode}) {
                         return (
                           <Link
                             aria-label={link.text}
-                            className={`w-full px-5 py-1.5 transition md:hover:bg-neutralLightest ${
-                              selected ? 'bg-neutralLighter' : ''
-                            }`}
+                            className={clsx(
+                              'w-full px-5 py-1.5 transition md:hover:bg-neutralLightest',
+                              selected && 'bg-neutralLighter',
+                            )}
                             onClick={close}
                             to={link.url}
                             newTab={link.newTab}

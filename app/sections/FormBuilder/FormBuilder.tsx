@@ -1,4 +1,5 @@
-import {Fragment, useEffect, useRef, useState, useCallback} from 'react';
+import {Fragment, useEffect, useRef, useState, useCallback, memo} from 'react';
+import clsx from 'clsx';
 
 import {Container} from '~/components/Container';
 import {useLoadScript, useRootLoaderData} from '~/hooks';
@@ -28,14 +29,14 @@ export function FormBuilder({cms}: {cms: FormBuilderCms}) {
     cms.recaptchaEnabled && !!ENV.PUBLIC_RECAPTCHA_SITE_KEY;
 
   const handleSubmit = useCallback(
-    async (e: React.FormEvent<HTMLFormElement>) => {
+    async (e: React.FormEvent<HTMLButtonElement>) => {
       try {
         setErrors([]);
         const formIsValid = formRef.current?.checkValidity();
         if (!recaptchaEnabled || !captchaLoaded || !formIsValid) return;
         e.preventDefault();
         // Check if captcha is verified if captcha was originally rendered
-        const captchaResponse = await window.grecaptcha?.getResponse();
+        const captchaResponse = window.grecaptcha?.getResponse();
         if (!captchaResponse) {
           setErrors(['Please verify you are not a robot']);
           return;
@@ -88,7 +89,7 @@ export function FormBuilder({cms}: {cms: FormBuilderCms}) {
   return (
     <Container container={cms.container}>
       <div className="px-contained py-contained">
-        <div className={`mx-auto ${section?.maxWidth}`}>
+        <div className={clsx('mx-auto', section?.maxWidth)}>
           {heading && (
             <h2 className="text-h2 mb-4 md:mb-6 lg:mb-8">{heading}</h2>
           )}
@@ -100,8 +101,8 @@ export function FormBuilder({cms}: {cms: FormBuilderCms}) {
             method="POST"
             ref={formRef}
           >
-            {parsedFields?.map((field) => (
-              <Fragment key={field.name}>
+            {parsedFields?.map((field, index) => (
+              <Fragment key={index}>
                 <FormField field={field} />
               </Fragment>
             ))}
@@ -114,9 +115,7 @@ export function FormBuilder({cms}: {cms: FormBuilderCms}) {
               )}
 
               <button
-                className={`btn-primary mt-4 w-auto max-w-48 ${
-                  endpoint ? 'cursor-pointer' : 'cursor-not-allowed'
-                }`}
+                className="btn-primary mt-4 w-auto max-w-48"
                 disabled={!endpoint}
                 onClick={handleSubmit}
                 type="submit"

@@ -1,6 +1,8 @@
+import clsx from 'clsx';
+
 import {Container} from '~/components/Container';
 import {Image} from '~/components/Image';
-import {Markdown} from '~/components/Markdown';
+import {RichText} from '~/components/RichText';
 import {Svg} from '~/components/Svg';
 
 import type {IconRowCms} from './IconRow.types';
@@ -19,16 +21,17 @@ export function IconRow({cms}: {cms: IconRowCms}) {
         style={{color: section?.textColor}}
       >
         <div
-          className={`mx-auto flex flex-col items-center gap-4 text-center md:gap-6 ${maxWidthClass}`}
+          className={clsx(
+            'mx-auto flex flex-col items-center gap-4 text-center md:gap-6',
+            maxWidthClass,
+          )}
         >
           {heading && (
             <h2 className="text-h2 mx-auto max-w-[46rem]">{heading}</h2>
           )}
 
           {subtext && (
-            <div className="mx-auto max-w-[46rem] [&_a]:underline [&_h1]:text-base [&_h2]:text-base [&_h3]:text-base [&_h4]:text-base [&_h5]:text-base [&_h6]:text-base [&_p]:text-base">
-              <Markdown>{subtext}</Markdown>
-            </div>
+            <RichText className="mx-auto max-w-[46rem]">{subtext}</RichText>
           )}
 
           {icons?.length > 0 && (

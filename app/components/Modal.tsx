@@ -5,6 +5,7 @@ import {
   Transition,
   TransitionChild,
 } from '@headlessui/react';
+import clsx from 'clsx';
 
 import {Svg} from '~/components/Svg';
 import {useMenu} from '~/hooks';
@@ -41,7 +42,10 @@ export const Modal = memo(() => {
         >
           <DialogPanel
             as="aside"
-            className={`fixed left-1/2 top-1/2 z-50 max-h-[calc(var(--viewport-height)-2rem)] w-[calc(100%-2rem)] max-w-screen-md -translate-x-1/2 -translate-y-1/2 overflow-hidden bg-background ${className}`}
+            className={clsx(
+              'fixed left-1/2 top-1/2 z-50 max-h-[calc(var(--viewport-height)-2rem)] w-[calc(100%-2rem)] max-w-screen-md -translate-x-1/2 -translate-y-1/2 overflow-hidden bg-background',
+              className,
+            )}
             {...props}
           >
             <button

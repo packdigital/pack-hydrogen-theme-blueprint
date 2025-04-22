@@ -1,5 +1,6 @@
 import {memo} from 'react';
 import startCase from 'lodash/startCase';
+import clsx from 'clsx';
 
 import {Svg} from '~/components/Svg';
 
@@ -17,7 +18,7 @@ export const CollectionFiltersSummary = memo(
       useCollectionFilters();
 
     return activeFilterValues.length ? (
-      <ul className={`flex flex-wrap gap-2 ${className}`}>
+      <ul className={clsx('flex flex-wrap gap-2', className)}>
         {activeFilterValues.map((filterValue, index) => {
           let id = filterValue.id;
           let filterLabel = filterValue.filter?.label;

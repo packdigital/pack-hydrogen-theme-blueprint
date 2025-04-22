@@ -1,6 +1,7 @@
 import {Fragment, memo, useMemo} from 'react';
-import type {Product} from '@shopify/hydrogen/storefront-api-types';
 import {Pagination} from '@shopify/hydrogen';
+import clsx from 'clsx';
+import type {Product} from '@shopify/hydrogen/storefront-api-types';
 
 import {LoadingDots} from '~/components/Animations';
 import {ProductItem} from '~/components/ProductItem';
@@ -43,10 +44,10 @@ export const CollectionGrid = memo(
           return (
             <div className="flex flex-col gap-4">
               <PreviousLink
-                className={`btn-select relative self-center`}
+                className="btn-select relative self-center"
                 suppressHydrationWarning
               >
-                <span className={`${isLoading ? 'invisible' : 'visible'}`}>
+                <span className={clsx(isLoading ? 'invisible' : 'visible')}>
                   {loadPreviousText}
                 </span>
 
@@ -60,11 +61,12 @@ export const CollectionGrid = memo(
               </PreviousLink>
 
               <ul
-                className={`mx-auto grid w-full grid-cols-2 gap-x-4 gap-y-8 px-4 xs:gap-x-5 ${
+                className={clsx(
+                  'mx-auto grid w-full grid-cols-2 gap-x-4 gap-y-8 px-4 xs:gap-x-5 md:px-0',
                   desktopFiltersOpen
                     ? 'md:grid-cols-2 lg:grid-cols-3'
-                    : 'md:grid-cols-3 lg:grid-cols-4'
-                } md:px-0`}
+                    : 'md:grid-cols-3 lg:grid-cols-4',
+                )}
               >
                 {productNodes.map((product, index) => {
                   const promoTile = promoTilesByPosition?.[index + 1];
@@ -102,10 +104,10 @@ export const CollectionGrid = memo(
               </ul>
 
               <NextLink
-                className={`btn-select relative flex self-center`}
+                className="btn-select relative flex self-center"
                 suppressHydrationWarning
               >
-                <span className={`${isLoading ? 'invisible' : 'visible'}`}>
+                <span className={clsx(isLoading ? 'invisible' : 'visible')}>
                   {loadMoreText}
                 </span>
 

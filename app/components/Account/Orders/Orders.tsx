@@ -1,4 +1,5 @@
 import {useLocation} from '@remix-run/react';
+import clsx from 'clsx';
 
 import {Link} from '~/components/Link';
 import {Pagination} from '~/components/Pagination';
@@ -47,7 +48,7 @@ export function Orders() {
           <p className="text-center">{emptyOrdersText}</p>
 
           {emptyOrdersButton?.text && (
-            <Link className={`${buttonStyle}`} to={emptyOrdersButton.url}>
+            <Link className={clsx(buttonStyle)} to={emptyOrdersButton.url}>
               {emptyOrdersButton.text}
             </Link>
           )}

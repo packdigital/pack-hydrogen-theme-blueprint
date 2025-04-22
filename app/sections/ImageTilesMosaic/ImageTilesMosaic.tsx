@@ -1,3 +1,5 @@
+import clsx from 'clsx';
+
 import {Container} from '~/components/Container';
 
 import type {ImageTilesMosaicCms} from './ImageTilesMosaic.types';
@@ -83,7 +85,11 @@ export function ImageTilesMosaic({cms}: {cms: ImageTilesMosaicCms}) {
       <div className="py-contained flex flex-col gap-10">
         {(!!heading || !!subheading) && (
           <div
-            className={`px-contained mx-auto mb-6 flex w-full flex-col gap-2 ${alignment} ${maxWidthClass}`}
+            className={clsx(
+              'px-contained mx-auto mb-6 flex w-full flex-col gap-2',
+              alignment,
+              maxWidthClass,
+            )}
             style={{color: textColor}}
           >
             {heading && <h2 className="text-h2">{heading}</h2>}
@@ -92,21 +98,40 @@ export function ImageTilesMosaic({cms}: {cms: ImageTilesMosaicCms}) {
         )}
 
         <div
-          className={`grid w-full grid-cols-1 md:grid-cols-2 ${gapClasses} ${fullBleedClasses}`}
+          className={clsx(
+            'grid w-full grid-cols-1 md:grid-cols-2',
+            gapClasses,
+            fullBleedClasses,
+          )}
         >
           <div
-            className={`relative ${primary?.aspectRatioMobile} ${primary?.aspectRatioDesktop} ${primaryPlacementMobile} ${primaryPlacementDesktop}`}
+            className={clsx(
+              'relative',
+              primary?.aspectRatioMobile,
+              primary?.aspectRatioDesktop,
+              primaryPlacementMobile,
+              primaryPlacementDesktop,
+            )}
           >
             <ImageTilesMosaicItem content={content} tile={primary} />
           </div>
 
           <div
-            className={`grid h-full grid-cols-1 gap-2.5 md:grid-cols-2 md:grid-rows-2 ${gridConfig.gridClasses} ${gridPlacementMobile} ${gridPlacementDesktop}`}
+            className={clsx(
+              'grid h-full grid-cols-1 gap-2.5 md:grid-cols-2 md:grid-rows-2',
+              gridConfig.gridClasses,
+              gridPlacementMobile,
+              gridPlacementDesktop,
+            )}
           >
             {grid?.tiles?.slice(0, gridConfig.count).map((tile, index) => {
               return (
                 <div
-                  className={`relative ${tile.aspectRatioMobile} ${gridConfig.cellClasses}`}
+                  className={clsx(
+                    'relative',
+                    tile.aspectRatioMobile,
+                    gridConfig.cellClasses,
+                  )}
                   key={index}
                 >
                   <ImageTilesMosaicItem content={content} tile={tile} />

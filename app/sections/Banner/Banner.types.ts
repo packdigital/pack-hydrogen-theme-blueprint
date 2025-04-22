@@ -56,6 +56,7 @@ export interface BannerCms {
     };
   };
   container: ContainerSettings;
+  sectionName: string;
 }
 
 export interface BannerContentProps {
@@ -73,4 +74,5 @@ export interface BannerVideoProps {
 export interface BannerContainerProps {
   children: ReactNode;
   cms: BannerCms;
+  sectionId: string;
 }

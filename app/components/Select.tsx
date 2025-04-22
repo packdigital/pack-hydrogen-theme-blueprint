@@ -6,6 +6,7 @@ import {
   ListboxOption,
   Transition,
 } from '@headlessui/react';
+import clsx from 'clsx';
 
 import {Svg} from '~/components/Svg';
 
@@ -44,7 +45,7 @@ export function Select({
   return (
     <Listbox
       as="div"
-      className={`relative z-10 w-full ${className}`}
+      className={clsx('relative z-10 w-full', className)}
       value={JSON.stringify(selectedOption)}
       onChange={(value) => {
         try {
@@ -54,15 +55,20 @@ export function Select({
     >
       <ListboxButton
         aria-label="Open account menu"
-        className={`btn-select w-full justify-between gap-2 ${textClassName}`}
+        className={clsx(
+          'btn-select w-full justify-between gap-2',
+          textClassName,
+        )}
       >
         {children || (
           <p
-            className={`truncate ${selectedClass} ${
+            className={clsx(
+              'truncate',
+              selectedClass,
               selectedOption?.label
                 ? 'text-text'
-                : placeholderClass || 'text-neutralMedium'
-            }`}
+                : placeholderClass || 'text-neutralMedium',
+            )}
           >
             {selectedOption?.label || placeholder}
           </p>
@@ -86,25 +92,27 @@ export function Select({
         leaveTo="transform scale-95 opacity-0"
       >
         <ListboxOptions
-          className={`absolute left-1/2 z-10 flex max-h-72 w-full -translate-x-1/2 flex-col gap-0 overflow-hidden overflow-y-auto rounded border border-neutralLight bg-background py-2 text-base ${
+          className={clsx(
+            'absolute left-1/2 z-10 flex max-h-72 w-full -translate-x-1/2 flex-col gap-0 overflow-hidden overflow-y-auto rounded border border-neutralLight bg-background py-2 text-base',
             openFrom === 'top'
               ? 'bottom-[calc(100%+0.5rem)]'
-              : 'top-[calc(100%+0.5rem)]'
-          }`}
+              : 'top-[calc(100%+0.5rem)]',
+          )}
         >
           {options.map((option, index) => {
             if (!option.label) return null;
             return (
               <ListboxOption
                 key={index}
-                className={`w-full text-left text-text ${textClassName}`}
+                className={clsx('w-full text-left text-text', textClassName)}
                 value={JSON.stringify(option)}
               >
                 {({selected}) => (
                   <div
-                    className={`cursor-pointer px-5 py-1.5 transition md:hover:bg-neutralLightest ${
-                      selected ? 'bg-neutralLighter' : ''
-                    }`}
+                    className={clsx(
+                      'cursor-pointer px-5 py-1.5 transition md:hover:bg-neutralLightest',
+                      selected && 'bg-neutralLighter',
+                    )}
                   >
                     {option.label}
                   </div>

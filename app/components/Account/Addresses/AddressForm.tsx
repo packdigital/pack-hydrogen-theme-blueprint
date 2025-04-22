@@ -1,4 +1,5 @@
 import {useEffect, useMemo, useRef, useState} from 'react';
+import clsx from 'clsx';
 import type {MailingAddress} from '@shopify/hydrogen/storefront-api-types';
 
 import {LoadingDots} from '~/components/Animations';
@@ -256,12 +257,13 @@ export function AddressForm({
         <div className="col-span-2 mt-4 flex justify-center">
           <button
             aria-label={initialAddress ? 'Update Address' : 'Add Address'}
-            className={`btn-primary w-full min-w-48 md:w-auto ${
-              status.started ? 'cursor-default' : ''
-            }`}
+            className={clsx(
+              'btn-primary w-full min-w-48 md:w-auto',
+              status.started && 'cursor-default',
+            )}
             type="submit"
           >
-            <span className={`${status.started ? 'invisible' : 'visible'}`}>
+            <span className={clsx(status.started ? 'invisible' : 'visible')}>
               {buttonText}
             </span>
 

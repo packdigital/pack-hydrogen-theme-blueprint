@@ -25,6 +25,7 @@ interface Media {
   image: Image;
   mediaOrderDesktop: string;
   mediaOrderMobile: string;
+  mediaWidthRatio: string;
   video: Video;
 }
 
@@ -62,8 +63,10 @@ export interface HalfHeroMediaProps {
 }
 
 export interface HalfHeroContentProps {
-  aboveTheFold: boolean;
-  content: Content;
+  aboveTheFold?: boolean;
+  content?: Content;
+  fullBleed?: boolean;
+  mediaOrderDesktop?: string;
 }
 
 export interface HalfHeroVideoProps {

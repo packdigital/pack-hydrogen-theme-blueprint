@@ -9,7 +9,8 @@ import {containerSettings} from '~/settings/container';
 const media = {
   label: 'Media Settings',
   name: 'media',
-  description: 'Image settings, video settings, order, aspect ratio',
+  description:
+    'Image settings, video settings, media width ratio, order, aspect ratio',
   component: 'group',
   fields: [
     {
@@ -104,6 +105,20 @@ const media = {
       ],
     },
     {
+      label: 'Media Width Ratio (tablet/desktop)',
+      name: 'mediaWidthRatio',
+      component: 'radio-group',
+      direction: 'horizontal',
+      variant: 'radio',
+      description: 'The width ratio of the media to the content',
+      options: [
+        {label: '1/2', value: '1/2'},
+        {label: '3/5', value: '3/5'},
+        {label: '2/3', value: '2/3'},
+        {label: '3/4', value: '3/4'},
+      ],
+    },
+    {
       label: 'Media Order (tablet/desktop)',
       name: 'mediaOrderDesktop',
       component: 'radio-group',
@@ -185,6 +200,7 @@ const media = {
       autoplay: true,
       sound: false,
     },
+    mediaWidthRatio: '1/2',
     mediaOrderDesktop: '1',
     aspectDesktop: 'md:before:pb-[100%]',
     fill: true,
@@ -213,7 +229,7 @@ const content = {
     {
       label: 'Subtext',
       name: 'subtext',
-      component: 'markdown',
+      component: 'rich-text',
     },
     {
       label: 'Buttons',
@@ -290,7 +306,7 @@ const content = {
     heading: 'Half Hero Heading',
     superheading: '',
     subtext:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+      '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>',
     buttons: [
       {
         link: {text: 'Shop Now', url: ''},

@@ -1,13 +1,13 @@
 /// <reference types="@shopify/remix-oxygen" />
 /// <reference types="@shopify/oxygen-workers-types" />
 
-import type {Storefront} from '@shopify/hydrogen';
+import type {HydrogenCart, Storefront} from '@shopify/hydrogen';
 import type {Pack} from '@pack/hydrogen';
 
 import type {OxygenEnv} from '~/lib/utils';
+import type {Admin} from '~/lib/admin-api-api';
 
 import type {HydrogenSession} from './server';
-import type {Admin} from '~/lib/admin-api-api';
 
 declare global {
   /**
@@ -72,5 +72,6 @@ declare module '@shopify/remix-oxygen' {
     env: Env;
     pack: Pack;
     oxygen: OxygenEnv;
+    cart: HydrogenCart;
   }
 }

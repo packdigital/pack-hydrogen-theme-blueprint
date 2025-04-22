@@ -1,4 +1,5 @@
 import {useInView} from 'react-intersection-observer';
+import clsx from 'clsx';
 
 import {getAspectRatioFromClass} from '~/lib/utils';
 import {Image} from '~/components/Image';
@@ -28,7 +29,7 @@ export function CollectionPromoTile({tile}: CollectionPromoTileProps) {
       type={link?.type}
     >
       <div
-        className={`relative ${aspectRatio} overflow-hidden`}
+        className={clsx('relative overflow-hidden', aspectRatio)}
         style={{
           backgroundColor: media ? 'var(--neutral-lightest)' : bgColor,
         }}

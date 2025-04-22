@@ -104,7 +104,7 @@ export function Schema() {
           {
             label: 'Caption',
             name: 'caption',
-            component: 'markdown',
+            component: 'rich-text',
             description: 'Optional caption below image',
           },
         ],

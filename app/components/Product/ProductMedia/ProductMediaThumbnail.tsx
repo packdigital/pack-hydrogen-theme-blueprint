@@ -1,3 +1,5 @@
+import clsx from 'clsx';
+
 import {Image} from '~/components/Image';
 import {Svg} from '~/components/Svg';
 
@@ -14,9 +16,10 @@ export function ProductMediaThumbnail({
   return (
     <button
       aria-label={`Slide to product image ${index + 1}`}
-      className={`relative flex aspect-square w-full select-none items-center justify-center overflow-hidden rounded border transition ${
-        isActive ? ' border-black' : 'border-transparent'
-      }`}
+      className={clsx(
+        'relative flex aspect-square w-full select-none items-center justify-center overflow-hidden rounded border transition',
+        isActive ? 'border-black' : 'border-transparent',
+      )}
       onClick={() => swiper?.slideTo(index)}
       type="button"
     >
@@ -26,8 +29,9 @@ export function ProductMediaThumbnail({
           altText: alt || image?.altText,
         }}
         aspectRatio="1/1"
-        width="80px"
+        className="w-full"
         loading={index < 6 ? 'eager' : 'lazy'}
+        sizes="100px"
       />
 
       {mediaContentType === 'VIDEO' && (

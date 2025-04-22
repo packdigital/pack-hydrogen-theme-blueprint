@@ -5,6 +5,7 @@ import {
   Transition,
   TransitionChild,
 } from '@headlessui/react';
+import clsx from 'clsx';
 
 import {Svg} from '~/components/Svg';
 
@@ -52,7 +53,7 @@ export function Drawer({
     <Transition appear show={open} as={Fragment} unmount={unmount}>
       <Dialog
         as="div"
-        className={`relative z-50 ${className}`}
+        className={clsx('relative z-50', className)}
         unmount={unmount}
         onClose={onClose}
       >
@@ -60,11 +61,12 @@ export function Drawer({
         <TransitionChild
           as={Fragment}
           enter="ease-out duration-300"
-          enterFrom="opacity-0 left-0"
+          enterFrom="opacity-0"
           enterTo="opacity-100"
           leave="ease-out duration-200"
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
+          unmount={unmount}
         >
           <div className="fixed inset-0 bg-overlay" />
         </TransitionChild>
@@ -72,9 +74,10 @@ export function Drawer({
         <div className="fixed inset-0">
           <div className="absolute inset-0 overflow-hidden">
             <div
-              className={`fixed inset-y-0 flex max-w-full ${
-                openFrom === 'right' ? 'right-0' : ''
-              }`}
+              className={clsx(
+                'fixed inset-y-0 flex max-w-full',
+                openFrom === 'right' && 'right-0',
+              )}
             >
               <TransitionChild
                 as={Fragment}
@@ -96,7 +99,6 @@ export function Drawer({
                     <button
                       aria-label={`Close ${ariaName}`}
                       className="absolute left-4 top-1/2 -translate-y-1/2"
-                      inert={!open}
                       onClick={onClose}
                       type="button"
                     >

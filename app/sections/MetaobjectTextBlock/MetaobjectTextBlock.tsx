@@ -1,5 +1,7 @@
+import clsx from 'clsx';
+
 import {Link} from '~/components/Link';
-import {Markdown} from '~/components/Markdown';
+import {RichText} from '~/components/RichText';
 
 import {Schema} from './MetaobjectTextBlock.schema';
 
@@ -22,7 +24,11 @@ export function MetaobjectTextBlock({cms}: {cms: Record<string, any>}) {
       style={{backgroundColor: 'var(--background)', color: 'var(--text)'}}
     >
       <div
-        className={`mx-auto flex flex-col items-center gap-4 md:gap-6 ${maxWidthClass} text-center`}
+        className={clsx(
+          'mx-auto flex flex-col items-center gap-4 md:gap-6',
+          maxWidthClass,
+          'text-center',
+        )}
       >
         {heading &&
           (above_the_fold ? (
@@ -32,9 +38,7 @@ export function MetaobjectTextBlock({cms}: {cms: Record<string, any>}) {
           ))}
 
         {subtext && (
-          <div className="mx-auto max-w-[46rem] [&_a]:underline [&_h1]:text-base [&_h2]:text-base [&_h3]:text-base [&_h4]:text-base [&_h5]:text-base [&_h6]:text-base [&_p]:text-base">
-            <Markdown>{subtext}</Markdown>
-          </div>
+          <RichText className="mx-auto max-w-[46rem]">{subtext}</RichText>
         )}
 
         {button_link && (

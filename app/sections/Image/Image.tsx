@@ -1,9 +1,10 @@
 import {useMemo} from 'react';
+import clsx from 'clsx';
 
 import {Container} from '~/components/Container';
 import {Image as ImageComponent} from '~/components/Image';
 import {Link} from '~/components/Link';
-import {Markdown} from '~/components/Markdown';
+import {RichText} from '~/components/RichText';
 
 import type {ImageCms} from './Image.types';
 import {Schema} from './Image.schema';
@@ -33,13 +34,14 @@ export function Image({cms}: {cms: ImageCms}) {
   return (
     <Container container={cms.container}>
       <div
-        className={`py-4 md:py-6 lg:py-8 ${
-          enablePadding ? 'px-contained' : ''
-        }`}
+        className={clsx(
+          'py-4 md:py-6 lg:py-8',
+          enablePadding && 'px-contained',
+        )}
       >
         <Link
           aria-label={link?.text}
-          className={`mx-auto ${maxWidth}`}
+          className={clsx('mx-auto', maxWidth)}
           to={link?.url}
           newTab={link?.newTab}
           type={link?.type}
@@ -84,12 +86,8 @@ export function Image({cms}: {cms: ImageCms}) {
         </Link>
 
         {caption && (
-          <div className={`mt-3 ${enablePadding ? '' : 'px-contained'}`}>
-            <div
-              className={`mx-auto [&_a]:underline [&_h1]:text-base [&_h2]:text-base [&_h3]:text-base [&_h4]:text-base [&_h5]:text-base [&_h6]:text-base [&_p]:text-base ${maxWidth}`}
-            >
-              <Markdown>{caption}</Markdown>
-            </div>
+          <div className={clsx('mt-3', !enablePadding && 'px-contained')}>
+            <RichText className={clsx('mx-auto', maxWidth)}>{caption}</RichText>
           </div>
         )}
       </div>

@@ -1,3 +1,5 @@
+import clsx from 'clsx';
+
 import type {ContainerSettings} from '~/settings/container';
 
 export function Container({
@@ -16,11 +18,18 @@ export function Container({
     mobilePaddingBottom,
     mobileMarginBottom,
   } = {...container};
-  const paddingClasses = `${tabletDesktopPaddingTop} ${tabletDesktopPaddingBottom} ${mobilePaddingTop} ${mobilePaddingBottom}`;
-  const marginClasses = `${tabletDesktopMarginBottom} ${mobileMarginBottom}`;
+
   return (
     <div
-      className={`relative ${paddingClasses} ${marginClasses}`}
+      className={clsx(
+        'relative',
+        tabletDesktopPaddingTop,
+        tabletDesktopPaddingBottom,
+        mobilePaddingTop,
+        mobilePaddingBottom,
+        tabletDesktopMarginBottom,
+        mobileMarginBottom,
+      )}
       style={{backgroundColor: bgColor}}
     >
       {children}

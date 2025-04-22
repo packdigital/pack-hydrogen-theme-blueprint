@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import type {ReactNode} from 'react';
 
 import {Analytics} from '~/components/Analytics';
@@ -35,7 +36,7 @@ export function Layout({children}: {children: ReactNode}) {
         <main
           role="main"
           id="mainContent"
-          className={`grow ${mainPaddingTopClass}`}
+          className={clsx('grow', mainPaddingTopClass)}
         >
           {children}
         </main>

@@ -1,5 +1,6 @@
-import {Fragment, useState} from 'react';
+import {Fragment, useState, memo} from 'react';
 import {TabGroup, TabPanels, TabPanel} from '@headlessui/react';
+import clsx from 'clsx';
 
 import {Container} from '~/components/Container';
 import {Link} from '~/components/Link';
@@ -38,7 +39,11 @@ export function TabbedTilesSlider({cms}: {cms: TabbedTilesSliderCms}) {
       <div className="lg:px-contained py-contained overflow-x-clip">
         {(!!heading || !!subheading) && (
           <div
-            className={`max-lg:px-contained mx-auto mb-6 flex w-full flex-col gap-2 md:mb-10 ${alignment} ${maxWidthClass}`}
+            className={clsx(
+              'max-lg:px-contained mx-auto mb-6 flex w-full flex-col gap-2 md:mb-10',
+              alignment,
+              maxWidthClass,
+            )}
             style={{color: textColor}}
           >
             {heading && <h2 className="text-h2">{heading}</h2>}
@@ -82,10 +87,10 @@ export function TabbedTilesSlider({cms}: {cms: TabbedTilesSliderCms}) {
         </TabGroup>
 
         {button?.text && (
-          <div className={`mt-10 flex w-full flex-col ${alignment}`}>
+          <div className={clsx('mt-10 flex w-full flex-col', alignment)}>
             <Link
               aria-label={button.text}
-              className={`${buttonStyle}`}
+              className={clsx(buttonStyle)}
               to={button.url}
               newTab={button.newTab}
               type={button.type}

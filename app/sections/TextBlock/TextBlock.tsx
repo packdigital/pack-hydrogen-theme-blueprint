@@ -1,6 +1,8 @@
+import clsx from 'clsx';
+
 import {Container} from '~/components/Container';
 import {Link} from '~/components/Link';
-import {Markdown} from '~/components/Markdown';
+import {RichText} from '~/components/RichText';
 
 import {Schema} from './TextBlock.schema';
 import type {TextBlockCms} from './TextBlock.types';
@@ -18,7 +20,11 @@ export function TextBlock({cms}: {cms: TextBlockCms}) {
         style={{color: section?.textColor}}
       >
         <div
-          className={`mx-auto flex flex-col items-center gap-4 md:gap-6 ${maxWidthClass} text-center`}
+          className={clsx(
+            'mx-auto flex flex-col items-center gap-4 md:gap-6',
+            maxWidthClass,
+            'text-center',
+          )}
         >
           {heading &&
             (section?.aboveTheFold ? (
@@ -28,9 +34,7 @@ export function TextBlock({cms}: {cms: TextBlockCms}) {
             ))}
 
           {subtext && (
-            <div className="mx-auto max-w-[46rem] [&_a]:underline [&_h1]:text-base [&_h2]:text-base [&_h3]:text-base [&_h4]:text-base [&_h5]:text-base [&_h6]:text-base [&_p]:text-base">
-              <Markdown>{subtext}</Markdown>
-            </div>
+            <RichText className="mx-auto max-w-[46rem]">{subtext}</RichText>
           )}
 
           {buttons?.length > 0 && (
@@ -40,7 +44,7 @@ export function TextBlock({cms}: {cms: TextBlockCms}) {
                   <li key={index}>
                     <Link
                       aria-label={link?.text}
-                      className={style}
+                      className={clsx(style)}
                       to={link?.url}
                       newTab={link?.newTab}
                       type={link?.type}

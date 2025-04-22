@@ -1,3 +1,5 @@
+import clsx from 'clsx';
+
 import {Container} from '~/components/Container';
 
 import {ImageTilesGridItem} from './ImageTilesGridItem';
@@ -39,10 +41,14 @@ export function ImageTilesGrid({cms}: {cms: ImageTilesGridCms}) {
 
   return (
     <Container container={cms.container}>
-      <div className={`py-4 md:py-6 ${fullBleedClasses}`}>
+      <div className={clsx('py-4 md:py-6', fullBleedClasses)}>
         {(!!heading || !!subheading) && (
           <div
-            className={`max-lg:px-contained mx-auto mb-6 flex w-full flex-col gap-2 ${alignment} ${maxWidthClass}`}
+            className={clsx(
+              'max-lg:px-contained mx-auto mb-6 flex w-full flex-col gap-2',
+              alignment,
+              maxWidthClass,
+            )}
             style={{color: textColor}}
           >
             {heading && <h2 className="text-h2">{heading}</h2>}
@@ -50,9 +56,9 @@ export function ImageTilesGrid({cms}: {cms: ImageTilesGridCms}) {
           </div>
         )}
 
-        <div className={`mx-auto ${maxWidthClass}`}>
+        <div className={clsx('mx-auto', maxWidthClass)}>
           {tiles?.length > 0 && (
-            <div className={`grid ${gridColsClasses} ${gapClasses}`}>
+            <div className={clsx('grid', gridColsClasses, gapClasses)}>
               {tiles.map((tile, index) => {
                 return (
                   <div className="relative" key={index}>

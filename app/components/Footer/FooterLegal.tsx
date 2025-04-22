@@ -1,4 +1,5 @@
 import {useMemo} from 'react';
+import clsx from 'clsx';
 
 import {Link} from '~/components/Link';
 import type {Settings} from '~/lib/types';
@@ -20,7 +21,11 @@ export function FooterLegal({settings}: {settings: Settings['footer']}) {
           return (
             <li key={index} className="flex">
               <p
-                className={`pr-4 ${index === 0 ? 'hidden' : 'block'} md:block`}
+                className={clsx(
+                  'pr-4',
+                  index === 0 ? 'hidden' : 'block',
+                  'md:block',
+                )}
               >
                 |
               </p>

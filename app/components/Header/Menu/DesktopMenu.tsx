@@ -1,4 +1,5 @@
 import {memo} from 'react';
+import clsx from 'clsx';
 
 import {Image} from '~/components/Image';
 import {Link} from '~/components/Link';
@@ -37,9 +38,10 @@ export const DesktopMenu = memo(
     return (
       <div
         data-comp={DesktopMenu.displayName}
-        className={`absolute left-0 top-full hidden w-full origin-top border-border bg-background transition duration-200 lg:block ${
-          activeMenuHasContent ? 'scale-y-100 border-b' : 'scale-y-0'
-        }`}
+        className={clsx(
+          'absolute left-0 top-full hidden w-full origin-top border-border bg-background transition duration-200 lg:block',
+          activeMenuHasContent ? 'scale-y-100 border-b' : 'scale-y-0',
+        )}
         onMouseEnter={handleDesktopMenuStayOpen}
         onMouseLeave={handleDesktopMenuHoverOut}
       >
@@ -52,9 +54,11 @@ export const DesktopMenu = memo(
           return (
             <nav
               key={index}
-              className={`mx-auto grid max-w-[70rem] grid-cols-[12rem_1fr] gap-5 p-8 md:p-12 ${
-                !isActiveMenu ? 'hidden' : ''
-              }`}
+              inert={!isActiveMenu}
+              className={clsx(
+                'mx-auto grid max-w-[70rem] grid-cols-[12rem_1fr] gap-5 p-8 md:p-12',
+                !isActiveMenu && 'hidden',
+              )}
             >
               <div>
                 <ul className="flex flex-col gap-2">
@@ -64,7 +68,6 @@ export const DesktopMenu = memo(
                         <Link
                           aria-label={link?.text}
                           className="hover-text-underline"
-                          inert={!isActiveMenu}
                           newTab={link?.newTab}
                           onClick={handleDesktopMenuClose}
                           to={link?.url}
@@ -81,7 +84,6 @@ export const DesktopMenu = memo(
                   <Link
                     aria-label={mainLink.text}
                     className="btn-primary mt-5"
-                    inert={!isActiveMenu}
                     newTab={mainLink.newTab}
                     onClick={handleDesktopMenuClose}
                     to={mainLink.url}
@@ -99,7 +101,6 @@ export const DesktopMenu = memo(
                       <li key={index}>
                         <Link
                           aria-label={caption}
-                          inert={!isActiveMenu}
                           newTab={link?.newTab}
                           onClick={handleDesktopMenuClose}
                           to={link?.url}

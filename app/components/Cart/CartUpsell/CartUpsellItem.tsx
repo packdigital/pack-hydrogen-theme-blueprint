@@ -1,3 +1,5 @@
+import clsx from 'clsx';
+
 import {BackInStockModal} from '~/components/BackInStockModal';
 import {Image} from '~/components/Image';
 import {Link} from '~/components/Link';
@@ -34,9 +36,10 @@ export function CartUpsellItem({
 
   return (
     <div
-      className={`flex items-center justify-center gap-4 ${
-        isOnlyUpsell ? 'px-4' : 'px-10'
-      }`}
+      className={clsx(
+        'flex items-center justify-center gap-4',
+        isOnlyUpsell ? 'px-4' : 'px-10',
+      )}
     >
       <Link
         aria-label={product.title}
@@ -71,7 +74,10 @@ export function CartUpsellItem({
         <div className="flex items-center justify-between gap-4">
           <button
             aria-label={buttonText}
-            className={`text-label-sm text-main-underline ${isUpdatingClass}`}
+            className={clsx(
+              'text-label-sm text-main-underline',
+              isUpdatingClass,
+            )}
             disabled={!!isSoldOut && !isNotifyMe}
             onClick={() => {
               if (isNotifyMe) {

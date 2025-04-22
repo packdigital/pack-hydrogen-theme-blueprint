@@ -1,4 +1,5 @@
 import {memo} from 'react';
+import clsx from 'clsx';
 
 import {LoadingDots} from '~/components/Animations';
 import {useMarketingListSubscribe} from '~/hooks';
@@ -51,7 +52,7 @@ export const EmailSignup = memo(
           className="btn-primary mt-3 w-full"
           type="submit"
         >
-          <span className={`${isSubmitting ? 'invisible' : 'visible'}`}>
+          <span className={clsx(isSubmitting ? 'invisible' : 'visible')}>
             {buttonText}
           </span>
 

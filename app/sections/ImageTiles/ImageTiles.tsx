@@ -1,6 +1,7 @@
 import {useState} from 'react';
-import type {SwiperClass} from 'swiper/react';
 import {Swiper, SwiperSlide} from 'swiper/react';
+import clsx from 'clsx';
+import type {SwiperClass} from 'swiper/react';
 
 import {Container} from '~/components/Container';
 import {Spinner} from '~/components/Animations';
@@ -37,7 +38,11 @@ export function ImageTiles({cms}: {cms: ImageTilesCms}) {
       <div className="lg:px-contained overflow-x-clip py-4 md:py-6">
         {(!!heading || !!subheading) && (
           <div
-            className={`max-lg:px-contained mx-auto mb-6 flex w-full flex-col gap-2 ${alignment} ${maxWidthClass}`}
+            className={clsx(
+              'max-lg:px-contained mx-auto mb-6 flex w-full flex-col gap-2',
+              alignment,
+              maxWidthClass,
+            )}
             style={{color: textColor}}
           >
             {heading && <h2 className="text-h2">{heading}</h2>}
@@ -45,14 +50,15 @@ export function ImageTiles({cms}: {cms: ImageTilesCms}) {
           </div>
         )}
 
-        <div className={`mx-auto ${maxWidthClass}`}>
+        <div className={clsx('mx-auto', maxWidthClass)}>
           {tiles?.length > 0 && (
             <>
               {/* mobile/tablet/desktop */}
               <div
-                className={`relative [&_.swiper]:overflow-visible ${
-                  isGridOnDesktop ? 'lg:hidden' : ''
-                }`}
+                className={clsx(
+                  'relative [&_.swiper]:overflow-visible',
+                  isGridOnDesktop && 'lg:hidden',
+                )}
               >
                 <Swiper
                   grabCursor

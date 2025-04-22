@@ -1,4 +1,5 @@
 import {useMemo, useState} from 'react';
+import clsx from 'clsx';
 
 import {useColorSwatches, useSettings} from '~/hooks';
 
@@ -61,9 +62,10 @@ export function Collection({
 
         {(enabledFilters || enabledSort) && !noSearchResults && (
           <div
-            className={`grid w-full grid-cols-2 gap-x-4 max-md:px-4 max-md:pt-4 md:gap-x-6 ${
-              !showHeading ? 'md:mt-4' : ''
-            }`}
+            className={clsx(
+              'grid w-full grid-cols-2 gap-x-4 max-md:px-4 max-md:pt-4 md:gap-x-6',
+              !showHeading && 'md:mt-4',
+            )}
           >
             <div className="flex">
               {enabledFilters && (
@@ -91,9 +93,10 @@ export function Collection({
         )}
 
         <div
-          className={`mt-6 grid gap-x-6 ${
-            desktopFiltersOpen ? 'md:grid-cols-[13rem_1fr]' : 'md:grid-cols-1'
-          }`}
+          className={clsx(
+            'mt-6 grid gap-x-6',
+            desktopFiltersOpen ? 'md:grid-cols-[13rem_1fr]' : 'md:grid-cols-1',
+          )}
         >
           {enabledFilters && (
             <>

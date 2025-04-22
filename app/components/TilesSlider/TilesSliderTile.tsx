@@ -1,3 +1,5 @@
+import clsx from 'clsx';
+
 import {getAspectRatioFromClass} from '~/lib/utils';
 import {Image} from '~/components/Image';
 import {Link} from '~/components/Link';
@@ -40,7 +42,7 @@ export function TilesSliderTile({
         />
       </Link>
 
-      <div className={`inset-0 flex size-full flex-col gap-4 ${textAlign}`}>
+      <div className={clsx('inset-0 flex size-full flex-col gap-4', textAlign)}>
         <Link
           aria-label={item.heading}
           to={item.link?.url}
@@ -48,7 +50,7 @@ export function TilesSliderTile({
           type={item.link?.type}
         >
           <div className="group flex">
-            <h2 className={`${tileHeadingSize}`}>{item.heading}</h2>
+            <h2 className={clsx(tileHeadingSize)}>{item.heading}</h2>
 
             <span className="ml-3 block max-w-5 transition-transform lg:group-hover:translate-x-2">
               <Svg

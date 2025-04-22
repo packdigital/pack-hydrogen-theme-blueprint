@@ -1,5 +1,9 @@
 import type {AspectRatio, MetafieldIdentifier} from '../types';
 
+export const COLOR_OPTION_NAME = 'Color' as const;
+
+export const SIZE_OPTION_NAME = 'Size' as const;
+
 /*
  * Add metafield identifiers to the PRODUCT_METAFIELDS_IDENTIFIERS array to fetch desired metafields for products
  * e.g. [{namespace: 'global', key: 'description'}, {namespace: 'product', key: 'seasonal_colors'}]

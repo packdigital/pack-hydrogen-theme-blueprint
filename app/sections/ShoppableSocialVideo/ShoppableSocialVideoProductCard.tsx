@@ -1,6 +1,7 @@
 import {useCallback, useEffect, useMemo, useState} from 'react';
 import hexToRgba from 'hex-to-rgba';
 import equal from 'fast-deep-equal';
+import clsx from 'clsx';
 import type {ProductVariant} from '@shopify/hydrogen/storefront-api-types';
 
 import {AddToCart} from '~/components/AddToCart';
@@ -132,9 +133,10 @@ export function ShoppableSocialVideoProductCard({
       }}
     >
       <div
-        className={`grid grid-cols-[auto_1fr] gap-3 ${
-          showOptions ? 'pb-4' : ''
-        }`}
+        className={clsx(
+          'grid grid-cols-[auto_1fr] gap-3',
+          showOptions && 'pb-4',
+        )}
       >
         <div className="relative overflow-hidden">
           <Image
@@ -238,7 +240,7 @@ export function ShoppableSocialVideoProductCard({
           {!showOptions && !hasOneVariant && (
             <button
               aria-label={optionsBtnText}
-              className={`gap-2 ${optionsBtnStyle}`}
+              className={clsx('gap-2', optionsBtnStyle)}
               type="button"
               onClick={() => setShowOptions(true)}
             >
@@ -288,7 +290,7 @@ export function ShoppableSocialVideoProductCard({
 
             <AddToCart
               addToCartText={atcBtnText}
-              className={atcBtnStyle}
+              className={clsx(atcBtnStyle)}
               containerClassName="flex-1"
               onAddToCart={() => setShowOptions(false)}
               quantity={quantity}

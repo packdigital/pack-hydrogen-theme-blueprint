@@ -1,3 +1,5 @@
+import clsx from 'clsx';
+
 import {Container} from '~/components/Container';
 import {Link} from '~/components/Link';
 
@@ -24,19 +26,23 @@ export function Video({cms}: {cms: VideoCms}) {
   return (
     <Container container={cms.container}>
       <div
-        className={`${enableYPadding ? 'py-4 md:py-6 lg:py-8' : ''} ${
-          enableXPadding ? 'px-contained' : ''
-        }`}
+        className={clsx(
+          enableYPadding && 'py-4 md:py-6 lg:py-8',
+          enableXPadding && 'px-contained',
+        )}
       >
         <Link
           aria-label={content?.link?.text}
-          className={`mx-auto ${maxWidth}`}
+          className={clsx('mx-auto', maxWidth)}
           to={isLink ? content?.link?.url : undefined}
           newTab={isLink ? content?.link?.newTab : false}
           type={isLink ? content?.link?.type : undefined}
         >
           <div
-            className={`relative bg-neutralLightest md:hidden ${aspectMobile}`}
+            className={clsx(
+              'relative bg-neutralLightest md:hidden',
+              aspectMobile,
+            )}
           >
             {videoMobile?.mediaType === 'VIDEO' && (
               <VideoElement
@@ -49,7 +55,10 @@ export function Video({cms}: {cms: VideoCms}) {
           </div>
 
           <div
-            className={`relative hidden bg-neutralLightest md:block ${aspectDesktop}`}
+            className={clsx(
+              'relative hidden bg-neutralLightest md:block',
+              aspectDesktop,
+            )}
           >
             {videoDesktop?.mediaType === 'VIDEO' && (
               <VideoElement

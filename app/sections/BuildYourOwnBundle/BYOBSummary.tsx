@@ -1,4 +1,5 @@
 import {useEffect, useMemo, useState} from 'react';
+import clsx from 'clsx';
 
 import {Image} from '~/components/Image';
 import {Svg} from '~/components/Svg';
@@ -68,11 +69,13 @@ export function BYOBSummary({
 
   return (
     <div
-      className={`flex transform-gpu flex-col bg-background transition-[max-height] max-md:h-[calc(var(--viewport-height)-var(--header-height-mobile)-var(--byob-subnav-height))] max-md:w-full max-md:overflow-hidden md:sticky md:top-[var(--header-height-desktop)] ${menuDesktopHeightClass} ${
+      className={clsx(
+        'flex transform-gpu flex-col bg-background transition-[max-height] max-md:h-[calc(var(--viewport-height)-var(--header-height-mobile)-var(--byob-subnav-height))] max-md:w-full max-md:overflow-hidden md:sticky md:top-[var(--header-height-desktop)]',
+        menuDesktopHeightClass,
         mobileSummaryOpen
           ? 'max-md:max-h-[calc(var(--viewport-height)-var(--header-height-mobile)-var(--byob-subnav-height))]'
-          : 'max-md:max-h-16'
-      }`}
+          : 'max-md:max-h-16',
+      )}
     >
       {/* Mobile open summary button */}
       <button
@@ -104,13 +107,13 @@ export function BYOBSummary({
         </div>
 
         <Svg
-          className={`w-4 ${mobileSummaryOpen ? 'rotate-180' : ''}`}
+          className={clsx('w-4', mobileSummaryOpen && 'rotate-180')}
           src="/svgs/chevron-down.svg#chevron-down"
           viewBox="0 0 24 24"
         />
       </button>
 
-      <div className={`flex max-h-full flex-1 flex-col`}>
+      <div className="flex max-h-full flex-1 flex-col">
         <div className="w-full bg-neutralLightest max-md:hidden">
           <BYOBSummaryHeader
             addToCartUnlocked={addToCartUnlocked}
@@ -122,13 +125,14 @@ export function BYOBSummary({
 
         <div className="overflow-hidden border-b border-border bg-neutralLightest max-md:flex-1">
           <ul
-            className={`scrollbar-hide grid h-auto max-h-full grid-cols-1 overflow-y-auto px-8 xl:px-[60px] ${
+            className={clsx(
+              'scrollbar-hide grid h-auto max-h-full grid-cols-1 overflow-y-auto px-8 xl:px-[60px]',
               mobileSummaryOpen && bundle[0]
                 ? 'max-md:pb-5 max-md:pt-10 md:py-5'
                 : mobileSummaryOpen || bundle[0]
                 ? 'py-5'
-                : 'pb-5'
-            }`}
+                : 'pb-5',
+            )}
           >
             {tiers?.map(({message}, index, arr) => {
               const variant = bundle[index];
@@ -136,16 +140,18 @@ export function BYOBSummary({
               return (
                 <li key={index} className="flex flex-col items-center">
                   <div
-                    className={`relative mx-auto grid w-full max-w-[360px] place-items-center gap-3 rounded-md border bg-background p-4 transition xl:gap-5 ${
+                    className={clsx(
+                      'relative mx-auto grid w-full max-w-[360px] place-items-center gap-3 rounded-md border bg-background p-4 transition xl:gap-5',
                       isActive
                         ? 'grid-cols-[28px_1fr] border-solid border-text'
-                        : 'min-h-16 grid-cols-[28px_1fr_28px] border-dashed border-border'
-                    }`}
+                        : 'min-h-16 grid-cols-[28px_1fr_28px] border-dashed border-border',
+                    )}
                   >
                     <div
-                      className={`flex size-[28px] items-center justify-center rounded-[50%] transition ${
-                        isActive ? 'bg-secondary' : 'bg-neutralLight'
-                      }`}
+                      className={clsx(
+                        'flex size-[28px] items-center justify-center rounded-[50%] transition',
+                        isActive ? 'bg-secondary' : 'bg-neutralLight',
+                      )}
                     >
                       {isActive ? (
                         <p className="text-white">{index + 1}</p>
@@ -178,11 +184,12 @@ export function BYOBSummary({
                         </div>
                       ) : (
                         <p
-                          className={`relative text-center text-sm ${
+                          className={clsx(
+                            'relative text-center text-sm',
                             index === arr.length - 1
                               ? 'z-[1] text-white after:absolute after:left-1/2 after:top-1/2 after:z-[-1] after:h-[calc(100%+8px)] after:w-[calc(100%+32px)] after:origin-center after:-translate-x-1/2 after:-translate-y-1/2 after:rounded-full after:bg-primary after:transition'
-                              : 'text-neutralDarker'
-                          }`}
+                              : 'text-neutralDarker',
+                          )}
                         >
                           {message}
                         </p>
@@ -226,9 +233,10 @@ export function BYOBSummary({
 
                   {index !== arr.length - 1 && (
                     <div
-                      className={`pointer-events-none h-5 w-px transition ${
-                        isActive ? 'bg-text' : 'bg-border'
-                      }`}
+                      className={clsx(
+                        'pointer-events-none h-5 w-px transition',
+                        isActive ? 'bg-text' : 'bg-border',
+                      )}
                     />
                   )}
                 </li>
@@ -238,9 +246,10 @@ export function BYOBSummary({
         </div>
 
         <div
-          className={`flex w-full flex-col items-center justify-center gap-5 border-b border-border px-8 py-5 md:px-8 ${
-            mobileSummaryOpen ? 'max-md:pb-[80px]' : ''
-          }`}
+          className={clsx(
+            'flex w-full flex-col items-center justify-center gap-5 border-b border-border px-8 py-5 md:px-8',
+            mobileSummaryOpen && 'max-md:pb-[80px]',
+          )}
         >
           <div className="w-full self-start md:hidden">
             <BYOBSummaryHeader
@@ -275,7 +284,7 @@ function BYOBSummaryHeader({
   className?: string;
 }) {
   return (
-    <div className={`flex w-full justify-between gap-2 ${className}`}>
+    <div className={clsx('flex w-full justify-between gap-2', className)}>
       <h2 className="text-h4 flex-1">{heading}</h2>
 
       {addToCartUnlocked && (

@@ -1,3 +1,5 @@
+import clsx from 'clsx';
+
 import {Container} from '~/components/Container';
 import {RichText as RichTextComp} from '~/components/RichText';
 
@@ -10,12 +12,13 @@ export function RichText({cms}: {cms: RichTextCms}) {
   return (
     <Container container={cms.container}>
       <div
-        className={`${section?.hasXPadding ? 'px-contained' : ''} ${
-          section?.hasYPadding ? 'py-contained' : ''
-        }`}
+        className={clsx(
+          section?.hasXPadding && 'px-contained',
+          section?.hasYPadding && 'py-contained',
+        )}
       >
         <div
-          className={`mx-auto ${section?.maxWidth || ''}`}
+          className={clsx('mx-auto', section?.maxWidth)}
           style={{color: section?.textColor}}
         >
           <RichTextComp>{richtext}</RichTextComp>

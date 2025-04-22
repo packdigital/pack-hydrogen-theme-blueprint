@@ -1,4 +1,5 @@
 import {useCallback} from 'react';
+import clsx from 'clsx';
 
 import {ProductStars} from '~/components/ProductStars';
 import {useMatchMedia, useVariantPrices} from '~/hooks';
@@ -37,7 +38,7 @@ export function ProductHeader({
     const header = document.querySelector(`[data-comp="${HEADER_NAVIGATION}"]`);
     const headerHeight = header ? (header as HTMLElement).offsetHeight : 80;
 
-    const offsetTop = reviewsSection.getBoundingClientRect().top + headerHeight;
+    const offsetTop = reviewsSection.getBoundingClientRect().top - headerHeight;
     window.scrollTo({top: offsetTop, behavior: 'smooth'});
   }, [isModalProduct]);
 
@@ -46,10 +47,11 @@ export function ProductHeader({
 
   return (
     <div
-      className={`max-md:px-4 ${
+      className={clsx(
+        'max-md:px-4',
         // remove if only one header placement is used
-        isMobile ? 'md:hidden' : 'max-md:hidden'
-      }`}
+        isMobile ? 'md:hidden' : 'max-md:hidden',
+      )}
     >
       {enabledStarRating && (
         <div className="min-h-6">

@@ -1,5 +1,6 @@
 import {useEffect, useRef} from 'react';
 import {useLocation, useNavigate} from '@remix-run/react';
+import clsx from 'clsx';
 
 import {Svg} from '~/components/Svg';
 import {useLocale} from '~/hooks';
@@ -58,7 +59,7 @@ export function SearchInput({
 
         <button
           aria-label="Clear search"
-          className={`${rawTerm ? '' : 'invisible'}`}
+          className={clsx(!rawTerm && 'invisible')}
           onClick={handleClear}
           type="button"
         >

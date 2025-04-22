@@ -1,4 +1,5 @@
 import {memo} from 'react';
+import clsx from 'clsx';
 
 import type {PaginationProps} from './usePaginationLayout';
 import {usePaginationLayout} from './usePaginationLayout';
@@ -63,9 +64,9 @@ export const Pagination = memo(
               ) : (
                 <button
                   aria-label={`Go to page ${page}`}
-                  className={`${
-                    isActivePage ? 'underline underline-offset-2' : ''
-                  }`}
+                  className={clsx(
+                    isActivePage && 'underline underline-offset-2',
+                  )}
                   onClick={() => handlePageClick(page)}
                   type="button"
                 >

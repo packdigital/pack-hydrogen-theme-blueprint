@@ -1,4 +1,5 @@
 import {memo, useEffect, useState} from 'react';
+import clsx from 'clsx';
 
 import {HEADER_NAVIGATION} from '~/lib/constants';
 import {useSettings} from '~/hooks';
@@ -51,18 +52,23 @@ export const TransparentNavigation = memo(() => {
 
   return (
     <nav
-      className={`px-contained relative z-[1] grid flex-1 grid-cols-[1fr_auto_1fr] gap-4 transition md:gap-8 ${gridColsClassDesktop}`}
+      className={clsx(
+        'px-contained relative z-[1] grid flex-1 grid-cols-[1fr_auto_1fr] gap-4 transition md:gap-8',
+        gridColsClassDesktop,
+      )}
       data-comp={HEADER_NAVIGATION}
       style={{backgroundColor: isScrolled ? scrolledBgColor : 'transparent'}}
     >
-      <div className={`order-2 flex items-center ${logoOrderClassDesktop}`}>
+      <div className={clsx('order-2 flex items-center', logoOrderClassDesktop)}>
         <NavigationLogo
           className="transition"
           color={isScrolled ? scrolledIconColor : iconColor}
         />
       </div>
 
-      <div className={`order-1 flex items-center ${menuOrderClassDesktop}`} />
+      <div
+        className={clsx('order-1 flex items-center', menuOrderClassDesktop)}
+      />
 
       <div className="order-3 flex items-center justify-end gap-4 md:gap-5">
         <NavigationCart

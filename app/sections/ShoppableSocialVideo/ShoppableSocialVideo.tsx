@@ -3,8 +3,9 @@ import {useLoaderData} from '@remix-run/react';
 import {Scrollbar} from 'swiper/modules';
 import {Swiper, SwiperSlide} from 'swiper/react';
 import hexToRgba from 'hex-to-rgba';
+import clsx from 'clsx';
 
-import {Markdown} from '~/components/Markdown';
+import {RichText} from '~/components/RichText';
 import {Svg} from '~/components/Svg';
 import {useRootLoaderData, useColorSwatches} from '~/hooks';
 import type {loader} from '~/routes/($locale).pages.$handle';
@@ -120,31 +121,32 @@ export function ShoppableSocialVideo({cms}: {cms: ShoppableSocialVideoCms}) {
             </div>
 
             <div
-              className={`grow space-y-2 overflow-x-hidden ${
-                enabledScrollForMore ? '' : 'pb-5'
-              }`}
+              className={clsx(
+                'grow space-y-2 overflow-x-hidden',
+                !enabledScrollForMore && 'pb-5',
+              )}
             >
               <style>
                 {`.swiper-scrollbar-drag { background-color: ${scrollbarColor}; }`}
               </style>
               {/* Products slider */}
               <div
-                className={`relative text-clip px-6 [&_.swiper]:overflow-visible ${
-                  sliderProducts.length > 1 && enabledScrollbar
-                    ? '[&_.swiper]:pt-8'
-                    : ''
-                }`}
+                className={clsx(
+                  'relative text-clip px-6 [&_.swiper]:overflow-visible',
+                  sliderProducts.length > 1 &&
+                    enabledScrollbar &&
+                    '[&_.swiper]:pt-8',
+                )}
               >
                 <style>
                   {`.theme-product-option { border-color: ${slideBorderColor}; } .theme-product-option:first-of-type { border-top: 0; } .theme-product-option-label, .theme-product-option-label > button, .theme-product-card-text-color-faded, .theme-product-option-label .theme-selected-option-value { color: ${slideTextColorFaded}; } .theme-product-card-text-color { color: ${slideTextColor}; } .theme-product-card-text-color-faded { color: ${slideTextColorFaded}; }`}
                 </style>
 
                 <Swiper
-                  className={`${
-                    !swiper
-                      ? '[&_.swiper-wrapper]:flex [&_.swiper-wrapper]:gap-3'
-                      : ''
-                  }`}
+                  className={clsx(
+                    !swiper &&
+                      '[&_.swiper-wrapper]:flex [&_.swiper-wrapper]:gap-3',
+                  )}
                   grabCursor
                   onSlideChange={({activeIndex}) => setActiveIndex(activeIndex)}
                   onSwiper={setSwiper}
@@ -187,9 +189,7 @@ export function ShoppableSocialVideo({cms}: {cms: ShoppableSocialVideoCms}) {
               </div>
 
               {/* Subtext */}
-              <div className="px-6">
-                <Markdown>{subtext}</Markdown>
-              </div>
+              <RichText className="px-6">{subtext}</RichText>
             </div>
 
             {enabledScrollForMore && (

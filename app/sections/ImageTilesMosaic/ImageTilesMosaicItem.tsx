@@ -1,4 +1,5 @@
 import {Fragment} from 'react';
+import clsx from 'clsx';
 
 import {Image} from '~/components/Image';
 import {Link} from '~/components/Link';
@@ -51,20 +52,26 @@ export function ImageTilesMosaicItem({
             width: tile?.image?.width,
             height: tile?.image?.height,
           }}
-          className={`media-fill ${tile?.positionMobile} ${tile?.positionDesktop}`}
+          className={clsx(
+            'media-fill',
+            tile?.positionMobile,
+            tile?.positionDesktop,
+          )}
           sizes="(min-width: 1024px) 30vw, (min-width: 768px) 50vw, 100vw"
         />
 
         <div
-          className={`pointer-events-none absolute inset-0 z-[1] flex size-full p-6 text-center md:p-8 ${
-            darkOverlay ? 'bg-[rgba(0,0,0,0.2)]' : ''
-          } ${contentPosition}`}
+          className={clsx(
+            'pointer-events-none absolute inset-0 z-[1] flex size-full p-6 text-center md:p-8',
+            darkOverlay && 'bg-[rgba(0,0,0,0.2)]',
+            contentPosition,
+          )}
         >
           <div className="pointer-events-auto flex w-full flex-col gap-3 lg:gap-4">
             {(!!tile?.heading || !!tile?.subheading) && (
-              <div className={`flex flex-col ${alignment.text}`}>
+              <div className={clsx('flex flex-col', alignment.text)}>
                 {tile?.heading && (
-                  <h3 className={`text-white ${tileHeadingSize}`}>
+                  <h3 className={clsx('text-white', tileHeadingSize)}>
                     {tile.heading}
                   </h3>
                 )}
@@ -77,7 +84,7 @@ export function ImageTilesMosaicItem({
             )}
 
             {!tile?.hideButton && (firstLink?.text || secondLink?.text) && (
-              <div className={`flex flex-wrap gap-3 ${alignment.buttons}`}>
+              <div className={clsx('flex flex-wrap gap-3', alignment.buttons)}>
                 {tile?.buttons?.slice(0, 2).map(({link, style}, index) => {
                   // hide second button if clickable image is enabled
                   if (clickableImage && index > 0) return null;
@@ -86,7 +93,7 @@ export function ImageTilesMosaicItem({
                     <Fragment key={index}>
                       <Link
                         aria-label={link.text}
-                        className={`${style}`}
+                        className={clsx(style)}
                         to={!clickableImage ? link.url : ''}
                         newTab={link.newTab}
                         type={link.type}

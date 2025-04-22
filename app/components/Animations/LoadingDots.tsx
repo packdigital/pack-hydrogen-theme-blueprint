@@ -1,3 +1,5 @@
+import clsx from 'clsx';
+
 interface LoadingDotsProps {
   className?: string;
   color?: string;
@@ -15,11 +17,13 @@ export function LoadingDots({
 }: LoadingDotsProps) {
   return (
     <div
-      className={`pointer-events-none flex items-center justify-center gap-1.5 ${
+      className={clsx(
+        'pointer-events-none flex items-center justify-center gap-1.5',
         withAbsolutePosition
           ? 'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2'
-          : 'relative'
-      } ${className}`}
+          : 'relative',
+        className,
+      )}
     >
       {withStatusRole ? (
         <p aria-live="assertive" className="sr-only" role="status">

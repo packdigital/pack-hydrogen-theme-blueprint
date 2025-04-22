@@ -1,4 +1,5 @@
 import {Fragment} from 'react';
+import clsx from 'clsx';
 
 import {getAspectRatioFromClass} from '~/lib/utils';
 import {Image} from '~/components/Image';
@@ -61,19 +62,26 @@ export function ImageTilesGridItem({
       />
 
       <div
-        className={`pointer-events-none absolute inset-0 flex size-full p-6 text-center md:p-8 ${
-          darkOverlay ? 'bg-[rgba(0,0,0,0.2)]' : ''
-        } ${contentPosition}`}
+        className={clsx(
+          'pointer-events-none absolute inset-0 flex size-full p-6 text-center md:p-8',
+          darkOverlay && 'bg-[rgba(0,0,0,0.2)]',
+          contentPosition,
+        )}
       >
         <div
-          className={`pointer-events-auto flex w-full flex-col gap-3 lg:gap-4 ${alignment.text}`}
+          className={clsx(
+            'pointer-events-auto flex w-full flex-col gap-3 lg:gap-4',
+            alignment.text,
+          )}
         >
           {tile.heading && (
-            <h3 className={`text-white ${tileHeadingSize}`}>{tile.heading}</h3>
+            <h3 className={clsx('text-white', tileHeadingSize)}>
+              {tile.heading}
+            </h3>
           )}
 
           {!hideButtons && (firstLink?.text || secondLink?.text) && (
-            <div className={`flex flex-wrap gap-3 ${alignment.buttons}`}>
+            <div className={clsx('flex flex-wrap gap-3', alignment.buttons)}>
               {tile.buttons?.slice(0, 2).map(({link}, index) => {
                 /* hide second button if clickable image is enabled */
                 if (clickableImage && index > 0) return null;
@@ -82,9 +90,9 @@ export function ImageTilesGridItem({
                   <Fragment key={index}>
                     <Link
                       aria-label={link.text}
-                      className={`${
-                        index === 1 ? secondaryButtonStyle : primaryButtonStyle
-                      }`}
+                      className={clsx(
+                        index === 1 ? secondaryButtonStyle : primaryButtonStyle,
+                      )}
                       to={!clickableImage ? link.url : ''}
                       newTab={link.newTab}
                       type={link.type}
