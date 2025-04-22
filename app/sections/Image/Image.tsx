@@ -3,7 +3,7 @@ import {useMemo} from 'react';
 import {Container} from '~/components/Container';
 import {Image as ImageComponent} from '~/components/Image';
 import {Link} from '~/components/Link';
-import {Markdown} from '~/components/Markdown';
+import {RichText} from '~/components/RichText';
 
 import type {ImageCms} from './Image.types';
 import {Schema} from './Image.schema';
@@ -85,11 +85,7 @@ export function Image({cms}: {cms: ImageCms}) {
 
         {caption && (
           <div className={`mt-3 ${enablePadding ? '' : 'px-contained'}`}>
-            <div
-              className={`mx-auto [&_a]:underline [&_h1]:text-base [&_h2]:text-base [&_h3]:text-base [&_h4]:text-base [&_h5]:text-base [&_h6]:text-base [&_p]:text-base ${maxWidth}`}
-            >
-              <Markdown>{caption}</Markdown>
-            </div>
+            <RichText className={`mx-auto ${maxWidth}`}>{caption}</RichText>
           </div>
         )}
       </div>

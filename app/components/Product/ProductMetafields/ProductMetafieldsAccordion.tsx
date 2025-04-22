@@ -3,7 +3,7 @@ import type {Metafield} from '@shopify/hydrogen/storefront-api-types';
 import startCase from 'lodash/startCase';
 
 import {Expand} from '~/components/Expand';
-import {Markdown} from '~/components/Markdown';
+import {RichText} from '~/components/RichText';
 import {Svg} from '~/components/Svg';
 
 interface ProductMetafieldsAccordionProps {
@@ -50,7 +50,7 @@ export function ProductMetafieldsAccordion({
               className="px-4 pt-4 [&_h1]:mb-3 [&_h1]:text-sm [&_h2]:mb-3 [&_h2]:text-sm [&_h3]:mb-3 [&_h3]:text-sm [&_h4]:mb-3 [&_h4]:text-sm [&_h5]:mb-3 [&_h5]:text-sm [&_h6]:mb-3 [&_h6]:text-sm [&_ol]:!pl-4 [&_ol]:text-sm [&_p]:mb-3 [&_p]:text-sm [&_ul]:!pl-4 [&_ul]:text-sm"
               static
             >
-              <Markdown>{value}</Markdown>
+              <RichText>{value}</RichText>
             </DisclosurePanel>
           </Expand>
         </>

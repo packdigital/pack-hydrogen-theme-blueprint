@@ -22,9 +22,9 @@ export function Schema() {
       {
         label: 'Subtext',
         name: 'subtext',
-        component: 'markdown',
+        component: 'rich-text',
         defaultValue:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+          '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>',
       },
       {
         label: 'Buttons',

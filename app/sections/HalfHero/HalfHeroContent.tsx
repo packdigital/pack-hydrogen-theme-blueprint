@@ -1,7 +1,7 @@
 import {useMemo} from 'react';
 
 import {Link} from '~/components/Link';
-import {Markdown} from '~/components/Markdown';
+import {RichText} from '~/components/RichText';
 
 import type {HalfHeroContentProps} from './HalfHero.types';
 
@@ -58,11 +58,7 @@ export function HalfHeroContent({
           )}
         </div>
 
-        {subtext && (
-          <div className="[&_a]:underline [&_h1]:text-base [&_h2]:text-base [&_h3]:text-base [&_h4]:text-base [&_h5]:text-base [&_h6]:text-base [&_p]:text-base">
-            <Markdown>{subtext}</Markdown>
-          </div>
-        )}
+        {subtext && <RichText>{subtext}</RichText>}
 
         {buttons?.length > 0 && (
           <ul className="mt-4 flex flex-col justify-center gap-4 xs:flex-row">

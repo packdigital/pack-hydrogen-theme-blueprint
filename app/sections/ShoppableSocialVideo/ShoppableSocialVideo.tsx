@@ -4,7 +4,7 @@ import {Scrollbar} from 'swiper/modules';
 import {Swiper, SwiperSlide} from 'swiper/react';
 import hexToRgba from 'hex-to-rgba';
 
-import {Markdown} from '~/components/Markdown';
+import {RichText} from '~/components/RichText';
 import {Svg} from '~/components/Svg';
 import {useRootLoaderData, useColorSwatches} from '~/hooks';
 import type {loader} from '~/routes/($locale).pages.$handle';
@@ -187,9 +187,7 @@ export function ShoppableSocialVideo({cms}: {cms: ShoppableSocialVideoCms}) {
               </div>
 
               {/* Subtext */}
-              <div className="px-6">
-                <Markdown>{subtext}</Markdown>
-              </div>
+              <RichText className="px-6">{subtext}</RichText>
             </div>
 
             {enabledScrollForMore && (

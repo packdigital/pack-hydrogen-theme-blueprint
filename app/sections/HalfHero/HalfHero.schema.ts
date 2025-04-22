@@ -229,7 +229,7 @@ const content = {
     {
       label: 'Subtext',
       name: 'subtext',
-      component: 'markdown',
+      component: 'rich-text',
     },
     {
       label: 'Buttons',
@@ -306,7 +306,7 @@ const content = {
     heading: 'Half Hero Heading',
     superheading: '',
     subtext:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+      '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>',
     buttons: [
       {
         link: {text: 'Shop Now', url: ''},

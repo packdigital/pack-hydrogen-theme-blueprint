@@ -234,7 +234,7 @@ export function Schema({template}: {template: string}) {
           {
             label: 'Subtext',
             name: 'subtext',
-            component: 'markdown',
+            component: 'rich-text',
             description: 'Subtext below the product slider',
           },
           {

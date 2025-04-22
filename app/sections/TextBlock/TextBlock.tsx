@@ -1,6 +1,6 @@
 import {Container} from '~/components/Container';
 import {Link} from '~/components/Link';
-import {Markdown} from '~/components/Markdown';
+import {RichText} from '~/components/RichText';
 
 import {Schema} from './TextBlock.schema';
 import type {TextBlockCms} from './TextBlock.types';
@@ -28,9 +28,7 @@ export function TextBlock({cms}: {cms: TextBlockCms}) {
             ))}
 
           {subtext && (
-            <div className="mx-auto max-w-[46rem] [&_a]:underline [&_h1]:text-base [&_h2]:text-base [&_h3]:text-base [&_h4]:text-base [&_h5]:text-base [&_h6]:text-base [&_p]:text-base">
-              <Markdown>{subtext}</Markdown>
-            </div>
+            <RichText className="mx-auto max-w-[46rem]">{subtext}</RichText>
           )}
 
           {buttons?.length > 0 && (

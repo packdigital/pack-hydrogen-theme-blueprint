@@ -34,7 +34,7 @@ export function Schema() {
           {
             label: 'Body',
             name: 'body',
-            component: 'markdown',
+            component: 'rich-text',
           },
           {
             label: 'Default Open',
@@ -50,13 +50,13 @@ export function Schema() {
         defaultValue: [
           {
             header: 'Excepteur sint occaecat cupidatat non proident?',
-            body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+            body: '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>',
             defaultOpen: false,
           },
         ],
         defaultItem: {
           header: 'Excepteur sint occaecat cupidatat non proident?',
-          body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+          body: '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>',
           defaultOpen: false,
         },
       },
