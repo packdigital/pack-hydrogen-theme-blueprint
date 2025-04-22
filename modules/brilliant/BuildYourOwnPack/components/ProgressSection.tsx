@@ -1,4 +1,5 @@
 import {ProductVariant} from '@shopify/hydrogen-react/storefront-api-types';
+import {ArrowRightFromLine} from 'lucide-react';
 import {useMemo} from 'react';
 
 import {Button} from '~/components/ui/button';
@@ -28,9 +29,38 @@ export function ProgressSection({
 
   return (
     <div className={cn('w-full', className)}>
-      <div className="flex flex-wrap items-center justify-between rounded-md bg-gray-100 p-4">
+      <DesktopProgressSection
+        selectedCount={selectedCount}
+        bundleSize={bundleSize}
+        progressPercentage={progressPercentage}
+        viewBundleSelection={viewBundleSelection}
+      />
+      <MobileProgressSection
+        selectedCount={selectedCount}
+        bundleSize={bundleSize}
+        progressPercentage={progressPercentage}
+        viewBundleSelection={viewBundleSelection}
+      />
+    </div>
+  );
+}
+
+export function DesktopProgressSection({
+  selectedCount,
+  bundleSize,
+  progressPercentage,
+  viewBundleSelection,
+}: {
+  selectedCount: number;
+  bundleSize: number;
+  progressPercentage: number;
+  viewBundleSelection: (val: boolean) => void;
+}) {
+  return (
+    <div className="fixed bottom-0 left-0 z-50 hidden w-full flex-col border-t-2 border-blue-500 shadow-lg md:flex ">
+      <div className="flex items-center justify-between gap-4 bg-gray-100 p-4">
         <div className="grow px-6 py-2">
-          <div className="mb-1 flex flex-wrap items-end justify-between gap-2 ">
+          <div className="mb-1 flex items-end justify-between gap-2 ">
             <span className="font-semibold text-gray-900">
               Your Selection: {selectedCount} of {bundleSize}
             </span>
@@ -40,12 +70,54 @@ export function ProgressSection({
           </div>
           <Progress
             value={progressPercentage}
-            className="h-4 w-full overflow-hidden rounded-md bg-gray-200"
+            className="h-4 w-full overflow-hidden rounded-md bg-gray-300"
           />
         </div>
-        <div className="mt-2 flex w-full justify-center">
+        <div className="flex justify-center">
           <Button onClick={() => viewBundleSelection(true)} className="">
-            View Selected Items
+            Review Your Pack <ArrowRightFromLine className="size-8" />
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function MobileProgressSection({
+  selectedCount,
+  bundleSize,
+  progressPercentage,
+  viewBundleSelection,
+}: {
+  selectedCount: number;
+  bundleSize: number;
+  progressPercentage: number;
+  viewBundleSelection: (val: boolean) => void;
+}) {
+  return (
+    <div className="fixed bottom-0 left-0 z-50 w-full border-t-2 border-blue-500 shadow-lg md:hidden ">
+      <div className="flex flex-wrap items-center justify-between gap-1 bg-gray-100 p-2">
+        <div className="grow p-2">
+          <div className="mb-1 flex flex-wrap items-end justify-between gap-1 text-sm ">
+            <span className="font-semibold">
+              Your Selection: {selectedCount} of {bundleSize}
+            </span>
+            <span className="font-semibold">
+              {Math.round(progressPercentage)}% complete
+            </span>
+          </div>
+          <Progress
+            value={progressPercentage}
+            className="h-4 w-full overflow-hidden rounded-md bg-gray-300"
+          />
+        </div>
+        <div className="flex w-full justify-center">
+          <Button
+            onClick={() => viewBundleSelection(true)}
+            className="mb-2"
+            size="sm"
+          >
+            Review Your Pack <ArrowRightFromLine className="size-8" />
           </Button>
         </div>
       </div>
