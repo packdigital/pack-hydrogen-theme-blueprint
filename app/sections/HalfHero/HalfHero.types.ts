@@ -25,6 +25,7 @@ interface Media {
   image: Image;
   mediaOrderDesktop: string;
   mediaOrderMobile: string;
+  mediaWidthRatio: string;
   video: Video;
 }
 
