@@ -1,3 +1,4 @@
+import type {RefObject} from 'react';
 import {useState, useEffect} from 'react';
 
 const SCRIPTS_LOADED: Record<string, Promise<boolean>> = {};
@@ -7,7 +8,7 @@ export function loadScript(
       `data-${string}`,
       any
     >,
-  placement?: 'head' | 'body' | null,
+  placement?: 'head' | 'body' | RefObject<HTMLElement | null> | null,
 ): Promise<boolean> {
   const {id, innerHTML, src, type, onload, onerror, ...rest} = {
     ...attributes,
@@ -44,7 +45,14 @@ export function loadScript(
         onerror(e);
       }
     };
-    if (placement === 'head') {
+    // checks if placement is react ref
+    if (
+      placement !== null &&
+      typeof placement === 'object' &&
+      'current' in placement
+    ) {
+      placement?.current?.appendChild(script);
+    } else if (placement === 'head') {
       document.head.appendChild(script);
     } else {
       document.body.appendChild(script);
