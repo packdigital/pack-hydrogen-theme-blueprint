@@ -24,6 +24,7 @@ export default defineConfig({
   ssr: {
     optimizeDeps: {
       include: [
+        'react-fast-marquee',
         'hex-to-rgba',
         '@pack/types',
         '@remix-run/dev/server-build',

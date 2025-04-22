@@ -17,6 +17,7 @@ import {ImageTilesGrid} from './ImageTilesGrid';
 import {ImageTilesMosaic} from './ImageTilesMosaic';
 import {Markdown} from './Markdown';
 import {MarketingSignup} from './MarketingSignup';
+import {Marquee} from './Marquee';
 import {Product, PRODUCT_SECTION_KEY} from './Product';
 import {PressSlider} from './PressSlider';
 import {ProductRecommendationsSlider} from './ProductRecommendationsSlider';
@@ -46,6 +47,7 @@ export function registerSections() {
   registerSection(Markdown as Section, {name: 'markdown'});
   registerSection(Accordions as Section, {name: 'accordions'});
   registerSection(IconRow as Section, {name: 'icon-row'});
+  registerSection(Marquee as Section, {name: 'marquee'});
 
   /* Hero ---------- */
   registerSection(Hero as Section, {name: 'hero'});
