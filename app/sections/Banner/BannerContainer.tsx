@@ -1,5 +1,3 @@
-import {useRef} from 'react';
-import {v4 as uuidv4} from 'uuid';
 import clsx from 'clsx';
 
 import type {BannerContainerProps} from './Banner.types';
@@ -11,8 +9,11 @@ const FALLBACK_MOBILE_HEIGHT_CLASS = 'max-md:h-[12.5rem]';
 const FALLBACK_MOBILE_ASPECT_RATIO_CLASS = 'max-md:aspect-[3/1]';
 const FALLBACK_MOBILE_ASPECT_RATIO = '3 / 1';
 
-export function BannerContainer({children, cms}: BannerContainerProps) {
-  const randomId = useRef(uuidv4()).current;
+export function BannerContainer({
+  children,
+  cms,
+  sectionId,
+}: BannerContainerProps) {
   const {section, image, video} = cms;
 
   // container
@@ -59,7 +60,7 @@ export function BannerContainer({children, cms}: BannerContainerProps) {
   const heightContainerClasses = `${heightClassesMobile} ${heightClassesDesktop}`;
 
   /* unique class name is important to not override other banner aspect ratios */
-  const nativeAspectRatiosClass = `banner-native-aspect-ratios-${randomId}`;
+  const nativeAspectRatiosClass = `banner-native-aspect-ratios-${sectionId}`;
 
   return (
     <div className={clsx(fullBleedClass)}>

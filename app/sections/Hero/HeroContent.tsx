@@ -1,5 +1,4 @@
-import {useMemo, useRef} from 'react';
-import {v4 as uuidv4} from 'uuid';
+import {useMemo} from 'react';
 import clsx from 'clsx';
 
 import {Link} from '~/components/Link';
@@ -8,11 +7,12 @@ import type {HeroSlideProps} from './Hero.types';
 
 export function HeroContent({
   aboveTheFold,
+  index,
   isActiveSlide,
   isFirstSlide,
+  sectionId,
   slide,
 }: HeroSlideProps) {
-  const randomId = useRef(uuidv4()).current;
   const {button, content, text} = slide;
   const {
     colorDesktop,
@@ -62,7 +62,7 @@ export function HeroContent({
     );
   }, [heading]);
 
-  const heroTextColorClass = `theme-hero-text-${randomId}`;
+  const heroTextColorClass = `theme-hero-text-${sectionId}-${index}`;
 
   return (
     <div
