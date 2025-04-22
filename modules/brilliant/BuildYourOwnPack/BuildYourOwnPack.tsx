@@ -230,45 +230,38 @@ export function BuildYourOwnPack({cms}: {cms: BuildYourOwnPackCms}) {
   return (
     <Container container={cms.container}>
       {/* Use a single column layout structure for consistency between server and client */}
-      <div className="flex w-full flex-col">
+      <div className="w-full px-2 xl:mx-auto xl:max-w-7xl xl:px-0">
         {/* Top section with selection tools */}
-        <div className="mx-auto w-9/12">
-          <BundleSheet
-            open={bundleSheetOpen}
-            onOpenChange={setBundleSheetOpen}
+
+        <BundleSheet open={bundleSheetOpen} onOpenChange={setBundleSheetOpen} />
+
+        <div className="mb-4">
+          <DesktopBundleSelector
+            selectedBundle={selectedBundle}
+            availableBundles={availableBundles}
+            onBundleSelect={handleTierChange}
           />
+        </div>
 
-          <div className="mb-4">
-            <DesktopBundleSelector
-              className="p-6"
-              selectedBundle={selectedBundle}
-              availableBundles={availableBundles}
-              onBundleSelect={handleTierChange}
-            />
-          </div>
+        <div className="mb-4">
+          <ProgressSection
+            viewBundleSelection={setBundleSheetOpen}
+            selectedCount={selectedCount}
+            selectedBundle={selectedBundle}
+          />
+        </div>
 
-          <div className="mb-4">
-            <ProgressSection
-              className="p-6"
-              viewBundleSelection={setBundleSheetOpen}
-              selectedCount={selectedCount}
-              selectedBundle={selectedBundle}
-            />
-          </div>
-
-          <div className="mb-8">
-            <ProductGrid
-              className="p-6"
-              products={products}
-              selectedCount={selectedCount}
-              selectedBundle={selectedBundle}
-              bundleProducts={selectedItems}
-              bundleMapById={bundleMapById}
-              incrementDisabled={incrementDisabled}
-              handleRemoveFromBundle={handleRemoveFromBundle}
-              handleAddToBundle={handleAddToBundle}
-            />
-          </div>
+        <div className="mb-8">
+          <ProductGrid
+            products={products}
+            selectedCount={selectedCount}
+            selectedBundle={selectedBundle}
+            bundleProducts={selectedItems}
+            bundleMapById={bundleMapById}
+            incrementDisabled={incrementDisabled}
+            handleRemoveFromBundle={handleRemoveFromBundle}
+            handleAddToBundle={handleAddToBundle}
+          />
         </div>
       </div>
     </Container>

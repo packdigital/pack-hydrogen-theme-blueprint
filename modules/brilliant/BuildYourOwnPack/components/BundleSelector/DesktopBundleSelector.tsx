@@ -12,7 +12,7 @@ export function DesktopBundleSelector({
   availableBundles,
   onBundleSelect,
 }: {
-  className: string;
+  className?: string;
   selectedBundle: ProductVariant | undefined;
   availableBundles: ProductVariant[];
   onBundleSelect: (variant: ProductVariant) => void;
@@ -30,7 +30,7 @@ export function DesktopBundleSelector({
   );
 
   return (
-    <section className="mx-auto hidden justify-center md:container md:block">
+    <section className="mx-auto justify-center md:container md:block">
       <div className={cn('w-full', className)}>
         <div className="grid gap-4 md:grid-cols-3">
           {mappedVariants.map((bundle, index) => (

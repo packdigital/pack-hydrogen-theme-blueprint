@@ -1,10 +1,7 @@
 import {ProductVariant} from '@shopify/hydrogen-react/storefront-api-types';
-import {Check, CircleCheckBig, Plus} from 'lucide-react';
-import {
-  BundleMapById,
-  ProductGrouping,
-} from 'modules/brilliant/BuildYourOwnPack/BuildYourOwnPack.types';
-import {useCallback, useEffect, useMemo, useState} from 'react';
+import {CircleCheck} from 'lucide-react';
+import {BundleMapById} from 'modules/brilliant/BuildYourOwnPack/BuildYourOwnPack.types';
+import {useEffect, useMemo, useState} from 'react';
 import {useInView} from 'react-intersection-observer';
 
 import {BYOPProductItemMedia} from '../BYOPProductItem/BYOPProductItemMedia';
@@ -42,7 +39,7 @@ export function ProductGrid({
   return (
     <div className={cn('w-full', className)}>
       <div className="w-full">
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 md:gap-4 lg:grid-cols-5">
+        <div className="grid grid-cols-2 gap-2 md:grid-cols-3 md:gap-3 lg:grid-cols-4">
           {safeProducts.map((product, index) => (
             <ProductCard
               key={product?.id || index}
@@ -108,7 +105,7 @@ export function ProductCard({
       <div className="p-2">
         <div className="relative">
           {isSelected && (
-            <CircleCheckBig className="absolute right-2 top-2 z-10 size-8 rounded-full bg-primary text-white " />
+            <CircleCheck className="absolute right-1 top-1 z-10 size-8 rounded-full bg-primary text-white " />
           )}
           {product?.media?.nodes && product.media.nodes.length > 0 && (
             <BYOPProductItemMedia
@@ -118,23 +115,29 @@ export function ProductCard({
           )}
         </div>
       </div>
-      <CardContent className="p-2 md:p-3">
-        <div className="flex items-center justify-between">
+      <CardContent className="p-0 pb-2">
+        <div className="flex flex-col items-center text-center">
           <h3 className="text-base font-medium text-gray-900">
             {product?.title || ''}
           </h3>
 
-          <BYOPQuickShop
-            bundle={bundle}
-            bundleMapById={bundleMapById}
-            handleAddToBundle={handleAddToBundle}
-            handleRemoveFromBundle={handleRemoveFromBundle}
-            incrementDisabled={incrementDisabled}
-            product={product}
-            selectedVariant={selectedVariant}
-          />
+          <div className="mt-2">
+            <BYOPQuickShop
+              bundle={bundle}
+              bundleMapById={bundleMapById}
+              handleAddToBundle={handleAddToBundle}
+              handleRemoveFromBundle={handleRemoveFromBundle}
+              incrementDisabled={incrementDisabled}
+              product={product}
+              selectedVariant={selectedVariant}
+            />
+          </div>
         </div>
       </CardContent>
     </Card>
   );
 }
+/*
+mx-auto inline-flex w-full justify-center text-right md:ml-auto md:mr-0 md:mt-1
+
+*/

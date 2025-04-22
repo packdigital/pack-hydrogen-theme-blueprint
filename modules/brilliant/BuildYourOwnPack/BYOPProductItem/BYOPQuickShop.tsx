@@ -78,7 +78,7 @@ export function BYOPQuickShop({
       {!quantityInBundle && hasOneVariant && (
         <button
           aria-label={`Add one ${product?.title || 'item'} to your bundle`}
-          className="btn-primary size-9 p-2"
+          className="btn-primary size-8 p-2"
           disabled={!variantToAdd || incrementDisabled}
           onClick={() => {
             if (variantToAdd && handleAddToBundle)
@@ -98,7 +98,7 @@ export function BYOPQuickShop({
       {!quantityInBundle && product && !hasOneVariant && !optionsVisible && (
         <button
           aria-label={`Add one ${product?.title || 'item'} to your bundle`}
-          className="btn-primary !size-12 !p-0"
+          className="btn-primary !size-8 !p-0"
           disabled={!variantToAdd || incrementDisabled}
           onClick={() => setOptionsVisible(true)}
           type="button"

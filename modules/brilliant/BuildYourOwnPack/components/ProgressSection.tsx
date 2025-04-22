@@ -28,9 +28,9 @@ export function ProgressSection({
 
   return (
     <div className={cn('w-full', className)}>
-      <div className="flex items-center justify-between rounded-md bg-gray-100 p-4">
+      <div className="flex flex-wrap items-center justify-between rounded-md bg-gray-100 p-4">
         <div className="grow px-6 py-2">
-          <div className="mb-1 flex justify-between">
+          <div className="mb-1 flex flex-wrap items-end justify-between gap-2 ">
             <span className="font-semibold text-gray-900">
               Your Selection: {selectedCount} of {bundleSize}
             </span>
@@ -43,11 +43,8 @@ export function ProgressSection({
             className="h-4 w-full overflow-hidden rounded-md bg-gray-200"
           />
         </div>
-        <div>
-          <Button
-            onClick={() => viewBundleSelection(true)}
-            className="rounded-md bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700"
-          >
+        <div className="mt-2 flex w-full justify-center">
+          <Button onClick={() => viewBundleSelection(true)} className="">
             View Selected Items
           </Button>
         </div>
