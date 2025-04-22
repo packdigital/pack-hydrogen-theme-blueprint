@@ -1,12 +1,13 @@
 import type {ContainerSettings} from '~/settings/container';
 
-export interface RichTextCms {
-  richtext: string;
+export interface MarkdownCms {
+  content: string;
   section: {
+    centerAllText: boolean;
     hasXPadding: boolean;
     hasYPadding: boolean;
-    maxWidth?: string;
-    textColor?: string;
+    maxWidth: string;
+    textColor: string;
   };
   container: ContainerSettings;
 }

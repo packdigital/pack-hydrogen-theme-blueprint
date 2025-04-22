@@ -29,11 +29,14 @@ export function BannerContent({
   const headingWithBreaks = useMemo(() => {
     const splitHeading = heading?.split('\n');
     if (splitHeading?.length === 1) return heading;
-    return splitHeading?.reduce((acc: JSX.Element[], line, index, arr) => {
-      acc.push(<span key={index}>{line}</span>);
-      if (index < arr.length - 1) acc.push(<br key={`br${index}`} />);
-      return acc;
-    }, []);
+    return splitHeading?.reduce(
+      (acc: React.JSX.Element[], line, index, arr) => {
+        acc.push(<span key={index}>{line}</span>);
+        if (index < arr.length - 1) acc.push(<br key={`br${index}`} />);
+        return acc;
+      },
+      [],
+    );
   }, [heading]);
 
   return (

@@ -46,7 +46,7 @@ const emitEvent = ({
     }
     if (debug)
       console.log(
-        `MetaPixelEvents: 🚀 event emitted for \`${eventName}\`:`,
+        `${ANALYTICS_NAME}: 🚀 event emitted for \`${eventName}\`:`,
         parameters || {},
       );
     if (typeof onEmit === 'function') onEmit({eventName, parameters});

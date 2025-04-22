@@ -1,5 +1,6 @@
 import {useCallback} from 'react';
 
+import {SIZE_OPTION_NAME} from '~/lib/constants';
 import {useMenu} from '~/hooks';
 
 import type {ProductOptionValuesLabelProps} from './ProductOptions.types';
@@ -30,7 +31,7 @@ export function ProductOptionValuesLabel({
         )}
       </div>
 
-      {name === 'Size' && (
+      {name === SIZE_OPTION_NAME && (
         <button
           className="text-underline text-xs"
           onClick={handleSizeGuideClick}

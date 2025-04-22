@@ -34,7 +34,7 @@ export const Navigation = memo(
     mobileMenuOpen,
   }: NavigationProps) => {
     const customer = useCustomer();
-    const {openSearch} = useMenu();
+    const {closeAll, openSearch} = useMenu();
     const {header} = useSettings();
     const {
       bgColor = 'var(--background)',
@@ -161,6 +161,7 @@ export const Navigation = memo(
 
           <Link
             aria-label="Go to account page"
+            onClick={closeAll}
             style={{color: iconColor}}
             to={customer ? `/account/orders` : `/account/login`}
           >

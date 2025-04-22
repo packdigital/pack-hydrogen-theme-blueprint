@@ -2,13 +2,17 @@ import {memo} from 'react';
 
 import {Link} from '~/components/Link';
 import {Svg} from '~/components/Svg';
+import {useMenu} from '~/hooks';
 
 export const NavigationLogo = memo(
   ({className = '', color}: {className?: string; color?: string}) => {
+    const {closeAll} = useMenu();
+
     return (
       <Link
         aria-label="Go to homepage"
         className={`text-text ${className}`}
+        onClick={closeAll}
         style={{color}}
         to="/"
       >

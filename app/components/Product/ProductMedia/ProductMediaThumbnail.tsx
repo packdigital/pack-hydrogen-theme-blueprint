@@ -26,8 +26,9 @@ export function ProductMediaThumbnail({
           altText: alt || image?.altText,
         }}
         aspectRatio="1/1"
-        width="80px"
+        className="w-full"
         loading={index < 6 ? 'eager' : 'lazy'}
+        sizes="100px"
       />
 
       {mediaContentType === 'VIDEO' && (

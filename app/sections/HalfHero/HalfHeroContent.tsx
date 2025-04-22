@@ -60,7 +60,7 @@ export function HalfHeroContent({
 
         {subtext && <RichText>{subtext}</RichText>}
 
-        {buttons?.length > 0 && (
+        {buttons && buttons.length > 0 && (
           <ul className="mt-4 flex flex-col justify-center gap-4 xs:flex-row">
             {buttons.slice(0, 2).map(({link, style}, index) => {
               return (

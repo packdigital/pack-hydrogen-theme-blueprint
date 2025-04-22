@@ -47,9 +47,9 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     shop,
     siteSettings,
   ] = await Promise.all([
-    context.pack.query(PRODUCT_PAGE_QUERY, {
+    pack.query(PRODUCT_PAGE_QUERY, {
       variables: {handle},
-      cache: context.storefront.CacheLong(),
+      cache: storefront.CacheLong(),
     }),
     storefront.query(PRODUCT_QUERY, {
       variables: {
