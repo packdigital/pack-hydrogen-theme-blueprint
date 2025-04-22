@@ -1,3 +1,5 @@
+import clsx from 'clsx';
+
 import {CountryField} from './CountryField';
 
 export function FormField({field}: Record<string, any>) {
@@ -63,22 +65,28 @@ export function FormField({field}: Record<string, any>) {
 
   return (
     <div
-      className={`flex flex-col self-end ${
-        halfWidth ? halfWidthSpan : 'col-[1_/_span_2]'
-      } ${isNotFullWidth ? 'items-start' : 'items-stretch'}`}
+      className={clsx(
+        'flex flex-col gap-4',
+        'md:flex-row md:gap-8',
+        'lg:gap-12',
+        halfWidth ? halfWidthSpan : 'col-[1_/_span_2]',
+        isNotFullWidth ? 'items-start' : 'items-stretch',
+      )}
       key={name}
     >
       <label
-        className={`flex gap-x-1 gap-y-1.5 ${
+        className={clsx(
+          'flex gap-x-1 gap-y-1.5',
           isCheckbox || isRadio || isFileType
             ? 'justify-self-start'
-            : 'justify-self-stretch'
-        } ${isCheckbox || isLabel ? 'py-1' : ''} ${
-          isCheckbox ? 'flex-row' : 'flex-col-reverse'
-        } ${isNotFullWidth ? 'w-auto' : 'w-full'}`}
+            : 'justify-self-stretch',
+          isCheckbox || isLabel ? 'py-1' : '',
+          isCheckbox ? 'flex-row' : 'flex-col-reverse',
+          isNotFullWidth ? 'w-auto' : 'w-full',
+        )}
         htmlFor={name}
       >
-        {isLabel && <span className={`${labelClass}`}>{label}</span>}
+        {isLabel && <span className={clsx(labelClass)}>{label}</span>}
 
         {isFileType && (
           <input
@@ -92,7 +100,7 @@ export function FormField({field}: Record<string, any>) {
 
         {isInput && (
           <input
-            className={`${inputClass}`}
+            className={clsx(inputClass)}
             id={name}
             name={name}
             placeholder={placeholder}
@@ -103,7 +111,7 @@ export function FormField({field}: Record<string, any>) {
 
         {isTextarea && (
           <textarea
-            className={`resize-none ${inputClass}`}
+            className={clsx('resize-none', inputClass)}
             id={name}
             name={name}
             placeholder={placeholder}
@@ -123,9 +131,10 @@ export function FormField({field}: Record<string, any>) {
 
         {isMultiCheckbox && (
           <div
-            className={`flex flex-wrap justify-start gap-x-4 gap-y-2 self-start ${
-              direction === 'vertical' ? 'flex-col' : 'flex-row'
-            }`}
+            className={clsx(
+              'flex flex-wrap justify-start gap-x-4 gap-y-2 self-start',
+              direction === 'vertical' ? 'flex-col' : 'flex-row',
+            )}
           >
             {options?.map((value) => (
               <label
@@ -147,9 +156,10 @@ export function FormField({field}: Record<string, any>) {
 
         {isRadio && (
           <div
-            className={`flex flex-wrap justify-start gap-x-4 gap-y-2 self-start ${
-              direction === 'vertical' ? 'flex-col' : 'flex-row'
-            }`}
+            className={clsx(
+              'flex flex-wrap justify-start gap-x-4 gap-y-2 self-start',
+              direction === 'vertical' ? 'flex-col' : 'flex-row',
+            )}
           >
             {options?.map((value) => (
               <label
@@ -171,7 +181,7 @@ export function FormField({field}: Record<string, any>) {
 
         {isSelect && (
           <select
-            className={`${selectClass}`}
+            className={clsx(selectClass)}
             id={name}
             name={name}
             required={required}
@@ -207,7 +217,7 @@ export function FormField({field}: Record<string, any>) {
                   : ''
               }${required ? ' *' : ''}`,
             }}
-            className={`[&_a]:underline ${labelClass}`}
+            className={clsx('[&_a]:underline', labelClass)}
           />
         )}
       </label>

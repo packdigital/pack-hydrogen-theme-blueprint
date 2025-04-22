@@ -1,4 +1,5 @@
 import {memo, useEffect, useState} from 'react';
+import clsx from 'clsx';
 
 import {useSettings} from '~/hooks';
 
@@ -27,11 +28,12 @@ export const CollectionDesktopFilters = memo(
     }, [desktopFiltersOpen]);
 
     return (
-      <div className={`${desktopFiltersOpen ? 'max-md:hidden' : 'hidden'}`}>
+      <div className={clsx(desktopFiltersOpen ? 'max-md:hidden' : 'hidden')}>
         <div
-          className={`flex flex-col gap-5 md:sticky ${
-            sticky ? stickyTopClass : ''
-          }`}
+          className={clsx(
+            'flex flex-col gap-5 md:sticky',
+            sticky && stickyTopClass,
+          )}
         >
           <div className="overflow-hidden rounded border border-border max-md:hidden">
             <div className="scrollbar-hide max-h-[calc(var(--viewport-height)-var(--header-height-desktop)-100px)] overflow-y-auto overflow-x-hidden">

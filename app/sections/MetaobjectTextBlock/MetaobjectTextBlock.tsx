@@ -1,3 +1,5 @@
+import clsx from 'clsx';
+
 import {Link} from '~/components/Link';
 import {RichText} from '~/components/RichText';
 
@@ -22,7 +24,11 @@ export function MetaobjectTextBlock({cms}: {cms: Record<string, any>}) {
       style={{backgroundColor: 'var(--background)', color: 'var(--text)'}}
     >
       <div
-        className={`mx-auto flex flex-col items-center gap-4 md:gap-6 ${maxWidthClass} text-center`}
+        className={clsx(
+          'mx-auto flex flex-col items-center gap-4 md:gap-6',
+          maxWidthClass,
+          'text-center',
+        )}
       >
         {heading &&
           (above_the_fold ? (

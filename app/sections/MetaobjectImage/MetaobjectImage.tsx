@@ -1,3 +1,5 @@
+import clsx from 'clsx';
+
 import {Image} from '~/components/Image';
 import {Link} from '~/components/Link';
 import {RichText} from '~/components/RichText';
@@ -14,9 +16,12 @@ export function MetaobjectImage({cms}: {cms: Record<string, any>}) {
 
   return (
     <div
-      className={`py-4 md:py-6 lg:py-8 ${enable_padding ? 'px-contained' : ''}`}
+      className={clsx(
+        'py-4 md:py-6 lg:py-8',
+        enable_padding ? 'px-contained' : '',
+      )}
     >
-      <Link className={`mx-auto ${maxWidth}`} href={link} newTab={true}>
+      <Link className={clsx('mx-auto', maxWidth)} href={link} newTab={true}>
         <Image
           data={{
             ...imageDetails,
@@ -29,8 +34,8 @@ export function MetaobjectImage({cms}: {cms: Record<string, any>}) {
       </Link>
 
       {caption && (
-        <div className={`mt-3 ${enable_padding ? '' : 'px-contained'}`}>
-          <RichText className={`mx-auto ${maxWidth}`}>{caption}</RichText>
+        <div className={clsx('mt-3', !enable_padding && 'px-contained')}>
+          <RichText className={clsx('mx-auto', maxWidth)}>{caption}</RichText>
         </div>
       )}
     </div>

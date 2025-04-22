@@ -1,4 +1,5 @@
 import {useInView} from 'react-intersection-observer';
+import clsx from 'clsx';
 
 import {Container} from '~/components/Container';
 
@@ -18,13 +19,15 @@ export function VideoEmbed({cms}: {cms: VideoEmbedCms}) {
   return (
     <Container container={cms.container}>
       <div
-        className={`[&_iframe]:!h-full [&_iframe]:!w-full ${
-          enableYPadding ? 'py-4 md:py-6 lg:py-8' : ''
-        } ${enableXPadding ? 'px-contained' : ''}`}
+        className={clsx(
+          '[&_iframe]:!h-full [&_iframe]:!w-full',
+          enableYPadding && 'py-4 md:py-6 lg:py-8',
+          enableXPadding && 'px-contained',
+        )}
         ref={inViewRef}
       >
         <div
-          className={`mx-auto bg-neutralLightest ${maxWidth} ${aspectRatio}`}
+          className={clsx('mx-auto bg-neutralLightest', maxWidth, aspectRatio)}
           dangerouslySetInnerHTML={{__html: inView ? embed : ''}}
         />
       </div>

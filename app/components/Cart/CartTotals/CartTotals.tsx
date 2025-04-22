@@ -1,5 +1,6 @@
 import {memo, useMemo} from 'react';
 import {useCart, useMoney} from '@shopify/hydrogen-react';
+import clsx from 'clsx';
 import type {CartWithActions} from '@shopify/hydrogen-react';
 import type {
   Cart,
@@ -86,9 +87,10 @@ export const CartTotals = memo(({settings}: CartTotalsProps) => {
 
   return (
     <div
-      className={`flex-col gap-4 border-t border-t-border p-4 ${
-        totalQuantity ? 'flex' : 'hidden'
-      }`}
+      className={clsx(
+        'flex-col gap-4 border-t border-t-border p-4',
+        totalQuantity ? 'flex' : 'hidden',
+      )}
     >
       <div className="flex flex-col gap-1">
         {isDiscounted && (

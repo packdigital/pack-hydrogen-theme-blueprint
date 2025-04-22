@@ -1,5 +1,6 @@
 import {useEffect, useState} from 'react';
 import {useNavigate} from '@remix-run/react';
+import clsx from 'clsx';
 
 import {LoadingDots} from '~/components/Animations';
 import {Link} from '~/components/Link';
@@ -66,12 +67,13 @@ export function Activate() {
 
           <button
             aria-label="Submit to activate account"
-            className={`btn-primary mt-3 min-w-40 self-center ${
-              status.started ? 'cursor-default' : ''
-            }`}
+            className={clsx(
+              'btn-primary mt-3 min-w-40 self-center',
+              status.started && 'cursor-default',
+            )}
             type="submit"
           >
-            <span className={`${status.started ? 'invisible' : 'visible'}`}>
+            <span className={clsx(status.started ? 'invisible' : 'visible')}>
               {buttonText}
             </span>
 

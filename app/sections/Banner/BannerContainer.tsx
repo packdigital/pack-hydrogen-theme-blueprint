@@ -1,5 +1,6 @@
 import {useRef} from 'react';
 import {v4 as uuidv4} from 'uuid';
+import clsx from 'clsx';
 
 import type {BannerContainerProps} from './Banner.types';
 
@@ -61,7 +62,7 @@ export function BannerContainer({children, cms}: BannerContainerProps) {
   const nativeAspectRatiosClass = `banner-native-aspect-ratios-${randomId}`;
 
   return (
-    <div className={`${fullBleedClass}`}>
+    <div className={clsx(fullBleedClass)}>
       {/* For dynamic media queries, it must be done outside of tailwind using a style block */}
       {(usesDesktopNativeAspectRatio || usesMobileNativeAspectRatio) && (
         <style>
@@ -92,7 +93,12 @@ export function BannerContainer({children, cms}: BannerContainerProps) {
       )}
 
       <div
-        className={`relative mx-auto ${nativeAspectRatiosClass} ${heightContainerClasses} ${maxWidthContainerClass}`}
+        className={clsx(
+          'relative mx-auto',
+          nativeAspectRatiosClass,
+          heightContainerClasses,
+          maxWidthContainerClass,
+        )}
       >
         {children}
       </div>

@@ -1,3 +1,5 @@
+import clsx from 'clsx';
+
 import {Container} from '~/components/Container';
 import {Link} from '~/components/Link';
 import {RichText} from '~/components/RichText';
@@ -18,7 +20,11 @@ export function TextBlock({cms}: {cms: TextBlockCms}) {
         style={{color: section?.textColor}}
       >
         <div
-          className={`mx-auto flex flex-col items-center gap-4 md:gap-6 ${maxWidthClass} text-center`}
+          className={clsx(
+            'mx-auto flex flex-col items-center gap-4 md:gap-6',
+            maxWidthClass,
+            'text-center',
+          )}
         >
           {heading &&
             (section?.aboveTheFold ? (
@@ -38,7 +44,7 @@ export function TextBlock({cms}: {cms: TextBlockCms}) {
                   <li key={index}>
                     <Link
                       aria-label={link?.text}
-                      className={style}
+                      className={clsx(style)}
                       to={link?.url}
                       newTab={link?.newTab}
                       type={link?.type}

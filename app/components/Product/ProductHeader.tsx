@@ -1,4 +1,5 @@
 import {useCallback} from 'react';
+import clsx from 'clsx';
 
 import {ProductStars} from '~/components/ProductStars';
 import {useMatchMedia, useVariantPrices} from '~/hooks';
@@ -46,10 +47,11 @@ export function ProductHeader({
 
   return (
     <div
-      className={`max-md:px-4 ${
+      className={clsx(
+        'max-md:px-4',
         // remove if only one header placement is used
-        isMobile ? 'md:hidden' : 'max-md:hidden'
-      }`}
+        isMobile ? 'md:hidden' : 'max-md:hidden',
+      )}
     >
       {enabledStarRating && (
         <div className="min-h-6">

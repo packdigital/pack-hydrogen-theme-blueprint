@@ -1,5 +1,6 @@
 import {useRef, useState} from 'react';
 import {useInView} from 'react-intersection-observer';
+import clsx from 'clsx';
 
 import {Svg} from '~/components/Svg';
 
@@ -27,9 +28,10 @@ export function VideoElement({
         <video
           aria-label={title}
           autoPlay={autoplay}
-          className={`absolute inset-0 size-full object-cover ${
-            pauseAndPlay ? 'cursor-pointer' : ''
-          }`}
+          className={clsx(
+            'absolute inset-0 size-full object-cover',
+            pauseAndPlay && 'cursor-pointer',
+          )}
           controls={controls}
           loop={loop}
           muted={autoplay || !sound}

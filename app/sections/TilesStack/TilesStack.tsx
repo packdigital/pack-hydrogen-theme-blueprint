@@ -1,3 +1,5 @@
+import clsx from 'clsx';
+
 import {getAspectRatioFromClass} from '~/lib/utils';
 import {Container} from '~/components/Container';
 import {Image} from '~/components/Image';
@@ -30,7 +32,11 @@ export function TilesStack({cms}: {cms: TilesStackCms}) {
       <div className="px-contained py-contained">
         {(!!heading || !!subheading) && (
           <div
-            className={`max-lg:px-contained mx-auto mb-6 flex w-full flex-col gap-2 md:mb-10 ${alignment} ${maxWidthClass}`}
+            className={clsx(
+              'max-lg:px-contained mx-auto mb-6 flex w-full flex-col gap-2 md:mb-10',
+              alignment,
+              maxWidthClass,
+            )}
             style={{color: textColor}}
           >
             {heading && <h2 className="text-h2">{heading}</h2>}
@@ -40,7 +46,10 @@ export function TilesStack({cms}: {cms: TilesStackCms}) {
 
         {tiles?.length > 0 && (
           <div
-            className={`${maxWidthClass} mx-auto grid gap-5 md:auto-cols-fr md:grid-flow-col lg:gap-x-8`}
+            className={clsx(
+              maxWidthClass,
+              'mx-auto grid gap-5 md:auto-cols-fr md:grid-flow-col lg:gap-x-8',
+            )}
             style={{color: textColor}}
           >
             {tiles.map((item, index) => {
@@ -66,7 +75,7 @@ export function TilesStack({cms}: {cms: TilesStackCms}) {
                     />
                   </Link>
 
-                  <div className={`flex flex-col ${textAlign}`}>
+                  <div className={clsx('flex flex-col', textAlign)}>
                     <Link
                       aria-label={item.heading}
                       to={item.link?.url}
@@ -74,7 +83,9 @@ export function TilesStack({cms}: {cms: TilesStackCms}) {
                       type={item.link?.type}
                     >
                       <div className="group flex">
-                        <h3 className={`${tileHeadingSize}`}>{item.heading}</h3>
+                        <h3 className={clsx(tileHeadingSize)}>
+                          {item.heading}
+                        </h3>
 
                         <span className="ml-3 block max-w-5 transition-transform lg:w-6 lg:group-hover:translate-x-2">
                           <Svg

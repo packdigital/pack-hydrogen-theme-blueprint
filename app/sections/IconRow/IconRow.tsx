@@ -1,3 +1,5 @@
+import clsx from 'clsx';
+
 import {Container} from '~/components/Container';
 import {Image} from '~/components/Image';
 import {RichText} from '~/components/RichText';
@@ -19,7 +21,10 @@ export function IconRow({cms}: {cms: IconRowCms}) {
         style={{color: section?.textColor}}
       >
         <div
-          className={`mx-auto flex flex-col items-center gap-4 text-center md:gap-6 ${maxWidthClass}`}
+          className={clsx(
+            'mx-auto flex flex-col items-center gap-4 text-center md:gap-6',
+            maxWidthClass,
+          )}
         >
           {heading && (
             <h2 className="text-h2 mx-auto max-w-[46rem]">{heading}</h2>

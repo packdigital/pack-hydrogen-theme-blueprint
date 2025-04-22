@@ -1,4 +1,5 @@
 import {useEffect, useState} from 'react';
+import clsx from 'clsx';
 
 import {Image} from '~/components/Image';
 
@@ -46,7 +47,7 @@ export function HeroSlide({
               altText: image.imageMobile.altText || image.alt,
               url: mounted ? image.imageMobile.url : '',
             }}
-            className={`media-fill ${image.positionMobile}`}
+            className={clsx('media-fill', image.positionMobile)}
             loading={aboveTheFold && isFirstSlide ? 'eager' : 'lazy'}
             sizes="100vw"
           />
@@ -68,7 +69,7 @@ export function HeroSlide({
               altText: image.imageDesktop.altText || image.alt,
               url: mounted ? image.imageDesktop.url : '',
             }}
-            className={`media-fill ${image.positionDesktop}`}
+            className={clsx('media-fill', image.positionDesktop)}
             loading={aboveTheFold && isFirstSlide ? 'eager' : 'lazy'}
             sizes="100vw"
           />

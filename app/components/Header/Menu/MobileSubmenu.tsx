@@ -1,3 +1,5 @@
+import clsx from 'clsx';
+
 import {Image} from '~/components/Image';
 import {Link} from '~/components/Link';
 import {Svg} from '~/components/Svg';
@@ -22,9 +24,10 @@ export function MobileSubmenu({
 }: MobileSubmenuProps) {
   return (
     <div
-      className={`scrollbar-hide absolute left-0 top-0 z-[1] size-full bg-background ${
-        activeSubmenuHasContent ? 'visible' : 'invisible'
-      }`}
+      className={clsx(
+        'scrollbar-hide absolute left-0 top-0 z-[1] size-full bg-background',
+        activeSubmenuHasContent ? 'visible' : 'invisible',
+      )}
     >
       {navItems?.map(({imageLinks, links, mainLink, navItem}, index) => {
         const isActiveSubmenu = mobileSubmenuIndex === index;
@@ -34,9 +37,10 @@ export function MobileSubmenu({
 
         return (
           <nav
-            className={`scrollbar-hide size-full overflow-y-auto ${
-              !isActiveSubmenu ? 'hidden' : ''
-            }`}
+            className={clsx(
+              'scrollbar-hide size-full overflow-y-auto',
+              !isActiveSubmenu && 'hidden',
+            )}
             inert={!isActiveSubmenu}
             key={index}
           >

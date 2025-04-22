@@ -1,5 +1,6 @@
 import {Navigation, Pagination} from 'swiper/modules';
 import {Swiper, SwiperSlide} from 'swiper/react';
+import clsx from 'clsx';
 
 import {Container} from '~/components/Container';
 import {Link} from '~/components/Link';
@@ -22,7 +23,10 @@ export function TestimonialSlider({cms}: {cms: TestimonialSliderCms}) {
     <Container container={cms.container}>
       <div className="md:px-contained py-12 lg:py-16">
         <div
-          className={`${maxWidthClass} relative mx-auto flex flex-col items-center lg:px-14`}
+          className={clsx(
+            'relative mx-auto flex flex-col items-center lg:px-14',
+            maxWidthClass,
+          )}
         >
           <h2 className="text-h2 px-4 text-center" style={{color: textColor}}>
             {heading}
@@ -90,9 +94,10 @@ export function TestimonialSlider({cms}: {cms: TestimonialSliderCms}) {
               <div className="swiper-pagination !static mt-6 lg:!hidden" />
 
               <div
-                className={`swiper-button-prev left-0 !hidden !h-14 !w-14 rounded-full bg-white after:hidden ${
-                  blocks.length > 3 ? 'lg:!flex' : 'lg:!hidden'
-                }`}
+                className={clsx(
+                  'swiper-button-prev left-0 !hidden !h-14 !w-14 rounded-full bg-white after:hidden',
+                  blocks.length > 3 ? 'lg:!flex' : 'lg:!hidden',
+                )}
               >
                 <Svg
                   className="max-w-5 text-black"
@@ -103,9 +108,10 @@ export function TestimonialSlider({cms}: {cms: TestimonialSliderCms}) {
               </div>
 
               <div
-                className={`swiper-button-next right-0 !hidden !h-14 !w-14 rounded-full bg-white after:hidden ${
-                  blocks.length > 3 ? 'lg:!flex' : 'lg:!hidden'
-                }`}
+                className={clsx(
+                  'swiper-button-next right-0 !hidden !h-14 !w-14 rounded-full bg-white after:hidden',
+                  blocks.length > 3 ? 'lg:!flex' : 'lg:!hidden',
+                )}
               >
                 <Svg
                   className="max-w-5 text-black"

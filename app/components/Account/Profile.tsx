@@ -1,5 +1,6 @@
 import {useEffect, useRef, useState} from 'react';
 import {useLocation} from '@remix-run/react';
+import clsx from 'clsx';
 
 import {LoadingDots} from '~/components/Animations';
 import {useCustomer, useSettings} from '~/hooks';
@@ -90,12 +91,13 @@ export function Profile() {
         <div className="col-span-2 flex justify-center">
           <button
             aria-label="Save to update profile"
-            className={`btn-primary mt-4 w-full min-w-40 md:w-auto ${
-              status.started ? 'cursor-default' : ''
-            }`}
+            className={clsx(
+              'btn-primary mt-4 w-full min-w-40 md:w-auto',
+              status.started && 'cursor-default',
+            )}
             type="submit"
           >
-            <span className={`${status.started ? 'invisible' : 'visible'}`}>
+            <span className={clsx(status.started ? 'invisible' : 'visible')}>
               {buttonText}
             </span>
 

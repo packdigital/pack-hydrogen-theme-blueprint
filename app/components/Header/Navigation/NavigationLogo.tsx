@@ -1,4 +1,5 @@
 import {memo} from 'react';
+import clsx from 'clsx';
 
 import {Link} from '~/components/Link';
 import {Svg} from '~/components/Svg';
@@ -11,7 +12,7 @@ export const NavigationLogo = memo(
     return (
       <Link
         aria-label="Go to homepage"
-        className={`text-text ${className}`}
+        className={clsx('text-text', className)}
         onClick={closeAll}
         style={{color}}
         to="/"

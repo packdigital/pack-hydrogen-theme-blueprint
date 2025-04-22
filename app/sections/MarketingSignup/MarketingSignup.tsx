@@ -1,4 +1,5 @@
 import {useEffect, useState} from 'react';
+import clsx from 'clsx';
 
 import {Container} from '~/components/Container';
 
@@ -28,7 +29,10 @@ export function MarketingSignup({cms}: {cms: MarketingSignupCms}) {
 
         {(type === 'email' || type === 'emailPhone') && (
           <div
-            className={`flex flex-col ${step === 'email' ? 'block' : 'hidden'}`}
+            className={clsx(
+              'flex flex-col',
+              step === 'email' ? 'block' : 'hidden',
+            )}
           >
             <MarketingEmailSignup
               {...email}
@@ -52,7 +56,10 @@ export function MarketingSignup({cms}: {cms: MarketingSignupCms}) {
 
         {(type === 'phone' || type === 'emailPhone') && (
           <div
-            className={`flex flex-col ${step === 'phone' ? 'block' : 'hidden'}`}
+            className={clsx(
+              'flex flex-col',
+              step === 'phone' ? 'block' : 'hidden',
+            )}
           >
             <MarketingPhoneSignup {...phone} />
 

@@ -1,4 +1,5 @@
 import {Fragment} from 'react';
+import clsx from 'clsx';
 
 import {Link} from '~/components/Link';
 import {LoadingDots} from '~/components/Animations';
@@ -79,7 +80,7 @@ export function MarketingPhoneSignup({
         disabled={!listId}
         type="submit"
       >
-        <span className={`${isSubmitting ? 'invisible' : 'visible'}`}>
+        <span className={clsx(isSubmitting ? 'invisible' : 'visible')}>
           {buttonText}
         </span>
 

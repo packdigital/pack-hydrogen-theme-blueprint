@@ -1,3 +1,5 @@
+import clsx from 'clsx';
+
 import {Container} from '~/components/Container';
 
 import {HalfHeroContent} from './HalfHeroContent';
@@ -48,15 +50,26 @@ export function HalfHero({cms}: {cms: HalfHeroCms}) {
   return (
     <Container container={cms.container}>
       <div
-        className={`${section?.fullBleed ? '' : 'px-contained'} ${
-          section?.verticalPadding ? 'py-contained' : ''
-        }`}
+        className={clsx(
+          !section?.fullBleed && 'px-contained',
+          section?.verticalPadding && 'py-contained',
+        )}
       >
         <div
-          className={`relative mx-auto grid grid-cols-1 items-center ${desktopGridColsClass} ${maxWidthContainerClass}`}
+          className={clsx(
+            'relative mx-auto grid grid-cols-1 items-center',
+            desktopGridColsClass,
+            maxWidthContainerClass,
+          )}
         >
           <div
-            className={`relative w-full bg-neutralLightest max-md:before:float-left ${aspectMobile} ${fillClass} ${mediaOrderClasses}`}
+            className={clsx(
+              'relative w-full bg-neutralLightest',
+              'max-md:before:float-left',
+              aspectMobile,
+              fillClass,
+              mediaOrderClasses,
+            )}
           >
             <HalfHeroMedia
               aboveTheFold={section?.aboveTheFold}
@@ -68,7 +81,12 @@ export function HalfHero({cms}: {cms: HalfHeroCms}) {
           </div>
 
           <div
-            className={`flex w-full items-center md:before:float-left ${aspectDesktop} ${contentOrderClasses}`}
+            className={clsx(
+              'flex w-full items-center',
+              'md:before:float-left',
+              aspectDesktop,
+              contentOrderClasses,
+            )}
           >
             <HalfHeroContent
               aboveTheFold={section?.aboveTheFold}

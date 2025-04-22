@@ -1,5 +1,6 @@
 import {useEffect, useMemo, useState} from 'react';
 import {useInView} from 'react-intersection-observer';
+import clsx from 'clsx';
 import type {ProductVariant} from '@shopify/hydrogen-react/storefront-api-types';
 
 import {COLOR_OPTION_NAME} from '~/lib/constants';
@@ -59,11 +60,12 @@ export function BYOBProductItem({
 
   return (
     <div
-      className={`flex h-full flex-col border-b border-border ${
-        isSecondCol ? '' : 'max-sm:border-r md:max-lg:border-r'
-      } ${isThirdCol ? '' : 'sm:max-md:border-r lg:max-xl:border-r'} ${
-        isFourthCol ? '' : 'xl:border-r'
-      }`}
+      className={clsx(
+        'flex h-full flex-col border-b border-border',
+        !isSecondCol && 'max-sm:border-r md:max-lg:border-r',
+        !isThirdCol && 'sm:max-md:border-r lg:max-xl:border-r',
+        !isFourthCol && 'xl:border-r',
+      )}
       ref={ref}
     >
       <BYOBProductItemMedia

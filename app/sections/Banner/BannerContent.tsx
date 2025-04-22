@@ -1,4 +1,5 @@
 import {useMemo} from 'react';
+import clsx from 'clsx';
 
 import {Link} from '~/components/Link';
 
@@ -41,10 +42,18 @@ export function BannerContent({
 
   return (
     <div
-      className={`pointer-events-none relative flex size-full p-4 md:p-8 xl:p-12 ${positionClasses} ${darkOverlayClass}`}
+      className={clsx(
+        'pointer-events-none relative flex size-full p-4 md:p-8 xl:p-12',
+        positionClasses,
+        darkOverlayClass,
+      )}
     >
       <div
-        className={`pointer-events-auto flex flex-col gap-6 ${alignmentClasses} ${maxWidthContentClasses}`}
+        className={clsx(
+          'pointer-events-auto flex flex-col gap-6',
+          alignmentClasses,
+          maxWidthContentClasses,
+        )}
         style={{color}}
       >
         <div>
@@ -62,13 +71,13 @@ export function BannerContent({
         </div>
 
         {buttons?.length > 0 && (
-          <ul className={`flex flex-col justify-center gap-4 xs:flex-row`}>
+          <ul className="flex flex-col justify-center gap-4 xs:flex-row">
             {buttons?.slice(0, 2).map(({link, style}, index) => {
               return (
                 <li key={index}>
                   <Link
                     aria-label={link?.text}
-                    className={style}
+                    className={clsx(style)}
                     to={link?.url}
                     newTab={link?.newTab}
                     type={link?.type}

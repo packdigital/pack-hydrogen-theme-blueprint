@@ -1,5 +1,6 @@
 import {useMemo, useRef} from 'react';
 import {v4 as uuidv4} from 'uuid';
+import clsx from 'clsx';
 
 import {Link} from '~/components/Link';
 
@@ -65,9 +66,11 @@ export function HeroContent({
 
   return (
     <div
-      className={`absolute inset-0 flex size-full p-4 md:p-8 xl:p-12 ${positionClasses} ${darkOverlayClass} ${
-        isActiveSlide ? 'pointer-events-auto' : 'pointer-events-none'
-      }`}
+      className={clsx(
+        'absolute inset-0 flex size-full p-4 md:p-8 xl:p-12',
+        positionClasses,
+        darkOverlayClass,
+      )}
     >
       <style>
         {`.${heroTextColorClass} {
@@ -82,9 +85,13 @@ export function HeroContent({
       </style>
 
       <div
-        className={`relative flex flex-col gap-6 ${alignmentClasses} ${maxWidthContentClasses}`}
+        className={clsx(
+          'relative flex flex-col gap-6',
+          alignmentClasses,
+          maxWidthContentClasses,
+        )}
       >
-        <div className={`${heroTextColorClass} ${hiddenHeadingClasses}`}>
+        <div className={clsx(heroTextColorClass, hiddenHeadingClasses)}>
           {superheading && (
             <p className="text-superheading max-lg:mb-1">{superheading}</p>
           )}
@@ -100,14 +107,17 @@ export function HeroContent({
 
         {button?.buttons?.length > 0 && (
           <ul
-            className={`flex flex-col justify-center gap-4 xs:flex-row ${hiddenButtonClasses}`}
+            className={clsx(
+              'flex flex-col justify-center gap-4 xs:flex-row',
+              hiddenButtonClasses,
+            )}
           >
             {button?.buttons?.slice(0, 2).map(({link, style}, index) => {
               return (
                 <li key={index}>
                   <Link
                     aria-label={link?.text}
-                    className={style}
+                    className={clsx(style)}
                     to={button.clickableSlide ? null : link?.url}
                     newTab={link?.newTab}
                     type={link?.type}

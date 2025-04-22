@@ -1,4 +1,5 @@
 import {useEffect} from 'react';
+import clsx from 'clsx';
 import type {
   AttributeInput,
   SellingPlan,
@@ -64,10 +65,15 @@ export function AddToCart({
   const isNotifyMeClass = isNotifyMe ? 'btn-inverse-dark' : 'btn-primary';
 
   return (
-    <div className={`${containerClassName}`}>
+    <div className={clsx(containerClassName)}>
       <button
         aria-label={buttonText}
-        className={`${isNotifyMeClass} relative w-full ${isUpdatingClass} ${className}`}
+        className={clsx(
+          isNotifyMeClass,
+          'relative w-full',
+          isUpdatingClass,
+          className,
+        )}
         disabled={!!isSoldOut && !isNotifyMe}
         onClick={() => {
           if (isNotifyMe) {
@@ -80,7 +86,7 @@ export function AddToCart({
         }}
         type="button"
       >
-        <span className={`${isAdding || isAdded ? 'invisible' : 'visible'}`}>
+        <span className={clsx(isAdding || isAdded ? 'invisible' : 'visible')}>
           {buttonText}
           {!isSoldOut && (
             <span className="font-normal">

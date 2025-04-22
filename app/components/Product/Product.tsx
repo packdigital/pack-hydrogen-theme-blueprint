@@ -1,5 +1,6 @@
-import {useEffect, useMemo} from 'react';
+import {useEffect, useMemo, memo} from 'react';
 import {useProduct} from '@shopify/hydrogen-react';
+import clsx from 'clsx';
 
 import {COLOR_OPTION_NAME} from '~/lib/constants';
 import {useLocale, useParsedProductMetafields, useSettings} from '~/hooks';
@@ -86,9 +87,10 @@ export function Product({
 
           <div>
             <div
-              className={`md:sticky ${
-                isModalProduct ? 'md:top-10 lg:top-12' : stickyTopClass
-              }`}
+              className={clsx(
+                'md:sticky',
+                isModalProduct ? 'md:top-10 lg:top-12' : stickyTopClass,
+              )}
             >
               <ProductMedia
                 product={product}
@@ -100,9 +102,10 @@ export function Product({
 
           <div className="max-md:px-4 md:pl-4 lg:pl-10 xl:pl-16">
             <div
-              className={`flex flex-col gap-y-4 md:sticky ${
-                isModalProduct ? 'md:top-10 lg:top-12' : stickyTopClass
-              }`}
+              className={clsx(
+                'flex flex-col gap-y-4 md:sticky',
+                isModalProduct ? 'md:top-10 lg:top-12' : stickyTopClass,
+              )}
             >
               {/* desktop header placement */}
               <ProductHeader

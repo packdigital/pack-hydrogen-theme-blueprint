@@ -1,4 +1,5 @@
 import {memo} from 'react';
+import clsx from 'clsx';
 
 import {Link} from '~/components/Link';
 import {Svg} from '~/components/Svg';
@@ -56,15 +57,22 @@ export const Navigation = memo(
 
     return (
       <div
-        className={`px-contained relative z-[1] grid flex-1 grid-cols-[1fr_auto_1fr] gap-4 border-b border-b-border transition md:gap-8 ${gridColsClassDesktop}`}
+        className={clsx(
+          'px-contained relative z-[1] grid flex-1 grid-cols-[1fr_auto_1fr] gap-4 border-b border-b-border transition md:gap-8',
+          gridColsClassDesktop,
+        )}
         data-comp={HEADER_NAVIGATION}
         style={{backgroundColor: bgColor, color: textColor}}
       >
-        <div className={`order-2 flex items-center ${logoOrderClassDesktop}`}>
+        <div
+          className={clsx('order-2 flex items-center', logoOrderClassDesktop)}
+        >
           <NavigationLogo color={iconColor} />
         </div>
 
-        <div className={`order-1 flex items-center ${menuOrderClassDesktop}`}>
+        <div
+          className={clsx('order-1 flex items-center', menuOrderClassDesktop)}
+        >
           <nav className="hidden h-full lg:flex">
             <ul className="flex">
               {navItems?.map((item, index) => {
@@ -85,9 +93,10 @@ export const Navigation = memo(
                       </p>
 
                       <div
-                        className={`absolute left-0 top-[calc(100%_-_2px)] h-[3px] w-full origin-center scale-0 border-t-2 border-t-primary bg-transparent transition after:w-full group-hover:scale-100 ${
-                          isHovered ? 'scale-100' : 'scale-0'
-                        }`}
+                        className={clsx(
+                          'absolute left-0 top-[calc(100%_-_2px)] h-[3px] w-full origin-center scale-0 border-t-2 border-t-primary bg-transparent transition after:w-full group-hover:scale-100',
+                          isHovered ? 'scale-100' : 'scale-0',
+                        )}
                       />
                     </Link>
                   </li>

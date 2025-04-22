@@ -1,4 +1,5 @@
 import {useMemo} from 'react';
+import clsx from 'clsx';
 
 import {Svg} from '~/components/Svg';
 
@@ -51,11 +52,11 @@ export function ReviewStars({
   };
 
   return (
-    <ul className={`flex items-center ${classBySize[size]?.gap}`}>
+    <ul className={clsx('flex items-center', classBySize[size]?.gap)}>
       {stars.map(({key, label}, index) => (
         <li key={index}>
           <Svg
-            className={`${classBySize[size]?.width}`}
+            className={clsx(classBySize[size]?.width)}
             src={`/svgs/${key}.svg#${key}`}
             style={{color}}
             title={label}

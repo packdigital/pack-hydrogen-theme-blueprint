@@ -1,4 +1,5 @@
 import {useMemo} from 'react';
+import clsx from 'clsx';
 
 import {COLOR_OPTION_NAME, PRICE_FILTER_ID} from '~/lib/constants';
 import {isLightHexColor} from '~/lib/utils';
@@ -85,9 +86,11 @@ export function CollectionFilterOption({
   return (
     <button
       aria-label={`Add ${label} to filters`}
-      className={`group flex gap-3 px-4 text-left text-base transition max-md:h-10 max-md:w-full max-md:items-center md:gap-2 hover:md:text-text disabled:hover:md:text-neutralMedium ${
-        disabled ? 'cursor-not-allowed opacity-60' : ''
-      } ${isActive ? 'text-text max-md:font-bold' : 'text-neutralMedium'}`}
+      className={clsx(
+        'group flex gap-3 px-4 text-left text-base transition max-md:h-10 max-md:w-full max-md:items-center md:gap-2 hover:md:text-text disabled:hover:md:text-neutralMedium',
+        disabled && 'cursor-not-allowed opacity-60',
+        isActive ? 'text-text max-md:font-bold' : 'text-neutralMedium',
+      )}
       disabled={disabled}
       onClick={() => {
         if (isActive) {
@@ -99,11 +102,12 @@ export function CollectionFilterOption({
       type="button"
     >
       <div
-        className={`relative flex size-5 items-center justify-center overflow-hidden border border-border transition md:mt-px md:size-[18px] ${
-          isColor ? 'rounded-[50%]' : 'rounded'
-        } ${!disabled ? 'group-hover:md:border-text' : ''} ${
-          isActive ? 'border-text' : ''
-        }`}
+        className={clsx(
+          'relative flex size-5 items-center justify-center overflow-hidden border border-border transition md:mt-px md:size-[18px]',
+          isColor ? 'rounded-[50%]' : 'rounded',
+          !disabled && 'group-hover:md:border-text',
+          isActive && 'border-text',
+        )}
         style={{
           backgroundColor: isColor ? colorBackground : nonColorBackground,
         }}
@@ -123,23 +127,26 @@ export function CollectionFilterOption({
         )}
 
         <div
-          className={`media-fill rounded-[1px] border-white transition-[border-width] duration-100 ${
-            isActive ? 'border-0 md:border-0' : 'border-0'
-          }`}
+          className={clsx(
+            'media-fill rounded-[1px] border-white transition-[border-width] duration-100',
+            isActive ? 'border-0 md:border-0' : 'border-0',
+          )}
         />
 
         <Svg
           src="/svgs/checkmark.svg#checkmark"
           viewBox="0 0 24 24"
-          className={`pointer-events-none w-6 transition md:w-5 ${checkmarkColor} ${
-            isActive ? 'opacity-100' : 'opacity-0'
-          }`}
+          className={clsx(
+            'pointer-events-none w-6 transition md:w-5',
+            checkmarkColor,
+            isActive ? 'opacity-100' : 'opacity-0',
+          )}
         />
       </div>
 
       <p className="flex-1 text-sm">
         {label}{' '}
-        <span className={`text-2xs ${showCount ? 'inline' : 'hidden'}`}>
+        <span className={clsx('text-2xs', showCount ? 'inline' : 'hidden')}>
           ({count})
         </span>
       </p>

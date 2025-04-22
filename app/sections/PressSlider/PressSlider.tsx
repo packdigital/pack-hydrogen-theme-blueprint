@@ -1,6 +1,7 @@
 import {useState} from 'react';
 import {Autoplay, Thumbs} from 'swiper/modules';
 import {Swiper, SwiperSlide} from 'swiper/react';
+import clsx from 'clsx';
 import type {SwiperClass} from 'swiper/react';
 
 import {Container} from '~/components/Container';
@@ -30,7 +31,7 @@ export function PressSlider({cms}: {cms: PressSliderCms}) {
         }}
       >
         {slides?.length > 0 && (
-          <div className={`mx-auto pt-4 ${maxWidthContainerClass}`}>
+          <div className={clsx('mx-auto pt-4', maxWidthContainerClass)}>
             <Swiper
               autoplay={{
                 delay: 8000,

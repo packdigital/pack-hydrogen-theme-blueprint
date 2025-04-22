@@ -1,3 +1,5 @@
+import clsx from 'clsx';
+
 import type {InnerOptionValueProps} from './ProductOptionValue.types';
 
 export function InnerOptionValue({
@@ -16,7 +18,12 @@ export function InnerOptionValue({
 
   return (
     <div
-      className={`relative flex h-10 min-w-14 items-center justify-center rounded border border-border px-3 transition ${validClass} ${unavailableClass} ${selectedClass}`}
+      className={clsx(
+        'relative flex h-10 min-w-14 items-center justify-center rounded border border-border px-3 transition',
+        validClass,
+        unavailableClass,
+        selectedClass,
+      )}
     >
       {optionValue.name}
     </div>

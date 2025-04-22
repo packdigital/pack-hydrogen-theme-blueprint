@@ -6,6 +6,7 @@ import {
   DisclosurePanel,
   Transition,
 } from '@headlessui/react';
+import clsx from 'clsx';
 
 import {PRICE_FILTER_ID} from '~/lib/constants';
 import {Svg} from '~/components/Svg';
@@ -97,7 +98,7 @@ export function CollectionFilterDropdown({
         <>
           <DisclosureButton
             aria-label={filter.label}
-            className={`relative flex min-h-12 w-full items-center justify-between gap-4 px-4 py-2 text-left`}
+            className="relative flex min-h-12 w-full items-center justify-between gap-4 px-4 py-2 text-left"
           >
             <div className="flex flex-1 items-center">
               <h3 className="text-nav">{filter.label}</h3>
@@ -110,7 +111,7 @@ export function CollectionFilterDropdown({
             </div>
 
             <Svg
-              className={`w-4 text-text ${open ? 'rotate-180' : ''}`}
+              className={clsx('w-4 text-text', open && 'rotate-180')}
               src="/svgs/chevron-down.svg#chevron-down"
               title="Chevron"
               viewBox="0 0 24 24"

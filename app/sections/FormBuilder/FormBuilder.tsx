@@ -1,4 +1,5 @@
-import {Fragment, useEffect, useRef, useState, useCallback} from 'react';
+import {Fragment, useEffect, useRef, useState, useCallback, memo} from 'react';
+import clsx from 'clsx';
 
 import {Container} from '~/components/Container';
 import {useLoadScript, useRootLoaderData} from '~/hooks';
@@ -88,7 +89,7 @@ export function FormBuilder({cms}: {cms: FormBuilderCms}) {
   return (
     <Container container={cms.container}>
       <div className="px-contained py-contained">
-        <div className={`mx-auto ${section?.maxWidth}`}>
+        <div className={clsx('mx-auto', section?.maxWidth)}>
           {heading && (
             <h2 className="text-h2 mb-4 md:mb-6 lg:mb-8">{heading}</h2>
           )}

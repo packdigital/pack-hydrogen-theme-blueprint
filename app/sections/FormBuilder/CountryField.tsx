@@ -1,4 +1,5 @@
 import {useMemo} from 'react';
+import clsx from 'clsx';
 
 import {useCountriesList} from '~/hooks';
 
@@ -29,7 +30,7 @@ export function CountryField({
 
   return (
     <select
-      className={`${selectClass}`}
+      className={clsx(selectClass)}
       id={name}
       name={name}
       required={required}

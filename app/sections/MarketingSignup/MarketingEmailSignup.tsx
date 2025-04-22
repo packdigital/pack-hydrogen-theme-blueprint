@@ -1,4 +1,5 @@
 import {useEffect} from 'react';
+import clsx from 'clsx';
 
 import {LoadingDots} from '~/components/Animations';
 import {useMarketingListSubscribe} from '~/hooks';
@@ -45,7 +46,7 @@ export function MarketingEmailSignup({
         disabled={!listId}
         type="submit"
       >
-        <span className={`${isSubmitting ? 'invisible' : 'visible'}`}>
+        <span className={clsx(isSubmitting ? 'invisible' : 'visible')}>
           {buttonText}
         </span>
 

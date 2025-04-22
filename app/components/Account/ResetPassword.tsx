@@ -1,5 +1,6 @@
 import {useEffect, useState} from 'react';
 import {useNavigate} from '@remix-run/react';
+import clsx from 'clsx';
 
 import {LoadingDots} from '~/components/Animations';
 import {Link} from '~/components/Link';
@@ -62,12 +63,13 @@ export function ResetPassword() {
 
           <button
             aria-label="Submit to reset password"
-            className={`btn-primary mt-3 min-w-40 self-center ${
-              status.started ? 'cursor-default' : ''
-            }`}
+            className={clsx(
+              'btn-primary mt-3 min-w-40 self-center',
+              status.started && 'cursor-default',
+            )}
             type="submit"
           >
-            <span className={`${status.started ? 'invisible' : 'visible'}`}>
+            <span className={clsx(status.started ? 'invisible' : 'visible')}>
               {buttonText}
             </span>
 

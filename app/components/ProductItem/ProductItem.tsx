@@ -112,10 +112,7 @@ export const ProductItem = memo(
     }, [index, publish, selectedProduct?.id, selectedVariant?.id, searchTerm]);
 
     return (
-      <div
-        className="group flex h-full flex-col justify-between"
-        ref={inViewRef}
-      >
+      <div className="group relative flex flex-col gap-2" ref={inViewRef}>
         <div className="flex flex-col items-start">
           <Link
             aria-label={title}

@@ -1,4 +1,5 @@
 import {useMemo} from 'react';
+import clsx from 'clsx';
 
 import {Link} from '~/components/Link';
 import {RichText} from '~/components/RichText';
@@ -21,7 +22,6 @@ export function HalfHeroContent({
     subtext,
     superheading,
   } = {...content};
-  const alignmentClasses = `${alignmentMobile} ${alignmentDesktop}`;
 
   const headingWithBreaks = useMemo(() => {
     const splitHeading = heading?.split('\n');
@@ -38,12 +38,18 @@ export function HalfHeroContent({
 
   return (
     <div
-      className={`px-contained py-contained w-full ${
-        fullBleed ? '' : mediaOrderDesktop === '2' ? 'md:!pl-0' : 'md:!pr-0'
-      }`}
+      className={clsx(
+        'px-contained py-contained w-full',
+        fullBleed ? '' : mediaOrderDesktop === '2' ? 'md:!pl-0' : 'md:!pr-0',
+      )}
     >
       <div
-        className={`mx-auto flex flex-col gap-4 ${alignmentClasses} ${maxWidthDesktop}`}
+        className={clsx(
+          'mx-auto flex flex-col gap-4',
+          alignmentMobile,
+          alignmentDesktop,
+          maxWidthDesktop,
+        )}
         style={{color}}
       >
         <div>
@@ -67,7 +73,7 @@ export function HalfHeroContent({
                 <li key={index}>
                   <Link
                     aria-label={link?.text}
-                    className={style}
+                    className={clsx(style)}
                     to={link?.url}
                     newTab={link?.newTab}
                     type={link?.type}

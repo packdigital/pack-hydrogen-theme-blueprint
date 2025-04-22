@@ -1,7 +1,8 @@
 import {memo, useEffect} from 'react';
-import type {SwiperProps} from 'swiper/react';
 import {Swiper, SwiperSlide} from 'swiper/react';
 import {A11y, EffectFade, Autoplay, Navigation} from 'swiper/modules';
+import clsx from 'clsx';
+import type {SwiperProps} from 'swiper/react';
 
 import {Link} from '~/components/Link';
 import {useMatchMedia, useMenu, usePromobar, useSettings} from '~/hooks';
@@ -77,11 +78,12 @@ export const Promobar = memo(() => {
 
   return (
     <div
-      className={`overflow-hidden transition-[height] ease-out ${
+      className={clsx(
+        'overflow-hidden transition-[height] ease-out',
         promobarOpen && !promobarDisabled
           ? 'duration-300 max-md:h-[var(--promobar-height-mobile)] md:h-[var(--promobar-height-desktop)]'
-          : 'h-0 duration-[50ms]'
-      }`}
+          : 'h-0 duration-[50ms]',
+      )}
       style={{backgroundColor: bgColor}}
     >
       {enabled && messages?.length ? (

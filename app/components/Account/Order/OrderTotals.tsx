@@ -1,5 +1,6 @@
 import {useMemo} from 'react';
 import {Money} from '@shopify/hydrogen-react';
+import clsx from 'clsx';
 import type {Order} from '@shopify/hydrogen/storefront-api-types';
 
 export function OrderTotals({order}: {order: Order}) {
@@ -69,9 +70,9 @@ export function OrderTotals({order}: {order: Order}) {
 
             <Money
               as="p"
-              className={`${
-                label === 'Total' ? 'text-lg font-bold' : 'text-sm'
-              }`}
+              className={clsx(
+                label === 'Total' ? 'text-lg font-bold' : 'text-sm',
+              )}
               data={{amount, currencyCode}}
             />
           </div>

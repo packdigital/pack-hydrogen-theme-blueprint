@@ -1,5 +1,6 @@
-import type {ChangeEvent} from 'react';
 import {useCallback, useEffect, useMemo, useState, useRef} from 'react';
+import clsx from 'clsx';
+import type {ChangeEvent} from 'react';
 
 import {parseAsCurrency} from '~/lib/utils';
 import {useLocale} from '~/hooks';
@@ -100,9 +101,10 @@ export const MultiRangeSlider = ({
             setMinVal(value);
             e.target.value = value.toString();
           }}
-          className={`range-thumb z-[3] w-full ${
-            minVal > max - 100 ? 'z-[5]' : ''
-          }`}
+          className={clsx(
+            'range-thumb z-[3] w-full',
+            minVal > max - 100 && 'z-[5]',
+          )}
         />
         <label htmlFor="multirange-slider-min" className="sr-only">
           Min
@@ -143,9 +145,10 @@ export const MultiRangeSlider = ({
           <button
             type="button"
             aria-label={`Set min and max values to ${minVal} and ${maxVal}`}
-            className={`mt-3 rounded border border-border px-1 py-px text-xs font-bold uppercase transition ${
-              hasChanges ? '' : 'opacity-40'
-            }`}
+            className={clsx(
+              'mt-3 rounded border border-border px-1 py-px text-xs font-bold uppercase transition',
+              !hasChanges && 'opacity-40',
+            )}
             disabled={!hasChanges}
             onClick={() => {
               if (typeof onSubmit !== 'function') return;
@@ -158,9 +161,10 @@ export const MultiRangeSlider = ({
           <button
             type="button"
             aria-label={`Set min and max values to ${minVal} and ${maxVal}`}
-            className={`mt-3 rounded border border-border px-1 py-px text-xs font-bold uppercase ${
-              canReset ? '' : 'opacity-40'
-            }`}
+            className={clsx(
+              'mt-3 rounded border border-border px-1 py-px text-xs font-bold uppercase',
+              !canReset && 'opacity-40',
+            )}
             onClick={onReset}
           >
             Reset

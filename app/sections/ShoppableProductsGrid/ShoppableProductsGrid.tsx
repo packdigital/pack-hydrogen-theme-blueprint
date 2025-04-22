@@ -1,5 +1,6 @@
 import {useMemo} from 'react';
 import {useInView} from 'react-intersection-observer';
+import clsx from 'clsx';
 import type {Product} from '@shopify/hydrogen/storefront-api-types';
 
 import type {ContainerSettings} from '~/settings/container';
@@ -59,11 +60,18 @@ export function ShoppableProductsGrid({
       <div className="px-contained py-contained">
         <div className="mx-auto w-full max-w-[var(--content-max-width)]">
           {heading && (
-            <h2 className={`mb-5 md:mb-8 ${headingTextAlign}`}>{heading}</h2>
+            <h2 className={clsx('mb-5 md:mb-8', headingTextAlign)}>
+              {heading}
+            </h2>
           )}
 
           <ul
-            className={`grid w-full gap-x-4 gap-y-8 xs:gap-x-5 md:px-0 ${columnsMobile} ${columnsTablet} ${columnsDesktop}`}
+            className={clsx(
+              'grid w-full gap-x-4 gap-y-8 xs:gap-x-5 md:px-0',
+              columnsMobile,
+              columnsTablet,
+              columnsDesktop,
+            )}
             ref={ref}
           >
             {(fullProducts.length ? fullProducts : placeholderProducts).map(

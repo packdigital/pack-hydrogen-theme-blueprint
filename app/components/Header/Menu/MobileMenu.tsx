@@ -1,4 +1,5 @@
 import {memo} from 'react';
+import clsx from 'clsx';
 
 import {Link} from '~/components/Link';
 import {Drawer} from '~/components/Drawer';
@@ -87,9 +88,10 @@ export const MobileMenu = memo(
       >
         <div className="relative w-full flex-1 overflow-x-hidden">
           <div
-            className={`scrollbar-hide size-full overflow-y-auto ${
-              activeSubmenuHasContent ? 'invisible' : 'visible'
-            }`}
+            className={clsx(
+              'scrollbar-hide size-full overflow-y-auto',
+              activeSubmenuHasContent ? 'invisible' : 'visible',
+            )}
           >
             <nav className="mb-8 flex">
               <ul className="flex w-full flex-col">

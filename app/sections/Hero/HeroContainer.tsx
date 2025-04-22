@@ -1,5 +1,6 @@
 import {useRef} from 'react';
 import {v4 as uuidv4} from 'uuid';
+import clsx from 'clsx';
 
 import type {HeroContainerProps} from './Hero.types';
 
@@ -58,7 +59,7 @@ export function HeroContainer({children, cms}: HeroContainerProps) {
   const nativeAspectRatiosClass = `hero-native-aspect-ratios-${randomId}`;
 
   return (
-    <div className={`${fullBleedClass}`}>
+    <div className={clsx(fullBleedClass)}>
       {/* For dynamic media queries, it must be done outside of tailwind using a style block */}
       {(usesDesktopNativeAspectRatio || usesMobileNativeAspectRatio) && (
         <style>
@@ -89,7 +90,12 @@ export function HeroContainer({children, cms}: HeroContainerProps) {
       )}
 
       <div
-        className={`relative mx-auto flex w-full flex-col bg-neutralLightest ${nativeAspectRatiosClass} ${heightContainerClasses} ${maxWidthContainerClass}`}
+        className={clsx(
+          'relative mx-auto flex w-full flex-col bg-neutralLightest',
+          nativeAspectRatiosClass,
+          heightContainerClasses,
+          maxWidthContainerClass,
+        )}
       >
         {children}
       </div>

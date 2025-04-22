@@ -1,4 +1,5 @@
 import {useMemo} from 'react';
+import clsx from 'clsx';
 
 import {AddToCart} from '~/components/AddToCart';
 import {COLOR_OPTION_NAME} from '~/lib/constants';
@@ -48,9 +49,10 @@ export function QuickShop({
 
   return qualifiesForQuickShop && selectedVariant ? (
     <div
-      className={`mt-5 transition md:block md:opacity-0 md:group-hover:opacity-100 lg:mt-6 ${
-        quickShopMobileHidden ? 'max-md:hidden' : ''
-      }`}
+      className={clsx(
+        'mt-5 transition md:block md:opacity-0 md:group-hover:opacity-100 lg:mt-6',
+        quickShopMobileHidden && 'max-md:hidden',
+      )}
     >
       {usesAddToCart && (
         <AddToCart

@@ -1,4 +1,5 @@
 import {useInView} from 'react-intersection-observer';
+import clsx from 'clsx';
 
 import {Container} from '~/components/Container';
 import {Image} from '~/components/Image';
@@ -23,11 +24,15 @@ export function SocialMediaGrid({cms}: {cms: SocialMediaGridCms}) {
   return (
     <Container container={cms.container}>
       <div
-        className={`py-px ${section?.fullBleed ? '' : 'px-contained'}`}
+        className={clsx('py-px', !section?.fullBleed && 'px-contained')}
         ref={ref}
       >
-        <ul
-          className={`mx-auto grid grid-cols-2 sm:grid-cols-4 ${gridGap} ${maxWidthClass}`}
+        <div
+          className={clsx(
+            'mx-auto grid grid-cols-2 sm:grid-cols-4',
+            gridGap,
+            maxWidthClass,
+          )}
         >
           {media?.slice(0, 4).map((item, index) => {
             const videoUrl =
@@ -41,7 +46,9 @@ export function SocialMediaGrid({cms}: {cms: SocialMediaGridCms}) {
                   to={item.url}
                   newTab
                 >
-                  <div className={`relative bg-neutralLightest ${aspectRatio}`}>
+                  <div
+                    className={clsx('relative bg-neutralLightest', aspectRatio)}
+                  >
                     {inView && (
                       <>
                         {videoUrl ? (
@@ -83,7 +90,7 @@ export function SocialMediaGrid({cms}: {cms: SocialMediaGridCms}) {
               </li>
             );
           })}
-        </ul>
+        </div>
       </div>
     </Container>
   );

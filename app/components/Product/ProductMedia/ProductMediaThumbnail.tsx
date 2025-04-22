@@ -1,3 +1,5 @@
+import clsx from 'clsx';
+
 import {Image} from '~/components/Image';
 import {Svg} from '~/components/Svg';
 
@@ -14,9 +16,10 @@ export function ProductMediaThumbnail({
   return (
     <button
       aria-label={`Slide to product image ${index + 1}`}
-      className={`relative flex aspect-square w-full select-none items-center justify-center overflow-hidden rounded border transition ${
-        isActive ? ' border-black' : 'border-transparent'
-      }`}
+      className={clsx(
+        'relative flex aspect-square w-full select-none items-center justify-center overflow-hidden rounded border transition',
+        isActive ? 'border-black' : 'border-transparent',
+      )}
       onClick={() => swiper?.slideTo(index)}
       type="button"
     >

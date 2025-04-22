@@ -1,6 +1,7 @@
 import {useState, forwardRef} from 'react';
-import type {SwiperClass} from 'swiper/react';
 import {Swiper, SwiperSlide} from 'swiper/react';
+import clsx from 'clsx';
+import type {SwiperClass} from 'swiper/react';
 
 import {Spinner} from '~/components/Animations';
 import type {MediaCms} from '~/lib/types';
@@ -43,12 +44,13 @@ export const TilesSlider = forwardRef(
     const isGridOnDesktop = tiles?.length === tilesPerViewDesktop;
 
     return tiles?.length > 0 ? (
-      <div className={`mx-auto ${maxWidthClass}`} ref={ref}>
+      <div className={clsx('mx-auto', maxWidthClass)} ref={ref}>
         {/* mobile/tablet/desktop */}
         <div
-          className={`relative [&_.swiper]:overflow-visible ${
-            isGridOnDesktop ? 'lg:hidden' : ''
-          }`}
+          className={clsx(
+            'relative [&_.swiper]:overflow-visible',
+            isGridOnDesktop && 'lg:hidden',
+          )}
         >
           <Swiper
             grabCursor

@@ -2,6 +2,7 @@
 /* eslint-disable jsx-a11y/media-has-caption */
 import {useEffect, useRef, useState} from 'react';
 import {useInView} from 'react-intersection-observer';
+import clsx from 'clsx';
 
 import {Svg} from '~/components/Svg';
 
@@ -52,9 +53,10 @@ export function HalfHeroVideo({
       {!autoplay && !sound && (
         <button
           aria-label={`Play video for ${videoAlt}`}
-          className={`group absolute inset-0 size-full transition md:hover:bg-transparent ${
-            !isPlaying ? 'bg-[rgba(0,0,0,0.2)]' : ''
-          }`}
+          className={clsx(
+            'group absolute inset-0 size-full transition md:hover:bg-transparent',
+            !isPlaying && 'bg-[rgba(0,0,0,0.2)]',
+          )}
           onClick={() => setIsPlaying(!isPlaying)}
           type="button"
         >

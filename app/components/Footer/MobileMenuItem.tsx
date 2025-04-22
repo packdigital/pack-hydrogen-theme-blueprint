@@ -1,4 +1,5 @@
 import {Disclosure, DisclosureButton, DisclosurePanel} from '@headlessui/react';
+import clsx from 'clsx';
 
 import {Expand} from '~/components/Expand';
 import {Link} from '~/components/Link';
@@ -23,7 +24,7 @@ export function MobileMenuItem({
             <h3 className="text-nav">{item.title}</h3>
 
             <Svg
-              className={`w-4 text-white ${open ? 'rotate-180' : ''}`}
+              className={clsx('w-4 text-white', open && 'rotate-180')}
               src="/svgs/chevron-down.svg#chevron-down"
               title="Chevron"
               viewBox="0 0 24 24"

@@ -1,4 +1,5 @@
 import {useMemo} from 'react';
+import clsx from 'clsx';
 
 import {BackInStockModal} from '~/components/BackInStockModal';
 import {Spinner} from '~/components/Animations';
@@ -45,7 +46,12 @@ export function QuickShopOption({
   return (
     <button
       aria-label={optionValue.name}
-      className={`group/option relative flex size-full items-center justify-center whitespace-nowrap text-center text-sm transition ${validClass} ${unavailableClass} ${isUpdatingClass}`}
+      className={clsx(
+        'group/option relative flex size-full items-center justify-center whitespace-nowrap text-center text-sm transition',
+        validClass,
+        unavailableClass,
+        isUpdatingClass,
+      )}
       disabled={disabled || isSoldOut}
       onClick={() => {
         if (isNotifyMe) {

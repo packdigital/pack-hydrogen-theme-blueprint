@@ -1,4 +1,5 @@
 import {memo} from 'react';
+import clsx from 'clsx';
 
 import {Image} from '~/components/Image';
 import {Link} from '~/components/Link';
@@ -37,9 +38,10 @@ export const DesktopMenu = memo(
     return (
       <div
         data-comp={DesktopMenu.displayName}
-        className={`absolute left-0 top-full hidden w-full origin-top border-border bg-background transition duration-200 lg:block ${
-          activeMenuHasContent ? 'scale-y-100 border-b' : 'scale-y-0'
-        }`}
+        className={clsx(
+          'absolute left-0 top-full hidden w-full origin-top border-border bg-background transition duration-200 lg:block',
+          activeMenuHasContent ? 'scale-y-100 border-b' : 'scale-y-0',
+        )}
         onMouseEnter={handleDesktopMenuStayOpen}
         onMouseLeave={handleDesktopMenuHoverOut}
       >
@@ -53,9 +55,10 @@ export const DesktopMenu = memo(
             <nav
               key={index}
               inert={!isActiveMenu}
-              className={`mx-auto grid max-w-[70rem] grid-cols-[12rem_1fr] gap-5 p-8 md:p-12 ${
-                !isActiveMenu ? 'hidden' : ''
-              }`}
+              className={clsx(
+                'mx-auto grid max-w-[70rem] grid-cols-[12rem_1fr] gap-5 p-8 md:p-12',
+                !isActiveMenu && 'hidden',
+              )}
             >
               <div>
                 <ul className="flex flex-col gap-2">

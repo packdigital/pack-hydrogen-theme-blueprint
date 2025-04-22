@@ -1,3 +1,5 @@
+import clsx from 'clsx';
+
 import {Container} from '~/components/Container';
 import {Image} from '~/components/Image';
 
@@ -39,7 +41,7 @@ export function Banner({cms}: {cms: BannerCms}) {
                 width: image.imageMobile.width,
                 height: image.imageMobile.height,
               }}
-              className={`media-fill ${image.positionMobile}`}
+              className={clsx('media-fill', image.positionMobile)}
               loading="eager"
               sizes="100vw"
             />
@@ -63,7 +65,7 @@ export function Banner({cms}: {cms: BannerCms}) {
                 width: image.imageDesktop.width,
                 height: image.imageDesktop.height,
               }}
-              className={`media-fill ${image.positionDesktop}`}
+              className={clsx('media-fill', image.positionDesktop)}
               loading="eager"
               sizes="100vw"
             />

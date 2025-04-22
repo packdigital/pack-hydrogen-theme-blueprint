@@ -1,5 +1,6 @@
 import {memo} from 'react';
 import {useCart} from '@shopify/hydrogen-react';
+import clsx from 'clsx';
 
 import {Svg} from '~/components/Svg';
 import {useMenu} from '~/hooks';
@@ -13,7 +14,7 @@ export const NavigationCart = memo(
       <div className="relative flex items-center">
         <button
           aria-label="Open cart"
-          className={`w-5 text-text ${className}`}
+          className={clsx('w-5 text-text', className)}
           onClick={openCart}
           style={{color}}
           type="button"

@@ -1,4 +1,5 @@
 import MarqueeComp from 'react-fast-marquee';
+import clsx from 'clsx';
 
 import {Container} from '~/components/Container';
 import {RichText} from '~/components/RichText';
@@ -23,7 +24,7 @@ export function Marquee({cms}: {cms: MarqueeCms}) {
 
   return (
     <Container container={cms.container}>
-      <div className={`${section?.hasYPadding ? 'py-contained' : ''}`}>
+      <div className={clsx(section?.hasYPadding ? 'py-contained' : '')}>
         <MarqueeComp
           autoFill
           direction={marquee?.direction || 'left'}
@@ -39,9 +40,18 @@ export function Marquee({cms}: {cms: MarqueeCms}) {
             return (
               <RichText
                 key={index}
-                className={`${font} ${fontSizeMobile} ${fontSizeTablet} ${fontSizeDesktop} ${letterSpacing} ${spacing} ${
-                  uppercase ? 'uppercase' : ''
-                } ${yPaddingMobile} ${yPaddingTablet} ${yPaddingDesktop}`}
+                className={clsx(
+                  font,
+                  fontSizeMobile,
+                  fontSizeTablet,
+                  fontSizeDesktop,
+                  letterSpacing,
+                  spacing,
+                  uppercase ? 'uppercase' : '',
+                  yPaddingMobile,
+                  yPaddingTablet,
+                  yPaddingDesktop,
+                )}
               >
                 {item.text}
               </RichText>

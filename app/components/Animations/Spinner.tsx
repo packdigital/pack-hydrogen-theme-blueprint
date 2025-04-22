@@ -1,4 +1,5 @@
 import {useMemo} from 'react';
+import clsx from 'clsx';
 
 const baseWidth = 32;
 const baseBorderWidth = 4;
@@ -33,7 +34,7 @@ export function Spinner({
   return (
     <div
       style={{width: formattedWidth, height: formattedWidth, color}}
-      className={`relative ${className}`}
+      className={clsx('relative', className)}
     >
       <div
         className="inline-block size-full animate-spin-fast rounded-full border-solid border-current border-x-transparent border-t-transparent align-[-0.125em]"

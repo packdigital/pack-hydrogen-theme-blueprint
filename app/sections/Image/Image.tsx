@@ -1,4 +1,5 @@
 import {useMemo} from 'react';
+import clsx from 'clsx';
 
 import {Container} from '~/components/Container';
 import {Image as ImageComponent} from '~/components/Image';
@@ -33,13 +34,14 @@ export function Image({cms}: {cms: ImageCms}) {
   return (
     <Container container={cms.container}>
       <div
-        className={`py-4 md:py-6 lg:py-8 ${
-          enablePadding ? 'px-contained' : ''
-        }`}
+        className={clsx(
+          'py-4 md:py-6 lg:py-8',
+          enablePadding && 'px-contained',
+        )}
       >
         <Link
           aria-label={link?.text}
-          className={`mx-auto ${maxWidth}`}
+          className={clsx('mx-auto', maxWidth)}
           to={link?.url}
           newTab={link?.newTab}
           type={link?.type}
@@ -84,8 +86,8 @@ export function Image({cms}: {cms: ImageCms}) {
         </Link>
 
         {caption && (
-          <div className={`mt-3 ${enablePadding ? '' : 'px-contained'}`}>
-            <RichText className={`mx-auto ${maxWidth}`}>{caption}</RichText>
+          <div className={clsx('mt-3', !enablePadding && 'px-contained')}>
+            <RichText className={clsx('mx-auto', maxWidth)}>{caption}</RichText>
           </div>
         )}
       </div>

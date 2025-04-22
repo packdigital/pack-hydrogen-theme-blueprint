@@ -1,4 +1,5 @@
 import {useMemo} from 'react';
+import clsx from 'clsx';
 
 import {Image} from '~/components/Image';
 import {isLightHexColor} from '~/lib/utils';
@@ -37,7 +38,12 @@ export function InnerColorOptionValue({
 
   return (
     <div
-      className={`relative flex size-8 items-center justify-center overflow-hidden rounded-[50%] border border-border transition ${validClass} ${unavailableClass} ${selectedClass}`}
+      className={clsx(
+        'relative flex size-8 items-center justify-center overflow-hidden rounded-[50%] border border-border transition',
+        validClass,
+        unavailableClass,
+        selectedClass,
+      )}
       style={{backgroundColor: optionColor}}
     >
       {optionImageUrl && (
@@ -55,9 +61,10 @@ export function InnerColorOptionValue({
       )}
 
       <div
-        className={`media-fill rounded-[50%] border-white transition-[border-width] duration-100 ${
-          isSelected ? 'border-[3px]' : 'border-0'
-        }`}
+        className={clsx(
+          'media-fill rounded-[50%] border-white transition-[border-width] duration-100',
+          isSelected ? 'border-[3px]' : 'border-0',
+        )}
       />
     </div>
   );
