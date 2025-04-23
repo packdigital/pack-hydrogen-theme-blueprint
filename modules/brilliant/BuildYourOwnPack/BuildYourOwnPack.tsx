@@ -237,6 +237,7 @@ export function BuildYourOwnPack({cms}: {cms: BuildYourOwnPackCms}) {
           onOpenChange={setBundleSheetOpen}
           selectedItems={selectedItems}
           selectedBundle={selectedBundle}
+          handleRemoveFromBundle={handleRemoveFromBundle}
           clid={clid}
         />
 

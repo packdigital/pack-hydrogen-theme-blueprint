@@ -9,7 +9,7 @@ import {AddToCart} from './AddToCart';
 import {Button} from '~/components/ui/button';
 import {Card, CardContent} from '~/components/ui/card';
 import {ScrollArea, ScrollBar} from '~/components/ui/scroll-area';
-import {Separator} from '~/components/ui/separator';
+
 import {
   Sheet,
   SheetContent,
@@ -22,12 +22,14 @@ export function BundleSheet({
   open,
   onOpenChange,
   selectedItems,
+  handleRemoveFromBundle,
   selectedBundle,
   clid,
 }: {
   open: boolean;
   onOpenChange: (val: boolean) => void;
   selectedItems: ProductVariant[];
+  handleRemoveFromBundle: (id: string) => void;
   selectedBundle: ProductVariant | undefined;
   clid: string;
 }) {
@@ -66,7 +68,11 @@ export function BundleSheet({
         <ScrollArea className="flex-1 flex-col gap-2 overflow-y-auto pr-2">
           <div className="grid grid-cols-1 gap-2 pb-8 pt-4 md:grid-cols-1">
             {selectedItems.map((item, index) => (
-              <SheetItem key={item.id + index} item={item}></SheetItem>
+              <SheetItem
+                key={item.id + index}
+                item={item}
+                handleRemoveFromBundle={handleRemoveFromBundle}
+              ></SheetItem>
             ))}
           </div>
           <ScrollBar orientation="vertical" />
@@ -85,8 +91,14 @@ export function BundleSheet({
     </Sheet>
   );
 }
-
-function SheetItem({item}: {item: ProductVariant}) {
+// handleRemoveFromBundle = {handleRemoveFromBundle};
+function SheetItem({
+  item,
+  handleRemoveFromBundle,
+}: {
+  item: ProductVariant;
+  handleRemoveFromBundle: (id: string) => void;
+}) {
   const itemImageData = useMemo(
     () => ({
       altText: item.product?.title || '',
@@ -102,6 +114,10 @@ function SheetItem({item}: {item: ProductVariant}) {
     ],
   );
 
+  const onPressHandler = useCallback(() => {
+    handleRemoveFromBundle(item.id);
+  }, [handleRemoveFromBundle, item.id]);
+
   return (
     <Card className="relative rounded-sm bg-gray-100">
       <CardContent className="p-1">
@@ -116,7 +132,14 @@ function SheetItem({item}: {item: ProductVariant}) {
             {item?.product?.title}
           </div>
           <div className="">
-            <CircleX size="24" className="text-red-500" />
+            <Button
+              className="rounded-sm"
+              size="icon"
+              onClick={onPressHandler}
+              variant="destructive"
+            >
+              <CircleX className="text-white" />
+            </Button>
           </div>
         </div>
       </CardContent>
