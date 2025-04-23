@@ -6,8 +6,7 @@ import {QuantitySelector} from '~/components/QuantitySelector';
 import {Svg} from '~/components/Svg';
 
 export function BYOPQuickShop({
-  bundle = [],
-  bundleMapById = {},
+  selectedItems = [],
   handleAddToBundle,
   handleRemoveFromBundle,
   incrementDisabled = false,
@@ -16,11 +15,13 @@ export function BYOPQuickShop({
 }: BYOPQuickShopProps) {
   const [optionsVisible, setOptionsVisible] = useState(false);
 
+  /*
   // Ensure bundle is always an array
   const safeBundle = useMemo(
-    () => (Array.isArray(bundle) ? bundle : []),
-    [bundle],
+    () => (Array.isArray(selectedItems) ? selectedItems : []),
+    [selectedItems],
   );
+  */
 
   const variantToAdd = useMemo(() => {
     if (!selectedVariant) return undefined;
@@ -31,15 +32,17 @@ export function BYOPQuickShop({
   }, [product?.featuredImage, selectedVariant]);
 
   const quantityInBundle = useMemo(() => {
-    return safeBundle.filter(
+    return selectedItems.filter(
       (variant) => variant?.product?.handle === product?.handle,
     ).length;
-  }, [safeBundle, product]);
+  }, [selectedItems, product]);
 
+  /*
   const variantInBundle = bundleMapById[selectedVariant?.id || ''];
 
   const lastBundleIndexOfVariant =
     variantInBundle?.indexes?.[variantInBundle?.indexes?.length - 1] || -1;
+*/
 
   const qualifiesForQuickShop = useMemo(() => {
     if (!product) return false;

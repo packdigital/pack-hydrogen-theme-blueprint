@@ -125,7 +125,6 @@ export function BuildYourOwnPack({cms}: {cms: BuildYourOwnPackCms}) {
       return [...acc, productId];
     }, []);
   }, [chosenItems, productGroupings]);
-
   const preselectedProducts = useProductsByIds(validPreselectedIds);
 
   const bundleMapById = useMemo(() => {
@@ -233,7 +232,13 @@ export function BuildYourOwnPack({cms}: {cms: BuildYourOwnPackCms}) {
       <div className="w-full px-2 xl:mx-auto xl:max-w-7xl xl:px-0">
         {/* Top section with selection tools */}
 
-        <BundleSheet open={bundleSheetOpen} onOpenChange={setBundleSheetOpen} />
+        <BundleSheet
+          open={bundleSheetOpen}
+          onOpenChange={setBundleSheetOpen}
+          selectedItems={selectedItems}
+          selectedBundle={selectedBundle}
+          clid={clid}
+        />
 
         <div className="mb-4">
           <DesktopBundleSelector
@@ -254,10 +259,7 @@ export function BuildYourOwnPack({cms}: {cms: BuildYourOwnPackCms}) {
         <div className="mb-8">
           <ProductGrid
             products={products}
-            selectedCount={selectedCount}
-            selectedBundle={selectedBundle}
-            bundleProducts={selectedItems}
-            bundleMapById={bundleMapById}
+            selectedItems={selectedItems}
             incrementDisabled={incrementDisabled}
             handleRemoveFromBundle={handleRemoveFromBundle}
             handleAddToBundle={handleAddToBundle}

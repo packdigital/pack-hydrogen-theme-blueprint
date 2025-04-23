@@ -51,7 +51,14 @@ export interface BYOPSubnavProps {
 export interface BYOPAddToCartProps {
   addToCartUnlocked: boolean;
   bundle: ProductVariant[];
-  total: string;
   clid: string;
   selectedVariant: ProductVariant | undefined;
+}
+
+export interface AddToCartProps {
+  addToCartUnlocked: boolean;
+  bundle: ProductVariant[];
+  clid: string;
+  selectedBundle: ProductVariant | undefined;
+  afterAdd?: () => void;
 }

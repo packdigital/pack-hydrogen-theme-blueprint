@@ -1,5 +1,5 @@
 import {ProductVariant} from '@shopify/hydrogen-react/storefront-api-types';
-import {ArrowRightFromLine} from 'lucide-react';
+import {CircleArrowRight} from 'lucide-react';
 import {useMemo} from 'react';
 
 import {Button} from '~/components/ui/button';
@@ -75,7 +75,7 @@ export function DesktopProgressSection({
         </div>
         <div className="flex justify-center">
           <Button onClick={() => viewBundleSelection(true)} className="">
-            Review Your Pack <ArrowRightFromLine className="size-8" />
+            Review Your Pack <CircleArrowRight className="size-8" />
           </Button>
         </div>
       </div>
@@ -117,7 +117,7 @@ export function MobileProgressSection({
             className="mb-2"
             size="sm"
           >
-            Review Your Pack <ArrowRightFromLine className="size-8" />
+            Review Your Pack <CircleArrowRight className="size-8" />
           </Button>
         </div>
       </div>

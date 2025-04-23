@@ -1,6 +1,5 @@
 import {ProductVariant} from '@shopify/hydrogen-react/storefront-api-types';
 import {CircleCheck} from 'lucide-react';
-import {BundleMapById} from 'modules/brilliant/BuildYourOwnPack/BuildYourOwnPack.types';
 import {useEffect, useMemo, useState} from 'react';
 import {useInView} from 'react-intersection-observer';
 
@@ -14,20 +13,16 @@ import {cn} from '~/lib/utils';
 
 export function ProductGrid({
   products,
-  selectedCount,
-  selectedBundle,
-  bundleProducts,
-  bundleMapById,
+
+  selectedItems,
   incrementDisabled,
   handleRemoveFromBundle,
   handleAddToBundle,
   className,
 }: {
   products: ProductCms[];
-  selectedCount?: number;
-  selectedBundle?: ProductVariant | undefined;
-  bundleProducts: ProductVariant[];
-  bundleMapById: BundleMapById;
+
+  selectedItems: ProductVariant[];
   incrementDisabled: boolean;
   handleRemoveFromBundle: (id: string) => void;
   handleAddToBundle: (product: ProductVariant) => void;
@@ -44,8 +39,7 @@ export function ProductGrid({
             <ProductCard
               key={product?.id || index}
               handle={product?.handle || ''}
-              bundle={bundleProducts}
-              bundleMapById={bundleMapById}
+              selectedItems={selectedItems}
               incrementDisabled={incrementDisabled}
               handleRemoveFromBundle={handleRemoveFromBundle}
               handleAddToBundle={handleAddToBundle}
@@ -59,15 +53,13 @@ export function ProductGrid({
 
 export function ProductCard({
   handle,
-  bundle,
-  bundleMapById,
+  selectedItems,
   incrementDisabled,
   handleRemoveFromBundle,
   handleAddToBundle,
 }: {
   handle: string;
-  bundle: ProductVariant[];
-  bundleMapById: BundleMapById;
+  selectedItems: ProductVariant[];
   incrementDisabled: boolean;
   handleRemoveFromBundle: (id: string) => void;
   handleAddToBundle: (product: ProductVariant) => void;
@@ -88,8 +80,8 @@ export function ProductCard({
   }, [product]);
 
   const isSelected = useMemo(() => {
-    return !!bundle.find(({id}) => selectedVariant?.id === id);
-  }, [bundle, selectedVariant]);
+    return !!selectedItems?.find(({id}) => selectedVariant?.id === id);
+  }, [selectedItems, selectedVariant]);
 
   if (!handle) return null;
 
@@ -123,8 +115,7 @@ export function ProductCard({
 
           <div className="mt-2">
             <BYOPQuickShop
-              bundle={bundle}
-              bundleMapById={bundleMapById}
+              selectedItems={selectedItems}
               handleAddToBundle={handleAddToBundle}
               handleRemoveFromBundle={handleRemoveFromBundle}
               incrementDisabled={incrementDisabled}
@@ -137,7 +128,3 @@ export function ProductCard({
     </Card>
   );
 }
-/*
-mx-auto inline-flex w-full justify-center text-right md:ml-auto md:mr-0 md:mt-1
-
-*/

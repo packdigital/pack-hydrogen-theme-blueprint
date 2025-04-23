@@ -33,8 +33,7 @@ export interface BYOPProductItemVideoProps {
 }
 
 export interface BYOPQuickShopProps {
-  bundle: Bundle;
-  bundleMapById: BundleMapById;
+  selectedItems: Bundle;
   handleAddToBundle: HandleAddToBundle;
   handleRemoveFromBundle: HandleRemoveFromBundle;
   incrementDisabled: boolean;
@@ -43,7 +42,7 @@ export interface BYOPQuickShopProps {
 }
 
 export interface BYOPQuickShopOptionsProps {
-  bundle: Bundle;
+  selectedItems: Bundle;
   bundleMapById: BundleMapById;
   handleAddToBundle: HandleAddToBundle;
   handleRemoveFromBundle: HandleRemoveFromBundle;
@@ -53,7 +52,7 @@ export interface BYOPQuickShopOptionsProps {
 
 export interface BYOPQuickShopOptionProps {
   activeQtySelectorIndex: number | null;
-  bundle: Bundle;
+  selectedItems: Bundle;
   bundleMapById: BundleMapById;
   handleAddToBundle: HandleAddToBundle;
   handleRemoveFromBundle: HandleRemoveFromBundle;

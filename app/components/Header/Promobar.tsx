@@ -77,12 +77,12 @@ export const Promobar = memo(() => {
 
   return (
     <div
-      className={`overflow-hidden transition-[height] ease-out ${
+      className={`overflow-hidden bg-primary transition-[height] ease-out ${
         promobarOpen && !promobarDisabled
           ? 'duration-300 max-md:h-[var(--promobar-height-mobile)] md:h-[var(--promobar-height-desktop)]'
           : 'duration-[50ms] h-0'
       }`}
-      style={{backgroundColor: bgColor}}
+      /* style={{backgroundColor: bgColor}} */
     >
       {enabled && messages?.length ? (
         <Swiper
