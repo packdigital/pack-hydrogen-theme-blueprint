@@ -8,11 +8,11 @@ import {LoadingDots} from '~/components/Animations/LoadingDots';
 import {useMenu} from '~/hooks';
 
 export function AddToCart({
-  addToCartUnlocked,
   bundle,
   clid,
   selectedBundle,
   afterAdd,
+  addToCartUnlocked,
 }: AddToCartProps) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -148,7 +148,7 @@ export function AddToCart({
 
       openCart();
 
-      navigate(location.pathname);
+      navigate(location.pathname + '?added');
       setTimeout(() => setIsAdded(false), 1000);
     }
   }, [
@@ -180,30 +180,40 @@ export function AddToCart({
   }, [selectedBundle]);
 
   return (
-    <button
-      aria-label="Add bundle to cart"
-      disabled={!addToCartUnlocked}
-      className="btn-primary w-full"
-      onClick={handleAddToCart}
-      type="button"
-    >
-      <span className={`${isAdding || isAdded ? 'invisible' : 'visible'}`}>
-        {clid ? 'Update Item In Your Cart' : `Add To Cart ${formattedPrice} `}
-      </span>
+    <>
+      {addToCartUnlocked ? (
+        <button
+          aria-label="Add bundle to cart"
+          disabled={!addToCartUnlocked}
+          className="btn-primary w-full"
+          onClick={handleAddToCart}
+          type="button"
+        >
+          <span className={`${isAdding || isAdded ? 'invisible' : 'visible'}`}>
+            {clid
+              ? 'Update Item In Your Cart'
+              : `Add To Cart ${formattedPrice} `}
+          </span>
 
-      {isAdding && (
-        <LoadingDots
-          status="Adding to cart"
-          withAbsolutePosition
-          withStatusRole
-        />
-      )}
+          {isAdding && (
+            <LoadingDots
+              status="Adding to cart"
+              withAbsolutePosition
+              withStatusRole
+            />
+          )}
 
-      {isAdded && (
-        <span aria-live="assertive" className="absolute-center" role="status">
-          Added To Cart
-        </span>
-      )}
-    </button>
+          {isAdded && (
+            <span
+              aria-live="assertive"
+              className="absolute-center"
+              role="status"
+            >
+              Added To Cart
+            </span>
+          )}
+        </button>
+      ) : null}
+    </>
   );
 }

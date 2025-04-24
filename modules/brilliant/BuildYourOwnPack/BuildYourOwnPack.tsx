@@ -4,19 +4,15 @@ import type {ProductVariant} from '@shopify/hydrogen-react/storefront-api-types'
 import {useCallback, useEffect, useMemo, useState} from 'react';
 
 import {Schema} from './BuildYourOwnPack.schema';
-import type {
-  BuildYourOwnPackCms,
-  BundleMapById,
-} from './BuildYourOwnPack.types';
-import {BYOP_SUBNAV_HEIGHT, BYOP_PRODUCT_HANDLE} from './BuildYourPackConfig';
-import {BYOPProductItem} from './BYOPProductItem/BYOPProductItem';
-import {BYOPSummary} from './BYOPSummary';
+import type {BuildYourOwnPackCms} from './BuildYourOwnPack.types';
+import {BYOP_PRODUCT_HANDLE} from './BuildYourPackConfig';
 import {DesktopBundleSelector} from './components/BundleSelector/DesktopBundleSelector';
 import {BundleSheet} from './components/BundleSheet';
-import {ProductGrid} from './components/ProductGrid';
+import {ProductGrid} from './components/ProductGrid/ProductGrid';
 import {ProgressSection} from './components/ProgressSection';
 
 import {Container} from '~/components/Container';
+import {Separator} from '~/components/ui/separator';
 import {useProductsByIds, useProductByHandle} from '~/hooks';
 import type {ProductCms} from '~/lib/types';
 
@@ -45,6 +41,8 @@ export function BuildYourOwnPack({cms}: {cms: BuildYourOwnPackCms}) {
   const searchParams = new URLSearchParams(location.search);
   const clid = searchParams.get('clid') || '';
   const ts = searchParams.get('ts') || false; //additional TS for chosenItems
+  const addedToCart = searchParams.get('added') || false;
+  //console.log('ADDED=', addedToCart);
 
   const {lines} = useCart();
 
@@ -127,6 +125,7 @@ export function BuildYourOwnPack({cms}: {cms: BuildYourOwnPackCms}) {
   }, [chosenItems, productGroupings]);
   const preselectedProducts = useProductsByIds(validPreselectedIds);
 
+  /*
   const bundleMapById = useMemo(() => {
     return selectedItems.reduce((acc: BundleMapById, variant, index) => {
       if (acc[variant.id]) {
@@ -147,6 +146,7 @@ export function BuildYourOwnPack({cms}: {cms: BuildYourOwnPackCms}) {
       };
     }, {});
   }, [selectedItems]);
+*/
 
   const incrementDisabled =
     !!selectedBundle && selectedItems.length >= Number(selectedBundle.title); //in our variants, size options value is the title
@@ -221,6 +221,55 @@ export function BuildYourOwnPack({cms}: {cms: BuildYourOwnPackCms}) {
     );
   }, [productGroupings]);
 
+  /* PAGINATION START */
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 15;
+
+  //do any filtering next
+  const filteredProducts = useMemo(() => {
+    return products.filter((product) => {
+      //filter option 1
+      //filter option 2
+
+      //return all for now
+      return true;
+    });
+  }, [products]);
+
+  const totalItems = useMemo(
+    () => filteredProducts.length,
+    [filteredProducts.length],
+  );
+
+  const totalPages = useMemo(
+    () => Math.max(1, Math.ceil(totalItems / itemsPerPage)),
+    [totalItems],
+  );
+
+  const currentProducts = useMemo(
+    () =>
+      filteredProducts.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage,
+      ),
+    [currentPage, filteredProducts],
+  );
+
+  const gridElementId = 'bundle-grid-section';
+
+  // Handle page change
+
+  const handlePageChange = useCallback((page: number) => {
+    setCurrentPage(page);
+    // Scroll to top of grid when changing pages
+    window.scrollTo({
+      top: document.getElementById(gridElementId)?.offsetTop || 0,
+      behavior: 'smooth',
+    });
+  }, []);
+
+  /* PAGINATION END */
+
   // If no container is provided, return null on both server and client
   if (!cms?.container) {
     return null;
@@ -241,6 +290,12 @@ export function BuildYourOwnPack({cms}: {cms: BuildYourOwnPackCms}) {
           clid={clid}
         />
 
+        {addedToCart && (
+          <div>
+            <h3>THANKS </h3>
+          </div>
+        )}
+
         <div className="mb-4">
           <DesktopBundleSelector
             selectedBundle={selectedBundle}
@@ -257,13 +312,20 @@ export function BuildYourOwnPack({cms}: {cms: BuildYourOwnPackCms}) {
           />
         </div>
 
-        <div className="mb-8">
+        <Separator className="my-3" />
+
+        <div className="mb-8" id={gridElementId}>
           <ProductGrid
-            products={products}
+            products={currentProducts}
             selectedItems={selectedItems}
             incrementDisabled={incrementDisabled}
             handleRemoveFromBundle={handleRemoveFromBundle}
             handleAddToBundle={handleAddToBundle}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+            totalItems={totalItems}
+            itemsPerPage={itemsPerPage}
           />
         </div>
       </div>

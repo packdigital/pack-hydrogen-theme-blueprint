@@ -3,8 +3,10 @@ import {CircleCheck} from 'lucide-react';
 import {useEffect, useMemo, useState} from 'react';
 import {useInView} from 'react-intersection-observer';
 
-import {BYOPProductItemMedia} from '../BYOPProductItem/BYOPProductItemMedia';
-import {BYOPQuickShop} from '../BYOPProductItem/BYOPQuickShop';
+import {BYOPProductItemMedia} from '../../BYOPProductItem/BYOPProductItemMedia';
+import {BYOPQuickShop} from '../../BYOPProductItem/BYOPQuickShop';
+
+import {Pagination} from './Pagination';
 
 import {Card, CardContent} from '~/components/ui/card';
 import {useProductByHandle} from '~/hooks';
@@ -12,29 +14,54 @@ import type {ProductCms} from '~/lib/types';
 import {cn} from '~/lib/utils';
 
 export function ProductGrid({
+  className,
   products,
-
   selectedItems,
   incrementDisabled,
   handleRemoveFromBundle,
   handleAddToBundle,
-  className,
+  currentPage,
+  totalPages,
+  onPageChange,
+  totalItems,
+  itemsPerPage,
 }: {
+  className?: string;
   products: ProductCms[];
-
   selectedItems: ProductVariant[];
   incrementDisabled: boolean;
   handleRemoveFromBundle: (id: string) => void;
   handleAddToBundle: (product: ProductVariant) => void;
-  className?: string;
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+  totalItems: number;
+  itemsPerPage: number;
 }) {
   // Ensure products is always an array
   const safeProducts = Array.isArray(products) ? products : [];
 
+  // Calculate the range of items being displayed
+  const startItem = useMemo(
+    () => (currentPage - 1) * itemsPerPage + 1,
+    [currentPage, itemsPerPage],
+  );
+  const endItem = useMemo(
+    () => Math.min(currentPage * itemsPerPage, totalItems),
+    [currentPage, itemsPerPage, totalItems],
+  );
+
   return (
     <div className={cn('w-full', className)}>
       <div className="w-full">
-        <div className="grid grid-cols-2 gap-2 md:grid-cols-3 md:gap-3 lg:grid-cols-4">
+        {/* Results summary */}
+        {totalItems > 0 && (
+          <div className="mb-2 w-full text-right text-sm text-muted-foreground ">
+            Showing {startItem}-{endItem} of {totalItems} pets
+          </div>
+        )}
+
+        <div className="grid grid-cols-2 gap-2 md:grid-cols-3 md:gap-3 lg:grid-cols-5">
           {safeProducts.map((product, index) => (
             <ProductCard
               key={product?.id || index}
@@ -46,6 +73,12 @@ export function ProductGrid({
             />
           ))}
         </div>
+
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={onPageChange}
+        />
       </div>
     </div>
   );
@@ -99,12 +132,11 @@ export function ProductCard({
           {isSelected && (
             <CircleCheck className="absolute right-1 top-1 z-10 size-8 rounded-full bg-primary text-white " />
           )}
-          {product?.media?.nodes && product.media.nodes.length > 0 && (
-            <BYOPProductItemMedia
-              media={product.media.nodes}
-              productTitle={product?.title || ''}
-            />
-          )}
+
+          <BYOPProductItemMedia
+            media={product?.media.nodes}
+            productTitle={product?.title || ''}
+          />
         </div>
       </div>
       <CardContent className="p-0 pb-2">

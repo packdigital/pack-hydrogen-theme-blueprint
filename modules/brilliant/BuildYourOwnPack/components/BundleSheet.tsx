@@ -1,3 +1,4 @@
+import {useNavigate} from '@remix-run/react';
 import {Image} from '@shopify/hydrogen-react';
 import {ProductVariant} from '@shopify/hydrogen-react/storefront-api-types';
 import {useIsHydrated} from 'app/hooks/useIsHydrated';
@@ -9,7 +10,6 @@ import {AddToCart} from './AddToCart';
 import {Button} from '~/components/ui/button';
 import {Card, CardContent} from '~/components/ui/card';
 import {ScrollArea, ScrollBar} from '~/components/ui/scroll-area';
-
 import {
   Sheet,
   SheetContent,
@@ -34,9 +34,13 @@ export function BundleSheet({
   clid: string;
 }) {
   const isHydrated = useIsHydrated();
-  const addToCartUnlocked = useMemo(() => {
-    return true;
-  }, []);
+
+  const addToCartUnlocked = useMemo(
+    () =>
+      selectedItems.length !== 0 &&
+      selectedItems.length == Number(selectedBundle?.title),
+    [selectedBundle?.title, selectedItems.length],
+  );
 
   const afterAddHandler = useCallback(() => {
     onOpenChange(false);
@@ -78,14 +82,21 @@ export function BundleSheet({
           <ScrollBar orientation="vertical" />
         </ScrollArea>
 
-        <div className="sticky bottom-0 border-t bg-background p-2">
-          <AddToCart
-            bundle={selectedItems}
-            addToCartUnlocked={addToCartUnlocked}
-            clid={clid}
-            selectedBundle={selectedBundle}
-            afterAdd={afterAddHandler}
-          />
+        <div className="sticky bottom-0 flex w-full items-center  justify-center border-t bg-background p-2 ">
+          {addToCartUnlocked ? (
+            <AddToCart
+              bundle={selectedItems}
+              addToCartUnlocked={addToCartUnlocked}
+              clid={clid}
+              selectedBundle={selectedBundle}
+              afterAdd={afterAddHandler}
+            />
+          ) : (
+            <Button onClick={() => onOpenChange(false)}>
+              <CircleArrowLeft className="size-6" />
+              Continue Adding Items
+            </Button>
+          )}
         </div>
       </SheetContent>
     </Sheet>
