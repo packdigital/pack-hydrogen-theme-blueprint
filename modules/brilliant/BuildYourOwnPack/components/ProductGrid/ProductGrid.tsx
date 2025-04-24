@@ -130,7 +130,7 @@ export function ProductCard({
       <div className="p-2">
         <div className="relative">
           {isSelected && (
-            <CircleCheck className="absolute right-1 top-1 z-10 size-8 rounded-full bg-primary text-white " />
+            <CircleCheck className="absolute right-1 top-1 z-10 size-8 animate-popIn rounded-full bg-primary text-white " />
           )}
 
           <BYOPProductItemMedia

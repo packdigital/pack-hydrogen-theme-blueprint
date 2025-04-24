@@ -169,6 +169,7 @@ export default {
         'spin-fast': 'spin 0.75s linear infinite',
         'bounce-high': 'bounce-high 0.75s infinite',
         flash: 'flash 1.5s infinite',
+        popIn: 'popIn 0.3s ease-out',
       },
       keyframes: {
         'bounce-high': {
@@ -180,6 +181,10 @@ export default {
             transform: 'translateY(0)',
             animationTimingFunction: 'cubic-bezier(0, 0, 0.2, 1)',
           },
+        },
+        popIn: {
+          '0%': {opacity: 0, transform: 'scale(0.5)'},
+          '100%': {opacity: 1, transform: 'scale(1)'},
         },
         flash: {
           '0%, 100%': {

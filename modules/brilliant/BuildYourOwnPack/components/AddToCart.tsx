@@ -5,6 +5,7 @@ import {useCallback, useEffect, useMemo, useState} from 'react';
 import type {AddToCartProps} from '../BuildYourOwnPack.types';
 
 import {LoadingDots} from '~/components/Animations/LoadingDots';
+import {Button} from '~/components/ui/button';
 import {useMenu} from '~/hooks';
 
 export function AddToCart({
@@ -182,10 +183,10 @@ export function AddToCart({
   return (
     <>
       {addToCartUnlocked ? (
-        <button
+        <Button
           aria-label="Add bundle to cart"
           disabled={!addToCartUnlocked}
-          className="btn-primary w-full"
+          className="border-green-500 bg-green-500 hover:border-green-900 hover:bg-green-700 "
           onClick={handleAddToCart}
           type="button"
         >
@@ -212,7 +213,7 @@ export function AddToCart({
               Added To Cart
             </span>
           )}
-        </button>
+        </Button>
       ) : null}
     </>
   );

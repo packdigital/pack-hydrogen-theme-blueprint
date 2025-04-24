@@ -42,7 +42,7 @@ export function BundleSheet({
     [selectedBundle?.title, selectedItems.length],
   );
 
-  const afterAddHandler = useCallback(() => {
+  const closeDrawer = useCallback(() => {
     onOpenChange(false);
   }, [onOpenChange]);
 
@@ -89,13 +89,19 @@ export function BundleSheet({
               addToCartUnlocked={addToCartUnlocked}
               clid={clid}
               selectedBundle={selectedBundle}
-              afterAdd={afterAddHandler}
+              afterAdd={closeDrawer}
             />
           ) : (
-            <Button onClick={() => onOpenChange(false)}>
-              <CircleArrowLeft className="size-6" />
-              Continue Adding Items
-            </Button>
+            <div className="text-center">
+              <p className="p-2 text-sm">
+                You haven’t added enough items to complete your bundle. Keep
+                browsing to add more!
+              </p>
+              <Button onClick={closeDrawer}>
+                <CircleArrowLeft className="size-6" />
+                Continue Adding Items
+              </Button>
+            </div>
           )}
         </div>
       </SheetContent>
