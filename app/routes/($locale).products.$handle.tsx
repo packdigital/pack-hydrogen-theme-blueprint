@@ -1,27 +1,26 @@
-import {useLoaderData} from '@remix-run/react';
-import {ProductProvider} from '@shopify/hydrogen-react';
-import {Analytics, AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 import {RenderSections} from '@pack/react';
-import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
+import {useLoaderData} from '@remix-run/react';
+import {Analytics, AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 import type {ShopifyAnalyticsProduct} from '@shopify/hydrogen';
+import {ProductProvider} from '@shopify/hydrogen-react';
+import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
+import {BYOP_PRODUCT_HANDLE} from 'modules/brilliant/BuildYourOwnPack/BuildYourPackConfig';
 
+import {Product} from '~/components/Product';
+import {routeHeaders} from '~/data/cache';
+import {ADMIN_PRODUCT_QUERY} from '~/data/graphql/admin/product';
+import {PRODUCT_PAGE_QUERY} from '~/data/graphql/pack/product-page';
+import {PRODUCT_QUERY} from '~/data/graphql/storefront/product';
+import {useGlobal, useProductWithGrouping} from '~/hooks';
+import {getGrouping, getSelectedProductOptions} from '~/lib/products.server';
+import {seoPayload} from '~/lib/seo.server';
+import type {ProductWithInitialGrouping} from '~/lib/types';
 import {
   getProductGroupings,
   getShop,
   getSiteSettings,
   normalizeAdminProduct,
 } from '~/lib/utils';
-import {getGrouping, getSelectedProductOptions} from '~/lib/products.server';
-import {PRODUCT_PAGE_QUERY} from '~/data/graphql/pack/product-page';
-import {ADMIN_PRODUCT_QUERY} from '~/data/graphql/admin/product';
-import {PRODUCT_QUERY} from '~/data/graphql/storefront/product';
-import {Product} from '~/components/Product';
-import {routeHeaders} from '~/data/cache';
-import {seoPayload} from '~/lib/seo.server';
-import {useGlobal, useProductWithGrouping} from '~/hooks';
-import type {ProductWithInitialGrouping} from '~/lib/types';
-
-import {BYOP_PRODUCT_HANDLE} from 'modules/brilliant/BuildYourOwnPack/BuildYourPackConfig';
 
 export const headers = routeHeaders;
 
