@@ -5,7 +5,16 @@ import type {AspectRatio, MetafieldIdentifier} from '../types';
  * e.g. [{namespace: 'global', key: 'description'}, {namespace: 'product', key: 'seasonal_colors'}]
  * If namespace is omitted, the app-reserved namespace will be used.
  */
-export const PRODUCT_METAFIELDS_IDENTIFIERS = [] as MetafieldIdentifier[];
+export const PRODUCT_METAFIELDS_IDENTIFIERS = [
+  {
+    namespace: 'custom',
+    key: 'featured_description',
+  },
+  {
+    namespace: 'custom',
+    key: 'featured_title',
+  },
+] as MetafieldIdentifier[];
 
 /* Ensure updating this ratio as needed. Required format is 'width/height' */
 export const PRODUCT_IMAGE_ASPECT_RATIO: AspectRatio =

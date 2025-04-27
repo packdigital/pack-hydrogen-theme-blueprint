@@ -55,8 +55,8 @@
   --overlay: rgba(0, 0, 0, 0.3);
 
   /* Button Styles - Primary */
-  --primary-btn-bg-color: hsl(217, 91%, 60%);
-  --primary-btn-border-color: hsl(217, 91%, 60%);
+  --primary-btn-bg-color: hsl(217, 91%, 45%);
+  --primary-btn-border-color: hsl(217, 91%, 40%);
   --primary-btn-text-color: #ffffff;
   --primary-btn-hover-bg-color: hsl(217, 91%, 50%);
   --primary-btn-hover-border-color: hsl(217, 91%, 50%);
@@ -325,9 +325,7 @@
   /* button specific */
   .btn-text {
     @apply font-sans
-      text-base
-      font-bold
-      uppercase
+      text-base      
       tracking-wider;
   }
   .btn {

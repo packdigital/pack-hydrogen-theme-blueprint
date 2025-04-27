@@ -1,12 +1,14 @@
 import {registerSection} from '@pack/react';
 import type {Section} from '@pack/types';
 
+import {BuildYourOwnPack} from '../../modules/brilliant/BuildYourOwnPack';
+import {FeaturedSlider} from '../../modules/brilliant/FeaturedSlider';
+
 import {Accordions} from './Accordions';
 import {Banner} from './Banner';
 import {BlogCategories} from './BlogCategories';
 import {BlogGrid} from './BlogGrid';
 import {BuildYourOwnBundle} from './BuildYourOwnBundle';
-import {BuildYourOwnPack} from '../../modules/brilliant/BuildYourOwnPack';
 import {FormBuilder} from './FormBuilder';
 import {HalfHero} from './HalfHero';
 import {Hero} from './Hero';
@@ -18,8 +20,10 @@ import {ImageTilesGrid} from './ImageTilesGrid';
 import {ImageTilesMosaic} from './ImageTilesMosaic';
 import {Markdown} from './Markdown';
 import {MarketingSignup} from './MarketingSignup';
-import {Product, PRODUCT_SECTION_KEY} from './Product';
+import {MetaobjectImage} from './MetaobjectImage';
+import {MetaobjectTextBlock} from './MetaobjectTextBlock/MetaobjectTextBlock';
 import {PressSlider} from './PressSlider';
+import {Product, PRODUCT_SECTION_KEY} from './Product';
 import {ProductRecommendationsSlider} from './ProductRecommendationsSlider';
 import {ProductReviews, PRODUCT_REVIEWS_KEY} from './ProductReviews';
 import {ProductsSlider} from './ProductsSlider';
@@ -37,8 +41,6 @@ import {TilesSlider} from './TilesSlider';
 import {TilesStack} from './TilesStack';
 import {Video} from './Video';
 import {VideoEmbed} from './VideoEmbed';
-import {MetaobjectTextBlock} from './MetaobjectTextBlock/MetaobjectTextBlock';
-import {MetaobjectImage} from './MetaobjectImage';
 
 export function registerSections() {
   /* Text ---------- */
@@ -70,6 +72,7 @@ export function registerSections() {
   /* Product ---------- */
   registerSection(Product as Section, {name: PRODUCT_SECTION_KEY});
   registerSection(ProductsSlider as Section, {name: 'products-slider'});
+
   registerSection(ProductRecommendationsSlider as Section, {
     name: 'product-recommendations-slider',
   });
@@ -82,8 +85,6 @@ export function registerSections() {
   registerSection(BuildYourOwnBundle as Section, {
     name: 'build-your-own-bundle',
   });
-
-  registerSection(BuildYourOwnPack as Section, {name: 'build-your-own-pack'});
 
   /* Reviews ---------- */
   registerSection(PressSlider as Section, {name: 'press-slider'});
@@ -106,4 +107,11 @@ export function registerSections() {
     name: 'metaobject-text-block',
   });
   registerSection(MetaobjectImage as Section, {name: 'metaobject-image'});
+
+  /* Brilliant Sections --------*/
+  registerSection(FeaturedSlider as Section, {
+    name: 'featured-slider',
+  });
+
+  registerSection(BuildYourOwnPack as Section, {name: 'build-your-own-pack'});
 }
