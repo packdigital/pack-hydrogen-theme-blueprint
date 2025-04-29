@@ -48,15 +48,40 @@ export function FeaturedSliderContainer({
           </Link>
         </div>
       </div>
-      <div className={`grid gap-4 ${mobileGrid} md:${gridCols}`}>
-        {products.map((product) => (
-          <FeaturedSliderCard
-            key={product.id}
-            product={product}
-            design={cms.design}
-          />
-        ))}
-      </div>
+
+      {products.length === 0 ? (
+        <div className={`grid gap-4 ${mobileGrid} md:${gridCols}`}>
+          {[...Array(cms.design === 'expanded' ? 3 : 4)].map((_, i) => (
+            <div
+              className="flex animate-pulse flex-col overflow-hidden rounded-md border bg-white"
+              key={i}
+            >
+              <div
+                className={` ${cms.design === 'expanded' ? 'h-64' : 'h-48'} bg-gray-300`}
+              />{' '}
+              {/* Image placeholder */}
+              <div className="flex flex-1 flex-col justify-between p-4">
+                <div className="h-4 w-3/4 rounded bg-gray-300" />
+                <div className="mt-2 h-4 w-1/2 rounded bg-gray-300" />
+                <div className="mt-auto flex justify-between pt-4">
+                  <div className="h-4 w-10 rounded bg-gray-300" />
+                  <div className="h-4 w-12 rounded bg-gray-300" />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className={`grid gap-4 ${mobileGrid} md:${gridCols}`}>
+          {products.map((product) => (
+            <FeaturedSliderCard
+              key={product.id}
+              product={product}
+              design={cms.design}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
