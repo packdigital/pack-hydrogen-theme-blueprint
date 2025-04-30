@@ -18,7 +18,9 @@ export const NavigationLogo = memo(
           title="Brilliant Layers logo"
           viewBox="0 0 180 180"
         />
-        <h3 className="md:flex">Brilliant Layers</h3>
+        <h3 className="text-2xl font-medium uppercase md:flex">
+          Brilliant Layers
+        </h3>
       </Link>
     );
   },

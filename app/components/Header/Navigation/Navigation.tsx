@@ -80,7 +80,7 @@ export const Navigation = memo(
                       onMouseEnter={() => handleDesktopMenuHoverIn(index)}
                       onMouseLeave={handleDesktopMenuHoverOut}
                     >
-                      <h5 className="font-medium uppercase text-current">
+                      <h5 className="text-xl font-medium text-current">
                         {item.navItem?.text}
                       </h5>
 
