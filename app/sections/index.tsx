@@ -1,8 +1,8 @@
 import {registerSection} from '@pack/react';
 import type {Section} from '@pack/types';
-
-import {BuildYourOwnPack} from '../../modules/brilliant/BuildYourOwnPack';
-import {FeaturedSlider} from '../../modules/brilliant/FeaturedSlider';
+import {BuildYourOwnPack} from 'modules/brilliant/BuildYourOwnPack';
+import {CategorySlider} from 'modules/brilliant/CategorySlider';
+import {FeaturedSlider} from 'modules/brilliant/FeaturedSlider';
 
 import {Accordions} from './Accordions';
 import {Banner} from './Banner';
@@ -111,6 +111,10 @@ export function registerSections() {
   /* Brilliant Sections --------*/
   registerSection(FeaturedSlider as Section, {
     name: 'featured-slider',
+  });
+
+  registerSection(CategorySlider as Section, {
+    name: 'category-slider',
   });
 
   registerSection(BuildYourOwnPack as Section, {name: 'build-your-own-pack'});
