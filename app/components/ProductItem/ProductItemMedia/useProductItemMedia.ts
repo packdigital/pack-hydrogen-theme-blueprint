@@ -1,12 +1,12 @@
-import {useMemo} from 'react';
 import type {
   MediaEdge,
   MediaImage,
 } from '@shopify/hydrogen/storefront-api-types';
-
-import {COLOR_OPTION_NAME} from '~/lib/constants';
+import {useMemo} from 'react';
 
 import type {ProductItemMediaProps} from '../ProductItem.types';
+
+import {COLOR_OPTION_NAME} from '~/lib/constants';
 
 export function useProductItemMedia({
   hasGrouping,
@@ -20,7 +20,7 @@ export function useProductItemMedia({
     return selectedProduct?.options?.find(
       (option) => option.name === COLOR_OPTION_NAME,
     )?.optionValues;
-  }, [selectedProduct?.id]);
+  }, [selectedProduct?.options]);
 
   const hasMultiColorsNotFromGroup =
     !hasGrouping && colorOptions && colorOptions.length > 1;
@@ -63,7 +63,7 @@ export function useProductItemMedia({
       const media = [medias[firstMediaIndex], medias[secondMediaIndex]];
       return {...acc, [color.name]: media};
     }, {});
-  }, [selectedProduct?.id]);
+  }, [colorOptions, hasMultiColorsNotFromGroup, selectedProduct]);
 
   const selectedMedia = useMemo(() => {
     // if multi color variants from same product
@@ -84,15 +84,17 @@ export function useProductItemMedia({
         mediaContentType: 'IMAGE',
         previewImage: variantImage,
       } as MediaImage;
-      return [variantMedia];
+      //BRILLIANT add an additional image to make things consistent until we make a size thing
+      const extraImage = selectedProduct?.media?.nodes?.[1];
+      return [variantMedia, extraImage];
     }
     // otherwise, use first two media
     return selectedProduct?.media?.nodes?.slice(0, 2);
   }, [
     hasMultiColorsNotFromGroup,
     mediaMapByAltText,
-    selectedProduct?.id,
-    selectedVariant?.id,
+    selectedProduct?.media?.nodes,
+    selectedVariant,
   ]);
 
   return {
