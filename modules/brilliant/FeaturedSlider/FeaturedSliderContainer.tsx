@@ -26,7 +26,7 @@ export function FeaturedSliderContainer({
   const link = useMemo(() => cms.link, [cms.link]);
 
   return (
-    <div className="">
+    <div className="px-3">
       <div className="mb-3 flex items-center justify-between">
         <div className="flex">
           <h3 className="text-2xl">{cms.heading}</h3>
