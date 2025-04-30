@@ -107,8 +107,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['Poppins', 'sans-serif'],
-        heading: ['Poppins', 'sans-serif'],
+        heading: ['"Barlow Condensed"', 'sans-serif'], // thin→bold
+        sans: ['"Merriweather Sans"', 'ui-sans-serif', 'system-ui'],
       },
       colors: {
         primary: {

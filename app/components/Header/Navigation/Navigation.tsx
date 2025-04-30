@@ -1,15 +1,15 @@
 import {memo} from 'react';
 
-import {Link} from '~/components/Link';
-import {Svg} from '~/components/Svg';
-import {HEADER_NAVIGATION} from '~/lib/constants';
-import {useCustomer, useMenu, useSettings} from '~/hooks';
-
 import type {UseDesktopMenuReturn} from '../useDesktopMenu';
 import type {UseMobileMenuReturn} from '../useMobileMenu';
 
 import {NavigationCart} from './NavigationCart';
 import {NavigationLogo} from './NavigationLogo';
+
+import {Link} from '~/components/Link';
+import {Svg} from '~/components/Svg';
+import {useCustomer, useMenu, useSettings} from '~/hooks';
+import {HEADER_NAVIGATION} from '~/lib/constants';
 
 type NavigationProps = Pick<
   UseMobileMenuReturn,
@@ -80,9 +80,9 @@ export const Navigation = memo(
                       onMouseEnter={() => handleDesktopMenuHoverIn(index)}
                       onMouseLeave={handleDesktopMenuHoverOut}
                     >
-                      <p className="text-nav text-current">
+                      <h5 className="font-medium uppercase text-current">
                         {item.navItem?.text}
-                      </p>
+                      </h5>
 
                       <div
                         className={`absolute left-0 top-[calc(100%_-_2px)] h-[3px] w-full origin-center scale-0 border-t-2 border-t-primary bg-transparent transition after:w-full group-hover:scale-100 ${

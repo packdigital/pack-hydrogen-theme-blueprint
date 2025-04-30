@@ -1,19 +1,19 @@
+import {Footer} from 'modules/brilliant/Footer/Footer';
 import type {ReactNode} from 'react';
 
 import {Analytics} from '~/components/Analytics';
 import {Cart} from '~/components/Cart';
-import {Footer} from '~/components/Footer';
 import {Header} from '~/components/Header';
 import {Modal} from '~/components/Modal';
 import {ProductModal} from '~/components/Product/ProductModal';
 import {Search} from '~/components/Search';
-import {usePreviewModeCustomerInit} from '~/lib/customer';
 import {
   useCartAddDiscountUrl,
   usePromobar,
   useScrollToHashOnNavigation,
   useSetViewportHeightCssVar,
 } from '~/hooks';
+import {usePreviewModeCustomerInit} from '~/lib/customer';
 
 export function Layout({children}: {children: ReactNode}) {
   const {mainPaddingTopClass} = usePromobar();

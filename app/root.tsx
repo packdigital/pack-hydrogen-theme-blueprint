@@ -98,7 +98,11 @@ export const links: LinksFunction = () => {
     },
     {
       rel: 'stylesheet',
-      href: 'https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap',
+      href:
+        'https://fonts.googleapis.com/css2?' +
+        'family=Barlow+Condensed:wght@100;200;300;400;500;600;700&' +
+        'family=Merriweather+Sans:wght@300;400;500;600;700;800;900&' +
+        'display=swap',
     },
   ];
 };

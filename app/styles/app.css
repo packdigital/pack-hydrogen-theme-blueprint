@@ -219,47 +219,42 @@
   .text-h1 {
     @apply overflow-anywhere
       font-heading
-      text-4xl
-      font-bold
+      text-4xl   
       md:text-5xl
       xl:text-6xl;
   }
   .text-h2 {
     @apply overflow-anywhere
       font-heading
-      text-3xl
-      font-bold
+      text-3xl    
       md:text-4xl
       xl:text-5xl;
   }
   .text-h3 {
     @apply overflow-anywhere
       font-heading
-      text-2xl
-      font-bold
+      font-light
+      text-2xl            
       md:text-3xl
       xl:text-4xl;
   }
   .text-h4 {
     @apply overflow-anywhere
       font-heading
-      text-xl
-      font-bold
+      text-xl  
       md:text-2xl
       xl:text-3xl;
   }
   .text-h5 {
     @apply overflow-anywhere
       font-heading
-      text-base
-      font-bold
+      text-base   
       md:text-lg;
   }
   .text-h6 {
     @apply overflow-anywhere
       font-heading
-      text-sm
-      font-bold;
+      text-sm;
   }
   .text-body {
     @apply font-sans
