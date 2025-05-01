@@ -6,33 +6,33 @@
 /* Global Theme Variables */
 :root {
   /* Color System */
-  --background: 0 0% 100%;
-  --foreground: 222.2 84% 4.9%;
+  --background: 220 14% 96%;
+  --foreground: 0 0% 15%;
   --card: 0 0% 100%;
-  --card-foreground: 222.2 84% 4.9%;
+  --card-foreground: 0 0% 15%;
   --popover: 0 0% 100%;
-  --popover-foreground: 222.2 84% 4.9%;
+  --popover-foreground: 0 0% 15%;
 
   /* Primary Blue Theme - Darkened */
-  --primary: 217 91% 45%;
-  --primary-foreground: 210 40% 98%;
+  --primary: 224 74% 40%; /* #1e40af - Primary */
+  --primary-foreground: 0 0% 100%; /* #ffffff */
 
   /* Secondary & UI Colors - Darker than Primary */
-  --secondary: 217 91% 35%;
-  --secondary-foreground: 210 40% 98%;
-  --muted: 0 0% 95%;
-  --muted-foreground: 0 0% 30%;
-  --accent: 217 91% 35%;
-  --accent-foreground: 210 40% 98%;
+  --secondary: 0 0% 15%; /* #262626 - Secondary */
+  --secondary-foreground: 0 0% 100%; /* #ffffff */
+  --muted: 220 13% 91%; /* #e5e7eb - Lighter version of base */
+  --muted-foreground: 220 9% 46%; /* #6b7280 - Darker version of info */
+  --accent: 24 95% 53%; /* #f97316 - Orange accent */
+  --accent-foreground: 0 0% 100%; /* #ffffff */
 
   /* Status Colors */
-  --destructive: 0 84.2% 60.2%;
-  --destructive-foreground: 210 40% 98%;
+  --destructive: 0 84.2% 60.2%; /* keeping original */
+  --destructive-foreground: 0 0% 100%; /* #ffffff */
 
   /* UI Elements */
-  --border: 214.3 31.8% 91.4%;
-  --input: 214.3 31.8% 91.4%;
-  --ring: 217 91% 60%;
+  --border: 220 13% 91%; /* #e5e7eb - Lighter version of info */
+  --input: 220 13% 91%; /* #e5e7eb - Lighter version of info */
+  --ring: 224 74% 40%; /* #1e40af - Primary */
   --radius: 0.5rem;
 
   /* Chart Colors */
@@ -182,26 +182,32 @@
 
   h1 {
     @apply text-h1;
+    letter-spacing: 0.01em;
   }
 
   h2 {
     @apply text-h2;
+    letter-spacing: 0.01em;
   }
 
   h3 {
     @apply text-h3;
+    letter-spacing: 0.01em;
   }
 
   h4 {
     @apply text-h4;
+    letter-spacing: 0.01em;
   }
 
   h5 {
     @apply text-h5;
+    letter-spacing: 0.01em;
   }
 
   h6 {
     @apply text-h6;
+    letter-spacing: 0.01em;
   }
 
   input::-webkit-outer-spin-button,
@@ -219,6 +225,7 @@
   .text-h1 {
     @apply overflow-anywhere
       font-heading
+      font-medium
       text-4xl   
       md:text-5xl
       xl:text-6xl;
@@ -226,6 +233,7 @@
   .text-h2 {
     @apply overflow-anywhere
       font-heading
+      font-medium
       text-3xl    
       md:text-4xl
       xl:text-5xl;
@@ -233,7 +241,7 @@
   .text-h3 {
     @apply overflow-anywhere
       font-heading
-      font-light
+      font-medium    
       text-2xl            
       md:text-3xl
       xl:text-4xl;
@@ -241,6 +249,7 @@
   .text-h4 {
     @apply overflow-anywhere
       font-heading
+      font-medium
       text-xl  
       md:text-2xl
       xl:text-3xl;
@@ -248,12 +257,14 @@
   .text-h5 {
     @apply overflow-anywhere
       font-heading
+      font-medium    
       text-base   
       md:text-lg;
   }
   .text-h6 {
     @apply overflow-anywhere
       font-heading
+      font-medium    
       text-sm;
   }
   .text-body {

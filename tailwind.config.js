@@ -107,7 +107,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        heading: ['"Barlow Condensed"', 'sans-serif'], // thin→bold
+        heading: ['"Fjalla One"', 'sans-serif'],
+        //heading: ['"Barlow Condensed"', 'sans-serif'], // thin→bold
         sans: ['"Merriweather Sans"', 'ui-sans-serif', 'system-ui'],
       },
       colors: {
@@ -165,6 +166,11 @@ export default {
           5: 'hsl(var(--chart-5))',
         },
       },
+      textShadow: {
+        sm: '0 1px 2px rgba(0,0,0,0.25)',
+        DEFAULT: '0 2px 4px rgba(0, 0, 0, 0.7)',
+        lg: '0 4px 6px rgba(0,0,0,0.45)',
+      },
       animation: {
         'spin-fast': 'spin 0.75s linear infinite',
         'bounce-high': 'bounce-high 0.75s infinite',
@@ -207,5 +213,18 @@ export default {
       },
     },
   },
-  plugins: [headlessuiPlugin, require('tailwindcss-animate')],
+  plugins: [
+    headlessuiPlugin,
+    require('tailwindcss-animate'),
+    function ({matchUtilities, theme}) {
+      matchUtilities(
+        {
+          'text-shadow': (value) => ({
+            textShadow: value,
+          }),
+        },
+        {values: theme('textShadow')},
+      );
+    },
+  ],
 };

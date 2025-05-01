@@ -10,6 +10,6 @@ export interface FeaturedSliderCms {
   link: LinkCms;
   section: {
     fullWidth: boolean;
-    margin: number;
+    extraCss: string;
   };
 }

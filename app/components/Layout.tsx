@@ -1,9 +1,9 @@
 import {Footer} from 'modules/brilliant/Footer/Footer';
+import {Header} from 'modules/brilliant/Header';
 import type {ReactNode} from 'react';
 
 import {Analytics} from '~/components/Analytics';
 import {Cart} from '~/components/Cart';
-import {Header} from '~/components/Header';
 import {Modal} from '~/components/Modal';
 import {ProductModal} from '~/components/Product/ProductModal';
 import {Search} from '~/components/Search';

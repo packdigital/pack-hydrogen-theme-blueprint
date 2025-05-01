@@ -49,7 +49,7 @@ module.exports = {
     'prettier/prettier': ['error', {endOfLine: 'auto'}],
     'tailwindcss/no-custom-classname': [
       'warn',
-      {whitelist: ['theme-\\S+', 'swiper-\\S+']},
+      {whitelist: ['theme-\\S+', 'swiper-\\S+', 'text-shadow(?:-[a-z0-9]+)?']},
     ],
     'import/order': [
       'error',

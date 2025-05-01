@@ -38,15 +38,15 @@ export function FeaturedSlider({
     [cms?.section?.fullWidth],
   );
 
-  const margin = useMemo(
-    () => (cms?.section?.margin ? `m-${cms.section.margin}` : `m-3`),
-    [cms?.section?.margin],
+  const extraCss = useMemo(
+    () => cms?.section?.extraCss ?? ``,
+    [cms?.section?.extraCss],
   );
 
   return (
     <Container container={cms.container}>
-      <div ref={ref}>
-        <div className={`${maxWidthClass} justify-center ${margin}`}>
+      <div className={`${extraCss} justify-center`} ref={ref}>
+        <div className={`${maxWidthClass}`}>
           <FeaturedSliderContainer products={products} cms={cms} />
         </div>
       </div>
