@@ -30,13 +30,7 @@ export function useProductRecommendations(
   });
 
   useEffect(() => {
-    if (
-      !fetchOnMount ||
-      !productId ||
-      !intent ||
-      fetcher.data?.productRecommendations
-    )
-      return;
+    if (!fetchOnMount || !productId || !intent) return;
     const searchParams = new URLSearchParams({productId, intent});
     fetcher.load(`${pathPrefix}/api/recommendations?${searchParams}`);
   }, [fetchOnMount, productId, intent]);
