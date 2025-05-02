@@ -1,13 +1,13 @@
-import {Fragment, memo, useMemo} from 'react';
-import type {Product} from '@shopify/hydrogen/storefront-api-types';
 import {Pagination} from '@shopify/hydrogen';
-
-import {LoadingDots} from '~/components/Animations';
-import {ProductItem} from '~/components/ProductItem';
+import type {Product} from '@shopify/hydrogen/storefront-api-types';
+import {ProductItem} from 'modules/brilliant/ProductItem/ProductItem';
+import {Fragment, memo, useMemo} from 'react';
 
 import type {CollectionGridProps} from './Collection.types';
-import {CollectionPromoTile} from './CollectionPromoTile';
 import {useCollectionFilters} from './CollectionFilters';
+import {CollectionPromoTile} from './CollectionPromoTile';
+
+import {LoadingDots} from '~/components/Animations';
 
 export const CollectionGrid = memo(
   ({
@@ -27,13 +27,16 @@ export const CollectionGrid = memo(
 
     const connection = useMemo(() => {
       return products;
-    }, [JSON.stringify(products.pageInfo)]);
+    }, [products]);
 
     const promoTilesByPosition = useMemo(() => {
-      return promoTiles?.reduce((acc, tile) => {
-        acc[tile.position] = tile;
-        return acc;
-      }, {} as Record<number, (typeof promoTiles)[0]>);
+      return promoTiles?.reduce(
+        (acc, tile) => {
+          acc[tile.position] = tile;
+          return acc;
+        },
+        {} as Record<number, (typeof promoTiles)[0]>,
+      );
     }, [promoTiles]);
 
     return (
