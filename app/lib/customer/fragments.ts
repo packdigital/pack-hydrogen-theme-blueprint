@@ -277,7 +277,6 @@ const CUSTOMER_SUMMARY = `#graphql
     id
     lastName
     phone
-    tags
     updatedAt
   }
   ${ADDRESS_FULL}
@@ -314,7 +313,6 @@ const CUSTOMER_FULL = `#graphql
       }
     }
     phone
-    tags
     updatedAt
   }
   ${ADDRESS_FULL}
@@ -343,7 +341,6 @@ const CUSTOMER_ORDERS = `#graphql
       }
     }
     phone
-    tags
     updatedAt
   }
   ${ORDER_SUMMARY}
