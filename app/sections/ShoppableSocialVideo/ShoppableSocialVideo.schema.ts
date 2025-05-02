@@ -52,8 +52,7 @@ export function Schema({template}: {template: string}) {
         label: 'Products',
         name: 'products',
         component: 'group-list',
-        description:
-          'If the selected product does display in the frontend, check it is on the Hydrogen sales channel.',
+        description: `If the selected product doesn't display in the frontend, ensure it's on the Hydrogen sales channel.`,
         itemProps: {
           label: '{{item.product.handle}}',
         },

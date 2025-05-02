@@ -25,7 +25,7 @@ export function Schema() {
             label: 'Text',
             name: 'text',
             component: 'rich-text',
-            description: 'Do not using headings for marquee text',
+            description: 'Do not use headings for marquee text',
           },
         ],
         defaultValue: [
