@@ -5,9 +5,9 @@ import {useEffect, useMemo} from 'react';
 import {ADDITIONAL_VARIANT_NAMES} from './additionalVariantNames';
 import type {ProductProps} from './Product.types';
 import {ProductDetails} from './ProductDetails';
+import {ProductHeader} from './ProductHeader';
 import {ProductMedia} from './ProductMedia';
 
-import {ProductHeader} from '~/components/Product/ProductHeader';
 import {useLocale, useParsedProductMetafields, useSettings} from '~/hooks';
 import {COLOR_OPTION_NAME} from '~/lib/constants';
 import type {SelectedVariant} from '~/lib/types';
