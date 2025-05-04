@@ -1,9 +1,10 @@
 import {memo} from 'react';
 
+import {DesktopMenu} from './Menu/DesktopMenu';
 import {Navigation, TransparentNavigation} from './Navigation';
 import {Promobar} from './Promobar';
 
-import {DesktopMenu, MobileMenu} from '~/components/Header/Menu';
+import {MobileMenu} from '~/components/Header/Menu';
 import {useDesktopMenu} from '~/components/Header/useDesktopMenu';
 import {useMobileMenu} from '~/components/Header/useMobileMenu';
 import {usePromobar} from '~/hooks';

@@ -3,8 +3,8 @@ import type {ProductOptionValuesProps} from 'modules/brilliant/Product/ProductOp
 import {useEffect, useMemo, useState} from 'react';
 
 import {ProductOptionValue} from './ProductOptionValue/ProductOptionValue';
+import {ProductOptionValuesLabel} from './ProductOptionValuesLabel';
 
-import {ProductOptionValuesLabel} from '~/components/Product/ProductOptions/ProductOptionValuesLabel';
 import {
   Carousel,
   CarouselContent,

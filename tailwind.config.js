@@ -107,8 +107,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        heading: ['"Fjalla One"', 'sans-serif'],
-        //heading: ['"Barlow Condensed"', 'sans-serif'], // thin→bold
+        //heading: ['"Fjalla One"', 'sans-serif'],
+        heading: ['"Barlow Condensed"', 'sans-serif'], // thin→bold
         sans: ['"Merriweather Sans"', 'ui-sans-serif', 'system-ui'],
       },
       colors: {
