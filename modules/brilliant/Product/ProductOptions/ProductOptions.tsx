@@ -13,6 +13,7 @@ export function ProductOptions({
   selectedOptionsMap,
   setSelectedOption,
   swatchesMap,
+  optionsImageVariantMap,
 }: ProductOptionsProps) {
   const {publish, shop} = useAnalytics();
 
@@ -47,6 +48,7 @@ export function ProductOptions({
               selectedOptionsMap={selectedOptionsMap}
               setSelectedOption={setSelectedOption}
               swatchesMap={swatchesMap}
+              optionsImageVariantMap={optionsImageVariantMap}
             />
           </div>
         );

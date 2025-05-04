@@ -44,6 +44,7 @@
     "country-region-data": "^3.1.0",
     "crypto-js": "^4.2.0",
     "dompurify": "^3.2.4",
+    "embla-carousel-react": "^8.6.0",
     "fast-xml-parser": "^4.5.0",
     "graphql": "^16.10.0",
     "hex-to-rgba": "^2.0.1",

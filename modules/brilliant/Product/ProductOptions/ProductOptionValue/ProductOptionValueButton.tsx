@@ -1,0 +1,64 @@
+// import {InnerColorOptionValue} from '~/components/Product/ProductOptions/ProductOptionValue/InnerColorOptionValue';
+import {InnerOptionValue} from './InnerOptionValue';
+import type {ProductOptionValueButtonProps} from './ProductOptionValue.types';
+
+export function ProductOptionValueButton({
+  isAvailable,
+  isColor,
+  isDisabled,
+  isSelected,
+  onSelect,
+  optionName,
+  optionValue,
+  selectedVariantFromOptions,
+  setSelectedOption,
+  swatch,
+  optionsImageVariantMap,
+}: ProductOptionValueButtonProps) {
+  return (
+    <button
+      aria-label={optionValue.name}
+      className="group"
+      disabled={isDisabled}
+      onClick={() => {
+        if (isSelected) return;
+        setSelectedOption(optionName, optionValue.name);
+        if (typeof onSelect === 'function') {
+          onSelect({
+            selectedVariant: selectedVariantFromOptions,
+            optionName,
+            optionValue,
+          });
+        }
+      }}
+      type="button"
+    >
+      {/* - BRILLIANT - isColor ? (
+        <InnerColorOptionValue
+          isAvailable={isAvailable}
+          isDisabled={isDisabled}
+          isSelected={isSelected}
+          swatch={swatch}
+          optionValue={optionValue}
+        />
+      ) : (
+        <InnerOptionValue
+          isAvailable={isAvailable}
+          isDisabled={isDisabled}
+          isSelected={isSelected}
+          optionValue={optionValue}
+        />
+      )*/}
+
+      <InnerOptionValue
+        isAvailable={isAvailable}
+        isDisabled={isDisabled}
+        isSelected={isSelected}
+        optionValue={optionValue}
+        optionsImageVariantMap={optionsImageVariantMap}
+      />
+    </button>
+  );
+}
+
+ProductOptionValueButton.displayName = 'ProductOptionValueButton';

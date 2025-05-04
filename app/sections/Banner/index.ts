@@ -1,1 +1,1 @@
-export {Banner} from './Banner';
+export {Banner} from 'modules/brilliant/Banner/Banner';

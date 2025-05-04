@@ -5,8 +5,8 @@ import type {ShopifyAnalyticsProduct} from '@shopify/hydrogen';
 import {ProductProvider} from '@shopify/hydrogen-react';
 import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 import {BYOP_PRODUCT_HANDLE} from 'modules/brilliant/BuildYourOwnPack/BuildYourPackConfig';
+import {Product} from 'modules/brilliant/Product/Product';
 
-import {Product} from '~/components/Product';
 import {routeHeaders} from '~/data/cache';
 import {ADMIN_PRODUCT_QUERY} from '~/data/graphql/admin/product';
 import {PRODUCT_PAGE_QUERY} from '~/data/graphql/pack/product-page';
