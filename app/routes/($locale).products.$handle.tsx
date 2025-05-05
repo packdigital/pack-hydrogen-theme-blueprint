@@ -76,7 +76,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
         ADMIN_PRODUCT_QUERY,
         {variables: {handle}, cache: admin.CacheShort()},
       );
-      if (!adminProduct) return;
+      if (!adminProduct) throw new Response(null, {status: 404});
       queriedProduct = normalizeAdminProduct(adminProduct);
       productStatus = adminProduct.status;
     }
