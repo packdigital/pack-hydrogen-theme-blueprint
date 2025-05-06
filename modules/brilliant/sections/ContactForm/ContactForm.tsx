@@ -1,18 +1,19 @@
+'use client';
+
 import {useMemo} from 'react';
 import {useInView} from 'react-intersection-observer';
 
-import {ContactFormWrapper} from '../sections/ContactForm/ContactFormWrapper';
-
-import {Schema} from './CategorySlider.schema';
-import {CategorySliderCms} from './CategorySlider.types';
+import {Schema} from './ContactForm.schema';
+import {ContactFormCms} from './ContactForm.types';
+import {ContactFormWrapper} from './ContactFormWrapper';
 
 import {Container} from '~/components/Container';
 import {ContainerSettings} from '~/settings/container';
 
-export function CategorySlider({
+export function ContactForm({
   cms,
 }: {
-  cms: CategorySliderCms & {container: ContainerSettings};
+  cms: ContactFormCms & {container: ContainerSettings};
 }) {
   const {ref, inView} = useInView({
     rootMargin: '200px',
@@ -27,15 +28,10 @@ export function CategorySlider({
     [cms?.section?.fullWidth],
   );
 
-  const margin = useMemo(
-    () => (cms?.section?.margin ? `m-${cms.section.margin}` : `m-3`),
-    [cms?.section?.margin],
-  );
-
   return (
     <Container container={cms.container}>
       <div ref={ref}>
-        <div className={`${maxWidthClass} justify-center ${margin}`}>
+        <div className={`${maxWidthClass} justify-center`}>
           <ContactFormWrapper />
         </div>
       </div>
@@ -43,5 +39,5 @@ export function CategorySlider({
   );
 }
 
-CategorySlider.displayName = 'CategorySlider';
-CategorySlider.Schema = Schema;
+ContactForm.displayName = 'ContactForm';
+ContactForm.Schema = Schema;

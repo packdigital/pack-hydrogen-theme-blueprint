@@ -13,3 +13,5 @@ export const DEFAULT_LOCALE: I18nLocale = Object.freeze({
 export const LOGGED_OUT_REDIRECT_TO = '/account/login' as const;
 
 export const LOGGED_IN_REDIRECT_TO = '/account/orders' as const;
+
+export const FORMSPREE_CONTACT_FORM_URL = 'https://formspree.io/f/mrbqqzan';

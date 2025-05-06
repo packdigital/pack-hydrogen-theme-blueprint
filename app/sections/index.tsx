@@ -3,6 +3,7 @@ import type {Section} from '@pack/types';
 import {BuildYourOwnPack} from 'modules/brilliant/BuildYourOwnPack';
 import {CategorySlider} from 'modules/brilliant/CategorySlider';
 import {FeaturedSlider} from 'modules/brilliant/FeaturedSlider';
+import {ContactForm} from 'modules/brilliant/sections/ContactForm/ContactForm';
 
 import {Accordions} from './Accordions';
 import {Banner} from './Banner';
@@ -115,6 +116,10 @@ export function registerSections() {
 
   registerSection(CategorySlider as Section, {
     name: 'category-slider',
+  });
+
+  registerSection(ContactForm as Section, {
+    name: 'brilliant-contact-form',
   });
 
   registerSection(BuildYourOwnPack as Section, {name: 'build-your-own-pack'});
