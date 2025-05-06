@@ -81,9 +81,9 @@ export default function FormContactForm() {
 
   return (
     <div>
-      <div className="flex flex-col items-center justify-center p-8">
+      <div className="flex flex-col items-center justify-center py-8">
         <h3 className="text-h3 text-3xl">Contact Us </h3>
-        <div className="w-1/2 p-5">
+        <div className="w-full px-4 md:w-1/2">
           <p className="text-center text-gray-500 ">
             Have questions about our products or services? We'd love to hear
             from you! Fill out the form below and we'll reply to you as soon as
@@ -91,102 +91,104 @@ export default function FormContactForm() {
           </p>
         </div>
       </div>
-      <div className="grid grid-cols-2 gap-6">
-        <div className="mb-8 items-center justify-center px-8">
-          <Card className={formBackgroundColor}>
-            {formResult && (
+      <div className="container mx-auto px-2 py-8 sm:px-4 lg:px-6 ">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+          <div className="flex justify-center">
+            <Card className={`${formBackgroundColor} w-full max-w-lg `}>
+              {formResult && (
+                <CardHeader>
+                  <CardTitle className="">
+                    <h3>{formResult.message}</h3>
+                  </CardTitle>
+                </CardHeader>
+              )}
               <CardHeader>
-                <CardTitle className="">
-                  <h3>{formResult.message}</h3>
+                <CardTitle>
+                  <h3 className="text-h3 text-3xl">Send Us a Message</h3>
                 </CardTitle>
               </CardHeader>
-            )}
-            <CardHeader>
-              <CardTitle>
-                <h3 className="text-h3 text-3xl">Send Us a Message</h3>
-              </CardTitle>
-            </CardHeader>
 
-            <CardContent className="">
-              <Form {...form}>
-                <form
-                  onSubmit={form.handleSubmit(onSubmit)}
-                  className="space-y-6"
-                >
-                  <FormField
-                    control={form.control}
-                    name="name"
-                    rules={{required: 'Name is required'}}
-                    render={({field}) => (
-                      <FormItem>
-                        <FormLabel>Name</FormLabel>
-                        <FormControl>
-                          <Input {...field} placeholder="Your name" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+              <CardContent className="">
+                <Form {...form}>
+                  <form
+                    onSubmit={form.handleSubmit(onSubmit)}
+                    className="space-y-6"
+                  >
+                    <FormField
+                      control={form.control}
+                      name="name"
+                      rules={{required: 'Name is required'}}
+                      render={({field}) => (
+                        <FormItem>
+                          <FormLabel>Name</FormLabel>
+                          <FormControl>
+                            <Input {...field} placeholder="Your name" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                  <FormField
-                    control={form.control}
-                    name="email"
-                    rules={{required: 'Email is required'}}
-                    render={({field}) => (
-                      <FormItem>
-                        <FormLabel>Email</FormLabel>
-                        <FormControl>
-                          <Input
-                            {...field}
-                            type="email"
-                            placeholder="you@example.com"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                    <FormField
+                      control={form.control}
+                      name="email"
+                      rules={{required: 'Email is required'}}
+                      render={({field}) => (
+                        <FormItem>
+                          <FormLabel>Email</FormLabel>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              type="email"
+                              placeholder="you@example.com"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                  <FormField
-                    control={form.control}
-                    name="message"
-                    rules={{required: 'Message is required'}}
-                    render={({field}) => (
-                      <FormItem>
-                        <FormLabel>Message</FormLabel>
-                        <FormControl>
-                          <Textarea
-                            {...field}
-                            placeholder="Your message…"
-                            rows={5}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                    <FormField
+                      control={form.control}
+                      name="message"
+                      rules={{required: 'Message is required'}}
+                      render={({field}) => (
+                        <FormItem>
+                          <FormLabel>Message</FormLabel>
+                          <FormControl>
+                            <Textarea
+                              {...field}
+                              placeholder="Your message…"
+                              rows={5}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                  <div className="flex gap-4">
-                    <Button type="submit" className="flex-1">
-                      Submit
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      className="flex-1"
-                      onClick={() => resetForm}
-                    >
-                      Reset
-                    </Button>
-                  </div>
-                </form>
-              </Form>
-            </CardContent>
-          </Card>
-        </div>
-        <div className="flex flex-col gap-6">
-          <ContactUsCard />
-          <QuickLinksCard />
+                    <div className="flex gap-4">
+                      <Button type="submit" className="flex-1">
+                        Submit
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="flex-1"
+                        onClick={() => resetForm}
+                      >
+                        Reset
+                      </Button>
+                    </div>
+                  </form>
+                </Form>
+              </CardContent>
+            </Card>
+          </div>
+          <div className="flex flex-col gap-6">
+            <ContactUsCard />
+            <QuickLinksCard />
+          </div>
         </div>
       </div>
     </div>
