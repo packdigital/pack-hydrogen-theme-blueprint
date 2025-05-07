@@ -169,7 +169,7 @@ export function ProductOptionValues({
                   return (
                     <CarouselItem
                       key={optionValue.name}
-                      className="basis-1/3 px-1 md:basis-1/2 lg:basis-1/3"
+                      className="basis-1/2 px-1 lg:basis-1/3"
                     >
                       <ProductOptionValue
                         index={index}

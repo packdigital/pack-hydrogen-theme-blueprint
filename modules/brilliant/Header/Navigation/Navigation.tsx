@@ -117,7 +117,7 @@ export const Navigation = memo(
                 />
               ) : (
                 <Svg
-                  className="w-full text-current"
+                  className="w-full text-white"
                   src="/svgs/menu.svg#menu"
                   title="Navigation"
                   viewBox="0 0 24 24"
