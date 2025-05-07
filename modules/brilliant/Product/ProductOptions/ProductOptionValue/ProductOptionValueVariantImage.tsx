@@ -59,9 +59,7 @@ export function ProductOptionValueVariantImage({
           <img src={optionImageUrl} alt={optionImageAlt} />
         </div>
         <div className="flex items-center justify-center p-1">
-          <p className="text-center text-xs truncate">
-            {selectedVariantFromOptions?.title}
-          </p>
+          <p className="text-center text-xs truncate">{optionValue.name}</p>
         </div>
       </CardContent>
     </Card>
