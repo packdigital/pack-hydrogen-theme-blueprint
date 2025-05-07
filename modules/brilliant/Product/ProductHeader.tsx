@@ -1,11 +1,11 @@
 import {useCallback} from 'react';
 
+import type {ProductHeaderProps} from './Product.types';
+
 import {ProductStars} from '~/components/ProductStars';
 import {useMatchMedia, useVariantPrices} from '~/hooks';
 import {HEADER_NAVIGATION, PRODUCT_MODAL_PANEL} from '~/lib/constants';
 import {PRODUCT_REVIEWS_KEY} from '~/sections/ProductReviews';
-
-import type {ProductHeaderProps} from './Product.types';
 
 export function ProductHeader({
   isMobile,
@@ -15,7 +15,11 @@ export function ProductHeader({
   selectedVariantColor,
   settings,
 }: ProductHeaderProps) {
-  const {price, compareAtPrice} = useVariantPrices(selectedVariant);
+  const {price, compareAtPrice, priceLocalized} =
+    useVariantPrices(selectedVariant);
+
+  //use priceLocalized instead of price if we want $10.00 with both zero cents
+
   const {enabledStarRating = true} = {...settings?.reviews};
   const isMobileViewport = useMatchMedia('(max-width: 767px)');
 
@@ -72,9 +76,7 @@ export function ProductHeader({
       )}
 
       {selectedVariantColor && (
-        <h2 className="min-h-6 text-base font-normal">
-          {selectedVariantColor}
-        </h2>
+        <h2 className="min-h-6 text-2xl font-normal">{selectedVariantColor}</h2>
       )}
 
       <div className="mt-2 flex min-h-6 gap-2">

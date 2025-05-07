@@ -25,6 +25,7 @@ export const prefixNonUsdDollar = (money: ReturnType<typeof useMoney>) => {
 
 export function useVariantPrices(variant: ProductVariant | undefined | null): {
   price: string | undefined;
+  priceLocalized?: string | undefined;
   compareAtPrice: string | undefined;
 } {
   const {currency} = useLocale();
@@ -42,15 +43,22 @@ export function useVariantPrices(variant: ProductVariant | undefined | null): {
     if (!price?.amount) {
       return {price: undefined, compareAtPrice: undefined};
     }
+
     const amount = parseFloat(price.amount);
     const compareAtAmount = parseFloat(compareAtPrice?.amount || '0');
 
     return {
       price: prefixNonUsdDollar(formattedPrice),
+      priceLocalized: formattedPrice.localizedString,
       compareAtPrice:
         compareAtAmount > amount
           ? prefixNonUsdDollar(formattedCompareAtPrice)
           : undefined,
     };
-  }, [id]);
+  }, [
+    compareAtPrice?.amount,
+    formattedCompareAtPrice,
+    formattedPrice,
+    price?.amount,
+  ]);
 }

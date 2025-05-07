@@ -124,21 +124,6 @@ export const Navigation = memo(
                 />
               )}
             </button>
-
-            <button
-              aria-label="Open search"
-              className="block w-5 md:hidden"
-              onClick={openSearch}
-              style={{color: iconColor}}
-              type="button"
-            >
-              <Svg
-                className="w-full text-current"
-                src="/svgs/search.svg#search"
-                title="Search"
-                viewBox="0 0 24 24"
-              />
-            </button>
           </div>
         </div>
 

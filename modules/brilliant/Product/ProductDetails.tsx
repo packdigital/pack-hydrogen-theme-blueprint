@@ -13,8 +13,9 @@ import type {
 import {ProductOptions} from './ProductOptions/ProductOptions';
 
 import {AddToCart} from '~/components/AddToCart';
-import {Card, CardContent} from '~/components/ui/card';
 import {useColorSwatches} from '~/hooks';
+
+const sizes = ['Small /', 'Medium /', 'Large /'];
 
 export function ProductDetails({
   enabledQuantitySelector,
@@ -55,9 +56,22 @@ export function ProductDetails({
     product.variants?.nodes?.length === 1 &&
     product.variants?.nodes?.[0]?.title === 'Default Title';
 
+  const stripSizes = useCallback((title: string) => {
+    // 1) remove each size-marker
+    let result = title;
+    sizes.forEach((size) => {
+      result = result.replaceAll(size, '');
+    });
+    return result
+      .split(' ')
+      .filter((token) => token !== '')
+      .join(' ');
+  }, []);
+
   const optionsImageVariantMap = useMemo<ProductOptionVariantImageMap>(() => {
     // 1. Flatten all option‐values
     const allValues = product.options.flatMap((o) => o.optionValues);
+
     // 2. Build a quick lookup by exact name
     const nameLookup = new Map<string, ProductOptionValue>(
       allValues.map((v) => [v.name, v]),
@@ -65,22 +79,25 @@ export function ProductDetails({
     // 3. Reduce variants into a map of optionValueId → image
     return product.variants.nodes.reduce((map, variant) => {
       // try exact match
-      const match = nameLookup.get(variant.title);
+      //Lets remove our size strings from the title to see how that plays out?
+      const match = nameLookup.get(stripSizes(variant.title));
+
       // fallback to fuzzy match if needed
       /*
-            if (!match) {
-              match = allValues.find(
-                (v) =>
-                  v.name.includes(variant.title) || variant.title.includes(v.name),
-              );
-            }
-            */
+      if (!match) {
+        match = allValues.find(
+          (v) =>
+            v.name.includes(variant.title) || variant.title.includes(v.name),
+        );
+      }
+      */
+
       if (match) {
         map[match.id] = variant.image;
       }
       return map;
     }, {} as ProductOptionVariantImageMap);
-  }, [product.variants, product.options]);
+  }, [product.options, product.variants.nodes, stripSizes]);
 
   return (
     <div className="flex flex-col gap-5">

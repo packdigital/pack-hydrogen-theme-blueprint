@@ -164,7 +164,7 @@ export function ProductOptionValues({
                 loop: true,
               }}
             >
-              <CarouselContent className="mx-0 px-5 py-4">
+              <CarouselContent className="mx-0">
                 {optionValues?.map((optionValue, index) => {
                   return (
                     <CarouselItem
@@ -190,9 +190,17 @@ export function ProductOptionValues({
                 })}
               </CarouselContent>
               <div className="mt-2 flex w-full items-center justify-center gap-6">
-                <CarouselPrevious className="" variant="default" />
-                <div className="text-sm">Select A {name}</div>
-                <CarouselNext className="" variant="default" />
+                <CarouselPrevious
+                  className=""
+                  variant="default"
+                  hideOnDisabled={true}
+                />
+
+                <CarouselNext
+                  className=""
+                  variant="default"
+                  hideOnDisabled={true}
+                />
               </div>
             </Carousel>
           </div>
