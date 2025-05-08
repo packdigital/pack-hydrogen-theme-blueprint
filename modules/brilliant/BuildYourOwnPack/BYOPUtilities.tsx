@@ -4,6 +4,8 @@ export type MappedSelectedBundle = {
   size: number;
   title: string;
   savings: string;
+  savingsText: string;
+  tagline: string;
 };
 
 export const tierMapToVariants: Record<
@@ -11,10 +13,24 @@ export const tierMapToVariants: Record<
   Partial<MappedSelectedBundle & ProductVariant>
 > = {
   6: {
-    title: 'Small',
+    title: 'Starter',
     size: 6,
-    savings: '1.50',
+    savings: '3.00',
+    savingsText: 'vs. buying individually',
+    tagline: 'Perfect for first-time collectors!',
   },
-  14: {title: 'Medium', size: 14, savings: '4.50'},
-  30: {title: 'Large', size: 30, savings: '8.50'},
+  14: {
+    title: 'Popular Pick',
+    size: 14,
+    savings: '15.00',
+    savingsText: 'when bundled',
+    tagline: 'Great value for animal lovers!',
+  },
+  30: {
+    title: 'Collectors Edition',
+    size: 30,
+    savings: '45.00',
+    savingsText: 'on the largest set',
+    tagline: 'Best deal for super fans & gift-givers!',
+  },
 };
