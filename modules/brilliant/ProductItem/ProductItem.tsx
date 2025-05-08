@@ -155,7 +155,11 @@ export const ProductItem = memo(
             <Link aria-label={title} to={productUrl} onClick={handleClick}>
               <h3 className="mt-2 min-h-6 text-base">{title}</h3>
             </Link>
-            {color && <p className="text-sm text-neutralMedium">{color}</p>}
+            {color && (
+              <p className="text-xs text-neutralMedium">
+                Multiple Colors Available
+              </p>
+            )}
 
             {enabledColorSelector && (
               <ColorVariantSelector
