@@ -1,13 +1,23 @@
-const TAG_PRIORITY: Record<string, number> = {
-  'Special Edition': 1,
-  Bestseller: 2,
-  New: 3,
+const TAG_META: Record<string, {priority: number; color: string}> = {
+  'Special Edition': {priority: 1, color: 'bg-yellow-400 text-black'},
+  Bestseller: {priority: 2, color: 'bg-red-500 text-white text-shadow'},
+  New: {priority: 3, color: 'bg-green-500 text-white text-shadow'},
+  Featured: {priority: 4, color: 'bg-orange-500 text-white text-shadow'},
 };
 
-export function getPriorityTag(tags: string[] = []): string | undefined {
+export function getPriorityTag(
+  tags: string[] = [],
+): {tag: string; color: string; priority: number} | undefined {
   const prioritized = tags
-    .filter((tag) => Object.prototype.hasOwnProperty.call(TAG_PRIORITY, tag))
-    .sort((a, b) => TAG_PRIORITY[a] - TAG_PRIORITY[b]);
+    .filter((tag) => Object.hasOwn(TAG_META, tag))
+    .sort((a, b) => TAG_META[a].priority - TAG_META[b].priority);
 
-  return prioritized[0]; // lowest priority number wins
+  const topTag = prioritized[0];
+  if (!topTag) return undefined;
+
+  return {
+    tag: topTag,
+    color: TAG_META[topTag].color,
+    priority: TAG_META[topTag].priority,
+  };
 }

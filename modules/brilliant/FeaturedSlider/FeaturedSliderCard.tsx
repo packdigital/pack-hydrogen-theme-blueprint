@@ -75,8 +75,10 @@ export function FeaturedSliderCard({
       {/* Top section: Product Image */}
       <div className="relative">
         {priorityTag && design === 'expanded' && (
-          <div className="absolute left-2 top-2 z-10 rounded-full bg-primary px-2 py-1 text-xs text-white">
-            {priorityTag}
+          <div
+            className={`${priorityTag.color} absolute left-2 top-2 z-10 rounded-full px-2 py-1 text-xs`}
+          >
+            {priorityTag.tag}
           </div>
         )}
         <Link
