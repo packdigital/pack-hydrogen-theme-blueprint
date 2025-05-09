@@ -121,6 +121,11 @@ export function AddToCart({
           ...itemCartPayload,
         },
       ]);
+
+      //we should be done updating so navigate back to bundle page?
+      if (afterAdd) afterAdd();
+      navigate(location.pathname + '?updated=true');
+      openCart();
     } else {
       //add item payload and call
       linesAdd([
@@ -133,10 +138,14 @@ export function AddToCart({
     addToCartUnlocked,
     isAdding,
     cartIsUpdating,
-    linesToAddByVariantId,
     selectedBundle?.id,
+    linesToAddByVariantId,
     clid,
     linesUpdate,
+    afterAdd,
+    navigate,
+    location.pathname,
+    openCart,
     linesAdd,
   ]);
 
@@ -149,7 +158,7 @@ export function AddToCart({
 
       openCart();
 
-      navigate(location.pathname + '?added');
+      navigate(location.pathname + '?added=true');
       setTimeout(() => setIsAdded(false), 1000);
     }
   }, [

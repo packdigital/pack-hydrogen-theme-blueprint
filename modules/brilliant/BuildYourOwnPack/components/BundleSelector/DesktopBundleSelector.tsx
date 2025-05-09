@@ -103,7 +103,7 @@ export function BundleOption({
 
             <div className="mb-1 flex flex-col items-baseline gap-1 ">
               <span className="text-base font-medium text-green-600">
-                💰 Save ${bundleDetails.savings} {bundleDetails.savingsText}
+                💰 Save {bundleDetails.savings} {bundleDetails.savingsText}
               </span>
             </div>
 

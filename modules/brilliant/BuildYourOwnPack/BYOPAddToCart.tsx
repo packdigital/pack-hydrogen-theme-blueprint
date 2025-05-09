@@ -188,7 +188,7 @@ export function BYOPAddToCart({
       type="button"
     >
       <span className={`${isAdding || isAdded ? 'invisible' : 'visible'}`}>
-        {clid ? 'Update Item In Your Cart' : `Add To Cart ${formattedPrice} `}
+        {clid ? 'Update Cart Item' : `Add To Cart ${formattedPrice} `}
       </span>
 
       {isAdding && (

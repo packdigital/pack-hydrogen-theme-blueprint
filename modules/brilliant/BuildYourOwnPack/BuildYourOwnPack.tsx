@@ -6,6 +6,7 @@ import {useCallback, useEffect, useMemo, useState} from 'react';
 import {Schema} from './BuildYourOwnPack.schema';
 import type {BuildYourOwnPackCms} from './BuildYourOwnPack.types';
 import {BYOP_PRODUCT_HANDLE} from './BuildYourPackConfig';
+import {BundleAddedBanner} from './BYOPAddedBanner';
 import {DesktopBundleSelector} from './components/BundleSelector/DesktopBundleSelector';
 import {BundleSheet} from './components/BundleSheet';
 import {ProductGrid} from './components/ProductGrid/ProductGrid';
@@ -42,7 +43,7 @@ export function BuildYourOwnPack({cms}: {cms: BuildYourOwnPackCms}) {
   const clid = searchParams.get('clid') || '';
   const ts = searchParams.get('ts') || false; //additional TS for chosenItems
   const addedToCart = searchParams.get('added') || false;
-  //console.log('ADDED=', addedToCart);
+  const [bannerVisible, setBannerVisible] = useState(false);
 
   const {lines} = useCart();
 
@@ -58,6 +59,14 @@ export function BuildYourOwnPack({cms}: {cms: BuildYourOwnPackCms}) {
     if (!clid || !lines) return;
     setSelectedItems([]);
   }, [ts, clid, lines]);
+
+  //For when we return to the page from cart
+  useEffect(() => {
+    if (addedToCart) {
+      setSelectedItems([]);
+      setBannerVisible(true);
+    }
+  }, [addedToCart]);
 
   const chosenItems = useMemo((): {id: string}[] => {
     //If we have CLID we need to get those product variant ids out.
@@ -291,9 +300,10 @@ export function BuildYourOwnPack({cms}: {cms: BuildYourOwnPackCms}) {
         />
 
         {addedToCart && (
-          <div>
-            <h3>THANKS </h3>
-          </div>
+          <BundleAddedBanner
+            visible={bannerVisible}
+            onClose={() => setBannerVisible(false)}
+          />
         )}
 
         <div className="mb-4">
