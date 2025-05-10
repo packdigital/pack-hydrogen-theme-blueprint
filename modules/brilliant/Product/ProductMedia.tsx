@@ -55,7 +55,7 @@ export function ProductMedia({
     | undefined;
 
   return (
-    <div className="grid grid-cols-1 justify-between gap-4 lg:grid-cols-[80px_calc(100%-100px)] xl:gap-5">
+    <div className="grid grid-cols-1 justify-between gap-4">
       <div className="order-1 lg:order-2">
         <div
           className="relative rounded-lg border bg-white p-2"
@@ -127,7 +127,7 @@ export function ProductMedia({
        * 10px = gutter between thumbnails
        * 3 = number of gutters between thumbnails
        */}
-      <div className="scrollbar-hide relative order-2 hidden w-full overflow-x-auto md:block md:max-lg:pb-[calc((100%-5*8px)/6)] lg:order-1 lg:h-[calc(80px*5+12px*4)] xl:h-[calc(80px*6+12px*5)]">
+      <div className="scrollbar-hide relative order-2 hidden w-full overflow-x-auto md:block md:max-lg:pb-[calc((100%-5*8px)/6)]">
         {media.length > 0 && (
           <ProductMediaThumbnails
             activeIndex={activeIndex}

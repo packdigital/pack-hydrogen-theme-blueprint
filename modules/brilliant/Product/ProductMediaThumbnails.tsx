@@ -55,6 +55,10 @@ export function ProductMediaThumbnails({
         onSwiper={setThumbsSwiper}
         preventClicks={false}
         preventClicksPropagation={false}
+        centeredSlides={true}
+        centeredSlidesBounds={true}
+        effect="fade"
+        fadeEffect={{crossFade: true}}
         slidesPerView={6}
         spaceBetween={8}
         onSlideChange={(_swiper) => {
@@ -67,18 +71,17 @@ export function ProductMediaThumbnails({
         }}
         breakpoints={{
           1024: {
-            direction: 'vertical',
             slidesPerView: 5,
             spaceBetween: 12,
           },
           1280: {
-            direction: 'vertical',
             slidesPerView: 6,
             spaceBetween: 12,
           },
         }}
       >
         {!!thumbsSwiper &&
+          swiper &&
           media.map((mediaItem, index) => {
             const {id, mediaContentType} = mediaItem;
             const isActive = index === activeIndex;
@@ -97,9 +100,8 @@ export function ProductMediaThumbnails({
             );
           })}
 
-        <div className="swiper-button-prev !left-0 !text-black opacity-90 after:flex after:size-5 after:items-center after:justify-center after:overflow-hidden after:rounded-[50%] after:bg-white after:!text-[0.6rem] after:!content-['prev'] lg:!left-1/2 lg:!top-5 lg:!-translate-x-1/2 lg:!rotate-90" />
-
-        <div className="swiper-button-next !right-0 !text-black opacity-90 after:flex after:size-5 after:items-center after:justify-center after:overflow-hidden after:rounded-[50%] after:bg-white after:!text-[0.6rem] after:!content-['next'] lg:!bottom-0 lg:!left-1/2 lg:!top-auto lg:!-translate-x-1/2 lg:!rotate-90" />
+        <div className="swiper-button-prev  rounded-full  bg-white p-4 opacity-95  [--swiper-navigation-color:bg-primary] [--swiper-navigation-size:16px]" />
+        <div className="swiper-button-next  rounded-full  bg-white p-4 opacity-95  [--swiper-navigation-color:bg-primary] [--swiper-navigation-size:16px]" />
       </Swiper>
     </>
   );
