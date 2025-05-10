@@ -166,7 +166,7 @@ export default function ProductRoute() {
       initialVariantId={initialSelectedVariant?.id || null}
     >
       <div data-comp={ProductRoute.displayName}>
-        {/* BRILLIANT - */}
+        {/* BRILLIANT HANDLES LOADING OUR SINGLE PRODUCT THAT WE HAVE A CUSTOM SECTION TIED TO OUR BYOP STUFF - */}
         {!BYOP_PRODUCT_HANDLE.includes(product?.handle) && (
           <Product
             product={product}

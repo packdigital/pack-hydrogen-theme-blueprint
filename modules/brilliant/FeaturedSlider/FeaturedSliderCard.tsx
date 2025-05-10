@@ -11,7 +11,7 @@ import {AnalyticsEvent} from '~/components/Analytics/constants';
 import {Link} from '~/components/Link';
 import {ProductItemMedia} from '~/components/ProductItem/ProductItemMedia';
 import {Card} from '~/components/ui/card';
-import {useParsedProductMetafields, useProductModal} from '~/hooks';
+import {useParsedProductMetafields} from '~/hooks';
 import {COLOR_OPTION_NAME} from '~/lib/constants';
 import {SelectedVariant} from '~/lib/types';
 //import type {ProductCms} from '~/lib/types';

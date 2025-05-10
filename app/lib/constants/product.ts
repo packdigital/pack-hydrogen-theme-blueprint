@@ -14,6 +14,10 @@ export const PRODUCT_METAFIELDS_IDENTIFIERS = [
     namespace: 'custom',
     key: 'featured_title',
   },
+  {
+    namespace: 'custom',
+    key: 'breadcrumbs',
+  },
 ] as MetafieldIdentifier[];
 
 /* Ensure updating this ratio as needed. Required format is 'width/height' */

@@ -2,6 +2,8 @@ import {useProduct} from '@shopify/hydrogen-react';
 import {useEffect, useMemo} from 'react';
 
 //import {ProductMetafields} from './ProductMetafields';
+import {Breadcrumbs} from '../components/Breadcrumbs';
+
 import {ADDITIONAL_VARIANT_NAMES} from './additionalVariantNames';
 import type {ProductProps} from './Product.types';
 import {ProductDetails} from './ProductDetails';
@@ -81,7 +83,10 @@ export function Product({
 
   return (
     <section data-comp="product">
-      <div className="md:px-contained py-6 md:py-10 lg:py-12">
+      <div className="md:px-contained">
+        <div className="mx-auto max-w-screen-xl py-1 pb-4 md:pb-6 lg:pb-8">
+          <Breadcrumbs product={product} />
+        </div>
         <div className="mx-auto grid max-w-screen-xl grid-cols-1 gap-y-5 md:grid-cols-2 md:grid-rows-[auto_1fr] md:gap-y-4">
           {/* mobile header placement */}
           {/* note: remove this component if mobile header shares same placement as desktop */}

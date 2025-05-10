@@ -1,9 +1,9 @@
-import {useMemo} from 'react';
 import type {Product} from '@shopify/hydrogen/storefront-api-types';
+import {useMemo} from 'react';
 
-import {parseMetafieldsFromProduct} from '~/lib/utils';
 import {PRODUCT_METAFIELDS_IDENTIFIERS} from '~/lib/constants';
 import type {ParsedMetafields} from '~/lib/types';
+import {parseMetafieldsFromProduct} from '~/lib/utils';
 
 /**
  * Parse metafields from product
@@ -26,7 +26,7 @@ export function useParsedProductMetafields(
       product,
       identifiers: PRODUCT_METAFIELDS_IDENTIFIERS,
     });
-  }, [fetchOnMount, product?.id]);
+  }, [fetchOnMount, product]);
 }
 
 //

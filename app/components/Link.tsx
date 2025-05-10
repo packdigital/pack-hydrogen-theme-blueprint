@@ -1,7 +1,7 @@
-import {forwardRef, useMemo} from 'react';
-import type {ReactNode} from 'react';
 import {Link as RemixLink} from '@remix-run/react';
 import type {LinkProps as RemixLinkProps} from '@remix-run/react';
+import {forwardRef, useMemo} from 'react';
+import type {ReactNode} from 'react';
 
 import {useLocale} from '~/hooks';
 

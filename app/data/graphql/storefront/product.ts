@@ -91,7 +91,9 @@ export const PRODUCT_FRAGMENT = `#graphql
     tags
     collections(first: 250) {
       nodes {
-        handle
+        id
+        handle,        
+        title,
       }
     }
     featuredImage {
