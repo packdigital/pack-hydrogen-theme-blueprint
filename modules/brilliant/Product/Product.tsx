@@ -8,6 +8,7 @@ import {ADDITIONAL_VARIANT_NAMES} from './additionalVariantNames';
 import type {ProductProps} from './Product.types';
 import {ProductDetails} from './ProductDetails';
 import {ProductHeader} from './ProductHeader';
+import {ProductMarketing} from './ProductMarketing/ProductMarketing';
 import {ProductMedia} from './ProductMedia';
 
 import {useLocale, useParsedProductMetafields, useSettings} from '~/hooks';
@@ -110,6 +111,10 @@ export function Product({
                 selectedVariant={selectedVariant}
                 selectedVariantColor={selectedVariantColor}
               />
+
+              <hr className="mt-6" />
+
+              <ProductMarketing product={product} />
             </div>
           </div>
 
