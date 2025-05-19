@@ -76,9 +76,10 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
         ADMIN_PRODUCT_QUERY,
         {variables: {handle}, cache: admin.CacheShort()},
       );
-      if (!adminProduct) return;
-      queriedProduct = normalizeAdminProduct(adminProduct);
-      productStatus = adminProduct.status;
+      if (adminProduct) {
+        queriedProduct = normalizeAdminProduct(adminProduct);
+        productStatus = adminProduct.status;
+      }
     }
   }
 
