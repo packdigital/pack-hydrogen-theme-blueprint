@@ -1,5 +1,6 @@
 import snake_case from 'snakecase-keys';
-import CryptoJS from 'crypto-js';
+import CryptoJS from 'crypto-js/core';
+import aes from 'crypto-js/aes';
 
 import type {MultipassCustomer} from './multipass.types';
 
@@ -55,13 +56,14 @@ export class Multipassify {
     // Get the origin of the request
     const toOrigin = new URL(request.url).origin;
 
-    const redirectToCheckout = customer.return_to
+    const redirectToShopify = customer.return_to
       ? customer.return_to.includes('cart/c') ||
-        customer.return_to.includes('checkout')
+        customer.return_to.includes('checkout') ||
+        customer.return_to.includes('account')
       : false;
 
-    // if the target url is the checkout, we use the shopify domain liquid auth
-    const toUrl = redirectToCheckout
+    // if the target url is the checkout or account, we use the shopify domain liquid auth
+    const toUrl = redirectToShopify
       ? `https://${shopifyDomain}/account/login/multipass/${token}` // uses liquid multipass auth
       : `${toOrigin}/account/login/multipass/${token}`; // uses local multipass verification. @see: api route
 
@@ -93,7 +95,7 @@ export class Multipassify {
     // Use a random IV
     const iv = CryptoJS.lib.WordArray.random(this.BLOCK_SIZE);
 
-    const cipher = CryptoJS.AES.encrypt(customerText, this.encryptionKey, {
+    const cipher = aes.encrypt(customerText, this.encryptionKey, {
       iv,
       mode: CryptoJS.mode.CBC,
       padding: CryptoJS.pad.Pkcs7,
@@ -130,7 +132,7 @@ export class Multipassify {
 
     const encryptedCustomer = CryptoJS.enc.Base64.stringify(encrypted);
 
-    const decryptedCustomer = CryptoJS.AES.decrypt(
+    const decryptedCustomer = aes.decrypt(
       encryptedCustomer,
       this.encryptionKey,
       {

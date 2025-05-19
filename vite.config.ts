@@ -41,6 +41,8 @@ export default defineConfig({
         'react-markdown',
         'remark-gfm',
         'remark-breaks',
+        'crypto-js/core',
+        'crypto-js/aes',
       ],
     },
   },
