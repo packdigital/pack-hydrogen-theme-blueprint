@@ -1,7 +1,7 @@
 import {useLoaderData} from '@remix-run/react';
-import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 import {RenderSections} from '@pack/react';
+import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 
 import {getShop, getSiteSettings} from '~/lib/utils';
 import {PAGE_QUERY} from '~/data/graphql/pack/page';
@@ -23,12 +23,14 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
     getSiteSettings(context),
   ]);
 
-  if (!data?.page) throw new Response(null, {status: 404});
+  const {page} = data;
+
+  if (!page) throw new Response(null, {status: 404});
 
   /* Certain product sections require fetching products before page load */
   const productsMap = await getProductsMapForPage({
     context,
-    page: data.page,
+    page,
   });
 
   const isPolicy = handle?.includes('privacy') || handle?.includes('policy');
@@ -36,14 +38,14 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
     pageType: isPolicy ? AnalyticsPageType.policy : AnalyticsPageType.page,
   };
   const seo = seoPayload.page({
-    page: data.page,
+    page,
     shop,
     siteSettings,
   });
 
   return {
     analytics,
-    page: data.page,
+    page,
     productsMap,
     seo,
     url: request.url,

@@ -41,7 +41,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
   });
 
   const [
-    pageData,
+    {data},
     {product: storefrontProduct},
     productGroupings,
     shop,
@@ -68,7 +68,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
   let queriedProduct = storefrontProduct;
   let productStatus = 'ACTIVE';
 
-  const productPage = pageData?.data?.productPage;
+  const {productPage} = data;
 
   if (admin && isPreviewModeEnabled) {
     if (!queriedProduct) {

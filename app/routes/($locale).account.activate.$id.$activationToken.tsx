@@ -1,10 +1,10 @@
 import {data as dataWithOptions, redirect} from '@shopify/remix-oxygen';
+import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 import type {
   ActionFunctionArgs,
   LoaderFunctionArgs,
   MetaArgs,
 } from '@shopify/remix-oxygen';
-import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 
 import {Activate} from '~/components/Account';
 import {GuestAccountLayout} from '~/components/AccountLayout';

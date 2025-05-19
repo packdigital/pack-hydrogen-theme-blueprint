@@ -1,5 +1,5 @@
-import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
+import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 
 import {CartPage} from '~/components/Cart';
 import {getShop, getSiteSettings} from '~/lib/utils';

@@ -247,7 +247,7 @@ function notLoggedInResponse(options: NotLoggedInResponseType) {
   if (!errorKey) {
     error = 'UNKNOWN_ERROR';
   } else {
-    error = ERRORS[errorKey] ?? 'UNKNOWN_ERROR';
+    error = ERRORS[errorKey] ?? errorKey;
   }
 
   // Always return the original URL.

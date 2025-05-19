@@ -1,9 +1,9 @@
 import {useEffect} from 'react';
 import {redirect} from '@shopify/remix-oxygen';
-import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 import {getSeoMeta} from '@shopify/hydrogen';
 import {useLoaderData, useNavigate} from '@remix-run/react';
 import {useCart} from '@shopify/hydrogen-react';
+import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 
 export async function loader({request, params}: LoaderFunctionArgs) {
   const {code, locale} = params;

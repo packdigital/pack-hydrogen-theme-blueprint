@@ -1,6 +1,5 @@
 import {useMemo} from 'react';
 import {useLoaderData} from '@remix-run/react';
-import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 import {
   Analytics,
   AnalyticsPageType,
@@ -8,6 +7,7 @@ import {
   getSeoMeta,
 } from '@shopify/hydrogen';
 import {RenderSections} from '@pack/react';
+import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 import type {ProductCollectionSortKeys} from '@shopify/hydrogen/storefront-api-types';
 
 import {Collection} from '~/components/Collection';
@@ -51,7 +51,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     pageBy: resultsPerPage,
   });
 
-  const [pageData, {collection}, shop] = await Promise.all([
+  const [{data}, {collection}, shop] = await Promise.all([
     pack.query(COLLECTION_PAGE_QUERY, {
       variables: {handle},
       cache: storefront.CacheLong(),
@@ -71,7 +71,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     getShop(context),
   ]);
 
-  const collectionPage = pageData.data?.collectionPage;
+  const {collectionPage} = data;
 
   if (!collection) throw new Response(null, {status: 404});
 

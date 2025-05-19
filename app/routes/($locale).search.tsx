@@ -1,11 +1,11 @@
 import {useLoaderData} from '@remix-run/react';
-import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 import {
   Analytics,
   AnalyticsPageType,
   getPaginationVariables,
   getSeoMeta,
 } from '@shopify/hydrogen';
+import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 import type {
   Collection as CollectionType,
   SearchSortKeys,

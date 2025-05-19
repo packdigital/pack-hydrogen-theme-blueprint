@@ -1,8 +1,8 @@
 import {useMemo} from 'react';
 import {useLoaderData} from '@remix-run/react';
-import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 import {RenderSections} from '@pack/react';
+import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 
 import {ARTICLE_PAGE_QUERY} from '~/data/graphql/pack/article-page';
 import {getShop, getSiteSettings} from '~/lib/utils';
@@ -23,11 +23,13 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     getSiteSettings(context),
   ]);
 
-  if (!data.article) throw new Response(null, {status: 404});
+  const {article} = data;
+
+  if (!article) throw new Response(null, {status: 404});
 
   const analytics = {pageType: AnalyticsPageType.article};
   const seo = seoPayload.article({
-    page: data.article,
+    page: article,
     shop,
     siteSettings,
     url: request.url,
@@ -35,7 +37,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
 
   return {
     analytics,
-    article: data.article,
+    article,
     seo,
     url: request.url,
   };

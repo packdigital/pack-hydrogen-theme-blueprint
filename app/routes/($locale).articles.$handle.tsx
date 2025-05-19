@@ -1,9 +1,9 @@
 import {useMemo} from 'react';
 import {useLoaderData} from '@remix-run/react';
 import {redirect} from '@shopify/remix-oxygen';
-import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 import {RenderSections} from '@pack/react';
+import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 
 import {ARTICLE_PAGE_QUERY} from '~/data/graphql/pack/article-page';
 import {getShop, getSiteSettings} from '~/lib/utils';
@@ -19,11 +19,13 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     cache: context.storefront.CacheLong(),
   });
 
-  if (!data.article) throw new Response(null, {status: 404});
+  const article = data;
 
-  if (data.article.blog) {
+  if (!article) throw new Response(null, {status: 404});
+
+  if (article.blog) {
     // If the article has a blog, redirect to the new path
-    const blogHandle = data.article.blog.handle;
+    const blogHandle = article.blog.handle;
     const newPath = locale
       ? `/${locale}/blogs/${blogHandle}/${handle}`
       : `/blogs/${blogHandle}/${handle}`;
@@ -36,7 +38,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     ]);
     const analytics = {pageType: AnalyticsPageType.article};
     const seo = seoPayload.article({
-      page: data.article,
+      page: article,
       shop,
       siteSettings,
       url: request.url,
@@ -44,7 +46,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
 
     return {
       analytics,
-      article: data.article,
+      article,
       seo,
       url: request.url,
     };
