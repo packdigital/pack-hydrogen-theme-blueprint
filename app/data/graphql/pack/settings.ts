@@ -54,6 +54,7 @@ export const SECTION_FRAGMENT = `
     title
     status
     data
+    styles
     publishedAt
     createdAt
     updatedAt
