@@ -52,7 +52,6 @@ registerStorefrontSettings();
 // This is important to avoid re-fetching root queries on sub-navigations
 export const shouldRevalidate: ShouldRevalidateFunction = ({
   formMethod,
-  defaultShouldRevalidate,
   currentUrl,
   nextUrl,
 }) => {
@@ -64,7 +63,7 @@ export const shouldRevalidate: ShouldRevalidateFunction = ({
   if (currentUrl.toString() === nextUrl.toString()) {
     return true;
   }
-  return defaultShouldRevalidate;
+  return false;
 };
 
 export const links: LinksFunction = () => {
