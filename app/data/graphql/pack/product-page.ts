@@ -1,13 +1,13 @@
 import {SECTION_FRAGMENT} from './settings';
 
 export const PRODUCT_PAGE_QUERY = `
-  query ProductPage($handle: String!, $version: Version) {
+  query ProductPage($handle: String!, $version: Version, $cursor: String) {
     productPage: productPageByHandle(handle: $handle, version: $version) {
       id
       title
       handle
       status
-      sections(first: 25) {
+      sections(first: 25, after: $cursor) {
         nodes {
           ...SectionFragment
         }

@@ -3,7 +3,7 @@ import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 import {RenderSections} from '@pack/react';
 import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 
-import {getShop, getSiteSettings} from '~/lib/utils';
+import {getPage, getShop, getSiteSettings} from '~/lib/utils';
 import {PAGE_QUERY} from '~/data/graphql/pack/page';
 import {routeHeaders} from '~/data/cache';
 import {seoPayload} from '~/lib/seo.server';
@@ -14,16 +14,13 @@ export const headers = routeHeaders;
 export async function loader({context, params, request}: LoaderFunctionArgs) {
   const {handle} = params;
 
-  const [{data}, shop, siteSettings] = await Promise.all([
-    context.pack.query(PAGE_QUERY, {
-      variables: {handle},
-      cache: context.storefront.CacheLong(),
-    }),
+  if (!handle) throw new Response(null, {status: 404});
+
+  const [{page}, shop, siteSettings] = await Promise.all([
+    getPage({context, handle, pageKey: 'page', query: PAGE_QUERY}),
     getShop(context),
     getSiteSettings(context),
   ]);
-
-  const {page} = data;
 
   if (!page) throw new Response(null, {status: 404});
 

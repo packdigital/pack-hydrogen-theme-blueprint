@@ -1,12 +1,66 @@
 import {v4 as uuidv4} from 'uuid';
 import cookieParser from 'cookie';
+import type {AppLoadContext} from '@shopify/remix-oxygen';
 import type {
   Product,
   ProductOptionValue,
 } from '@shopify/hydrogen/storefront-api-types';
 
 import {COLOR_OPTION_NAME} from '~/lib/constants';
-import type {Group, OptionWithGroups} from '~/lib/types';
+import type {Group, OptionWithGroups, Page} from '~/lib/types';
+
+/*
+ * Fetches page data from Pack with all sections,
+ * using recursive calls in case there are more than 25 sections
+ */
+export const getPage = async ({
+  context,
+  handle,
+  pageKey = 'page',
+  query,
+}: {
+  context: AppLoadContext;
+  handle: string;
+  pageKey?: string;
+  query: string;
+}) => {
+  const getPageWithAllSections = async ({
+    accumulatedPage,
+    cursor,
+  }: {
+    accumulatedPage: Page | null;
+    cursor: string | null;
+  }): Promise<Page> => {
+    const {data} = await context.pack.query(query, {
+      variables: {handle, cursor},
+      cache: context.storefront.CacheLong(),
+    });
+
+    if (!data?.[pageKey]) throw new Response(null, {status: 404});
+
+    const {nodes = [], pageInfo} = {...data[pageKey].sections};
+    const combinedSections = {
+      nodes: [...(accumulatedPage?.sections?.nodes || []), ...nodes],
+      pageInfo,
+    };
+    const combinedPage = {
+      ...data[pageKey],
+      sections: combinedSections,
+    };
+    if (pageInfo?.hasNextPage) {
+      return getPageWithAllSections({
+        accumulatedPage: combinedPage,
+        cursor: pageInfo.endCursor,
+      });
+    }
+    return combinedPage;
+  };
+  const page = await getPageWithAllSections({
+    accumulatedPage: null,
+    cursor: null,
+  });
+  return {[pageKey]: page};
+};
 
 const SESSION_COOKIE = 'pack_session';
 const DEFAULT_EXPIRES = 365;

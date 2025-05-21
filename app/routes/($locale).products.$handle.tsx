@@ -6,6 +6,7 @@ import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 import type {ShopifyAnalyticsProduct} from '@shopify/hydrogen';
 
 import {
+  getPage,
   getProductGroupings,
   getShop,
   getSiteSettings,
@@ -32,6 +33,8 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
   const {handle} = params;
   const {admin, pack, storefront} = context;
 
+  if (!handle) throw new Response(null, {status: 404});
+
   const storeDomain = storefront.getShopifyDomain();
   const isPreviewModeEnabled = pack.isPreviewModeEnabled();
   const selectedOptions = await getSelectedProductOptions({
@@ -41,15 +44,17 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
   });
 
   const [
-    {data},
+    {productPage},
     {product: storefrontProduct},
     productGroupings,
     shop,
     siteSettings,
   ] = await Promise.all([
-    pack.query(PRODUCT_PAGE_QUERY, {
-      variables: {handle},
-      cache: storefront.CacheLong(),
+    getPage({
+      context,
+      handle,
+      pageKey: 'productPage',
+      query: PRODUCT_PAGE_QUERY,
     }),
     storefront.query(PRODUCT_QUERY, {
       variables: {
@@ -67,8 +72,6 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
 
   let queriedProduct = storefrontProduct;
   let productStatus = 'ACTIVE';
-
-  const {productPage} = data;
 
   if (admin && isPreviewModeEnabled) {
     if (!queriedProduct) {

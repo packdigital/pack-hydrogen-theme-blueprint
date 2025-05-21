@@ -6,20 +6,24 @@ import {RenderSections} from '@pack/react';
 import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 
 import {ARTICLE_PAGE_QUERY} from '~/data/graphql/pack/article-page';
-import {getShop, getSiteSettings} from '~/lib/utils';
+import {getPage, getShop, getSiteSettings} from '~/lib/utils';
 import {routeHeaders} from '~/data/cache';
 import {seoPayload} from '~/lib/seo.server';
+import type {ArticlePage} from '~/lib/types';
 
 export const headers = routeHeaders;
 
 export async function loader({params, context, request}: LoaderFunctionArgs) {
   const {handle, locale} = params;
-  const {data} = await context.pack.query(ARTICLE_PAGE_QUERY, {
-    variables: {handle},
-    cache: context.storefront.CacheLong(),
-  });
 
-  const article = data;
+  if (!handle) throw new Response(null, {status: 404});
+
+  const {article} = await (getPage({
+    context,
+    handle,
+    pageKey: 'article',
+    query: ARTICLE_PAGE_QUERY,
+  }) as Promise<{article: ArticlePage}>);
 
   if (!article) throw new Response(null, {status: 404});
 

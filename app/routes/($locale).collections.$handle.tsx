@@ -13,7 +13,7 @@ import type {ProductCollectionSortKeys} from '@shopify/hydrogen/storefront-api-t
 import {Collection} from '~/components/Collection';
 import {COLLECTION_QUERY} from '~/data/graphql/storefront/collection';
 import {COLLECTION_PAGE_QUERY} from '~/data/graphql/pack/collection-page';
-import {getFilters, getShop, getSiteSettings} from '~/lib/utils';
+import {getFilters, getPage, getShop, getSiteSettings} from '~/lib/utils';
 import {routeHeaders} from '~/data/cache';
 import {seoPayload} from '~/lib/seo.server';
 import {useGlobal} from '~/hooks';
@@ -23,7 +23,9 @@ export const headers = routeHeaders;
 
 export async function loader({params, context, request}: LoaderFunctionArgs) {
   const {handle} = params;
-  const {pack, storefront} = context;
+  const {storefront} = context;
+
+  if (!handle) throw new Response(null, {status: 404});
 
   const searchParams = new URL(request.url).searchParams;
   const siteSettings = await getSiteSettings(context);
@@ -51,10 +53,12 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     pageBy: resultsPerPage,
   });
 
-  const [{data}, {collection}, shop] = await Promise.all([
-    pack.query(COLLECTION_PAGE_QUERY, {
-      variables: {handle},
-      cache: storefront.CacheLong(),
+  const [{collectionPage}, {collection}, shop] = await Promise.all([
+    getPage({
+      context,
+      handle,
+      pageKey: 'collectionPage',
+      query: COLLECTION_PAGE_QUERY,
     }),
     storefront.query(COLLECTION_QUERY, {
       variables: {
@@ -70,8 +74,6 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     }),
     getShop(context),
   ]);
-
-  const {collectionPage} = data;
 
   if (!collection) throw new Response(null, {status: 404});
 
