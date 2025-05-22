@@ -27,6 +27,9 @@ function robotsTxtData({url}: {url: string}) {
     Disallow: /account
     ${sitemapUrl ? `Sitemap: ${sitemapUrl}` : ''}
 
+    User-agent: OAI-SearchBot
+    Allow: /
+
     # Google adsbot ignores robots.txt unless specifically named!
     User-agent: adsbot-google
     Disallow: /checkouts/

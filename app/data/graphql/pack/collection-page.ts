@@ -1,12 +1,12 @@
 import {SECTION_FRAGMENT} from './settings';
 
 export const COLLECTION_PAGE_QUERY = `
-  query CollectionPage($handle: String!, $version: Version) {
+  query CollectionPage($handle: String!, $version: Version, $cursor: String) {
     collectionPage: collectionPageByHandle(handle: $handle, version: $version) {
       id
       handle
       status
-      sections(first: 25) {
+      sections(first: 25, after: $cursor) {
         nodes {
           ...SectionFragment
         }

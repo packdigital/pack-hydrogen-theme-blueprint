@@ -1,7 +1,13 @@
-import {redirect, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
+import {useEffect, useState} from 'react';
+import {useNavigate} from '@remix-run/react';
+import {useCart} from '@shopify/hydrogen-react';
+import type {CartLineInput} from '@shopify/hydrogen/storefront-api-types';
+
+import {Spinner} from '~/components/Animations';
+import {useLocale} from '~/hooks';
 
 /**
- * Automatically creates a new cart based on the URL and redirects straight to checkout.
+ * Automatically creates a new cart based on the URL.
  * Expected URL structure:
  * ```ts
  * /cart/<variant_id>:<quantity>
@@ -19,51 +25,82 @@ import {redirect, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
  * ```
  * @preserve
  */
-export async function loader({request, context, params}: LoaderFunctionArgs) {
-  const {cart} = context;
-  const {lines} = params;
-  const linesMap = lines?.split(',').map((line) => {
-    const lineDetails = line.split(':');
-    const variantId = lineDetails[0];
-    const quantity = parseInt(lineDetails[1], 10);
-
-    return {
-      merchandiseId: `gid://shopify/ProductVariant/${variantId}`,
-      quantity,
-    };
-  });
-
-  const url = new URL(request.url);
-  const searchParams = new URLSearchParams(url.search);
-
-  const discount = searchParams.get('discount');
-  const discountArray = discount ? [discount] : [];
-
-  //! create a cart
-  const result = await cart.create({
-    lines: linesMap,
-    discountCodes: discountArray,
-  });
-
-  const cartResult = result.cart;
-
-  if (result.errors?.length || !cartResult) {
-    throw new Response('Link may be expired. Try checking the URL.', {
-      status: 410,
-    });
-  }
-
-  // Update cart id in cookie
-  const headers = cart.setCartId(cartResult.id);
-
-  //! redirect to checkout
-  if (cartResult.checkoutUrl) {
-    return redirect(cartResult.checkoutUrl, {headers});
-  } else {
-    throw new Error('No checkout URL found');
-  }
-}
 
 export default function CartLinesRoute() {
-  return null;
+  const {cartCreate, lines = [], status} = useCart();
+  const navigate = useNavigate();
+  const {pathPrefix} = useLocale();
+
+  const [linesToAdd, setLinesToAdd] = useState<CartLineInput[]>([]);
+  const [discountCode, setDiscountCode] = useState('');
+  const [isCartCreated, setIsCartCreated] = useState(false);
+  const [isMaybeError, setIsMaybeError] = useState(false);
+
+  useEffect(() => {
+    const linesPath = window.location.pathname.split('/').pop();
+    if (!linesPath) {
+      navigate(`${pathPrefix}/cart`, {replace: true});
+      return;
+    }
+    const lines = linesPath.split(',').map((line) => {
+      const lineDetails = line.split(':');
+      const variantId = lineDetails[0];
+      const quantity = parseInt(lineDetails[1], 10) ?? 1;
+      return {
+        merchandiseId: `gid://shopify/ProductVariant/${variantId}`,
+        quantity,
+      };
+    });
+    const searchParams = new URLSearchParams(window.location.search);
+    const discount = searchParams.get('discount');
+    if (discount) setDiscountCode(discount);
+    setLinesToAdd(lines);
+  }, []);
+
+  useEffect(() => {
+    if (status === 'idle' && linesToAdd.length > 0) {
+      cartCreate({
+        lines: linesToAdd,
+        discountCodes: discountCode ? [discountCode] : [],
+      });
+      setLinesToAdd([]);
+      setDiscountCode('');
+      setIsCartCreated(true);
+    }
+  }, [status === 'idle', JSON.stringify(linesToAdd)]);
+
+  useEffect(() => {
+    if (isCartCreated && lines.length > 0) {
+      setTimeout(() => {
+        navigate(`${pathPrefix}/cart`, {replace: true});
+      }, 100);
+    }
+  }, [isCartCreated, JSON.stringify(lines)]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsMaybeError(true);
+    }, 8000);
+  }, []);
+
+  return (
+    <div
+      className={`px-contained py-contained flex items-center justify-center max-md:h-[calc(100vh-var(--header-height-mobile)-var(--promobar-height-mobile))] md:h-[calc(100vh-var(--header-height-desktop)-var(--promobar-height-desktop))]`}
+    >
+      <div className="flex flex-col items-center gap-4">
+        <div className="flex flex-wrap items-center gap-6">
+          <Spinner width="24" />
+          <h1 className="font-sans text-2xl font-bold">
+            Your cart is creating...
+          </h1>
+        </div>
+
+        {isMaybeError && (
+          <p className="text-center text-lg">
+            Cart link may be expired or invalid. Try checking the URL.
+          </p>
+        )}
+      </div>
+    </div>
+  );
 }

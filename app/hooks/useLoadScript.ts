@@ -92,7 +92,7 @@ type LoadScriptParams = Parameters<typeof loadScript>;
 
 export function useLoadScript(
   attributes: LoadScriptParams[0], // any valid HTMLScriptElement attributes; id is required
-  placement: LoadScriptParams[1] = 'body', // 'head' | 'body'
+  placement: LoadScriptParams[1] = 'body', // 'head' | 'body' | RefObject<HTMLElement | null> | null
   ready = true, // boolean to determine if the script should be loaded
 ): ScriptState {
   const [status, setStatus] = useState<ScriptState>('loading');

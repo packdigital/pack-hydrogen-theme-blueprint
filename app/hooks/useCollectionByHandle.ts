@@ -36,7 +36,7 @@ export function useCollectionByHandle(
   });
 
   useEffect(() => {
-    if (!fetchOnMount || !handle || fetcher.data?.collection) return;
+    if (!fetchOnMount || !handle) return;
     const paramsAsStrings = Object.entries({...params}).reduce(
       (acc: Record<string, string>, [key, value]) => {
         acc[key] = String(value);

@@ -1,18 +1,20 @@
 import {useLoaderData} from '@remix-run/react';
-import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 import {RenderSections} from '@pack/react';
+import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 
 import {BLOG_PAGE_QUERY} from '~/data/graphql/pack/blog-page';
-import {getShop, getSiteSettings} from '~/lib/utils';
-import type {BlogPage} from '~/lib/types';
+import {getPage, getShop, getSiteSettings} from '~/lib/utils';
 import {routeHeaders} from '~/data/cache';
 import {seoPayload} from '~/lib/seo.server';
+import type {BlogPage} from '~/lib/types';
 
 export const headers = routeHeaders;
 
 export async function loader({params, context, request}: LoaderFunctionArgs) {
   const {handle} = params;
+
+  if (!handle) throw new Response(null, {status: 404});
 
   // if the number of articles is in the several of hundreds, consider paginating the query
   const getBlogWithAllArticles = async ({
@@ -26,7 +28,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
       variables: {
         first: 250,
         handle,
-        cursor,
+        articlesCursor: cursor,
       },
       cache: context.storefront.CacheLong(),
     });
@@ -54,7 +56,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     return compiledBlog;
   };
 
-  const [blog, shop, siteSettings] = await Promise.all([
+  const [blogWithAllArticles, shop, siteSettings] = await Promise.all([
     getBlogWithAllArticles({
       blog: null,
       cursor: null,
@@ -63,7 +65,21 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     getSiteSettings(context),
   ]);
 
-  if (!blog) throw new Response(null, {status: 404});
+  if (!blogWithAllArticles) throw new Response(null, {status: 404});
+
+  let blog = blogWithAllArticles;
+  if (blogWithAllArticles.sections.pageInfo.hasNextPage) {
+    const {blog: blogWithAllSections} = await (getPage({
+      context,
+      handle,
+      pageKey: 'blog',
+      query: BLOG_PAGE_QUERY,
+    }) as Promise<{blog: BlogPage}>);
+    blog = {
+      ...blogWithAllArticles,
+      sections: blogWithAllSections.sections,
+    };
+  }
 
   const sortedArticles = blog.articles.nodes.sort((articleA, articleB) => {
     return articleA.firstPublishedAt > articleB.firstPublishedAt ? -1 : 1;

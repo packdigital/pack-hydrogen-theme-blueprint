@@ -1,10 +1,10 @@
 import {data as dataWithOptions} from '@shopify/remix-oxygen';
+import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 import type {
   ActionFunctionArgs,
   LoaderFunctionArgs,
   MetaArgs,
 } from '@shopify/remix-oxygen';
-import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 
 import {customerPasswordResetAction} from '~/lib/customer/servers/reset.server';
 import {getAccountSeo} from '~/lib/utils';

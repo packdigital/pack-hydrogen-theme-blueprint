@@ -1,10 +1,10 @@
 import {data as dataWithOptions, redirect} from '@shopify/remix-oxygen';
+import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 import type {
   ActionFunctionArgs,
   LoaderFunctionArgs,
   MetaArgs,
 } from '@shopify/remix-oxygen';
-import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 
 import {redirectLinkIfLoggedIn} from '~/lib/customer';
 import {customerLoginRegisterAction} from '~/lib/customer/servers/login-register.server';

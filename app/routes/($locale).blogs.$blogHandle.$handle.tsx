@@ -1,33 +1,38 @@
 import {useMemo} from 'react';
 import {useLoaderData} from '@remix-run/react';
-import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 import {RenderSections} from '@pack/react';
+import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 
 import {ARTICLE_PAGE_QUERY} from '~/data/graphql/pack/article-page';
-import {getShop, getSiteSettings} from '~/lib/utils';
+import {getPage, getShop, getSiteSettings} from '~/lib/utils';
 import {routeHeaders} from '~/data/cache';
 import {seoPayload} from '~/lib/seo.server';
+import type {ArticlePage} from '~/lib/types';
 
 export const headers = routeHeaders;
 
 export async function loader({params, context, request}: LoaderFunctionArgs) {
   const {handle} = params;
 
-  const [{data}, shop, siteSettings] = await Promise.all([
-    context.pack.query(ARTICLE_PAGE_QUERY, {
-      variables: {handle},
-      cache: context.storefront.CacheLong(),
-    }),
+  if (!handle) throw new Response(null, {status: 404});
+
+  const [{article}, shop, siteSettings] = await Promise.all([
+    getPage({
+      context,
+      handle,
+      pageKey: 'article',
+      query: ARTICLE_PAGE_QUERY,
+    }) as Promise<{article: ArticlePage}>,
     getShop(context),
     getSiteSettings(context),
   ]);
 
-  if (!data.article) throw new Response(null, {status: 404});
+  if (!article) throw new Response(null, {status: 404});
 
   const analytics = {pageType: AnalyticsPageType.article};
   const seo = seoPayload.article({
-    page: data.article,
+    page: article,
     shop,
     siteSettings,
     url: request.url,
@@ -35,7 +40,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
 
   return {
     analytics,
-    article: data.article,
+    article,
     seo,
     url: request.url,
   };

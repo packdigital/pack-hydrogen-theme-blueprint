@@ -27,7 +27,7 @@ export function useArticles(
   });
 
   useEffect(() => {
-    if (!fetchOnMount || !handle || fetcher.data?.articles) return;
+    if (!fetchOnMount || !handle) return;
     const searchParams = new URLSearchParams({
       handle,
       limit: limit?.toString() || '3',

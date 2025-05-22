@@ -27,7 +27,7 @@ export function useProductsByIds(
   const idsString = JSON.stringify(ids);
 
   useEffect(() => {
-    if (!fetchOnMount || !ids?.length || fetcher.data?.products) return;
+    if (!fetchOnMount || !ids?.length) return;
     const searchParams = new URLSearchParams({
       query: ids
         .filter(Boolean)
