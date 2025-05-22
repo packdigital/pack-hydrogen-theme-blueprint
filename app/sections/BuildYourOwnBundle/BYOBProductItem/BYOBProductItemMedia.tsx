@@ -76,7 +76,7 @@ export function BYOBProductItemMedia({
       {/* loading shimmer */}
       {!primaryMedia && (
         <div className="relative size-full overflow-hidden">
-          <div className="loading-shimmer opacity-60" />
+          <div className="loading-shimmer" />
         </div>
       )}
     </div>

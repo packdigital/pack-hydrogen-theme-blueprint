@@ -45,7 +45,7 @@ export const Image = forwardRef(
         )}
         style={{aspectRatio, width}}
       >
-        {withLoadingAnimation && <div className="loading-shimmer opacity-60" />}
+        {withLoadingAnimation && <div className="loading-shimmer" />}
       </div>
     );
   },

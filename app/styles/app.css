@@ -379,7 +379,7 @@
     @apply bg-black;
   }
   .loading-shimmer {
-    @apply pointer-events-none absolute inset-0 -translate-x-full animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-neutralLighter to-transparent;
+    @apply pointer-events-none absolute inset-0 -translate-x-full animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-neutralLighter to-transparent opacity-20;
   }
   /* multi-range slider style */
   .range-thumb {

@@ -42,8 +42,8 @@ import {MetaobjectImage} from './MetaobjectImage';
 
 export function registerSections() {
   /* Text ---------- */
-  registerSection(TextBlock as Section, {name: 'text-block'});
   registerSection(RichText as Section, {name: 'rich-text'});
+  registerSection(TextBlock as Section, {name: 'text-block'});
   registerSection(Markdown as Section, {name: 'markdown'});
   registerSection(Accordions as Section, {name: 'accordions'});
   registerSection(IconRow as Section, {name: 'icon-row'});
