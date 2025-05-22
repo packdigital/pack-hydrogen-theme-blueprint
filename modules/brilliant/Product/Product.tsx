@@ -26,8 +26,6 @@ export function Product({
   };
   const {header, product: productSettings} = useSettings();
   const {pathPrefix} = useLocale();
-  /* Product metafields parsed into an object with metafields by `${namespace}.${key}` */
-  const metafields = useParsedProductMetafields(product);
 
   const selectedVariant = useMemo(() => {
     /* workaround because selected variant from useProduct hook is momentarily

@@ -1,9 +1,13 @@
-import {useCallback} from 'react';
+import {useCallback, useMemo} from 'react';
 
 import type {ProductHeaderProps} from './Product.types';
 
 import {ProductStars} from '~/components/ProductStars';
-import {useMatchMedia, useVariantPrices} from '~/hooks';
+import {
+  useMatchMedia,
+  useParsedProductMetafields,
+  useVariantPrices,
+} from '~/hooks';
 import {HEADER_NAVIGATION, PRODUCT_MODAL_PANEL} from '~/lib/constants';
 import {PRODUCT_REVIEWS_KEY} from '~/sections/ProductReviews';
 
@@ -17,6 +21,13 @@ export function ProductHeader({
 }: ProductHeaderProps) {
   const {price, compareAtPrice, priceLocalized} =
     useVariantPrices(selectedVariant);
+
+  /* Product metafields parsed into an object with metafields by `${namespace}.${key}` */
+  const metafields = useParsedProductMetafields(product);
+  const creatorName = useMemo(
+    () => metafields?.['custom.creator_name']?.value || '',
+    [metafields],
+  );
 
   //use priceLocalized instead of price if we want $10.00 with both zero cents
 
@@ -73,6 +84,13 @@ export function ProductHeader({
         <h1 className="text-h2">{product.title}</h1>
       ) : (
         <h2 className="text-h2">{product.title}</h2>
+      )}
+
+      {creatorName && (
+        <div className="flex gap-2">
+          <h5>Designed By: </h5>
+          <h5 className="text-h4 font-normal">{creatorName}</h5>
+        </div>
       )}
 
       {selectedVariantColor && (
