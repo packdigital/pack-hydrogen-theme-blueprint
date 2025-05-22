@@ -24,6 +24,7 @@ export const ProductOptionValue = memo(
     subgroupIndex,
     swatchesMap,
     optionsImageVariantMap,
+    hasLargeAmountOfVariants,
   }: ProductOptionValueProps) => {
     const {
       isAvailable,
@@ -98,6 +99,7 @@ export const ProductOptionValue = memo(
             selectedVariantFromOptions={selectedVariantFromOptions}
             setSelectedOption={setSelectedOption}
             swatch={swatch}
+            hasLargeAmountOfVariants={hasLargeAmountOfVariants}
           />
         )}
       </>

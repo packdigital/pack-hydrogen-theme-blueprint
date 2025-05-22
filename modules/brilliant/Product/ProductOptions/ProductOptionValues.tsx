@@ -64,6 +64,11 @@ export function ProductOptionValues({
     [optionsImageVariantMap],
   );
 
+  const hasLargeAmountOfVariants = useMemo(
+    () => (optionValues?.length || 0) > 6,
+    [optionValues?.length],
+  );
+
   return (
     <div>
       {hasSubgroups && (
@@ -125,7 +130,9 @@ export function ProductOptionValues({
             name={name}
             selectedValue={selectedOptionsMap?.[name]}
           />
-          <ul className="flex flex-wrap justify-center gap-2">
+          <ul
+            className={`${hasLargeAmountOfVariants ? 'grid grid-cols-2 gap-x-4 gap-y-2' : 'flex flex-wrap justify-center gap-2'}`}
+          >
             {optionValues?.map((optionValue, index) => {
               return (
                 <li key={optionValue.name}>
@@ -142,6 +149,7 @@ export function ProductOptionValues({
                     optionValue={optionValue}
                     onSelect={onSelect}
                     optionsImageVariantMap={optionsImageVariantMap}
+                    hasLargeAmountOfVariants={hasLargeAmountOfVariants}
                   />
                 </li>
               );

@@ -2,13 +2,13 @@ import {useAnalytics} from '@shopify/hydrogen';
 import {memo, useCallback, useMemo, useState} from 'react';
 import {useInView} from 'react-intersection-observer';
 
+import {ColorVariantSelector} from './ColorVariantSelector/ColorVariantSelector';
+
 import {AnalyticsEvent} from '~/components/Analytics/constants';
 import {Link} from '~/components/Link';
-import {ColorVariantSelector} from '~/components/ProductItem/ColorVariantSelector';
 import type {ProductItemProps} from '~/components/ProductItem/ProductItem.types';
 import {ProductItemMedia} from '~/components/ProductItem/ProductItemMedia/ProductItemMedia';
 import {ProductItemPrice} from '~/components/ProductItem/ProductItemPrice';
-import {QuickShop} from '~/components/ProductItem/QuickShop';
 import {ProductStars} from '~/components/ProductStars';
 import {Card, CardContent, CardDescription} from '~/components/ui/card';
 import {

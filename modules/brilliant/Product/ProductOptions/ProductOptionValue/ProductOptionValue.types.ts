@@ -29,6 +29,7 @@ export interface ProductOptionValueProps {
   subgroupIndex?: number;
   swatchesMap?: SwatchesMap;
   optionsImageVariantMap?: ProductOptionVariantImageMap;
+  hasLargeAmountOfVariants?: boolean;
 }
 
 export interface ProductOptionValueLinkProps {
@@ -97,6 +98,7 @@ export interface ProductOptionValueButtonProps {
   setSelectedOption: (name: string, value: string) => void;
   swatch?: Swatch | null;
   optionsImageVariantMap?: ProductOptionVariantImageMap;
+  hasLargeAmountOfVariants?: boolean;
 }
 
 export interface InnerColorOptionValueProps {
@@ -113,4 +115,5 @@ export interface InnerOptionValueProps {
   isSelected: boolean;
   optionValue: ProductOptionValue;
   optionsImageVariantMap?: ProductOptionVariantImageMap;
+  hasLargeAmountOfVariants?: boolean;
 }

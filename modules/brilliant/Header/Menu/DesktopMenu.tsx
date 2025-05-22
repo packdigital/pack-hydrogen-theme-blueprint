@@ -124,7 +124,8 @@ export const DesktopMenu = memo(
                                       height: image?.height,
                                     }}
                                     aspectRatio="16/9"
-                                    style={{maxWidth: '400px'}}
+                                    sizes="(max-width: 400px) 100vw, 400px"
+                                    className="h-auto w-full"
                                   />
                                 </div>
                               )}

@@ -80,7 +80,8 @@ export function ProductDetails({
     return product.variants.nodes.reduce((map, variant) => {
       // try exact match
       //Lets remove our size strings from the title to see how that plays out?
-      const match = nameLookup.get(stripSizes(variant.title));
+      // const match = nameLookup.get(stripSizes(variant.title));
+      const match = nameLookup.get(variant.title);
 
       // fallback to fuzzy match if needed
       /*
@@ -97,7 +98,7 @@ export function ProductDetails({
       }
       return map;
     }, {} as ProductOptionVariantImageMap);
-  }, [product.options, product.variants.nodes, stripSizes]);
+  }, [product.options, product.variants.nodes]);
 
   return (
     <div className="flex flex-col gap-5">
