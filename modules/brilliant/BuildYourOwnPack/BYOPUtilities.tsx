@@ -12,25 +12,25 @@ export const tierMapToVariants: Record<
   number,
   Partial<MappedSelectedBundle & ProductVariant>
 > = {
-  6: {
-    title: 'Starter',
-    size: 6,
+  3: {
+    title: 'Starter Pack',
+    size: 3,
     savings: '20%',
     savingsText: 'vs. buying individually',
-    tagline: 'Perfect for first-time collectors!',
+    tagline: 'Just enough to fall in love!',
   },
-  14: {
-    title: 'Popular Pick',
-    size: 14,
-    savings: '43%',
+  7: {
+    title: 'Fan Favorite',
+    size: 7,
+    savings: '30%',
     savingsText: 'with this bundle',
-    tagline: 'Great value for animal lovers!',
+    tagline: 'A great value for animal lovers!',
   },
-  30: {
-    title: 'Collector’s Edition',
-    size: 30,
-    savings: '50%',
-    savingsText: 'on the largest set',
-    tagline: 'Best deal for super fans & gift-givers!',
+  12: {
+    title: 'Collector’s Set',
+    size: 12,
+    savings: '40%',
+    savingsText: 'on the group',
+    tagline: 'Best deal for collectors & gift-givers!',
   },
 };

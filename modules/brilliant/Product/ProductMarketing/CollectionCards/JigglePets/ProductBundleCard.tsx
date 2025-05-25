@@ -34,21 +34,19 @@ export default function PopularBundleCard({
               <div className="grid grid-cols-3 gap-2 text-center">
                 <div>
                   <div className=" text-lg font-bold text-blue-600">
-                    &nbsp;6 Pets
+                    &nbsp;3 Pets
                   </div>
                   <div className=" text-sm text-green-700">Save 20%</div>
                 </div>
                 <div className="border-x border-blue-100">
-                  <div className=" text-lg font-bold text-blue-600">
-                    14 Pets
-                  </div>
-                  <div className=" text-sm text-green-700">Save 43%</div>
+                  <div className=" text-lg font-bold text-blue-600">7 Pets</div>
+                  <div className=" text-sm text-green-700">Save 30%</div>
                 </div>
                 <div>
                   <div className=" text-lg font-bold text-blue-600">
-                    30 Pets
+                    12 Pets
                   </div>
-                  <div className=" text-sm text-green-700">Save 50%</div>
+                  <div className=" text-sm text-green-700">Save 40%</div>
                 </div>
               </div>
             </div>

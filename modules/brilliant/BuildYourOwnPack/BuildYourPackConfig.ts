@@ -4,18 +4,18 @@ export const BYOP_PRODUCT_HANDLE = 'jiggle-pets-bundle';
 
 export const BYOP_TIERS: TBYOP_TIER[] = [
   {
-    count: 6,
-    title: '6 Pack',
+    count: 3,
+    title: '3 Pack',
     variantId: 'gid://shopify/ProductVariant/46035989299415',
+  },
+  {
+    count: 7,
+    title: '7 Pack',
+    variantId: 'gid://shopify/ProductVariant/46035989332183',
   },
   {
     count: 12,
     title: '12 Pack',
-    variantId: 'gid://shopify/ProductVariant/46035989332183',
-  },
-  {
-    count: 30,
-    title: '30 Pack',
     variantId: 'gid://shopify/ProductVariant/46035989364951',
   },
 ];

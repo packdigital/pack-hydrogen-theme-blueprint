@@ -1,5 +1,5 @@
 import {ProductVariant} from '@shopify/hydrogen-react/storefront-api-types';
-import {CheckIcon, Gift} from 'lucide-react';
+import {Gift} from 'lucide-react';
 import {tierMapToVariants} from 'modules/brilliant/BuildYourOwnPack/BYOPUtilities';
 import {useMemo} from 'react';
 
