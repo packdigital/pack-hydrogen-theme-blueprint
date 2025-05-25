@@ -56,6 +56,10 @@ export function DesktopProgressSection({
   progressPercentage: number;
   viewBundleSelection: (val: boolean) => void;
 }) {
+  const isComplete = useMemo(() => {
+    return progressPercentage === 100;
+  }, [progressPercentage]);
+
   return (
     <div className="fixed inset-x-0 bottom-0 z-50 hidden w-full justify-center md:flex">
       <div className="flex w-2/3 flex-col rounded-t-lg border-x-2 border-t-2 border-blue-500 bg-gray-100 shadow-lg xl:max-w-7xl ">
@@ -87,9 +91,11 @@ export function DesktopProgressSection({
             <Button
               size="sm"
               onClick={() => viewBundleSelection(true)}
-              className="h-auto flex-wrap py-2"
+              className={`h-auto flex-wrap py-2 ${isComplete ? 'bg-green-600 text-white hover:bg-green-700' : ''}`}
             >
-              <span className="break-words">Review Your Pack</span>
+              <span className="break-words">
+                {isComplete ? 'Finalize your pack' : 'Review Your Pack'}
+              </span>
               <CircleArrowRight className="size-8" />
             </Button>
           </div>
@@ -110,6 +116,10 @@ export function MobileProgressSection({
   progressPercentage: number;
   viewBundleSelection: (val: boolean) => void;
 }) {
+  const isComplete = useMemo(() => {
+    return progressPercentage === 100;
+  }, [progressPercentage]);
+
   return (
     <div className="fixed bottom-0 left-0 z-50 w-full border-t-2 border-blue-500 shadow-lg md:hidden ">
       <div className="flex flex-wrap items-center justify-between gap-1 bg-gray-100 p-2">
@@ -130,10 +140,11 @@ export function MobileProgressSection({
         <div className="flex w-full justify-center">
           <Button
             onClick={() => viewBundleSelection(true)}
-            className="mb-2"
+            className={`mb-2 ${isComplete ? 'bg-green-600 text-white hover:bg-green-700' : ''}`}
             size="sm"
           >
-            Review Your Pack <CircleArrowRight className="size-8" />
+            {isComplete ? 'Finalize your pack' : 'Review Your Pack'}{' '}
+            <CircleArrowRight className="size-8" />
           </Button>
         </div>
       </div>
