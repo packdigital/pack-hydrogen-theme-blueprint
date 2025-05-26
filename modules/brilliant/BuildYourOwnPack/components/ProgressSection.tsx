@@ -11,11 +11,17 @@ export function ProgressSection({
   viewBundleSelection,
   selectedCount,
   selectedBundle,
+  fillRandomly,
+  randomLoading,
+  selectedItemsLength,
 }: {
   className?: string;
   viewBundleSelection: (val: boolean) => void;
   selectedCount: number;
   selectedBundle: ProductVariant | undefined;
+  fillRandomly: () => void;
+  randomLoading: boolean;
+  selectedItemsLength: number;
 }) {
   const bundleSize = useMemo(
     () => Number(selectedBundle?.selectedOptions[0].value) || 0,
@@ -34,12 +40,18 @@ export function ProgressSection({
         bundleSize={bundleSize}
         progressPercentage={progressPercentage}
         viewBundleSelection={viewBundleSelection}
+        fillRandomly={fillRandomly}
+        randomLoading={randomLoading}
+        selectedItemsLength={selectedItemsLength}
       />
       <MobileProgressSection
         selectedCount={selectedCount}
         bundleSize={bundleSize}
         progressPercentage={progressPercentage}
         viewBundleSelection={viewBundleSelection}
+        fillRandomly={fillRandomly}
+        randomLoading={randomLoading}
+        selectedItemsLength={selectedItemsLength}
       />
     </div>
   );
@@ -50,11 +62,17 @@ export function DesktopProgressSection({
   bundleSize,
   progressPercentage,
   viewBundleSelection,
+  fillRandomly,
+  randomLoading,
+  selectedItemsLength,
 }: {
   selectedCount: number;
   bundleSize: number;
   progressPercentage: number;
   viewBundleSelection: (val: boolean) => void;
+  fillRandomly: () => void;
+  randomLoading: boolean;
+  selectedItemsLength: number;
 }) {
   const isComplete = useMemo(() => {
     return progressPercentage === 100;
@@ -62,7 +80,7 @@ export function DesktopProgressSection({
 
   return (
     <div className="fixed inset-x-0 bottom-0 z-50 hidden w-full justify-center md:flex">
-      <div className="flex w-2/3 flex-col rounded-t-lg border-x-2 border-t-2 border-blue-500 bg-gray-100 shadow-lg xl:max-w-7xl ">
+      <div className="mx-8 flex w-full flex-col rounded-t-lg border-x-2 border-t-2 border-blue-500 bg-gray-100 shadow-lg xl:max-w-7xl ">
         <div className="flex items-center justify-between gap-4 p-2">
           <div className="grow px-6 py-1">
             <div className="mb-1 flex items-end justify-between gap-2 text-sm  ">
@@ -87,7 +105,18 @@ export function DesktopProgressSection({
               className="h-4 w-full overflow-hidden rounded-md bg-gray-300"
             />
           </div>
-          <div className="flex justify-center ">
+          <div className="flex justify-center gap-2">
+            <Button
+              size={'sm'}
+              variant={'outline'}
+              type="button"
+              onClick={fillRandomly}
+              disabled={randomLoading || selectedItemsLength >= bundleSize}
+              className="border-gray-400"
+            >
+              {randomLoading ? 'Filling...' : 'Random Fill'}
+            </Button>
+
             <Button
               size="sm"
               onClick={() => viewBundleSelection(true)}
@@ -110,11 +139,17 @@ export function MobileProgressSection({
   bundleSize,
   progressPercentage,
   viewBundleSelection,
+  fillRandomly,
+  randomLoading,
+  selectedItemsLength,
 }: {
   selectedCount: number;
   bundleSize: number;
   progressPercentage: number;
   viewBundleSelection: (val: boolean) => void;
+  fillRandomly: () => void;
+  randomLoading: boolean;
+  selectedItemsLength: number;
 }) {
   const isComplete = useMemo(() => {
     return progressPercentage === 100;
@@ -137,7 +172,18 @@ export function MobileProgressSection({
             className="h-4 w-full overflow-hidden rounded-md bg-gray-300"
           />
         </div>
-        <div className="flex w-full justify-center">
+        <div className="flex w-full justify-center gap-3">
+          <Button
+            size={'sm'}
+            variant={'outline'}
+            type="button"
+            onClick={fillRandomly}
+            disabled={randomLoading || selectedItemsLength >= bundleSize}
+            className="border-gray-400"
+          >
+            {randomLoading ? 'Filling...' : 'Random Fill'}
+          </Button>
+
           <Button
             onClick={() => viewBundleSelection(true)}
             className={`mb-2 ${isComplete ? 'bg-green-600 text-white hover:bg-green-700' : ''}`}

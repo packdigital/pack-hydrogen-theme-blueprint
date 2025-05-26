@@ -2,7 +2,7 @@ import {ExternalLink} from 'lucide-react';
 
 export function FlipDeckUpsell() {
   return (
-    <div className="flex w-full flex-col items-center">
+    <div className="flex w-full flex-col items-center px-3">
       <a
         target="_new"
         href="https://www.tiktok.com/@mzmdigitaldesign/video/7456929017573215519"

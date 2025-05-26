@@ -30,7 +30,10 @@ export function DesktopBundleSelector({
   );
 
   return (
-    <section className="mx-auto justify-center md:container md:block">
+    <section className="mx-auto justify-center md:block">
+      <h3 className="mb-4 text-left text-3xl font-semibold text-gray-900">
+        1. Choose Your Pack Size:
+      </h3>
       <div className={cn('w-full', className)}>
         <div className="grid gap-4 md:grid-cols-3">
           {mappedVariants.map((bundle, index) => (
@@ -85,32 +88,32 @@ export function BundleOption({
       tabIndex={0}
     >
       <CardContent className="p-4">
-        <div className="flex items-start gap-3">
-          <div className="mt-1 shrink-0 rounded-full bg-blue-100 p-2 ">
-            <Gift className="size-10 text-blue-600" />
+        {/* Row 1: Icon, Title, Price */}
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="shrink-0 rounded-full bg-blue-100 p-2">
+            <Gift className="size-8 text-blue-600" />
           </div>
-          <div className="flex-1">
-            <div className="flex items-center justify-between gap-0 ">
-              <h3 className="text-2xl text-gray-900">{bundleDetails.title}</h3>
-              <span className="text-2xl font-bold text-green-800">
-                ${bundle.price.amount}
-              </span>
-            </div>
-            <h4 className="flex text-xl text-gray-600">
-              ✔ {bundle.selectedOptions[0].value} adorable pets included
-            </h4>
-            <p className="text-xs text-gray-500"></p>
-
-            <div className="mb-1 flex flex-col items-baseline gap-1 ">
-              <span className="text-base font-medium text-green-600">
-                💰 Save {bundleDetails.savings} {bundleDetails.savingsText}
-              </span>
-            </div>
-
-            <div className="mb-1 flex w-full items-baseline gap-1">
-              <div className="text-sm font-medium text-gray-600">
-                {bundleDetails.tagline}
-              </div>
+          <h3 className="min-w-0 flex-1 break-words text-2xl text-gray-900">
+            {bundleDetails.title}
+          </h3>
+          <span className="shrink-0 text-2xl font-bold text-green-800">
+            ${bundle.price.amount}
+          </span>
+        </div>
+        {/* Row 2: Remaining content, left justified */}
+        <div className="flex flex-col items-center">
+          <h4 className="text-xl text-gray-600">
+            ✔ {bundle.selectedOptions[0].value} adorable pets included
+          </h4>
+          <p className="text-xs text-gray-500"></p>
+          <div className="mb-1 flex flex-col items-baseline gap-1">
+            <span className="text-base font-medium text-green-600">
+              💰 Save {bundleDetails.savings} {bundleDetails.savingsText}
+            </span>
+          </div>
+          <div className="mb-1 flex items-baseline gap-1">
+            <div className="text-sm font-medium text-gray-600">
+              {bundleDetails.tagline}
             </div>
           </div>
         </div>

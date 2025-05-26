@@ -215,16 +215,27 @@ export function BuildYourOwnPack({cms}: {cms: BuildYourOwnPackCms}) {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 15;
 
+  //Filter States
+  const [filter, setFilter] = useState<'all' | 'selected'>('all');
+
   //do any filtering next
   const filteredProducts = useMemo(() => {
-    return products.filter((product) => {
-      //filter option 1
-      //filter option 2
+    if (filter === 'selected') {
+      setCurrentPage(1); // Reset to first page when filter changes
+      const selectedProductIds = new Set(
+        selectedItems.map((item) => item.product?.id),
+      );
+      return products.filter((product) => selectedProductIds.has(product.id));
+    }
+    if (filter === 'all') {
+      return products; // Return all products
+    }
+    //filter option 1
+    //filter option 2
 
-      //return all for now
-      return true;
-    });
-  }, [products]);
+    //return all for now
+    return products;
+  }, [filter, products, selectedItems]);
 
   const totalItems = useMemo(
     () => filteredProducts.length,
@@ -300,6 +311,9 @@ export function BuildYourOwnPack({cms}: {cms: BuildYourOwnPackCms}) {
             viewBundleSelection={setBundleSheetOpen}
             selectedCount={selectedCount}
             selectedBundle={selectedBundle}
+            fillRandomly={fillRandomly}
+            randomLoading={randomLoading}
+            selectedItemsLength={selectedItems.length}
           />
         </div>
 
@@ -307,13 +321,11 @@ export function BuildYourOwnPack({cms}: {cms: BuildYourOwnPackCms}) {
 
         <div className="mb-1">
           <GridHeader
-            fillRandomly={fillRandomly}
-            randomLoading={randomLoading}
             currentPage={currentPage}
             totalItems={totalItems}
-            selectedItemsLength={selectedItems.length}
             itemsPerPage={itemsPerPage}
-            bundleSize={bundleSize}
+            filter={filter}
+            setFilter={setFilter}
           />
         </div>
 

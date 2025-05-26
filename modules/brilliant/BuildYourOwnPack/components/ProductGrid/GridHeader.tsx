@@ -1,23 +1,21 @@
 import {useMemo} from 'react';
 
-import {Button} from '~/components/ui/button';
+import {ToggleGroup, ToggleGroupItem} from '~/components/ui/toggle-group'; // Adjust import path as needed
 
 export function GridHeader({
-  randomLoading,
-  fillRandomly,
-  selectedItemsLength,
   totalItems,
   itemsPerPage,
   currentPage,
-  bundleSize,
+
+  filter,
+  setFilter,
 }: {
-  randomLoading: boolean;
-  fillRandomly: () => void;
-  selectedItemsLength: number;
   totalItems: number;
   itemsPerPage: number;
   currentPage: number;
-  bundleSize: number;
+
+  filter: 'all' | 'selected';
+  setFilter: (value: 'all' | 'selected') => void;
 }) {
   // Calculate the range of items being displayed
   const startItem = useMemo(
@@ -30,26 +28,58 @@ export function GridHeader({
   );
 
   return (
-    <div className="mb-4 flex items-center justify-between">
-      {/* View Selected */}
+    <>
+      {/* Row 1: Title */}
+      <h3 className="mb-2 text-left text-3xl font-semibold text-gray-900">
+        2. Select Your Jiggle Pets
+      </h3>
 
-      {/* Random Fill*/}
-      <Button
-        type="button"
-        onClick={fillRandomly}
-        disabled={randomLoading || selectedItemsLength >= bundleSize}
-      >
-        {randomLoading ? 'Filling...' : 'Random Fill'}
-      </Button>
-
-      <div className="flex w-full flex-row items-center justify-between">
-        {/* Results summary */}
-        {totalItems > 0 && (
-          <div className="mb-2 w-full text-right text-sm text-muted-foreground ">
-            Showing {startItem}-{endItem} of {totalItems} pets
+      <div className="mb-4 flex items-center justify-between gap-4">
+        <div className="flex w-full flex-col gap-2">
+          <div className="flex w-full items-center justify-between gap-2">
+            {/* Right column: Pack Actions */}
+            <div className="flex items-center gap-2">
+              {/* Results summary */}
+              <div className="min-w-[140px] text-right text-sm text-muted-foreground">
+                {totalItems > 0
+                  ? `Showing ${startItem}-${endItem} of ${totalItems} pets`
+                  : 'No pets to display'}
+              </div>
+            </div>
           </div>
-        )}
+        </div>
+
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <p className="text-sm font-bold">View:</p>
+            <ToggleGroup
+              type="single"
+              variant={'outline'}
+              value={filter}
+              onValueChange={(val) => setFilter(val as 'all' | 'selected')}
+              aria-label="Product filter"
+            >
+              <ToggleGroupItem
+                variant={'outline'}
+                value="all"
+                aria-label="Show all products"
+                className="border-gray-400"
+              >
+                All
+              </ToggleGroupItem>
+              <ToggleGroupItem
+                variant={'outline'}
+                value="selected"
+                aria-label="Show selected products"
+                className="border-gray-400"
+              >
+                Selected
+              </ToggleGroupItem>
+              {/* Add more ToggleGroupItem for more filters */}
+            </ToggleGroup>
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

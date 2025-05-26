@@ -35,6 +35,8 @@
     "@radix-ui/react-scroll-area": "^1.2.6",
     "@radix-ui/react-separator": "^1.1.4",
     "@radix-ui/react-slot": "^1.2.1",
+    "@radix-ui/react-toggle": "^1.1.9",
+    "@radix-ui/react-toggle-group": "^1.1.10",
     "@remix-run/react": "^2.16.4",
     "@shopify/cli": "^3.77.1",
     "@shopify/cli-hydrogen": "9.0.8",
