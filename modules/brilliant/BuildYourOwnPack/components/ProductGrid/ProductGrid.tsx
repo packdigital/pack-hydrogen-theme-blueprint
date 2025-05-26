@@ -41,26 +41,9 @@ export function ProductGrid({
   // Ensure products is always an array
   const safeProducts = Array.isArray(products) ? products : [];
 
-  // Calculate the range of items being displayed
-  const startItem = useMemo(
-    () => (currentPage - 1) * itemsPerPage + 1,
-    [currentPage, itemsPerPage],
-  );
-  const endItem = useMemo(
-    () => Math.min(currentPage * itemsPerPage, totalItems),
-    [currentPage, itemsPerPage, totalItems],
-  );
-
   return (
     <div className={cn('w-full', className)}>
       <div className="w-full">
-        {/* Results summary */}
-        {totalItems > 0 && (
-          <div className="mb-2 w-full text-right text-sm text-muted-foreground ">
-            Showing {startItem}-{endItem} of {totalItems} pets
-          </div>
-        )}
-
         <div className="grid grid-cols-2 gap-2 md:grid-cols-3 md:gap-3 lg:grid-cols-5">
           {safeProducts.map((product, index) => (
             <ProductCard

@@ -9,10 +9,13 @@ import {BYOP_PRODUCT_HANDLE} from './BuildYourPackConfig';
 import {BundleAddedBanner} from './BYOPAddedBanner';
 import {DesktopBundleSelector} from './components/BundleSelector/DesktopBundleSelector';
 import {BundleSheet} from './components/BundleSheet';
+import {GridHeader} from './components/ProductGrid/GridHeader';
 import {ProductGrid} from './components/ProductGrid/ProductGrid';
 import {ProgressSection} from './components/ProgressSection';
+import {useRandomProductFiller} from './hooks/useRandomProductFiller';
 
 import {Container} from '~/components/Container';
+import {Button} from '~/components/ui/button';
 import {Separator} from '~/components/ui/separator';
 import {useProductsByIds, useProductByHandle} from '~/hooks';
 import type {ProductCms} from '~/lib/types';
@@ -134,28 +137,10 @@ export function BuildYourOwnPack({cms}: {cms: BuildYourOwnPackCms}) {
   }, [chosenItems, productGroupings]);
   const preselectedProducts = useProductsByIds(validPreselectedIds);
 
-  /*
-  const bundleMapById = useMemo(() => {
-    return selectedItems.reduce((acc: BundleMapById, variant, index) => {
-      if (acc[variant.id]) {
-        return {
-          ...acc,
-          [variant.id]: {
-            ...acc[variant.id],
-            indexes: [...acc[variant.id].indexes, index],
-          },
-        };
-      }
-      return {
-        ...acc,
-        [variant.id]: {
-          ...variant,
-          indexes: [index],
-        },
-      };
-    }, {});
-  }, [selectedItems]);
-*/
+  const bundleSize = useMemo(
+    () => Number(selectedBundle?.selectedOptions[0].value) || 0,
+    [selectedBundle?.selectedOptions],
+  );
 
   const incrementDisabled =
     !!selectedBundle && selectedItems.length >= Number(selectedBundle.title); //in our variants, size options value is the title
@@ -203,17 +188,6 @@ export function BuildYourOwnPack({cms}: {cms: BuildYourOwnPackCms}) {
     }
   }, [preselectedProducts, clid, ts]);
 
-  /*
-  // Set CSS variable for mobile subnav height based on whether product groupings exist
-  useEffect(() => {
-    const subnavHeight = `${BYOP_SUBNAV_HEIGHT}px`;
-    document.documentElement.style.setProperty(
-      '--byob-subnav-height',
-      hasProductGroupings ? subnavHeight : '0px',
-    );
-  }, [hasProductGroupings]);
-  */
-
   //Selected Items in Bundle Count
   const selectedCount = useMemo(() => {
     return selectedItems.length;
@@ -229,6 +203,13 @@ export function BuildYourOwnPack({cms}: {cms: BuildYourOwnPackCms}) {
       }) || []
     );
   }, [productGroupings]);
+
+  const {fillRandomly, randomLoading} = useRandomProductFiller(
+    selectedItems,
+    products,
+    bundleSize,
+    handleAddToBundle,
+  );
 
   /* PAGINATION START */
   const [currentPage, setCurrentPage] = useState(1);
@@ -324,6 +305,19 @@ export function BuildYourOwnPack({cms}: {cms: BuildYourOwnPackCms}) {
 
         <Separator className="my-3" />
 
+        <div className="mb-1">
+          <GridHeader
+            fillRandomly={fillRandomly}
+            randomLoading={randomLoading}
+            currentPage={currentPage}
+            totalItems={totalItems}
+            selectedItemsLength={selectedItems.length}
+            itemsPerPage={itemsPerPage}
+            bundleSize={bundleSize}
+          />
+        </div>
+
+        {/* Product Grid Section */}
         <div className="mb-8" id={gridElementId}>
           <ProductGrid
             products={currentProducts}
