@@ -25,6 +25,7 @@ export default defineConfig({
   ssr: {
     optimizeDeps: {
       include: [
+        'set-cookie-parser',
         '@headlessui/react',
         '@pack/types',
         '@remix-run/dev/server-build',
