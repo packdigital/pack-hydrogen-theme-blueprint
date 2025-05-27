@@ -4,6 +4,8 @@ import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 
 import {COLLECTION_QUERY} from '~/data/graphql/storefront/collection';
 import {routeHeaders} from '~/data/cache';
+import {transformShopifyGids} from '~/lib/utils/server.utils';
+
 export const headers = routeHeaders;
 
 export async function loader({params, context, request}: LoaderFunctionArgs) {
@@ -27,6 +29,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
   });
 
   if (!collection) throw new Response(null, {status: 404});
+  const transformedCollection = transformShopifyGids(collection);
 
-  return json(collection);
+  return json(transformedCollection);
 }

@@ -4,7 +4,7 @@ import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import {getSelectedProductOptions} from '~/lib/products.server';
 import {PRODUCT_QUERY} from '~/data/graphql/storefront/product';
 import {routeHeaders} from '~/data/cache';
-
+import {transformShopifyGids} from '~/lib/utils/server.utils';
 export const headers = routeHeaders;
 
 export async function loader({params, context, request}: LoaderFunctionArgs) {
@@ -27,5 +27,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     cache: storefront.CacheShort(),
   });
 
-  return json(product);
+  const transformedProduct = transformShopifyGids(product);
+
+  return json(transformedProduct);
 }
