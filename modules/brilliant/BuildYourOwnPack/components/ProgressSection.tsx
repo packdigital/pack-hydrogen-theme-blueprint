@@ -1,9 +1,12 @@
 import {ProductVariant} from '@shopify/hydrogen-react/storefront-api-types';
-import {CircleArrowRight} from 'lucide-react';
+import {CircleArrowRight, CircleXIcon, GiftIcon} from 'lucide-react';
 import {useMemo} from 'react';
+
+import {tierMapToVariants} from '../BYOPUtilities';
 
 import {Button} from '~/components/ui/button';
 import {Progress} from '~/components/ui/progress';
+import {useVariantPrices} from '~/hooks/product/useVariantPrices';
 import {cn} from '~/lib/utils';
 
 export function ProgressSection({
@@ -14,6 +17,7 @@ export function ProgressSection({
   fillRandomly,
   randomLoading,
   selectedItemsLength,
+  handleClear,
 }: {
   className?: string;
   viewBundleSelection: (val: boolean) => void;
@@ -22,10 +26,18 @@ export function ProgressSection({
   fillRandomly: () => void;
   randomLoading: boolean;
   selectedItemsLength: number;
+  handleClear?: () => void;
 }) {
+  const {price} = useVariantPrices(selectedBundle);
+
   const bundleSize = useMemo(
     () => Number(selectedBundle?.selectedOptions[0].value) || 0,
     [selectedBundle?.selectedOptions],
+  );
+
+  const bundleName = useMemo(
+    () => tierMapToVariants[bundleSize]?.title || 'Your Bundle',
+    [bundleSize],
   );
 
   const progressPercentage = useMemo(() => {
@@ -34,7 +46,7 @@ export function ProgressSection({
   }, [bundleSize, selectedCount]);
 
   return (
-    <div className={cn('w-full', className)}>
+    <div className={cn('w-full ', className)}>
       <DesktopProgressSection
         selectedCount={selectedCount}
         bundleSize={bundleSize}
@@ -43,6 +55,9 @@ export function ProgressSection({
         fillRandomly={fillRandomly}
         randomLoading={randomLoading}
         selectedItemsLength={selectedItemsLength}
+        bundleName={bundleName}
+        bundleCost={price || 'N/A'}
+        handleClear={handleClear}
       />
       <MobileProgressSection
         selectedCount={selectedCount}
@@ -60,52 +75,65 @@ export function ProgressSection({
 export function DesktopProgressSection({
   selectedCount,
   bundleSize,
+  bundleName,
+  bundleCost,
   progressPercentage,
   viewBundleSelection,
   fillRandomly,
   randomLoading,
   selectedItemsLength,
+  handleClear,
 }: {
   selectedCount: number;
   bundleSize: number;
+  bundleName: string;
+  bundleCost: string;
   progressPercentage: number;
   viewBundleSelection: (val: boolean) => void;
   fillRandomly: () => void;
   randomLoading: boolean;
   selectedItemsLength: number;
+  handleClear?: () => void;
 }) {
   const isComplete = useMemo(() => {
     return progressPercentage === 100;
   }, [progressPercentage]);
 
+  const notStarted = useMemo(() => {
+    return selectedCount === 0 && bundleSize > 0;
+  }, [selectedCount, bundleSize]);
+
   return (
     <div className="fixed inset-x-0 bottom-0 z-50 hidden w-full justify-center md:flex">
-      <div className="mx-8 flex w-full flex-col rounded-t-lg border-x-2 border-t-2 border-blue-500 bg-gray-100 shadow-lg xl:max-w-7xl ">
+      <div className="mx-8 flex w-full flex-col rounded-t-lg border-x-2 border-t-2 border-blue-500 bg-white shadow-lg xl:max-w-7xl ">
         <div className="flex items-center justify-between gap-4 p-2">
-          <div className="grow px-6 py-1">
-            <div className="mb-1 flex items-end justify-between gap-2 text-sm  ">
-              <div className="flex flex-wrap items-center gap-1">
-                <div className="px-1 text-center text-sm font-semibold text-gray-900">
-                  Your Selection:
-                </div>
-                <span className="px-1 text-center text-sm font-semibold text-gray-900">
-                  {selectedCount} of {bundleSize}
-                </span>
+          {/*1st Column */}
+          <div className="flex items-center gap-4">
+            <GiftIcon className="size-8 text-blue-600" />
+            <div className="flex flex-col">
+              <div>
+                <p className="text-h3 text-lg ">{bundleName}</p>
               </div>
-
-              <div className="flex flex-wrap items-center gap-1  text-sm font-semibold text-gray-900">
-                <div className="px-1 text-center">
-                  {Math.round(progressPercentage)}%
-                </div>
-                <div className="px-1 text-center">Complete</div>
+              <div>
+                <p className="text-h3 text-lg text-gray-500">
+                  {selectedCount} of {bundleSize} selected
+                </p>
               </div>
             </div>
+          </div>
+          {/*2nd Column */}
+          <div className="flex grow items-center gap-4">
             <Progress
               value={progressPercentage}
               className="h-4 w-full overflow-hidden rounded-md bg-gray-300"
             />
           </div>
-          <div className="flex justify-center gap-2">
+          {/*3rd Column */}
+          <div className="flex items-center gap-4">
+            <div className="flex flex-col items-center">
+              <p className="text-h3 text-gray-500">Total</p>
+              <p>{bundleCost}</p>
+            </div>
             <Button
               size={'sm'}
               variant={'outline'}
@@ -115,6 +143,19 @@ export function DesktopProgressSection({
               className="border-gray-400"
             >
               {randomLoading ? 'Filling...' : 'Random Fill'}
+            </Button>
+          </div>
+          {/*4th Column */}
+          <div className="flex items-center gap-4">
+            <Button
+              size="sm"
+              variant={'outline'}
+              onClick={handleClear}
+              className="border-gray-400"
+              disabled={notStarted}
+            >
+              <CircleXIcon className="size-8" />
+              <span className="break-words">Clear</span>
             </Button>
 
             <Button

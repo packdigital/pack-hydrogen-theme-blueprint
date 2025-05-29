@@ -314,6 +314,7 @@ export function BuildYourOwnPack({cms}: {cms: BuildYourOwnPackCms}) {
             fillRandomly={fillRandomly}
             randomLoading={randomLoading}
             selectedItemsLength={selectedItems.length}
+            handleClear={() => setSelectedItems([])}
           />
         </div>
 
