@@ -20,10 +20,13 @@ export function useArticles(
   handle: string | undefined | null = '',
   limit: number | undefined | null = 3,
   fetchOnMount = true,
+  addKeyIdentifier = false,
 ) {
   const {pathPrefix} = useLocale();
   const fetcher = useFetcher<{articles: Article[]}>({
-    key: `articles-by-blog-handle:${handle}:${pathPrefix}`,
+    key: addKeyIdentifier
+      ? `articles-by-blog-handle:${handle}:${pathPrefix}`
+      : undefined,
   });
 
   useEffect(() => {

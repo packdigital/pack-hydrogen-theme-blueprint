@@ -29,10 +29,13 @@ export function useCollectionByHandle(
   handle: string | undefined | null = '',
   params?: Params,
   fetchOnMount = true,
+  addKeyIdentifier = false,
 ): Collection | null {
   const {pathPrefix} = useLocale();
   const fetcher = useFetcher<{collection: Collection}>({
-    key: `collection-by-handle:${handle}:${pathPrefix}`,
+    key: addKeyIdentifier
+      ? `collection-by-handle:${handle}:${pathPrefix}`
+      : undefined,
   });
 
   useEffect(() => {
