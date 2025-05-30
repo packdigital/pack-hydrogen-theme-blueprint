@@ -18,10 +18,13 @@ import {useLocale} from '~/hooks';
 export function useProductsByIds(
   ids: string[] = [],
   fetchOnMount = true,
+  addKeyIdentifier = false,
 ): Product[] {
   const {pathPrefix} = useLocale();
   const fetcher = useFetcher<{products: Product[]}>({
-    key: `products-by-ids:${ids.join(',')}:${pathPrefix}`,
+    key: addKeyIdentifier
+      ? `products-by-ids:${ids.join(',')}:${pathPrefix}`
+      : undefined,
   });
 
   const idsString = JSON.stringify(ids);

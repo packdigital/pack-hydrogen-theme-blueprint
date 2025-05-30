@@ -18,10 +18,13 @@ import {useLocale} from '~/hooks';
 export function useProductByHandle(
   handle: string | undefined | null = '',
   fetchOnMount = true,
+  addKeyIdentifier = false,
 ): Product | null {
   const {pathPrefix} = useLocale();
   const fetcher = useFetcher<{product: Product}>({
-    key: `product-by-handle:${handle}:${pathPrefix}`,
+    key: addKeyIdentifier
+      ? `product-by-handle:${handle}:${pathPrefix}`
+      : undefined,
   });
 
   useEffect(() => {

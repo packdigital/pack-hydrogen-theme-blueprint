@@ -23,10 +23,13 @@ export function useProductRecommendations(
   productId = '',
   intent: ProductRecommendationIntent = 'RELATED', // 'COMPLEMENTARY' | 'RELATED'
   fetchOnMount = true,
+  addKeyIdentifier = false,
 ): Product[] | null {
   const {pathPrefix} = useLocale();
   const fetcher = useFetcher<{productRecommendations: Product[]}>({
-    key: `product-recommendations:${productId}${intent}:${pathPrefix}`,
+    key: addKeyIdentifier
+      ? `product-recommendations:${productId}${intent}:${pathPrefix}`
+      : undefined,
   });
 
   useEffect(() => {
