@@ -61,6 +61,7 @@ export function JigglePetSlide() {
                 data={imageData}
                 alt={'Jiggle Pets Collection'}
                 className="size-full object-cover"
+                sizes="(max-height: 500px) 100vh, (max-width: 1200px) 50vw, 33vw"
               />
             </div>
           </div>

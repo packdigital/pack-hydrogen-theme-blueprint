@@ -73,6 +73,7 @@ export function DragonsSlide({
                 data={imageData}
                 alt={backgroundAlt}
                 className="size-full object-cover"
+                sizes="(max-height: 500px) 100vh, (max-width: 1200px) 50vw, 33vw"
               />
             </div>
           </div>
