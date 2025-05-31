@@ -36,7 +36,7 @@ export function CategorySlider({
     <Container container={cms.container}>
       <div ref={ref}>
         <div className={`${maxWidthClass} justify-center ${margin}`}>
-          <ContactFormWrapper />
+          This is placeholder for a cagetory slider component next
         </div>
       </div>
     </Container>
