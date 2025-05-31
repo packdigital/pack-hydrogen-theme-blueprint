@@ -4,6 +4,7 @@ import {BuildYourOwnPack} from 'modules/brilliant/BuildYourOwnPack';
 import {CategorySlider} from 'modules/brilliant/CategorySlider';
 import {FeaturedSlider} from 'modules/brilliant/FeaturedSlider';
 import {ContactForm} from 'modules/brilliant/sections/ContactForm/ContactForm';
+import {ProductSlider} from 'modules/brilliant/sections/ProductSlider/ProductSlider';
 
 import {Accordions} from './Accordions';
 import {Banner} from './Banner';
@@ -123,4 +124,8 @@ export function registerSections() {
   });
 
   registerSection(BuildYourOwnPack as Section, {name: 'build-your-own-pack'});
+
+  registerSection(ProductSlider as Section, {
+    name: 'brilliant-product-slider',
+  });
 }
