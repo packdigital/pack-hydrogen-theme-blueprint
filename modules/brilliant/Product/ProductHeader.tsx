@@ -1,13 +1,10 @@
+import {useMoney} from '@shopify/hydrogen-react';
 import {useCallback, useMemo} from 'react';
 
 import type {ProductHeaderProps} from './Product.types';
 
 import {ProductStars} from '~/components/ProductStars';
-import {
-  useMatchMedia,
-  useParsedProductMetafields,
-  useVariantPrices,
-} from '~/hooks';
+import {useMatchMedia, useParsedProductMetafields} from '~/hooks';
 import {HEADER_NAVIGATION, PRODUCT_MODAL_PANEL} from '~/lib/constants';
 import {PRODUCT_REVIEWS_KEY} from '~/sections/ProductReviews';
 
@@ -19,8 +16,10 @@ export function ProductHeader({
   selectedVariantColor,
   settings,
 }: ProductHeaderProps) {
-  const {price, compareAtPrice, priceLocalized} =
-    useVariantPrices(selectedVariant);
+  const productPrice = useMoney({
+    amount: selectedVariant?.price.amount || '0.00',
+    currencyCode: selectedVariant?.price.currencyCode || 'USD',
+  });
 
   /* Product metafields parsed into an object with metafields by `${namespace}.${key}` */
   const metafields = useParsedProductMetafields(product);
@@ -28,8 +27,6 @@ export function ProductHeader({
     () => metafields?.['custom.creator_name']?.value || '',
     [metafields],
   );
-
-  //use priceLocalized instead of price if we want $10.00 with both zero cents
 
   const {enabledStarRating = true} = {...settings?.reviews};
   const isMobileViewport = useMatchMedia('(max-width: 767px)');
@@ -98,10 +95,7 @@ export function ProductHeader({
       )}
 
       <div className="mt-2 flex min-h-6 gap-2">
-        {compareAtPrice && (
-          <p className="text-neutralMedium line-through">{compareAtPrice}</p>
-        )}
-        <h4 className="text-3xl font-normal">{price}</h4>
+        <h4 className="text-3xl font-normal">{productPrice.localizedString}</h4>
       </div>
     </div>
   );

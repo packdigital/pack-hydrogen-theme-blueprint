@@ -1,4 +1,5 @@
 import {useAnalytics} from '@shopify/hydrogen';
+import {ProductItemPrice} from 'modules/brilliant/ProductItem/ProductItemPrice';
 import {memo, useCallback, useMemo, useState} from 'react';
 import {useInView} from 'react-intersection-observer';
 
@@ -8,7 +9,6 @@ import {AnalyticsEvent} from '~/components/Analytics/constants';
 import {Link} from '~/components/Link';
 import type {ProductItemProps} from '~/components/ProductItem/ProductItem.types';
 import {ProductItemMedia} from '~/components/ProductItem/ProductItemMedia/ProductItemMedia';
-import {ProductItemPrice} from '~/components/ProductItem/ProductItemPrice';
 import {ProductStars} from '~/components/ProductStars';
 import {Card, CardContent, CardDescription} from '~/components/ui/card';
 import {

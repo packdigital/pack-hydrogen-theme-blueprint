@@ -1,4 +1,6 @@
+import {useMoney} from '@shopify/hydrogen-react';
 import {ProductVariant} from '@shopify/hydrogen-react/storefront-api-types';
+import {UseMoneyValue} from '@shopify/hydrogen-react/useMoney';
 import {CircleArrowRight, CircleXIcon, GiftIcon} from 'lucide-react';
 import {useMemo} from 'react';
 
@@ -6,7 +8,6 @@ import {tierMapToVariants} from '../BYOPUtilities';
 
 import {Button} from '~/components/ui/button';
 import {Progress} from '~/components/ui/progress';
-import {useVariantPrices} from '~/hooks/product/useVariantPrices';
 import {cn} from '~/lib/utils';
 
 export function ProgressSection({
@@ -28,7 +29,10 @@ export function ProgressSection({
   selectedItemsLength: number;
   handleClear?: () => void;
 }) {
-  const {price} = useVariantPrices(selectedBundle);
+  const bundlePrice = useMoney({
+    amount: selectedBundle?.price.amount || '0.00',
+    currencyCode: selectedBundle?.price.currencyCode || 'USD',
+  });
 
   const bundleSize = useMemo(
     () => Number(selectedBundle?.selectedOptions[0].value) || 0,
@@ -45,6 +49,8 @@ export function ProgressSection({
     return Math.round((selectedCount / bundleSize) * 100);
   }, [bundleSize, selectedCount]);
 
+  console.log('ProgressSection', selectedBundle);
+
   return (
     <div className={cn('w-full ', className)}>
       <DesktopProgressSection
@@ -56,7 +62,7 @@ export function ProgressSection({
         randomLoading={randomLoading}
         selectedItemsLength={selectedItemsLength}
         bundleName={bundleName}
-        bundleCost={price || 'N/A'}
+        bundlePrice={bundlePrice}
         handleClear={handleClear}
       />
       <MobileProgressSection
@@ -76,7 +82,7 @@ export function DesktopProgressSection({
   selectedCount,
   bundleSize,
   bundleName,
-  bundleCost,
+  bundlePrice,
   progressPercentage,
   viewBundleSelection,
   fillRandomly,
@@ -87,7 +93,7 @@ export function DesktopProgressSection({
   selectedCount: number;
   bundleSize: number;
   bundleName: string;
-  bundleCost: string;
+  bundlePrice: UseMoneyValue;
   progressPercentage: number;
   viewBundleSelection: (val: boolean) => void;
   fillRandomly: () => void;
@@ -132,7 +138,7 @@ export function DesktopProgressSection({
           <div className="flex items-center gap-4">
             <div className="flex flex-col items-center">
               <p className="text-h3 text-gray-500">Total</p>
-              <p>{bundleCost}</p>
+              <p>{bundlePrice.localizedString}</p>
             </div>
             <Button
               size={'sm'}

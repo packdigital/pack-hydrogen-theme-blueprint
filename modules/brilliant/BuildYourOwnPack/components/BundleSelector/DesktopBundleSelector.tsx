@@ -1,3 +1,4 @@
+import {useMoney} from '@shopify/hydrogen-react';
 import {ProductVariant} from '@shopify/hydrogen-react/storefront-api-types';
 import {Gift} from 'lucide-react';
 import {tierMapToVariants} from 'modules/brilliant/BuildYourOwnPack/BYOPUtilities';
@@ -71,6 +72,11 @@ export function BundleOption({
 
   const isSelected = selectedBundledId === bundle.id;
 
+  const bundlePrice = useMoney({
+    amount: bundle?.price?.amount || '0.00',
+    currencyCode: bundle.price?.currencyCode || 'USD',
+  });
+
   return (
     <Card
       className={`cursor-pointer overflow-hidden rounded-md border transition-all hover:border-blue-600  ${
@@ -97,7 +103,7 @@ export function BundleOption({
             {bundleDetails.title}
           </h3>
           <span className="shrink-0 text-2xl font-bold text-green-800">
-            ${bundle.price.amount}
+            {bundlePrice.localizedString}
           </span>
         </div>
         {/* Row 2: Remaining content, left justified */}
