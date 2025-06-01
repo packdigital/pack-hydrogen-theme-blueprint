@@ -39,12 +39,12 @@ export function Schema() {
         description: 'Add slides to the product slider',
         fields: [
           {
-            label: 'Design',
-            name: 'design',
+            label: 'Image Location',
+            name: 'imageLocation',
             component: 'select',
             options: [
-              {label: 'Default', value: 'default'},
-              {label: 'Full Background', value: 'fullBackground'},
+              {label: 'Left', value: 'left'},
+              {label: 'Right', value: 'right'},
             ],
           },
           {
@@ -64,6 +64,12 @@ export function Schema() {
             name: 'tagline',
             component: 'text',
             description: 'Optional tagline for the slide',
+          },
+          {
+            label: 'Description',
+            name: 'description',
+            component: 'html',
+            description: 'Optional html for the slide',
           },
         ],
       },

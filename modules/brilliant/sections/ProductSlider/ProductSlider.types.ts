@@ -4,9 +4,10 @@ export interface ProductSliderCms {
     fullWidth: boolean;
   };
   slides: {
-    design: 'default' | 'fullBackground';
+    imageLocation: 'left' | 'right';
     title?: string;
     title2?: string;
     tagline?: string;
+    description?: string;
   }[];
 }

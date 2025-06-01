@@ -35,6 +35,8 @@ export function ProductSlider({
     [cms?.section?.fullWidth],
   );
 
+  console.log('ProductSlider CMS:', cms);
+
   const [carouselApi, setCarouselApi] = useState<CarouselApi | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [totalItems, setTotalItems] = useState(0);
