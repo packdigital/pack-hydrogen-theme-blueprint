@@ -32,6 +32,41 @@ export function Schema() {
           },
         ],
       },
+      {
+        label: 'Slides',
+        name: 'slides',
+        component: 'group-list',
+        description: 'Add slides to the product slider',
+        fields: [
+          {
+            label: 'Design',
+            name: 'design',
+            component: 'select',
+            options: [
+              {label: 'Default', value: 'default'},
+              {label: 'Full Background', value: 'fullBackground'},
+            ],
+          },
+          {
+            label: 'Title',
+            name: 'title',
+            component: 'text',
+            description: 'Optional title for the slide',
+          },
+          {
+            label: 'Title 2',
+            name: 'title2',
+            component: 'text',
+            description: 'Optional second title for the slide',
+          },
+          {
+            label: 'Tagline',
+            name: 'tagline',
+            component: 'text',
+            description: 'Optional tagline for the slide',
+          },
+        ],
+      },
       containerSettings(),
     ],
   };

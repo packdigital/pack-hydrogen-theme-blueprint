@@ -3,4 +3,10 @@ export interface ProductSliderCms {
   section: {
     fullWidth: boolean;
   };
+  slides: {
+    design: 'default' | 'fullBackground';
+    title?: string;
+    title2?: string;
+    tagline?: string;
+  }[];
 }
