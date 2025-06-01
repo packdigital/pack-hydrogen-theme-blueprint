@@ -2,10 +2,10 @@ import Autoplay from 'embla-carousel-autoplay';
 import {useEffect, useMemo, useState} from 'react';
 import {useInView} from 'react-intersection-observer';
 
+import {ProductSlide} from './ProductSlide';
 import {Schema} from './ProductSlider.schema';
 import {ProductSliderCms} from './ProductSlider.types';
-import {DragonsSlide} from './slides/DragonsSlide';
-import {JigglePetSlide} from './slides/JigglePetSlide';
+import {sliderMock} from './sliderMock';
 
 import {Container} from '~/components/Container';
 import {Button} from '~/components/ui/button';
@@ -35,8 +35,7 @@ export function ProductSlider({
     [cms?.section?.fullWidth],
   );
 
-  console.log('ProductSlider CMS:', cms);
-
+  /* Start Carousel Controls */
   const [carouselApi, setCarouselApi] = useState<CarouselApi | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [totalItems, setTotalItems] = useState(0);
@@ -58,45 +57,54 @@ export function ProductSlider({
     };
   }, [carouselApi]);
 
+  /* End Carousel Controls */
+
+  const slides = useMemo(() => cms?.slides || [], [cms?.slides]);
+
   return (
     <Container container={cms.container}>
       <div ref={ref}>
         <div className={`${maxWidthClass} justify-center`}>
-          <Carousel
-            setApi={setCarouselApi}
-            opts={{
-              align: 'start',
-              loop: true,
-            }}
-            plugins={[
-              Autoplay({
-                delay: 10000,
-              }),
-            ]}
-          >
-            <CarouselContent className="">
-              <CarouselItem>
-                <DragonsSlide />
-              </CarouselItem>
-              <CarouselItem>
-                <JigglePetSlide />
-              </CarouselItem>
-            </CarouselContent>
+          {inView && (
+            <Carousel
+              className=""
+              setApi={setCarouselApi}
+              opts={{
+                align: 'start',
+                loop: true,
+              }}
+              plugins={[
+                Autoplay({
+                  delay: 10000,
+                }),
+              ]}
+            >
+              <CarouselContent>
+                {slides.map((slide, index) => (
+                  <CarouselItem
+                    key={index}
+                    className="flex flex-col items-center justify-center"
+                  >
+                    <ProductSlide slide={slide} index={index} />
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
 
-            {/* Navigation Dots */}
-            <div className="absolute bottom-0 left-1/2 flex justify-center gap-1 pb-4">
-              {Array.from({length: totalItems}).map((_, index) => (
-                <Button
-                  size={'icon'}
-                  key={index}
-                  onClick={() => scrollToIndex(index)}
-                  className={`size-4 rounded-full ${
-                    currentIndex === index ? 'bg-orange-400' : 'bg-gray-400'
-                  }`}
-                />
-              ))}
-            </div>
-          </Carousel>
+              {/* Navigation Dots */}
+              <div className="flex justify-center gap-1">
+                {Array.from({length: totalItems}).map((_, index) => (
+                  <Button
+                    size={'icon'}
+                    key={index}
+                    onClick={() => scrollToIndex(index)}
+                    className={`size-4 rounded-full ${
+                      currentIndex === index ? 'bg-orange-400' : 'bg-gray-400'
+                    }`}
+                  />
+                ))}
+              </div>
+            </Carousel>
+          )}
         </div>
       </div>
     </Container>

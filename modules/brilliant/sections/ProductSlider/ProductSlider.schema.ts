@@ -1,3 +1,4 @@
+import {BUTTONS} from '~/settings/common';
 import {containerSettings} from '~/settings/container';
 
 export function Schema() {
@@ -37,6 +38,9 @@ export function Schema() {
         name: 'slides',
         component: 'group-list',
         description: 'Add slides to the product slider',
+        itemProps: {
+          label: '{{item.title}}',
+        },
         fields: [
           {
             label: 'Image Location',
@@ -46,12 +50,36 @@ export function Schema() {
               {label: 'Left', value: 'left'},
               {label: 'Right', value: 'right'},
             ],
+            validate: {
+              required: true,
+            },
+          },
+          {
+            label: 'Image Desktop',
+            name: 'imageDesktop',
+            component: 'image',
+            description: 'Image for the slide',
+            validate: {
+              required: true,
+            },
+          },
+          {
+            label: 'Image Alt Text',
+            name: 'imageAltText',
+            component: 'text',
+            description: ' title for the slide',
+            validate: {
+              required: true,
+            },
           },
           {
             label: 'Title',
             name: 'title',
             component: 'text',
             description: 'Optional title for the slide',
+            validate: {
+              required: true,
+            },
           },
           {
             label: 'Title 2',
@@ -70,6 +98,58 @@ export function Schema() {
             name: 'description',
             component: 'html',
             description: 'Optional html for the slide',
+            validate: {
+              required: true,
+            },
+          },
+
+          {
+            label: 'Feature Orientation',
+            name: 'featureOrientation',
+            component: 'select',
+            options: [
+              {label: 'Vertical', value: 'vertical'},
+              {label: 'Horizontal', value: 'horizontal'},
+            ],
+          },
+
+          {
+            label: 'Features List',
+            name: 'features',
+            component: 'list',
+            field: {
+              component: 'text',
+            },
+          },
+
+          {
+            label: 'Buttons',
+            name: 'buttons',
+            component: 'group-list',
+            description: 'Max of two buttons',
+            itemProps: {
+              label: '{{item.link.text}}',
+            },
+            validate: {
+              maxItems: 2,
+            },
+            fields: [
+              {
+                label: 'Link',
+                name: 'link',
+                component: 'link',
+              },
+              {
+                label: 'Button Style',
+                name: 'style',
+                component: 'select',
+                options: BUTTONS,
+              },
+            ],
+            defaultItem: {
+              link: {text: 'Shop Now', url: ''},
+              style: 'btn-primary',
+            },
           },
         ],
       },
