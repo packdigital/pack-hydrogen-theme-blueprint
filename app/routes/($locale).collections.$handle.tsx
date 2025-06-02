@@ -36,9 +36,9 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
   });
 
   const sortKey = String(
-    searchParams.get('sortKey')?.toUpperCase() ?? 'COLLECTION_DEFAULT',
+    searchParams.get('sortKey')?.toUpperCase() ?? 'CREATED',
   ) as ProductCollectionSortKeys;
-  const reverse = Boolean(searchParams.get('reverse') ?? false);
+  const reverse = Boolean(searchParams.get('reverse') ?? true);
 
   const resultsPerPage = Math.floor(
     Number(
