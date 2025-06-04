@@ -80,7 +80,7 @@ export const Promobar = memo(() => {
       className={`overflow-hidden bg-blue-950 font-medium text-gray-200 transition-[height] ease-out ${
         promobarOpen && !promobarDisabled
           ? 'duration-300 max-md:h-[var(--promobar-height-mobile)] md:h-[var(--promobar-height-desktop)]'
-          : 'duration-[50ms] h-0'
+          : 'h-0 duration-100'
       }`}
       /* style={{backgroundColor: bgColor}} */
     >

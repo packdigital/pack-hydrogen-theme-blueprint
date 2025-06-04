@@ -83,7 +83,7 @@ export function ProductSlider({
                 {slides.map((slide, index) => (
                   <CarouselItem
                     key={index}
-                    className="flex flex-col items-center justify-center"
+                    className="flex flex-col items-center justify-start md:items-center md:justify-center"
                   >
                     <ProductSlide slide={slide} index={index} />
                   </CarouselItem>

@@ -4,6 +4,8 @@ import {useMemo} from 'react';
 
 import {ProductSliderSlide} from './ProductSlider.types';
 
+import {useMatchMedia} from '~/hooks';
+
 interface ProductSliderSlideProps {
   slide: ProductSliderSlide;
   index?: number;
@@ -12,8 +14,10 @@ export const ProductSlide: React.FC<ProductSliderSlideProps> = ({
   slide,
   index,
 }) => {
+  const isMobileViewport = useMatchMedia('(max-width: 767px)');
+
   const {imageLocation, imageDesktop} = slide;
-  const isImageLeft = imageLocation === 'left';
+  const isImageLeft = imageLocation === 'left' || isMobileViewport;
 
   return (
     <div
@@ -26,13 +30,13 @@ export const ProductSlide: React.FC<ProductSliderSlideProps> = ({
             imageUrl={imageDesktop?.url || ''}
             imageAlt={slide.imageAltText || ''}
           />
-          <div className="flex h-full flex-col items-start justify-center text-left md:items-center">
+          <div className="flex h-full flex-col items-start justify-start text-left md:items-center md:justify-center">
             <ProductSlideContent slide={slide} />
           </div>
         </>
       ) : (
         <>
-          <div className="flex h-full flex-col items-start justify-center text-left md:items-center">
+          <div className="flex h-full flex-col items-start justify-start text-left md:items-center  md:justify-center">
             <ProductSlideContent slide={slide} />
           </div>
           <ProductSlideImage
@@ -57,7 +61,7 @@ function ProductSlideContent({slide}: {slide: ProductSliderSlide}) {
   } = slide;
 
   return (
-    <div className="flex flex-col px-4">
+    <div className="flex w-full min-w-0 flex-col px-4">
       {tagline && (
         <p className="font-medium uppercase leading-snug text-gray-600">
           {tagline}
@@ -109,8 +113,8 @@ function ProductSlideImage({
   );
 
   return (
-    <div className="flex h-full items-center justify-center p-4">
-      <div className="max-h-[460px] w-full overflow-hidden rounded shadow-lg">
+    <div className="flex size-full items-center  justify-center p-4">
+      <div className="max-h-[460px] w-full max-w-full overflow-hidden rounded shadow-lg">
         <Image
           aspectRatio="9/6"
           data={imageData}
@@ -131,7 +135,7 @@ function ProductSlideButtons({
   if (!buttons || buttons.length === 0) return null;
 
   return (
-    <div className="mt-6 flex flex-row gap-5 md:mt-12">
+    <div className="mt-6 flex flex-row flex-wrap gap-5 md:mt-12">
       {buttons.map((button, index) => (
         <a href={button.link.url} key={index}>
           <Button className={button.style}>{button.link.text}</Button>
