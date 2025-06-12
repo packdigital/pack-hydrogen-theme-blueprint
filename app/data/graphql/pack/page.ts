@@ -1,7 +1,7 @@
 import {SECTION_FRAGMENT} from './settings';
 
 export const PAGE_QUERY = `
-  query Page($handle: String!, $version: Version, $cursor: String) {
+  query Page($handle: String!, $version: Version, $cursor: String, $language: String, $country: String) @inContext(language: $language, country: $country) {
     page: pageByHandle(handle: $handle, version: $version) {
       id
       title
