@@ -1,5 +1,5 @@
 export const SITE_SETTINGS_QUERY = `
-  query SiteSettings($version: Version) {
+  query SiteSettings($version: Version, $language: String, $country: String) @inContext(language: $language, country: $country) {
     siteSettings(version: $version) {
       id
       status

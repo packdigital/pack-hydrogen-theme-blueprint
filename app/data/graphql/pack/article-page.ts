@@ -1,7 +1,7 @@
 import {SECTION_FRAGMENT} from './settings';
 
 export const ARTICLE_PAGE_QUERY = `
-  query Article($handle: String!, $version: Version, $cursor: String) {
+  query Article($handle: String!, $version: Version, $cursor: String, $language: String, $country: String) @inContext(language: $language, country: $country) {
     article: articleByHandle(handle: $handle, version: $version) {
       id
       title

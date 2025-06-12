@@ -24,6 +24,7 @@ export const getPage = async ({
   pageKey?: string;
   query: string;
 }) => {
+  const {pack, storefront} = context;
   const getPageWithAllSections = async ({
     accumulatedPage,
     cursor,
@@ -31,9 +32,14 @@ export const getPage = async ({
     accumulatedPage: Page | null;
     cursor: string | null;
   }): Promise<Page> => {
-    const {data} = await context.pack.query(query, {
-      variables: {handle, cursor},
-      cache: context.storefront.CacheLong(),
+    const {data} = await pack.query(query, {
+      variables: {
+        handle,
+        cursor,
+        country: storefront.i18n.country,
+        language: storefront.i18n.language,
+      },
+      cache: storefront.CacheLong(),
     });
 
     if (!data?.[pageKey]) throw new Response(null, {status: 404});

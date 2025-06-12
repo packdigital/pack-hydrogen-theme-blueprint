@@ -1,7 +1,7 @@
 import {SECTION_FRAGMENT} from './settings';
 
 export const COLLECTION_PAGE_QUERY = `
-  query CollectionPage($handle: String!, $version: Version, $cursor: String) {
+  query CollectionPage($handle: String!, $version: Version, $cursor: String, $language: String, $country: String) @inContext(language: $language, country: $country) {
     collectionPage: collectionPageByHandle(handle: $handle, version: $version) {
       id
       handle
