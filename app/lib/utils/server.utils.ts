@@ -32,8 +32,13 @@ export const getShop = async (context: AppLoadContext) => {
 export const getSiteSettings = async (
   context: AppLoadContext,
 ): Promise<RootSiteSettings> => {
-  return context.pack.query(SITE_SETTINGS_QUERY, {
-    cache: context.storefront.CacheLong(),
+  const {pack, storefront} = context;
+  return pack.query(SITE_SETTINGS_QUERY, {
+    variables: {
+      country: storefront.i18n.country,
+      language: storefront.i18n.language,
+    },
+    cache: storefront.CacheLong(),
   }) as RootSiteSettings;
 };
 

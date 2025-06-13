@@ -1,7 +1,7 @@
 import {SECTION_FRAGMENT} from './settings';
 
 export const PRODUCT_PAGE_QUERY = `
-  query ProductPage($handle: String!, $version: Version, $cursor: String) {
+  query ProductPage($handle: String!, $version: Version, $cursor: String, $language: String, $country: String) @inContext(language: $language, country: $country) {
     productPage: productPageByHandle(handle: $handle, version: $version) {
       id
       title

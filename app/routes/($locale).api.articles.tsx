@@ -26,13 +26,16 @@ export async function loader({context, request}: LoaderFunctionArgs) {
     blog: BlogPage | null;
     cursor: string | null;
   }): Promise<BlogPage> => {
-    const {data} = await context.pack.query(BLOG_PAGE_QUERY, {
+    const {pack, storefront} = context;
+    const {data} = await pack.query(BLOG_PAGE_QUERY, {
       variables: {
         first: 250,
         handle,
         cursor,
+        country: storefront.i18n.country,
+        language: storefront.i18n.language,
       },
-      cache: context.storefront.CacheLong(),
+      cache: storefront.CacheLong(),
     });
     if (!data?.blog) throw new Response(null, {status: 404});
 
