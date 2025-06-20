@@ -73,8 +73,8 @@ export async function loader({request, context}: LoaderFunctionArgs) {
           search.totalCount === 1 ? 'result' : 'results'
         } for "${searchTerm}"`
       : filters.length
-      ? `Found 0 filtered results for "${searchTerm}"`
-      : `Found no results for "${searchTerm}"`,
+        ? `Found 0 filtered results for "${searchTerm}"`
+        : `Found no results for "${searchTerm}"`,
     handle: 'search',
     descriptionHtml: 'Search results',
     description: 'Search results',

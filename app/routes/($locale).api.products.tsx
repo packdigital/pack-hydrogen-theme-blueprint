@@ -37,13 +37,16 @@ export async function loader({request, context}: LoaderFunctionArgs) {
     queryIds = reverse ? [...queryIds].reverse() : queryIds;
 
     if (products?.length !== queryIds.length) {
-      const productsById = products?.reduce((acc, product) => {
-        const id = product.id?.split('/').pop();
-        if (id) {
-          acc[id] = product;
-        }
-        return acc;
-      }, {} as Record<string, Product>);
+      const productsById = products?.reduce(
+        (acc, product) => {
+          const id = product.id?.split('/').pop();
+          if (id) {
+            acc[id] = product;
+          }
+          return acc;
+        },
+        {} as Record<string, Product>,
+      );
       const productsWithDrafts = await Promise.all(
         queryIds.map(async (queryId) => {
           const id = queryId.replace('id:', '');

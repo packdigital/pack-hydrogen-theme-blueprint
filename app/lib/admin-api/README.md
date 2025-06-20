@@ -13,6 +13,7 @@ The Admin API access token from the private app in Shopify for Pack is required 
 The product object from Admin API is not 1 to 1 with a product object from Storefront API. Thus, wherever a product from Admin API is fetched, it is then normalized to have the same shape as Storefront API products. See `normalizeAdminProduct` in `/lib/utils/product.utils.ts`.
 
 Whenever updating the regular Storefront API Graphql queries for Product, remember to:
+
 - Also update the corresponding Admin API queries accordingly (e.g. variants, selling plans, metafields, etc)
 - Ensure the changes are kosher by either referencing the [Graphql Admin API Docs](https://shopify.dev/docs/api/admin-graphql), or using the `Shopify GraphiQL App` in Shopify
 - If changes to the query are not 1 to 1 with the Storefront API product, update the util `normalizeAdminProduct` to normalize the data returned
@@ -22,9 +23,11 @@ Whenever updating the regular Storefront API Graphql queries for Product, rememb
 The Admin API client `admin` is modeled after Hydrogen's `storefront` client and can be used similarly, except there is no support for using the public API token for Admin API.
 
 ### Query
+
 `const data = await admin.query(QUERY, {...options});`
 
 Example:
+
 ```
 async function loader({context}) {
   const {admin} = context;
@@ -35,11 +38,12 @@ async function loader({context}) {
 }
 ```
 
-
 ### Mutation
+
 `await admin.mutate(MUTATION, {...options});`
 
 Example:
+
 ```
 async function action({context}) {
   const {admin} = context;

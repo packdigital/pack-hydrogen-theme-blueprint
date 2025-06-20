@@ -757,7 +757,7 @@
                 "tileHeadingSize": "text-h4",
                 "buttonStyle": "btn-primary",
                 "fullWidth": false
-             },
+              },
               "_template": "tabbed-tiles-slider",
               "id": "default-tabbed-tiles-slider-data",
               "sectionName": "Homepage Tabbed Tiles Slider",
@@ -1034,7 +1034,7 @@
                 "textAlign": "text-left items-start",
                 "tileHeadingSize": "text-h4",
                 "fullWidth": false
-             },
+              },
               "_template": "tiles-stack",
               "id": "default-tiles-stack-data",
               "sectionName": "Homepage Tiles Stack",
@@ -1146,7 +1146,7 @@
                 "secondaryButtonStyle": "btn-inverse-light",
                 "clickableImage": true,
                 "hideButtons": false
-             },
+              },
               "header": {
                 "alignment": "text-center items-center"
               },
@@ -1157,7 +1157,7 @@
                 "aspectRatio": "aspect-[3/4]",
                 "textColor": "#000000",
                 "fullWidth": false
-             },
+              },
               "_template": "image-tiles",
               "id": "default-image-tiles-data",
               "sectionName": "Homepage Image Tiles",

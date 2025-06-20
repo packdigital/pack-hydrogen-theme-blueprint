@@ -335,10 +335,13 @@ export const getProductsMapForPage = async ({
 
     if (admin && isPreviewModeEnabled) {
       if (products?.length !== productIds.length) {
-        const productsById = products?.reduce((acc, product) => {
-          if (product.id) acc[product.id] = product;
-          return acc;
-        }, {} as Record<string, Product>);
+        const productsById = products?.reduce(
+          (acc, product) => {
+            if (product.id) acc[product.id] = product;
+            return acc;
+          },
+          {} as Record<string, Product>,
+        );
         const productsWithDrafts = await Promise.all(
           productIds.map(async (id) => {
             if (productsById?.[id]) return productsById[id];

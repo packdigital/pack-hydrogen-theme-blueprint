@@ -135,8 +135,8 @@ export const createClientSubscription = async ({
         message: email
           ? 'Thank you for signing up!'
           : phone
-          ? 'Thank you for signing up!'
-          : '',
+            ? 'Thank you for signing up!'
+            : '',
         error: null,
         email: email || null,
         phone: phone || null,
