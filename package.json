@@ -24,7 +24,7 @@
     "@headlessui/tailwindcss": "^0.2.2",
     "@pack/client": "^1.0.2",
     "@pack/hydrogen": "^1.0.8",
-    "@pack/react": "^2.2.0",
+    "@pack/react": "^2.2.0-beta.2",
     "@pack/types": "^0.0.3",
     "@remix-run/react": "^2.16.5",
     "@shopify/cli": "^3.78.1",

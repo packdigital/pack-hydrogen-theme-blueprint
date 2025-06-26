@@ -27,6 +27,7 @@ declare global {
     PRIVATE_SHOPIFY_CHECKOUT_DOMAIN?: string;
     PRIVATE_SHOPIFY_STORE_MULTIPASS_SECRET?: string;
     PRIVATE_STOREFRONT_API_TOKEN: string;
+    PACK_API_URL?: string;
     PUBLIC_CHECKOUT_DOMAIN: string;
     PUBLIC_PACK_CONTENT_ENVIRONMENT?: string;
     PUBLIC_STORE_DOMAIN: string;
@@ -49,7 +50,7 @@ declare global {
     // Meta pixel
     fbq?: Function;
     // TikTok pixel
-    ttq?: Record<string,any>;
+    ttq?: Record<string, any>;
     // Fueled
     fueled?: any;
     fueledConfig?: Record<string, any>;
