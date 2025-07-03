@@ -36,6 +36,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
         language: storefront.i18n.language,
       },
       cache: storefront.CacheLong(),
+      request,
     });
     if (!data?.blog) throw new Response(null, {status: 404});
 
@@ -68,7 +69,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
       cursor: null,
     }),
     getShop(context),
-    getSiteSettings(context),
+    getSiteSettings(context, request),
   ]);
 
   if (!blogWithAllArticles) throw new Response(null, {status: 404});
@@ -80,6 +81,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
       handle,
       pageKey: 'blog',
       query: BLOG_PAGE_QUERY,
+      request,
     });
     blog = {
       ...blogWithAllArticles,

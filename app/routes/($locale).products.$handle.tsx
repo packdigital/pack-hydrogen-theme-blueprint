@@ -56,6 +56,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
       handle,
       pageKey: 'productPage',
       query: PRODUCT_PAGE_QUERY,
+      request,
     }),
     storefront.query(PRODUCT_QUERY, {
       variables: {
@@ -66,9 +67,9 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
       },
       cache: storefront.CacheShort(),
     }),
-    getProductGroupings(context),
+    getProductGroupings(context, request),
     getShop(context),
-    getSiteSettings(context),
+    getSiteSettings(context, request),
   ]);
 
   let queriedProduct = storefrontProduct;

@@ -18,11 +18,13 @@ export const getPage = async ({
   handle,
   pageKey = 'page',
   query,
+  request,
 }: {
   context: AppLoadContext;
   handle: string;
   pageKey?: string;
   query: string;
+  request: Request;
 }) => {
   const {pack, storefront} = context;
   let capturedPackTestInfo: any = null;
@@ -42,6 +44,7 @@ export const getPage = async ({
         language: storefront.i18n.language,
       },
       cache: storefront.CacheLong(),
+      request,
     });
 
     // Capture packTestInfo from the first call

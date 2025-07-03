@@ -12,7 +12,12 @@ import {
   createRequestHandler,
   getStorefrontHeaders,
 } from '@shopify/remix-oxygen';
-import {createPackClient, PackSession, handleRequest} from '@pack/hydrogen';
+import {
+  createPackClient,
+  PackSession,
+  handleRequest,
+  PackTestSession,
+} from '@pack/hydrogen';
 
 import {AppSession} from '~/lib/session.server';
 import {getLocaleFromRequest, getOxygenEnv} from '~/lib/utils';
@@ -37,10 +42,11 @@ export default {
       }
 
       const waitUntil = (p: Promise<any>) => executionContext.waitUntil(p);
-      const [cache, session, packSession] = await Promise.all([
+      const [cache, session, packSession, packTestSession] = await Promise.all([
         caches.open('hydrogen'),
         AppSession.init(request, [env.SESSION_SECRET]),
         PackSession.init(request, [env.SESSION_SECRET]),
+        PackTestSession.init(request, [env.SESSION_SECRET]),
       ]);
 
       /**
@@ -108,6 +114,7 @@ export default {
         token: env.PACK_SECRET_TOKEN,
         storeId: env.PACK_STOREFRONT_ID,
         session: packSession,
+        testSession: packTestSession,
         contentEnvironment: env.PUBLIC_PACK_CONTENT_ENVIRONMENT,
         defaultThemeData,
         apiUrl: env.PACK_API_URL,

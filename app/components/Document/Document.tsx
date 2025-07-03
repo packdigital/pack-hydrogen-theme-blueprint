@@ -79,6 +79,7 @@ export function Document({children, title}: DocumentProps) {
                 customizerMeta={packCustomizerMeta}
                 isPreviewModeEnabled={packIsPreviewMode}
                 siteSettings={siteSettings}
+                contentEnvironment={ENV.PUBLIC_PACK_CONTENT_ENVIRONMENT}
               >
                 <Layout key={`${locale.language}-${locale.country}`}>
                   {children}

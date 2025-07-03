@@ -3,33 +3,33 @@ import {
   Outlet,
   useMatches,
   useRouteError,
-} from "@remix-run/react";
-import { data as dataWithOptions, redirect } from "@shopify/remix-oxygen";
-import type { ShouldRevalidateFunction } from "@remix-run/react";
+} from '@remix-run/react';
+import {data as dataWithOptions, redirect} from '@shopify/remix-oxygen';
+import type {ShouldRevalidateFunction} from '@remix-run/react';
 import {
   getSeoMeta,
   getShopAnalytics,
   ShopifySalesChannel,
-} from "@shopify/hydrogen";
+} from '@shopify/hydrogen';
 import type {
   LinksFunction,
   LoaderFunctionArgs,
   MetaArgs,
-} from "@shopify/remix-oxygen";
+} from '@shopify/remix-oxygen';
 import type {
   Customer,
   CustomerAccessToken,
   Shop,
-} from "@shopify/hydrogen/storefront-api-types";
+} from '@shopify/hydrogen/storefront-api-types';
 
 import {
   ApplicationError,
   Document,
   NotFound,
   ServerError,
-} from "~/components/Document";
-import { validateCustomerAccessToken } from "~/lib/customer";
-import { customerGetAction } from "~/lib/customer/servers/customer.server";
+} from '~/components/Document';
+import {validateCustomerAccessToken} from '~/lib/customer';
+import {customerGetAction} from '~/lib/customer/servers/customer.server';
 import {
   getCookieDomain,
   getPublicEnvs,
@@ -38,13 +38,13 @@ import {
   getSiteSettings,
   redirectLinkToBuyerLocale,
   setPackCookie,
-} from "~/lib/utils";
-import { registerSections } from "~/sections";
-import { registerStorefrontSettings } from "~/settings";
-import { seoPayload } from "~/lib/seo.server";
-import { getModalProduct } from "~/lib/products.server";
-import type { RootSiteSettings } from "~/lib/types";
-import styles from "~/styles/app.css?url";
+} from '~/lib/utils';
+import {registerSections} from '~/sections';
+import {registerStorefrontSettings} from '~/settings';
+import {seoPayload} from '~/lib/seo.server';
+import {getModalProduct} from '~/lib/products.server';
+import type {RootSiteSettings} from '~/lib/types';
+import styles from '~/styles/app.css?url';
 
 registerSections();
 registerStorefrontSettings();
@@ -56,7 +56,7 @@ export const shouldRevalidate: ShouldRevalidateFunction = ({
   nextUrl,
 }) => {
   // revalidate when a mutation is performed e.g add to cart, login...
-  if (formMethod && formMethod !== "GET") {
+  if (formMethod && formMethod !== 'GET') {
     return true;
   }
   // revalidate when manually revalidating via useRevalidator
@@ -68,36 +68,36 @@ export const shouldRevalidate: ShouldRevalidateFunction = ({
 
 export const links: LinksFunction = () => {
   return [
-    { rel: "stylesheet", href: styles },
+    {rel: 'stylesheet', href: styles},
     {
-      rel: "stylesheet",
-      href: "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css",
+      rel: 'stylesheet',
+      href: 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css',
     },
     {
-      rel: "preconnect",
-      href: "https://cdn.shopify.com",
+      rel: 'preconnect',
+      href: 'https://cdn.shopify.com',
     },
     {
-      rel: "preconnect",
-      href: "https://shop.app",
+      rel: 'preconnect',
+      href: 'https://shop.app',
     },
     {
-      rel: "preconnect",
-      href: "https://fonts.googleapis.com",
+      rel: 'preconnect',
+      href: 'https://fonts.googleapis.com',
     },
     {
-      rel: "preconnect",
-      href: "https://fonts.gstatic.com",
+      rel: 'preconnect',
+      href: 'https://fonts.gstatic.com',
     },
     {
-      rel: "stylesheet",
-      href: "https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap",
+      rel: 'stylesheet',
+      href: 'https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap',
     },
   ];
 };
 
-export async function loader({ context, request }: LoaderFunctionArgs) {
-  const { storefront, session, oxygen, pack, env } = context;
+export async function loader({context, request}: LoaderFunctionArgs) {
+  const {storefront, session, oxygen, pack, env} = context;
   const isPreviewModeEnabled = pack.isPreviewModeEnabled() as boolean;
 
   /*
@@ -123,24 +123,24 @@ export async function loader({ context, request }: LoaderFunctionArgs) {
     Record<string, string>,
   ] = await Promise.all([
     getShop(context),
-    getSiteSettings(context),
-    session.get("customerAccessToken"),
-    getPublicEnvs({ context, request }),
+    getSiteSettings(context, request),
+    session.get('customerAccessToken'),
+    getPublicEnvs({context, request}),
   ]);
 
-  const groupingsPromise = getProductGroupings(context);
+  const groupingsPromise = getProductGroupings(context, request);
 
-  const { isLoggedIn, headers: headersWithAccessToken } =
+  const {isLoggedIn, headers: headersWithAccessToken} =
     await validateCustomerAccessToken(session, customerAccessToken);
   let customer: Customer | null = null;
   if (isLoggedIn) {
-    const { data: customerData } = await customerGetAction({ context });
+    const {data: customerData} = await customerGetAction({context});
     if (customerData.customer) {
       customer = customerData.customer;
     }
   }
   const cookieDomain = getCookieDomain(request.url);
-  const { headers: headersWithPackCookie } = await setPackCookie({
+  const {headers: headersWithPackCookie} = await setPackCookie({
     cookieDomain,
     headers: headersWithAccessToken,
     request,
@@ -148,7 +148,7 @@ export async function loader({ context, request }: LoaderFunctionArgs) {
   const headers = headersWithPackCookie;
 
   /* Get product if modalProduct url param is present */
-  const { modalProduct, modalSelectedVariant } = await getModalProduct({
+  const {modalProduct, modalSelectedVariant} = await getModalProduct({
     context,
     request,
   });
@@ -183,7 +183,7 @@ export async function loader({ context, request }: LoaderFunctionArgs) {
       customer,
       customerAccessToken,
       // customizerMeta: pack.session.get('customizerMeta'),
-      ENV: { ...ENV, SITE_TITLE } as Record<string, string>,
+      ENV: {...ENV, SITE_TITLE} as Record<string, string>,
       groupingsPromise,
       modalProduct,
       modalSelectedVariant,
@@ -196,11 +196,11 @@ export async function loader({ context, request }: LoaderFunctionArgs) {
       url: request.url,
       ...pack.getPackContextData(),
     },
-    { headers },
+    {headers},
   );
 }
 
-export const meta = ({ matches }: MetaArgs<typeof loader>) => {
+export const meta = ({matches}: MetaArgs<typeof loader>) => {
   return getSeoMeta(...matches.map((match) => (match.data as any).seo));
 };
 
@@ -219,7 +219,7 @@ export function ErrorBoundary() {
 
   if (!root?.data) return <ServerError error={routeError} />;
 
-  const title = isRouteError ? "Not Found" : "Application Error";
+  const title = isRouteError ? 'Not Found' : 'Application Error';
 
   return (
     <Document title={title}>
