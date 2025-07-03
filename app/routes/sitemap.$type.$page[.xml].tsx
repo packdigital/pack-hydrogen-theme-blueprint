@@ -43,9 +43,11 @@ const PACK_QUERIES: Record<string, string> = {
 const getPagesFromType = async ({
   type,
   context,
+  request,
 }: {
   type: string;
   context: AppLoadContext;
+  request: Request;
 }) => {
   const query = PACK_QUERIES[type];
 
@@ -61,6 +63,7 @@ const getPagesFromType = async ({
     const {data} = await context.pack.query(query, {
       variables: {first, cursor},
       cache: context.storefront.CacheLong(),
+      request,
     });
     const {endCursor, hasNextPage} = data[EDGES[type]].pageInfo;
     const compiledPages = [...(pages || []), ...data[EDGES[type]].nodes];
@@ -100,11 +103,11 @@ export async function loader({request, params, context}: LoaderFunctionArgs) {
   /* If Pack native template type, build sitemap from Pack query for that type */
   /* ------------------------------------------------------------------------- */
   if (isPackNativeTemplateType) {
-    let pages = await getPagesFromType({type, context});
+    let pages = await getPagesFromType({type, context, request});
 
     // Add static pages to the pages sitemap
     if (type === 'pages') {
-      const siteSettings = await getSiteSettings(context);
+      const siteSettings = await getSiteSettings(context, request);
       const accountNoIndex =
         !!siteSettings?.data?.siteSettings?.settings?.account?.noIndex;
       pages = [...pages, ...STATIC_PAGES(accountNoIndex)];
@@ -188,6 +191,7 @@ export async function loader({request, params, context}: LoaderFunctionArgs) {
         const pageData = await context.pack.query(packQuery, {
           variables: {handle},
           cache: context.storefront.CacheLong(),
+          request,
         });
         const page = pageData?.data?.[EDGES[type]];
         if (

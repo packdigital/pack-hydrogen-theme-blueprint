@@ -41,6 +41,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
         language: storefront.i18n.language,
       },
       cache: storefront.CacheLong(),
+      request,
     });
     if (!data?.blog) return undefined;
 
@@ -73,7 +74,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
       cursor: null,
     }),
     getShop(context),
-    getSiteSettings(context),
+    getSiteSettings(context, request),
   ]);
 
   if (!blogWithAllArticles) {
@@ -89,6 +90,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
       handle,
       pageKey: 'blog',
       query: BLOG_PAGE_QUERY,
+      request,
     });
     blog = {
       ...blogWithAllArticles,

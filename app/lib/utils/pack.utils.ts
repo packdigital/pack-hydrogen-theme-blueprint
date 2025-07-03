@@ -4,7 +4,116 @@ import type {
 } from '@shopify/hydrogen/storefront-api-types';
 
 import {COLOR_OPTION_NAME} from '~/lib/constants';
-import type {Group, OptionWithGroups} from '~/lib/types';
+import type {Group, OptionWithGroups, Page} from '~/lib/types';
+import type {AppLoadContext} from '@shopify/remix-oxygen';
+import cookieParser from 'cookie';
+import {v4 as uuidv4} from 'uuid';
+
+/*
+ * Fetches page data from Pack with all sections,
+ * using recursive calls in case there are more than 25 sections
+ */
+export const getPage = async ({
+  context,
+  handle,
+  pageKey = 'page',
+  query,
+  request,
+}: {
+  context: AppLoadContext;
+  handle: string;
+  pageKey?: string;
+  query: string;
+  request: Request;
+}) => {
+  const {pack, storefront} = context;
+  let capturedPackTestInfo: any = null;
+
+  const getPageWithAllSections = async ({
+    accumulatedPage,
+    cursor,
+  }: {
+    accumulatedPage: Page | null;
+    cursor: string | null;
+  }): Promise<Page> => {
+    const {data, packTestInfo} = await pack.query(query, {
+      variables: {
+        handle,
+        cursor,
+        country: storefront.i18n.country,
+        language: storefront.i18n.language,
+      },
+      cache: storefront.CacheLong(),
+      request,
+    });
+
+    // Capture packTestInfo from the first call
+    if (!capturedPackTestInfo) {
+      capturedPackTestInfo = packTestInfo;
+    }
+
+    if (!data?.[pageKey]) throw new Response(null, {status: 404});
+
+    const {nodes = [], pageInfo} = {...data[pageKey].sections};
+    const combinedSections = {
+      nodes: [...(accumulatedPage?.sections?.nodes || []), ...nodes],
+      pageInfo,
+    };
+    const combinedPage = {
+      ...data[pageKey],
+      sections: combinedSections,
+    };
+    if (pageInfo?.hasNextPage) {
+      return getPageWithAllSections({
+        accumulatedPage: combinedPage,
+        cursor: pageInfo.endCursor,
+      });
+    }
+    return combinedPage;
+  };
+  const page = await getPageWithAllSections({
+    accumulatedPage: null,
+    cursor: null,
+  });
+  return {[pageKey]: page, packTestInfo: capturedPackTestInfo};
+};
+
+const SESSION_COOKIE = 'pack_session';
+const DEFAULT_EXPIRES = 365;
+
+export const setPackCookie = async ({
+  cookieDomain,
+  headers,
+  request,
+}: {
+  cookieDomain: string;
+  headers: Headers;
+  request: Request;
+}) => {
+  try {
+    const cookies = cookieParser.parse(request.headers.get('Cookie') || '');
+
+    let sessionCookie = cookies[SESSION_COOKIE];
+
+    if (!sessionCookie) {
+      sessionCookie = uuidv4();
+
+      const daysInMs = DEFAULT_EXPIRES * 24 * 60 * 60 * 1000;
+      const expiresAtInMs = Date.now() + daysInMs;
+      const expiresAt = new Date(expiresAtInMs).toUTCString();
+
+      headers.append(
+        'Set-Cookie',
+        `${SESSION_COOKIE}=${sessionCookie}; Path=/; Domain=${cookieDomain}; Expires=${expiresAt}; Secure;`,
+      );
+    }
+
+    return {headers};
+  } catch (error) {
+    console.error('Error setting pack cookie', error);
+    return {headers};
+  }
+};
 
 export const formatGroupingWithOptions = ({
   grouping,

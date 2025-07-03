@@ -124,7 +124,6 @@ export async function loader({context, request}: LoaderFunctionArgs) {
   ]);
 
   const groupingsPromise = getProductGroupings(context);
-
   let customer: Customer | null = null;
 
   if (isLoggedIn) {

@@ -30,6 +30,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     handle,
     pageKey: 'article',
     query: ARTICLE_PAGE_QUERY,
+    request,
   });
 
   if (!article) {
@@ -49,7 +50,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     // If the article exists but has no blog, don't redirect
     const [shop, siteSettings] = await Promise.all([
       getShop(context),
-      getSiteSettings(context),
+      getSiteSettings(context, request),
     ]);
     const analytics = {pageType: AnalyticsPageType.article};
     const seo = seoPayload.article({

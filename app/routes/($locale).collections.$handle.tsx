@@ -36,7 +36,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
   if (!handle) throw new Response(null, {status: 404});
 
   const searchParams = new URL(request.url).searchParams;
-  const siteSettings = await getSiteSettings(context);
+  const siteSettings = await getSiteSettings(context, request);
 
   const {activeFilterValues, filters} = await getFilters({
     handle,
@@ -68,6 +68,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
         handle,
         pageKey: 'collectionPage',
         query: COLLECTION_PAGE_QUERY,
+        request,
       }),
       storefront.query(COLLECTION_QUERY, {
         variables: {

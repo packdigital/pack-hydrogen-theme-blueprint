@@ -25,9 +25,9 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
   if (!handle) throw new Response(null, {status: 404});
 
   const [{page, packTestInfo}, shop, siteSettings] = await Promise.all([
-    getPage({context, handle, pageKey: 'page', query: PAGE_QUERY}),
+    getPage({context, handle, pageKey: 'page', query: PAGE_QUERY, request}),
     getShop(context),
-    getSiteSettings(context),
+    getSiteSettings(context, request),
   ]);
 
   if (!page) {
