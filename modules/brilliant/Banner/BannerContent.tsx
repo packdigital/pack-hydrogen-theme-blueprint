@@ -43,7 +43,9 @@ export function BannerContent({
         className={`pointer-events-auto flex flex-col gap-6 ${alignmentClasses} ${maxWidthContentClasses}`}
         style={{color}}
       >
-        <div className="rounded-lg bg-[rgba(29,61,148,0.7)] p-4">
+        <div
+          className={`rounded-lg p-4 ${headingWithBreaks || subheading ? 'bg-[rgba(29,61,148,0.7)]' : ''}`}
+        >
           {headingWithBreaks && (
             <>
               {aboveTheFold ? (
