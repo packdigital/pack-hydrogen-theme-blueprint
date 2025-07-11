@@ -9,7 +9,7 @@ import type {ProductProps} from './Product.types';
 import {ProductDetails} from './ProductDetails';
 import {ProductHeader} from './ProductHeader';
 import {ProductMarketing} from './ProductMarketing/ProductMarketing';
-import {ProductMedia} from './ProductMedia';
+import {ProductMedia} from './ProductMedia/ProductMedia';
 
 import {useLocale, useParsedProductMetafields, useSettings} from '~/hooks';
 import {COLOR_OPTION_NAME} from '~/lib/constants';

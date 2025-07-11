@@ -4,6 +4,7 @@ import {A11y, Pagination} from 'swiper/modules';
 import type {SwiperClass} from 'swiper/react';
 import {Swiper, SwiperSlide} from 'swiper/react';
 
+import {ProductMediaFile} from './ProductMediaFile';
 import {ProductMediaThumbnails} from './ProductMediaThumbnails';
 import {useProductMedia} from './useProductMedia';
 
@@ -11,7 +12,6 @@ import {Badges} from '~/components/Badges';
 import {ProductDraftMediaOverlay} from '~/components/Product/ProductMedia/ProductDraftMediaOverlay';
 import {ProductImage} from '~/components/Product/ProductMedia/ProductImage';
 import type {ProductMediaProps} from '~/components/Product/ProductMedia/ProductMedia.types';
-import {ProductMediaFile} from '~/components/Product/ProductMedia/ProductMediaFile';
 import type {ProductWithStatus} from '~/lib/types';
 
 export function ProductMedia({

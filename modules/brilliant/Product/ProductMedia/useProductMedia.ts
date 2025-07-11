@@ -4,7 +4,7 @@ import type {
 } from '@shopify/hydrogen/storefront-api-types';
 import {useMemo} from 'react';
 
-import {ADDITIONAL_VARIANT_NAMES} from './additionalVariantNames';
+import {ADDITIONAL_VARIANT_NAMES} from '../additionalVariantNames';
 
 import {COLOR_OPTION_NAME} from '~/lib/constants';
 import type {ProductWithGrouping, SelectedVariant} from '~/lib/types';
