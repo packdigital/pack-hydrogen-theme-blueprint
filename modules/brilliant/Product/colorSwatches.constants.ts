@@ -20,6 +20,7 @@ export const colorSwatches: ColorSwatchRecord = {
   'orange-black': ['#f97316', '#000000'],
   'black-orange': ['#000000', '#f97316'],
   'purple-magenta': ['#7e22ce', '#d946ef'],
+  'magenta-purple': ['#d946ef', '#7e22ce'],
   'black-red': ['#000000', '#dc2626'],
   'red-black': ['#dc2626', '#000000'],
   'blue-gold': ['#1e40af', '#fbbf24'],
@@ -38,4 +39,8 @@ export const colorSwatches: ColorSwatchRecord = {
   'rainbow-black': [...rainbow, '#000000'],
   'rainbow-white': [...rainbow, '#ffffff'],
   'matte-rainbow-black': [...rainbow, '#000000'],
+  'black-brown': ['#000000', '#8B4513'],
+  'brown-black': ['#8B4513', '#000000'],
+  'white-brown': ['#ffffff', '#8B4513'],
+  'brown-white': ['#8B4513', '#ffffff'],
 };
