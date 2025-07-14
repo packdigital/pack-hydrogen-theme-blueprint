@@ -7,4 +7,4 @@ export const Context = createContext({
   actions: {},
 } as PromobarContext);
 
-export const usePromobarContext = () => useContext(Context);
+export const usePromobarContext = () => useContext(Context) as PromobarContext;
