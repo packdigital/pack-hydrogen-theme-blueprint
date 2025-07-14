@@ -121,8 +121,9 @@ export async function loader({request, params, context}: LoaderFunctionArgs) {
             if (page.isStatic) pathname = `/${page.handle}`;
             if (page.handle === '/') pathname = '/';
             /*
-             * If article url's do not follow the `blogs/$blogHandle/$handle`
-             * pattern, delete this conditional
+             * If article url's do not follow the pattern
+             * `/blogs/$blogHandle/$handle`, and instead use
+             * `/articles/$handle`, delete this conditional
              */
             if (type === 'articles') {
               const blogHandle = page.blog?.handle;

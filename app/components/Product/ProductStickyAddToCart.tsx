@@ -41,8 +41,8 @@ export const ProductStickyAddToCart = forwardRef(
           viewports === 'mobile-tablet-desktop'
             ? ''
             : viewports === 'mobile-tablet'
-            ? 'lg:hidden'
-            : 'md:hidden',
+              ? 'lg:hidden'
+              : 'md:hidden',
         )}
       >
         <ProductAddToCart
