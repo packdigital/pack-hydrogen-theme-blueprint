@@ -51,7 +51,7 @@ export const getProductGroupings = async (context: AppLoadContext) => {
     cursor: string | null;
   }): Promise<Group[] | null> => {
     const {data} = await context.pack.query(PRODUCT_GROUPINGS_QUERY, {
-      variables: {first: 250, after: cursor},
+      variables: {after: cursor},
       cache: context.storefront.CacheLong(),
     });
     if (!data?.groups) return null;

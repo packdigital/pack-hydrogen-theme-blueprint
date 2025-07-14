@@ -18,8 +18,8 @@ export const SITE_SETTINGS_QUERY = `
 ` as const;
 
 export const PRODUCT_GROUPINGS_QUERY = `
-  query ProductGroupings($first: Int!, $after: String) {
-    groups(first: $first, after: $after) {
+  query ProductGroupings($after: String) {
+    groups(first: 25, after: $after) {
       pageInfo {
         hasNextPage
         endCursor

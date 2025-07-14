@@ -29,7 +29,10 @@ export async function loader({request, context}: LoaderFunctionArgs) {
       metafieldIdentifiers = JSON.parse(metafieldIdentifiersString);
     } catch (error) {
       return dataWithOptions(
-        {metafields: null, errors: ['Invalid `metafieldQueries` parameter']},
+        {
+          metafields: null,
+          errors: ['Invalid `metafieldIdentifiers` parameter'],
+        },
         {status: 400},
       );
     }

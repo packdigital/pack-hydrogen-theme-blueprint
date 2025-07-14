@@ -29,7 +29,6 @@ export async function loader({context, request}: LoaderFunctionArgs) {
     const {pack, storefront} = context;
     const {data} = await pack.query(BLOG_PAGE_QUERY, {
       variables: {
-        first: 250,
         handle,
         cursor,
         country: storefront.i18n.country,
