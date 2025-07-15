@@ -1,6 +1,8 @@
 import snake_case from 'snakecase-keys';
 import CryptoJS from 'crypto-js/core';
 import aes from 'crypto-js/aes';
+import SHA256 from 'crypto-js/sha256';
+import HmacSHA256 from 'crypto-js/hmac-sha256';
 
 import type {MultipassCustomer} from './multipass.types';
 
@@ -23,7 +25,7 @@ export class Multipassify {
     this.BLOCK_SIZE = 16;
 
     // Hash the secret
-    const digest = CryptoJS.SHA256(secret);
+    const digest = SHA256(secret);
 
     // create the encryption and signing keys
     this.encryptionKey = CryptoJS.lib.WordArray.create(
@@ -108,7 +110,7 @@ export class Multipassify {
 
   // signs the encrypted customer data
   private sign(encrypted: CryptoJS.lib.WordArray) {
-    return CryptoJS.HmacSHA256(encrypted, this.signingKey);
+    return HmacSHA256(encrypted, this.signingKey);
   }
 
   // Decrypts the customer data from a multipass token
