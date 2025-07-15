@@ -10,7 +10,7 @@ export const ProductStars = memo(({id}: {id: string}) => {
     error: string | null;
     rating: string;
     count: number;
-  }>({key: `getProductReviewAggregate:${id}`});
+  }>();
   const {pathPrefix} = useLocale();
   const [reviewAggregate, setReviewAggregate] = useState<{
     rating: number;

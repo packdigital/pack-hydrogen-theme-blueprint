@@ -31,9 +31,7 @@ export function useCollectionByHandle(
   fetchOnMount = true,
 ): Collection | null {
   const {pathPrefix} = useLocale();
-  const fetcher = useFetcher<{collection: Collection}>({
-    key: `collection-by-handle:${handle}:${pathPrefix}`,
-  });
+  const fetcher = useFetcher<{collection: Collection}>();
 
   useEffect(() => {
     if (!fetchOnMount || !handle) return;
