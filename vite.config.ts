@@ -31,6 +31,8 @@ export default defineConfig({
         'cookie',
         'crypto-js/aes',
         'crypto-js/core',
+        'crypto-js/hmac-sha256',
+        'crypto-js/sha256',
         'debug',
         'fast-deep-equal',
         'fast-xml-parser',
