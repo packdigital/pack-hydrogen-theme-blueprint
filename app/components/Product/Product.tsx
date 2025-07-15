@@ -1,4 +1,4 @@
-import {useEffect, useMemo, memo} from 'react';
+import {useEffect, useMemo, useRef, useState} from 'react';
 import {useProduct} from '@shopify/hydrogen-react';
 import clsx from 'clsx';
 
@@ -10,6 +10,7 @@ import {ProductDetails} from './ProductDetails';
 import {ProductMetafields} from './ProductMetafields';
 import {ProductHeader} from './ProductHeader';
 import {ProductMedia} from './ProductMedia';
+import {ProductStickyAddToCart} from './ProductStickyAddToCart';
 import type {ProductProps} from './Product.types';
 
 export function Product({
@@ -18,6 +19,7 @@ export function Product({
   isSectionProduct,
   product,
 }: ProductProps) {
+  const addToCartRef = useRef<HTMLDivElement>(null);
   const {selectedVariant: providerSelectedVariant} = useProduct() as {
     selectedVariant: SelectedVariant;
   };
@@ -25,6 +27,8 @@ export function Product({
   const {pathPrefix} = useLocale();
   /* Product metafields parsed into an object with metafields by `${namespace}.${key}` */
   const metafields = useParsedProductMetafields(product);
+
+  const [quantity, setQuantity] = useState(1);
 
   const selectedVariant = useMemo(() => {
     /* workaround because selected variant from useProduct hook is momentarily
@@ -117,16 +121,32 @@ export function Product({
               />
 
               <ProductDetails
+                quantity={quantity}
                 enabledQuantitySelector={
                   productSettings?.quantitySelector?.enabled
                 }
                 isModalProduct={isModalProduct}
                 product={product}
+                ref={addToCartRef}
                 selectedVariant={selectedVariant}
+                setQuantity={setQuantity}
               />
 
               <ProductMetafields product={product} />
             </div>
+
+            {productSettings?.stickyAddToCart?.enabled && (
+              <ProductStickyAddToCart
+                quantity={quantity}
+                enabledQuantitySelector={
+                  productSettings?.stickyAddToCart?.enabledQuantitySelector
+                }
+                ref={addToCartRef}
+                selectedVariant={selectedVariant}
+                setQuantity={setQuantity}
+                viewports={productSettings?.stickyAddToCart?.viewports}
+              />
+            )}
           </div>
         </div>
       </div>

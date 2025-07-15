@@ -114,22 +114,24 @@ export const normalizeAdminProduct = (adminProduct: any) => {
                                     policy.adjustmentValue?.percentage || 0,
                                 }
                               : policy.adjustmentType === 'FIXED_AMOUNT'
-                              ? {
-                                  adjustmentAmount: {
-                                    amount: policy.adjustmentValue?.amount || 0,
-                                    currencyCode:
-                                      policy.adjustmentValue?.currencyCode,
-                                  },
-                                }
-                              : policy.adjustmentType === 'PRICE'
-                              ? {
-                                  price: {
-                                    amount: policy.adjustmentValue?.amount || 0,
-                                    currencyCode:
-                                      policy.adjustmentValue?.currencyCode,
-                                  },
-                                }
-                              : {},
+                                ? {
+                                    adjustmentAmount: {
+                                      amount:
+                                        policy.adjustmentValue?.amount || 0,
+                                      currencyCode:
+                                        policy.adjustmentValue?.currencyCode,
+                                    },
+                                  }
+                                : policy.adjustmentType === 'PRICE'
+                                  ? {
+                                      price: {
+                                        amount:
+                                          policy.adjustmentValue?.amount || 0,
+                                        currencyCode:
+                                          policy.adjustmentValue?.currencyCode,
+                                      },
+                                    }
+                                  : {},
                         };
                       },
                     ),
@@ -193,26 +195,28 @@ export const normalizeAdminProduct = (adminProduct: any) => {
                                         '0.0',
                                     }
                                   : policy.adjustmentType === 'FIXED_AMOUNT'
-                                  ? {
-                                      adjustmentAmount: {
-                                        amount:
-                                          policy.adjustmentValue?.amount ||
-                                          '0.0',
-                                        currencyCode:
-                                          policy.adjustmentValue?.currencyCode,
-                                      },
-                                    }
-                                  : policy.adjustmentType === 'PRICE'
-                                  ? {
-                                      price: {
-                                        amount:
-                                          policy.adjustmentValue?.amount ||
-                                          variant.price,
-                                        currencyCode:
-                                          policy.adjustmentValue?.currencyCode,
-                                      },
-                                    }
-                                  : {},
+                                    ? {
+                                        adjustmentAmount: {
+                                          amount:
+                                            policy.adjustmentValue?.amount ||
+                                            '0.0',
+                                          currencyCode:
+                                            policy.adjustmentValue
+                                              ?.currencyCode,
+                                        },
+                                      }
+                                    : policy.adjustmentType === 'PRICE'
+                                      ? {
+                                          price: {
+                                            amount:
+                                              policy.adjustmentValue?.amount ||
+                                              variant.price,
+                                            currencyCode:
+                                              policy.adjustmentValue
+                                                ?.currencyCode,
+                                          },
+                                        }
+                                      : {},
                             };
                           },
                         ),
@@ -236,23 +240,23 @@ export const normalizeAdminProduct = (adminProduct: any) => {
                                       (variantPriceNum * productsCount)
                                     ).toFixed(2)
                                   : policy.adjustmentType === 'FIXED_AMOUNT'
-                                  ? (
-                                      variantPriceNum * productsCount -
-                                      Number(
-                                        policy.adjustmentValue?.amount ?? 0,
-                                      ) *
-                                        productsCount
-                                    ).toFixed(2)
-                                  : policy.adjustmentType === 'PRICE'
-                                  ? (
-                                      Number(
-                                        policy.adjustmentValue?.amount ||
-                                          variant.price,
-                                      ) * productsCount
-                                    ).toFixed(2)
-                                  : (variantPriceNum * productsCount).toFixed(
-                                      2,
-                                    ),
+                                    ? (
+                                        variantPriceNum * productsCount -
+                                        Number(
+                                          policy.adjustmentValue?.amount ?? 0,
+                                        ) *
+                                          productsCount
+                                      ).toFixed(2)
+                                    : policy.adjustmentType === 'PRICE'
+                                      ? (
+                                          Number(
+                                            policy.adjustmentValue?.amount ||
+                                              variant.price,
+                                          ) * productsCount
+                                        ).toFixed(2)
+                                      : (
+                                          variantPriceNum * productsCount
+                                        ).toFixed(2),
                               currencyCode,
                             },
                             perDeliveryPrice: {
@@ -266,16 +270,16 @@ export const normalizeAdminProduct = (adminProduct: any) => {
                                       variantPriceNum
                                     ).toFixed(2)
                                   : policy.adjustmentType === 'FIXED_AMOUNT'
-                                  ? (
-                                      variantPriceNum -
-                                      Number(
-                                        policy.adjustmentValue?.amount ?? 0,
-                                      )
-                                    ).toFixed(2)
-                                  : policy.adjustmentType === 'PRICE'
-                                  ? policy.adjustmentValue?.amount ||
-                                    variant.price
-                                  : variant.price,
+                                    ? (
+                                        variantPriceNum -
+                                        Number(
+                                          policy.adjustmentValue?.amount ?? 0,
+                                        )
+                                      ).toFixed(2)
+                                    : policy.adjustmentType === 'PRICE'
+                                      ? policy.adjustmentValue?.amount ||
+                                        variant.price
+                                      : variant.price,
                               currencyCode,
                             },
                           };

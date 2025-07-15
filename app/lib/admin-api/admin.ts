@@ -244,8 +244,8 @@ export function createAdminClient<TI18n extends I18nBase>(
       headers instanceof Headers
         ? Object.fromEntries(headers.entries())
         : Array.isArray(headers)
-        ? Object.fromEntries(headers)
-        : headers;
+          ? Object.fromEntries(headers)
+          : headers;
 
     const document = query ?? mutation;
     const queryVariables = {...variables};

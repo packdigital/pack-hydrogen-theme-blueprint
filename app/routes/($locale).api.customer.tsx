@@ -1,4 +1,3 @@
-import {data as dataWithOptions} from '@shopify/remix-oxygen';
 import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 
 import {customerGetClient} from '~/lib/customer';
@@ -18,14 +17,14 @@ export async function loader({context, request}: LoaderFunctionArgs) {
 
     if (errors?.length) {
       console.error('/api/customer:error', errors);
-      return dataWithOptions({customer: null, errors}, {status: 400});
+      return Response.json({customer: null, errors}, {status: 400});
     }
 
-    return {
+    return Response.json({
       customer: response?.customer || null,
-    };
+    });
   } catch (error) {
     console.error('/api/customer:error', error);
-    return dataWithOptions({customer: null, errors: [error]}, {status: 500});
+    return Response.json({customer: null, errors: [error]}, {status: 500});
   }
 }

@@ -89,10 +89,10 @@ export function ShoppableSocialVideo({cms}: {cms: ShoppableSocialVideoCms}) {
                 firstColor && secondColor && thirdColor
                   ? `linear-gradient(${colorType}, ${firstColor}, ${secondColor}, ${thirdColor})`
                   : firstColor && secondColor
-                  ? `linear-gradient(${colorType}, ${firstColor}, ${secondColor})`
-                  : firstColor
-                  ? `linear-gradient(${colorType}, ${firstColor}, ${firstColor})`
-                  : 'none',
+                    ? `linear-gradient(${colorType}, ${firstColor}, ${secondColor})`
+                    : firstColor
+                      ? `linear-gradient(${colorType}, ${firstColor}, ${firstColor})`
+                      : 'none',
             }),
       }}
       ref={ref}

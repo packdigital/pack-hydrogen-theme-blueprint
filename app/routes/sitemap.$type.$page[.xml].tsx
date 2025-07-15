@@ -8,18 +8,21 @@ import {CMS_BLOGS_QUERY} from '~/data/graphql/pack/blog-page';
 import {CMS_COLLECTION_QUERY} from '~/data/graphql/pack/collection-page';
 import {CMS_PAGES_QUERY} from '~/data/graphql/pack/page';
 import {CMS_PRODUCT_QUERY} from '~/data/graphql/pack/product-page';
-import type {Page} from '~/lib/types';
 
 import {PACK_NATIVE_TEMPLATE_TYPES} from './[sitemap.xml]';
 
 const STATIC_PAGES = (accountNoIndex: boolean) =>
   [
-    {handle: 'account', seo: {noIndex: accountNoIndex}},
-    {handle: 'account/login', seo: {noIndex: accountNoIndex}},
-    {handle: 'account/register', seo: {noIndex: accountNoIndex}},
-    {handle: 'cart', seo: {noIndex: false}},
-    {handle: 'search', seo: {noIndex: false}},
-  ] as Page[];
+    {handle: 'account', seo: {noIndex: accountNoIndex}, isStatic: true},
+    {handle: 'account/login', seo: {noIndex: accountNoIndex}, isStatic: true},
+    {
+      handle: 'account/register',
+      seo: {noIndex: accountNoIndex},
+      isStatic: true,
+    },
+    {handle: 'cart', seo: {noIndex: false}, isStatic: true},
+    {handle: 'search', seo: {noIndex: false}, isStatic: true},
+  ] as {handle: string; seo: {noIndex: boolean}; isStatic: boolean}[];
 
 const EDGES: Record<string, string> = {
   products: 'productPage',
@@ -111,10 +114,33 @@ export async function loader({request, params, context}: LoaderFunctionArgs) {
       urlset: {
         '@_xmlns': 'http://www.sitemaps.org/schemas/sitemap/0.9',
         '@_xmlns:xhtml': 'http://www.w3.org/1999/xhtml',
-        url: pages.map((page: any) => ({
-          loc: `${baseUrl}/${type}/${page.handle}`,
-          changefreq: 'daily',
-        })),
+        url: pages.reduce(
+          (acc: {loc: string; changefreq: string}[], page: any) => {
+            if (page.seo?.noIndex) return acc;
+            let pathname = `/${type}/${page.handle}`;
+            if (page.isStatic) pathname = `/${page.handle}`;
+            if (page.handle === '/') pathname = '/';
+            /*
+             * If article url's do not follow the pattern
+             * `/blogs/$blogHandle/$handle`, and instead use
+             * `/articles/$handle`, delete this conditional
+             */
+            if (type === 'articles') {
+              const blogHandle = page.blog?.handle;
+              if (blogHandle) {
+                pathname = `/blogs/${blogHandle}/${page.handle}`;
+              }
+            }
+            return [
+              ...acc,
+              {
+                loc: `${baseUrl}${pathname}`,
+                changefreq: 'daily',
+              },
+            ];
+          },
+          [],
+        ),
       },
     };
     const xmlBuilder = new XMLBuilder({ignoreAttributes: false});

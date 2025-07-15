@@ -22,11 +22,7 @@ export async function customerLogout(context: AppLoadContext) {
 }
 
 export async function loader({context}: LoaderFunctionArgs) {
-  return redirect(
-    `${
-      (context.storefront.i18n as I18nLocale).pathPrefix
-    }${LOGGED_OUT_REDIRECT_TO}`,
-  );
+  return customerLogout(context);
 }
 
 export const action: ActionFunction = async ({context}: ActionFunctionArgs) => {

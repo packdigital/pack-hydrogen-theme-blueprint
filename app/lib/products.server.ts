@@ -47,15 +47,19 @@ export const getSelectedProductOptions = async ({
       },
     );
     if (productWithOptions) {
-      const optionsTable = Object.values({
+      const optionValuesByOptionName = Object.values({
         ...productWithOptions.options,
-      } as Product['options']).reduce((acc: Record<string, string>, option) => {
-        return {...acc, [option.name.toLowerCase()]: option.name};
-      }, {});
+      } as Product['options']).reduce(
+        (acc: Record<string, string[]>, option) => {
+          return {...acc, [option.name.toLowerCase()]: option.values};
+        },
+        {},
+      );
       // Set selected options from the query string
       searchParams.forEach((value, name) => {
-        // Filter out non-option search params
-        if (!optionsTable[name.toLowerCase()]) return;
+        // Filter out non-option or invalid value search params
+        if (!optionValuesByOptionName[name.toLowerCase()]?.includes(value))
+          return;
         selectedOptions.push({name, value});
       });
     }
@@ -309,13 +313,13 @@ export const getProductsMapForPage = async ({
         return section.data?.products?.map(({product}) => product?.id) || [];
       })
       ?.filter(Boolean) || [];
-  const productSectionsProductHandles =
+  const productSectionsProductIds =
     sectionsByKey?.[PRODUCT_SECTION_KEY]?.filter((section) => {
       return section.data?.sectionVisibility === 'visible';
     })?.map((section) => section.data?.product?.id) || [];
   const productIds = [
     ...shoppableSocialVideoSectionsProductIds,
-    ...productSectionsProductHandles,
+    ...productSectionsProductIds,
   ];
 
   if (productIds?.length) {
@@ -335,10 +339,13 @@ export const getProductsMapForPage = async ({
 
     if (admin && isPreviewModeEnabled) {
       if (products?.length !== productIds.length) {
-        const productsById = products?.reduce((acc, product) => {
-          if (product.id) acc[product.id] = product;
-          return acc;
-        }, {} as Record<string, Product>);
+        const productsById = products?.reduce(
+          (acc, product) => {
+            if (product.id) acc[product.id] = product;
+            return acc;
+          },
+          {} as Record<string, Product>,
+        );
         const productsWithDrafts = await Promise.all(
           productIds.map(async (id) => {
             if (productsById?.[id]) return productsById[id];

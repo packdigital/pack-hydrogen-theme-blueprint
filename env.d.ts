@@ -49,7 +49,7 @@ declare global {
     // Meta pixel
     fbq?: Function;
     // TikTok pixel
-    ttq?: Record<string,any>;
+    ttq?: Record<string, any>;
     // Fueled
     fueled?: any;
     fueledConfig?: Record<string, any>;

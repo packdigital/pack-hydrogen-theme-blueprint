@@ -37,7 +37,7 @@ export const BLOG_PAGE_QUERY = `
       publishedAt
       createdAt
       updatedAt
-      articles(first: $first, after: $articlesCursor) {
+      articles(first: 25, after: $articlesCursor) {
           pageInfo {
             hasNextPage
             endCursor

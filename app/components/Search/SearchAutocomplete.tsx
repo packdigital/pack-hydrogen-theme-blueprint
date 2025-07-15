@@ -17,9 +17,7 @@ export function SearchAutocomplete({
   const {search} = useSettings();
   const isHydrated = useIsHydrated();
   const {pathPrefix} = useLocale();
-  const fetcher = useFetcher<AutocompleteFetcherData>({
-    key: `predictive-search-query:${searchTerm}`,
-  });
+  const fetcher = useFetcher<AutocompleteFetcherData>();
 
   const {enabled, heading, limit} = {...search?.autocomplete};
 

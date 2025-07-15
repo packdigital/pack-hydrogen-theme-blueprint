@@ -23,9 +23,7 @@ export function useProductGroupingByHandle(
   fetchOnMount = true,
 ): Group | null {
   const {pathPrefix} = useLocale();
-  const fetcher = useFetcher<{products: Product[]}>({
-    key: `product-grouping-by-handle:${handle}:${pathPrefix}`,
-  });
+  const fetcher = useFetcher<{products: Product[]}>();
   const {actions, state} = useGroupingsContext();
   const {setGroupings} = actions;
   const {groupings, groupingIndexesMap} = state;

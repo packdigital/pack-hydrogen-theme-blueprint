@@ -35,7 +35,7 @@ export function BYOBQuickShopOption({
   const showQtySelector = activeQtySelectorIndex === index;
   const variantInBundle = bundleMapById[variantToAdd?.id || ''];
   const lastBundleIndexOfVariant = variantInBundle?.indexes
-    ? variantInBundle.indexes[variantInBundle.indexes.length - 1] ?? -1
+    ? (variantInBundle.indexes[variantInBundle.indexes.length - 1] ?? -1)
     : -1;
 
   const disabled = !variantToAdd;
@@ -50,8 +50,8 @@ export function BYOBQuickShopOption({
   const selectedClass = showQtySelector
     ? 'bg-black text-white md:hover:bg-black md:hover:text-white'
     : variantInBundle
-    ? 'bg-neutralDarker text-white'
-    : 'bg-background';
+      ? 'bg-neutralDarker text-white'
+      : 'bg-background';
 
   return (
     <div

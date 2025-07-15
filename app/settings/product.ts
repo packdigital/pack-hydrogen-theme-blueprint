@@ -36,6 +36,11 @@ export interface ProductSettings {
   reviews: {
     enabledStarRating: boolean;
   };
+  stickyAddToCart: {
+    enabled: boolean;
+    viewports: string;
+    enabledQuantitySelector: boolean;
+  };
 }
 
 export default {
@@ -306,6 +311,50 @@ export default {
       ],
       defaultValue: {
         enabledStarRating: true,
+      },
+    },
+    {
+      label: 'Sticky Add To Cart',
+      name: 'stickyAddToCart',
+      component: 'group',
+      description: 'Enable sticky add to cart, quantity selector',
+      fields: [
+        {
+          label: 'Enable Sticky Add To Cart',
+          name: 'enabled',
+          component: 'toggle',
+          toggleLabels: {
+            true: 'On',
+            false: 'Off',
+          },
+        },
+        {
+          label: 'Viewports',
+          name: 'viewports',
+          component: 'select',
+          options: [
+            {label: 'Mobile', value: 'mobile'},
+            {label: 'Mobile / Tablet', value: 'mobile-tablet'},
+            {
+              label: 'Mobile / Tablet / Desktop',
+              value: 'mobile-tablet-desktop',
+            },
+          ],
+        },
+        {
+          label: 'Enable Quantity Selector',
+          name: 'enabledQuantitySelector',
+          component: 'toggle',
+          toggleLabels: {
+            true: 'On',
+            false: 'Off',
+          },
+        },
+      ],
+      defaultValue: {
+        enabled: true,
+        viewports: 'mobile',
+        enabledQuantitySelector: false,
       },
     },
   ],
