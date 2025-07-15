@@ -66,5 +66,5 @@ export async function loader({request, context}: LoaderFunctionArgs) {
     }
   }
 
-  return {totalProducts: products?.length ?? 0, products};
+  return Response.json({totalProducts: products?.length ?? 0, products});
 }

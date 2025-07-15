@@ -1,4 +1,3 @@
-import {data as dataWithOptions} from '@shopify/remix-oxygen';
 import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 
 import {getMetafields, normalizeAdminProduct} from '~/lib/utils';
@@ -13,7 +12,7 @@ export async function loader({request, context}: LoaderFunctionArgs) {
   const isPreviewModeEnabled = pack.isPreviewModeEnabled();
 
   if (!handle)
-    return dataWithOptions(
+    return Response.json(
       {product: null, errors: ['Missing `handle` parameter']},
       {status: 400},
     );
@@ -28,7 +27,7 @@ export async function loader({request, context}: LoaderFunctionArgs) {
     try {
       metafieldIdentifiers = JSON.parse(metafieldIdentifiersString);
     } catch (error) {
-      return dataWithOptions(
+      return Response.json(
         {
           metafields: null,
           errors: ['Invalid `metafieldIdentifiers` parameter'],
@@ -57,7 +56,7 @@ export async function loader({request, context}: LoaderFunctionArgs) {
       isDraftProduct,
       identifiers: metafieldIdentifiers,
     });
-    return {metafields};
+    return Response.json({metafields});
   }
 
   /* Product query by handle */
@@ -86,5 +85,5 @@ export async function loader({request, context}: LoaderFunctionArgs) {
     }
   }
 
-  return {product};
+  return Response.json({product});
 }

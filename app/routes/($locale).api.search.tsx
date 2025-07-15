@@ -16,11 +16,11 @@ export async function loader({request, context}: LoaderFunctionArgs) {
   );
 
   if (!searchTerm || searchTerm.length < characterMin)
-    return {
+    return Response.json({
       searchResults: {results: null, totalResults: 0},
       searchTerm,
       searchTypes: ['PRODUCT'],
-    };
+    });
 
   const count = Number(searchParams.get('count')) || 10;
 
@@ -34,12 +34,12 @@ export async function loader({request, context}: LoaderFunctionArgs) {
     cache: storefront.CacheShort(),
   });
 
-  return {
+  return Response.json({
     searchResults: {
       results: search.nodes || null,
       totalResults: search.totalCount ?? 0,
     },
     searchTerm,
     searchTypes: ['PRODUCT'],
-  };
+  });
 }

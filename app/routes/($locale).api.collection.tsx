@@ -44,5 +44,5 @@ export async function loader({context, request}: LoaderFunctionArgs) {
     cache: storefront.CacheShort(),
   });
 
-  return {collection};
+  return Response.json({collection});
 }
