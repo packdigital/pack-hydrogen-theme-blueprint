@@ -88,6 +88,7 @@
     "postcss-import": "^16.1.0",
     "postcss-preset-env": "^10.1.6",
     "prettier": "^3.5.3",
+    "set-cookie-parser": "^2.7.1",
     "tailwindcss": "3.4.17",
     "typescript": "^5.8.3",
     "vite": "5.4.11",
