@@ -1,4 +1,4 @@
-import {data as dataWithOptions, redirect} from '@shopify/remix-oxygen';
+import {redirect} from '@shopify/remix-oxygen';
 import type {
   ActionFunctionArgs,
   LoaderFunctionArgs,
@@ -137,7 +137,7 @@ export async function action({request, context}: ActionFunctionArgs) {
       }
 
       // success, return token, url
-      return dataWithOptions(
+      return Response.json(
         {data: {...data, error: null}},
         {
           status: 200,
@@ -175,7 +175,7 @@ export async function action({request, context}: ActionFunctionArgs) {
 }
 
 function handleMethodNotAllowed() {
-  return dataWithOptions(
+  return Response.json(
     {
       data: null,
       error: 'Method not allowed.',
@@ -188,7 +188,7 @@ function handleMethodNotAllowed() {
 }
 
 function handleOptionsPreflight(origin: string) {
-  return dataWithOptions(null, {
+  return Response.json(null, {
     status: 204,
     headers: getCorsHeaders(origin),
   });
@@ -220,7 +220,7 @@ async function handleLoggedOutResponse(options: {
 
   // For example, checkoutDomain `checkout.hydrogen.shop` or `shop.example.com` or `{shop}.myshopify.com`.
   const logOutUrl = `https://${checkoutDomain}/account/logout?return_url=${encodedCheckoutUrl}&step=contact_information`;
-  return {data: {url: logOutUrl}, error: null};
+  return Response.json({data: {url: logOutUrl}, error: null});
 }
 
 /*
@@ -251,7 +251,7 @@ function notLoggedInResponse(options: NotLoggedInResponseType) {
   }
 
   // Always return the original URL.
-  return {data: {url}, error};
+  return Response.json({data: {url}, error});
 }
 
 function getCorsHeaders(origin: string): {[key: string]: string} {
