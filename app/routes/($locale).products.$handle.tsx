@@ -97,7 +97,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
 
   if (!queriedProduct) {
     const redirect = await storefrontRedirect({request, storefront});
-    if (redirect?.status === 301) {
+    if (redirect.status === 301) {
       return redirect;
     }
     throw new Response(null, {status: 404});

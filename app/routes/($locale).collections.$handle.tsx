@@ -10,7 +10,7 @@ import {
 import {RenderSections} from '@pack/react';
 import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 import type {
-  ProductCollectionSortKeys as ProductCollectionSortKeysType,
+  ProductCollectionSortKeys,
   Collection as CollectionType,
 } from '@shopify/hydrogen/storefront-api-types';
 
@@ -83,7 +83,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
   if (!collection) {
     const redirect = await storefrontRedirect({request, storefront});
 
-    if (redirect?.status === 301) {
+    if (redirect.status === 301) {
       return redirect;
     }
 
