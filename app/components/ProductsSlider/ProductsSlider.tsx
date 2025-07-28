@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useMemo, useState} from 'react';
 import {Navigation} from 'swiper/modules';
 import {Swiper, SwiperSlide} from 'swiper/react';
 import clsx from 'clsx';
@@ -6,8 +6,8 @@ import type {SwiperClass} from 'swiper/react';
 import type {Product} from '@shopify/hydrogen/storefront-api-types';
 
 import {Link} from '~/components/Link';
-import {ProductItem} from '~/components/ProductItem';
-import {Spinner} from '~/components/Animations';
+import {ProductItem, ProductItemSkeleton} from '~/components/ProductItem';
+import {SwiperSkeleton} from '~/components/SwiperSkeleton';
 import {Svg} from '~/components/Svg';
 import {useColorSwatches} from '~/hooks';
 
@@ -26,9 +26,6 @@ export function ProductsSlider({
   const [swiper, setSwiper] = useState<SwiperClass | null>(null);
 
   const {sliderStyle} = {...slider};
-  const slidesPerViewDesktop = slider?.slidesPerViewDesktop || 4;
-  const slidesPerViewTablet = slider?.slidesPerViewTablet || 3.4;
-  const slidesPerViewMobile = slider?.slidesPerViewMobile || 1.4;
   const isFullBleedAndCentered =
     sliderStyle === 'fullBleed' || sliderStyle === 'fullBleedWithGradient';
   const isLoop = isFullBleedAndCentered || sliderStyle === 'containedWithLoop';
@@ -36,6 +33,41 @@ export function ProductsSlider({
     section?.fullWidth || isFullBleedAndCentered
       ? 'max-w-none'
       : 'max-w-[var(--content-max-width)]';
+
+  const breakpoints = useMemo(() => {
+    return {
+      mobile: {
+        slidesPerView: slider?.slidesPerViewMobile || 2.4,
+        spaceBetween: 16,
+        slidesOffsetBefore: isFullBleedAndCentered ? 0 : 16,
+        slidesOffsetAfter: isFullBleedAndCentered ? 0 : 16,
+        centeredSlides:
+          isFullBleedAndCentered &&
+          products?.length >= slider?.slidesPerViewMobile * 2,
+        loop: isLoop && products?.length >= slider?.slidesPerViewMobile * 2,
+      },
+      tablet: {
+        slidesPerView: slider?.slidesPerViewTablet || 3.4,
+        spaceBetween: 20,
+        slidesOffsetBefore: isFullBleedAndCentered ? 0 : 32,
+        slidesOffsetAfter: isFullBleedAndCentered ? 0 : 32,
+        centeredSlides:
+          isFullBleedAndCentered &&
+          products?.length >= slider?.slidesPerViewTablet * 2,
+        loop: isLoop && products?.length >= slider?.slidesPerViewTablet * 2,
+      },
+      desktop: {
+        slidesPerView: slider?.slidesPerViewDesktop || 4,
+        spaceBetween: 20,
+        slidesOffsetBefore: 0,
+        slidesOffsetAfter: 0,
+        centeredSlides:
+          isFullBleedAndCentered &&
+          products?.length >= slider?.slidesPerViewDesktop * 2,
+        loop: isLoop && products?.length >= slider?.slidesPerViewDesktop * 2,
+      },
+    };
+  }, [isFullBleedAndCentered, isLoop, slider, products?.length]);
 
   return (
     <div
@@ -49,10 +81,7 @@ export function ProductsSlider({
 
         {products?.length > 0 && (
           <Swiper
-            centeredSlides={
-              isFullBleedAndCentered &&
-              products.length >= slidesPerViewMobile * 2
-            }
+            centeredSlides={breakpoints.mobile.centeredSlides}
             className={clsx(
               'relative mt-10 w-full',
               maxWidthClass,
@@ -60,38 +89,20 @@ export function ProductsSlider({
                 'swiper-offset-gradient-270-left swiper-offset-gradient-270-right',
             )}
             grabCursor
-            loop={isLoop && products.length >= slidesPerViewMobile * 2}
+            loop={breakpoints.mobile.loop}
             modules={[Navigation]}
             navigation={{
               nextEl: '.swiper-button-next',
               prevEl: '.swiper-button-prev',
             }}
             onSwiper={setSwiper}
-            slidesOffsetAfter={isFullBleedAndCentered ? 0 : 16}
-            slidesOffsetBefore={isFullBleedAndCentered ? 0 : 16}
-            slidesPerView={slidesPerViewMobile}
-            spaceBetween={16}
+            slidesOffsetAfter={breakpoints.mobile.slidesOffsetAfter}
+            slidesOffsetBefore={breakpoints.mobile.slidesOffsetBefore}
+            slidesPerView={breakpoints.mobile.slidesPerView}
+            spaceBetween={breakpoints.mobile.spaceBetween}
             breakpoints={{
-              768: {
-                centeredSlides:
-                  isFullBleedAndCentered &&
-                  products.length >= slidesPerViewTablet * 2,
-                loop: isLoop && products.length >= slidesPerViewTablet * 2,
-                slidesPerView: slidesPerViewTablet,
-                spaceBetween: 20,
-                slidesOffsetBefore: isFullBleedAndCentered ? 0 : 32,
-                slidesOffsetAfter: isFullBleedAndCentered ? 0 : 32,
-              },
-              1024: {
-                centeredSlides:
-                  isFullBleedAndCentered &&
-                  products.length >= slidesPerViewDesktop * 2,
-                loop: isLoop && products.length >= slidesPerViewDesktop * 2,
-                slidesPerView: slidesPerViewDesktop,
-                spaceBetween: 20,
-                slidesOffsetBefore: 0,
-                slidesOffsetAfter: 0,
-              },
+              768: breakpoints.tablet,
+              1024: breakpoints.desktop,
             }}
           >
             {swiper &&
@@ -117,7 +128,7 @@ export function ProductsSlider({
               })}
 
             {/* Navigation */}
-            {products.length > slidesPerViewDesktop && (
+            {products.length > breakpoints.desktop.slidesPerView && (
               <div className="absolute inset-x-0 top-[calc(50%-28px)] z-[1] md:px-8 xl:px-14">
                 <div
                   className={clsx(
@@ -160,9 +171,9 @@ export function ProductsSlider({
         )}
 
         {(!swiper || !products?.length) && (
-          <div className="flex min-h-80 items-center justify-center">
-            <Spinner width="32" />
-          </div>
+          <SwiperSkeleton breakpoints={breakpoints} className="mt-10">
+            <ProductItemSkeleton />
+          </SwiperSkeleton>
         )}
 
         {/* Footer button */}
