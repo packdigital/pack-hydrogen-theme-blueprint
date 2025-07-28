@@ -5,10 +5,14 @@ import {
   AnalyticsPageType,
   getPaginationVariables,
   getSeoMeta,
+  storefrontRedirect,
 } from '@shopify/hydrogen';
 import {RenderSections} from '@pack/react';
 import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
-import type {ProductCollectionSortKeys} from '@shopify/hydrogen/storefront-api-types';
+import type {
+  Collection as CollectionType,
+  ProductCollectionSortKeys,
+} from '@shopify/hydrogen/storefront-api-types';
 
 import {Collection} from '~/components/Collection';
 import {COLLECTION_QUERY} from '~/data/graphql/storefront/collection';
@@ -17,6 +21,7 @@ import {getFilters, getPage, getShop, getSiteSettings} from '~/lib/utils';
 import {routeHeaders} from '~/data/cache';
 import {seoPayload} from '~/lib/seo.server';
 import {useGlobal} from '~/hooks';
+import type {Page} from '~/lib/types';
 import type {ActiveFilterValue} from '~/components/Collection/CollectionFilters/CollectionFilters.types';
 
 export const headers = routeHeaders;
@@ -75,7 +80,11 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     getShop(context),
   ]);
 
-  if (!collection) throw new Response(null, {status: 404});
+  if (!collection) {
+    const redirect = await storefrontRedirect({request, storefront});
+    if (redirect.status === 301) return redirect;
+    throw new Response(null, {status: 404});
+  }
 
   const analytics = {
     pageType: AnalyticsPageType.collection,
@@ -105,8 +114,11 @@ export const meta = ({matches}: MetaArgs<typeof loader>) => {
 };
 
 export default function CollectionRoute() {
-  const {activeFilterValues, collection, collectionPage} =
-    useLoaderData<typeof loader>();
+  const {activeFilterValues, collection, collectionPage} = useLoaderData<{
+    activeFilterValues: ActiveFilterValue[];
+    collection: CollectionType;
+    collectionPage?: Page;
+  }>();
   const {isCartReady} = useGlobal();
 
   // determines if default collection heading should be shown
@@ -128,7 +140,7 @@ export default function CollectionRoute() {
           activeFilterValues={activeFilterValues as ActiveFilterValue[]}
           collection={collection}
           showHeading={!hasVisibleHeroSection}
-          title={collectionPage.title}
+          title={collectionPage?.title}
         />
       </section>
 

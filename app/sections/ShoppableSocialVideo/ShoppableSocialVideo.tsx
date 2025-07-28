@@ -8,7 +8,7 @@ import clsx from 'clsx';
 import {RichText} from '~/components/RichText';
 import {Svg} from '~/components/Svg';
 import {useRootLoaderData, useColorSwatches} from '~/hooks';
-import type {loader} from '~/routes/($locale).pages.$handle';
+import type {ProductsMap} from '~/lib/types';
 
 import {ShoppableSocialVideoProductCard} from './ShoppableSocialVideoProductCard';
 import {
@@ -22,7 +22,7 @@ import type {ShoppableSocialVideoCms} from './ShoppableSocialVideo.types';
 export function ShoppableSocialVideo({cms}: {cms: ShoppableSocialVideoCms}) {
   const ref = useRef(null);
   const {isPreviewModeEnabled} = useRootLoaderData();
-  const {productsMap} = useLoaderData<typeof loader>();
+  const {productsMap} = useLoaderData<{productsMap: ProductsMap}>();
   const swatchesMap = useColorSwatches();
 
   const [activeIndex, setActiveIndex] = useState(0);

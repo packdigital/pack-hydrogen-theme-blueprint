@@ -1,5 +1,9 @@
 import {useLoaderData} from '@remix-run/react';
-import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
+import {
+  AnalyticsPageType,
+  getSeoMeta,
+  storefrontRedirect,
+} from '@shopify/hydrogen';
 import {RenderSections} from '@pack/react';
 import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 
@@ -8,11 +12,13 @@ import {PAGE_QUERY} from '~/data/graphql/pack/page';
 import {routeHeaders} from '~/data/cache';
 import {seoPayload} from '~/lib/seo.server';
 import {getProductsMapForPage} from '~/lib/products.server';
+import type {Page} from '~/lib/types';
 
 export const headers = routeHeaders;
 
 export async function loader({context, params, request}: LoaderFunctionArgs) {
   const {handle} = params;
+  const {storefront} = context;
 
   if (!handle) throw new Response(null, {status: 404});
 
@@ -22,7 +28,11 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
     getSiteSettings(context),
   ]);
 
-  if (!page) throw new Response(null, {status: 404});
+  if (!page) {
+    const redirect = await storefrontRedirect({request, storefront});
+    if (redirect.status === 301) return redirect;
+    throw new Response(null, {status: 404});
+  }
 
   /* Certain product sections require fetching products before page load */
   const productsMap = await getProductsMapForPage({
@@ -54,7 +64,7 @@ export const meta = ({matches}: MetaArgs<typeof loader>) => {
 };
 
 export default function PageRoute() {
-  const {page} = useLoaderData<typeof loader>();
+  const {page} = useLoaderData<{page: Page}>();
 
   return (
     <div data-comp={PageRoute.displayName}>
