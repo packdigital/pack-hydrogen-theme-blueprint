@@ -1,6 +1,11 @@
 import {useLoaderData} from '@remix-run/react';
 import {ProductProvider} from '@shopify/hydrogen-react';
-import {Analytics, AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
+import {
+  Analytics,
+  AnalyticsPageType,
+  getSeoMeta,
+  storefrontRedirect,
+} from '@shopify/hydrogen';
 import {RenderSections} from '@pack/react';
 import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 import type {ShopifyAnalyticsProduct} from '@shopify/hydrogen';
@@ -20,7 +25,11 @@ import {Product} from '~/components/Product';
 import {routeHeaders} from '~/data/cache';
 import {seoPayload} from '~/lib/seo.server';
 import {useGlobal, useProductWithGrouping} from '~/hooks';
-import type {ProductWithInitialGrouping} from '~/lib/types';
+import type {
+  Page,
+  ProductWithInitialGrouping,
+  SelectedVariant,
+} from '~/lib/types';
 
 export const headers = routeHeaders;
 
@@ -86,7 +95,11 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     }
   }
 
-  if (!queriedProduct) throw new Response(null, {status: 404});
+  if (!queriedProduct) {
+    const redirect = await storefrontRedirect({request, storefront});
+    if (redirect.status === 301) return redirect;
+    throw new Response(null, {status: 404});
+  }
 
   let grouping = undefined;
   let groupingProducts = undefined;
@@ -159,7 +172,11 @@ export default function ProductRoute() {
     product: initialProduct,
     productPage,
     selectedVariant: initialSelectedVariant,
-  } = useLoaderData<typeof loader>();
+  } = useLoaderData<{
+    product: ProductWithInitialGrouping;
+    productPage?: Page;
+    selectedVariant?: SelectedVariant;
+  }>();
   const {isCartReady} = useGlobal();
   const product = useProductWithGrouping(initialProduct);
 

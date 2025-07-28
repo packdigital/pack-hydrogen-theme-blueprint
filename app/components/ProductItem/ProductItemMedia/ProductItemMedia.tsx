@@ -11,6 +11,7 @@ import type {ProductWithStatus} from '~/lib/types';
 import type {ProductItemMediaProps} from '../ProductItem.types';
 
 import {ProductItemVideo} from './ProductItemVideo';
+import {ProductItemSkeleton} from '../ProductItemSkeleton';
 import {useProductItemMedia} from './useProductItemMedia';
 
 export function ProductItemMedia({
@@ -98,11 +99,7 @@ export function ProductItemMedia({
       )}
 
       {/* loading shimmer */}
-      {!primaryMedia && (
-        <div className="relative size-full overflow-hidden">
-          <div className="loading-shimmer" />
-        </div>
-      )}
+      {!primaryMedia && <ProductItemSkeleton />}
 
       {(selectedProduct as ProductWithStatus)?.status === 'DRAFT' && (
         <ProductDraftMediaOverlay />

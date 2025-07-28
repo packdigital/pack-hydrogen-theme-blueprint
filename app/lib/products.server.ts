@@ -18,7 +18,12 @@ import {getProductGroupings, normalizeAdminProduct} from '~/lib/utils';
 import {SHOPPABLE_SOCIAL_VIDEO_SECTION_KEY} from '~/sections/ShoppableSocialVideo';
 import {PRODUCT_SECTION_KEY} from '~/sections/Product';
 import {MODAL_PRODUCT_URL_PARAM} from '~/lib/constants';
-import type {Group, Page, ProductWithInitialGrouping} from '~/lib/types';
+import type {
+  Group,
+  Page,
+  ProductsMap,
+  ProductWithInitialGrouping,
+} from '~/lib/types';
 
 export const getSelectedProductOptions = async ({
   handle,
@@ -292,7 +297,7 @@ export const getProductsMapForPage = async ({
   const {admin, pack} = context;
   const isPreviewModeEnabled = pack.isPreviewModeEnabled();
 
-  const productsMap: Record<string, Product> = {};
+  const productsMap: ProductsMap = {};
   const sectionsByKey = page.sections?.nodes?.reduce(
     (acc: Record<string, Record<string, any>[]>, section) => {
       return {

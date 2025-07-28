@@ -245,7 +245,7 @@ function product({
 }: {
   product: ProductRequiredFields;
   selectedVariant: SelectedVariantRequiredFields;
-  page: Page;
+  page?: Page;
   shop: Shop;
   siteSettings: RootSiteSettings;
   url: Request['url'];
@@ -522,7 +522,7 @@ function page({
   shop,
   siteSettings,
 }: {
-  page: Page;
+  page?: Page;
   shop: Shop;
   siteSettings: RootSiteSettings;
 }): SeoConfig {

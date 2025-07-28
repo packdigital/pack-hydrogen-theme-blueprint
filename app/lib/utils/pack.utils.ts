@@ -31,7 +31,7 @@ export const getPage = async ({
   }: {
     accumulatedPage: Page | null;
     cursor: string | null;
-  }): Promise<Page> => {
+  }): Promise<Page | undefined> => {
     const {data} = await pack.query(query, {
       variables: {
         handle,
@@ -42,7 +42,7 @@ export const getPage = async ({
       cache: storefront.CacheLong(),
     });
 
-    if (!data?.[pageKey]) throw new Response(null, {status: 404});
+    if (!data?.[pageKey]) return undefined;
 
     const {nodes = [], pageInfo} = {...data[pageKey].sections};
     const combinedSections = {
