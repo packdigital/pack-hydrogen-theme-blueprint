@@ -7,7 +7,6 @@ module.exports = {
     'plugin:hydrogen/recommended',
     'plugin:hydrogen/typescript',
     'plugin:tailwindcss/recommended',
-    'plugin:prettier/recommended',
   ],
   overrides: [
     {

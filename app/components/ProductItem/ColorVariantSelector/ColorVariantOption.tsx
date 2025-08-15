@@ -51,7 +51,7 @@ export function ColorVariantOption({
 
         <div
           className={clsx(
-            'media-fill rounded-[50%] border-white transition-[border-width] duration-100',
+            'absolute inset-0 size-full rounded-[50%] border-white transition-[border-width] duration-100',
             isActive ? 'border-2' : 'border-0',
           )}
         />
