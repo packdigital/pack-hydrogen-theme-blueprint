@@ -27,7 +27,7 @@ export function SocialMediaGrid({cms}: {cms: SocialMediaGridCms}) {
         className={clsx('py-px', !section?.fullBleed && 'px-contained')}
         ref={ref}
       >
-        <div
+        <ul
           className={clsx(
             'mx-auto grid grid-cols-2 sm:grid-cols-4',
             gridGap,
@@ -89,7 +89,7 @@ export function SocialMediaGrid({cms}: {cms: SocialMediaGridCms}) {
               </li>
             );
           })}
-        </div>
+        </ul>
       </div>
     </Container>
   );
