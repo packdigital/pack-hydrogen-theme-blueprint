@@ -54,7 +54,7 @@ export function SocialMediaGrid({cms}: {cms: SocialMediaGridCms}) {
                         {videoUrl ? (
                           <video
                             autoPlay
-                            className="media-fill object-cover"
+                            className="media-fill"
                             loop
                             muted
                             playsInline
@@ -71,7 +71,6 @@ export function SocialMediaGrid({cms}: {cms: SocialMediaGridCms}) {
                               width: image?.width,
                               height: image?.height,
                             }}
-                            aspectRatio="1/1"
                             className="media-fill"
                             sizes="(min-width: 768px) 25vw, 50vw"
                           />

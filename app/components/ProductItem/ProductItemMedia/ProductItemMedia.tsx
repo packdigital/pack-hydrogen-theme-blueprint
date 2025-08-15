@@ -78,7 +78,7 @@ export function ProductItemMedia({
       )}
 
       {inView && hoverMedia && (
-        <div className="hidden opacity-0 transition duration-300 md:block md:group-hover/media:opacity-100">
+        <div className="absolute inset-0 hidden size-full opacity-0 transition duration-300 md:block md:group-hover/media:opacity-100">
           {hoverMedia.mediaContentType === 'VIDEO' ? (
             <ProductItemVideo
               autoPlay={false}

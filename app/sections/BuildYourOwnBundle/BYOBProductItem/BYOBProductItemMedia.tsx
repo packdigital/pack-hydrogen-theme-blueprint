@@ -53,7 +53,7 @@ export function BYOBProductItemMedia({
       )}
 
       {hoverMedia && (
-        <div className="hidden opacity-0 transition duration-300 md:block md:group-hover/media:opacity-100">
+        <div className="absolute inset-0 hidden size-full opacity-0 transition duration-300 md:block md:group-hover/media:opacity-100">
           {hoverMedia.mediaContentType === 'VIDEO' ? (
             <BYOBProductItemVideo
               autoPlay={false}
@@ -102,7 +102,7 @@ export const BYOBProductItemVideo = forwardRef(
         loop
         controls={false}
         poster={previewImage?.url}
-        className="absolute inset-0 size-full"
+        className="media-fill"
         key={JSON.stringify(videoSources)}
       >
         {videoSources?.length

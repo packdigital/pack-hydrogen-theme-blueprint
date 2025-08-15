@@ -18,7 +18,7 @@ export function BannerVideo({
     <div ref={ref} className="absolute inset-0 size-full">
       {(aboveTheFold || inView) && (
         <video
-          className="size-full object-cover"
+          className="media-fill"
           autoPlay
           controls={false}
           loop

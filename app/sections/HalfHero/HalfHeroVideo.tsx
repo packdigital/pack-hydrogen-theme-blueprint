@@ -33,7 +33,7 @@ export function HalfHeroVideo({
   }, [autoplay, isPlaying, sound]);
 
   return (
-    <div ref={ref} className="absolute inset-0 size-full">
+    <div ref={ref} className="media-fill relative">
       {inView && (
         <video
           autoPlay={autoplay}

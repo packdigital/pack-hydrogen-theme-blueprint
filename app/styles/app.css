@@ -466,13 +466,7 @@
     overflow-wrap: anywhere;
   }
   .media-fill {
-    @apply absolute
-      left-1/2
-      top-1/2
-      h-full
-      w-full
-      -translate-x-1/2
-      -translate-y-1/2
+    @apply size-full
       object-cover;
   }
   .absolute-center {
