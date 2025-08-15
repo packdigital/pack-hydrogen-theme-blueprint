@@ -1,7 +1,7 @@
 import {SECTION_FRAGMENT} from './settings';
 
 export const BLOG_PAGE_QUERY = `
-  query Blog($first: Int!, $handle: String!, $version: Version, $cursor: String, $articlesCursor: String, $language: String, $country: String) @inContext(language: $language, country: $country) {
+  query Blog($handle: String!, $version: Version, $cursor: String, $articlesCursor: String, $language: String, $country: String) @inContext(language: $language, country: $country) {
     blog: blogByHandle(handle: $handle, version: $version) {
       id
       title
