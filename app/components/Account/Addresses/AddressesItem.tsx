@@ -48,14 +48,6 @@ export function AddressesItem({
             <p key={line}>{line}</p>
           ))}
           {phoneNumber && <p>{phoneNumber}</p>}
-
-          {isDefaultAddress && (
-            <div className="mt-3 flex">
-              <p className="text-label rounded bg-[#F3EFE6] px-2 py-1 font-medium text-text">
-                Default Address
-              </p>
-            </div>
-          )}
         </div>
       </div>
 
