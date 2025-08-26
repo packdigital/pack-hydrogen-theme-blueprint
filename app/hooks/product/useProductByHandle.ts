@@ -20,9 +20,7 @@ export function useProductByHandle(
   fetchOnMount = true,
 ): Product | null {
   const {pathPrefix} = useLocale();
-  const fetcher = useFetcher<{product: Product}>({
-    key: `product-by-handle:${handle}:${pathPrefix}`,
-  });
+  const fetcher = useFetcher<{product: Product}>();
 
   useEffect(() => {
     if (!fetchOnMount || !handle) return;

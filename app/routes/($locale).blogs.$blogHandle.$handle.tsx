@@ -1,6 +1,10 @@
 import {useMemo} from 'react';
 import {useLoaderData} from '@remix-run/react';
-import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
+import {
+  AnalyticsPageType,
+  getSeoMeta,
+  storefrontRedirect,
+} from '@shopify/hydrogen';
 import {RenderSections} from '@pack/react';
 import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 import {PackTestRoute} from '@pack/hydrogen';
@@ -15,6 +19,7 @@ export const headers = routeHeaders;
 
 export async function loader({params, context, request}: LoaderFunctionArgs) {
   const {handle} = params;
+  const {storefront} = context;
 
   if (!handle) throw new Response(null, {status: 404});
 
@@ -30,7 +35,11 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     getSiteSettings(context, request),
   ]);
 
-  if (!article) throw new Response(null, {status: 404});
+  if (!article) {
+    const redirect = await storefrontRedirect({request, storefront});
+    if (redirect.status === 301) return redirect;
+    throw new Response(null, {status: 404});
+  }
 
   const analytics = {pageType: AnalyticsPageType.article};
   const seo = seoPayload.article({
@@ -54,7 +63,7 @@ export const meta = ({matches}: MetaArgs<typeof loader>) => {
 };
 
 export default function ArticleRoute() {
-  const {article} = useLoaderData<typeof loader>();
+  const {article} = useLoaderData<{article: ArticlePage}>();
 
   const atDate =
     article.firstPublishedAt || article.publishedAt || article.createdAt;

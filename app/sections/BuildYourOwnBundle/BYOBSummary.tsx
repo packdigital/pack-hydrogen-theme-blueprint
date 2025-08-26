@@ -130,8 +130,8 @@ export function BYOBSummary({
               mobileSummaryOpen && bundle[0]
                 ? 'max-md:pb-5 max-md:pt-10 md:py-5'
                 : mobileSummaryOpen || bundle[0]
-                ? 'py-5'
-                : 'pb-5',
+                  ? 'py-5'
+                  : 'pb-5',
             )}
           >
             {tiers?.map(({message}, index, arr) => {

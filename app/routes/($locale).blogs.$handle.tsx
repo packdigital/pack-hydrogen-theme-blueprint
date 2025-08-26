@@ -1,5 +1,9 @@
 import {useLoaderData} from '@remix-run/react';
-import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
+import {
+  AnalyticsPageType,
+  getSeoMeta,
+  storefrontRedirect,
+} from '@shopify/hydrogen';
 import {RenderSections} from '@pack/react';
 import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 import {PackTestRoute} from '@pack/hydrogen';
@@ -15,6 +19,7 @@ export const headers = routeHeaders;
 export async function loader({params, context, request}: LoaderFunctionArgs) {
   const {handle} = params;
   let packTestInfoData = null;
+  const {storefront} = context;
 
   if (!handle) throw new Response(null, {status: 404});
 
@@ -25,20 +30,18 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
   }: {
     blog: BlogPage | null;
     cursor: string | null;
-  }): Promise<BlogPage> => {
+  }): Promise<BlogPage | undefined> => {
     const {pack, storefront} = context;
     const {data, packTestInfo} = await pack.query(BLOG_PAGE_QUERY, {
       variables: {
-        first: 250,
         handle,
         articlesCursor: cursor,
         country: storefront.i18n.country,
         language: storefront.i18n.language,
       },
       cache: storefront.CacheLong(),
-      request,
     });
-    if (!data?.blog) throw new Response(null, {status: 404});
+    if (!data?.blog) return undefined;
 
     packTestInfoData = packTestInfo;
     const queriedBlog = data.blog;
@@ -72,7 +75,11 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     getSiteSettings(context, request),
   ]);
 
-  if (!blogWithAllArticles) throw new Response(null, {status: 404});
+  if (!blogWithAllArticles) {
+    const redirect = await storefrontRedirect({request, storefront});
+    if (redirect.status === 301) return redirect;
+    throw new Response(null, {status: 404});
+  }
 
   let blog = blogWithAllArticles;
   if (blogWithAllArticles.sections.pageInfo.hasNextPage) {
@@ -122,7 +129,7 @@ export const meta = ({matches}: MetaArgs<typeof loader>) => {
 };
 
 export default function BlogRoute() {
-  const {blog} = useLoaderData<typeof loader>();
+  const {blog} = useLoaderData<{blog: BlogPage}>();
 
   return (
     <>

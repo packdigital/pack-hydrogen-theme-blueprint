@@ -39,7 +39,7 @@ export function CollectionPromoTile({tile}: CollectionPromoTileProps) {
             {hasVideo && (
               <video
                 autoPlay
-                className="absolute inset-0 size-full object-cover"
+                className="media-fill"
                 controls={false}
                 loop
                 muted

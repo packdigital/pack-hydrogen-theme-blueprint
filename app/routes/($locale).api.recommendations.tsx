@@ -1,4 +1,3 @@
-import {data as dataWithOptions} from '@shopify/remix-oxygen';
 import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 
 import {PRODUCT_RECOMMENDATIONS_QUERY} from '~/data/graphql/storefront/product';
@@ -13,7 +12,7 @@ export async function loader({request, context}: LoaderFunctionArgs) {
   const intent = String(searchParams.get('intent') || 'RELATED');
 
   if (!productId)
-    return dataWithOptions(
+    return Response.json(
       {products: null, errors: ['Missing product `productId` parameter']},
       {status: 500},
     );
@@ -31,5 +30,5 @@ export async function loader({request, context}: LoaderFunctionArgs) {
     },
   );
 
-  return {productRecommendations};
+  return Response.json({productRecommendations});
 }

@@ -44,7 +44,6 @@ export const getPage = async ({
         language: storefront.i18n.language,
       },
       cache: storefront.CacheLong(),
-      request,
     });
 
     // Capture packTestInfo from the first call

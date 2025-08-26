@@ -31,19 +31,11 @@ export async function loader({request, context}: LoaderFunctionArgs) {
     pageBy: resultsPerPage,
   });
 
-  const {activeFilterValues, filters} = await getFilters({
-    handle,
-    searchParams,
-    siteSettings,
-    storefront,
-  });
-
   const {collection} = await storefront.query(COLLECTION_QUERY, {
     variables: {
       handle,
       sortKey,
       reverse,
-      filters,
       country: storefront.i18n.country,
       language: storefront.i18n.language,
       ...paginationVariables,
@@ -51,8 +43,5 @@ export async function loader({request, context}: LoaderFunctionArgs) {
     cache: storefront.CacheShort(),
   });
 
-  return {
-    collection,
-    activeFilterValues,
-  };
+  return Response.json({collection});
 }

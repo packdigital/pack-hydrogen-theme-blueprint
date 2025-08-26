@@ -7,4 +7,4 @@ export const Context = createContext({
   actions: {},
 } as SettingsContext);
 
-export const useSettingsContext = () => useContext(Context);
+export const useSettingsContext = () => useContext(Context) as SettingsContext;

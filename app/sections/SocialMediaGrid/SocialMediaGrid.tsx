@@ -27,7 +27,7 @@ export function SocialMediaGrid({cms}: {cms: SocialMediaGridCms}) {
         className={clsx('py-px', !section?.fullBleed && 'px-contained')}
         ref={ref}
       >
-        <div
+        <ul
           className={clsx(
             'mx-auto grid grid-cols-2 sm:grid-cols-4',
             gridGap,
@@ -54,7 +54,7 @@ export function SocialMediaGrid({cms}: {cms: SocialMediaGridCms}) {
                         {videoUrl ? (
                           <video
                             autoPlay
-                            className="media-fill object-cover"
+                            className="media-fill"
                             loop
                             muted
                             playsInline
@@ -71,7 +71,6 @@ export function SocialMediaGrid({cms}: {cms: SocialMediaGridCms}) {
                               width: image?.width,
                               height: image?.height,
                             }}
-                            aspectRatio="1/1"
                             className="media-fill"
                             sizes="(min-width: 768px) 25vw, 50vw"
                           />
@@ -90,7 +89,7 @@ export function SocialMediaGrid({cms}: {cms: SocialMediaGridCms}) {
               </li>
             );
           })}
-        </div>
+        </ul>
       </div>
     </Container>
   );

@@ -35,7 +35,7 @@ export async function loader({request, params, context}: LoaderFunctionArgs) {
     request,
     context,
   });
-  return search;
+  return Response.json(search);
 }
 
 async function fetchPredictiveSearchResults({

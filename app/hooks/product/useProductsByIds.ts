@@ -20,9 +20,7 @@ export function useProductsByIds(
   fetchOnMount = true,
 ): Product[] {
   const {pathPrefix} = useLocale();
-  const fetcher = useFetcher<{products: Product[]}>({
-    key: `products-by-ids:${ids.join(',')}:${pathPrefix}`,
-  });
+  const fetcher = useFetcher<{products: Product[]}>();
 
   const idsString = JSON.stringify(ids);
 

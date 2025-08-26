@@ -31,10 +31,13 @@ export const CollectionGrid = memo(
     }, [JSON.stringify(products.pageInfo)]);
 
     const promoTilesByPosition = useMemo(() => {
-      return promoTiles?.reduce((acc, tile) => {
-        acc[tile.position] = tile;
-        return acc;
-      }, {} as Record<number, (typeof promoTiles)[0]>);
+      return promoTiles?.reduce(
+        (acc, tile) => {
+          acc[tile.position] = tile;
+          return acc;
+        },
+        {} as Record<number, (typeof promoTiles)[0]>,
+      );
     }, [promoTiles]);
 
     return (

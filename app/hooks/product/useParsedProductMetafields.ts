@@ -28,5 +28,3 @@ export function useParsedProductMetafields(
     });
   }, [fetchOnMount, product?.id]);
 }
-
-//

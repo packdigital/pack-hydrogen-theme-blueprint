@@ -31,7 +31,7 @@ export const OPTION_FRAGMENT = `#graphql
         }
       }
     }
-  } 
+  }
 `;
 
 export const VARIANT_FRAGMENT = `#graphql

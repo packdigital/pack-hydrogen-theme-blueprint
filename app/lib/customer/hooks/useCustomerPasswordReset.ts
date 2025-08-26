@@ -22,11 +22,12 @@ export function useCustomerPasswordReset() {
   });
 
   const resetUrl = useMemo(() => {
-    const baseUrl = `https://${ENV.PUBLIC_STORE_DOMAIN}`;
     try {
+      const baseUrl = new URL(ENV.PRIMARY_DOMAIN).origin;
       const newUrl = new URL(url);
-      return `${baseUrl}${newUrl.pathname}`;
+      return `${baseUrl}${newUrl.pathname}${newUrl.search}`;
     } catch (error) {
+      const baseUrl = new URL(url).origin;
       return `${baseUrl}${location.pathname}${location.search}`;
     }
   }, [ENV, url]);

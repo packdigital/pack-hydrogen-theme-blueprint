@@ -28,9 +28,7 @@ export function useProductMetafields(
   const metafieldIdentifiersString = JSON.stringify(metafieldIdentifiers);
   const fetcher = useFetcher<{
     metafields: ParsedMetafields | null;
-  }>({
-    key: `product-metafields:${handle}:${pathPrefix}:${metafieldIdentifiersString}`,
-  });
+  }>();
   const {metafields} = {...fetcher.data};
 
   useEffect(() => {

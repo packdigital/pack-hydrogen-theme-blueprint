@@ -35,17 +35,17 @@ export function HalfHero({cms}: {cms: HalfHeroCms}) {
       ? mediaWidthRatio === '3/4'
         ? 'md:grid-cols-[1fr_3fr]'
         : mediaWidthRatio === '2/3'
-        ? 'md:grid-cols-[1fr_2fr]'
-        : mediaWidthRatio === '3/5'
-        ? 'md:grid-cols-[2fr_3fr]'
-        : 'md:grid-cols-[1fr_1fr]'
+          ? 'md:grid-cols-[1fr_2fr]'
+          : mediaWidthRatio === '3/5'
+            ? 'md:grid-cols-[2fr_3fr]'
+            : 'md:grid-cols-[1fr_1fr]'
       : mediaWidthRatio === '3/4'
-      ? 'md:grid-cols-[3fr_1fr]'
-      : mediaWidthRatio === '2/3'
-      ? 'md:grid-cols-[2fr_1fr]'
-      : mediaWidthRatio === '3/5'
-      ? 'md:grid-cols-[3fr_2fr]'
-      : 'md:grid-cols-[1fr_1fr]';
+        ? 'md:grid-cols-[3fr_1fr]'
+        : mediaWidthRatio === '2/3'
+          ? 'md:grid-cols-[2fr_1fr]'
+          : mediaWidthRatio === '3/5'
+            ? 'md:grid-cols-[3fr_2fr]'
+            : 'md:grid-cols-[1fr_1fr]';
 
   return (
     <Container container={cms.container}>

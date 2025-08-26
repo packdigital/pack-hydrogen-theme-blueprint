@@ -17,6 +17,8 @@ export type ParsedMetafields = Record<string, Metafield | null>;
 
 export type MetafieldIdentifier = {namespace?: string; key: string};
 
+export type ProductsMap = Record<string, Product>;
+
 export interface OptionWithGroups {
   name: string;
   optionValues: ProductOptionValue[];

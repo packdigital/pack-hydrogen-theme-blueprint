@@ -18,5 +18,5 @@ export async function loader({request, context}: LoaderFunctionArgs) {
     cache: storefront.CacheShort(),
   });
 
-  return cart;
+  return Response.json(cart);
 }

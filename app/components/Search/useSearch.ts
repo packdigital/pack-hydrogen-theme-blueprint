@@ -25,12 +25,8 @@ export function useSearch() {
   const [rawTerm, setRawTerm] = useState('');
   const [searchTerm, setSearchTerm] = useState(rawTerm);
 
-  const productsFetcher = useFetcher<ProductsFetcherData>({
-    key: `search-first:${searchTerm}`,
-  });
-  const collectionsFetcher = useFetcher<CollectionsFetcherData>({
-    key: `predictive-search-collection:${searchTerm}`,
-  });
+  const productsFetcher = useFetcher<ProductsFetcherData>();
+  const collectionsFetcher = useFetcher<CollectionsFetcherData>();
 
   const collectionsEnabled = search?.results?.collectionsEnabled ?? true;
 

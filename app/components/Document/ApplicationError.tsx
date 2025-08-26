@@ -43,8 +43,8 @@ export function ApplicationError({error}: ApplicationErrorProps) {
                   {error instanceof Error
                     ? error.stack
                     : typeof error === 'string'
-                    ? error
-                    : JSON.stringify(error, null, 2)}
+                      ? error
+                      : JSON.stringify(error, null, 2)}
                 </pre>
               </div>
 

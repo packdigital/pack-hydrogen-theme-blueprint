@@ -7,4 +7,5 @@ export const Context = createContext({
   actions: {},
 } as GroupingsContext);
 
-export const useGroupingsContext = () => useContext(Context);
+export const useGroupingsContext = () =>
+  useContext(Context) as GroupingsContext;

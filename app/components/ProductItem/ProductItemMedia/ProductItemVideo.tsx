@@ -21,7 +21,7 @@ export const ProductItemVideo = forwardRef(
         loop
         controls={false}
         poster={previewImage?.url}
-        className="absolute inset-0 size-full"
+        className="media-fill"
         key={JSON.stringify(videoSources)}
       >
         {videoSources?.length

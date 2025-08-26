@@ -62,7 +62,7 @@ export function InnerColorOptionValue({
 
       <div
         className={clsx(
-          'media-fill rounded-[50%] border-white transition-[border-width] duration-100',
+          'absolute inset-0 size-full rounded-[50%] border-white transition-[border-width] duration-100',
           isSelected ? 'border-[3px]' : 'border-0',
         )}
       />

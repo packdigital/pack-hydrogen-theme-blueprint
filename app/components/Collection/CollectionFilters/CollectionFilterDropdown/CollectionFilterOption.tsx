@@ -128,7 +128,7 @@ export function CollectionFilterOption({
 
         <div
           className={clsx(
-            'media-fill rounded-[1px] border-white transition-[border-width] duration-100',
+            'absolute inset-0 rounded-[1px] border-white transition-[border-width] duration-100',
             isActive ? 'border-0 md:border-0' : 'border-0',
           )}
         />
@@ -137,7 +137,7 @@ export function CollectionFilterOption({
           src="/svgs/checkmark.svg#checkmark"
           viewBox="0 0 24 24"
           className={clsx(
-            'pointer-events-none w-6 transition md:w-5',
+            'pointer-events-none absolute left-1/2 top-1/2 w-4 -translate-x-1/2 -translate-y-1/2 transition md:w-3',
             checkmarkColor,
             isActive ? 'opacity-100' : 'opacity-0',
           )}

@@ -18,7 +18,12 @@ import {getProductGroupings, normalizeAdminProduct} from '~/lib/utils';
 import {SHOPPABLE_SOCIAL_VIDEO_SECTION_KEY} from '~/sections/ShoppableSocialVideo';
 import {PRODUCT_SECTION_KEY} from '~/sections/Product';
 import {MODAL_PRODUCT_URL_PARAM} from '~/lib/constants';
-import type {Group, Page, ProductWithInitialGrouping} from '~/lib/types';
+import type {
+  Group,
+  Page,
+  ProductsMap,
+  ProductWithInitialGrouping,
+} from '~/lib/types';
 
 export const getSelectedProductOptions = async ({
   handle,
@@ -47,15 +52,19 @@ export const getSelectedProductOptions = async ({
       },
     );
     if (productWithOptions) {
-      const optionsTable = Object.values({
+      const optionValuesByOptionName = Object.values({
         ...productWithOptions.options,
-      } as Product['options']).reduce((acc: Record<string, string>, option) => {
-        return {...acc, [option.name.toLowerCase()]: option.name};
-      }, {});
+      } as Product['options']).reduce(
+        (acc: Record<string, string[]>, option) => {
+          return {...acc, [option.name.toLowerCase()]: option.values};
+        },
+        {},
+      );
       // Set selected options from the query string
       searchParams.forEach((value, name) => {
-        // Filter out non-option search params
-        if (!optionsTable[name.toLowerCase()]) return;
+        // Filter out non-option or invalid value search params
+        if (!optionValuesByOptionName[name.toLowerCase()]?.includes(value))
+          return;
         selectedOptions.push({name, value});
       });
     }
@@ -288,7 +297,7 @@ export const getProductsMapForPage = async ({
   const {admin, pack} = context;
   const isPreviewModeEnabled = pack.isPreviewModeEnabled();
 
-  const productsMap: Record<string, Product> = {};
+  const productsMap: ProductsMap = {};
   const sectionsByKey = page.sections?.nodes?.reduce(
     (acc: Record<string, Record<string, any>[]>, section) => {
       return {
@@ -309,13 +318,13 @@ export const getProductsMapForPage = async ({
         return section.data?.products?.map(({product}) => product?.id) || [];
       })
       ?.filter(Boolean) || [];
-  const productSectionsProductHandles =
+  const productSectionsProductIds =
     sectionsByKey?.[PRODUCT_SECTION_KEY]?.filter((section) => {
       return section.data?.sectionVisibility === 'visible';
     })?.map((section) => section.data?.product?.id) || [];
   const productIds = [
     ...shoppableSocialVideoSectionsProductIds,
-    ...productSectionsProductHandles,
+    ...productSectionsProductIds,
   ];
 
   if (productIds?.length) {
@@ -335,10 +344,13 @@ export const getProductsMapForPage = async ({
 
     if (admin && isPreviewModeEnabled) {
       if (products?.length !== productIds.length) {
-        const productsById = products?.reduce((acc, product) => {
-          if (product.id) acc[product.id] = product;
-          return acc;
-        }, {} as Record<string, Product>);
+        const productsById = products?.reduce(
+          (acc, product) => {
+            if (product.id) acc[product.id] = product;
+            return acc;
+          },
+          {} as Record<string, Product>,
+        );
         const productsWithDrafts = await Promise.all(
           productIds.map(async (id) => {
             if (productsById?.[id]) return productsById[id];

@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import type {SwiperClass} from 'swiper/react';
 
 import {Container} from '~/components/Container';
-import {Spinner} from '~/components/Animations';
+import {SwiperSkeleton} from '~/components/SwiperSkeleton';
 
 import type {ImageTilesCms} from './ImageTiles.types';
 import {ImageTile} from './ImageTile';
@@ -27,6 +27,27 @@ export function ImageTiles({cms}: {cms: ImageTilesCms}) {
   } = {...section};
 
   const [swiper, setSwiper] = useState<SwiperClass | null>(null);
+
+  const breakpoints = {
+    mobile: {
+      slidesPerView: tilesPerViewMobile,
+      slidesOffsetBefore: 16,
+      slidesOffsetAfter: 16,
+      spaceBetween: 16,
+    },
+    tablet: {
+      slidesPerView: tilesPerViewTablet,
+      slidesOffsetBefore: 32,
+      slidesOffsetAfter: 32,
+      spaceBetween: 20,
+    },
+    desktop: {
+      slidesPerView: tilesPerViewDesktop,
+      slidesOffsetBefore: 0,
+      slidesOffsetAfter: 0,
+      spaceBetween: 20,
+    },
+  };
 
   const maxWidthClass = fullWidth
     ? 'max-w-none'
@@ -63,23 +84,13 @@ export function ImageTiles({cms}: {cms: ImageTilesCms}) {
                 <Swiper
                   grabCursor
                   onSwiper={setSwiper}
-                  slidesOffsetAfter={16}
-                  slidesOffsetBefore={16}
-                  slidesPerView={tilesPerViewMobile}
-                  spaceBetween={16}
+                  slidesOffsetAfter={breakpoints.mobile.slidesOffsetAfter}
+                  slidesOffsetBefore={breakpoints.mobile.slidesOffsetBefore}
+                  slidesPerView={breakpoints.mobile.slidesPerView}
+                  spaceBetween={breakpoints.mobile.spaceBetween}
                   breakpoints={{
-                    768: {
-                      slidesPerView: tilesPerViewTablet,
-                      slidesOffsetBefore: 32,
-                      slidesOffsetAfter: 32,
-                      spaceBetween: 20,
-                    },
-                    1024: {
-                      slidesPerView: tilesPerViewDesktop,
-                      slidesOffsetBefore: 0,
-                      slidesOffsetAfter: 0,
-                      spaceBetween: 20,
-                    },
+                    768: breakpoints.tablet,
+                    1024: breakpoints.desktop,
                   }}
                 >
                   {swiper &&
@@ -97,9 +108,14 @@ export function ImageTiles({cms}: {cms: ImageTilesCms}) {
                 </Swiper>
 
                 {!swiper && (
-                  <div className="flex min-h-[25rem] items-center justify-center">
-                    <Spinner width="32" />
-                  </div>
+                  <SwiperSkeleton breakpoints={breakpoints}>
+                    <div
+                      className={clsx(
+                        'bg-neutralLightest animate-pulse',
+                        aspectRatio,
+                      )}
+                    />
+                  </SwiperSkeleton>
                 )}
               </div>
 

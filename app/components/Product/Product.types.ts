@@ -10,10 +10,27 @@ export interface ProductProps {
 }
 
 export interface ProductDetailsProps {
-  enabledQuantitySelector: boolean;
+  enabledQuantitySelector?: boolean;
   isModalProduct?: boolean;
   product: Product;
+  quantity: number;
   selectedVariant: SelectedVariant;
+  setQuantity: (quantity: number) => void;
+}
+
+export interface ProductAddToCartProps {
+  enabledQuantitySelector?: boolean;
+  quantity: number;
+  selectedVariant: SelectedVariant;
+  setQuantity: (quantity: number) => void;
+}
+
+export interface ProductStickyAddToCartProps {
+  enabledQuantitySelector?: boolean;
+  quantity: number;
+  selectedVariant: SelectedVariant;
+  setQuantity: (quantity: number) => void;
+  viewports?: string;
 }
 
 export interface ProductHeaderProps {
