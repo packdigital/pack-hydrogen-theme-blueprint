@@ -31,17 +31,16 @@ export const getShop = async (context: AppLoadContext) => {
 
 export const getSiteSettings = async (
   context: AppLoadContext,
-  request: Request,
 ): Promise<RootSiteSettings> => {
   const {pack, storefront} = context;
-  return pack.query(SITE_SETTINGS_QUERY, {
+  const response = await pack.query(SITE_SETTINGS_QUERY, {
     variables: {
       country: storefront.i18n.country,
       language: storefront.i18n.language,
     },
     cache: storefront.CacheLong(),
-    request,
-  }) as RootSiteSettings;
+  });
+  return response as RootSiteSettings;
 };
 
 export const getProductGroupings = async (
@@ -58,7 +57,6 @@ export const getProductGroupings = async (
     const {data} = await context.pack.query(PRODUCT_GROUPINGS_QUERY, {
       variables: {first: 250, after: cursor},
       cache: context.storefront.CacheLong(),
-      request,
     });
     if (!data?.groups) return null;
 
@@ -89,7 +87,7 @@ export const getAccountSeo = async (
 ) => {
   const [shop, siteSettings] = await Promise.all([
     getShop(context),
-    getSiteSettings(context, request),
+    getSiteSettings(context),
   ]);
   const {title: seoSiteTitle} = {
     ...siteSettings?.data?.siteSettings?.seo,

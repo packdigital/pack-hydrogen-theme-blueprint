@@ -36,7 +36,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
   if (!handle) throw new Response(null, {status: 404});
 
   const searchParams = new URL(request.url).searchParams;
-  const siteSettings = await getSiteSettings(context, request);
+  const siteSettings = await getSiteSettings(context);
 
   const {activeFilterValues, filters} = await getFilters({
     handle,
