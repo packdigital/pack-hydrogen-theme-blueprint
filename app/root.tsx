@@ -16,7 +16,8 @@ import type {
   LoaderFunctionArgs,
   MetaArgs,
 } from '@shopify/remix-oxygen';
-import type {Customer, Shop} from '@shopify/hydrogen/storefront-api-types';
+import type {Shop} from '@shopify/hydrogen/storefront-api-types';
+import type {Customer} from '@shopify/hydrogen/customer-account-api-types';
 
 import {
   ApplicationError,
