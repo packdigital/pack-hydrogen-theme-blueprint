@@ -1,3 +1,5 @@
+import type {Customer} from '@shopify/hydrogen/customer-account-api-types';
+
 import {AnalyticsEvent} from '../constants';
 
 import {
@@ -47,17 +49,16 @@ const customerEvent = ({
 
     const {customer: providerCustomer} = data;
     const {customer: customCustomer} = data.customData;
-    const customer =
-      typeof customCustomer !== 'undefined' ? customCustomer : providerCustomer;
+    const customer = (customCustomer || providerCustomer) as Customer;
     if (typeof customer === 'undefined')
       throw new Error('`customer` parameter is missing in `customData`.');
     if (!customer) return;
 
     const customerObject = {
-      email: customer.email,
+      email: customer.emailAddress?.emailAddress || '',
       city: customer.defaultAddress?.city || '',
-      firstName: customer.firstName,
-      lastName: customer.lastName,
+      firstName: customer.firstName || '',
+      lastName: customer.lastName || '',
     };
 
     if (!window.edgetag) throw new Error('`edgetag` is not defined.');

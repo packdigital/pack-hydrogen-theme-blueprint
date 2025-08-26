@@ -1,15 +1,9 @@
 import {useEffect} from 'react';
-import type {MailingAddress} from '@shopify/hydrogen/storefront-api-types';
 
-import {useCustomerUpdateAddress} from '~/lib/customer';
+import {useCustomerUpdateAddress} from '~/hooks';
 
 import {AddressForm} from './AddressForm';
-
-interface EditAddressFormProps {
-  defaultAddress: MailingAddress | null;
-  initialAddress: MailingAddress | null;
-  setInitialAddress: (initialAddress: MailingAddress | null) => void;
-}
+import type {EditAddressFormProps} from './Addresses.types';
 
 export function EditAddressForm({
   defaultAddress,

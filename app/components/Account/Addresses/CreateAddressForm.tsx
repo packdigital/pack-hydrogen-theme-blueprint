@@ -1,12 +1,9 @@
 import {useEffect} from 'react';
 
-import {useCustomerCreateAddress} from '~/lib/customer';
+import {useCustomerCreateAddress} from '~/hooks';
 
 import {AddressForm} from './AddressForm';
-
-interface CreateAddressFormProps {
-  setIsCreateAddress: (isCreateAddress: boolean) => void;
-}
+import type {CreateAddressFormProps} from './Addresses.types';
 
 export function CreateAddressForm({
   setIsCreateAddress,

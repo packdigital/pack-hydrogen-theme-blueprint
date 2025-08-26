@@ -1,3 +1,5 @@
+import type {Customer} from '@shopify/hydrogen/customer-account-api-types';
+
 import {AnalyticsEvent} from '../constants';
 
 export const ANALYTICS_NAME = 'TikTokPixelEvents';
@@ -38,7 +40,7 @@ const emitEvent = ({
   tiktokPixelId: string;
   eventName: string;
   parameters?: Record<string, any>;
-  customer?: Record<string, any> | null;
+  customer?: Customer | null;
   debug?: boolean;
   onEmit?: (event: Record<string, any>) => void;
 }) => {
@@ -50,7 +52,7 @@ const emitEvent = ({
       if (customer) {
         window.ttq.identify({
           external_id: customer.id?.split('/').pop() || '',
-          email: customer.email || '',
+          email: customer.emailAddress?.emailAddress || '',
         });
       }
       window.ttq.instance(tiktokPixelId).track('track', eventName, parameters);
@@ -113,7 +115,7 @@ const addToCartEvent = ({
   try {
     if (debug) logSubscription({data, analyticsEvent});
 
-    const {cart, currentLine, prevLine} = data;
+    const {cart, currentLine, customer, prevLine} = data;
     if (!cart || !currentLine)
       throw new Error('`cart` and/or `currentLine` parameters are missing.');
 

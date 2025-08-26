@@ -1,1 +1,0 @@
-export {multipass} from './multipass';

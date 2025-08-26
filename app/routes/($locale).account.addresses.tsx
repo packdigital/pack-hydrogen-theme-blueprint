@@ -1,34 +1,29 @@
-import {data as dataWithOptions, redirect} from '@shopify/remix-oxygen';
-import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
+import {data as dataWithOptions} from '@shopify/remix-oxygen';
 import type {
   ActionFunctionArgs,
   LoaderFunctionArgs,
   MetaArgs,
 } from '@shopify/remix-oxygen';
+import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 
-import {redirectLinkIfLoggedOut} from '~/lib/customer';
-import {
-  customerAddressesAction,
-  customerAddressesLoader,
-} from '~/lib/customer/servers/addresses.server';
+import {customerAddressesAction} from '~/lib/customer';
 import {getAccountSeo} from '~/lib/utils';
-import {CustomerAccountLayout} from '~/components/AccountLayout';
-import {Addresses} from '~/components/Account';
+import {CustomerAccountLayout} from '~/components/AccountLayout/CustomerAccountLayout';
+import {Addresses} from '~/components/Account/Addresses/Addresses';
 
 export async function action({request, context}: ActionFunctionArgs) {
+  // Double-check current user is logged in
+  if (!(await context.customerAccount.isLoggedIn())) {
+    return context.customerAccount.logout();
+  }
   const {data, status} = await customerAddressesAction({request, context});
   return dataWithOptions(data, {status});
 }
 
-export async function loader({context, params}: LoaderFunctionArgs) {
-  const redirectLink = await redirectLinkIfLoggedOut({context, params});
-  if (redirectLink) return redirect(redirectLink);
-  const [{data, status}, seo] = await Promise.all([
-    customerAddressesLoader({context}),
-    getAccountSeo(context, 'Addresses'),
-  ]);
+export async function loader({context}: LoaderFunctionArgs) {
   const analytics = {pageType: AnalyticsPageType.customersAddresses};
-  return dataWithOptions({...data, analytics, seo}, {status});
+  const seo = await getAccountSeo(context, 'Addresses');
+  return {analytics, seo};
 }
 
 export const meta = ({matches}: MetaArgs<typeof loader>) => {

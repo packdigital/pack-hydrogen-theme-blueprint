@@ -7,11 +7,11 @@ import type {
   CartCodeDiscountAllocation,
 } from '@shopify/hydrogen/storefront-api-types';
 
+import {Link} from '~/components/Link';
 import {prefixNonUsdDollar} from '~/hooks/product/useVariantPrices';
 import {useLocale} from '~/hooks';
 
 import type {CartTotalsProps} from '../Cart.types';
-import {MultipassCheckoutButton} from '../MultipassCheckoutButton';
 
 import {CartTotalsDiscountItem} from './CartTotalsDiscountItem';
 
@@ -119,12 +119,9 @@ export const CartTotals = memo(({settings}: CartTotalsProps) => {
         {subtext && <p className="text-xs">{subtext}</p>}
       </div>
 
-      <MultipassCheckoutButton
-        className="btn-primary w-full"
-        checkoutUrl={checkoutUrl}
-      >
+      <Link className="btn-primary w-full" to={checkoutUrl}>
         {checkoutText}
-      </MultipassCheckoutButton>
+      </Link>
     </div>
   );
 });

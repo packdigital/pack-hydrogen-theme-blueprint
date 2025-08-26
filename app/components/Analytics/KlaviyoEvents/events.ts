@@ -1,3 +1,5 @@
+import type {Customer} from '@shopify/hydrogen/customer-account-api-types';
+
 import {AnalyticsEvent} from '../constants';
 
 import {
@@ -84,12 +86,12 @@ const viewProductEvent = ({
   try {
     if (debug) logSubscription({data, analyticsEvent});
 
-    const {customer} = data;
+    const {customer} = data as {customer: Customer};
     const {selectedVariant} = data.customData;
     const previousPath = sessionStorage.getItem('PREVIOUS_PATH');
     const list = previousPath?.startsWith('/collections') ? previousPath : '';
     emitEvent({
-      email: customer?.email,
+      email: customer?.emailAddress?.emailAddress || '',
       event: 'Viewed Product',
       properties: mapProductPageVariant(list)(selectedVariant),
       debug,
@@ -110,7 +112,8 @@ const addToCartEvent = ({
   try {
     if (debug) logSubscription({data, analyticsEvent});
 
-    const {currentLine, customer, prevLine} = data;
+    const {customer} = data as {customer: Customer};
+    const {currentLine, prevLine} = data;
     if (!currentLine)
       throw new Error('`cart` and/or `currentLine` parameters are missing.');
 
@@ -126,7 +129,7 @@ const addToCartEvent = ({
       '';
     const productProps = mapCartLine(list)(lineAdded);
     emitEvent({
-      email: customer?.email,
+      email: customer?.emailAddress?.emailAddress || '',
       event: 'Added to Cart',
       properties: productProps,
       debug,

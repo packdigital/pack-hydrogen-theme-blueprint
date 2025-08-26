@@ -3,6 +3,7 @@
 import * as remixBuild from 'virtual:remix/server-build';
 import {
   createCartHandler,
+  createCustomerAccountClient,
   cartGetIdDefault,
   cartSetIdDefault,
   createStorefrontClient,
@@ -60,6 +61,17 @@ export default {
         storeDomain: env.PUBLIC_STORE_DOMAIN,
         storefrontId: env.PUBLIC_STOREFRONT_ID,
         storefrontHeaders: getStorefrontHeaders(request),
+      });
+
+      /**
+       * Create a client for Customer Account API.
+       */
+      const customerAccount = createCustomerAccountClient({
+        waitUntil,
+        request,
+        session,
+        customerAccountId: env.PUBLIC_CUSTOMER_ACCOUNT_API_CLIENT_ID,
+        shopId: env.SHOP_ID,
       });
 
       /**
@@ -127,6 +139,7 @@ export default {
             waitUntil,
             session,
             storefront,
+            customerAccount,
             admin,
             cart,
             env,

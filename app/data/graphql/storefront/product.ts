@@ -310,6 +310,21 @@ export const PRODUCT_ITEM_QUERY = `#graphql
   ${PRODUCT_ITEM_FRAGMENT}
 ` as const;
 
+export const PRODUCT_ITEM_QUERY_BY_ID = `#graphql
+  query product(
+    $id: ID!
+    $country: CountryCode
+    $language: LanguageCode
+  ) @inContext(country: $country, language: $language) {
+    product(id: $id) {
+      ... on Product {
+        ...ProductItemFragment
+      }
+    }
+  }
+  ${PRODUCT_ITEM_FRAGMENT}
+` as const;
+
 export const PRODUCT_OPTIONS_QUERY = `#graphql
   query ProductOptions(
     $handle: String!

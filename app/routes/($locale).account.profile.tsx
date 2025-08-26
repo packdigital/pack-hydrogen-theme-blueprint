@@ -1,31 +1,28 @@
-import {data as dataWithOptions, redirect} from '@shopify/remix-oxygen';
-import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
+import {data as dataWithOptions} from '@shopify/remix-oxygen';
 import type {
   ActionFunctionArgs,
   LoaderFunctionArgs,
   MetaArgs,
 } from '@shopify/remix-oxygen';
+import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 
-import {CustomerAccountLayout} from '~/components/AccountLayout';
-import {Profile} from '~/components/Account';
 import {getAccountSeo} from '~/lib/utils';
-import {redirectLinkIfLoggedOut} from '~/lib/customer';
-import {customerUpdateProfileAction} from '~/lib/customer/servers/profile.server';
+import {CustomerAccountLayout} from '~/components/AccountLayout/CustomerAccountLayout';
+import {Profile} from '~/components/Account/Profile';
+import {customerUpdateProfileAction} from '~/lib/customer';
 
 export async function action({request, context}: ActionFunctionArgs) {
-  const {data, status} = await customerUpdateProfileAction({request, context});
-  if (data.customerAccessToken) {
-    context.session.set('customerAccessToken', data.customerAccessToken);
-    return dataWithOptions(data, {status});
+  // Double-check current user is logged in
+  if (!(await context.customerAccount.isLoggedIn())) {
+    return context.customerAccount.logout();
   }
+  const {data, status} = await customerUpdateProfileAction({request, context});
   return dataWithOptions(data, {status});
 }
 
-export async function loader({context, params}: LoaderFunctionArgs) {
-  const redirectLink = await redirectLinkIfLoggedOut({context, params});
-  if (redirectLink) return redirect(redirectLink);
-  const seo = await getAccountSeo(context, 'Profile');
+export async function loader({context}: LoaderFunctionArgs) {
   const analytics = {pageType: AnalyticsPageType.customersAccount};
+  const seo = await getAccountSeo(context, 'Profile');
   return {analytics, seo};
 }
 

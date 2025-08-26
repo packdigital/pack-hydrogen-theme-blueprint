@@ -2,19 +2,9 @@ import {useEffect} from 'react';
 import {useCart} from '@shopify/hydrogen-react';
 import cookieParser from 'cookie';
 
+import {deleteCookie, getExpirationDate} from '~/lib/utils/document.utils';
+
 const DISCOUNT_COOKIE_NAME = 'discount_code';
-
-const getExpirationDate = () => {
-  const now = new Date();
-  const time = now.getTime();
-  const expireTime = time + 1000 * 86400; // 1 day
-  now.setTime(expireTime);
-  return now;
-};
-
-const deleteCookie = (cookieName: string) => {
-  document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
-};
 
 export const useCartAddDiscountUrl = () => {
   const {discountCodesUpdate, id} = useCart();

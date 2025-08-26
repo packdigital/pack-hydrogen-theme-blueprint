@@ -1,12 +1,11 @@
-import type {AppLoadContext, ActionFunctionArgs} from '@shopify/remix-oxygen';
+import type {ActionFunctionArgs} from '@shopify/remix-oxygen';
 import type {MailingAddress} from '@shopify/hydrogen/storefront-api-types';
 
 import {
   addressCreateClient,
   addressDeleteClient,
-  addressesClient,
   addressUpdateClient,
-} from '~/lib/customer';
+} from './client';
 
 const ACTIONS = ['create-address', 'update-address', 'delete-address'];
 
@@ -19,61 +18,15 @@ const getAddressFromBody = (body?: FormData) => {
     address1: body.get('address1') || '',
     address2: body.get('address2') || '',
     city: body.get('city') || '',
-    province: body.get('province') || '',
+    zoneCode: body.get('zoneCode') || '',
     zip: body.get('zip') || '',
-    country: body.get('country') || '',
-    phone: body.get('phone') || '',
+    territoryCode: body.get('territoryCode') || '',
+    phoneNumber: body.get('phoneNumber') || '',
   };
 };
 
 const getFormError = (message = 'We could not perform this address action') => {
   return `Sorry. ${message}. Please try again later.`;
-};
-
-interface LoaderData {
-  errors: string[] | null;
-  addressesClient: MailingAddress[] | null;
-}
-
-export const customerAddressesLoader = async ({
-  context,
-}: {
-  context: ActionFunctionArgs['context'];
-}): Promise<{data: LoaderData; status: number}> => {
-  const data: LoaderData = {
-    errors: null,
-    addressesClient: null,
-  };
-  try {
-    const customerAccessToken = await context.session.get(
-      'customerAccessToken',
-    );
-
-    if (!customerAccessToken) {
-      data.errors = ['Cannot find customer access token'];
-      return {data, status: 401};
-    }
-
-    const {errors, response} = await addressesClient(context, {
-      customerAccessToken,
-    });
-
-    if (errors?.length) {
-      console.error('addressesClient:errors', errors);
-      data.errors = errors;
-      return {data, status: 400};
-    }
-
-    if (response?.addressesClient) {
-      data.addressesClient = response.addressesClient;
-    }
-
-    return {data, status: 200};
-  } catch (error) {
-    console.error('customerOrdersLoader:error', error);
-    data.errors = [error];
-    return {data, status: 500};
-  }
 };
 
 interface ActionData {
@@ -107,22 +60,6 @@ export const customerAddressesAction = async ({
       body = await request.formData();
     } catch (error) {}
 
-    let customerAccessToken = await context.session.get('customerAccessToken');
-    /* in customizer, customer access token is stored in local storage, so it needs to be passed */
-    const previewModeCustomerAccessToken = String(
-      body?.get('previewModeCustomerAccessToken') || '',
-    );
-    if (previewModeCustomerAccessToken) {
-      try {
-        customerAccessToken = JSON.parse(previewModeCustomerAccessToken);
-      } catch (error) {}
-    }
-
-    if (!customerAccessToken) {
-      data.errors = ['Cannot find customer access token'];
-      return {data, status: 401};
-    }
-
     action = String(body?.get('action') || '');
 
     if (!action) {
@@ -143,23 +80,19 @@ export const customerAddressesAction = async ({
       }
       const isDefault = body?.get('isDefault') === 'true';
 
-      const {errors, response} = await addressCreateClient(context, {
-        customerAccessToken,
-        address,
-        isDefault,
-      });
-
-      if (errors?.length) {
+      const {response, apiErrors, formErrors} = await addressCreateClient(
+        context,
+        {address, isDefault},
+      );
+      const errors = [...new Set([...apiErrors, ...formErrors])];
+      if (errors.length) {
         console.error('addressCreateClient:errors', errors);
-        data.createErrors = errors;
-        data.formErrors = errors;
+        data.createErrors = apiErrors;
+        data.formErrors = formErrors;
         return {data, status: 400};
       }
       if (response?.address) {
         data.address = response.address;
-      }
-      if (response?.defaultAddress) {
-        data.defaultAddress = response.defaultAddress;
       }
     }
 
@@ -170,45 +103,39 @@ export const customerAddressesAction = async ({
         data.formErrors = ['Missing address'];
         return {data, status: 400};
       }
-      const id = String(body?.get('id') || '');
+      const addressId = String(body?.get('id') || '');
       const isDefault = body?.get('isDefault') === 'true';
 
-      const {errors, response} = await addressUpdateClient(context, {
-        customerAccessToken,
-        address,
-        id,
-        isDefault,
-      });
+      const {response, apiErrors, formErrors} = await addressUpdateClient(
+        context,
+        {address, addressId, isDefault},
+      );
 
-      if (errors?.length) {
+      const errors = [...new Set([...apiErrors, ...formErrors])];
+      if (errors.length) {
         console.error('addressUpdateClient:errors', errors);
-        data.updateErrors = errors;
-        data.formErrors = errors;
+        data.updateErrors = apiErrors;
+        data.formErrors = formErrors;
         return {data, status: 400};
       }
       if (response?.address) {
         data.address = response.address;
       }
-      if (response?.defaultAddress) {
-        data.defaultAddress = response.defaultAddress;
-      }
     }
 
     /* --- DELETE ADDRESS --- */
     if (action === 'delete-address') {
-      const id = String(body?.get('id') || '');
-      const {errors, response} = await addressDeleteClient(context, {
-        customerAccessToken,
-        id,
+      const addressId = String(body?.get('id') || '');
+      const {apiErrors, formErrors} = await addressDeleteClient(context, {
+        addressId,
       });
 
+      const errors = [...new Set([...apiErrors, ...formErrors])];
       if (errors?.length) {
         console.error('addressDeleteClient:errors', errors);
-        data.deleteErrors = errors;
+        data.deleteErrors = apiErrors;
+        data.formErrors = formErrors;
         return {data, status: 400};
-      }
-      if (response?.deletedCustomerAddressId) {
-        data.deletedCustomerAddressId = response.deletedCustomerAddressId;
       }
     }
 

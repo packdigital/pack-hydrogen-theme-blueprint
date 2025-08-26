@@ -16,11 +16,8 @@ import type {
   LoaderFunctionArgs,
   MetaArgs,
 } from '@shopify/remix-oxygen';
-import type {
-  Customer,
-  CustomerAccessToken,
-  Shop,
-} from '@shopify/hydrogen/storefront-api-types';
+import type {Shop} from '@shopify/hydrogen/storefront-api-types';
+import type {Customer} from '@shopify/hydrogen/customer-account-api-types';
 
 import {
   ApplicationError,
@@ -28,8 +25,6 @@ import {
   NotFound,
   ServerError,
 } from '~/components/Document';
-import {validateCustomerAccessToken} from '~/lib/customer';
-import {customerGetAction} from '~/lib/customer/servers/customer.server';
 import {
   getCookieDomain,
   getPublicEnvs,
@@ -43,6 +38,7 @@ import {registerSections} from '~/sections';
 import {registerStorefrontSettings} from '~/settings';
 import {seoPayload} from '~/lib/seo.server';
 import {getModalProduct} from '~/lib/products.server';
+import {CUSTOMER_DETAILS_QUERY} from '~/data/graphql/customer-account/customer';
 import type {RootSiteSettings} from '~/lib/types';
 import styles from '~/styles/app.css?url';
 
@@ -97,7 +93,7 @@ export const links: LinksFunction = () => {
 };
 
 export async function loader({context, request}: LoaderFunctionArgs) {
-  const {storefront, session, oxygen, pack, env} = context;
+  const {storefront, oxygen, pack, env, customerAccount} = context;
   const isPreviewModeEnabled = pack.isPreviewModeEnabled() as boolean;
 
   /*
@@ -113,33 +109,32 @@ export async function loader({context, request}: LoaderFunctionArgs) {
       return redirect(redirectedLink.to, redirectedLink.options);
   }
 
-  const [shop, siteSettings, customerAccessToken, ENV]: [
+  const [shop, siteSettings, ENV, isLoggedIn]: [
     Shop,
     RootSiteSettings,
-    CustomerAccessToken | undefined,
     Record<string, string>,
+    boolean,
   ] = await Promise.all([
     getShop(context),
     getSiteSettings(context),
-    session.get('customerAccessToken'),
     getPublicEnvs({context, request}),
+    customerAccount.isLoggedIn(),
   ]);
 
   const groupingsPromise = getProductGroupings(context);
 
-  const {isLoggedIn, headers: headersWithAccessToken} =
-    await validateCustomerAccessToken(session, customerAccessToken);
   let customer: Customer | null = null;
+
   if (isLoggedIn) {
-    const {data: customerData} = await customerGetAction({context});
-    if (customerData.customer) {
-      customer = customerData.customer;
-    }
+    const {data, errors} = await customerAccount.query(CUSTOMER_DETAILS_QUERY);
+    if (data?.customer && !errors?.length) customer = data.customer;
   }
+
   const cookieDomain = getCookieDomain(request.url);
+  const newHeaders = new Headers();
   const {headers: headersWithPackCookie} = await setPackCookie({
     cookieDomain,
-    headers: headersWithAccessToken,
+    headers: newHeaders,
     request,
   });
   const headers = headersWithPackCookie;
@@ -178,7 +173,6 @@ export async function loader({context, request}: LoaderFunctionArgs) {
       consent,
       cookieDomain,
       customer,
-      customerAccessToken,
       customizerMeta: pack.session.get('customizerMeta'),
       ENV: {...ENV, SITE_TITLE} as Record<string, string>,
       groupingsPromise,

@@ -1,7 +1,7 @@
 import {useMemo} from 'react';
 import startCase from 'lodash/startCase';
 import {Money} from '@shopify/hydrogen-react';
-import type {Order} from '@shopify/hydrogen/storefront-api-types';
+import type {Order} from '@shopify/hydrogen/customer-account-api-types';
 
 import {Link} from '~/components/Link';
 

@@ -1,9 +1,9 @@
 import {flattenConnection} from '@shopify/hydrogen-react';
-import type {Order} from '@shopify/hydrogen/storefront-api-types';
 
 import {OrderItem} from './OrderItem';
+import type {OrderItemsProps} from './Order.types';
 
-export function OrderItems({order}: {order: Order}) {
+export function OrderItems({order}: OrderItemsProps) {
   const mobileHeaders = ['Product', 'Total'];
   const headers = ['Product', 'Title', 'Price', 'Qty', 'Total'];
   const lineItems = flattenConnection(order.lineItems);

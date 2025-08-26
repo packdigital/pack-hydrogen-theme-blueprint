@@ -1,4 +1,5 @@
 import {useEffect} from 'react';
+import type {Customer} from '@shopify/hydrogen/customer-account-api-types';
 
 import {AnalyticsEvent} from '../constants';
 
@@ -29,7 +30,7 @@ export function FueledEvents({
 }: {
   register: (key: string) => {ready: () => void};
   subscribe: (arg0: any, arg1: any) => void;
-  customer?: Record<string, any> | null;
+  customer?: Customer | null;
   debug?: boolean;
 }) {
   let ready: (() => void) | undefined = undefined;

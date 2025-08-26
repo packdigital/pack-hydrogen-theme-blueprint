@@ -1,32 +1,35 @@
 import {useMemo} from 'react';
 import {Money} from '@shopify/hydrogen-react';
-import type {OrderLineItem} from '@shopify/hydrogen/storefront-api-types';
 
 import {Image} from '~/components/Image';
 import {Link} from '~/components/Link';
 import {PRODUCT_IMAGE_ASPECT_RATIO} from '~/lib/constants';
+import {useProductById} from '~/hooks';
 
-export function OrderItem({item}: {item: OrderLineItem}) {
-  const {discountedTotalPrice, originalTotalPrice, quantity, variant} = item;
-  const {image} = {...variant};
+import type {OrderItemProps} from './Order.types';
+
+export function OrderItem({item}: OrderItemProps) {
+  const {totalDiscount, price, quantity, productId, image, variantTitle} = item;
+
+  const fullProduct = useProductById(productId);
 
   const {originalPrice, discountedPrice} = useMemo(() => {
-    const discountedNum = Number(discountedTotalPrice?.amount);
-    const originalNum = Number(originalTotalPrice?.amount);
-    const isDiscounted = discountedNum < originalNum;
+    const discountNum = Number(totalDiscount?.amount || 0);
+    const priceNum = Number(price?.amount || 0);
+    const originalPriceNum = priceNum + discountNum;
     return {
       originalPrice: {
-        amount: (originalNum / quantity).toFixed(2),
-        currencyCode: originalTotalPrice?.currencyCode,
+        amount: (originalPriceNum / quantity).toFixed(2),
+        currencyCode: price?.currencyCode,
       },
-      discountedPrice: isDiscounted
+      discountedPrice: discountNum
         ? {
-            amount: (discountedNum / quantity).toFixed(2),
-            currencyCode: discountedTotalPrice?.currencyCode,
+            amount: (priceNum / quantity).toFixed(2),
+            currencyCode: price?.currencyCode,
           }
         : null,
     };
-  }, [discountedTotalPrice, originalTotalPrice, quantity]);
+  }, [quantity, price, totalDiscount]);
 
   return (
     <div className="grid grid-cols-[10fr_auto] items-center gap-3 border-b border-b-border py-4 text-sm md:grid-cols-[6fr_2fr_1fr_1fr_1fr]">
@@ -35,7 +38,7 @@ export function OrderItem({item}: {item: OrderLineItem}) {
         <Image
           data={{
             ...image,
-            altText: variant?.product?.title,
+            altText: fullProduct?.title,
           }}
           aspectRatio={
             image?.width && image?.height
@@ -47,13 +50,13 @@ export function OrderItem({item}: {item: OrderLineItem}) {
 
         <div className="flex flex-1 flex-col items-start gap-2">
           {/* mobile/desktop product title */}
-          {variant?.product ? (
+          {fullProduct ? (
             <Link
-              aria-label={variant.product.title}
-              to={`/products/${variant?.product?.handle}`}
+              aria-label={fullProduct.title}
+              to={`/products/${fullProduct?.handle}`}
             >
               <p className="whitespace-normal break-words font-semibold">
-                {variant.product.title}
+                {fullProduct.title}
               </p>
             </Link>
           ) : (
@@ -63,8 +66,8 @@ export function OrderItem({item}: {item: OrderLineItem}) {
           )}
 
           {/* mobile variant title */}
-          {variant?.title !== 'Default Title' && (
-            <p className="text-2xs md:hidden">{variant?.title}</p>
+          {variantTitle !== 'Default Title' && (
+            <p className="text-2xs md:hidden">{variantTitle}</p>
           )}
 
           {/* mobile price per qty and quantity */}
@@ -84,7 +87,7 @@ export function OrderItem({item}: {item: OrderLineItem}) {
 
       {/* desktop variant title */}
       <p className="hidden md:block">
-        {variant?.title !== 'Default Title' ? variant?.title : ''}
+        {variantTitle !== 'Default Title' ? variantTitle : ''}
       </p>
 
       {/* desktop price per qty */}

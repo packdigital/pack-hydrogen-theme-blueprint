@@ -1,15 +1,8 @@
 import {useEffect, useState} from 'react';
-import type {MailingAddress} from '@shopify/hydrogen/storefront-api-types';
 
-import {useCustomerDeleteAddress} from '~/lib/customer';
+import {useCustomerDeleteAddress} from '~/hooks';
 
-interface AddressesItemProps {
-  address: MailingAddress;
-  defaultAddress: MailingAddress | null;
-  initialAddress: MailingAddress | null;
-  setInitialAddress: (address: MailingAddress | null) => void;
-  setIsCreateAddress: (isCreateAddress: boolean) => void;
-}
+import type {AddressesItemProps} from './Addresses.types';
 
 export function AddressesItem({
   address,
@@ -39,33 +32,22 @@ export function AddressesItem({
     }
   }, [errors]);
 
-  const {
-    address1,
-    address2,
-    city,
-    company,
-    country,
-    id,
-    name,
-    phone,
-    province,
-    zip,
-  } = address;
+  const {firstName, lastName, id, phoneNumber, formatted} = address;
   const isDefaultAddress =
     defaultAddress?.id?.split('?')[0] === id.split('?')[0];
 
   return (
     <div className="relative flex h-full flex-col justify-between gap-x-4 gap-y-6 rounded border border-border p-6 xs:flex-row md:flex-col lg:flex-row">
       <div>
-        <h3 className="text-h5 mb-2">{name}</h3>
+        <h3 className="text-h5 mb-2">
+          {firstName} {lastName}
+        </h3>
 
         <div className="flex flex-col gap-1.5 text-sm">
-          {company && <p>{company}</p>}
-          <p>{address1}</p>
-          {address2 && <p>{address2}</p>}
-          <p>{`${city}, ${province} ${zip}`}</p>
-          <p>{country}</p>
-          {phone && <p>{phone}</p>}
+          {formatted.map((line) => (
+            <p key={line}>{line}</p>
+          ))}
+          {phoneNumber && <p>{phoneNumber}</p>}
         </div>
       </div>
 

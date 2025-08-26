@@ -1,7 +1,11 @@
 /// <reference types="@shopify/remix-oxygen" />
 /// <reference types="@shopify/oxygen-workers-types" />
 
-import type {HydrogenCart, Storefront} from '@shopify/hydrogen';
+import type {
+  CustomerAccount,
+  HydrogenCart,
+  Storefront,
+} from '@shopify/hydrogen';
 import type {Pack} from '@pack/hydrogen';
 
 import type {OxygenEnv} from '~/lib/utils';
@@ -25,9 +29,10 @@ declare global {
     PRIMARY_DOMAIN: string;
     PRIVATE_ADMIN_API_TOKEN: string;
     PRIVATE_SHOPIFY_CHECKOUT_DOMAIN?: string;
-    PRIVATE_SHOPIFY_STORE_MULTIPASS_SECRET?: string;
     PRIVATE_STOREFRONT_API_TOKEN: string;
     PUBLIC_CHECKOUT_DOMAIN: string;
+    PUBLIC_CUSTOMER_ACCOUNT_API_CLIENT_ID: string;
+    PUBLIC_CUSTOMER_ACCOUNT_API_URL: string;
     PUBLIC_PACK_CONTENT_ENVIRONMENT?: string;
     PUBLIC_STORE_DOMAIN: string;
     PUBLIC_STOREFRONT_API_TOKEN: string;
@@ -73,5 +78,6 @@ declare module '@shopify/remix-oxygen' {
     pack: Pack;
     oxygen: OxygenEnv;
     cart: HydrogenCart;
+    customerAccount: CustomerAccount;
   }
 }

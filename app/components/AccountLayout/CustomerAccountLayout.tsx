@@ -1,5 +1,5 @@
-import {useEffect, useMemo} from 'react';
-import {useLocation, useNavigate} from '@remix-run/react';
+import {useMemo} from 'react';
+import {useLocation} from '@remix-run/react';
 import {
   Menu,
   MenuButton,
@@ -10,16 +10,10 @@ import {
 import clsx from 'clsx';
 
 import {Link} from '~/components/Link';
-import {Spinner} from '~/components/Animations';
 import {Svg} from '~/components/Svg';
-import {useCustomer, useLocale, usePreviewMode, useSettings} from '~/hooks';
-import {useCustomerLogOut} from '~/lib/customer';
-import {LOGGED_OUT_REDIRECT_TO} from '~/lib/constants';
+import {useCustomer, useCustomerLogOut, useSettings} from '~/hooks';
 
 export function CustomerAccountLayout({children}: {children: React.ReactNode}) {
-  const {isPreviewModeEnabled} = usePreviewMode();
-  const navigate = useNavigate();
-  const {pathPrefix} = useLocale();
   const {pathname} = useLocation();
   const customer = useCustomer();
   const {customerLogOut} = useCustomerLogOut();
@@ -32,24 +26,6 @@ export function CustomerAccountLayout({children}: {children: React.ReactNode}) {
       return pathname.startsWith(link?.url);
     });
   }, [pathname, menuItems]);
-
-  const customerPending =
-    !!isPreviewModeEnabled && typeof customer === 'undefined';
-
-  useEffect(() => {
-    if (customerPending) return;
-    if (isPreviewModeEnabled && !customer) {
-      navigate(`${pathPrefix}${LOGGED_OUT_REDIRECT_TO}`);
-    }
-  }, [customerPending]);
-
-  if (customerPending) {
-    return (
-      <div className="flex h-screen items-center justify-center">
-        <Spinner />
-      </div>
-    );
-  }
 
   return (
     <section
@@ -64,7 +40,9 @@ export function CustomerAccountLayout({children}: {children: React.ReactNode}) {
                 Hi{customer?.firstName ? `, ${customer.firstName}` : ''}
               </h2>
 
-              <p className="break-words text-xs">{customer?.email}</p>
+              <p className="break-words text-xs">
+                {customer?.emailAddress?.emailAddress}
+              </p>
             </div>
 
             <div>
