@@ -68,7 +68,6 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
         handle,
         pageKey: 'collectionPage',
         query: COLLECTION_PAGE_QUERY,
-        request,
       }),
       storefront.query(COLLECTION_QUERY, {
         variables: {

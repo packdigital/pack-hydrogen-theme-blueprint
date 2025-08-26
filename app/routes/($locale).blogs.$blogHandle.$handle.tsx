@@ -30,10 +30,9 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
       handle,
       pageKey: 'article',
       query: ARTICLE_PAGE_QUERY,
-      request,
     }),
     getShop(context),
-    getSiteSettings(context, request),
+    getSiteSettings(context),
   ]);
 
   if (!article) {

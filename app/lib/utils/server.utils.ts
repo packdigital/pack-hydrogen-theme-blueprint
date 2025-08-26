@@ -43,10 +43,7 @@ export const getSiteSettings = async (
   return response as RootSiteSettings;
 };
 
-export const getProductGroupings = async (
-  context: AppLoadContext,
-  request: Request,
-) => {
+export const getProductGroupings = async (context: AppLoadContext) => {
   const getAllProductGroupings = async ({
     groupings,
     cursor,

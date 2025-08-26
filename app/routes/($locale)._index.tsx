@@ -31,10 +31,9 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
       handle: '/',
       pageKey: 'page',
       query: PAGE_QUERY,
-      request,
     }),
     getShop(context),
-    getSiteSettings(context, request),
+    getSiteSettings(context),
   ]);
 
   if (!page) throw new Response(null, {status: 404});

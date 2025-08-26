@@ -107,7 +107,7 @@ export async function loader({request, params, context}: LoaderFunctionArgs) {
 
     // Add static pages to the pages sitemap
     if (type === 'pages') {
-      const siteSettings = await getSiteSettings(context, request);
+      const siteSettings = await getSiteSettings(context);
       const accountNoIndex =
         !!siteSettings?.data?.siteSettings?.settings?.account?.noIndex;
       pages = [...pages, ...STATIC_PAGES(accountNoIndex)];

@@ -74,7 +74,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
       cursor: null,
     }),
     getShop(context),
-    getSiteSettings(context, request),
+    getSiteSettings(context),
   ]);
 
   if (!blogWithAllArticles) {
@@ -90,7 +90,6 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
       handle,
       pageKey: 'blog',
       query: BLOG_PAGE_QUERY,
-      request,
     });
     blog = {
       ...blogWithAllArticles,

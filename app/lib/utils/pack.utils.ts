@@ -18,13 +18,11 @@ export const getPage = async ({
   handle,
   pageKey = 'page',
   query,
-  request,
 }: {
   context: AppLoadContext;
   handle: string;
   pageKey?: string;
   query: string;
-  request: Request;
 }) => {
   const {pack, storefront} = context;
   let capturedPackTestInfo: any = null;
