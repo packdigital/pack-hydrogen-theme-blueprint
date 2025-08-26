@@ -1,5 +1,3 @@
-import type {Customer} from '@shopify/hydrogen-react/storefront-api-types';
-
 import type {Settings} from '~/lib/types';
 
 export type Action = {type: string; payload?: any};
