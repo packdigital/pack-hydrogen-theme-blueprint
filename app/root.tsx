@@ -108,7 +108,10 @@ export async function loader({context, request}: LoaderFunctionArgs) {
     storefront.i18n.country !== oxygen.buyer.country &&
     !isPreviewModeEnabled
   ) {
-    const redirectedLink = await redirectLinkToBuyerLocale({context, request});
+    const redirectedLink = await redirectLinkToBuyerLocale({
+      context,
+      request,
+    });
     if (redirectedLink)
       return redirect(redirectedLink.to, redirectedLink.options);
   }
@@ -179,10 +182,9 @@ export async function loader({context, request}: LoaderFunctionArgs) {
       cookieDomain,
       customer,
       customerAccessToken,
-      customizerMeta: pack.session.get('customizerMeta'),
+      // customizerMeta: pack.session.get('customizerMeta'),
       ENV: {...ENV, SITE_TITLE} as Record<string, string>,
       groupingsPromise,
-      isPreviewModeEnabled,
       modalProduct,
       modalSelectedVariant,
       oxygen,
@@ -192,6 +194,7 @@ export async function loader({context, request}: LoaderFunctionArgs) {
       siteSettings,
       siteTitle: SITE_TITLE,
       url: request.url,
+      ...pack.getPackContextData(),
     },
     {headers},
   );

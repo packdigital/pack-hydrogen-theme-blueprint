@@ -6,6 +6,7 @@ import {
 } from '@shopify/hydrogen';
 import {RenderSections} from '@pack/react';
 import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
+import {PackTestRoute} from '@pack/hydrogen';
 
 import {BLOG_PAGE_QUERY} from '~/data/graphql/pack/blog-page';
 import {getPage, getShop, getSiteSettings} from '~/lib/utils';
@@ -17,6 +18,7 @@ export const headers = routeHeaders;
 
 export async function loader({params, context, request}: LoaderFunctionArgs) {
   const {handle} = params;
+  let packTestInfoData = null;
   const {storefront} = context;
 
   if (!handle) throw new Response(null, {status: 404});
@@ -30,7 +32,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     cursor: string | null;
   }): Promise<BlogPage | undefined> => {
     const {pack, storefront} = context;
-    const {data} = await pack.query(BLOG_PAGE_QUERY, {
+    const {data, packTestInfo} = await pack.query(BLOG_PAGE_QUERY, {
       variables: {
         handle,
         articlesCursor: cursor,
@@ -41,6 +43,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     });
     if (!data?.blog) return undefined;
 
+    packTestInfoData = packTestInfo;
     const queriedBlog = data.blog;
     const queriedBlogArticles = queriedBlog.articles;
 
@@ -80,12 +83,12 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
 
   let blog = blogWithAllArticles;
   if (blogWithAllArticles.sections.pageInfo.hasNextPage) {
-    const {blog: blogWithAllSections} = await (getPage({
+    const {blog: blogWithAllSections} = await getPage({
       context,
       handle,
       pageKey: 'blog',
       query: BLOG_PAGE_QUERY,
-    }) as Promise<{blog: BlogPage}>);
+    });
     blog = {
       ...blogWithAllArticles,
       sections: blogWithAllSections.sections,
@@ -116,6 +119,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     blog: blogWithSortedArticles,
     seo,
     url: request.url,
+    packTestInfo: packTestInfoData,
   };
 }
 
@@ -127,9 +131,12 @@ export default function BlogRoute() {
   const {blog} = useLoaderData<{blog: BlogPage}>();
 
   return (
-    <div data-comp={BlogRoute.displayName}>
-      <RenderSections content={blog} />
-    </div>
+    <>
+      <PackTestRoute />
+      <div data-comp={BlogRoute.displayName}>
+        <RenderSections content={blog} />
+      </div>
+    </>
   );
 }
 

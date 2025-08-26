@@ -9,6 +9,7 @@ import {
 import {RenderSections} from '@pack/react';
 import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 import type {ShopifyAnalyticsProduct} from '@shopify/hydrogen';
+import {PackTestRoute} from '@pack/hydrogen';
 
 import {
   getPage,
@@ -53,7 +54,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
   });
 
   const [
-    {productPage},
+    {productPage, packTestInfo},
     {product: storefrontProduct},
     productGroupings,
     shop,
@@ -160,6 +161,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     seo,
     storeDomain,
     url: request.url,
+    packTestInfo,
   };
 }
 
@@ -181,38 +183,41 @@ export default function ProductRoute() {
   const product = useProductWithGrouping(initialProduct);
 
   return (
-    <ProductProvider
-      data={product}
-      initialVariantId={initialSelectedVariant?.id || null}
-    >
-      <div data-comp={ProductRoute.displayName}>
-        <Product
-          product={product}
-          initialSelectedVariant={initialSelectedVariant}
-        />
+    <>
+      <PackTestRoute />
+      <ProductProvider
+        data={product}
+        initialVariantId={initialSelectedVariant?.id || null}
+      >
+        <div data-comp={ProductRoute.displayName}>
+          <Product
+            product={product}
+            initialSelectedVariant={initialSelectedVariant}
+          />
 
-        {productPage && <RenderSections content={productPage} />}
-      </div>
+          {productPage && <RenderSections content={productPage} />}
+        </div>
 
-      {isCartReady && (
-        <Analytics.ProductView
-          data={{
-            products: [
-              {
-                id: product.id,
-                title: product.title,
-                price: initialSelectedVariant?.price.amount || '0',
-                vendor: product.vendor,
-                variantId: initialSelectedVariant?.id || '',
-                variantTitle: initialSelectedVariant?.title || '',
-                quantity: 1,
-              },
-            ],
-          }}
-          customData={{product, selectedVariant: initialSelectedVariant}}
-        />
-      )}
-    </ProductProvider>
+        {isCartReady && (
+          <Analytics.ProductView
+            data={{
+              products: [
+                {
+                  id: product.id,
+                  title: product.title,
+                  price: initialSelectedVariant?.price.amount || '0',
+                  vendor: product.vendor,
+                  variantId: initialSelectedVariant?.id || '',
+                  variantTitle: initialSelectedVariant?.title || '',
+                  quantity: 1,
+                },
+              ],
+            }}
+            customData={{product, selectedVariant: initialSelectedVariant}}
+          />
+        )}
+      </ProductProvider>
+    </>
   );
 }
 

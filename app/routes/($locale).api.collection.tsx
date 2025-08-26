@@ -5,28 +5,27 @@ import type {ProductCollectionSortKeys} from '@shopify/hydrogen/storefront-api-t
 import {COLLECTION_QUERY} from '~/data/graphql/storefront/collection';
 import {getSiteSettings} from '~/lib/utils';
 import {routeHeaders} from '~/data/cache';
+import {getFilters} from '~/lib/utils';
 
 export const headers = routeHeaders;
 
-export async function loader({context, request}: LoaderFunctionArgs) {
+export async function loader({request, context}: LoaderFunctionArgs) {
   const {storefront} = context;
   const siteSettings = await getSiteSettings(context);
-  const url = new URL(request.url);
-  const searchParams = new URLSearchParams(url.search);
-
-  const handle = String(searchParams.get('handle') || '');
-  const sortKey = (String(searchParams.get('sortKey') || '').toUpperCase() ||
-    'COLLECTION_DEFAULT') as ProductCollectionSortKeys;
-  const reverse = Boolean(searchParams.get('reverse') ?? false);
-  const first = Number(searchParams.get('first')); // customize number of products to fetch with this request
-
   const resultsPerPage = Math.floor(
     Number(
-      first ||
-        siteSettings?.data?.siteSettings?.settings?.collection?.pagination
-          ?.resultsPerPage,
+      siteSettings?.data?.siteSettings?.settings?.collection?.pagination
+        ?.resultsPerPage,
     ) || 24,
   );
+
+  const url = new URL(request.url);
+  const searchParams = new URLSearchParams(url.search);
+  const handle = String(searchParams.get('handle') || '');
+  const sortKey = String(
+    searchParams.get('sortKey')?.toUpperCase() ?? 'COLLECTION_DEFAULT',
+  ) as ProductCollectionSortKeys;
+  const reverse = Boolean(searchParams.get('reverse') ?? false);
 
   const paginationVariables = getPaginationVariables(request, {
     pageBy: resultsPerPage,
