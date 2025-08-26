@@ -130,7 +130,6 @@ export default {
         testSession: packTestSession,
         contentEnvironment: env.PUBLIC_PACK_CONTENT_ENVIRONMENT,
         defaultThemeData,
-        apiUrl: env.PACK_API_URL,
       });
 
       /**
