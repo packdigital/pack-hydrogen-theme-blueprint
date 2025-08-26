@@ -123,12 +123,12 @@ export async function loader({context, request}: LoaderFunctionArgs) {
     Record<string, string>,
   ] = await Promise.all([
     getShop(context),
-    getSiteSettings(context, request),
+    getSiteSettings(context),
     session.get('customerAccessToken'),
     getPublicEnvs({context, request}),
   ]);
 
-  const groupingsPromise = getProductGroupings(context, request);
+  const groupingsPromise = getProductGroupings(context);
 
   const {isLoggedIn, headers: headersWithAccessToken} =
     await validateCustomerAccessToken(session, customerAccessToken);

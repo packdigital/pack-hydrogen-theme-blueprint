@@ -11,7 +11,7 @@ export const headers = routeHeaders;
 
 export async function loader({request, context}: LoaderFunctionArgs) {
   const {storefront} = context;
-  const siteSettings = await getSiteSettings(context, request);
+  const siteSettings = await getSiteSettings(context);
   const resultsPerPage = Math.floor(
     Number(
       siteSettings?.data?.siteSettings?.settings?.collection?.pagination
