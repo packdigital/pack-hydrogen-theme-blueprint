@@ -1,4 +1,5 @@
 import {v4 as uuidv4} from 'uuid';
+import type {Customer} from '@shopify/hydrogen/customer-account-api-types';
 
 import {AnalyticsEvent} from '../constants';
 
@@ -109,8 +110,7 @@ const customerEvent = ({
 
     const {customer: providerCustomer, shop} = data;
     const {customer: customCustomer, cart} = data.customData;
-    const customer =
-      typeof customCustomer !== 'undefined' ? customCustomer : providerCustomer;
+    const customer = (customCustomer || providerCustomer) as Customer;
     if (typeof customer === 'undefined')
       throw new Error('`customer` parameter is missing in `customData`.');
     if (typeof cart === 'undefined')

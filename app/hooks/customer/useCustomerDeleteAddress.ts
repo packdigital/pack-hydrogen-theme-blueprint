@@ -1,28 +1,22 @@
 import {useCallback, useEffect} from 'react';
 import {useFetcher} from '@remix-run/react';
 
-import {
-  getCustomerAccessTokenFromLocalStorage,
-  usePreviewModeCustomerFetch,
-} from '~/lib/customer';
-import {usePreviewMode} from '~/hooks';
-
 import {useFetcherStatus} from './useFetcherStatus';
 
 interface FetcherData {
   deletedCustomerAddressId: string;
   deleteErrors: string[];
+  formErrors: string[];
 }
 
 export function useCustomerDeleteAddress() {
-  const {isPreviewModeEnabled} = usePreviewMode();
   const fetcher = useFetcher({key: 'delete-address'});
-  const {deletedCustomerAddressId, deleteErrors} = {
+  const {deletedCustomerAddressId, deleteErrors, formErrors} = {
     ...(fetcher.data as FetcherData),
   };
 
   const {errors, setErrors, status} = useFetcherStatus({
-    fetcherErrors: [],
+    fetcherErrors: formErrors,
     state: fetcher.state,
   });
 
@@ -33,21 +27,10 @@ export function useCustomerDeleteAddress() {
       const formData = new FormData();
       formData.append('id', id);
       formData.append('action', 'delete-address');
-      /* if in customizer, pass customer access token from storage */
-      if (isPreviewModeEnabled) {
-        const customerAccessToken = getCustomerAccessTokenFromLocalStorage();
-        formData.append(
-          'previewModeCustomerAccessToken',
-          JSON.stringify(customerAccessToken),
-        );
-      }
       fetcher.submit(formData, {method: 'POST'});
     },
     [status.started],
   );
-
-  /* if in customizer, refetch customer after address deletion */
-  usePreviewModeCustomerFetch(deletedCustomerAddressId);
 
   useEffect(() => {
     if (process.env.NODE_ENV !== 'development') return;

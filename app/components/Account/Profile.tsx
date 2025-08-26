@@ -3,8 +3,7 @@ import {useLocation} from '@remix-run/react';
 import clsx from 'clsx';
 
 import {LoadingDots} from '~/components/Animations';
-import {useCustomer, useSettings} from '~/hooks';
-import {useCustomerUpdateProfile} from '~/lib/customer';
+import {useCustomer, useCustomerUpdateProfile, useSettings} from '~/hooks';
 
 interface ProfileFormElements extends HTMLFormControlsCollection {
   firstName: HTMLInputElement;
@@ -84,7 +83,7 @@ export function Profile() {
             placeholder="Email"
             required
             type="email"
-            value={customer?.email || ''}
+            value={customer?.emailAddress?.emailAddress || ''}
           />
         </label>
 

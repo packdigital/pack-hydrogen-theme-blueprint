@@ -1,4 +1,5 @@
 export * from './cart';
+export * from './customer';
 export * from './document';
 export * from './locale';
 export * from './product';
@@ -15,7 +16,6 @@ export * from './useLoadScript';
 export * from './useMarketingListSubscribe';
 export * from './useMenu';
 export * from './usePagination';
-export * from './usePreviewMode';
 export * from './usePromobar';
 export * from './useRootLoaderData';
 export * from './useSettings';

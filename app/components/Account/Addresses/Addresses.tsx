@@ -1,7 +1,7 @@
 import {useMemo, useState} from 'react';
 import {useLocation} from '@remix-run/react';
 import {flattenConnection} from '@shopify/hydrogen';
-import type {MailingAddress} from '@shopify/hydrogen/storefront-api-types';
+import type {CustomerAddress} from '@shopify/hydrogen/customer-account-api-types';
 
 import {Pagination} from '~/components/Pagination';
 import {useCustomer, usePagination, useSettings} from '~/hooks';
@@ -16,9 +16,9 @@ export function Addresses() {
   const {pathname} = useLocation();
   const {account} = useSettings();
   const customer = useCustomer();
-  const defaultAddress = customer?.defaultAddress as MailingAddress | null;
+  const defaultAddress = customer?.defaultAddress as CustomerAddress | null;
 
-  const addresses: MailingAddress[] = useMemo(() => {
+  const addresses: CustomerAddress[] = useMemo(() => {
     if (customer?.addresses) {
       return flattenConnection(customer.addresses);
     }
@@ -27,7 +27,7 @@ export function Addresses() {
 
   const defaultAddressId = defaultAddress?.id?.split('?')[0];
   const addressesWithDefaultFirst = addresses?.reduce(
-    (acc: MailingAddress[], address) => {
+    (acc: CustomerAddress[], address) => {
       const isDefault = address.id?.split('?')[0] === defaultAddressId;
       return isDefault ? [address, ...acc] : [...acc, address];
     },
@@ -39,7 +39,7 @@ export function Addresses() {
     totalResults: addressesWithDefaultFirst?.length,
   });
 
-  const [initialAddress, setInitialAddress] = useState<MailingAddress | null>(
+  const [initialAddress, setInitialAddress] = useState<CustomerAddress | null>(
     null,
   );
   const [isCreateAddress, setIsCreateAddress] = useState(false);

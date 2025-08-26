@@ -3,6 +3,7 @@ import type {
   Product,
   ProductVariant,
 } from '@shopify/hydrogen/storefront-api-types';
+import type {Customer} from '@shopify/hydrogen/customer-account-api-types';
 
 import {ANALYTICS_NAME} from './events';
 
@@ -35,13 +36,14 @@ let userPropertiesCache = null as Record<string, any> | null;
 export const generateUserProperties = ({
   customer,
 }: {
-  customer: Record<string, any> | null;
+  customer: Customer | null;
 }) => {
   let userProperties: Record<string, any> | null = null;
   if (customer) {
     if (userPropertiesCache?.customer_id === customer.id?.split('/').pop()) {
       return userPropertiesCache;
     }
+    const orders = flattenConnection(customer.orders);
     userProperties = {
       visitor_type: 'logged_in',
       user_consent: '',
@@ -63,15 +65,15 @@ export const generateUserProperties = ({
       ),
       ...returnKeyValueIfNotUndefined(
         'customer_country_code',
-        customer.defaultAddress?.countryCodeV2,
+        customer.defaultAddress?.territoryCode,
       ),
       ...returnKeyValueIfNotUndefined(
         'customer_phone',
-        customer.defaultAddress?.phone,
+        customer.defaultAddress?.phoneNumber,
       ),
       ...returnKeyValueIfNotUndefined(
         'customer_province_code',
-        customer.defaultAddress?.provinceCode,
+        customer.defaultAddress?.zoneCode,
       ),
       ...returnKeyValueIfNotUndefined(
         'customer_province',
@@ -82,12 +84,12 @@ export const generateUserProperties = ({
         customer.defaultAddress?.zip,
       ),
       customer_id: customer.id?.split('/').pop() || '',
-      customer_email: customer.email || '',
+      customer_email: customer.emailAddress?.emailAddress || '',
       customer_first_name: customer.firstName || '',
       customer_last_name: customer.lastName || '',
       customer_tags: customer.tags?.join(', ') || '',
-      customer_order_count: `${customer?.numberOfOrders || 0}`,
-      customer_total_spent: flattenConnection(customer.orders)
+      customer_order_count: `${orders?.length || 0}`,
+      customer_total_spent: orders
         ?.reduce((acc: number, order) => {
           return acc + Number(order.totalPrice?.amount || '0');
         }, 0)

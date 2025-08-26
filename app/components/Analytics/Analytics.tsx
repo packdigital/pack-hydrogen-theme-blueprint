@@ -38,8 +38,6 @@ export const Analytics = memo(() => {
   const enabledMetaPixel = !!ENV.PUBLIC_META_PIXEL_ID;
   const enabledTikTokPixel = !!ENV.PUBLIC_TIKTOK_PIXEL_ID;
 
-  const customerPending = typeof customer === 'undefined';
-
   return (
     <>
       {enabledFueled && (
@@ -110,7 +108,7 @@ export const Analytics = memo(() => {
         />
       )}
 
-      {isCartReady && !customerPending && (
+      {isCartReady && (
         <HydrogenAnalytics.CustomView
           type={AnalyticsEvent.CUSTOMER}
           customData={{customer, cart}}

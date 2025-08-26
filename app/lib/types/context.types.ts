@@ -67,14 +67,10 @@ export interface PromobarContext {
 
 export interface SettingsState {
   settings: Settings;
-  previewModeCustomer: Customer | null | undefined;
-  isPreviewModeEnabled: boolean;
   isTransparentNavPage: boolean;
 }
 
-export interface SettingsActions {
-  setPreviewModeCustomer: (customer: Customer | null) => void;
-}
+export interface SettingsActions {}
 
 export interface SettingsContext {
   state: SettingsState;

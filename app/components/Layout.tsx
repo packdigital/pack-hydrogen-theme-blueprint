@@ -8,7 +8,6 @@ import {Header} from '~/components/Header';
 import {Modal} from '~/components/Modal';
 import {ProductModal} from '~/components/Product/ProductModal';
 import {Search} from '~/components/Search';
-import {usePreviewModeCustomerInit} from '~/lib/customer';
 import {
   useCartAddDiscountUrl,
   usePromobar,
@@ -19,7 +18,6 @@ import {
 export function Layout({children}: {children: ReactNode}) {
   const {mainPaddingTopClass} = usePromobar();
   useCartAddDiscountUrl();
-  usePreviewModeCustomerInit();
   useScrollToHashOnNavigation();
   useSetViewportHeightCssVar();
 

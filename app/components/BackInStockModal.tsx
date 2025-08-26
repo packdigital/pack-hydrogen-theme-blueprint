@@ -22,7 +22,9 @@ export function BackInStockModal({selectedVariant}: BackInStockModalProps) {
     success,
   } = useBackInStock();
 
-  const [email, setEmail] = useState(customer?.email || '');
+  const [email, setEmail] = useState(
+    customer?.emailAddress?.emailAddress || '',
+  );
   const [message, setMessage] = useState('');
   const {heading, subtext, submitText, successText} = {
     ...productSettings?.backInStock,

@@ -2,6 +2,7 @@ export {useAddToCart} from './useAddToCart';
 export {useColorSwatches} from './useColorSwatches';
 export {useParsedProductMetafields} from './useParsedProductMetafields';
 export {useProductByHandle} from './useProductByHandle';
+export {useProductById} from './useProductById';
 export {useProductGroupingByHandle} from './useProductGroupingByHandle';
 export {useProductMetafields} from './useProductMetafields';
 export {useProductModal} from './useProductModal';

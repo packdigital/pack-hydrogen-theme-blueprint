@@ -1,15 +1,17 @@
 import {useMemo} from 'react';
+import {useLoaderData} from '@remix-run/react';
+import type {Order as OrderType} from '@shopify/hydrogen/customer-account-api-types';
 
 import {Link} from '~/components/Link';
 import {Svg} from '~/components/Svg';
-import {useCustomerOrder} from '~/lib/customer';
+import type {loader} from '~/routes/($locale).account.orders.$id';
 
 import {OrderAddressAndStatus} from './OrderAddressAndStatus';
 import {OrderItems} from './OrderItems';
 import {OrderTotals} from './OrderTotals';
 
 export function Order() {
-  const {order} = useCustomerOrder();
+  const {order} = useLoaderData<typeof loader>();
 
   const orderDate = useMemo(() => {
     if (!order?.processedAt) return null;
@@ -56,11 +58,11 @@ export function Order() {
 
       {order && (
         <div>
-          <OrderItems order={order} />
+          <OrderItems order={order as OrderType} />
 
-          <OrderTotals order={order} />
+          <OrderTotals order={order as OrderType} />
 
-          <OrderAddressAndStatus order={order} />
+          <OrderAddressAndStatus order={order as OrderType} />
         </div>
       )}
     </div>

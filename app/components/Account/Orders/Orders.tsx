@@ -1,16 +1,17 @@
 import {useLocation} from '@remix-run/react';
 import clsx from 'clsx';
+import {flattenConnection} from '@shopify/hydrogen';
 
 import {Link} from '~/components/Link';
 import {Pagination} from '~/components/Pagination';
-import {useCustomerOrders} from '~/lib/customer';
-import {usePagination, useSettings} from '~/hooks';
+import {useCustomer, usePagination, useSettings} from '~/hooks';
 
 import {OrdersItem} from './OrdersItem';
 
 export function Orders() {
   const {account} = useSettings();
-  const {orders} = useCustomerOrders();
+  const customer = useCustomer();
+  const orders = customer?.orders ? flattenConnection(customer.orders) : [];
 
   const {menuItems} = {...account?.menu};
   const {
@@ -77,7 +78,7 @@ export function Orders() {
             })}
           </ul>
 
-          {orders?.length > ordersPerPage && (
+          {orders.length > ordersPerPage && (
             <div className="mt-8 self-center md:mt-10">
               <Pagination
                 currentPage={currentPage}
