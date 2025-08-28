@@ -9,6 +9,7 @@ import {
 } from '@headlessui/react';
 import clsx from 'clsx';
 
+import {B2BLocation} from '~/components/B2B';
 import {Link} from '~/components/Link';
 import {Svg} from '~/components/Svg';
 import {useCustomer, useCustomerLogOut, useSettings} from '~/hooks';
@@ -55,6 +56,8 @@ export function CustomerAccountLayout({children}: {children: React.ReactNode}) {
                 Sign Out
               </button>
             </div>
+
+            <B2BLocation />
           </div>
 
           {/* desktop nav */}

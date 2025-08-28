@@ -5,7 +5,7 @@ import type {Action, Dispatch, MenuState} from '~/lib/types';
 
 import {Context} from './useMenuContext';
 
-const defaultModal = {children: null, props: {}};
+const defaultModal = {children: null, props: {}, disableClose: false};
 
 const globalState = {
   cartOpen: false,
@@ -129,8 +129,12 @@ const actions = (dispatch: Dispatch) => ({
   closeMobileMenu: () => {
     dispatch({type: 'CLOSE_MOBILE_MENU'});
   },
-  openModal: (children: ReactNode, props?: Record<string, any>) => {
-    dispatch({type: 'OPEN_MODAL', payload: {children, props}});
+  openModal: (
+    children: ReactNode,
+    props?: Record<string, any>,
+    disableClose?: boolean,
+  ) => {
+    dispatch({type: 'OPEN_MODAL', payload: {children, props, disableClose}});
   },
   closeModal: () => {
     dispatch({type: 'CLOSE_MODAL'});

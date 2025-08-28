@@ -17,7 +17,11 @@ export const Modal = memo(() => {
 
   return modal.children ? (
     <Transition appear show={!!modal.children} as={Fragment}>
-      <Dialog as="div" className="relative z-50" onClose={closeModal}>
+      <Dialog
+        as="div"
+        className="relative z-50"
+        onClose={modal.disableClose ? () => null : closeModal}
+      >
         {/* Overlay */}
         <TransitionChild
           as={Fragment}
@@ -48,19 +52,21 @@ export const Modal = memo(() => {
             )}
             {...props}
           >
-            <button
-              aria-label="Close modal"
-              className="absolute right-0 top-0  z-10 flex size-7 items-center justify-center bg-neutralLightest"
-              onClick={closeModal}
-              type="button"
-            >
-              <Svg
-                className="w-5 text-text"
-                src="/svgs/close.svg#close"
-                title="Close"
-                viewBox="0 0 24 24"
-              />
-            </button>
+            {!modal.disableClose && (
+              <button
+                aria-label="Close modal"
+                className="absolute right-0 top-0  z-10 flex size-7 items-center justify-center bg-neutralLightest"
+                onClick={closeModal}
+                type="button"
+              >
+                <Svg
+                  className="w-5 text-text"
+                  src="/svgs/close.svg#close"
+                  title="Close"
+                  viewBox="0 0 24 24"
+                />
+              </button>
+            )}
 
             <div className="scrollbar-hide px-contained py-contained max-h-[calc(var(--viewport-height)-2rem)] overflow-y-auto">
               {modal.children}

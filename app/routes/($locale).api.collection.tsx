@@ -5,6 +5,7 @@ import type {ProductCollectionSortKeys} from '@shopify/hydrogen/storefront-api-t
 import {COLLECTION_QUERY} from '~/data/graphql/storefront/collection';
 import {getSiteSettings} from '~/lib/utils';
 import {routeHeaders} from '~/data/cache';
+import {getBuyerVariables} from '~/lib/b2b.server';
 
 export const headers = routeHeaders;
 
@@ -32,6 +33,8 @@ export async function loader({context, request}: LoaderFunctionArgs) {
     pageBy: resultsPerPage,
   });
 
+  const buyerVariables = await getBuyerVariables(context);
+
   const {collection} = await storefront.query(COLLECTION_QUERY, {
     variables: {
       handle,
@@ -40,6 +43,7 @@ export async function loader({context, request}: LoaderFunctionArgs) {
       country: storefront.i18n.country,
       language: storefront.i18n.language,
       ...paginationVariables,
+      ...buyerVariables,
     },
     cache: storefront.CacheShort(),
   });

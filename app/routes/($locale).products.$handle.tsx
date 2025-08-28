@@ -24,6 +24,7 @@ import {PRODUCT_QUERY} from '~/data/graphql/storefront/product';
 import {Product} from '~/components/Product';
 import {routeHeaders} from '~/data/cache';
 import {seoPayload} from '~/lib/seo.server';
+import {getBuyerVariables} from '~/lib/b2b.server';
 import {useGlobal, useProductWithGrouping} from '~/hooks';
 import type {
   Page,
@@ -51,6 +52,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     context,
     request,
   });
+  const buyerVariables = await getBuyerVariables(context);
 
   const [
     {productPage},
@@ -71,6 +73,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
         selectedOptions,
         country: storefront.i18n.country,
         language: storefront.i18n.language,
+        ...buyerVariables,
       },
       cache: storefront.CacheShort(),
     }),

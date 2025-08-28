@@ -7,6 +7,7 @@ export type Dispatch = ({type, payload}: Action) => void;
 export type Modal = {
   children: React.ReactNode | null;
   props?: Record<string, any>;
+  disableClose?: boolean;
 };
 
 /*
@@ -29,7 +30,11 @@ export interface MenuActions {
   closeDesktopMenu: () => void;
   openMobileMenu: () => void;
   closeMobileMenu: () => void;
-  openModal: (children: React.ReactNode, props?: Record<string, any>) => void;
+  openModal: (
+    children: React.ReactNode,
+    props?: Record<string, any>,
+    disableClose?: boolean,
+  ) => void;
   closeModal: () => void;
   openSearch: () => void;
   closeSearch: () => void;

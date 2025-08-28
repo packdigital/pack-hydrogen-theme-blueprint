@@ -20,6 +20,7 @@ import {COLLECTION_PAGE_QUERY} from '~/data/graphql/pack/collection-page';
 import {getFilters, getPage, getShop, getSiteSettings} from '~/lib/utils';
 import {routeHeaders} from '~/data/cache';
 import {seoPayload} from '~/lib/seo.server';
+import {getBuyerVariables} from '~/lib/b2b.server';
 import {useGlobal} from '~/hooks';
 import type {Page} from '~/lib/types';
 import type {ActiveFilterValue} from '~/components/Collection/CollectionFilters/CollectionFilters.types';
@@ -36,10 +37,10 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
   const siteSettings = await getSiteSettings(context);
 
   const {activeFilterValues, filters} = await getFilters({
+    context,
     handle,
     searchParams,
     siteSettings,
-    storefront,
   });
 
   const sortKey = String(
@@ -58,6 +59,8 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     pageBy: resultsPerPage,
   });
 
+  const buyerVariables = await getBuyerVariables(context);
+
   const [{collectionPage}, {collection}, shop] = await Promise.all([
     getPage({
       context,
@@ -74,6 +77,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
         country: storefront.i18n.country,
         language: storefront.i18n.language,
         ...paginationVariables,
+        ...buyerVariables,
       },
       cache: storefront.CacheShort(),
     }),

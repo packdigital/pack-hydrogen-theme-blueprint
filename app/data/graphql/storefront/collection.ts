@@ -82,7 +82,8 @@ export const COLLECTION_QUERY = `#graphql
     $last: Int
     $startCursor: String
     $endCursor: String
-  ) @inContext(country: $country, language: $language) {
+    $buyer: BuyerInput
+  ) @inContext(country: $country, language: $language, buyer: $buyer) {
     collection(handle: $handle) {
       ... on Collection {
         ...CollectionFragment
@@ -96,8 +97,9 @@ export const COLLECTION_FILTERS_QUERY = `#graphql
   query CollectionFilters(
     $handle: String!,
     $country: CountryCode,
-    $language: LanguageCode
-  ) @inContext(country: $country, language: $language) {
+    $language: LanguageCode,
+    $buyer: BuyerInput
+  ) @inContext(country: $country, language: $language, buyer: $buyer) {
     collection(handle: $handle) {
       products(first: 1) {
         filters {
