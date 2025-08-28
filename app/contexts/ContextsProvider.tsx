@@ -1,5 +1,7 @@
 import type {ReactNode} from 'react';
 
+import {B2BLocationProvider} from '~/components/B2B';
+
 import {AnalyticsProvider} from './AnalyticsProvider';
 import {GlobalProvider} from './GlobalProvider/GlobalProvider';
 import {GroupingsProvider} from './GroupingsProvider/GroupingsProvider';
@@ -14,7 +16,9 @@ export function ContextsProvider({children}: {children: ReactNode}) {
         <MenuProvider>
           <PromobarProvider>
             <GroupingsProvider>
-              <AnalyticsProvider>{children}</AnalyticsProvider>
+              <B2BLocationProvider>
+                <AnalyticsProvider>{children}</AnalyticsProvider>
+              </B2BLocationProvider>
             </GroupingsProvider>
           </PromobarProvider>
         </MenuProvider>

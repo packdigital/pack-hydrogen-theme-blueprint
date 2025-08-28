@@ -28,8 +28,6 @@ export function Product({
   /* Product metafields parsed into an object with metafields by `${namespace}.${key}` */
   const metafields = useParsedProductMetafields(product);
 
-  const [quantity, setQuantity] = useState(1);
-
   const selectedVariant = useMemo(() => {
     /* workaround because selected variant from useProduct hook is momentarily
      * misaligned with the product from the loader after navigation between
@@ -39,6 +37,10 @@ export function Product({
       ? initialSelectedVariant
       : providerSelectedVariant;
   }, [initialSelectedVariant, providerSelectedVariant, product]);
+
+  const [quantity, setQuantity] = useState(
+    selectedVariant?.quantityRule?.increment || 1,
+  );
 
   const selectedVariantColor = useMemo(() => {
     return selectedVariant?.selectedOptions?.find(

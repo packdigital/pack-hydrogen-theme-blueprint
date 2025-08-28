@@ -15,8 +15,14 @@ import {useCartLinePrices} from './useCartLinePrices';
 export const CartLine = memo(({closeCart, line}: CartLineProps) => {
   const {discountAllocations, quantity, merchandise} = line;
 
-  const {handleDecrement, handleIncrement, handleRemove, isUpdatingLine} =
-    useCartLine({line});
+  const {
+    disableDecrement,
+    disableIncrement,
+    handleDecrement,
+    handleIncrement,
+    handleRemove,
+    isUpdatingLine,
+  } = useCartLine({line});
 
   const {price, compareAtPrice} = useCartLinePrices({line});
 
@@ -83,6 +89,8 @@ export const CartLine = memo(({closeCart, line}: CartLineProps) => {
 
         <div className="flex items-end justify-between gap-3">
           <QuantitySelector
+            disableDecrement={disableDecrement}
+            disableIncrement={disableIncrement}
             handleDecrement={handleDecrement}
             handleIncrement={handleIncrement}
             isUpdating={isUpdatingLine}

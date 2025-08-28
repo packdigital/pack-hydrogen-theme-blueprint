@@ -139,21 +139,22 @@ export const getPublicEnvs = async ({
 };
 
 export const getFilters = async ({
+  context,
   handle,
   searchParams,
   searchTerm,
   siteSettings,
-  storefront,
 }: {
+  context: AppLoadContext;
   handle?: string;
   searchParams: URLSearchParams;
   searchTerm?: string;
   siteSettings: RootSiteSettings;
-  storefront: AppLoadContext['storefront'];
 }): Promise<{
   activeFilterValues: ActiveFilterValue[];
   filters: ProductFilter[];
 }> => {
+  const {customerAccount, storefront} = context;
   const enabledFilters =
     siteSettings?.data?.siteSettings?.settings?.collection?.filters?.enabled ??
     true;
@@ -162,6 +163,18 @@ export const getFilters = async ({
   let defaultFilters: Filter[] = [];
 
   if (enabledFilters) {
+    /* Buyer contextualization for B2B */
+    const buyer = await customerAccount.getBuyer();
+    const buyerVariables =
+      buyer?.companyLocationId && buyer?.customerAccessToken
+        ? {
+            buyer: {
+              companyLocationId: buyer.companyLocationId,
+              customerAccessToken: buyer.customerAccessToken,
+            },
+          }
+        : null;
+
     if (searchTerm) {
       const defaultFiltersData = await storefront.query(
         `#graphql
@@ -169,7 +182,8 @@ export const getFilters = async ({
             $country: CountryCode
             $language: LanguageCode
             $searchTerm: String!
-          ) @inContext(country: $country, language: $language) {
+            $buyer: BuyerInput
+          ) @inContext(country: $country, language: $language, buyer: $buyer) {
             search(
               first: 1,
               query: $searchTerm,
@@ -195,6 +209,7 @@ export const getFilters = async ({
             searchTerm,
             country: storefront.i18n.country,
             language: storefront.i18n.language,
+            ...buyerVariables,
           },
           cache: storefront.CacheShort(),
         },
@@ -204,10 +219,11 @@ export const getFilters = async ({
       const defaultFiltersData = await storefront.query(
         `#graphql
           query CollectionFilters(
-            $handle: String!,
-            $country: CountryCode,
+            $handle: String!
+            $country: CountryCode
             $language: LanguageCode
-          ) @inContext(country: $country, language: $language) {
+            $buyer: BuyerInput
+          ) @inContext(country: $country, language: $language, buyer: $buyer) {
             collection(handle: $handle) {
               products(first: 1) {
                 filters {
@@ -230,6 +246,7 @@ export const getFilters = async ({
             handle,
             country: storefront.i18n.country,
             language: storefront.i18n.language,
+            ...buyerVariables,
           },
           cache: storefront.CacheShort(),
         },
@@ -370,7 +387,7 @@ export const getMetafields = async (
     identifiers: MetafieldIdentifier[];
   },
 ): Promise<Record<string, Metafield | null> | null> => {
-  const {admin, storefront} = context;
+  const {admin, customerAccount, storefront} = context;
 
   if (!handle || !identifiers?.length) return null;
 
@@ -404,12 +421,25 @@ export const getMetafields = async (
       identifiers,
     });
   } else {
+    /* Buyer contextualization for B2B */
+    const buyer = await customerAccount.getBuyer();
+    const buyerVariables =
+      buyer?.companyLocationId && buyer?.customerAccessToken
+        ? {
+            buyer: {
+              companyLocationId: buyer.companyLocationId,
+              customerAccessToken: buyer.customerAccessToken,
+            },
+          }
+        : null;
+
     const PRODUCT_METAFIELDS_QUERY = `#graphql
       query ProductMetafields(
         $handle: String!
         $country: CountryCode
         $language: LanguageCode
-      ) @inContext(country: $country, language: $language) {
+        $buyer: BuyerInput
+      ) @inContext(country: $country, language: $language, buyer: $buyer) {
         product(handle: $handle) {
           ${getMetafieldsQueryString(identifiers)}
         }
@@ -423,6 +453,7 @@ export const getMetafields = async (
           handle,
           country: storefront.i18n.country,
           language: storefront.i18n.language,
+          ...buyerVariables,
         },
         cache: storefront.CacheShort(),
       },

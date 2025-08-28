@@ -3,6 +3,7 @@ import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import {getMetafields, normalizeAdminProduct} from '~/lib/utils';
 import {PRODUCT_ITEM_QUERY} from '~/data/graphql/storefront/product';
 import {ADMIN_PRODUCT_ITEM_QUERY} from '~/data/graphql/admin/product';
+import {getBuyerVariables} from '~/lib/b2b.server';
 
 export async function loader({request, context}: LoaderFunctionArgs) {
   const {admin, pack, storefront} = context;
@@ -62,6 +63,8 @@ export async function loader({request, context}: LoaderFunctionArgs) {
   /* Product query by handle */
   let product = null;
 
+  const buyerVariables = await getBuyerVariables(context);
+
   const {product: storefrontProduct} = await storefront.query(
     PRODUCT_ITEM_QUERY,
     {
@@ -69,6 +72,7 @@ export async function loader({request, context}: LoaderFunctionArgs) {
         handle,
         country: storefront.i18n.country,
         language: storefront.i18n.language,
+        ...buyerVariables,
       },
       cache: storefront.CacheShort(),
     },

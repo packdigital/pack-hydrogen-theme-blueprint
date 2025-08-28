@@ -16,6 +16,7 @@ import {Collection} from '~/components/Collection';
 import {PRODUCTS_SEARCH_QUERY} from '~/data/graphql/storefront/search';
 import {getFilters, getShop, getSiteSettings} from '~/lib/utils';
 import {seoPayload} from '~/lib/seo.server';
+import {getBuyerVariables} from '~/lib/b2b.server';
 import {useGlobal} from '~/hooks';
 import type {Page} from '~/lib/types';
 import type {ActiveFilterValue} from '~/components/Collection/CollectionFilters/CollectionFilters.types';
@@ -59,10 +60,10 @@ export async function loader({request, context}: LoaderFunctionArgs) {
 
   if (searchTerm && searchTerm.length >= characterMin) {
     const filtersData = await getFilters({
+      context,
       searchParams,
       searchTerm,
       siteSettings,
-      storefront,
     });
 
     filters = filtersData.filters;
@@ -77,6 +78,8 @@ export async function loader({request, context}: LoaderFunctionArgs) {
       pageBy: resultsPerPage,
     });
 
+    const buyerVariables = await getBuyerVariables(context);
+
     const {search} = await storefront.query(PRODUCTS_SEARCH_QUERY, {
       variables: {
         searchTerm,
@@ -86,6 +89,7 @@ export async function loader({request, context}: LoaderFunctionArgs) {
         country: storefront.i18n.country,
         language: storefront.i18n.language,
         ...paginationVariables,
+        ...buyerVariables,
       },
       cache: storefront.CacheShort(),
     });

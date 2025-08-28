@@ -4,6 +4,7 @@ import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import {PRODUCT_ITEM_QUERY_BY_ID} from '~/data/graphql/storefront/product';
 import {ADMIN_PRODUCT_ITEM_BY_ID_QUERY} from '~/data/graphql/admin/product';
 import {normalizeAdminProduct} from '~/lib/utils';
+import {getBuyerVariables} from '~/lib/b2b.server';
 
 export async function loader({request, context}: LoaderFunctionArgs) {
   const {admin, pack, storefront} = context;
@@ -20,6 +21,8 @@ export async function loader({request, context}: LoaderFunctionArgs) {
 
   let product = null;
 
+  const buyerVariables = await getBuyerVariables(context);
+
   /* Product query by id */
   const {product: storefrontProduct} = await storefront.query(
     PRODUCT_ITEM_QUERY_BY_ID,
@@ -28,6 +31,7 @@ export async function loader({request, context}: LoaderFunctionArgs) {
         id,
         country: storefront.i18n.country,
         language: storefront.i18n.language,
+        ...buyerVariables,
       },
       cache: storefront.CacheShort(),
     },

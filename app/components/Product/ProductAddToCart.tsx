@@ -1,4 +1,4 @@
-import {useCallback, useEffect} from 'react';
+import {useCallback, useEffect, useMemo} from 'react';
 
 import {AddToCart} from '~/components/AddToCart';
 import {QuantitySelector} from '~/components/QuantitySelector';
@@ -11,19 +11,40 @@ export function ProductAddToCart({
   selectedVariant,
   setQuantity,
 }: ProductAddToCartProps) {
+  const {
+    increment = 1,
+    minimum = 1,
+    maximum,
+  } = {...selectedVariant?.quantityRule};
+
+  const {disableDecrement, disableIncrement} = useMemo(() => {
+    const nextIncrement = increment - (quantity % increment);
+    const prevIncrement =
+      quantity % increment === 0 ? increment : quantity % increment;
+    const prevQuantity = Number(
+      Math.max(0, quantity - prevIncrement).toFixed(0),
+    );
+    const nextQuantity = Number((quantity + nextIncrement).toFixed(0));
+    return {
+      disableDecrement: prevQuantity < minimum,
+      disableIncrement: Boolean(maximum && nextQuantity > maximum),
+    };
+  }, [increment, minimum, maximum, quantity, selectedVariant?.id]);
+
   const handleDecrement = useCallback(() => {
-    if (quantity === 1) return;
-    setQuantity(quantity - 1);
-  }, [quantity]);
+    if (disableDecrement) return;
+    setQuantity(quantity - increment);
+  }, [quantity, increment, disableDecrement]);
 
   const handleIncrement = useCallback(() => {
-    setQuantity(quantity + 1);
-  }, [quantity]);
+    if (disableIncrement) return;
+    setQuantity(quantity + increment);
+  }, [quantity, increment, disableIncrement]);
 
   useEffect(() => {
     if (!enabledQuantitySelector) return undefined;
     return () => {
-      setQuantity(1);
+      setQuantity(increment);
     };
   }, [enabledQuantitySelector]);
 
@@ -31,7 +52,8 @@ export function ProductAddToCart({
     <div className="flex w-full items-center gap-4">
       {enabledQuantitySelector && (
         <QuantitySelector
-          disableDecrement={quantity === 1}
+          disableDecrement={disableDecrement}
+          disableIncrement={disableIncrement}
           handleDecrement={handleDecrement}
           handleIncrement={handleIncrement}
           productTitle={selectedVariant?.product?.title}

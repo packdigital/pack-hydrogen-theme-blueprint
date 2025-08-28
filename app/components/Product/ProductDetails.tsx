@@ -1,6 +1,7 @@
 import {forwardRef, useMemo} from 'react';
 import {useProduct} from '@shopify/hydrogen-react';
 
+import {B2BQuantityRules, B2BPriceBreaks} from '~/components/B2B';
 import {useColorSwatches} from '~/hooks';
 
 import {ProductAddToCart} from './ProductAddToCart';
@@ -55,6 +56,12 @@ export const ProductDetails = forwardRef(
             enabledQuantitySelector={enabledQuantitySelector}
             selectedVariant={selectedVariant}
             setQuantity={setQuantity}
+          />
+
+          <B2BQuantityRules quantityRule={selectedVariant?.quantityRule} />
+
+          <B2BPriceBreaks
+            quantityPriceBreaks={selectedVariant?.quantityPriceBreaks?.nodes}
           />
         </div>
 

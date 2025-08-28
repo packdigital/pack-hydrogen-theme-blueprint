@@ -2,6 +2,7 @@ import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 
 import {PRODUCTS_SEARCH_QUERY} from '~/data/graphql/storefront/search';
 import {getSiteSettings} from '~/lib/utils';
+import {getBuyerVariables} from '~/lib/b2b.server';
 
 export async function loader({request, context}: LoaderFunctionArgs) {
   const {storefront} = context;
@@ -24,12 +25,15 @@ export async function loader({request, context}: LoaderFunctionArgs) {
 
   const count = Number(searchParams.get('count')) || 10;
 
+  const buyerVariables = await getBuyerVariables(context);
+
   const {search} = await storefront.query(PRODUCTS_SEARCH_QUERY, {
     variables: {
       searchTerm,
       country: storefront.i18n.country,
       language: storefront.i18n.language,
       first: count,
+      ...buyerVariables,
     },
     cache: storefront.CacheShort(),
   });

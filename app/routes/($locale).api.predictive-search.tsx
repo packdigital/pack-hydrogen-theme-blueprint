@@ -7,6 +7,7 @@ import type {
 
 import {PREDICTIVE_SEARCH_QUERY} from '~/data/graphql/storefront/search';
 import {getSiteSettings} from '~/lib/utils';
+import {getBuyerVariables} from '~/lib/b2b.server';
 
 type PredictiveCollection = PredictiveSearchResult['collections'][number];
 type PredicticeSearchResultItemImage = PredictiveCollection['image'];
@@ -71,6 +72,8 @@ async function fetchPredictiveSearchResults({
     };
   }
 
+  const buyerVariables = await getBuyerVariables(context);
+
   const data = await storefront.query(PREDICTIVE_SEARCH_QUERY, {
     variables: {
       limit,
@@ -79,6 +82,7 @@ async function fetchPredictiveSearchResults({
       types: searchTypes,
       country: storefront.i18n.country,
       language: storefront.i18n.language,
+      ...buyerVariables,
     },
     cache: storefront.CacheShort(),
   });

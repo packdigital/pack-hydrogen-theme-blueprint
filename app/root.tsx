@@ -124,10 +124,12 @@ export async function loader({context, request}: LoaderFunctionArgs) {
   const groupingsPromise = getProductGroupings(context);
 
   let customer: Customer | null = null;
+  let buyer = null;
 
   if (isLoggedIn) {
     const {data, errors} = await customerAccount.query(CUSTOMER_DETAILS_QUERY);
     if (data?.customer && !errors?.length) customer = data.customer;
+    buyer = await customerAccount.getBuyer();
   }
 
   const cookieDomain = getCookieDomain(request.url);
@@ -170,6 +172,7 @@ export async function loader({context, request}: LoaderFunctionArgs) {
   return dataWithOptions(
     {
       analytics,
+      buyer,
       consent,
       cookieDomain,
       customer,

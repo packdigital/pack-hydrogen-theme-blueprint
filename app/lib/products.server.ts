@@ -25,6 +25,8 @@ import type {
   ProductWithInitialGrouping,
 } from '~/lib/types';
 
+import {getBuyerVariables} from './b2b.server';
+
 export const getSelectedProductOptions = async ({
   handle,
   context,
@@ -39,6 +41,8 @@ export const getSelectedProductOptions = async ({
   const selectedOptions: Record<string, any>[] = [];
 
   if (searchParams.size) {
+    const buyerVariables = await getBuyerVariables(context);
+
     // Query for product's options
     const {product: productWithOptions} = await storefront.query(
       PRODUCT_OPTIONS_QUERY,
@@ -47,6 +51,7 @@ export const getSelectedProductOptions = async ({
           handle,
           country: storefront.i18n.country,
           language: storefront.i18n.language,
+          ...buyerVariables,
         },
         cache: storefront.CacheShort(),
       },
@@ -97,6 +102,8 @@ export const queryProducts = async ({
 
   const initialFirst = isAll ? FIRST : count > FIRST ? FIRST : count;
 
+  const buyerVariables = await getBuyerVariables(context);
+
   const getProducts = async ({
     products,
     cursor,
@@ -113,6 +120,7 @@ export const queryProducts = async ({
         endCursor: cursor,
         country: storefront.i18n.country,
         language: storefront.i18n.language,
+        ...buyerVariables,
       },
       cache: storefront.CacheShort(),
     });
@@ -237,12 +245,15 @@ export const getModalProduct = async ({
     });
     let queriedProduct = undefined;
 
+    const buyerVariables = await getBuyerVariables(context);
+
     const {product: storefrontProduct} = await storefront.query(PRODUCT_QUERY, {
       variables: {
         handle,
         selectedOptions,
         country: storefront.i18n.country,
         language: storefront.i18n.language,
+        ...buyerVariables,
       },
       cache: storefront.CacheShort(),
     });

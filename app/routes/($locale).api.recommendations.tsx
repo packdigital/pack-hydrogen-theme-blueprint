@@ -1,6 +1,7 @@
 import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 
 import {PRODUCT_RECOMMENDATIONS_QUERY} from '~/data/graphql/storefront/product';
+import {getBuyerVariables} from '~/lib/b2b.server';
 
 // docs: https://shopify.dev/docs/api/storefront/latest/queries/productRecommendations
 
@@ -17,6 +18,8 @@ export async function loader({request, context}: LoaderFunctionArgs) {
       {status: 500},
     );
 
+  const buyerVariables = await getBuyerVariables(context);
+
   const {productRecommendations} = await storefront.query(
     PRODUCT_RECOMMENDATIONS_QUERY,
     {
@@ -25,6 +28,7 @@ export async function loader({request, context}: LoaderFunctionArgs) {
         intent,
         country: storefront.i18n.country,
         language: storefront.i18n.language,
+        ...buyerVariables,
       },
       cache: storefront.CacheShort(),
     },

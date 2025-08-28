@@ -118,6 +118,20 @@ export const CART_LINE_FRAGMENT = `#graphql
             }
           }
         }
+        quantityRule {
+          maximum
+          minimum
+          increment
+        }
+        quantityPriceBreaks(first: 5) {
+          nodes {
+            minimumQuantity
+            price {
+              amount
+              currencyCode
+            }
+          }
+        }
       }
     }
   }
@@ -255,6 +269,20 @@ export const CART_LINE_COMPONENT_FRAGMENT = `#graphql
               ... on SellingPlanAllocation {
                 ...SellingPlanAllocationFragment
               }
+            }
+          }
+        }
+        quantityRule {
+          maximum
+          minimum
+          increment
+        }
+        quantityPriceBreaks(first: 5) {
+          nodes {
+            minimumQuantity
+            price {
+              amount
+              currencyCode
             }
           }
         }
@@ -400,6 +428,20 @@ export const CART_FRAGMENT = `#graphql
       }
       email
       phone
+      purchasingCompany {
+        company {
+          id
+          name
+        }
+        contact {
+          id
+          title
+        }
+        location {
+          name
+          id
+        }
+      }
     }
     attributes {
       key
