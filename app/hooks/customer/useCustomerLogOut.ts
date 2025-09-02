@@ -1,7 +1,7 @@
 import {useCallback} from 'react';
 import {useFetcher} from '@remix-run/react';
 
-import {deleteCookie} from '~/lib/utils/document.utils';
+import {deleteCookie} from '~/lib/utils';
 
 export function useCustomerLogOut() {
   const fetcher = useFetcher({key: 'logout'});
