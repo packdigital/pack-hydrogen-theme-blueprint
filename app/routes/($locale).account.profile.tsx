@@ -9,7 +9,7 @@ import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 import {getAccountSeo} from '~/lib/utils';
 import {CustomerAccountLayout} from '~/components/AccountLayout/CustomerAccountLayout';
 import {Profile} from '~/components/Account/Profile';
-import {customerUpdateProfileAction} from '~/lib/customer';
+import {customerUpdateProfileAction} from '~/lib/customer/profile.server';
 
 export async function action({request, context}: ActionFunctionArgs) {
   // Double-check current user is logged in

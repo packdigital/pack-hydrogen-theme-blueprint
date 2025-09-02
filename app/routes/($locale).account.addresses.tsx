@@ -6,7 +6,7 @@ import type {
 } from '@shopify/remix-oxygen';
 import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 
-import {customerAddressesAction} from '~/lib/customer';
+import {customerAddressesAction} from '~/lib/customer/addresses.server';
 import {getAccountSeo} from '~/lib/utils';
 import {CustomerAccountLayout} from '~/components/AccountLayout/CustomerAccountLayout';
 import {Addresses} from '~/components/Account/Addresses/Addresses';
