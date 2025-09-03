@@ -1,5 +1,6 @@
-import {forwardRef} from 'react';
+import {forwardRef, useMemo} from 'react';
 import clsx from 'clsx';
+import sanitizeHtml from 'sanitize-html';
 
 interface RichTextProps {
   className?: string;
@@ -12,6 +13,11 @@ export const RichText = forwardRef(
     {className = '', children, style}: RichTextProps,
     ref: React.Ref<HTMLDivElement> | undefined,
   ) => {
+    // Docs: https://www.npmjs.com/package/sanitize-html
+    const sanitizedHtml = useMemo(() => {
+      return typeof children === 'string' ? sanitizeHtml(children) : '';
+    }, [children]);
+
     return (
       <div
         ref={ref}
@@ -20,7 +26,7 @@ export const RichText = forwardRef(
           className,
         )}
         dangerouslySetInnerHTML={{
-          __html: typeof children === 'string' ? children : '',
+          __html: sanitizedHtml,
         }}
         style={style}
       />

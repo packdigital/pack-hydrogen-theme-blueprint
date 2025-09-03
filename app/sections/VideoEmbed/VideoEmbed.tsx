@@ -1,5 +1,7 @@
+import {useMemo} from 'react';
 import {useInView} from 'react-intersection-observer';
 import clsx from 'clsx';
+import sanitizeHtml from 'sanitize-html';
 
 import {Container} from '~/components/Container';
 
@@ -16,6 +18,28 @@ export function VideoEmbed({cms}: {cms: VideoEmbedCms}) {
     triggerOnce: true,
   });
 
+  // Docs: https://www.npmjs.com/package/sanitize-html
+  const sanitizedEmbed = useMemo(() => {
+    return inView
+      ? sanitizeHtml(embed || '', {
+          allowedTags: ['p', 'em', 'strong', 'iframe'],
+          allowedAttributes: {
+            iframe: [
+              'src',
+              'title',
+              'width',
+              'height',
+              'allow',
+              'referrerpolicy',
+              'allowfullscreen',
+            ],
+          },
+          // Add any additional allowed iframe hostnames here
+          allowedIframeHostnames: ['www.youtube.com', 'player.vimeo.com'],
+        })
+      : '';
+  }, [embed, inView]);
+
   return (
     <Container container={cms.container}>
       <div
@@ -28,7 +52,7 @@ export function VideoEmbed({cms}: {cms: VideoEmbedCms}) {
       >
         <div
           className={clsx('mx-auto bg-neutralLightest', maxWidth, aspectRatio)}
-          dangerouslySetInnerHTML={{__html: inView ? embed : ''}}
+          dangerouslySetInnerHTML={{__html: sanitizedEmbed}}
         />
       </div>
     </Container>

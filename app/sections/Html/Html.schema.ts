@@ -14,6 +14,8 @@ export function Schema() {
         label: 'HTML',
         name: 'html',
         component: 'html',
+        description:
+          'Default HTML sanitization does not allow scripts. To authorize specific script domains, adjust the sanitization filters in the code directly',
       },
       {
         label: 'Content Settings',
