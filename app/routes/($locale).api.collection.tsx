@@ -3,7 +3,7 @@ import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import type {ProductCollectionSortKeys} from '@shopify/hydrogen/storefront-api-types';
 
 import {COLLECTION_QUERY} from '~/data/graphql/storefront/collection';
-import {getSiteSettings} from '~/lib/utils';
+import {getSiteSettings} from '~/lib/server-utils/settings.server';
 import {routeHeaders} from '~/data/cache';
 
 export const headers = routeHeaders;

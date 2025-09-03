@@ -3,7 +3,7 @@ import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 
 import {COLLECTION_QUERY} from '~/data/graphql/storefront/collection';
 import {routeHeaders} from '~/data/cache';
-import {transformShopifyGids} from '~/lib/utils/server.utils';
+import {transformShopifyGids} from '~/lib/utils';
 
 export const headers = routeHeaders;
 

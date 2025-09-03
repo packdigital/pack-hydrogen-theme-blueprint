@@ -8,9 +8,10 @@ import {RenderSections} from '@pack/react';
 import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 
 import {BLOG_PAGE_QUERY} from '~/data/graphql/pack/blog-page';
-import {getPage, getShop, getSiteSettings} from '~/lib/utils';
+import {getPage} from '~/lib/server-utils/pack.server';
+import {getShop, getSiteSettings} from '~/lib/server-utils/settings.server';
+import {seoPayload} from '~/lib/server-utils/seo.server';
 import {routeHeaders} from '~/data/cache';
-import {seoPayload} from '~/lib/seo.server';
 import type {BlogPage} from '~/lib/types';
 
 export const headers = routeHeaders;

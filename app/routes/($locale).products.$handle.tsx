@@ -10,20 +10,19 @@ import {RenderSections} from '@pack/react';
 import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 import type {ShopifyAnalyticsProduct} from '@shopify/hydrogen';
 
+import {normalizeAdminProduct} from '~/lib/utils';
+import {getPage, getProductGroupings} from '~/lib/server-utils/pack.server';
+import {getShop, getSiteSettings} from '~/lib/server-utils/settings.server';
 import {
-  getPage,
-  getProductGroupings,
-  getShop,
-  getSiteSettings,
-  normalizeAdminProduct,
-} from '~/lib/utils';
-import {getGrouping, getSelectedProductOptions} from '~/lib/products.server';
+  getGrouping,
+  getSelectedProductOptions,
+} from '~/lib/server-utils/product.server';
+import {seoPayload} from '~/lib/server-utils/seo.server';
 import {PRODUCT_PAGE_QUERY} from '~/data/graphql/pack/product-page';
 import {ADMIN_PRODUCT_QUERY} from '~/data/graphql/admin/product';
 import {PRODUCT_QUERY} from '~/data/graphql/storefront/product';
 import {Product} from '~/components/Product';
 import {routeHeaders} from '~/data/cache';
-import {seoPayload} from '~/lib/seo.server';
 import {useGlobal, useProductWithGrouping} from '~/hooks';
 import type {
   Page,

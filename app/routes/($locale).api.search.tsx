@@ -1,7 +1,7 @@
 import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 
 import {PRODUCTS_SEARCH_QUERY} from '~/data/graphql/storefront/search';
-import {getSiteSettings} from '~/lib/utils';
+import {getSiteSettings} from '~/lib/server-utils/settings.server';
 
 export async function loader({request, context}: LoaderFunctionArgs) {
   const {storefront} = context;

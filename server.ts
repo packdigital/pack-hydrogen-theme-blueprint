@@ -16,7 +16,8 @@ import {
 import {createPackClient, PackSession, handleRequest} from '@pack/hydrogen';
 
 import {AppSession} from '~/lib/session.server';
-import {getLocaleFromRequest, getOxygenEnv} from '~/lib/utils';
+import {getLocaleFromRequest} from '~/lib/server-utils/locale.server';
+import {getOxygenEnv} from '~/lib/server-utils/oxygen.server';
 import {createAdminClient, getAdminHeaders} from '~/lib/admin-api';
 import defaultThemeData from '~/config/default-theme-data.json';
 

@@ -7,11 +7,12 @@ import {
 import {RenderSections} from '@pack/react';
 import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 
-import {getPage, getShop, getSiteSettings} from '~/lib/utils';
+import {getPage} from '~/lib/server-utils/pack.server';
+import {getShop, getSiteSettings} from '~/lib/server-utils/settings.server';
+import {seoPayload} from '~/lib/server-utils/seo.server';
+import {getProductsMapForPage} from '~/lib/server-utils/product.server';
 import {PAGE_QUERY} from '~/data/graphql/pack/page';
 import {routeHeaders} from '~/data/cache';
-import {seoPayload} from '~/lib/seo.server';
-import {getProductsMapForPage} from '~/lib/products.server';
 import type {Page} from '~/lib/types';
 
 export const headers = routeHeaders;
