@@ -1,4 +1,6 @@
+import {useMemo} from 'react';
 import clsx from 'clsx';
+import sanitizeHtml from 'sanitize-html';
 
 import {Container} from '~/components/Container';
 
@@ -7,6 +9,12 @@ import {Schema} from './Html.schema';
 
 export function Html({cms}: {cms: HtmlCms}) {
   const {content, html, section} = cms;
+
+  // Docs: https://www.npmjs.com/package/sanitize-html
+  const sanitizedHtml = useMemo(() => {
+    return sanitizeHtml(html || '');
+  }, [html]);
+
   return html ? (
     <Container container={cms.container}>
       <div
@@ -22,7 +30,7 @@ export function Html({cms}: {cms: HtmlCms}) {
             content?.textAlign,
             section?.maxWidth,
           )}
-          dangerouslySetInnerHTML={{__html: html}}
+          dangerouslySetInnerHTML={{__html: sanitizedHtml}}
           style={{
             color: section?.textColor,
           }}

@@ -1,4 +1,6 @@
+import {useMemo} from 'react';
 import clsx from 'clsx';
+import sanitizeHtml from 'sanitize-html';
 
 import {CountryField} from './CountryField';
 
@@ -17,6 +19,10 @@ export function FormField({field}: Record<string, any>) {
     placeholder,
     required,
   } = field;
+
+  const sanitizedLabel = useMemo(() => {
+    return sanitizeHtml(label || '', {allowedTags: []});
+  }, [label]);
 
   const isTextarea = type === 'textArea';
   const isRadio = type === 'radio';
@@ -211,7 +217,7 @@ export function FormField({field}: Record<string, any>) {
         {hasLabel && !hideLabel && (
           <span
             dangerouslySetInnerHTML={{
-              __html: `${label}${
+              __html: `${sanitizedLabel}${
                 link?.text
                   ? `&nbsp;<a to="${link.url}" onclick="event.preventDefault" target="_blank" style"position:inline;">${link.text}</a>`
                   : ''

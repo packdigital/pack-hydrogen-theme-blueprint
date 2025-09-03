@@ -25,19 +25,21 @@ import {
   NotFound,
   ServerError,
 } from '~/components/Document';
+import {getCookieDomain} from '~/lib/utils';
 import {
-  getCookieDomain,
   getPublicEnvs,
-  getProductGroupings,
   getShop,
   getSiteSettings,
-  redirectLinkToBuyerLocale,
+} from '~/lib/server-utils/settings.server';
+import {
+  getProductGroupings,
   setPackCookie,
-} from '~/lib/utils';
+} from '~/lib/server-utils/pack.server';
+import {redirectLinkToBuyerLocale} from '~/lib/server-utils/locale.server';
+import {seoPayload} from '~/lib/server-utils/seo.server';
+import {getModalProduct} from '~/lib/server-utils/product.server';
 import {registerSections} from '~/sections';
 import {registerStorefrontSettings} from '~/settings';
-import {seoPayload} from '~/lib/seo.server';
-import {getModalProduct} from '~/lib/products.server';
 import {CUSTOMER_DETAILS_QUERY} from '~/data/graphql/customer-account/customer';
 import type {RootSiteSettings} from '~/lib/types';
 import styles from '~/styles/app.css?url';

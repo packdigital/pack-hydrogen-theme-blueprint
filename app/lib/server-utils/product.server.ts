@@ -14,7 +14,7 @@ import {
   ADMIN_PRODUCT_ITEM_BY_ID_QUERY,
   ADMIN_PRODUCT_QUERY,
 } from '~/data/graphql/admin/product';
-import {getProductGroupings, normalizeAdminProduct} from '~/lib/utils';
+import {normalizeAdminProduct} from '~/lib/utils';
 import {SHOPPABLE_SOCIAL_VIDEO_SECTION_KEY} from '~/sections/ShoppableSocialVideo';
 import {PRODUCT_SECTION_KEY} from '~/sections/Product';
 import {MODAL_PRODUCT_URL_PARAM} from '~/lib/constants';
@@ -24,6 +24,8 @@ import type {
   ProductsMap,
   ProductWithInitialGrouping,
 } from '~/lib/types';
+
+import {getProductGroupings} from './pack.server';
 
 export const getSelectedProductOptions = async ({
   handle,

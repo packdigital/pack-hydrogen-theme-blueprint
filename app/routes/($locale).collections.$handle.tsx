@@ -17,9 +17,11 @@ import type {
 import {Collection} from '~/components/Collection';
 import {COLLECTION_QUERY} from '~/data/graphql/storefront/collection';
 import {COLLECTION_PAGE_QUERY} from '~/data/graphql/pack/collection-page';
-import {getFilters, getPage, getShop, getSiteSettings} from '~/lib/utils';
+import {getPage} from '~/lib/server-utils/pack.server';
+import {getShop, getSiteSettings} from '~/lib/server-utils/settings.server';
+import {getFilters} from '~/lib/server-utils/collection.server';
+import {seoPayload} from '~/lib/server-utils/seo.server';
 import {routeHeaders} from '~/data/cache';
-import {seoPayload} from '~/lib/seo.server';
 import {useGlobal} from '~/hooks';
 import type {Page} from '~/lib/types';
 import type {ActiveFilterValue} from '~/components/Collection/CollectionFilters/CollectionFilters.types';

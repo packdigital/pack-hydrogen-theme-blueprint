@@ -45,6 +45,7 @@ export default defineConfig({
         'react-markdown',
         'remark-breaks',
         'remark-gfm',
+        'sanitize-html',
         'set-cookie-parser',
         'snakecase-keys',
         'uuid',

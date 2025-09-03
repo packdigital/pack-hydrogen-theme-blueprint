@@ -3,8 +3,8 @@ import {Outlet} from '@remix-run/react';
 import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 
 import {CartPage} from '~/components/Cart';
-import {getShop, getSiteSettings} from '~/lib/utils';
-import {seoPayload} from '~/lib/seo.server';
+import {getShop, getSiteSettings} from '~/lib/server-utils/settings.server';
+import {seoPayload} from '~/lib/server-utils/seo.server';
 import type {Page} from '~/lib/types';
 
 export async function loader({context, request}: LoaderFunctionArgs) {

@@ -14,8 +14,9 @@ import type {
 
 import {Collection} from '~/components/Collection';
 import {PRODUCTS_SEARCH_QUERY} from '~/data/graphql/storefront/search';
-import {getFilters, getShop, getSiteSettings} from '~/lib/utils';
-import {seoPayload} from '~/lib/seo.server';
+import {getFilters} from '~/lib/server-utils/collection.server';
+import {getShop, getSiteSettings} from '~/lib/server-utils/settings.server';
+import {seoPayload} from '~/lib/server-utils/seo.server';
 import {useGlobal} from '~/hooks';
 import type {Page} from '~/lib/types';
 import type {ActiveFilterValue} from '~/components/Collection/CollectionFilters/CollectionFilters.types';

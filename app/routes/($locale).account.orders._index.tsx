@@ -1,7 +1,7 @@
 import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 
-import {getAccountSeo} from '~/lib/utils';
+import {getAccountSeo} from '~/lib/server-utils/seo.server';
 import {CustomerAccountLayout} from '~/components/AccountLayout/CustomerAccountLayout';
 import {Orders} from '~/components/Account/Orders/Orders';
 

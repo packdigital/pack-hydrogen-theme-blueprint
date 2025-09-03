@@ -6,7 +6,7 @@ import type {
 
 import {PRODUCTS_QUERY} from '~/data/graphql/storefront/product';
 import {ADMIN_PRODUCT_ITEM_BY_ID_QUERY} from '~/data/graphql/admin/product';
-import {queryProducts} from '~/lib/products.server';
+import {queryProducts} from '~/lib/server-utils/product.server';
 import {normalizeAdminProduct} from '~/lib/utils';
 
 // Docs: https://shopify.dev/docs/api/storefront/latest/queries/products

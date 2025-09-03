@@ -18,6 +18,8 @@ export function Schema() {
             label: 'Video Embed (HTML)',
             name: 'embed',
             component: 'html',
+            description:
+              'Default HTML sanitization only allows iframes from YouTube and Vimeo. Any additional authorized hostnames should be added to the sanitization filters in the code directly',
           },
           {
             label: 'Video Aspect Ratio',

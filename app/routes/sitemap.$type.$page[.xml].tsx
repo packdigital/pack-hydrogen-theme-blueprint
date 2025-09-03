@@ -2,7 +2,7 @@ import {getSitemap} from '@shopify/hydrogen';
 import {XMLParser, XMLBuilder} from 'fast-xml-parser';
 import type {AppLoadContext, LoaderFunctionArgs} from '@shopify/remix-oxygen';
 
-import {getSiteSettings} from '~/lib/utils';
+import {getSiteSettings} from '~/lib/server-utils/settings.server';
 import {CMS_ARTICLES_QUERY} from '~/data/graphql/pack/article-page';
 import {CMS_BLOGS_QUERY} from '~/data/graphql/pack/blog-page';
 import {CMS_COLLECTION_QUERY} from '~/data/graphql/pack/collection-page';

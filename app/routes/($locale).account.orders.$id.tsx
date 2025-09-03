@@ -3,7 +3,7 @@ import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 import type {Order as OrderType} from '@shopify/hydrogen/customer-account-api-types';
 
-import {getAccountSeo} from '~/lib/utils';
+import {getAccountSeo} from '~/lib/server-utils/seo.server';
 import {CustomerAccountLayout} from '~/components/AccountLayout/CustomerAccountLayout';
 import {Order} from '~/components/Account/Order/Order';
 import {CUSTOMER_ORDER_QUERY} from '~/data/graphql/customer-account/customer';

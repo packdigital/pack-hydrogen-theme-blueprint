@@ -1,5 +1,6 @@
 import {forwardRef, useMemo} from 'react';
 import {useProduct} from '@shopify/hydrogen-react';
+import sanitizeHtml from 'sanitize-html';
 
 import {useColorSwatches} from '~/hooks';
 
@@ -33,6 +34,10 @@ export const ProductDetails = forwardRef(
       );
     }, [selectedVariant]);
 
+    const sanitizedDescription = useMemo(() => {
+      return sanitizeHtml(product.descriptionHtml || '');
+    }, [product.descriptionHtml]);
+
     const hideOptions =
       product.variants?.nodes?.length === 1 &&
       product.variants?.nodes?.[0]?.title === 'Default Title';
@@ -59,7 +64,7 @@ export const ProductDetails = forwardRef(
         </div>
 
         <div
-          dangerouslySetInnerHTML={{__html: product.descriptionHtml}}
+          dangerouslySetInnerHTML={{__html: sanitizedDescription}}
           className="text-sm [&>:last-child]:mb-0 [&_a]:underline [&_blockquote]:pl-8 [&_h1]:mb-3 [&_h2]:mb-3 [&_h3]:mb-3 [&_h4]:mb-3 [&_h5]:mb-3 [&_h6]:mb-3 [&_li>p]:mb-0 [&_li]:mb-2 [&_ol>li]:list-decimal [&_ol]:mb-3 [&_ol]:pl-8 [&_p]:mb-3 [&_ul>li]:list-disc [&_ul]:mb-3 [&_ul]:pl-8"
         />
       </div>
