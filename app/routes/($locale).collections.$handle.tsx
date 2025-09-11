@@ -13,6 +13,7 @@ import type {
   Collection as CollectionType,
   ProductCollectionSortKeys,
 } from '@shopify/hydrogen/storefront-api-types';
+import {PackTestRoute} from '@pack/hydrogen';
 
 import {Collection} from '~/components/Collection';
 import {COLLECTION_QUERY} from '~/data/graphql/storefront/collection';
@@ -60,27 +61,28 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     pageBy: resultsPerPage,
   });
 
-  const [{collectionPage}, {collection}, shop] = await Promise.all([
-    getPage({
-      context,
-      handle,
-      pageKey: 'collectionPage',
-      query: COLLECTION_PAGE_QUERY,
-    }),
-    storefront.query(COLLECTION_QUERY, {
-      variables: {
+  const [{collectionPage, packTestInfo}, {collection}, shop] =
+    await Promise.all([
+      getPage({
+        context,
         handle,
-        sortKey,
-        reverse,
-        filters,
-        country: storefront.i18n.country,
-        language: storefront.i18n.language,
-        ...paginationVariables,
-      },
-      cache: storefront.CacheShort(),
-    }),
-    getShop(context),
-  ]);
+        pageKey: 'collectionPage',
+        query: COLLECTION_PAGE_QUERY,
+      }),
+      storefront.query(COLLECTION_QUERY, {
+        variables: {
+          handle,
+          sortKey,
+          reverse,
+          filters,
+          country: storefront.i18n.country,
+          language: storefront.i18n.language,
+          ...paginationVariables,
+        },
+        cache: storefront.CacheShort(),
+      }),
+      getShop(context),
+    ]);
 
   if (!collection) {
     const redirect = await storefrontRedirect({request, storefront});
@@ -108,6 +110,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
     collectionPage,
     seo,
     url: request.url,
+    packTestInfo,
   };
 }
 
@@ -134,30 +137,33 @@ export default function CollectionRoute() {
   }, [collectionPage]);
 
   return (
-    <div data-comp={CollectionRoute.displayName}>
-      {collectionPage && <RenderSections content={collectionPage} />}
+    <>
+      <PackTestRoute />
+      <div data-comp={CollectionRoute.displayName}>
+        {collectionPage && <RenderSections content={collectionPage} />}
 
-      <section data-comp="collection">
-        <Collection
-          activeFilterValues={activeFilterValues as ActiveFilterValue[]}
-          collection={collection}
-          showHeading={!hasVisibleHeroSection}
-          title={collectionPage?.title}
-        />
-      </section>
+        <section data-comp="collection">
+          <Collection
+            activeFilterValues={activeFilterValues as ActiveFilterValue[]}
+            collection={collection}
+            showHeading={!hasVisibleHeroSection}
+            title={collectionPage?.title}
+          />
+        </section>
 
-      {isCartReady && (
-        <Analytics.CollectionView
-          data={{
-            collection: {
-              id: collection.id,
-              handle: collection.handle,
-            },
-          }}
-          customData={{collection}}
-        />
-      )}
-    </div>
+        {isCartReady && (
+          <Analytics.CollectionView
+            data={{
+              collection: {
+                id: collection.id,
+                handle: collection.handle,
+              },
+            }}
+            customData={{collection}}
+          />
+        )}
+      </div>
+    </>
   );
 }
 

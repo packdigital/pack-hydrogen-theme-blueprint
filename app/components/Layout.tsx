@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import type {ReactNode} from 'react';
+import {PackTestProvider} from '@pack/hydrogen';
 
 import {Analytics} from '~/components/Analytics';
 import {Cart} from '~/components/Cart';
@@ -13,42 +14,48 @@ import {
   usePromobar,
   useScrollToHashOnNavigation,
   useSetViewportHeightCssVar,
+  useTestExpose,
 } from '~/hooks';
-
 export function Layout({children}: {children: ReactNode}) {
   const {mainPaddingTopClass} = usePromobar();
   useCartAddDiscountUrl();
   useScrollToHashOnNavigation();
   useSetViewportHeightCssVar();
 
+  const {handleTestExpose, hasUserConsent} = useTestExpose();
+
   return (
     <>
       <Analytics />
-
-      <div
-        className="flex h-[var(--viewport-height)] flex-col"
-        data-comp={Layout.displayName}
+      <PackTestProvider
+        hasUserConsent={hasUserConsent}
+        testExposureCallback={handleTestExpose}
       >
-        <Header />
-
-        <main
-          role="main"
-          id="mainContent"
-          className={clsx('grow', mainPaddingTopClass)}
+        <div
+          className="flex h-[var(--viewport-height)] flex-col"
+          data-comp={Layout.displayName}
         >
-          {children}
-        </main>
+          <Header />
 
-        <Footer />
+          <main
+            role="main"
+            id="mainContent"
+            className={clsx('grow', mainPaddingTopClass)}
+          >
+            {children}
+          </main>
 
-        <ProductModal />
+          <Footer />
 
-        <Cart />
+          <ProductModal />
 
-        <Search />
+          <Cart />
 
-        <Modal />
-      </div>
+          <Search />
+
+          <Modal />
+        </div>
+      </PackTestProvider>
     </>
   );
 }
