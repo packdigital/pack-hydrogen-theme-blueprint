@@ -2,6 +2,7 @@ import invariant from 'tiny-invariant';
 import type {AppLoadContext} from '@shopify/remix-oxygen';
 import type {
   Product,
+  ProductOptionValue,
   ProductVariant,
 } from '@shopify/hydrogen/storefront-api-types';
 
@@ -57,16 +58,18 @@ export const getSelectedProductOptions = async ({
       const optionValuesByOptionName = Object.values({
         ...productWithOptions.options,
       } as Product['options']).reduce(
-        (acc: Record<string, string[]>, option) => {
-          return {...acc, [option.name.toLowerCase()]: option.values};
+        (acc: Record<string, ProductOptionValue[]>, option) => {
+          return {...acc, [option.name]: option.optionValues};
         },
         {},
       );
       // Set selected options from the query string
       searchParams.forEach((value, name) => {
         // Filter out non-option or invalid value search params
-        if (!optionValuesByOptionName[name.toLowerCase()]?.includes(value))
-          return;
+        const isValidOptionName = optionValuesByOptionName[name]?.some(
+          (optionValue) => optionValue.name === value,
+        );
+        if (!isValidOptionName) return;
         selectedOptions.push({name, value});
       });
     }
