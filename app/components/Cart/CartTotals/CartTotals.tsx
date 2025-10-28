@@ -9,7 +9,7 @@ import type {
 
 import {Link} from '~/components/Link';
 import {prefixNonUsdDollar} from '~/hooks/product/useVariantPrices';
-import {useLocale} from '~/hooks';
+import {useCustomer, useLocale} from '~/hooks';
 
 import type {CartTotalsProps} from '../Cart.types';
 
@@ -17,6 +17,7 @@ import {CartTotalsDiscountItem} from './CartTotalsDiscountItem';
 
 export const CartTotals = memo(({settings}: CartTotalsProps) => {
   const {currency} = useLocale();
+  const customer = useCustomer();
   const {
     checkoutUrl = '',
     cost,
@@ -25,6 +26,15 @@ export const CartTotals = memo(({settings}: CartTotalsProps) => {
   } = useCart() as CartWithActions & {
     discountAllocations: Cart['discountAllocations'];
   };
+
+  const authenticatedCheckoutUrl = useMemo(() => {
+    if (!checkoutUrl) return '';
+    const url = new URL(checkoutUrl);
+    if (customer) {
+      url.searchParams.set('logged_in', 'true');
+    }
+    return url.toString();
+  }, [checkoutUrl, !!customer]);
 
   const parsedDiscountAllocations = useMemo((): Cart['discountAllocations'] => {
     const codes: string[] = [];
@@ -119,7 +129,7 @@ export const CartTotals = memo(({settings}: CartTotalsProps) => {
         {subtext && <p className="text-xs">{subtext}</p>}
       </div>
 
-      <Link className="btn-primary w-full" to={checkoutUrl}>
+      <Link className="btn-primary w-full" to={authenticatedCheckoutUrl}>
         {checkoutText}
       </Link>
     </div>
