@@ -39,7 +39,7 @@ export function Product({
   }, [initialSelectedVariant, providerSelectedVariant, product]);
 
   const [quantity, setQuantity] = useState(
-    selectedVariant?.quantityRule?.increment || 1,
+    selectedVariant?.quantityRule?.minimum || 1,
   );
 
   const selectedVariantColor = useMemo(() => {
