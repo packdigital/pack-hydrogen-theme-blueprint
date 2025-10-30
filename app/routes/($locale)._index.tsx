@@ -2,6 +2,7 @@ import {useLoaderData} from '@remix-run/react';
 import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 import {RenderSections} from '@pack/react';
 import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
+import {PackTestRoute} from '@pack/hydrogen';
 
 import {getPage} from '~/lib/server-utils/pack.server';
 import {getShop, getSiteSettings} from '~/lib/server-utils/settings.server';
@@ -24,7 +25,7 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
     throw new Response(null, {status: 404});
   }
 
-  const [{page}, shop, siteSettings] = await Promise.all([
+  const [{page, packTestInfo}, shop, siteSettings] = await Promise.all([
     getPage({
       context,
       handle: '/',
@@ -49,6 +50,7 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
     page,
     seo,
     url: request.url,
+    packTestInfo,
   };
 }
 
@@ -59,5 +61,10 @@ export const meta = ({matches}: MetaArgs<typeof loader>) => {
 export default function Index() {
   const {page} = useLoaderData<typeof loader>();
 
-  return <RenderSections content={page} />;
+  return (
+    <>
+      <PackTestRoute />
+      <RenderSections content={page} />;
+    </>
+  );
 }

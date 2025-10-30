@@ -124,7 +124,6 @@ export async function loader({context, request}: LoaderFunctionArgs) {
   ]);
 
   const groupingsPromise = getProductGroupings(context);
-
   let customer: Customer | null = null;
 
   if (isLoggedIn) {
@@ -178,7 +177,6 @@ export async function loader({context, request}: LoaderFunctionArgs) {
       customizerMeta: pack.session.get('customizerMeta'),
       ENV: {...ENV, SITE_TITLE} as Record<string, string>,
       groupingsPromise,
-      isPreviewModeEnabled,
       modalProduct,
       modalSelectedVariant,
       oxygen,
@@ -188,6 +186,7 @@ export async function loader({context, request}: LoaderFunctionArgs) {
       siteSettings,
       siteTitle: SITE_TITLE,
       url: request.url,
+      ...pack.getPackContextData(),
     },
     {headers},
   );

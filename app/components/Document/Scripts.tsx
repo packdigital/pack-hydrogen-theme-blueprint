@@ -1,7 +1,7 @@
-import {memo} from 'react';
-import {Script} from '@shopify/hydrogen';
+import { memo } from 'react';
+import { Script } from '@shopify/hydrogen';
 
-import {useLoadScript, useRootLoaderData} from '~/hooks';
+import { useLoadScript, useRootLoaderData } from '~/hooks';
 
 /**
  * Use useLoadScript hook to lazy load third party scripts.
@@ -12,7 +12,7 @@ import {useLoadScript, useRootLoaderData} from '~/hooks';
  */
 
 export const Scripts = memo(() => {
-  const {ENV} = useRootLoaderData();
+  const { ENV } = useRootLoaderData();
 
   useLoadScript(
     {
@@ -25,6 +25,30 @@ export const Scripts = memo(() => {
     },
     'body',
     !!ENV.PUBLIC_GTM_CONTAINER_ID,
+  );
+
+  // OneTrust scripts, PUBLIC_ONETRUST_DATA_DOMAIN_SCRIPT must be set in .env
+  useLoadScript(
+    {
+      id: 'onetrust-script',
+      src: 'https://cdn.cookielaw.org/scripttemplates/otSDKStub.js',
+      async: true,
+      type: 'text/javascript',
+      charset: 'UTF-8',
+      'data-domain-script': ENV.PUBLIC_ONETRUST_DATA_DOMAIN_SCRIPT,
+    },
+    'head',
+    !!ENV.PUBLIC_ONETRUST_DATA_DOMAIN_SCRIPT,
+  );
+
+  useLoadScript(
+    {
+      id: 'onetrust-inline-script',
+      innerHTML: 'function OptanonWrapper() { }',
+      type: 'text/javascript',
+    },
+    'head',
+    !!ENV.PUBLIC_ONETRUST_DATA_DOMAIN_SCRIPT,
   );
 
   // ↓ Other third party scripts ↓
