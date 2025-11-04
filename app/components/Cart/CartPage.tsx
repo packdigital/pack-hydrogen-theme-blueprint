@@ -1,9 +1,8 @@
-import {useCart} from '@shopify/hydrogen-react';
 import {Analytics} from '@shopify/hydrogen';
 import clsx from 'clsx';
 import type {CartLine as CartLineType} from '@shopify/hydrogen/storefront-api-types';
 
-import {useGlobal, useSettings} from '~/hooks';
+import {useCart, useGlobal, useSettings} from '~/hooks';
 
 import {CartEmpty} from './CartEmpty';
 import {CartLine} from './CartLine';

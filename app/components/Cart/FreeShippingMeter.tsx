@@ -1,20 +1,11 @@
 import {memo, useMemo} from 'react';
-import {useCart} from '@shopify/hydrogen-react';
-import type {CartWithActions} from '@shopify/hydrogen-react';
-import type {Cart} from '@shopify/hydrogen/storefront-api-types';
 
-import {useLocale} from '~/hooks';
+import {useCart, useLocale} from '~/hooks';
 
 import type {FreeShippingMeterProps} from './Cart.types';
 
 export const FreeShippingMeter = memo(({settings}: FreeShippingMeterProps) => {
-  const {
-    cost,
-    discountAllocations = [],
-    totalQuantity = 0,
-  } = useCart() as CartWithActions & {
-    discountAllocations: Cart['discountAllocations'];
-  };
+  const {cost, discountAllocations = [], totalQuantity = 0} = useCart();
   const {pathPrefix} = useLocale();
   const {
     enabled,

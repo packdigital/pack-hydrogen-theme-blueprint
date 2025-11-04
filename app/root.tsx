@@ -14,6 +14,7 @@ import {
 import type {
   LinksFunction,
   LoaderFunctionArgs,
+  LoaderFunction,
   MetaArgs,
 } from '@shopify/remix-oxygen';
 import type {Shop} from '@shopify/hydrogen/storefront-api-types';
@@ -95,7 +96,7 @@ export const links: LinksFunction = () => {
 };
 
 export async function loader({context, request}: LoaderFunctionArgs) {
-  const {storefront, oxygen, pack, env, customerAccount} = context;
+  const {storefront, oxygen, pack, env, customerAccount, cart} = context;
   const isPreviewModeEnabled = pack.isPreviewModeEnabled() as boolean;
 
   /*
@@ -172,6 +173,7 @@ export async function loader({context, request}: LoaderFunctionArgs) {
   return dataWithOptions(
     {
       analytics,
+      cart: cart.get(),
       consent,
       cookieDomain,
       customer,

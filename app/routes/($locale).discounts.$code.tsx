@@ -1,12 +1,22 @@
-import {useEffect} from 'react';
-import {redirect} from '@shopify/remix-oxygen';
-import {getSeoMeta} from '@shopify/hydrogen';
-import {useLoaderData, useNavigate} from '@remix-run/react';
-import {useCart} from '@shopify/hydrogen-react';
-import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
+import {redirect, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
 
-export async function loader({request, params}: LoaderFunctionArgs) {
-  const {code, locale} = params;
+/**
+ * Automatically applies a discount found on the url
+ * If a cart exists it's updated with the discount, otherwise a cart is created with the discount already applied
+ * @param ?redirect an optional path to return to otherwise return to the home page
+ * @example
+ * Example path applying a discount and redirecting
+ * ```ts
+ * /discount/FREESHIPPING?redirect=/products
+ *
+ * ```
+ * @preserve
+ */
+export async function loader({request, context, params}: LoaderFunctionArgs) {
+  const {cart} = context;
+  // N.B. This route will probably be removed in the future.
+  const session = context.session as any;
+  const {code} = params;
 
   const url = new URL(request.url);
   const searchParams = new URLSearchParams(url.search);
@@ -21,38 +31,20 @@ export async function loader({request, params}: LoaderFunctionArgs) {
   searchParams.delete('redirect');
   searchParams.delete('return_to');
 
-  const redirectUrl = `${
-    locale ? `/${locale}` : ''
-  }${redirectParam}?${searchParams}`;
+  const redirectUrl = `${redirectParam}?${searchParams}`;
 
   if (!code) {
     return redirect(redirectUrl);
   }
 
-  return {
-    code,
-    redirectUrl,
-    seo: {robots: {noIndex: true, noFollow: true}},
-  };
+  const result = await cart.updateDiscountCodes([code]);
+  const headers = cart.setCartId(result.cart.id);
+
+  // Using set-cookie on a 303 redirect will not work if the domain origin have port number (:3000)
+  // If there is no cart id and a new cart id is created in the progress, it will not be set in the cookie
+  // on localhost:3000
+  return redirect(redirectUrl, {
+    status: 303,
+    headers,
+  });
 }
-
-export const meta = ({matches}: MetaArgs<typeof loader>) => {
-  return getSeoMeta(...matches.map((match) => (match.data as any).seo));
-};
-
-export default function DiscountsRoute() {
-  const {code, redirectUrl} = useLoaderData<typeof loader>();
-  const {discountCodesUpdate} = useCart();
-  const navigate = useNavigate();
-
-  // Because useCart hook is being used, the codes update mutation must be done client side
-  useEffect(() => {
-    if (!code) return;
-    discountCodesUpdate([code]);
-    navigate(`${redirectUrl}`, {replace: true});
-  }, [code, discountCodesUpdate, redirectUrl]);
-
-  return null;
-}
-
-DiscountsRoute.displayName = 'DiscountsRoute';

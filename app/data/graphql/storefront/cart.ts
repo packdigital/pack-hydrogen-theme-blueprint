@@ -381,7 +381,7 @@ export const CART_LINE_COMPONENT_FRAGMENT = `#graphql
 ` as const;
 
 export const CART_FRAGMENT = `#graphql
-  fragment CartFragment on Cart {
+  fragment CartApiQuery on Cart {
     id
     checkoutUrl
     createdAt

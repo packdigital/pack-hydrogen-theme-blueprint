@@ -1,3 +1,5 @@
+import type {Cart} from '@shopify/hydrogen/storefront-api-types';
+
 import type {Settings} from '~/lib/types';
 
 export type Action = {type: string; payload?: any};
@@ -57,6 +59,36 @@ export interface PromobarActions {
 export interface PromobarContext {
   state: PromobarState;
   actions: PromobarActions;
+}
+
+/*
+ * CART CONTEXT PROVIDER -----------------------------------------------------
+ */
+
+export type CartStatus =
+  | 'uninitialized'
+  | 'creating'
+  | 'fetching'
+  | 'updating'
+  | 'idle';
+
+export type CartError = unknown;
+
+export interface CartState {
+  cart: Cart | null;
+  status: CartStatus;
+  error: CartError;
+}
+
+export interface CartActions {
+  setCart: (cart: Cart) => void;
+  setStatus: (status: CartState['status']) => void;
+  setError: (error: unknown) => void;
+}
+
+export interface CartContext {
+  state: CartState;
+  actions: CartActions;
 }
 
 /*

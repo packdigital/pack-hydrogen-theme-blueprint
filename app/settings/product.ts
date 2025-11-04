@@ -7,6 +7,7 @@ export interface ProductSettings {
     addToCartText: string;
     soldOutText: string;
     preorderText: string;
+    failedText: string;
     subtext: string;
   };
   backInStock: {
@@ -72,6 +73,11 @@ export default {
           component: 'text',
         },
         {
+          label: 'Failed To Add Text',
+          name: 'failedText',
+          component: 'text',
+        },
+        {
           label: 'Subtext',
           name: 'subtext',
           component: 'text',
@@ -82,6 +88,7 @@ export default {
         addToCartText: 'Add To Cart',
         soldOutText: 'Sold Out',
         preorderText: 'Preorder',
+        failedText: 'Failed To Add',
         subtext: '',
       },
     },

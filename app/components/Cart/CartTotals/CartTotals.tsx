@@ -1,15 +1,11 @@
 import {memo, useMemo} from 'react';
-import {useCart, useMoney} from '@shopify/hydrogen-react';
+import {useMoney} from '@shopify/hydrogen-react';
 import clsx from 'clsx';
-import type {CartWithActions} from '@shopify/hydrogen-react';
-import type {
-  Cart,
-  CartCodeDiscountAllocation,
-} from '@shopify/hydrogen/storefront-api-types';
+import type {CartCodeDiscountAllocation} from '@shopify/hydrogen/storefront-api-types';
 
 import {Link} from '~/components/Link';
 import {prefixNonUsdDollar} from '~/hooks/product/useVariantPrices';
-import {useCustomer, useLocale} from '~/hooks';
+import {useCart, useCustomer, useLocale} from '~/hooks';
 
 import type {CartTotalsProps} from '../Cart.types';
 
@@ -23,9 +19,7 @@ export const CartTotals = memo(({settings}: CartTotalsProps) => {
     cost,
     discountAllocations = [],
     totalQuantity = 0,
-  } = useCart() as CartWithActions & {
-    discountAllocations: Cart['discountAllocations'];
-  };
+  } = useCart();
 
   const authenticatedCheckoutUrl = useMemo(() => {
     if (!checkoutUrl) return '';
@@ -36,7 +30,7 @@ export const CartTotals = memo(({settings}: CartTotalsProps) => {
     return url.toString();
   }, [checkoutUrl, !!customer]);
 
-  const parsedDiscountAllocations = useMemo((): Cart['discountAllocations'] => {
+  const parsedDiscountAllocations = useMemo(() => {
     const codes: string[] = [];
     return discountAllocations.reduce(
       (acc: CartCodeDiscountAllocation[], allocation: any) => {

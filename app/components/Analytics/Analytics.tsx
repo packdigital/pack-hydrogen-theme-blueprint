@@ -1,8 +1,8 @@
 import {memo} from 'react';
 import {Analytics as HydrogenAnalytics, useAnalytics} from '@shopify/hydrogen';
-import {useCart} from '@shopify/hydrogen-react';
 
 import {
+  useCart,
   useCustomer,
   useGlobal,
   usePathStorage,

@@ -40,6 +40,7 @@ export function AddToCart({
   const {
     buttonText,
     cartIsUpdating,
+    failed,
     isAdded,
     isAdding,
     isNotifyMe,
@@ -73,6 +74,7 @@ export function AddToCart({
           'relative w-full',
           isUpdatingClass,
           className,
+          failed && 'bg-red-500',
         )}
         disabled={!!isSoldOut && !isNotifyMe}
         onClick={() => {

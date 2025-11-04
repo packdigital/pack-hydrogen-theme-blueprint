@@ -1,8 +1,8 @@
 import {useEffect, useMemo, useReducer} from 'react';
-import {useCart} from '@shopify/hydrogen-react';
 import {load} from '@fingerprintjs/botd';
 import type {ReactNode} from 'react';
 
+import {useCart} from '~/hooks';
 import type {Action, Dispatch, GlobalState} from '~/lib/types';
 
 import {Context} from './useGlobalContext';

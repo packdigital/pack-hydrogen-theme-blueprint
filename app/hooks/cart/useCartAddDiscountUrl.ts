@@ -1,8 +1,8 @@
 import {useEffect} from 'react';
-import {useCart} from '@shopify/hydrogen-react';
 import cookieParser from 'cookie';
 
 import {deleteCookie, getExpirationDate} from '~/lib/utils';
+import {useCart} from '~/hooks';
 
 const DISCOUNT_COOKIE_NAME = 'discount_code';
 
