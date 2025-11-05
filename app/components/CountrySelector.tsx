@@ -1,14 +1,13 @@
 import {memo, useCallback, useEffect, useMemo, useState} from 'react';
 import {useFetcher, useLocation} from '@remix-run/react';
 import {useInView} from 'react-intersection-observer';
-import {useCart} from '@shopify/hydrogen-react';
 import type {Localization} from '@shopify/hydrogen/storefront-api-types';
 
 import {DEFAULT_LOCALE} from '~/lib/constants';
 import type {I18nLocale} from '~/lib/types';
 import {pathWithLocalePrefix, pathWithoutLocalePrefix} from '~/lib/utils';
 import {Select} from '~/components/Select';
-import {useLocale} from '~/hooks';
+import {useCart, useLocale} from '~/hooks';
 
 export const CountrySelector = memo(
   ({openFrom = 'top'}: {openFrom?: 'top' | 'bottom'}) => {

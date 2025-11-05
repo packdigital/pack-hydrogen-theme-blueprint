@@ -1,9 +1,8 @@
 import {useCallback, useEffect, useMemo, useState} from 'react';
-import {useCart} from '@shopify/hydrogen-react';
 import clsx from 'clsx';
 
 import {LoadingDots} from '~/components/Animations';
-import {useMenu} from '~/hooks';
+import {useCart, useMenu} from '~/hooks';
 
 import type {BYOBAddToCartProps} from './BuildYourOwnBundle.types';
 

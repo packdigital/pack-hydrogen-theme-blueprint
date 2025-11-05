@@ -1,5 +1,4 @@
 import {Fragment, memo, useEffect, useMemo, useState} from 'react';
-import {useCart} from '@shopify/hydrogen-react';
 import {Navigation} from 'swiper/modules';
 import {Swiper, SwiperSlide} from 'swiper/react';
 import {
@@ -11,14 +10,14 @@ import {
 import type {CartLine} from '@shopify/hydrogen/storefront-api-types';
 
 import {Svg} from '~/components/Svg';
-import {useProductsByIds, useProductRecommendations} from '~/hooks';
+import {useCart, useProductsByIds, useProductRecommendations} from '~/hooks';
 
 import type {CartUpsellProps} from '../Cart.types';
 
 import {CartUpsellItem} from './CartUpsellItem';
 
 export const CartUpsell = memo(({closeCart, settings}: CartUpsellProps) => {
-  const {lines = [], status} = useCart();
+  const {lines = [], status, updatedAt} = useCart();
   const cartLines = lines as CartLine[];
 
   const {
@@ -64,9 +63,9 @@ export const CartUpsell = memo(({closeCart, settings}: CartUpsellProps) => {
       }) as [];
       setProductsNotInCart(remaining);
     }
-  }, [cartLines, fullProductsDep, status]);
+  }, [fullProductsDep, status, updatedAt]);
 
-  const showUpsell = lines?.length > 0 && productsNotInCart?.length > 0;
+  const showUpsell = cartLines?.length > 0 && productsNotInCart?.length > 0;
 
   return showUpsell ? (
     <Disclosure

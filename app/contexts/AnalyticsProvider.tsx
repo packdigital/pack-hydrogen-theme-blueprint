@@ -1,29 +1,18 @@
-import {useMemo} from 'react';
 import {Analytics} from '@shopify/hydrogen';
-import {useCart} from '@shopify/hydrogen-react';
 import type {ReactNode} from 'react';
-import type {CartReturn, ShopAnalytics} from '@shopify/hydrogen';
+import type {ShopAnalytics} from '@shopify/hydrogen';
+import type {Cart} from '@shopify/hydrogen/storefront-api-types';
 
 import {useGlobal, useRootLoaderData} from '~/hooks';
 
 export function AnalyticsProvider({children}: {children: ReactNode}) {
-  const {consent, cookieDomain, shop} = useRootLoaderData();
-  const cart = useCart();
-  const {isCartReady, isBot} = useGlobal();
-
-  const cartForAnalytics = useMemo(() => {
-    return {
-      id: 'uninitialized',
-      updatedAt: 'uninitialized',
-      ...cart,
-      lines: {nodes: cart.lines},
-    } as CartReturn;
-  }, [cart]);
+  const {cart, consent, cookieDomain, shop} = useRootLoaderData();
+  const {isBot} = useGlobal();
 
   return (
     <Analytics.Provider
       shop={(isBot ? null : shop) as Promise<ShopAnalytics | null>}
-      cart={isCartReady ? cartForAnalytics : null}
+      cart={cart as Promise<Cart>}
       consent={consent}
       cookieDomain={cookieDomain}
     >

@@ -1,13 +1,10 @@
 import {useMemo} from 'react';
-import type {ReactNode} from 'react';
 import {Links, Meta, Scripts, ScrollRestoration} from '@remix-run/react';
-import {CartProvider, ShopifyProvider} from '@shopify/hydrogen-react';
 import {PreviewProvider} from '@pack/react';
+import type {ReactNode} from 'react';
 
 import {ContextsProvider} from '~/contexts';
-import {CART_FRAGMENT} from '~/data/graphql/storefront/cart';
 import {Layout} from '~/components/Layout';
-import {DEFAULT_STOREFRONT_API_VERSION} from '~/lib/constants';
 import {useLocale, useRootLoaderData} from '~/hooks';
 
 import {Favicon} from './Favicon';
@@ -64,29 +61,17 @@ export function Document({children, title}: DocumentProps) {
       </head>
 
       <body>
-        <ShopifyProvider
-          storeDomain={`https://${ENV.PUBLIC_STORE_DOMAIN}`}
-          storefrontToken={ENV.PUBLIC_STOREFRONT_API_TOKEN}
-          storefrontApiVersion={
-            ENV.PUBLIC_STOREFRONT_API_VERSION || DEFAULT_STOREFRONT_API_VERSION
-          }
-          countryIsoCode={locale.country}
-          languageIsoCode={locale.language}
-        >
-          <CartProvider cartFragment={CART_FRAGMENT}>
-            <ContextsProvider>
-              <PreviewProvider
-                customizerMeta={customizerMeta}
-                isPreviewModeEnabled={isPreviewModeEnabled}
-                siteSettings={siteSettings}
-              >
-                <Layout key={`${locale.language}-${locale.country}`}>
-                  {children}
-                </Layout>
-              </PreviewProvider>
-            </ContextsProvider>
-          </CartProvider>
-        </ShopifyProvider>
+        <ContextsProvider>
+          <PreviewProvider
+            customizerMeta={customizerMeta}
+            isPreviewModeEnabled={isPreviewModeEnabled}
+            siteSettings={siteSettings}
+          >
+            <Layout key={`${locale.language}-${locale.country}`}>
+              {children}
+            </Layout>
+          </PreviewProvider>
+        </ContextsProvider>
         <RootScripts />
         <ScrollRestoration
           getKey={(location) => {

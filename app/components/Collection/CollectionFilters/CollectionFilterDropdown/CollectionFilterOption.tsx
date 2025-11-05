@@ -52,9 +52,11 @@ export function CollectionFilterOption({
 
   if (isPrice) {
     const currentMin = parsedInput.price.min;
-    const currentMax = parsedInput.price.max;
+    const currentMax = Math.ceil(parsedInput.price.max);
     const defaultMin = option?.parsedDefaultInput?.price?.min ?? currentMin;
-    const defaultMax = option?.parsedDefaultInput?.price?.max ?? currentMax;
+    const defaultMax = Math.ceil(
+      option?.parsedDefaultInput?.price?.max ?? currentMax,
+    );
     return (
       <div className="mx-auto w-full max-w-[400px] px-4 pb-4 md:pb-2">
         <MultiRangeSlider

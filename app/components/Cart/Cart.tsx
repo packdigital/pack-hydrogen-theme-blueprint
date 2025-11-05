@@ -1,11 +1,10 @@
 import {memo} from 'react';
-import {useCart} from '@shopify/hydrogen-react';
 import {Analytics} from '@shopify/hydrogen';
 import type {CartLine as CartLineType} from '@shopify/hydrogen/storefront-api-types';
 
 import {Drawer} from '~/components/Drawer';
 import {Svg} from '~/components/Svg';
-import {useMenu, useSettings} from '~/hooks';
+import {useCart, useMenu, useSettings} from '~/hooks';
 
 import {CartDiscounts} from './CartDiscounts';
 import {CartEmpty} from './CartEmpty';
@@ -54,7 +53,7 @@ export const Cart = memo(() => {
             return (
               <li
                 key={line.id}
-                className="border-b border-b-border last:border-none"
+                className="[&>div]:border-b [&>div]:border-b-border [&>div]:last:border-none"
               >
                 <CartLine line={line} closeCart={closeCart} />
               </li>

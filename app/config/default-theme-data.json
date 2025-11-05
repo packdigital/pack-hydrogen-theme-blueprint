@@ -379,7 +379,8 @@
             "subtext": "",
             "soldOutText": "Sold Out",
             "preorderText": "Preorder",
-            "addToCartText": "Add To Cart"
+            "addToCartText": "Add To Cart",
+            "failedText": "Failed To Add"
           },
           "backInStock": {
             "enabled": false,

@@ -119,7 +119,7 @@ export function GA4Events({
       removeFromCartEvent({...data, customer, debug});
     });
     subscribe(AnalyticsEvent.CUSTOMER, (data: Data) => {
-      customerEvent({...data, debug});
+      customerEvent({...data, customer, debug});
     });
     subscribe(AnalyticsEvent.CUSTOMER_LOGGED_IN, (data: Data) => {
       customerLogInEvent({...data, debug});
