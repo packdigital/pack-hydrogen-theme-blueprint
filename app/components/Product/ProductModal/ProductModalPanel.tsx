@@ -137,7 +137,8 @@ export function ProductModalPanel({
       <div className="flex items-center gap-3 border-t border-border p-4">
         {enabledQuantitySelector && (
           <QuantitySelector
-            disableDecrement={quantity === 1}
+            disableDecrement={disableDecrement}
+            disableIncrement={disableIncrement}
             handleDecrement={handleDecrement}
             handleIncrement={handleIncrement}
             productTitle={product.title}

@@ -62,6 +62,26 @@ export function ShoppableSocialVideoProductCard({
     selectedVariant?.quantityRule?.minimum || 1,
   );
 
+  const {
+    increment = 1,
+    minimum = 1,
+    maximum,
+  } = {...selectedVariant?.quantityRule};
+
+  const {disableDecrement, disableIncrement} = useMemo(() => {
+    const nextIncrement = increment - (quantity % increment);
+    const prevIncrement =
+      quantity % increment === 0 ? increment : quantity % increment;
+    const prevQuantity = Number(
+      Math.max(0, quantity - prevIncrement).toFixed(0),
+    );
+    const nextQuantity = Number((quantity + nextIncrement).toFixed(0));
+    return {
+      disableDecrement: prevQuantity < minimum,
+      disableIncrement: Boolean(maximum && nextQuantity > maximum),
+    };
+  }, [increment, minimum, maximum, quantity, selectedVariant?.id]);
+
   const setSelectedOption = useCallback(
     (option: string, value: string) => {
       setSelectedOptionsMap({...selectedOptionsMap, [option]: value});
@@ -111,6 +131,16 @@ export function ShoppableSocialVideoProductCard({
   } = {...sliderSettings};
 
   const {price, compareAtPrice} = useVariantPrices(selectedVariant);
+
+  const handleDecrement = useCallback(() => {
+    if (disableDecrement) return;
+    setQuantity(quantity - increment);
+  }, [quantity, increment, disableDecrement]);
+
+  const handleIncrement = useCallback(() => {
+    if (disableIncrement) return;
+    setQuantity(quantity + increment);
+  }, [quantity, increment, disableIncrement]);
 
   const productImage =
     image || selectedVariant?.image || product?.featuredImage;
@@ -282,9 +312,10 @@ export function ShoppableSocialVideoProductCard({
             {enabledQuantitySelector && (
               <QuantitySelector
                 className="max-w-[100px]"
-                disableDecrement={quantity <= 1}
-                handleDecrement={() => setQuantity(quantity - 1)}
-                handleIncrement={() => setQuantity(quantity + 1)}
+                disableDecrement={disableDecrement}
+                disableIncrement={disableIncrement}
+                handleDecrement={handleDecrement}
+                handleIncrement={handleIncrement}
                 productTitle={product?.title}
                 quantity={quantity}
               />
