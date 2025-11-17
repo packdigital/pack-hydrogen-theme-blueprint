@@ -44,7 +44,7 @@ export function ProductAddToCart({
   useEffect(() => {
     if (!enabledQuantitySelector) return undefined;
     return () => {
-      setQuantity(increment);
+      setQuantity(minimum);
     };
   }, [enabledQuantitySelector]);
 

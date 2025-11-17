@@ -52,13 +52,15 @@ export function ShoppableSocialVideoProductCard({
   }, [customizerProduct, loaderProduct?.id]);
 
   const [showOptions, setShowOptions] = useState(false);
-  const [quantity, setQuantity] = useState(1);
   const [selectedVariant, setSelectedVariant] = useState<
     ProductVariant | undefined
   >(product?.variants?.nodes?.[0]);
   const [selectedOptionsMap, setSelectedOptionsMap] = useState<
     Record<string, string>
   >(generateSelectedOptionsMap(selectedVariant));
+  const [quantity, setQuantity] = useState(
+    selectedVariant?.quantityRule?.minimum || 1,
+  );
 
   const setSelectedOption = useCallback(
     (option: string, value: string) => {

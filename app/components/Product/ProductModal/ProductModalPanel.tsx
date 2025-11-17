@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useState} from 'react';
+import {useCallback, useEffect, useMemo, useState} from 'react';
 import {useProduct} from '@shopify/hydrogen-react';
 import type {Product as ProductType} from '@shopify/hydrogen/storefront-api-types';
 
@@ -31,24 +31,45 @@ export function ProductModalPanel({
   };
   const {price} = useVariantPrices(selectedVariant);
 
-  const [quantity, setQuantity] = useState(1);
+  const {
+    increment = 1,
+    minimum = 1,
+    maximum,
+  } = {...selectedVariant?.quantityRule};
+
+  const [quantity, setQuantity] = useState(minimum);
+
+  const {disableDecrement, disableIncrement} = useMemo(() => {
+    const nextIncrement = increment - (quantity % increment);
+    const prevIncrement =
+      quantity % increment === 0 ? increment : quantity % increment;
+    const prevQuantity = Number(
+      Math.max(0, quantity - prevIncrement).toFixed(0),
+    );
+    const nextQuantity = Number((quantity + nextIncrement).toFixed(0));
+    return {
+      disableDecrement: prevQuantity < minimum,
+      disableIncrement: Boolean(maximum && nextQuantity > maximum),
+    };
+  }, [increment, minimum, maximum, quantity, selectedVariant?.id]);
 
   const enabledQuantitySelector =
     productSettings?.quantitySelector?.enabled || false;
 
   const handleDecrement = useCallback(() => {
-    if (quantity === 1) return;
-    setQuantity(quantity - 1);
-  }, [quantity]);
+    if (disableDecrement) return;
+    setQuantity(quantity - increment);
+  }, [quantity, increment, disableDecrement]);
 
   const handleIncrement = useCallback(() => {
-    setQuantity(quantity + 1);
-  }, [quantity]);
+    if (disableIncrement) return;
+    setQuantity(quantity + increment);
+  }, [quantity, increment, disableIncrement]);
 
   useEffect(() => {
     if (!enabledQuantitySelector) return undefined;
     return () => {
-      setQuantity(1);
+      setQuantity(minimum);
     };
   }, [enabledQuantitySelector]);
 
