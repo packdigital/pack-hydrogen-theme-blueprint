@@ -56,9 +56,9 @@ export function CustomerAccountLayout({children}: {children: React.ReactNode}) {
                 Sign Out
               </button>
             </div>
-
-            <B2BLocation />
           </div>
+
+          <B2BLocation />
 
           {/* desktop nav */}
           <nav className="hidden border-b border-b-border py-6 md:block">

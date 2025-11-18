@@ -27,7 +27,7 @@ export function B2BLocation() {
   )?.name;
 
   return (
-    <div className="order-3 grid grid-cols-1 gap-x-4 border-y border-border py-4 max-md:col-span-2 xs:grid-cols-2 md:order-2 md:grid-cols-1">
+    <div className="order-3 grid grid-cols-1 gap-x-4 border-b border-border py-4 max-md:col-span-2 xs:grid-cols-2 md:order-2 md:grid-cols-1">
       <h3 className="mb-2 !text-base">
         <span className="font-normal">Logged in for:</span>
         <br />
@@ -40,7 +40,9 @@ export function B2BLocation() {
           {locations.length
             ? locationFormattedAddress
               ? locationFormattedAddress.map((line) => <p key={line}>{line}</p>)
-              : 'Unselected'
+              : locations.length === 1
+                ? 'No location'
+                : 'Unselected'
             : 'No location'}
         </p>
 
