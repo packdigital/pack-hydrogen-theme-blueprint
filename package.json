@@ -20,7 +20,7 @@
   "prettier": "@shopify/prettier-config",
   "dependencies": {
     "@fingerprintjs/botd": "^1.9.1",
-    "@headlessui/react": "^2.2.4",
+    "@headlessui/react": "2.2.4",
     "@headlessui/tailwindcss": "^0.2.2",
     "@pack/client": "^1.0.2",
     "@pack/hydrogen": "^1.0.8",
