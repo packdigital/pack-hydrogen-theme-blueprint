@@ -76,10 +76,10 @@ export function OrderItem({item}: OrderItemProps) {
               <Money
                 as="p"
                 className="text-neutralMedium line-through"
-                data={discountedPrice}
+                data={originalPrice}
               />
             )}
-            <Money as="p" data={originalPrice} />
+            <Money as="p" data={discountedPrice || originalPrice} />
             <p>x {quantity}</p>
           </div>
         </div>
@@ -96,10 +96,10 @@ export function OrderItem({item}: OrderItemProps) {
           <Money
             as="p"
             className="text-neutralMedium line-through"
-            data={discountedPrice}
+            data={originalPrice}
           />
         )}
-        <Money as="p" data={originalPrice} />
+        <Money as="p" data={discountedPrice || originalPrice} />
       </div>
 
       {/* desktop quantity */}
@@ -111,10 +111,10 @@ export function OrderItem({item}: OrderItemProps) {
           <Money
             as="p"
             className="text-neutralMedium line-through"
-            data={discountedPrice}
+            data={originalPrice}
           />
         )}
-        <Money as="p" data={originalPrice} />
+        <Money as="p" data={discountedPrice || originalPrice} />
       </div>
     </div>
   );
