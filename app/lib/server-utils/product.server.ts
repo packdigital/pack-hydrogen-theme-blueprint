@@ -265,27 +265,27 @@ export const getModalProduct = async ({
     modalSelectedVariant =
       (modalProduct as Product & {selectedVariant?: ProductVariant})
         ?.selectedVariant ?? modalProduct?.variants?.nodes[0];
-  }
 
-  const productGroupings = await getProductGroupings(context);
+    const productGroupings = await getProductGroupings(context);
 
-  if (productGroupings) {
-    const groupingData = await getGrouping({
-      context,
-      handle: modalProduct?.handle,
-      productGroupings,
-    });
-    const grouping = groupingData.grouping;
-    const groupingProducts = groupingData.groupingProducts;
+    if (productGroupings) {
+      const groupingData = await getGrouping({
+        context,
+        handle: modalProduct?.handle,
+        productGroupings,
+      });
+      const grouping = groupingData.grouping;
+      const groupingProducts = groupingData.groupingProducts;
 
-    if (grouping) {
-      modalProduct = {
-        ...modalProduct,
-        initialGrouping: {
-          ...grouping,
-          allProducts: [modalProduct, ...(groupingProducts || [])],
-        },
-      } as ProductWithInitialGrouping;
+      if (grouping) {
+        modalProduct = {
+          ...modalProduct,
+          initialGrouping: {
+            ...grouping,
+            allProducts: [modalProduct, ...(groupingProducts || [])],
+          },
+        } as ProductWithInitialGrouping;
+      }
     }
   }
 
