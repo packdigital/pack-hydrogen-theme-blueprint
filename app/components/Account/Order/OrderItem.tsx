@@ -1,4 +1,4 @@
-import {useMemo} from 'react';
+import {memo, useMemo} from 'react';
 import {Money} from '@shopify/hydrogen-react';
 
 import {Image} from '~/components/Image';
@@ -8,7 +8,7 @@ import {useProductById} from '~/hooks';
 
 import type {OrderItemProps} from './Order.types';
 
-export function OrderItem({item}: OrderItemProps) {
+export const OrderItem = memo(({item}: OrderItemProps) => {
   const {totalDiscount, price, quantity, productId, image, variantTitle} = item;
 
   const fullProduct = useProductById(productId);
@@ -118,6 +118,6 @@ export function OrderItem({item}: OrderItemProps) {
       </div>
     </div>
   );
-}
+});
 
 OrderItem.displayName = 'OrderItem';
