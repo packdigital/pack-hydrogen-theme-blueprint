@@ -18,6 +18,7 @@ import {
   getSelectedProductOptions,
 } from '~/lib/server-utils/product.server';
 import {seoPayload} from '~/lib/server-utils/seo.server';
+import {checkForTrailingEncodedSpaces} from '~/lib/server-utils/app.server';
 import {PRODUCT_PAGE_QUERY} from '~/data/graphql/pack/product-page';
 import {ADMIN_PRODUCT_QUERY} from '~/data/graphql/admin/product';
 import {PRODUCT_QUERY} from '~/data/graphql/storefront/product';
@@ -42,6 +43,10 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
   const {admin, pack, storefront} = context;
 
   if (!handle) throw new Response(null, {status: 404});
+
+  // Check for trailing encoded spaces and redirect if needed
+  const urlRedirect = checkForTrailingEncodedSpaces(request);
+  if (urlRedirect) return urlRedirect;
 
   const storeDomain = storefront.getShopifyDomain();
   const isPreviewModeEnabled = pack.isPreviewModeEnabled();

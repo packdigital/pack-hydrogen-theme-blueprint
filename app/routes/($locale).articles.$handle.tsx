@@ -13,6 +13,7 @@ import {ARTICLE_PAGE_QUERY} from '~/data/graphql/pack/article-page';
 import {getPage} from '~/lib/server-utils/pack.server';
 import {getShop, getSiteSettings} from '~/lib/server-utils/settings.server';
 import {seoPayload} from '~/lib/server-utils/seo.server';
+import {checkForTrailingEncodedSpaces} from '~/lib/server-utils/app.server';
 import {routeHeaders} from '~/data/cache';
 import type {ArticlePage} from '~/lib/types';
 
@@ -23,6 +24,10 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
   const {storefront} = context;
 
   if (!handle) throw new Response(null, {status: 404});
+
+  // Check for trailing encoded spaces and redirect if needed
+  const urlRedirect = checkForTrailingEncodedSpaces(request);
+  if (urlRedirect) return urlRedirect;
 
   const {article} = await (getPage({
     context,
