@@ -1,4 +1,4 @@
-import {useMemo} from 'react';
+import {memo, useMemo} from 'react';
 import type {Metafield, Product} from '@shopify/hydrogen/storefront-api-types';
 
 import {ProductMetafieldsAccordion} from './ProductMetafieldsAccordion';
@@ -25,7 +25,7 @@ interface ProductMetafieldsProps {
   product: Product;
 }
 
-export function ProductMetafields({product}: ProductMetafieldsProps) {
+export const ProductMetafields = memo(({product}: ProductMetafieldsProps) => {
   const metafields = useMemo(() => {
     // if (!product.metafields) return null;
     // const metafieldsMap = product.metafields;
@@ -48,6 +48,6 @@ export function ProductMetafields({product}: ProductMetafieldsProps) {
       })}
     </ul>
   ) : null;
-}
+});
 
 ProductMetafields.displayName = 'ProductMetafields';

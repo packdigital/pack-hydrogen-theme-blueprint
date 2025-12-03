@@ -70,12 +70,6 @@ const CUSTOMER_FRAGMENT = `
         }
       }
     }
-    metafield(namespace: "sparklayer", key: "authentication") {
-      value
-      type
-      key
-      namespace
-    }
     tags
   }
 ` as const;

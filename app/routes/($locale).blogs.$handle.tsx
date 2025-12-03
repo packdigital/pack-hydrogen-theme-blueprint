@@ -11,6 +11,7 @@ import {BLOG_PAGE_QUERY} from '~/data/graphql/pack/blog-page';
 import {getPage} from '~/lib/server-utils/pack.server';
 import {getShop, getSiteSettings} from '~/lib/server-utils/settings.server';
 import {seoPayload} from '~/lib/server-utils/seo.server';
+import {checkForTrailingEncodedSpaces} from '~/lib/server-utils/app.server';
 import {routeHeaders} from '~/data/cache';
 import type {BlogPage} from '~/lib/types';
 
@@ -21,6 +22,10 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
   const {storefront} = context;
 
   if (!handle) throw new Response(null, {status: 404});
+
+  // Check for trailing encoded spaces and redirect if needed
+  const urlRedirect = checkForTrailingEncodedSpaces(request);
+  if (urlRedirect) return urlRedirect;
 
   // if the number of articles is in the several of hundreds, consider paginating the query
   const getBlogWithAllArticles = async ({

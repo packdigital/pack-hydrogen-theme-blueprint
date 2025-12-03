@@ -35,7 +35,9 @@ export const ProductDetails = forwardRef(
     }, [selectedVariant]);
 
     const sanitizedDescription = useMemo(() => {
-      return sanitizeHtml(product.descriptionHtml || '');
+      return sanitizeHtml(product.descriptionHtml || '', {
+        allowedAttributes: false,
+      });
     }, [product.descriptionHtml]);
 
     const hideOptions =

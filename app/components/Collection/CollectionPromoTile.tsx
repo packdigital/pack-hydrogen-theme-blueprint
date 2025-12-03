@@ -1,3 +1,4 @@
+import {memo} from 'react';
 import {useInView} from 'react-intersection-observer';
 import clsx from 'clsx';
 
@@ -7,7 +8,7 @@ import {Link} from '~/components/Link';
 
 import type {CollectionPromoTileProps} from './Collection.types';
 
-export function CollectionPromoTile({tile}: CollectionPromoTileProps) {
+export const CollectionPromoTile = memo(({tile}: CollectionPromoTileProps) => {
   const {ref, inView} = useInView({
     rootMargin: '200px',
     triggerOnce: true,
@@ -86,6 +87,6 @@ export function CollectionPromoTile({tile}: CollectionPromoTileProps) {
       </div>
     </Link>
   );
-}
+});
 
 CollectionPromoTile.displayName = 'CollectionPromoTile';

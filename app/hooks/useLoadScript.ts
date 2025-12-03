@@ -33,6 +33,37 @@ export function loadScript(
         script.setAttribute(key, additionalAttributes[key]);
       });
     }
+
+    // For inline scripts (innerHTML without src), resolve immediately after appending
+    // since they execute synchronously and don't fire onload
+    if (innerHTML && !src) {
+      script.onerror = (e): void => {
+        reject(false);
+        if (typeof onerror === 'function') {
+          onerror(e);
+        }
+      };
+
+      // checks if placement is react ref
+      if (
+        placement !== null &&
+        typeof placement === 'object' &&
+        'current' in placement
+      ) {
+        placement?.current?.appendChild(script);
+      } else if (placement === 'head') {
+        document.head.appendChild(script);
+      } else {
+        document.body.appendChild(script);
+      }
+
+      // Resolve immediately for inline scripts
+      // Use setTimeout to ensure script is in DOM and executed
+      setTimeout(() => resolve(true), 0);
+      return;
+    }
+
+    // For external scripts (with src), use onload/onerror
     script.onload = (e): void => {
       resolve(true);
       if (typeof onload === 'function') {
@@ -45,6 +76,7 @@ export function loadScript(
         onerror(e);
       }
     };
+
     // checks if placement is react ref
     if (
       placement !== null &&

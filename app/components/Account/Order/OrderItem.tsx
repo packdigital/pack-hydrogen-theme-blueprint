@@ -1,4 +1,4 @@
-import {useMemo} from 'react';
+import {memo, useMemo} from 'react';
 import {Money} from '@shopify/hydrogen-react';
 
 import {Image} from '~/components/Image';
@@ -8,7 +8,7 @@ import {useProductById} from '~/hooks';
 
 import type {OrderItemProps} from './Order.types';
 
-export function OrderItem({item}: OrderItemProps) {
+export const OrderItem = memo(({item}: OrderItemProps) => {
   const {totalDiscount, price, quantity, productId, image, variantTitle} = item;
 
   const fullProduct = useProductById(productId);
@@ -76,10 +76,10 @@ export function OrderItem({item}: OrderItemProps) {
               <Money
                 as="p"
                 className="text-neutralMedium line-through"
-                data={discountedPrice}
+                data={originalPrice}
               />
             )}
-            <Money as="p" data={originalPrice} />
+            <Money as="p" data={discountedPrice || originalPrice} />
             <p>x {quantity}</p>
           </div>
         </div>
@@ -96,10 +96,10 @@ export function OrderItem({item}: OrderItemProps) {
           <Money
             as="p"
             className="text-neutralMedium line-through"
-            data={discountedPrice}
+            data={originalPrice}
           />
         )}
-        <Money as="p" data={originalPrice} />
+        <Money as="p" data={discountedPrice || originalPrice} />
       </div>
 
       {/* desktop quantity */}
@@ -111,13 +111,13 @@ export function OrderItem({item}: OrderItemProps) {
           <Money
             as="p"
             className="text-neutralMedium line-through"
-            data={discountedPrice}
+            data={originalPrice}
           />
         )}
-        <Money as="p" data={originalPrice} />
+        <Money as="p" data={discountedPrice || originalPrice} />
       </div>
     </div>
   );
-}
+});
 
 OrderItem.displayName = 'OrderItem';

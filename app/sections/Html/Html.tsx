@@ -12,7 +12,7 @@ export function Html({cms}: {cms: HtmlCms}) {
 
   // Docs: https://www.npmjs.com/package/sanitize-html
   const sanitizedHtml = useMemo(() => {
-    return sanitizeHtml(html || '');
+    return sanitizeHtml(html || '', {allowedAttributes: false});
   }, [html]);
 
   return html ? (
