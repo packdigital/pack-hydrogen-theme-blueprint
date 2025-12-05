@@ -1,9 +1,10 @@
-import {useCallback, useEffect, useState} from 'react';
+import {useCallback, useEffect, useMemo, useState} from 'react';
 import type {
   AttributeInput,
   ProductVariant,
   SellingPlan,
 } from '@shopify/hydrogen/storefront-api-types';
+import {usePlaybookCartAttributes} from '@pack/react';
 
 import {useCart, useMenu, useRootLoaderData, useSettings} from '~/hooks';
 
@@ -58,10 +59,22 @@ export function useAddToCart({
   const {isPreviewModeEnabled} = useRootLoaderData();
   const {product: productSettings} = useSettings();
   const {openCart, openModal} = useMenu();
+  const getPlaybookAttrs = usePlaybookCartAttributes();
 
   const [isAdding, setIsAdding] = useState(false);
   const [isAdded, setIsAdded] = useState(false);
   const [failed, setFailed] = useState(false);
+
+  // Merge Playbook attribution with any existing attributes
+  const mergedAttributes = useMemo(() => {
+    const playbookAttrs = getPlaybookAttrs();
+    if (!playbookAttrs.length) return attributes;
+    if (!attributes?.length) return playbookAttrs as AttributeInput[];
+    // Merge: existing attributes + playbook attrs (playbook won't overwrite existing keys)
+    const existingKeys = new Set(attributes.map((a) => a.key));
+    const newPlaybookAttrs = playbookAttrs.filter((a) => !existingKeys.has(a.key));
+    return [...attributes, ...newPlaybookAttrs] as AttributeInput[];
+  }, [attributes, getPlaybookAttrs]);
 
   const enabledNotifyMe = productSettings?.backInStock?.enabled ?? true;
   const variantIsSoldOut = selectedVariant && !selectedVariant.availableForSale;
@@ -91,7 +104,7 @@ export function useAddToCart({
     setFailed(false);
     const data = await linesAdd([
       {
-        attributes,
+        attributes: mergedAttributes,
         merchandiseId: selectedVariant.id,
         quantity,
         sellingPlanId,
@@ -110,7 +123,7 @@ export function useAddToCart({
       }
     }
   }, [
-    attributes,
+    mergedAttributes,
     isAdding,
     linesAdd,
     quantity,
