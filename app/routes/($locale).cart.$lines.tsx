@@ -1,4 +1,5 @@
 import {redirect, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
+import {getPlaybookCartAttributesFromRequest} from '@pack/react';
 
 /**
  * Automatically creates a new cart based on the URL and redirects straight to checkout.
@@ -22,6 +23,10 @@ import {redirect, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
 export async function loader({request, context, params}: LoaderFunctionArgs) {
   const {cart} = context;
   const {lines} = params;
+
+  // Get Playbook attribution from cookies for conversion tracking
+  const playbookAttributes = getPlaybookCartAttributesFromRequest(request);
+
   const linesMap = lines?.split(',').map((line) => {
     const lineDetails = line.split(':');
     const variantId = lineDetails[0];
@@ -30,6 +35,8 @@ export async function loader({request, context, params}: LoaderFunctionArgs) {
     return {
       merchandiseId: `gid://shopify/ProductVariant/${variantId}`,
       quantity,
+      // Include Playbook attribution on each line
+      ...(playbookAttributes.length > 0 && {attributes: playbookAttributes}),
     };
   });
 
