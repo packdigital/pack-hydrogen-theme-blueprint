@@ -43,7 +43,7 @@ export function Document({children, title}: DocumentProps) {
   }, [url]);
 
   return (
-    <html lang={locale.language}>
+    <html lang={locale.language.toLowerCase()}>
       <head>
         {title && <title>{title}</title>}
         <meta charSet="utf-8" />
