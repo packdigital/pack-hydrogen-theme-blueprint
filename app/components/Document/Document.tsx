@@ -52,7 +52,7 @@ export function Document({children, title}: DocumentProps) {
         <meta name="og:site_name" content={siteTitle} />
         <meta
           name="og:locale"
-          content={`${locale.language}_${locale.country}`}
+          content={`${locale.language.toLowerCase()}_${locale.country.toUpperCase()}`}
         />
         <meta name="keywords" content={keywords} />
         <meta name="twitter:card" content="summary_large_image" />
