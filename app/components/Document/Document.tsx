@@ -55,6 +55,7 @@ export function Document({children, title}: DocumentProps) {
           content={`${locale.language}_${locale.country}`}
         />
         <meta name="keywords" content={keywords} />
+        <meta name="twitter:card" content="summary_large_image" />
         <link rel="canonical" href={canonicalUrl} />
         <Favicon />
         <Meta />

@@ -115,17 +115,21 @@ function root({
   siteSettings: RootSiteSettings;
   url: Request['url'];
 }): SeoConfig {
-  const {title: seoSiteTitle, description: seoSiteDescription} = {
+  const {title: seoSiteTitle, description: seoSiteDescription, image: seoSiteImage} = {
     ...siteSettings?.data?.siteSettings?.seo,
   } as Seo;
   const title = seoSiteTitle || shop?.name || '';
   const description = truncate(seoSiteDescription || shop?.description || '');
   const siteUrl = new URL(url);
   const origin = siteUrl.origin;
+  const media: SeoMedia = seoSiteImage
+    ? {type: 'image', url: seoSiteImage}
+    : undefined;
 
   return {
     title,
     description,
+    media,
     url,
     robots: {
       noIndex: false,
