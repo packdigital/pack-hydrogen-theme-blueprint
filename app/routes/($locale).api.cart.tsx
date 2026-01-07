@@ -1,12 +1,10 @@
 import {CartForm} from '@shopify/hydrogen';
-import type {
-  ActionFunctionArgs,
-  LoaderFunctionArgs,
-} from '@shopify/remix-oxygen';
 import type {CartQueryDataReturn} from '@shopify/hydrogen';
 import type {Cart} from '@shopify/hydrogen/storefront-api-types';
 
 import {isLocalPath} from '~/lib/utils';
+
+import type {Route} from './+types/($locale).api.cart';
 
 const getParsedJson = (value: FormDataEntryValue | null) => {
   if (!value || typeof value !== 'string') return value;
@@ -17,7 +15,7 @@ const getParsedJson = (value: FormDataEntryValue | null) => {
   }
 };
 
-export async function action({request, context}: ActionFunctionArgs) {
+export async function action({request, context}: Route.ActionArgs) {
   const {cart} = context;
 
   const formData = await request.formData();
@@ -107,6 +105,6 @@ export async function action({request, context}: ActionFunctionArgs) {
   );
 }
 
-export async function loader({context}: LoaderFunctionArgs) {
+export async function loader({context}: Route.LoaderArgs) {
   return Response.json({cart: await context.cart.get()});
 }

@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useState} from 'react';
-import {useFetcher} from '@remix-run/react';
+import {useFetcher} from 'react-router';
 import type {Product} from '@shopify/hydrogen/storefront-api-types';
 
 import {useGroupingsContext} from '~/contexts/GroupingsProvider/useGroupingsContext';

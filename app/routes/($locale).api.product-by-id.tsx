@@ -1,11 +1,12 @@
-import {data as dataWithOptions} from '@shopify/remix-oxygen';
-import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
+import {data as dataWithOptions} from 'react-router';
 
 import {PRODUCT_ITEM_QUERY_BY_ID} from '~/data/graphql/storefront/product';
 import {ADMIN_PRODUCT_ITEM_BY_ID_QUERY} from '~/data/graphql/admin/product';
 import {normalizeAdminProduct} from '~/lib/utils';
 
-export async function loader({request, context}: LoaderFunctionArgs) {
+import type {Route} from './+types/($locale).api.product-by-id';
+
+export async function loader({request, context}: Route.LoaderArgs) {
   const {admin, pack, storefront} = context;
   const url = new URL(request.url);
   const searchParams = new URLSearchParams(url.search);

@@ -1,6 +1,3 @@
-// @ts-ignore
-// Virtual entry point for the app
-import * as remixBuild from 'virtual:remix/server-build';
 import {
   createCartHandler,
   createCustomerAccountClient,
@@ -12,7 +9,7 @@ import {
 import {
   createRequestHandler,
   getStorefrontHeaders,
-} from '@shopify/remix-oxygen';
+} from '@shopify/hydrogen/oxygen';
 import {createPackClient, PackSession, handleRequest} from '@pack/hydrogen';
 
 import {AppSession} from '~/lib/session.server';
@@ -135,7 +132,9 @@ export default {
         pack,
         request,
         createRequestHandler({
-          build: remixBuild,
+          // @ts-ignore
+          // React Router 7.9.x uses virtual imports for the server build
+          build: await import('virtual:react-router/server-build'),
           mode: process.env.NODE_ENV,
           getLoadContext: () => ({
             cache,

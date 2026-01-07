@@ -1,6 +1,6 @@
 import {useMemo} from 'react';
 import {ProductProvider} from '@shopify/hydrogen-react';
-import {useLoaderData} from '@remix-run/react';
+import {useLoaderData} from 'react-router';
 
 import {Container} from '~/components/Container';
 import {Product as ProductComponent} from '~/components/Product';

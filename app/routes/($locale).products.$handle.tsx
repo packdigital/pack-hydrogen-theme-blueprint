@@ -1,4 +1,4 @@
-import {useLoaderData} from '@remix-run/react';
+import {useLoaderData} from 'react-router';
 import {ProductProvider} from '@shopify/hydrogen-react';
 import {
   Analytics,
@@ -7,7 +7,6 @@ import {
   storefrontRedirect,
 } from '@shopify/hydrogen';
 import {RenderSections} from '@pack/react';
-import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 import type {ShopifyAnalyticsProduct} from '@shopify/hydrogen';
 
 import {normalizeAdminProduct} from '~/lib/utils';
@@ -31,6 +30,8 @@ import type {
   SelectedVariant,
 } from '~/lib/types';
 
+import type {Route} from './+types/($locale).products.$handle';
+
 export const headers = routeHeaders;
 
 /*
@@ -38,7 +39,7 @@ export const headers = routeHeaders;
  * constant under lib/constants/product.ts
  */
 
-export async function loader({params, context, request}: LoaderFunctionArgs) {
+export async function loader({params, context, request}: Route.LoaderArgs) {
   const {handle} = params;
   const {admin, pack, storefront} = context;
 
@@ -167,7 +168,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
   };
 }
 
-export const meta = ({matches}: MetaArgs<typeof loader>) => {
+export const meta = ({matches}: Route.MetaArgs) => {
   return getSeoMeta(...matches.map((match) => (match.data as any).seo));
 };
 

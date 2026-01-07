@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useRef, useState, useMemo} from 'react';
-import {useFetcher} from '@remix-run/react';
+import {useFetcher} from 'react-router';
 import debounce from 'lodash/debounce';
 import type {Product} from '@shopify/hydrogen/storefront-api-types';
 

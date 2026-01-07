@@ -1,9 +1,10 @@
-import {redirect} from '@shopify/remix-oxygen';
-import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
+import {redirect} from 'react-router';
 
 import {FROM_ACCOUNT_AUTHORIZATION_KEY} from '~/lib/constants';
 
-export async function loader({context, params}: LoaderFunctionArgs) {
+import type {Route} from './+types/($locale).account_.authorize';
+
+export async function loader({context, params}: Route.LoaderArgs) {
   await context.customerAccount.authorize();
   const locale = params.locale;
   return redirect(

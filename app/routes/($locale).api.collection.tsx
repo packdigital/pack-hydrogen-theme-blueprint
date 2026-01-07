@@ -1,14 +1,15 @@
 import {getPaginationVariables} from '@shopify/hydrogen';
-import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import type {ProductCollectionSortKeys} from '@shopify/hydrogen/storefront-api-types';
 
 import {COLLECTION_QUERY} from '~/data/graphql/storefront/collection';
 import {getSiteSettings} from '~/lib/server-utils/settings.server';
 import {routeHeaders} from '~/data/cache';
 
+import type {Route} from './+types/($locale).api.collection';
+
 export const headers = routeHeaders;
 
-export async function loader({context, request}: LoaderFunctionArgs) {
+export async function loader({context, request}: Route.LoaderArgs) {
   const {storefront} = context;
   const siteSettings = await getSiteSettings(context);
   const url = new URL(request.url);

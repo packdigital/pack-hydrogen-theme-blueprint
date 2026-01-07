@@ -1,5 +1,5 @@
 import {useMemo, useState} from 'react';
-import {useLocation} from '@remix-run/react';
+import {useLocation} from 'react-router';
 import {flattenConnection} from '@shopify/hydrogen';
 import type {CustomerAddress} from '@shopify/hydrogen/customer-account-api-types';
 

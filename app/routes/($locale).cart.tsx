@@ -1,13 +1,14 @@
 import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
-import {Outlet} from '@remix-run/react';
-import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
+import {Outlet} from 'react-router';
 
 import {CartPage} from '~/components/Cart';
 import {getShop, getSiteSettings} from '~/lib/server-utils/settings.server';
 import {seoPayload} from '~/lib/server-utils/seo.server';
 import type {Page} from '~/lib/types';
 
-export async function loader({context, request}: LoaderFunctionArgs) {
+import type {Route} from './+types/($locale).cart';
+
+export async function loader({context, request}: Route.LoaderArgs) {
   const [shop, siteSettings] = await Promise.all([
     getShop(context),
     getSiteSettings(context),
@@ -21,7 +22,7 @@ export async function loader({context, request}: LoaderFunctionArgs) {
   return {analytics, seo, url: request.url};
 }
 
-export const meta = ({matches}: MetaArgs<typeof loader>) => {
+export const meta = ({matches}: Route.MetaArgs) => {
   return getSeoMeta(...matches.map((match) => (match.data as any).seo));
 };
 

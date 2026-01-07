@@ -1,9 +1,9 @@
-import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
-
 import {CACHE_LONG} from '~/data/cache';
 import {LOCALIZATION_QUERY} from '~/data/graphql/storefront/shop';
 
-export async function loader({context}: LoaderFunctionArgs) {
+import type {Route} from './+types/($locale).api.countries';
+
+export async function loader({context}: Route.LoaderArgs) {
   const {storefront} = context;
   const localization = await storefront.query(LOCALIZATION_QUERY, {
     variables: {

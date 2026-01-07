@@ -41,7 +41,7 @@ Instead of hard-coding the whole experience and having to stay on top of every s
 ## Major Features
 
 - CSS Framework: Tailwind
-- Framework: Remix
+- Framework: React Router 7
 - Open-source Hydrogen theme that’s opinionated to Pack, a visual frontend for Hydrogen.
   - Responsive components
     - Heros — multiple slides and configurations
@@ -150,7 +150,7 @@ Note: Pack is free if you’re only looking to spin up a few landing pages, with
   - GitHub
   - Hydrogen
   - Metaobjects
-- Support for Remix and Oxygen
+- Support for React Router 7 and Oxygen
 - A/B testing <b>(coming soon)</b>
 
 ## Get started

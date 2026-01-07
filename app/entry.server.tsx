@@ -1,16 +1,18 @@
 import {renderToReadableStream} from 'react-dom/server';
-import {RemixServer} from '@remix-run/react';
 import {isbot} from 'isbot';
-import type {EntryContext} from '@shopify/remix-oxygen';
+import {ServerRouter} from 'react-router';
+import type {HydrogenRouterContextProvider} from '@shopify/hydrogen';
+import type {EntryContext} from 'react-router';
 
 export default async function handleRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
-  remixContext: EntryContext,
+  reactRouterContext: EntryContext,
+  context: HydrogenRouterContextProvider,
 ) {
   const body = await renderToReadableStream(
-    <RemixServer context={remixContext} url={request.url} />,
+    <ServerRouter context={reactRouterContext} url={request.url} />,
     {
       signal: request.signal,
       onError(error) {

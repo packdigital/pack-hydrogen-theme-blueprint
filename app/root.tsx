@@ -3,20 +3,15 @@ import {
   Outlet,
   useMatches,
   useRouteError,
-} from '@remix-run/react';
-import {data as dataWithOptions, redirect} from '@shopify/remix-oxygen';
-import type {ShouldRevalidateFunction} from '@remix-run/react';
+  data as dataWithOptions,
+  redirect,
+} from 'react-router';
+import type {ShouldRevalidateFunction, LinksFunction} from 'react-router';
 import {
   getSeoMeta,
   getShopAnalytics,
   ShopifySalesChannel,
 } from '@shopify/hydrogen';
-import type {
-  LinksFunction,
-  LoaderFunctionArgs,
-  LoaderFunction,
-  MetaArgs,
-} from '@shopify/remix-oxygen';
 import type {Shop} from '@shopify/hydrogen/storefront-api-types';
 import type {Customer} from '@shopify/hydrogen/customer-account-api-types';
 
@@ -44,6 +39,8 @@ import {registerStorefrontSettings} from '~/settings';
 import {CUSTOMER_DETAILS_QUERY} from '~/data/graphql/customer-account/customer';
 import type {RootSiteSettings} from '~/lib/types';
 import styles from '~/styles/app.css?url';
+
+import type {Route} from './+types/root';
 
 registerSections();
 registerStorefrontSettings();
@@ -95,7 +92,7 @@ export const links: LinksFunction = () => {
   ];
 };
 
-export async function loader({context, request}: LoaderFunctionArgs) {
+export async function loader({context, request}: Route.LoaderArgs) {
   const {storefront, oxygen, pack, env, customerAccount, cart} = context;
   const isPreviewModeEnabled = pack.isPreviewModeEnabled() as boolean;
 
@@ -195,7 +192,7 @@ export async function loader({context, request}: LoaderFunctionArgs) {
   );
 }
 
-export const meta = ({matches}: MetaArgs<typeof loader>) => {
+export const meta = ({matches}: Route.MetaArgs) => {
   return getSeoMeta(...matches.map((match) => (match.data as any).seo));
 };
 
