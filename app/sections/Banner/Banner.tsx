@@ -47,6 +47,7 @@ export function Banner({cms}: {cms: BannerCms}) {
               }}
               className={clsx('media-fill', image.positionMobile)}
               loading="eager"
+              fetchpriority={section?.aboveTheFold ? 'high' : undefined}
               sizes="100vw"
             />
           )}
@@ -71,6 +72,7 @@ export function Banner({cms}: {cms: BannerCms}) {
               }}
               className={clsx('media-fill', image.positionDesktop)}
               loading="eager"
+              fetchpriority={section?.aboveTheFold ? 'high' : undefined}
               sizes="100vw"
             />
           )}

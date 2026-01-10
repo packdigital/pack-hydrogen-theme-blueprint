@@ -48,9 +48,12 @@ export function HeroSlide({
             data={{
               altText: image.imageMobile.altText || image.alt,
               url: mounted ? image.imageMobile.url : '',
+              width: image.imageMobile.width,
+              height: image.imageMobile.height,
             }}
             className={clsx('media-fill', image.positionMobile)}
             loading={aboveTheFold && isFirstSlide ? 'eager' : 'lazy'}
+            fetchpriority={aboveTheFold && isFirstSlide ? 'high' : undefined}
             sizes="100vw"
           />
         )}
@@ -70,9 +73,12 @@ export function HeroSlide({
             data={{
               altText: image.imageDesktop.altText || image.alt,
               url: mounted ? image.imageDesktop.url : '',
+              width: image.imageDesktop.width,
+              height: image.imageDesktop.height,
             }}
             className={clsx('media-fill', image.positionDesktop)}
             loading={aboveTheFold && isFirstSlide ? 'eager' : 'lazy'}
+            fetchpriority={aboveTheFold && isFirstSlide ? 'high' : undefined}
             sizes="100vw"
           />
         )}

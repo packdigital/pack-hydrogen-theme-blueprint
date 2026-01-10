@@ -41,6 +41,7 @@ export function HalfHeroMedia({
             crop={image?.cropMobile}
             className="media-fill"
             loading={aboveTheFold ? 'eager' : 'lazy'}
+            fetchpriority={aboveTheFold ? 'high' : undefined}
             sizes="100vw"
           />
         )}
@@ -69,6 +70,7 @@ export function HalfHeroMedia({
             crop={image?.cropDesktop}
             className="media-fill"
             loading={aboveTheFold ? 'eager' : 'lazy'}
+            fetchpriority={aboveTheFold ? 'high' : undefined}
             sizes="50vw"
           />
         )}

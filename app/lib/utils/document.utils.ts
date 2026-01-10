@@ -1,4 +1,4 @@
-import type {AspectRatio} from '~/lib/types';
+import type {AspectRatio, Page, Section} from '~/lib/types';
 
 export const isLightHexColor = (hex: string | undefined) => {
   if (!hex || typeof hex !== 'string') return undefined;
@@ -73,4 +73,62 @@ export function isLocalPath(url: string) {
   }
 
   return false;
+}
+
+/**
+ * Extracts hero image URLs from page sections for preloading
+ * Looks for Hero, Banner, and HalfHero sections marked as aboveTheFold
+ * @param page - The page object containing sections
+ * @returns Object with mobile and desktop hero image URLs
+ */
+export function getHeroImageUrls(page: Page | null): {
+  mobileUrl: string | null;
+  desktopUrl: string | null;
+} {
+  if (!page?.sections?.nodes?.length) {
+    return {mobileUrl: null, desktopUrl: null};
+  }
+
+  // Find the first hero-type section that is above the fold
+  const heroSection = page.sections.nodes.find((section: Section) => {
+    const sectionType = section.data?._template || section.data?.type || '';
+    const isHeroType = ['hero', 'banner', 'halfHero'].some((type) =>
+      sectionType.toLowerCase().includes(type.toLowerCase()),
+    );
+    const isAboveTheFold = section.data?.section?.aboveTheFold === true;
+    return isHeroType && isAboveTheFold;
+  });
+
+  if (!heroSection) {
+    return {mobileUrl: null, desktopUrl: null};
+  }
+
+  const data = heroSection.data;
+
+  // Handle Hero with slides
+  if (data?.slides?.length > 0) {
+    const firstSlide = data.slides[0];
+    return {
+      mobileUrl: firstSlide?.image?.imageMobile?.url || null,
+      desktopUrl: firstSlide?.image?.imageDesktop?.url || null,
+    };
+  }
+
+  // Handle Banner and HalfHero with direct image property
+  if (data?.image) {
+    return {
+      mobileUrl: data.image?.imageMobile?.url || null,
+      desktopUrl: data.image?.imageDesktop?.url || null,
+    };
+  }
+
+  // Handle HalfHero with media property
+  if (data?.media?.image) {
+    return {
+      mobileUrl: data.media.image?.imageMobile?.url || null,
+      desktopUrl: data.media.image?.imageDesktop?.url || null,
+    };
+  }
+
+  return {mobileUrl: null, desktopUrl: null};
 }

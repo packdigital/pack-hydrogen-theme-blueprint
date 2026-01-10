@@ -65,13 +65,18 @@ export const shouldRevalidate: ShouldRevalidateFunction = ({
   return false;
 };
 
+/**
+ * Resource hints and stylesheets configuration
+ *
+ * Order matters for performance:
+ * 1. Preconnect hints (establish connections early)
+ * 2. Critical stylesheets
+ * 3. DNS prefetch for non-critical domains
+ */
 export const links: LinksFunction = () => {
   return [
-    {rel: 'stylesheet', href: styles},
-    {
-      rel: 'stylesheet',
-      href: 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css',
-    },
+    // Essential preconnects - establish early connections to critical third-party origins
+    // These should come first to maximize their effectiveness
     {
       rel: 'preconnect',
       href: 'https://cdn.shopify.com',
@@ -87,10 +92,51 @@ export const links: LinksFunction = () => {
     {
       rel: 'preconnect',
       href: 'https://fonts.gstatic.com',
+      crossOrigin: 'anonymous' as const,
     },
+    {
+      rel: 'preconnect',
+      href: 'https://cdn.jsdelivr.net',
+    },
+
+    // Primary stylesheet (bundled with app)
+    {rel: 'stylesheet', href: styles},
+
+    // Swiper CSS - pinned to specific version for cache stability
+    // jsDelivr serves files with immutable cache headers (1 year)
+    // Version pinned to match package.json swiper@^12.0.3
+    {
+      rel: 'stylesheet',
+      href: 'https://cdn.jsdelivr.net/npm/swiper@12.0.3/swiper-bundle.min.css',
+    },
+
+    // Google Fonts with display=swap for better performance
     {
       rel: 'stylesheet',
       href: 'https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap',
+    },
+
+    // DNS prefetch for analytics/tracking domains (lower priority than preconnect)
+    // These hints allow DNS resolution to happen early without full connection overhead
+    {
+      rel: 'dns-prefetch',
+      href: 'https://www.googletagmanager.com',
+    },
+    {
+      rel: 'dns-prefetch',
+      href: 'https://www.google-analytics.com',
+    },
+    {
+      rel: 'dns-prefetch',
+      href: 'https://connect.facebook.net',
+    },
+    {
+      rel: 'dns-prefetch',
+      href: 'https://analytics.tiktok.com',
+    },
+    {
+      rel: 'dns-prefetch',
+      href: 'https://static.klaviyo.com',
     },
   ];
 };

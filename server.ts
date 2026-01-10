@@ -24,6 +24,43 @@ import {CART_FRAGMENT} from '~/data/graphql/storefront/cart';
 import defaultThemeData from '~/config/default-theme-data.json';
 
 /**
+ * Cache control constants for static assets
+ * Hashed assets (with content hash in filename) can be cached immutably
+ */
+const STATIC_ASSET_CACHE_CONTROL = 'public, max-age=31536000, immutable';
+
+/**
+ * Check if a request is for a static asset that should be cached long-term
+ */
+function isImmutableAsset(url: URL): boolean {
+  const pathname = url.pathname;
+  // Vite-generated assets have hashes in their filenames
+  // Format: /assets/[name]-[hash].[ext]
+  return (
+    pathname.startsWith('/assets/') ||
+    pathname.match(/\.[a-f0-9]{8,}\.(js|css|woff2?|ttf|otf|eot)$/) !== null
+  );
+}
+
+/**
+ * Add cache headers to response for static assets
+ */
+function addStaticAssetHeaders(response: Response, url: URL): Response {
+  if (isImmutableAsset(url)) {
+    const headers = new Headers(response.headers);
+    headers.set('Cache-Control', STATIC_ASSET_CACHE_CONTROL);
+    // Add Vary header for proper CDN caching
+    headers.set('Vary', 'Accept-Encoding');
+    return new Response(response.body, {
+      status: response.status,
+      statusText: response.statusText,
+      headers,
+    });
+  }
+  return response;
+}
+
+/**
  * Export a fetch handler in module format.
  */
 export default {
@@ -165,7 +202,9 @@ export default {
         return storefrontRedirect({request, response, storefront});
       }
 
-      return response;
+      // Apply cache headers for static assets
+      const url = new URL(request.url);
+      return addStaticAssetHeaders(response, url);
     } catch (error) {
       console.error(error);
       return new Response('An unexpected error occurred.', {status: 500});

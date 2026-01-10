@@ -5,7 +5,13 @@ import type {LinkProps as RemixLinkProps} from '@remix-run/react';
 
 import {useLocale} from '~/hooks';
 
-/* Docs: https://remix.run/docs/en/main/components/link */
+/*
+ * Docs: https://remix.run/docs/en/main/components/link
+ *
+ * Note: When v3_lazyRouteDiscovery is enabled in vite.config.ts, routes are
+ * discovered lazily. The `discover="render"` prop ensures routes are discovered
+ * when links render, preventing "Tried to prefetch X but no routes matched" warnings.
+ */
 
 const getValidatedHref = ({
   href,
@@ -42,6 +48,7 @@ const getValidatedHref = ({
 type LinkProps = {
   children?: ReactNode;
   className?: string;
+  discover?: RemixLinkProps['discover']; // 'render' | 'none' - controls lazy route discovery
   draggable?: boolean;
   href?: string | undefined | null;
   isExternal?: boolean;
@@ -66,6 +73,7 @@ export const Link = forwardRef(
     {
       children,
       className,
+      discover = 'render', // remix property - ensures routes are discovered before prefetch
       href = '', // html property
       isExternal = false, // cms property
       newTab = false,
@@ -97,6 +105,7 @@ export const Link = forwardRef(
     return finalHref ? (
       <RemixLink
         className={className}
+        discover={discover}
         prefetch={prefetch}
         preventScrollReset={preventScrollReset}
         ref={ref}

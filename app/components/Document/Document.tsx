@@ -10,6 +10,7 @@ import {useLocale, useRootLoaderData} from '~/hooks';
 import {Favicon} from './Favicon';
 import {PlaybookSDK} from './PlaybookSDK';
 import {Scripts as RootScripts} from './Scripts';
+import {ThirdPartyScripts} from './ThirdPartyScripts';
 
 interface DocumentProps {
   children: ReactNode;
@@ -75,6 +76,7 @@ export function Document({children, title}: DocumentProps) {
         </ContextsProvider>
         <RootScripts />
         <PlaybookSDK ENV={ENV} />
+        <ThirdPartyScripts />
         <ScrollRestoration
           getKey={(location) => {
             const isPdp = location.pathname.startsWith('/products/');

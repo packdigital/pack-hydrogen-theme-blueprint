@@ -8,6 +8,7 @@ type ImageProps = React.ComponentProps<typeof HydrogenImage> & {
   aspectRatio?: AspectRatio | undefined;
   withLoadingAnimation?: boolean;
   withBackgroundColor?: boolean;
+  fetchpriority?: 'high' | 'low' | 'auto';
 };
 
 export const Image = forwardRef(
@@ -19,6 +20,7 @@ export const Image = forwardRef(
       width,
       withLoadingAnimation = true, // adds a loading shimmer animation if data.url is undefined
       withBackgroundColor = true, // adds a placeholder background color before image loads
+      fetchpriority,
       ...props
     }: ImageProps,
     ref: React.Ref<HTMLImageElement>,
@@ -34,6 +36,8 @@ export const Image = forwardRef(
           withBackgroundColor ? 'bg-neutralLightest' : 'bg-transparent',
           className,
         )}
+        // @ts-expect-error fetchpriority is a valid HTML attribute
+        fetchpriority={fetchpriority}
         {...props}
       />
     ) : (
