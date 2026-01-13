@@ -1,10 +1,7 @@
-import {useState} from 'react';
 import {Swiper, SwiperSlide} from 'swiper/react';
 import clsx from 'clsx';
-import type {SwiperClass} from 'swiper/react';
 
 import {Container} from '~/components/Container';
-import {SwiperSkeleton} from '~/components/SwiperSkeleton';
 
 import type {ImageTilesCms} from './ImageTiles.types';
 import {ImageTile} from './ImageTile';
@@ -25,8 +22,6 @@ export function ImageTiles({cms}: {cms: ImageTilesCms}) {
     textColor = 'var(--text)',
     fullWidth,
   } = {...section};
-
-  const [swiper, setSwiper] = useState<SwiperClass | null>(null);
 
   const breakpoints = {
     mobile: {
@@ -83,7 +78,6 @@ export function ImageTiles({cms}: {cms: ImageTilesCms}) {
               >
                 <Swiper
                   grabCursor
-                  onSwiper={setSwiper}
                   slidesOffsetAfter={breakpoints.mobile.slidesOffsetAfter}
                   slidesOffsetBefore={breakpoints.mobile.slidesOffsetBefore}
                   slidesPerView={breakpoints.mobile.slidesPerView}
@@ -93,30 +87,18 @@ export function ImageTiles({cms}: {cms: ImageTilesCms}) {
                     1024: breakpoints.desktop,
                   }}
                 >
-                  {swiper &&
-                    tiles.map((tile, index) => {
-                      return (
-                        <SwiperSlide key={index}>
-                          <ImageTile
-                            aspectRatio={aspectRatio}
-                            content={content}
-                            tile={tile}
-                          />
-                        </SwiperSlide>
-                      );
-                    })}
+                  {tiles.map((tile, index) => {
+                    return (
+                      <SwiperSlide key={index}>
+                        <ImageTile
+                          aspectRatio={aspectRatio}
+                          content={content}
+                          tile={tile}
+                        />
+                      </SwiperSlide>
+                    );
+                  })}
                 </Swiper>
-
-                {!swiper && (
-                  <SwiperSkeleton breakpoints={breakpoints}>
-                    <div
-                      className={clsx(
-                        'bg-neutralLightest animate-pulse',
-                        aspectRatio,
-                      )}
-                    />
-                  </SwiperSkeleton>
-                )}
               </div>
 
               {/* desktop */}
