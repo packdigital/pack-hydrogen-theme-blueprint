@@ -9,7 +9,7 @@ export function PlaybookSDK({ENV}: {ENV: Record<string, string>}) {
   if (!ENV.PUBLIC_PLAYBOOK_SHOP_ID) return null;
 
   const sdkUrl =
-    ENV.PUBLIC_PLAYBOOK_SDK_URL || 'https://www.playbook.land/api/sdk';
+    ENV.PUBLIC_PLAYBOOK_SDK_URL || 'https://www.heyplaybook.com/sdk/playbook.js';
 
   // Anti-flicker inline script - runs synchronously before hydration
   const antiFlickerScript = `
