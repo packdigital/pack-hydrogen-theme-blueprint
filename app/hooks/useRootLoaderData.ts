@@ -1,5 +1,5 @@
-import type {useLoaderData} from '@remix-run/react';
-import {useMatches} from '@remix-run/react';
+import type {useLoaderData} from 'react-router';
+import {useMatches} from 'react-router';
 
 import type {loader} from '~/root';
 

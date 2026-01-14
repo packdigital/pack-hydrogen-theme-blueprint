@@ -1,5 +1,5 @@
 import {useMemo, useRef, useState} from 'react';
-import {useLoaderData} from '@remix-run/react';
+import {useLoaderData} from 'react-router';
 import {Scrollbar} from 'swiper/modules';
 import {Swiper, SwiperSlide} from 'swiper/react';
 import hexToRgba from 'hex-to-rgba';

@@ -1,9 +1,8 @@
 import {useEffect} from 'react';
-import {Outlet, useLoaderData} from '@remix-run/react';
-import {data as dataWithOptions, redirect} from '@shopify/remix-oxygen';
+import {Outlet, useLoaderData} from 'react-router';
+import {data as dataWithOptions, redirect} from 'react-router';
 import cookieParser from 'cookie';
 import {useAnalytics} from '@shopify/hydrogen';
-import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import type {Customer} from '@shopify/hydrogen/customer-account-api-types';
 
 import {AnalyticsEvent} from '~/components/Analytics/constants';
@@ -19,7 +18,9 @@ import {
 } from '~/lib/constants';
 import {CUSTOMER_DETAILS_QUERY} from '~/data/graphql/customer-account/customer';
 
-export async function loader({context, request, params}: LoaderFunctionArgs) {
+import type {Route} from './+types/($locale).account';
+
+export async function loader({context, request, params}: Route.LoaderArgs) {
   const {locale} = params;
   const isLoggedIn = await context.customerAccount.isLoggedIn();
 

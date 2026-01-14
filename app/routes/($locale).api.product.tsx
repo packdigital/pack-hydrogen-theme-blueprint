@@ -1,10 +1,10 @@
-import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
-
 import {getMetafields, normalizeAdminProduct} from '~/lib/utils';
 import {PRODUCT_ITEM_QUERY} from '~/data/graphql/storefront/product';
 import {ADMIN_PRODUCT_ITEM_QUERY} from '~/data/graphql/admin/product';
 
-export async function loader({request, context}: LoaderFunctionArgs) {
+import type {Route} from './+types/($locale).api.product';
+
+export async function loader({request, context}: Route.LoaderArgs) {
   const {admin, pack, storefront} = context;
   const url = new URL(request.url);
   const searchParams = new URLSearchParams(url.search);

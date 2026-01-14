@@ -1,4 +1,4 @@
-import type {AppLoadContext} from '@shopify/remix-oxygen';
+import type {AppLoadContext} from 'react-router';
 
 import {SITE_SETTINGS_QUERY} from '~/data/graphql/pack/settings';
 import {LAYOUT_QUERY} from '~/data/graphql/storefront/shop';

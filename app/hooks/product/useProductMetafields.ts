@@ -1,5 +1,5 @@
 import {useEffect} from 'react';
-import {useFetcher} from '@remix-run/react';
+import {useFetcher} from 'react-router';
 
 import {useLocale} from '~/hooks';
 import type {MetafieldIdentifier, ParsedMetafields} from '~/lib/types';

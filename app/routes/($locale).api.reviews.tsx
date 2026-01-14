@@ -1,4 +1,4 @@
-import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
+import type {Route} from './+types/($locale).api.reviews';
 
 /*
  * example api call to third party; repurpose as needed
@@ -23,7 +23,7 @@ const getProductReviewAggregate = async ({
   return response.json();
 };
 
-export async function loader({request, context}: LoaderFunctionArgs) {
+export async function loader({request, context}: Route.LoaderArgs) {
   const url = new URL(request.url);
   const searchParams = new URLSearchParams(url.search);
   const action = String(searchParams.get('action') || '');

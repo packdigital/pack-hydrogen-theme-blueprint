@@ -1,5 +1,5 @@
 import {useCallback, useMemo} from 'react';
-import {useSearchParams} from '@remix-run/react';
+import {useSearchParams} from 'react-router';
 import type {
   Product,
   ProductVariant,

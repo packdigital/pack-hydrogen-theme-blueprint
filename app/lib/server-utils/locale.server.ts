@@ -1,5 +1,5 @@
 import cookieParser from 'cookie';
-import type {AppLoadContext} from '@shopify/remix-oxygen';
+import type {AppLoadContext} from 'react-router';
 import type {Localization} from '@shopify/hydrogen/storefront-api-types';
 
 import {countries} from '~/data/countries';

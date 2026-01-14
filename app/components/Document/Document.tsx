@@ -1,5 +1,5 @@
 import {useMemo} from 'react';
-import {Links, Meta, Scripts, ScrollRestoration} from '@remix-run/react';
+import {Links, Meta, Scripts, ScrollRestoration} from 'react-router';
 import {PreviewProvider} from '@pack/react';
 import type {ReactNode} from 'react';
 

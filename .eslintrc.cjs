@@ -3,7 +3,6 @@
  */
 module.exports = {
   extends: [
-    '@remix-run/eslint-config',
     'plugin:hydrogen/recommended',
     'plugin:hydrogen/typescript',
     'plugin:tailwindcss/recommended',

@@ -1,5 +1,5 @@
 import {useCallback, useEffect} from 'react';
-import {useFetcher} from '@remix-run/react';
+import {useFetcher} from 'react-router';
 import type {Customer} from '@shopify/hydrogen/customer-account-api-types';
 
 import {useFetcherStatus} from './useFetcherStatus';

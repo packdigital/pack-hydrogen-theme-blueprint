@@ -1,7 +1,8 @@
-import {redirect} from '@shopify/remix-oxygen';
-import type {ActionFunctionArgs} from '@shopify/remix-oxygen';
+import {redirect} from 'react-router';
 
-export async function action({request}: ActionFunctionArgs) {
+import type {Route} from './+types/($locale).api.redirect';
+
+export async function action({request}: Route.ActionArgs) {
   let body;
   try {
     body = await request.formData();

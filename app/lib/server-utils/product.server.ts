@@ -1,5 +1,5 @@
 import invariant from 'tiny-invariant';
-import type {AppLoadContext} from '@shopify/remix-oxygen';
+import type {AppLoadContext} from 'react-router';
 import type {
   Product,
   ProductOptionValue,

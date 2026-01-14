@@ -1,10 +1,10 @@
-import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
-
 import {PRODUCT_RECOMMENDATIONS_QUERY} from '~/data/graphql/storefront/product';
+
+import type {Route} from './+types/($locale).api.recommendations';
 
 // docs: https://shopify.dev/docs/api/storefront/latest/queries/productRecommendations
 
-export async function loader({request, context}: LoaderFunctionArgs) {
+export async function loader({request, context}: Route.LoaderArgs) {
   const {storefront} = context;
   const url = new URL(request.url);
   const searchParams = new URLSearchParams(url.search);

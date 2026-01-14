@@ -8,7 +8,6 @@ import {useLoadScript, useRootLoaderData} from '~/hooks';
  * Pass an object with script attributes as first argument. `id` is required
  * Pass 'head' as second argument to load script in the head, if required. Otherwise pass 'body' or undefined
  * Pass a boolean as third argument to conditionally load the script.
- * IMPORTANT: Third party scripts rendered directly, i.e. as <script> tags, will likely cause hydration errors as a gotcha of Remix. Use the useLoadScript hook to avoid this issue.
  */
 
 export const Scripts = memo(() => {

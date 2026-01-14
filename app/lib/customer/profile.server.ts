@@ -1,4 +1,4 @@
-import type {AppLoadContext, ActionFunctionArgs} from '@shopify/remix-oxygen';
+import type {AppLoadContext, ActionFunctionArgs} from 'react-router';
 import type {Customer} from '@shopify/hydrogen/customer-account-api-types';
 
 import {customerUpdateClient} from './client';

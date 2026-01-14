@@ -69,7 +69,7 @@ declare global {
 /**
  * Declare local additions to `AppLoadContext` to include the session utilities we injected in `server.ts`.
  */
-declare module '@shopify/remix-oxygen' {
+declare module '@shopify/hydrogen/oxygen' {
   export interface AppLoadContext {
     session: HydrogenSession;
     storefront: Storefront;

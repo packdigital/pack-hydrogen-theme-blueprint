@@ -1,5 +1,5 @@
 import {useEffect, useMemo, useState} from 'react';
-import {useLocation} from '@remix-run/react';
+import {useLocation} from 'react-router';
 
 import {useLocale} from '~/hooks';
 

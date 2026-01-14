@@ -1,13 +1,14 @@
 import {getPaginationVariables} from '@shopify/hydrogen';
-import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 
 import {COLLECTION_QUERY} from '~/data/graphql/storefront/collection';
 import {routeHeaders} from '~/data/cache';
 import {transformShopifyGids} from '~/lib/utils';
 
+import type {Route} from './+types/($locale).collections.$handle[.]json';
+
 export const headers = routeHeaders;
 
-export async function loader({params, context, request}: LoaderFunctionArgs) {
+export async function loader({params, context, request}: Route.LoaderArgs) {
   const {handle} = params;
   const {storefront} = context;
 

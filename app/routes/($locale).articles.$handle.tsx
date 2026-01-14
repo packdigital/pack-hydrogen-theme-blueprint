@@ -1,13 +1,12 @@
 import {useMemo} from 'react';
-import {useLoaderData} from '@remix-run/react';
-import {redirect} from '@shopify/remix-oxygen';
+import {useLoaderData} from 'react-router';
+import {redirect} from 'react-router';
 import {
   AnalyticsPageType,
   getSeoMeta,
   storefrontRedirect,
 } from '@shopify/hydrogen';
 import {RenderSections} from '@pack/react';
-import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 
 import {ARTICLE_PAGE_QUERY} from '~/data/graphql/pack/article-page';
 import {getPage} from '~/lib/server-utils/pack.server';
@@ -17,9 +16,11 @@ import {checkForTrailingEncodedSpaces} from '~/lib/server-utils/app.server';
 import {routeHeaders} from '~/data/cache';
 import type {ArticlePage} from '~/lib/types';
 
+import type {Route} from './+types/($locale).articles.$handle';
+
 export const headers = routeHeaders;
 
-export async function loader({params, context, request}: LoaderFunctionArgs) {
+export async function loader({params, context, request}: Route.LoaderArgs) {
   const {handle, locale} = params;
   const {storefront} = context;
 
@@ -72,7 +73,7 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
   }
 }
 
-export const meta = ({matches}: MetaArgs<typeof loader>) => {
+export const meta = ({matches}: Route.MetaArgs) => {
   return getSeoMeta(...matches.map((match) => (match.data as any).seo));
 };
 

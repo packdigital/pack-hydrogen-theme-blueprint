@@ -1,6 +1,6 @@
 import {v4 as uuidv4} from 'uuid';
 import cookieParser from 'cookie';
-import type {AppLoadContext} from '@shopify/remix-oxygen';
+import type {AppLoadContext} from 'react-router';
 
 import {PRODUCT_GROUPINGS_QUERY} from '~/data/graphql/pack/settings';
 import type {Group, Page} from '~/lib/types';

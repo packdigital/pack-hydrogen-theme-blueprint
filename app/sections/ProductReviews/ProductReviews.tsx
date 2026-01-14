@@ -1,5 +1,5 @@
 import {useMemo} from 'react';
-import {useLoaderData} from '@remix-run/react';
+import {useLoaderData} from 'react-router';
 import {useInView} from 'react-intersection-observer';
 import type {Product} from '@shopify/hydrogen/storefront-api-types';
 

@@ -1,9 +1,10 @@
 import {parseGid} from '@shopify/hydrogen-react';
 import {XMLBuilder} from 'fast-xml-parser';
-import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import type {Product} from '@shopify/hydrogen/storefront-api-types';
 
 import {PRODUCT_FEED_QUERY} from '~/data/graphql/storefront/product';
+
+import type {Route} from './+types/[product-feed.xml]';
 
 const SAFE_XML: Record<string, string> = {
   '&': '&amp;',
@@ -18,7 +19,7 @@ const formatStr = (str = '') =>
     return acc + (SAFE_XML[char] || char);
   }, '');
 
-export async function loader({context, request}: LoaderFunctionArgs) {
+export async function loader({context, request}: Route.LoaderArgs) {
   const {storefront} = context;
 
   const baseUrl = new URL(request.url).origin;

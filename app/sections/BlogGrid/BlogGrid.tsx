@@ -1,5 +1,5 @@
 import {useMemo} from 'react';
-import {useLoaderData, useLocation} from '@remix-run/react';
+import {useLoaderData, useLocation} from 'react-router';
 
 import {Container} from '~/components/Container';
 import {Pagination} from '~/components/Pagination';

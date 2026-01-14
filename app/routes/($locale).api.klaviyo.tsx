@@ -1,5 +1,3 @@
-import type {ActionFunctionArgs} from '@shopify/remix-oxygen';
-
 import {
   checkIfEmailIsInList,
   checkIfPhoneNumberIsInList,
@@ -7,7 +5,9 @@ import {
   subscribeToBackInStock,
 } from '~/lib/klaviyo';
 
-export async function action({request, context}: ActionFunctionArgs) {
+import type {Route} from './+types/($locale).api.klaviyo';
+
+export async function action({request, context}: Route.ActionArgs) {
   let body;
   try {
     body = await request.formData();

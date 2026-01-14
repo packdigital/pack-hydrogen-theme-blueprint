@@ -1,4 +1,3 @@
-import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import type {
   PredictiveSearchResult,
   PredictiveSearchType,
@@ -7,6 +6,8 @@ import type {
 
 import {PREDICTIVE_SEARCH_QUERY} from '~/data/graphql/storefront/search';
 import {getSiteSettings} from '~/lib/server-utils/settings.server';
+
+import type {Route} from './+types/($locale).api.predictive-search';
 
 type PredictiveCollection = PredictiveSearchResult['collections'][number];
 type PredicticeSearchResultItemImage = PredictiveCollection['image'];
@@ -29,7 +30,7 @@ type NormalizedPredictiveSearchResults = Array<
 >;
 const DEFAULT_SEARCH_TYPES: PredictiveSearchType[] = ['COLLECTION', 'QUERY'];
 
-export async function loader({request, params, context}: LoaderFunctionArgs) {
+export async function loader({request, params, context}: Route.LoaderArgs) {
   const search = await fetchPredictiveSearchResults({
     params,
     request,
@@ -42,7 +43,7 @@ async function fetchPredictiveSearchResults({
   params,
   request,
   context,
-}: Pick<LoaderFunctionArgs, 'params' | 'context' | 'request'>) {
+}: Pick<Route.LoaderArgs, 'params' | 'context' | 'request'>) {
   const {storefront} = context;
   const url = new URL(request.url);
   const searchParams = new URLSearchParams(url.search);
@@ -100,7 +101,7 @@ async function fetchPredictiveSearchResults({
  */
 export function normalizePredictiveSearchResults(
   predictiveSearch: PredictiveSearchResult,
-  locale: LoaderFunctionArgs['params']['locale'],
+  locale: Route.LoaderArgs['params']['locale'],
 ): NormalizedPredictiveSearch {
   let totalResults = 0;
   if (!predictiveSearch) {
