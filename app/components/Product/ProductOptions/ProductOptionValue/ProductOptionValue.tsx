@@ -21,6 +21,7 @@ export const ProductOptionValue = memo(
     setSelectedOption,
     subgroupIndex,
     swatchesMap,
+    variantMap,
   }: ProductOptionValueProps) => {
     const {
       isAvailable,
@@ -34,6 +35,7 @@ export const ProductOptionValue = memo(
       product,
       selectedOptionsMap,
       optionValue,
+      variantMap,
     });
 
     const swatch = swatchesMap?.[optionValue.name.toLowerCase()];

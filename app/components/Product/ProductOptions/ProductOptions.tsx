@@ -1,5 +1,6 @@
-import {useCallback} from 'react';
+import {useCallback, useMemo} from 'react';
 import {useAnalytics} from '@shopify/hydrogen';
+import type {ProductVariant} from '@shopify/hydrogen/storefront-api-types';
 
 import {AnalyticsEvent} from '~/components/Analytics/constants';
 
@@ -15,6 +16,18 @@ export function ProductOptions({
   swatchesMap,
 }: ProductOptionsProps) {
   const {publish, shop} = useAnalytics();
+
+  const variantMap = useMemo(() => {
+    const map = new Map<string, ProductVariant>();
+    product.variants.nodes.forEach((variant) => {
+      const key = variant.selectedOptions
+        .map((opt) => `${opt.name}:${opt.value}`)
+        .sort()
+        .join('|');
+      map.set(key, variant);
+    });
+    return map;
+  }, [product.id]);
 
   const handleSelect: OnSelect = useCallback(
     ({selectedVariant, optionName, optionValue, fromGrouping = false}) => {
@@ -47,6 +60,7 @@ export function ProductOptions({
               selectedOptionsMap={selectedOptionsMap}
               setSelectedOption={setSelectedOption}
               swatchesMap={swatchesMap}
+              variantMap={variantMap}
             />
           </div>
         );

@@ -16,6 +16,7 @@ export const ProductOptionValues = memo(
     selectedOptionsMap,
     setSelectedOption,
     swatchesMap,
+    variantMap,
   }: ProductOptionValuesProps) => {
     const {pathname} = useLocation();
 
@@ -95,6 +96,7 @@ export const ProductOptionValues = memo(
                             setSelectedOption={setSelectedOption}
                             subgroupIndex={groupIndex}
                             swatchesMap={swatchesMap}
+                            variantMap={variantMap}
                           />
                         </li>
                       );
@@ -129,6 +131,7 @@ export const ProductOptionValues = memo(
                       swatchesMap={swatchesMap}
                       optionValue={optionValue}
                       onSelect={onSelect}
+                      variantMap={variantMap}
                     />
                   </li>
                 );

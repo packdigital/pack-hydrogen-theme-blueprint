@@ -1,5 +1,8 @@
 import {useMemo} from 'react';
-import type {Product} from '@shopify/hydrogen/storefront-api-types';
+import type {
+  Product,
+  ProductVariant,
+} from '@shopify/hydrogen/storefront-api-types';
 
 import {formatGroupingWithOptions} from '~/lib/utils';
 import type {
@@ -32,28 +35,21 @@ export function useProductWithGrouping(
       getProductByHandle: (handle) => groupingProductsByHandle[handle],
     });
 
-    const groupingProductsByOptionValue = initialGrouping.allProducts.reduce(
-      (acc: Record<string, Record<string, Product[]>>, groupProduct) => {
-        groupProduct.options.forEach((option) => {
-          const {name, optionValues} = option;
-          if (!optionValues) return;
-          optionValues.forEach((optionValue) => {
-            if (!acc[name]) acc[name] = {};
-            acc[name][optionValue.name] = [
-              ...(acc[name][optionValue.name] || []),
-              groupProduct,
-            ];
-          });
-        });
-        return acc;
-      },
-      {},
-    );
+    const variantMap = new Map<string, ProductVariant>();
+    initialGrouping.allProducts.forEach((groupProduct) => {
+      groupProduct.variants?.nodes.forEach((variant) => {
+        const key = variant.selectedOptions
+          .map((opt) => `${opt.name}:${opt.value}`)
+          .sort()
+          .join('|');
+        variantMap.set(key, variant);
+      });
+    });
 
     const completeGrouping = {
       ...groupingWithOptions,
       productsByHandle: groupingProductsByHandle,
-      productsByOptionValue: groupingProductsByOptionValue,
+      variantMap,
     } as Group;
 
     const productWithGrouping = {
