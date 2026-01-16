@@ -4,7 +4,7 @@ import {
   useMatches,
   useRouteError,
 } from '@remix-run/react';
-import {data as dataWithOptions, redirect} from '@shopify/remix-oxygen';
+import {redirect} from '@shopify/remix-oxygen';
 import type {ShouldRevalidateFunction} from '@remix-run/react';
 import {
   getSeoMeta,
@@ -14,7 +14,6 @@ import {
 import type {
   LinksFunction,
   LoaderFunctionArgs,
-  LoaderFunction,
   MetaArgs,
 } from '@shopify/remix-oxygen';
 import type {Shop} from '@shopify/hydrogen/storefront-api-types';
@@ -32,10 +31,7 @@ import {
   getShop,
   getSiteSettings,
 } from '~/lib/server-utils/settings.server';
-import {
-  getProductGroupings,
-  setPackCookie,
-} from '~/lib/server-utils/pack.server';
+import {getProductGroupings} from '~/lib/server-utils/pack.server';
 import {redirectLinkToBuyerLocale} from '~/lib/server-utils/locale.server';
 import {seoPayload} from '~/lib/server-utils/seo.server';
 import {getModalProduct} from '~/lib/server-utils/product.server';
@@ -134,13 +130,6 @@ export async function loader({context, request}: LoaderFunctionArgs) {
   }
 
   const cookieDomain = getCookieDomain(request.url);
-  const newHeaders = new Headers();
-  const {headers: headersWithPackCookie} = await setPackCookie({
-    cookieDomain,
-    headers: newHeaders,
-    request,
-  });
-  const headers = headersWithPackCookie;
 
   /* Get product if modalProduct url param is present */
   const {modalProduct, modalSelectedVariant} = await getModalProduct({
@@ -170,29 +159,26 @@ export async function loader({context, request}: LoaderFunctionArgs) {
   });
   const SITE_TITLE = siteSettings?.data?.siteSettings?.seo?.title || shop.name;
 
-  return dataWithOptions(
-    {
-      analytics,
-      cart: cart.get(),
-      consent,
-      cookieDomain,
-      customer,
-      customizerMeta: pack.session.get('customizerMeta'),
-      ENV: {...ENV, SITE_TITLE} as Record<string, string>,
-      groupingsPromise,
-      isPreviewModeEnabled,
-      modalProduct,
-      modalSelectedVariant,
-      oxygen,
-      selectedLocale: storefront.i18n,
-      seo,
-      shop: shopAnalytics,
-      siteSettings,
-      siteTitle: SITE_TITLE,
-      url: request.url,
-    },
-    {headers},
-  );
+  return {
+    analytics,
+    cart: cart.get(),
+    consent,
+    cookieDomain,
+    customer,
+    customizerMeta: pack.session.get('customizerMeta'),
+    ENV: {...ENV, SITE_TITLE} as Record<string, string>,
+    groupingsPromise,
+    isPreviewModeEnabled,
+    modalProduct,
+    modalSelectedVariant,
+    oxygen,
+    selectedLocale: storefront.i18n,
+    seo,
+    shop: shopAnalytics,
+    siteSettings,
+    siteTitle: SITE_TITLE,
+    url: request.url,
+  };
 }
 
 export const meta = ({matches}: MetaArgs<typeof loader>) => {
