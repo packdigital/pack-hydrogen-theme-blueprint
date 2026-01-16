@@ -12,6 +12,7 @@ export const SITE_SETTINGS_QUERY = `
         title
         description
         keywords
+        image
       }
     }
   }
