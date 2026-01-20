@@ -77,7 +77,10 @@ export function ImageTiles({cms}: {cms: ImageTilesCms}) {
               {/* mobile/tablet/desktop */}
               <div
                 className={clsx(
-                  'relative [&_.swiper]:overflow-visible',
+                  'relative',
+                  Number.isInteger(tilesPerViewDesktop)
+                    ? '[&_.swiper]:max-lg:overflow-visible'
+                    : '[&_.swiper]:overflow-visible',
                   isGridOnDesktop && 'lg:hidden',
                 )}
               >
