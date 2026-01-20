@@ -93,25 +93,27 @@ export function ImageTiles({cms}: {cms: ImageTilesCms}) {
                     1024: breakpoints.desktop,
                   }}
                 >
-                  {swiper &&
-                    tiles.map((tile, index) => {
-                      return (
-                        <SwiperSlide key={index}>
-                          <ImageTile
-                            aspectRatio={aspectRatio}
-                            content={content}
-                            tile={tile}
-                          />
-                        </SwiperSlide>
-                      );
-                    })}
+                  {tiles.map((tile, index) => {
+                    return (
+                      <SwiperSlide
+                        key={index}
+                        className={clsx(!swiper && '!hidden')}
+                      >
+                        <ImageTile
+                          aspectRatio={aspectRatio}
+                          content={content}
+                          tile={tile}
+                        />
+                      </SwiperSlide>
+                    );
+                  })}
                 </Swiper>
 
                 {!swiper && (
                   <SwiperSkeleton breakpoints={breakpoints}>
                     <div
                       className={clsx(
-                        'bg-neutralLightest animate-pulse',
+                        'animate-pulse bg-neutralLightest',
                         aspectRatio,
                       )}
                     />

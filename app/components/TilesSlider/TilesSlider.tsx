@@ -85,27 +85,29 @@ export const TilesSlider = forwardRef(
               1024: breakpoints.desktop,
             }}
           >
-            {swiper &&
-              tiles.map((item, index) => {
-                return (
-                  <SwiperSlide className="w-full" key={index}>
-                    <TilesSliderTile
-                      aspectRatio={aspectRatio}
-                      item={item}
-                      textAlign={textAlign}
-                      textColor={textColor}
-                      tileHeadingSize={tileHeadingSize}
-                    />
-                  </SwiperSlide>
-                );
-              })}
+            {tiles.map((item, index) => {
+              return (
+                <SwiperSlide
+                  className={clsx('w-full', !swiper && '!hidden')}
+                  key={index}
+                >
+                  <TilesSliderTile
+                    aspectRatio={aspectRatio}
+                    item={item}
+                    textAlign={textAlign}
+                    textColor={textColor}
+                    tileHeadingSize={tileHeadingSize}
+                  />
+                </SwiperSlide>
+              );
+            })}
           </Swiper>
 
           {!swiper && (
             <SwiperSkeleton breakpoints={breakpoints}>
               <div className="animate-pulse">
                 <div className={clsx('bg-neutralLightest', aspectRatio)} />
-                <div className="mt-4 w-[150px] h-[29px] md:h-8 bg-neutralLightest" />
+                <div className="mt-4 h-[29px] w-[150px] bg-neutralLightest md:h-8" />
               </div>
             </SwiperSkeleton>
           )}
