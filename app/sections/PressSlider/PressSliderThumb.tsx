@@ -24,8 +24,6 @@ export function PressSliderThumb({
             data={{
               altText: image.altText || alt,
               url: image.url,
-              width: image.width,
-              height: image.height,
             }}
             width="128px"
             className={clsx(

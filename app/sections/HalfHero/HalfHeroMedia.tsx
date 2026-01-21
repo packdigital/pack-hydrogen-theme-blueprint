@@ -34,8 +34,6 @@ export function HalfHeroMedia({
             data={{
               altText: image?.imageMobile?.altText || image?.alt,
               url: image?.imageMobile?.url,
-              width: image?.imageMobile?.width,
-              height: image?.imageMobile?.height,
             }}
             aspectRatio={getAspectRatioFromPercentage(aspectMobile)}
             crop={image?.cropMobile}
@@ -62,8 +60,6 @@ export function HalfHeroMedia({
             data={{
               altText: image?.imageDesktop?.altText || image?.alt,
               url: image?.imageDesktop?.url,
-              width: image?.imageDesktop?.width,
-              height: image?.imageDesktop?.height,
             }}
             aspectRatio={getAspectRatioFromPercentage(aspectDesktop)}
             crop={image?.cropDesktop}

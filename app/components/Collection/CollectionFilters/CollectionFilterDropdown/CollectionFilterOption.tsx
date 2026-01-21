@@ -120,8 +120,6 @@ export const CollectionFilterOption = memo(
               data={{
                 altText: label,
                 url: optionImageUrl,
-                width: optionImage?.width,
-                height: optionImage?.height,
               }}
               aspectRatio="1/1"
               width="24px"

@@ -57,8 +57,6 @@ export const CollectionPromoTile = memo(({tile}: CollectionPromoTileProps) => {
                 data={{
                   altText: media.altText || alt,
                   url: media.url,
-                  width: media.width,
-                  height: media.height,
                 }}
                 aspectRatio={getAspectRatioFromClass(aspectRatio)}
                 className="media-fill"

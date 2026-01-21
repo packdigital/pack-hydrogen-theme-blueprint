@@ -44,28 +44,18 @@ export const SearchItem = memo(
         to={`/products/${product.handle}`}
         onClick={handleClick}
       >
-        <div
-          className="bg-neutralLightest"
-          style={{
-            aspectRatio:
-              image?.width && image?.height
-                ? image.width / image.height
-                : 'var(--product-image-aspect-ratio)',
+        <Image
+          data={{
+            ...image,
+            altText: product.title,
           }}
-        >
-          <Image
-            data={{
-              ...image,
-              altText: product.title,
-            }}
-            aspectRatio={
-              image?.width && image?.height
-                ? `${image.width}/${image.height}`
-                : PRODUCT_IMAGE_ASPECT_RATIO
-            }
-            width="88px"
-          />
-        </div>
+          aspectRatio={
+            image?.width && image?.height
+              ? `${image.width}/${image.height}`
+              : PRODUCT_IMAGE_ASPECT_RATIO
+          }
+          width="88px"
+        />
 
         <div className="flex flex-col justify-between gap-3">
           <div>

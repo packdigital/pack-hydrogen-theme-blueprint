@@ -25,7 +25,7 @@ export function ProductMediaThumbnail({
     >
       <Image
         data={{
-          ...image,
+          url: image?.url,
           altText: alt || image?.altText,
         }}
         aspectRatio="1/1"

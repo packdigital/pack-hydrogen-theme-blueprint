@@ -41,8 +41,8 @@ export function BYOBProductItemMedia({
           ) : (
             <Image
               data={{
-                ...primaryMedia.previewImage,
                 altText: productTitle,
+                url: primaryMedia.previewImage?.url,
               }}
               className="media-fill"
               loading="eager"
@@ -63,8 +63,8 @@ export function BYOBProductItemMedia({
           ) : (
             <Image
               data={{
-                ...hoverMedia.previewImage,
                 altText: productTitle,
+                url: hoverMedia.previewImage?.url,
               }}
               className="media-fill"
               sizes="(min-width: 1280px) 20vw, (min-width: 768px) 30vw, 45vw"
@@ -75,7 +75,7 @@ export function BYOBProductItemMedia({
 
       {/* loading shimmer */}
       {!primaryMedia && (
-        <div className="size-full bg-neutralLightest animate-pulse" />
+        <div className="size-full animate-pulse bg-neutralLightest" />
       )}
     </div>
   );
