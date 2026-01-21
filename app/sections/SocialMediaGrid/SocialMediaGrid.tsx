@@ -68,8 +68,6 @@ export function SocialMediaGrid({cms}: {cms: SocialMediaGridCms}) {
                             data={{
                               altText: image?.altText || item.alt,
                               url: image?.url,
-                              width: image?.width,
-                              height: image?.height,
                             }}
                             className="media-fill"
                             sizes="(min-width: 768px) 25vw, 50vw"

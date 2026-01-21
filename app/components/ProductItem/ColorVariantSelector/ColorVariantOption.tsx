@@ -42,8 +42,6 @@ export const ColorVariantOption = memo(
               data={{
                 altText: color.name,
                 url: optionImageUrl,
-                width: optionImage?.width,
-                height: optionImage?.height,
               }}
               width="24px"
               aspectRatio="1/1"

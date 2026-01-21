@@ -8,6 +8,7 @@ import type {
   ProductWithGrouping,
   SelectedVariant,
   SwatchesMap,
+  VariantMap,
 } from '~/lib/types';
 
 export interface ProductOptionsProps {
@@ -39,6 +40,7 @@ export interface ProductOptionValuesProps {
   selectedOptionsMap?: Record<string, string> | null;
   setSelectedOption: (name: string, value: string) => void;
   swatchesMap?: SwatchesMap;
+  variantMap: VariantMap;
 }
 
 export interface ProductOptionValuesLabelProps {

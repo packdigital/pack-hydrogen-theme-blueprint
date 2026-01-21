@@ -51,8 +51,6 @@ export function InnerColorOptionValue({
           data={{
             altText: optionValue.name,
             url: optionImageUrl,
-            width: optionImage?.width,
-            height: optionImage?.height,
           }}
           aspectRatio="1/1"
           width="32px"

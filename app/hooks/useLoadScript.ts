@@ -1,5 +1,5 @@
 import type {RefObject} from 'react';
-import {useState, useEffect} from 'react';
+import {useCallback, useState, useEffect, useRef} from 'react';
 
 const SCRIPTS_LOADED: Record<string, Promise<boolean>> = {};
 
@@ -104,6 +104,7 @@ type LoadScriptParams = Parameters<typeof loadScript>;
  * @param attributes - any valid HTMLScriptElement attributes
  * @param placement - placement of the script tag in the document either in the head or body
  * @param ready - boolean to determine if the script should be loaded
+ * @param delay - optional delay in milliseconds before loading the script
  * @returns status of script loading
  * @example
  * ```tsx
@@ -113,7 +114,7 @@ type LoadScriptParams = Parameters<typeof loadScript>;
  *    innerHTML: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':...`,
  *  },
  *  'head',
- *  !!ENV.PUBLIC_GOOGLE_ID, // only load script if var is defined
+ *  !!ENV.PUBLIC_GOOGLE_ID, // only load script if var is defined,
  * );
  * // or
  * const status = useLoadScript({
@@ -126,17 +127,21 @@ export function useLoadScript(
   attributes: LoadScriptParams[0], // any valid HTMLScriptElement attributes; id is required
   placement: LoadScriptParams[1] = 'body', // 'head' | 'body' | RefObject<HTMLElement | null> | null
   ready = true, // boolean to determine if the script should be loaded
+  delay = 0, // optional delay in milliseconds before loading the script
 ): ScriptState {
   const [status, setStatus] = useState<ScriptState>('loading');
+  // Store attributes in a ref to always use the latest value in the callback
+  // while using stringified version for dependency comparison
+  const attributesRef = useRef(attributes);
   const stringifiedAttributes = JSON.stringify(attributes);
+  attributesRef.current = attributes;
 
-  useEffect(() => {
-    if (!ready) return;
-
+  const loadScriptAndSetStatus = useCallback(async () => {
     async function loadScriptWrapper(): Promise<void> {
       try {
         setStatus('loading');
-        await loadScript(attributes, placement);
+        // Use ref to get the latest attributes value
+        await loadScript(attributesRef.current, placement);
         setStatus('done');
       } catch (error) {
         setStatus('error');
@@ -146,7 +151,20 @@ export function useLoadScript(
     loadScriptWrapper().catch(() => {
       setStatus('error');
     });
-  }, [placement, ready, stringifiedAttributes]);
+  }, [placement, stringifiedAttributes]);
+
+  useEffect(() => {
+    if (!ready) return;
+
+    if (delay > 0) {
+      const timer = setTimeout(() => {
+        loadScriptAndSetStatus();
+      }, delay);
+      return () => clearTimeout(timer);
+    } else {
+      loadScriptAndSetStatus();
+    }
+  }, [delay, loadScriptAndSetStatus, ready]);
 
   return status;
 }

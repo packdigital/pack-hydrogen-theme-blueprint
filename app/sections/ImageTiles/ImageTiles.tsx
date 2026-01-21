@@ -77,7 +77,10 @@ export function ImageTiles({cms}: {cms: ImageTilesCms}) {
               {/* mobile/tablet/desktop */}
               <div
                 className={clsx(
-                  'relative [&_.swiper]:overflow-visible',
+                  'relative',
+                  Number.isInteger(tilesPerViewDesktop)
+                    ? '[&_.swiper]:max-lg:overflow-visible'
+                    : '[&_.swiper]:overflow-visible',
                   isGridOnDesktop && 'lg:hidden',
                 )}
               >
@@ -93,25 +96,27 @@ export function ImageTiles({cms}: {cms: ImageTilesCms}) {
                     1024: breakpoints.desktop,
                   }}
                 >
-                  {swiper &&
-                    tiles.map((tile, index) => {
-                      return (
-                        <SwiperSlide key={index}>
-                          <ImageTile
-                            aspectRatio={aspectRatio}
-                            content={content}
-                            tile={tile}
-                          />
-                        </SwiperSlide>
-                      );
-                    })}
+                  {tiles.map((tile, index) => {
+                    return (
+                      <SwiperSlide
+                        key={index}
+                        className={clsx(!swiper && '!hidden')}
+                      >
+                        <ImageTile
+                          aspectRatio={aspectRatio}
+                          content={content}
+                          tile={tile}
+                        />
+                      </SwiperSlide>
+                    );
+                  })}
                 </Swiper>
 
                 {!swiper && (
                   <SwiperSkeleton breakpoints={breakpoints}>
                     <div
                       className={clsx(
-                        'bg-neutralLightest animate-pulse',
+                        'animate-pulse bg-neutralLightest',
                         aspectRatio,
                       )}
                     />

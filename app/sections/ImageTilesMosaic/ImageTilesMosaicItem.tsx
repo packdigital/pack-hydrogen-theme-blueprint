@@ -49,8 +49,6 @@ export function ImageTilesMosaicItem({
           data={{
             altText: tile?.image?.altText || tile?.alt,
             url: tile?.image?.url,
-            width: tile?.image?.width,
-            height: tile?.image?.height,
           }}
           className={clsx(
             'media-fill',

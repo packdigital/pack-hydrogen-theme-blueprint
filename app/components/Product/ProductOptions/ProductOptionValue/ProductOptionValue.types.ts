@@ -5,6 +5,7 @@ import type {
   SelectedVariant,
   Swatch,
   SwatchesMap,
+  VariantMap,
 } from '~/lib/types';
 
 import type {OnSelect} from '../ProductOptions.types';
@@ -24,6 +25,7 @@ export interface ProductOptionValueProps {
   setSelectedOption: (name: string, value: string) => void;
   subgroupIndex?: number;
   swatchesMap?: SwatchesMap;
+  variantMap: VariantMap;
 }
 
 export interface ProductOptionValueLinkProps {

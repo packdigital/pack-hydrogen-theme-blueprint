@@ -105,27 +105,26 @@ export function ProductsSlider({
               1024: breakpoints.desktop,
             }}
           >
-            {swiper &&
-              products.map((product, index) => {
-                const hasFullProduct = !!product?.variants;
-                return (
-                  <SwiperSlide key={index}>
-                    <ProductItem
-                      enabledColorNameOnHover={
-                        productItem?.enabledColorNameOnHover
-                      }
-                      enabledColorSelector={productItem?.enabledColorSelector}
-                      enabledQuickShop={productItem?.enabledQuickShop}
-                      enabledStarRating={productItem?.enabledStarRating}
-                      handle={product?.handle}
-                      index={index}
-                      product={hasFullProduct ? product : null}
-                      quickShopMobileHidden={productItem?.quickShopMobileHidden}
-                      swatchesMap={swatchesMap}
-                    />
-                  </SwiperSlide>
-                );
-              })}
+            {products.map((product, index) => {
+              const hasFullProduct = !!product?.variants;
+              return (
+                <SwiperSlide key={index} className={clsx(!swiper && '!hidden')}>
+                  <ProductItem
+                    enabledColorNameOnHover={
+                      productItem?.enabledColorNameOnHover
+                    }
+                    enabledColorSelector={productItem?.enabledColorSelector}
+                    enabledQuickShop={productItem?.enabledQuickShop}
+                    enabledStarRating={productItem?.enabledStarRating}
+                    handle={product?.handle}
+                    index={index}
+                    product={hasFullProduct ? product : null}
+                    quickShopMobileHidden={productItem?.quickShopMobileHidden}
+                    swatchesMap={swatchesMap}
+                  />
+                </SwiperSlide>
+              );
+            })}
 
             {/* Navigation */}
             {products.length > breakpoints.desktop.slidesPerView && (

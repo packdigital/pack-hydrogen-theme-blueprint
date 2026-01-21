@@ -42,6 +42,8 @@ export interface InitialGroup {
   allProducts: Product[];
 }
 
+export type VariantMap = Map<string, ProductVariant>;
+
 export interface Group {
   id: string;
   title: string;
@@ -52,8 +54,8 @@ export interface Group {
   optionsMap?: Record<string, ProductOptionValue[]>;
   allProducts?: {handle: string; id: string}[];
   productsByHandle?: Record<string, Product>;
-  productsByOptionValue?: Record<string, Record<string, Product[]>>;
   isReady?: boolean;
+  variantMap?: VariantMap;
 }
 
 export interface ProductWithInitialGrouping extends Product {

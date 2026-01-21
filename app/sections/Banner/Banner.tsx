@@ -42,8 +42,6 @@ export function Banner({cms}: {cms: BannerCms}) {
               data={{
                 altText: image.imageMobile.altText || image.alt,
                 url: image.imageMobile.url,
-                width: image.imageMobile.width,
-                height: image.imageMobile.height,
               }}
               className={clsx('media-fill', image.positionMobile)}
               loading="eager"
@@ -66,8 +64,6 @@ export function Banner({cms}: {cms: BannerCms}) {
               data={{
                 altText: image.imageDesktop.altText || image.alt,
                 url: image.imageDesktop.url,
-                width: image.imageDesktop.width,
-                height: image.imageDesktop.height,
               }}
               className={clsx('media-fill', image.positionDesktop)}
               loading="eager"
