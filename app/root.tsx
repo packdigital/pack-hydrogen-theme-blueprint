@@ -1,21 +1,16 @@
 import {
   isRouteErrorResponse,
   Outlet,
+  redirect,
   useMatches,
   useRouteError,
-} from '@remix-run/react';
-import {redirect} from '@shopify/remix-oxygen';
-import type {ShouldRevalidateFunction} from '@remix-run/react';
+} from 'react-router';
+import type {LinksFunction, ShouldRevalidateFunction} from 'react-router';
 import {
   getSeoMeta,
   getShopAnalytics,
   ShopifySalesChannel,
 } from '@shopify/hydrogen';
-import type {
-  LinksFunction,
-  LoaderFunctionArgs,
-  MetaArgs,
-} from '@shopify/remix-oxygen';
 import type {Shop} from '@shopify/hydrogen/storefront-api-types';
 import type {Customer} from '@shopify/hydrogen/customer-account-api-types';
 
@@ -40,6 +35,8 @@ import {registerStorefrontSettings} from '~/settings';
 import {CUSTOMER_DETAILS_QUERY} from '~/data/graphql/customer-account/customer';
 import type {RootSiteSettings} from '~/lib/types';
 import styles from '~/styles/app.css?url';
+
+import type {Route} from './+types/root';
 
 registerSections();
 registerStorefrontSettings();
@@ -91,7 +88,7 @@ export const links: LinksFunction = () => {
   ];
 };
 
-export async function loader({context, request}: LoaderFunctionArgs) {
+export async function loader({context, request}: Route.LoaderArgs) {
   const {storefront, oxygen, pack, env, customerAccount, cart} = context;
   const isPreviewModeEnabled = pack.isPreviewModeEnabled() as boolean;
 
@@ -181,8 +178,10 @@ export async function loader({context, request}: LoaderFunctionArgs) {
   };
 }
 
-export const meta = ({matches}: MetaArgs<typeof loader>) => {
-  return getSeoMeta(...matches.map((match) => (match.data as any).seo));
+export const meta: Route.MetaFunction = ({matches}) => {
+  return (
+    getSeoMeta(...matches.map((match) => (match?.loaderData as any).seo)) || []
+  );
 };
 
 export default function App() {
@@ -198,7 +197,7 @@ export function ErrorBoundary() {
   const isRouteError = isRouteErrorResponse(routeError);
   const [root] = useMatches();
 
-  if (!root?.data) return <ServerError error={routeError} />;
+  if (!root?.loaderData) return <ServerError error={routeError} />;
 
   const title = isRouteError ? 'Not Found' : 'Application Error';
 

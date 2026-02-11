@@ -1,5 +1,5 @@
 import {useMemo} from 'react';
-import {useLoaderData} from '@remix-run/react';
+import {useLoaderData} from 'react-router';
 import {
   Analytics,
   AnalyticsPageType,
@@ -8,7 +8,6 @@ import {
   storefrontRedirect,
 } from '@shopify/hydrogen';
 import {RenderSections} from '@pack/react';
-import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 import type {
   Collection as CollectionType,
   ProductCollectionSortKeys,
@@ -27,9 +26,11 @@ import {useGlobal} from '~/hooks';
 import type {Page} from '~/lib/types';
 import type {ActiveFilterValue} from '~/components/Collection/CollectionFilters/CollectionFilters.types';
 
+import type {Route} from './+types/($locale).collections.$handle';
+
 export const headers = routeHeaders;
 
-export async function loader({params, context, request}: LoaderFunctionArgs) {
+export async function loader({params, context, request}: Route.LoaderArgs) {
   const {handle} = params;
   const {storefront} = context;
 
@@ -116,8 +117,10 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
   };
 }
 
-export const meta = ({matches}: MetaArgs<typeof loader>) => {
-  return getSeoMeta(...matches.map((match) => (match.data as any).seo));
+export const meta: Route.MetaFunction = ({matches}) => {
+  return (
+    getSeoMeta(...matches.map((match) => (match?.loaderData as any).seo)) || []
+  );
 };
 
 export default function CollectionRoute() {
@@ -139,7 +142,7 @@ export default function CollectionRoute() {
   }, [collectionPage]);
 
   return (
-    <div data-comp={CollectionRoute.displayName}>
+    <div data-comp="CollectionRoute">
       {collectionPage && <RenderSections content={collectionPage} />}
 
       <section data-comp="collection">
@@ -165,5 +168,3 @@ export default function CollectionRoute() {
     </div>
   );
 }
-
-CollectionRoute.displayName = 'CollectionRoute';

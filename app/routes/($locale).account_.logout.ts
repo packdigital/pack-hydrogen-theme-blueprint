@@ -1,15 +1,12 @@
-import {
-  redirect,
-  type ActionFunction,
-  type LoaderFunctionArgs,
-  type ActionFunctionArgs,
-} from '@shopify/remix-oxygen';
+import {redirect} from 'react-router';
 
-export async function loader({params}: LoaderFunctionArgs) {
+import type {Route} from './+types/($locale).account_.logout';
+
+export async function loader({params}: Route.LoaderArgs) {
   const locale = params.locale;
   return redirect(locale ? `/${locale}` : '/');
 }
 
-export const action: ActionFunction = async ({context}: ActionFunctionArgs) => {
+export const action = async ({context}: Route.ActionArgs) => {
   return context.customerAccount.logout();
 };

@@ -1,5 +1,5 @@
-import type {AppLoadContext, ActionFunctionArgs} from '@shopify/remix-oxygen';
 import type {Customer} from '@shopify/hydrogen/customer-account-api-types';
+import type {AppLoadContext} from 'react-router';
 
 import {customerUpdateClient} from './client';
 
@@ -16,7 +16,7 @@ export const customerUpdateProfileAction = async ({
   request,
   context,
 }: {
-  request: ActionFunctionArgs['request'];
+  request: Request;
   context: AppLoadContext;
 }): Promise<{
   data: Data;

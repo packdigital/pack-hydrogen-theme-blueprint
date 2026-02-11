@@ -1,6 +1,6 @@
-import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
+import type {Route} from './+types/[robots.txt]';
 
-export const loader = ({request}: LoaderFunctionArgs) => {
+export const loader = ({request}: Route.LoaderArgs) => {
   const baseUrl = new URL(request.url).origin;
 
   return new Response(robotsTxtData({url: baseUrl}), {

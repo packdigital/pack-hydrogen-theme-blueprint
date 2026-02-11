@@ -1,5 +1,5 @@
 import {useEffect} from 'react';
-import {useFetcher} from '@remix-run/react';
+import {useFetcher} from 'react-router';
 
 import type {Article} from '~/lib/types';
 import {useLocale} from '~/hooks';

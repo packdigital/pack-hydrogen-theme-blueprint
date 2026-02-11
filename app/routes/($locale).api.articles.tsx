@@ -1,12 +1,12 @@
-import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
-
 import {BLOG_PAGE_QUERY} from '~/data/graphql/pack/blog-page';
 import {routeHeaders} from '~/data/cache';
 import type {BlogPage} from '~/lib/types';
 
+import type {Route} from './+types/($locale).api.articles';
+
 export const headers = routeHeaders;
 
-export async function loader({context, request}: LoaderFunctionArgs) {
+export async function loader({context, request}: Route.LoaderArgs) {
   const url = new URL(request.url);
   const searchParams = new URLSearchParams(url.search);
   const handle = String(searchParams.get('handle') || '');

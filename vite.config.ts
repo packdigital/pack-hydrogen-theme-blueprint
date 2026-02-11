@@ -1,33 +1,55 @@
 import {defineConfig} from 'vite';
+import type {Plugin} from 'vite';
 import {hydrogen} from '@shopify/hydrogen/vite';
 import {oxygen} from '@shopify/mini-oxygen/vite';
-import {vitePlugin as remix} from '@remix-run/dev';
+import {reactRouter} from '@react-router/dev/vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
+
+/**
+ * Plugin to redirect vfile's Node.js imports to browser-compatible versions.
+ * This fixes "No such module node:path" errors on Oxygen deployment.
+ */
+function vfileBrowserPlugin(): Plugin {
+  return {
+    name: 'vfile-browser',
+    enforce: 'pre',
+    resolveId(id, importer) {
+      // Redirect vfile's internal imports to browser versions
+      if (importer?.includes('node_modules/vfile/')) {
+        // Get the vfile package root directory
+        const vfileRoot = importer.substring(
+          0,
+          importer.indexOf('node_modules/vfile/') +
+            'node_modules/vfile/'.length,
+        );
+        if (id === '#minpath') {
+          return {id: vfileRoot + 'lib/minpath.browser.js'};
+        }
+        if (id === '#minproc') {
+          return {id: vfileRoot + 'lib/minproc.browser.js'};
+        }
+        if (id === '#minurl') {
+          return {id: vfileRoot + 'lib/minurl.browser.js'};
+        }
+      }
+      return null;
+    },
+  };
+}
 
 export default defineConfig({
   plugins: [
     hydrogen(),
     oxygen(),
-    remix({
-      presets: [hydrogen.v3preset()],
-      ignoredRouteFiles: ['**/.*'],
-      future: {
-        v3_fetcherPersist: true,
-        v3_relativeSplatPath: true,
-        v3_throwAbortReason: true,
-        v3_lazyRouteDiscovery: true,
-        v3_routeConfig: true,
-        v3_singleFetch: true,
-      },
-    }),
+    reactRouter(),
     tsconfigPaths(),
+    vfileBrowserPlugin(),
   ],
   ssr: {
     optimizeDeps: {
       include: [
         '@headlessui/react',
         '@pack/types',
-        '@remix-run/dev/server-build',
         'cookie',
         'crypto-js/aes',
         'crypto-js/core',
@@ -43,13 +65,17 @@ export default defineConfig({
         'lodash/startCase',
         'react-fast-marquee',
         'react-markdown',
+        'react-router',
         'remark-breaks',
         'remark-gfm',
         'sanitize-html',
         'set-cookie-parser',
         'snakecase-keys',
-        'uuid',
       ],
+    },
+    resolve: {
+      conditions: ['workerd', 'worker', 'browser'],
+      externalConditions: ['workerd', 'worker'],
     },
   },
   optimizeDeps: {
@@ -61,6 +87,16 @@ export default defineConfig({
       'swiper/modules',
       'swiper/react',
     ],
+  },
+  server: {
+    headers: {
+      // Allow Private Network Access from public origins (e.g., hosted iframe)
+      'Access-Control-Allow-Private-Network': 'true',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+      'Access-Control-Allow-Headers': '*',
+    },
+    allowedHosts: [],
   },
   build: {
     // Allow a strict Content-Security-Policy
