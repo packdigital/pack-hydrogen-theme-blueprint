@@ -1,6 +1,5 @@
-import {redirect} from '@shopify/remix-oxygen';
+import {redirect} from 'react-router';
 import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
-import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 import type {Order as OrderType} from '@shopify/hydrogen/customer-account-api-types';
 
 import {getAccountSeo} from '~/lib/server-utils/seo.server';
@@ -8,7 +7,9 @@ import {CustomerAccountLayout} from '~/components/AccountLayout/CustomerAccountL
 import {Order} from '~/components/Account/Order/Order';
 import {CUSTOMER_ORDER_QUERY} from '~/data/graphql/customer-account/customer';
 
-export async function loader({request, context, params}: LoaderFunctionArgs) {
+import type {Route} from './+types/($locale).account.orders.$id';
+
+export async function loader({request, context, params}: Route.LoaderArgs) {
   if (!params.id) {
     return redirect(params?.locale ? `${params.locale}/account` : '/account');
   }
@@ -42,8 +43,10 @@ export async function loader({request, context, params}: LoaderFunctionArgs) {
   }
 }
 
-export const meta = ({matches}: MetaArgs<typeof loader>) => {
-  return getSeoMeta(...matches.map((match) => (match.data as any).seo));
+export const meta: Route.MetaFunction = ({matches}) => {
+  return (
+    getSeoMeta(...matches.map((match) => (match?.loaderData as any).seo)) || []
+  );
 };
 
 export default function OrderRoute() {
@@ -53,5 +56,3 @@ export default function OrderRoute() {
     </CustomerAccountLayout>
   );
 }
-
-OrderRoute.displayName = 'OrderRoute';

@@ -1,9 +1,9 @@
-import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
-
 import {PRODUCTS_SEARCH_QUERY} from '~/data/graphql/storefront/search';
 import {getSiteSettings} from '~/lib/server-utils/settings.server';
 
-export async function loader({request, context}: LoaderFunctionArgs) {
+import type {Route} from './+types/($locale).api.search';
+
+export async function loader({request, context}: Route.LoaderArgs) {
   const {storefront} = context;
   const searchParams = new URL(request.url).searchParams;
 

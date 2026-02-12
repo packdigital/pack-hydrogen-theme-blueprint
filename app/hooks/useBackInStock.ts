@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useState} from 'react';
-import {useFetcher} from '@remix-run/react';
+import {useFetcher} from 'react-router';
 import {useAnalytics} from '@shopify/hydrogen';
 
 import {AnalyticsEvent} from '~/components/Analytics/constants';

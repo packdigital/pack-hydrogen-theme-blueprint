@@ -1,5 +1,5 @@
 import {useCallback} from 'react';
-import {useSearchParams} from '@remix-run/react';
+import {useSearchParams} from 'react-router';
 import clsx from 'clsx';
 
 import {Container} from '~/components/Container';

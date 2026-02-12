@@ -1,5 +1,7 @@
-/// <reference types="@shopify/remix-oxygen" />
+/// <reference types="vite/client" />
+/// <reference types="react-router" />
 /// <reference types="@shopify/oxygen-workers-types" />
+/// <reference types="@shopify/hydrogen/react-router-types" />
 
 import type {
   CustomerAccount,
@@ -69,7 +71,7 @@ declare global {
 /**
  * Declare local additions to `AppLoadContext` to include the session utilities we injected in `server.ts`.
  */
-declare module '@shopify/remix-oxygen' {
+declare module 'react-router' {
   export interface AppLoadContext {
     session: HydrogenSession;
     storefront: Storefront;

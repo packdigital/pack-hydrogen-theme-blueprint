@@ -12,6 +12,7 @@ node_modules
 .env
 .shopify
 .hydrogen
+.react-router
 
 # IntelliJ
 .idea

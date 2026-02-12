@@ -1,9 +1,3 @@
-import {data as dataWithOptions} from '@shopify/remix-oxygen';
-import type {
-  ActionFunctionArgs,
-  LoaderFunctionArgs,
-  MetaArgs,
-} from '@shopify/remix-oxygen';
 import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
 
 import {getAccountSeo} from '~/lib/server-utils/seo.server';
@@ -11,23 +5,27 @@ import {CustomerAccountLayout} from '~/components/AccountLayout/CustomerAccountL
 import {Profile} from '~/components/Account/Profile';
 import {customerUpdateProfileAction} from '~/lib/customer/profile.server';
 
-export async function action({request, context}: ActionFunctionArgs) {
+import type {Route} from './+types/($locale).account.profile';
+
+export async function action({request, context}: Route.ActionArgs) {
   // Double-check current user is logged in
   if (!(await context.customerAccount.isLoggedIn())) {
     return context.customerAccount.logout();
   }
   const {data, status} = await customerUpdateProfileAction({request, context});
-  return dataWithOptions(data, {status});
+  return Response.json(data, {status});
 }
 
-export async function loader({context}: LoaderFunctionArgs) {
+export async function loader({context}: Route.LoaderArgs) {
   const analytics = {pageType: AnalyticsPageType.customersAccount};
   const seo = await getAccountSeo(context, 'Profile');
   return {analytics, seo};
 }
 
-export const meta = ({matches}: MetaArgs<typeof loader>) => {
-  return getSeoMeta(...matches.map((match) => (match.data as any).seo));
+export const meta: Route.MetaFunction = ({matches}) => {
+  return (
+    getSeoMeta(...matches.map((match) => (match?.loaderData as any).seo)) || []
+  );
 };
 
 export default function ProfileRoute() {
@@ -37,5 +35,3 @@ export default function ProfileRoute() {
     </CustomerAccountLayout>
   );
 }
-
-ProfileRoute.displayName = 'ProfileRoute';

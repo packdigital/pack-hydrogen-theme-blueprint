@@ -1,4 +1,4 @@
-import type {AppLoadContext} from '@shopify/remix-oxygen';
+import type {AppLoadContext} from 'react-router';
 import type {Metafield} from '@shopify/hydrogen/storefront-api-types';
 
 import type {MetafieldIdentifier} from '~/lib/types';

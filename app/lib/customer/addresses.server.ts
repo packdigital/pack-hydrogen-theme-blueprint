@@ -1,5 +1,5 @@
-import type {ActionFunctionArgs} from '@shopify/remix-oxygen';
 import type {MailingAddress} from '@shopify/hydrogen/storefront-api-types';
+import type {AppLoadContext} from 'react-router';
 
 import {
   addressCreateClient,
@@ -45,8 +45,8 @@ export const customerAddressesAction = async ({
   request,
   context,
 }: {
-  request: ActionFunctionArgs['request'];
-  context: ActionFunctionArgs['context'];
+  request: Request;
+  context: AppLoadContext;
 }): Promise<{data: ActionData; status: number}> => {
   const data: ActionData = {
     errors: null,

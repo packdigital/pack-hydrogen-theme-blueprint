@@ -1,5 +1,5 @@
 import {useMemo} from 'react';
-import {useLoaderData} from '@remix-run/react';
+import {useLoaderData} from 'react-router';
 import type {Order as OrderType} from '@shopify/hydrogen/customer-account-api-types';
 
 import {Link} from '~/components/Link';

@@ -1,4 +1,3 @@
-import {v4 as uuidv4} from 'uuid';
 import type {Customer} from '@shopify/hydrogen/customer-account-api-types';
 
 import {AnalyticsEvent} from '../constants';
@@ -74,7 +73,7 @@ const emitEvent = ({
   try {
     const emittedEvent = {
       ...event,
-      event_id: uuidv4(),
+      event_id: crypto.randomUUID(),
       event_time: new Date().toISOString(),
     } as Record<string, any>;
     if (window.gtag) {

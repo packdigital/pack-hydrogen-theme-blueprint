@@ -1,6 +1,16 @@
 {
-  "include": ["./**/*.d.ts", "./**/*.ts", "./**/*.tsx"],
-  "exclude": ["node_modules", "dist"],
+  "include": [
+    "env.d.ts",
+    "app/**/*.ts",
+    "app/**/*.tsx",
+    "app/**/*.d.ts",
+    "*.ts",
+    "*.tsx",
+    "*.d.ts",
+    ".graphqlrc.ts",
+    ".react-router/types/**/*"
+  ],
+  "exclude": ["node_modules", "dist", "build", "packages/**/dist/**/*"],
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
     "isolatedModules": true,
@@ -8,7 +18,7 @@
     "jsx": "react-jsx",
     "moduleResolution": "Bundler",
     "resolveJsonModule": true,
-    "module": "ESNext",
+    "module": "ES2022",
     "target": "ES2022",
     "strict": true,
     "allowJs": true,
@@ -16,16 +26,20 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "types": [
-      "vite/client",
       "@shopify/oxygen-workers-types",
+      "react-router",
+      "@shopify/hydrogen/react-router-types",
+      "vite/client",
       "@types/gtag.js",
       "@types/grecaptcha"
     ],
     "paths": {
       "~/*": ["app/*"]
     },
-    // Remix takes care of building everything in `./app` with `remix build`.
-    // Wrangler takes care of building everything in `./worker` with `wrangler start` / `wrangler publish`.
-    "noEmit": true
+    "noEmit": true,
+    "rootDirs": [".", "./.react-router/types"],
+    "incremental": true,
+    "composite": false,
+    "verbatimModuleSyntax": true
   }
 }

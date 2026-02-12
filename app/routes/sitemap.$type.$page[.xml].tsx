@@ -1,6 +1,6 @@
 import {getSitemap} from '@shopify/hydrogen';
 import {XMLParser, XMLBuilder} from 'fast-xml-parser';
-import type {AppLoadContext, LoaderFunctionArgs} from '@shopify/remix-oxygen';
+import type {AppLoadContext} from 'react-router';
 
 import {getSiteSettings} from '~/lib/server-utils/settings.server';
 import {CMS_ARTICLES_QUERY} from '~/data/graphql/pack/article-page';
@@ -10,6 +10,7 @@ import {CMS_PAGES_QUERY} from '~/data/graphql/pack/page';
 import {CMS_PRODUCT_QUERY} from '~/data/graphql/pack/product-page';
 
 import {PACK_NATIVE_TEMPLATE_TYPES} from './[sitemap.xml]';
+import type {Route} from './+types/sitemap.$type.$page[.xml]';
 
 const STATIC_PAGES = (accountNoIndex: boolean) =>
   [
@@ -81,7 +82,7 @@ const getPagesFromType = async ({
   });
 };
 
-export async function loader({request, params, context}: LoaderFunctionArgs) {
+export async function loader({request, params, context}: Route.LoaderArgs) {
   const {type = '', page} = params;
   const {storefront} = context;
 

@@ -1,5 +1,5 @@
 import {memo, useEffect, useState} from 'react';
-import {useFetcher} from '@remix-run/react';
+import {useFetcher} from 'react-router';
 import {parseGid} from '@shopify/hydrogen';
 
 import {ReviewStars} from '~/components/ReviewStars';

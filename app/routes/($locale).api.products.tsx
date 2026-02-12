@@ -1,4 +1,3 @@
-import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import type {
   Product,
   ProductSortKeys,
@@ -9,9 +8,11 @@ import {ADMIN_PRODUCT_ITEM_BY_ID_QUERY} from '~/data/graphql/admin/product';
 import {queryProducts} from '~/lib/server-utils/product.server';
 import {normalizeAdminProduct} from '~/lib/utils';
 
+import type {Route} from './+types/($locale).api.products';
+
 // Docs: https://shopify.dev/docs/api/storefront/latest/queries/products
 
-export async function loader({request, context}: LoaderFunctionArgs) {
+export async function loader({request, context}: Route.LoaderArgs) {
   const {admin, pack} = context;
   const url = new URL(request.url);
   const searchParams = new URLSearchParams(url.search);

@@ -1,11 +1,10 @@
-import {useLoaderData} from '@remix-run/react';
+import {useLoaderData} from 'react-router';
 import {
   AnalyticsPageType,
   getSeoMeta,
   storefrontRedirect,
 } from '@shopify/hydrogen';
 import {RenderSections} from '@pack/react';
-import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 
 import {BLOG_PAGE_QUERY} from '~/data/graphql/pack/blog-page';
 import {getPage} from '~/lib/server-utils/pack.server';
@@ -15,9 +14,11 @@ import {checkForTrailingEncodedSpaces} from '~/lib/server-utils/app.server';
 import {routeHeaders} from '~/data/cache';
 import type {BlogPage} from '~/lib/types';
 
+import type {Route} from './+types/($locale).blogs.$handle';
+
 export const headers = routeHeaders;
 
-export async function loader({params, context, request}: LoaderFunctionArgs) {
+export async function loader({params, context, request}: Route.LoaderArgs) {
   const {handle} = params;
   const {storefront} = context;
 
@@ -125,18 +126,18 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
   };
 }
 
-export const meta = ({matches}: MetaArgs<typeof loader>) => {
-  return getSeoMeta(...matches.map((match) => (match.data as any).seo));
+export const meta: Route.MetaFunction = ({matches}) => {
+  return (
+    getSeoMeta(...matches.map((match) => (match?.loaderData as any).seo)) || []
+  );
 };
 
 export default function BlogRoute() {
   const {blog} = useLoaderData<{blog: BlogPage}>();
 
   return (
-    <div data-comp={BlogRoute.displayName}>
+    <div data-comp="BlogRoute">
       <RenderSections content={blog} />
     </div>
   );
 }
-
-BlogRoute.displayName = 'BlogRoute';

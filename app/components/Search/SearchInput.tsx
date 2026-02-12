@@ -1,5 +1,5 @@
 import {useEffect, useRef} from 'react';
-import {useLocation, useNavigate} from '@remix-run/react';
+import {useLocation, useNavigate} from 'react-router';
 import clsx from 'clsx';
 
 import {Svg} from '~/components/Svg';

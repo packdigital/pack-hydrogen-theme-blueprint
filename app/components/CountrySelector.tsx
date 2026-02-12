@@ -1,5 +1,5 @@
 import {memo, useCallback, useEffect, useMemo, useState} from 'react';
-import {useFetcher, useLocation} from '@remix-run/react';
+import {useFetcher, useLocation} from 'react-router';
 import {useInView} from 'react-intersection-observer';
 import type {Localization} from '@shopify/hydrogen/storefront-api-types';
 

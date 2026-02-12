@@ -1,6 +1,6 @@
-import type {ReactNode} from 'react';
 import {useCallback, useMemo} from 'react';
-import {useSearchParams} from '@remix-run/react';
+import {useSearchParams} from 'react-router';
+import type {ReactNode} from 'react';
 import type {Filter} from '@shopify/hydrogen/storefront-api-types';
 
 import {PRICE_FILTER_ID} from '~/lib/constants';

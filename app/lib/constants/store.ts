@@ -1,6 +1,6 @@
 import type {I18nLocale} from '../types';
 
-export const DEFAULT_STOREFRONT_API_VERSION = '2025-01';
+export const DEFAULT_STOREFRONT_API_VERSION = '2026-01';
 
 export const DEFAULT_LOCALE: I18nLocale = Object.freeze({
   label: 'United States (USD $)',

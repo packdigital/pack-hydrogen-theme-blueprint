@@ -1,5 +1,5 @@
 import {useEffect} from 'react';
-import {useLocation} from '@remix-run/react';
+import {useLocation} from 'react-router';
 
 export function useScrollToHashOnNavigation() {
   const {hash} = useLocation();

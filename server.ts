@@ -1,6 +1,6 @@
 // @ts-ignore
 // Virtual entry point for the app
-import * as remixBuild from 'virtual:remix/server-build';
+import * as serverBuild from 'virtual:react-router/server-build';
 import {
   createCartHandler,
   createCustomerAccountClient,
@@ -12,8 +12,13 @@ import {
 import {
   createRequestHandler,
   getStorefrontHeaders,
-} from '@shopify/remix-oxygen';
-import {createPackClient, PackSession, handleRequest} from '@pack/hydrogen';
+} from '@shopify/hydrogen/oxygen';
+import {
+  createPackClient,
+  PackSession,
+  PackTestSession,
+  handleRequest,
+} from '@pack/hydrogen';
 
 import {AppSession} from '~/lib/session.server';
 import {getLocaleFromRequest} from '~/lib/server-utils/locale.server';
@@ -41,10 +46,11 @@ export default {
       }
 
       const waitUntil = (p: Promise<any>) => executionContext.waitUntil(p);
-      const [cache, session, packSession] = await Promise.all([
+      const [cache, session, packSession, packTestSession] = await Promise.all([
         caches.open('hydrogen'),
         AppSession.init(request, [env.SESSION_SECRET]),
         PackSession.init(request, [env.SESSION_SECRET]),
+        PackTestSession.init(request, [env.SESSION_SECRET]),
       ]);
 
       /**
@@ -123,19 +129,20 @@ export default {
         token: env.PACK_SECRET_TOKEN,
         storeId: env.PACK_STOREFRONT_ID,
         session: packSession,
+        testSession: packTestSession,
         contentEnvironment: env.PUBLIC_PACK_CONTENT_ENVIRONMENT,
         defaultThemeData,
       });
 
       /**
-       * Create a Remix request handler and pass
+       * Create a React Router request handler and pass
        * Hydrogen's Storefront client to the loader context.
        */
       const response = await handleRequest(
         pack,
         request,
         createRequestHandler({
-          build: remixBuild,
+          build: serverBuild,
           mode: process.env.NODE_ENV,
           getLoadContext: () => ({
             cache,

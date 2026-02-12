@@ -1,11 +1,10 @@
-import {useLoaderData} from '@remix-run/react';
+import {useLoaderData} from 'react-router';
 import {
   Analytics,
   AnalyticsPageType,
   getPaginationVariables,
   getSeoMeta,
 } from '@shopify/hydrogen';
-import type {LoaderFunctionArgs, MetaArgs} from '@shopify/remix-oxygen';
 import type {
   Collection as CollectionType,
   ProductConnection,
@@ -21,7 +20,9 @@ import {useGlobal} from '~/hooks';
 import type {Page} from '~/lib/types';
 import type {ActiveFilterValue} from '~/components/Collection/CollectionFilters/CollectionFilters.types';
 
-export async function loader({request, context}: LoaderFunctionArgs) {
+import type {Route} from './+types/($locale).search';
+
+export async function loader({request, context}: Route.LoaderArgs) {
   const {storefront} = context;
 
   const [siteSettings, shop] = await Promise.all([
@@ -137,8 +138,10 @@ export async function loader({request, context}: LoaderFunctionArgs) {
   };
 }
 
-export const meta = ({matches}: MetaArgs<typeof loader>) => {
-  return getSeoMeta(...matches.map((match) => (match.data as any).seo));
+export const meta: Route.MetaFunction = ({matches}) => {
+  return (
+    getSeoMeta(...matches.map((match) => (match?.loaderData as any).seo)) || []
+  );
 };
 
 export default function SearchRoute() {
@@ -167,5 +170,3 @@ export default function SearchRoute() {
     </section>
   );
 }
-
-SearchRoute.displayName = 'SearchRoute';

@@ -1,11 +1,11 @@
 import {forwardRef, useMemo} from 'react';
+import {Link as ReactRouterLink} from 'react-router';
 import type {ReactNode} from 'react';
-import {Link as RemixLink} from '@remix-run/react';
-import type {LinkProps as RemixLinkProps} from '@remix-run/react';
+import type {LinkProps as ReactRouterLinkProps} from 'react-router';
 
 import {useLocale} from '~/hooks';
 
-/* Docs: https://remix.run/docs/en/main/components/link */
+/* Docs: https://api.reactrouter.com/v7/functions/react_router.Link.html */
 
 const getValidatedHref = ({
   href,
@@ -47,16 +47,16 @@ type LinkProps = {
   isExternal?: boolean;
   newTab?: boolean;
   onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void;
-  prefetch?: RemixLinkProps['prefetch']; // 'none' | 'intent' | 'viewport' | 'render'
-  preventScrollReset?: RemixLinkProps['preventScrollReset'];
-  relative?: RemixLinkProps['relative'];
-  reloadDocument?: RemixLinkProps['reloadDocument'];
-  replace?: RemixLinkProps['replace'];
-  state?: RemixLinkProps['state'];
+  prefetch?: ReactRouterLinkProps['prefetch']; // 'none' | 'intent' | 'viewport' | 'render'
+  preventScrollReset?: ReactRouterLinkProps['preventScrollReset'];
+  relative?: ReactRouterLinkProps['relative'];
+  reloadDocument?: ReactRouterLinkProps['reloadDocument'];
+  replace?: ReactRouterLinkProps['replace'];
+  state?: ReactRouterLinkProps['state'];
   style?: React.CSSProperties;
   tabIndex?: number | undefined;
   text?: string;
-  to?: RemixLinkProps['to'] | string | undefined | null;
+  to?: ReactRouterLinkProps['to'] | string | undefined | null;
   type?: 'isPage' | 'isExternal' | 'isEmail' | 'isPhone' | undefined | null;
   url?: string | undefined | null;
 } & React.HTMLProps<HTMLAnchorElement>;
@@ -69,14 +69,14 @@ export const Link = forwardRef(
       href = '', // html property
       isExternal = false, // cms property
       newTab = false,
-      prefetch = 'viewport', // remix property
-      preventScrollReset = false, // remix property
-      relative, // remix property
-      reloadDocument = false, // remix property
-      replace = false, // remix property
-      state, // remix property
+      prefetch = 'viewport', // react router property
+      preventScrollReset = false, // react router property
+      relative, // react router property
+      reloadDocument = false, // react router property
+      replace = false, // react router property
+      state, // react router property
       text = '', // cms property
-      to = '', // remix property
+      to = '', // react router property
       type = 'isPage', // cms property
       url = '', // cms property
       ...props
@@ -95,7 +95,7 @@ export const Link = forwardRef(
     }, [initialHref, isExternal, pathPrefix, type]);
 
     return finalHref ? (
-      <RemixLink
+      <ReactRouterLink
         className={className}
         prefetch={prefetch}
         preventScrollReset={preventScrollReset}
@@ -109,7 +109,7 @@ export const Link = forwardRef(
         {...props}
       >
         {children || text}
-      </RemixLink>
+      </ReactRouterLink>
     ) : (
       <div className={className} ref={ref} {...props}>
         {children || text}
