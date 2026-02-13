@@ -23,7 +23,7 @@
     "@headlessui/react": "2.2.4",
     "@headlessui/tailwindcss": "^0.2.2",
     "@pack/client": "^1.0.3",
-    "@pack/hydrogen": "^3.1.0",
+    "@pack/hydrogen": "^3.1.1-beta.0",
     "@pack/react": "^4.0.0",
     "@pack/types": "^0.1.4",
     "@shopify/hydrogen": "^2026.1.0",
