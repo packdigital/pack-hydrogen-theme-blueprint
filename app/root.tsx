@@ -156,6 +156,13 @@ export async function loader({context, request}: Route.LoaderArgs) {
   });
   const SITE_TITLE = siteSettings?.data?.siteSettings?.seo?.title || shop.name;
 
+  const requestSearch = new URL(request.url).search;
+  const hasPlaybookParams =
+    requestSearch.includes('_pv=') ||
+    requestSearch.includes('pbk=') ||
+    requestSearch.includes('pb_mode=brand_preview') ||
+    requestSearch.includes('_preview=true');
+
   return {
     analytics,
     cart: cart.get(),
@@ -165,6 +172,7 @@ export async function loader({context, request}: Route.LoaderArgs) {
     customizerMeta: pack.session.get('customizerMeta'),
     ENV: {...ENV, SITE_TITLE} as Record<string, string>,
     groupingsPromise,
+    hasPlaybookParams,
     isPreviewModeEnabled,
     modalProduct,
     modalSelectedVariant,
