@@ -22,11 +22,7 @@ export function PlaybookSDK({
   const revealScript = `
     (function(){
       function reveal() {
-        var s = document.getElementById('pb-anti-flicker');
-        if (s) {
-          document.documentElement.classList.add('pb-ready');
-          s.remove();
-        }
+        document.documentElement.classList.add('pb-ready');
         if (window.__pbFlickerTimeout) {
           clearTimeout(window.__pbFlickerTimeout);
           window.__pbFlickerTimeout = null;
