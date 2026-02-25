@@ -42,6 +42,7 @@ declare global {
     PUBLIC_STOREFRONT_ID: string;
     SESSION_SECRET: string;
     SHOP_ID: string;
+    PLAYBOOK_PLATFORM_URL?: string;
   }
 
   interface Window {

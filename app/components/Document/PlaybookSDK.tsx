@@ -1,7 +1,6 @@
 /**
  * Playbook SDK - enables A/B testing and conversion tracking
  * To enable: add PUBLIC_PLAYBOOK_SHOP_ID env variable with your Playbook shop UUID
- * Optional: PUBLIC_PLAYBOOK_SDK_URL to override SDK endpoint (defaults to prod)
  *
  * Anti-flicker: Conditionally server-renders a <style> tag when Playbook params
  * are present (determined by the root loader). This survives React hydration
@@ -16,8 +15,13 @@ export function PlaybookSDK({
 }) {
   if (!ENV.PUBLIC_PLAYBOOK_SHOP_ID) return null;
 
-  const sdkUrl =
-    ENV.PUBLIC_PLAYBOOK_SDK_URL || 'https://www.heyplaybook.com/sdk/playbook.js';
+  // Proxy enabled by default — loads SDK through the store's own domain,
+  // making requests first-party and invisible to ad blockers.
+  // Set PUBLIC_PLAYBOOK_PROXY_ENABLED=false to disable.
+  const useProxy = ENV.PUBLIC_PLAYBOOK_PROXY_ENABLED !== 'false';
+  const sdkUrl = useProxy
+    ? '/apps/playbook/sdk'
+    : 'https://www.heyplaybook.com/sdk/playbook.js';
 
   const revealScript = `
     (function(){
