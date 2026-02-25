@@ -12,6 +12,7 @@
 |------|---------|
 | `app/components/Document/PlaybookSDK.tsx` | SDK loader + anti-flicker script |
 | `app/routes/apps.playbook.$.tsx` | Reverse proxy route (first-party SDK loading) |
+| `app/routes/($locale).cart.$lines.tsx` | Direct checkout route with Playbook attribution |
 | `app/root.tsx` | Root loader detects Playbook URL params |
 | `app/components/Document/Document.tsx` | Renders `<PlaybookSDK>` in `<head>` |
 | `env.d.ts` | TypeScript types for Playbook env vars |
@@ -186,6 +187,51 @@ frame-src:    https://www.heyplaybook.com
 
 ---
 
+## Step 7: Cart Attribution for Direct Checkout Routes
+
+The Playbook SDK automatically injects cart attributes (`pb_variant__`, `pb_impression_id__`, `pb_test_id__`) on standard add-to-cart flows. However, **server-side routes that create a cart and redirect straight to checkout bypass the SDK entirely** — the page never renders client-side, so the SDK's attribution never runs.
+
+This blueprint's `($locale).cart.$lines.tsx` already includes the fix. If your store has additional direct-checkout routes (e.g., "buy now" endpoints, quick checkout), apply the same pattern:
+
+```tsx
+/**
+ * Playbook A/B testing attribution.
+ * The SDK sets cookies when a visitor lands on a Playbook experience.
+ * Server-side routes that create a cart and redirect to checkout bypass
+ * the SDK's client-side injection. Read the cookies and inject manually.
+ */
+function getCookie(request: Request, name: string): string | null {
+  const cookies = request.headers.get('cookie') || '';
+  const match = cookies.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
+  return match ? decodeURIComponent(match[1]) : null;
+}
+```
+
+Then in your loader, after `cart.create()`:
+
+```tsx
+// Read Playbook attribution cookies
+const pbVariant = getCookie(request, '_pb_variant');
+const pbImpressionId = getCookie(request, '_pb_impression_id');
+const pbTestId = getCookie(request, '_pb_test_id');
+
+// ... cart.create() ...
+
+// Inject as private cart attributes (double-underscore suffix hides
+// them from customers but persists to the order's note_attributes)
+if (pbVariant && pbImpressionId && pbTestId) {
+  await cart.updateAttributes([
+    {key: 'pb_variant__', value: pbVariant},
+    {key: 'pb_impression_id__', value: pbImpressionId},
+    {key: 'pb_test_id__', value: pbTestId},
+  ]);
+}
+```
+
+**When this is NOT needed:** If a checkout route is client-side (uses `useCart().cartCreate()` and navigates to `/cart` instead of redirecting to checkout), the SDK has time to inject attributes before the user reaches checkout.
+
+---
+
 ## Verification
 
 After setup, verify:
@@ -195,6 +241,7 @@ After setup, verify:
 - [ ] Visit a test link — page hides briefly then reveals with the experience
 - [ ] No CSP errors in console
 - [ ] Cart attribution: after adding to cart via a test link, cart attributes include `pb_variant__`, `pb_impression_id__`, `pb_test_id__`
+- [ ] Direct checkout attribution: use a `/cart/variant:qty` link after visiting a Playbook test link — order should have Playbook attributes
 
 ---
 
@@ -208,4 +255,5 @@ After setup, verify:
 | Hero doesn't render | Test not on this environment | Verify `PLAYBOOK_PLATFORM_URL` points to the correct Playbook deployment |
 | Page flashes before experience | Anti-flicker not working | Ensure `PlaybookSDK` is in `<head>` and `hasPlaybookParams` is from root loader (not `useLocation`) |
 | Cart attribution missing | Env vars not exposed | Verify `PUBLIC_STOREFRONT_API_TOKEN` and `PUBLIC_STORE_DOMAIN` are in `window.ENV` |
+| Direct checkout attribution missing | Server-side route not reading cookies | Add Playbook cookie reading to `cart.$lines.tsx` (see Step 7) |
 | CSP errors in console | Missing directives | Add `heyplaybook.com` to `script-src` and `connect-src` |
