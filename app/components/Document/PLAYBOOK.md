@@ -1,6 +1,6 @@
 # Playbook Integration Guide for Hydrogen Storefronts
 
-Playbook enables A/B testing and conversion tracking for Shopify storefronts. This guide covers how to integrate Playbook into a Hydrogen store.
+[Playbook](https://www.heyplaybook.com) turns your ad creative into personalized, on-brand landing page experiences — live in minutes, with built-in A/B testing to measure conversion lift. This guide covers how to integrate Playbook into a Hydrogen storefront.
 
 > This blueprint already includes all Playbook integration code. Use this guide as a reference for how it works, or follow the steps to add Playbook to an existing Hydrogen store.
 
