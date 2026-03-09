@@ -1,11 +1,10 @@
-import {useEffect} from 'react';
-import {useFetcher} from 'react-router';
+import {useMemo} from 'react';
 import type {
   Collection,
   ProductCollectionSortKeys,
 } from '@shopify/hydrogen/storefront-api-types';
 
-import {useLocale} from '~/hooks';
+import {useLoadData, useLocale} from '~/hooks';
 
 /**
  * Fetch collection by its handle
@@ -31,10 +30,9 @@ export function useCollectionByHandle(
   fetchOnMount = true,
 ): Collection | null {
   const {pathPrefix} = useLocale();
-  const fetcher = useFetcher<{collection: Collection}>();
 
-  useEffect(() => {
-    if (!fetchOnMount || !handle) return;
+  const apiPath = useMemo(() => {
+    if (!fetchOnMount || !handle) return null;
     const paramsAsStrings = Object.entries({...params}).reduce(
       (acc: Record<string, string>, [key, value]) => {
         acc[key] = String(value);
@@ -43,8 +41,10 @@ export function useCollectionByHandle(
       {},
     );
     const searchParams = new URLSearchParams({handle, ...paramsAsStrings});
-    fetcher.load(`${pathPrefix}/api/collection?${searchParams}`);
+    return `${pathPrefix}/api/collection?${searchParams}`;
   }, [fetchOnMount, handle, JSON.stringify(params)]);
 
-  return (fetcher.data?.collection as Collection) || null;
+  const {data} = useLoadData<{collection: Collection}>(apiPath);
+
+  return (data?.collection as Collection) || null;
 }

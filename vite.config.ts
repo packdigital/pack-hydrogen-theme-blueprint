@@ -71,6 +71,7 @@ export default defineConfig({
         'sanitize-html',
         'set-cookie-parser',
         'snakecase-keys',
+        'use-sync-external-store/shim',
       ],
     },
     resolve: {

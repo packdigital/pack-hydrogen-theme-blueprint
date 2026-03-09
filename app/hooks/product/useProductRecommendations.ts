@@ -1,11 +1,9 @@
-import {useEffect} from 'react';
-import {useFetcher} from 'react-router';
 import type {
   Product,
   ProductRecommendationIntent,
 } from '@shopify/hydrogen/storefront-api-types';
 
-import {useLocale} from '~/hooks';
+import {useLoadData, useLocale} from '~/hooks';
 
 /**
  * Fetch up to 10 product recommendations for a given product id
@@ -15,7 +13,7 @@ import {useLocale} from '~/hooks';
  * @returns array of product items
  * @example
  * ```js
- * const productRecommendations = productRecommendations('gid://shopify/Product/1234567890', 'RELATED');
+ * const productRecommendations = useProductRecommendations('gid://shopify/Product/1234567890', 'RELATED');
  * ```
  */
 
@@ -25,13 +23,12 @@ export function useProductRecommendations(
   fetchOnMount = true,
 ): Product[] | null {
   const {pathPrefix} = useLocale();
-  const fetcher = useFetcher<{productRecommendations: Product[]}>();
 
-  useEffect(() => {
-    if (!fetchOnMount || !productId || !intent) return;
-    const searchParams = new URLSearchParams({productId, intent});
-    fetcher.load(`${pathPrefix}/api/recommendations?${searchParams}`);
-  }, [fetchOnMount, productId, intent]);
+  const {data} = useLoadData<{productRecommendations: Product[]}>(
+    fetchOnMount && productId && intent
+      ? `${pathPrefix}/api/recommendations?productId=${productId}&intent=${intent}`
+      : null,
+  );
 
-  return fetcher.data?.productRecommendations || null;
+  return data?.productRecommendations || null;
 }

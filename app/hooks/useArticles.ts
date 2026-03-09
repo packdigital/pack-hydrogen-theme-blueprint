@@ -1,8 +1,5 @@
-import {useEffect} from 'react';
-import {useFetcher} from 'react-router';
-
 import type {Article} from '~/lib/types';
-import {useLocale} from '~/hooks';
+import {useLoadData, useLocale} from '~/hooks';
 
 /**
  * Fetch articles by blog handle
@@ -22,16 +19,12 @@ export function useArticles(
   fetchOnMount = true,
 ) {
   const {pathPrefix} = useLocale();
-  const fetcher = useFetcher<{articles: Article[]}>();
 
-  useEffect(() => {
-    if (!fetchOnMount || !handle) return;
-    const searchParams = new URLSearchParams({
-      handle,
-      limit: limit?.toString() || '3',
-    });
-    fetcher.load(`${pathPrefix}/api/articles?${searchParams}`);
-  }, [fetchOnMount, handle, limit]);
+  const {data} = useLoadData<{articles: Article[]}>(
+    fetchOnMount && handle
+      ? `${pathPrefix}/api/articles?handle=${handle}&limit=${limit}`
+      : null,
+  );
 
-  return fetcher.data?.articles || null;
+  return data?.articles || null;
 }

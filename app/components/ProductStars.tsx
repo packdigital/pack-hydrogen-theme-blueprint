@@ -1,48 +1,39 @@
 import {memo, useEffect, useState} from 'react';
-import {useFetcher} from 'react-router';
 import {parseGid} from '@shopify/hydrogen';
 
 import {ReviewStars} from '~/components/ReviewStars';
-import {useLocale} from '~/hooks';
+import {useLoadData, useLocale} from '~/hooks';
 
 export const ProductStars = memo(({id}: {id: string}) => {
-  const fetcher = useFetcher<{
-    error: string | null;
-    rating: string;
-    count: number;
-  }>();
   const {pathPrefix} = useLocale();
   const [reviewAggregate, setReviewAggregate] = useState<{
     rating: number;
     count: number;
   } | null>(null);
 
-  useEffect(() => {
-    if (!fetcher.data?.error) return;
-    console.error(fetcher.data.error);
-  }, [fetcher.data?.error]);
-
-  useEffect(() => {
-    if (!id) return;
+  const {data} = useLoadData<{
+    error: string | null;
+    rating: string;
+    count: number;
+  }>(
     // ↓ comment back in once proper third party api call is implemented in `/api/reviews`
-    // const {id: productId} = parseGid(id);
-    // const searchParams = new URLSearchParams({
-    //   productId,
-    //   action: 'getProductReviewAggregate',
-    // });
-    // fetcher.load(`${pathPrefix}/api/reviews?${searchParams}`);
-  }, [id]);
+    // id
+    //   ? `${pathPrefix}/api/reviews?productId=${parseGid(id).id}&action=getProductReviewAggregate`
+    //   :
+    //
+    null,
+  );
 
   useEffect(() => {
     // ↓ comment back in once proper third party api call is implemented in `/api/reviews`
-    // if (!fetcher.data) return;
+    // if (!data) return;
 
     // mock data until proper third party api call is implemented
     // returned data will likely look differently
-    const {rating = '4.7', count = 105} = {...fetcher?.data};
+    const {rating = '4.7', count = 105} = {...data};
 
     setReviewAggregate({rating: Number(rating), count});
-  }, [fetcher.data]);
+  }, [data]);
 
   return (
     <div className="flex min-h-4 flex-wrap items-center gap-1">

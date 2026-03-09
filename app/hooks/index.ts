@@ -12,6 +12,7 @@ export * from './useGeoLocation';
 export * from './useGlobal';
 export * from './useIsBot';
 export * from './useIsHydrated';
+export * from './useLoadData';
 export * from './useLoadScript';
 export * from './useMarketingListSubscribe';
 export * from './useMenu';

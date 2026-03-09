@@ -1,8 +1,6 @@
-import {useEffect} from 'react';
-import {useFetcher} from 'react-router';
 import type {Product} from '@shopify/hydrogen/storefront-api-types';
 
-import {useLocale} from '~/hooks';
+import {useLocale, useLoadData} from '~/hooks';
 
 /**
  * Fetch product item by its handle
@@ -20,13 +18,12 @@ export function useProductByHandle(
   fetchOnMount = true,
 ): Product | null {
   const {pathPrefix} = useLocale();
-  const fetcher = useFetcher<{product: Product}>();
 
-  useEffect(() => {
-    if (!fetchOnMount || !handle) return;
-    const searchParams = new URLSearchParams({handle});
-    fetcher.load(`${pathPrefix}/api/product?${searchParams}`);
-  }, [fetchOnMount, handle]);
+  const {data} = useLoadData<{product: Product}>(
+    fetchOnMount && handle
+      ? `${pathPrefix}/api/product?handle=${handle}`
+      : null,
+  );
 
-  return fetcher.data?.product || null;
+  return data?.product || null;
 }
