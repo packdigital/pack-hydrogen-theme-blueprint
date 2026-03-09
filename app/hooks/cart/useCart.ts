@@ -50,11 +50,7 @@ export const useCart = (): CartWithActions => {
             setError(data.userErrors);
           }
           if (data?.cart) {
-            setStatus('fetching');
-            const response = await fetch('/api/cart');
-            const newCartData = (await response.json()) as {cart: Cart | null};
-            if (newCartData.cart) setCart(newCartData.cart);
-            data = {...data, cart: newCartData.cart};
+            setCart(data.cart);
           }
           setStatus('idle');
           return data;
