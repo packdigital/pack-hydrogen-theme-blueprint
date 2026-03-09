@@ -15,6 +15,14 @@ import type {CartActionData, CartWithActions} from '~/lib/types';
 
 import {useRootLoaderData} from '../useRootLoaderData';
 
+/**
+ * Module-level promise chain that serializes all cart mutations.
+ * This prevents concurrent API calls from returning stale cart state
+ * that overwrites the results of earlier mutations (e.g. rapidly
+ * removing multiple cart lines).
+ */
+let mutationQueue: Promise<CartActionData | null> = Promise.resolve(null);
+
 export const useCart = (): CartWithActions => {
   const {isPreviewModeEnabled} = useRootLoaderData();
   const {publish, shop} = useAnalytics();
@@ -25,28 +33,40 @@ export const useCart = (): CartWithActions => {
   } = useCartContext();
 
   const getCartActionData = useCallback(
-    async (formData: FormData): Promise<CartActionData | null> => {
+    (formData: FormData): Promise<CartActionData | null> => {
       const action = formData.get('action');
-      let data = null as CartActionData | null;
-      setError(null);
-      setStatus(action === CartForm.ACTIONS.Create ? 'creating' : 'updating');
-      const response = await fetch('/api/cart', {
-        method: 'POST',
-        body: formData,
-      });
-      data = await response.json();
-      if (data?.userErrors?.length) {
-        setError(data?.userErrors);
-      }
-      if (data?.cart) {
-        setStatus('fetching');
-        const response = await fetch('/api/cart');
-        const newCartData = (await response.json()) as {cart: Cart | null};
-        if (newCartData.cart) setCart(newCartData.cart);
-        data = {...data, cart: newCartData.cart};
-      }
-      setStatus('idle');
-      return data;
+
+      const mutation = async (): Promise<CartActionData | null> => {
+        let data = null as CartActionData | null;
+        setError(null);
+        setStatus(action === CartForm.ACTIONS.Create ? 'creating' : 'updating');
+        try {
+          const response = await fetch('/api/cart', {
+            method: 'POST',
+            body: formData,
+          });
+          data = await response.json();
+          if (data?.userErrors?.length) {
+            setError(data.userErrors);
+          }
+          if (data?.cart) {
+            setStatus('fetching');
+            const response = await fetch('/api/cart');
+            const newCartData = (await response.json()) as {cart: Cart | null};
+            if (newCartData.cart) setCart(newCartData.cart);
+            data = {...data, cart: newCartData.cart};
+          }
+          setStatus('idle');
+          return data;
+        } catch (err) {
+          setError(err);
+          setStatus('idle');
+          return null;
+        }
+      };
+
+      mutationQueue = mutationQueue.then(mutation, mutation);
+      return mutationQueue;
     },
     [],
   );
