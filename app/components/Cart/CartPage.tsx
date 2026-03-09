@@ -47,7 +47,7 @@ export function CartPage() {
                   return (
                     <li
                       key={line.id}
-                      className="border-b border-b-border last:border-none"
+                      className="[&>div]:border-b [&>div]:border-b-border [&>div]:last:border-none"
                     >
                       <CartLine line={line} />
                     </li>
