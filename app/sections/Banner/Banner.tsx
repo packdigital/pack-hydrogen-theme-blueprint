@@ -3,6 +3,7 @@ import kebabCase from 'lodash/kebabCase';
 
 import {Container} from '~/components/Container';
 import {Image} from '~/components/Image';
+import {ResponsivePicture} from '~/components/ResponsivePicture';
 
 import {BannerContainer} from './BannerContainer';
 import {BannerContent} from './BannerContent';
@@ -18,6 +19,11 @@ export function Banner({cms}: {cms: BannerCms}) {
 
   const hasMobileVideo = video?.videoMobile?.mediaType === 'VIDEO';
   const hasDesktopVideo = video?.videoDesktop?.mediaType === 'VIDEO';
+  const canUsePicture =
+    !hasMobileVideo &&
+    !hasDesktopVideo &&
+    image?.imageMobile?.url &&
+    image?.imageDesktop?.url;
 
   return (
     <Container
@@ -28,49 +34,70 @@ export function Banner({cms}: {cms: BannerCms}) {
       }}
     >
       <BannerContainer cms={cms} sectionId={sectionId}>
-        <div className="absolute inset-0 size-full overflow-hidden md:hidden">
-          {hasMobileVideo && (
-            <BannerVideo
-              aboveTheFold={section?.aboveTheFold}
-              posterUrl={video?.posterMobile?.url}
-              video={video?.videoMobile}
-            />
-          )}
-
-          {image?.imageMobile?.url && !hasMobileVideo && (
-            <Image
-              data={{
-                altText: image.imageMobile.altText || image.alt,
-                url: image.imageMobile.url,
-              }}
-              className={clsx('media-fill', image.positionMobile)}
+        {canUsePicture ? (
+          <div className="absolute inset-0 size-full overflow-hidden">
+            <ResponsivePicture
+              imageMobile={image.imageMobile}
+              imageDesktop={image.imageDesktop}
+              alt={image.alt}
               loading="eager"
-              sizes="100vw"
+              fetchPriority="high"
+              className={clsx(
+                'media-fill',
+                image.positionMobile,
+                image.positionDesktop,
+              )}
+              sizesMobile="100vw"
+              sizesDesktop="100vw"
             />
-          )}
-        </div>
+          </div>
+        ) : (
+          <>
+            <div className="absolute inset-0 size-full overflow-hidden md:hidden">
+              {hasMobileVideo && (
+                <BannerVideo
+                  aboveTheFold={section?.aboveTheFold}
+                  posterUrl={video?.posterMobile?.url}
+                  video={video?.videoMobile}
+                />
+              )}
 
-        <div className="absolute inset-0 hidden size-full overflow-hidden md:block">
-          {hasDesktopVideo && (
-            <BannerVideo
-              aboveTheFold={section?.aboveTheFold}
-              posterUrl={video?.posterDesktop?.url}
-              video={video?.videoDesktop}
-            />
-          )}
+              {image?.imageMobile?.url && !hasMobileVideo && (
+                <Image
+                  data={{
+                    altText: image.imageMobile.altText || image.alt,
+                    url: image.imageMobile.url,
+                  }}
+                  className={clsx('media-fill', image.positionMobile)}
+                  loading="eager"
+                  sizes="100vw"
+                />
+              )}
+            </div>
 
-          {image?.imageDesktop?.url && !hasDesktopVideo && (
-            <Image
-              data={{
-                altText: image.imageDesktop.altText || image.alt,
-                url: image.imageDesktop.url,
-              }}
-              className={clsx('media-fill', image.positionDesktop)}
-              loading="eager"
-              sizes="100vw"
-            />
-          )}
-        </div>
+            <div className="absolute inset-0 hidden size-full overflow-hidden md:block">
+              {hasDesktopVideo && (
+                <BannerVideo
+                  aboveTheFold={section?.aboveTheFold}
+                  posterUrl={video?.posterDesktop?.url}
+                  video={video?.videoDesktop}
+                />
+              )}
+
+              {image?.imageDesktop?.url && !hasDesktopVideo && (
+                <Image
+                  data={{
+                    altText: image.imageDesktop.altText || image.alt,
+                    url: image.imageDesktop.url,
+                  }}
+                  className={clsx('media-fill', image.positionDesktop)}
+                  loading="eager"
+                  sizes="100vw"
+                />
+              )}
+            </div>
+          </>
+        )}
 
         <BannerContent
           aboveTheFold={section?.aboveTheFold}
