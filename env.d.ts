@@ -38,7 +38,6 @@ declare global {
     PUBLIC_PACK_CONTENT_ENVIRONMENT?: string;
     PUBLIC_STORE_DOMAIN: string;
     PUBLIC_STOREFRONT_API_TOKEN: string;
-    PUBLIC_STOREFRONT_API_VERSION: string;
     PUBLIC_STOREFRONT_ID: string;
     SESSION_SECRET: string;
     SHOP_ID: string;

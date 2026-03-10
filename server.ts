@@ -112,6 +112,10 @@ export default {
         getCartId: cartGetIdDefault(request.headers),
         setCartId: cartSetIdDefault({domain: getCookieDomain(request.url)}),
         cartQueryFragment: CART_FRAGMENT,
+        cartMutateFragment: CART_FRAGMENT.replace(
+          'CartApiQuery',
+          'CartApiMutation',
+        ).replace('$numCartLines', '250'),
       });
 
       /**

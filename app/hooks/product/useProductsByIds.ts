@@ -1,8 +1,7 @@
-import {useEffect, useMemo} from 'react';
-import {useFetcher} from 'react-router';
+import {useMemo} from 'react';
 import type {Product} from '@shopify/hydrogen/storefront-api-types';
 
-import {useLocale} from '~/hooks';
+import {useLoadData, useLocale} from '~/hooks';
 
 /**
  * Fetch products by ids
@@ -20,12 +19,11 @@ export function useProductsByIds(
   fetchOnMount = true,
 ): Product[] {
   const {pathPrefix} = useLocale();
-  const fetcher = useFetcher<{products: Product[]}>();
 
   const idsString = JSON.stringify(ids);
 
-  useEffect(() => {
-    if (!fetchOnMount || !ids?.length) return;
+  const apiPath = useMemo(() => {
+    if (!fetchOnMount || !ids?.length) return null;
     const searchParams = new URLSearchParams({
       query: ids
         .filter(Boolean)
@@ -35,12 +33,14 @@ export function useProductsByIds(
         .join(' OR '),
       count: ids.length.toString(),
     });
-    fetcher.load(`${pathPrefix}/api/products?${searchParams}`);
+    return `${pathPrefix}/api/products?${searchParams}`;
   }, [fetchOnMount, idsString]);
 
+  const {data} = useLoadData<{products: Product[]}>(apiPath);
+
   return useMemo(() => {
-    if (!ids?.length || !fetcher.data?.products) return [];
-    const productsById = fetcher.data.products.reduce(
+    if (!ids?.length || !data?.products?.length) return [];
+    const productsById = data.products.reduce(
       (acc: Record<string, Product>, product) => {
         if (!product) return acc;
         return {...acc, [product.id]: product};
@@ -52,5 +52,5 @@ export function useProductsByIds(
       if (!productsById[id]) return acc;
       return [...acc, productsById[id]];
     }, []);
-  }, [fetcher.data?.products, idsString]);
+  }, [data?.products, idsString]);
 }

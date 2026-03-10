@@ -1,10 +1,9 @@
-import {useCallback, useEffect, useState} from 'react';
-import {useFetcher} from 'react-router';
+import {useCallback, useEffect, useMemo, useState} from 'react';
 import type {Product} from '@shopify/hydrogen/storefront-api-types';
 
 import {useGroupingsContext} from '~/contexts/GroupingsProvider/useGroupingsContext';
 import {formatGroupingWithOptions} from '~/lib/utils';
-import {useLocale} from '~/hooks';
+import {useLocale, useLoadData} from '~/hooks';
 import type {Group} from '~/lib/types';
 
 /**
@@ -23,7 +22,6 @@ export function useProductGroupingByHandle(
   fetchOnMount = true,
 ): Group | null {
   const {pathPrefix} = useLocale();
-  const fetcher = useFetcher<{products: Product[]}>();
   const {actions, state} = useGroupingsContext();
   const {setGroupings} = actions;
   const {groupings, groupingIndexesMap} = state;
@@ -47,13 +45,8 @@ export function useProductGroupingByHandle(
 
   const groupingIsReady = !!grouping?.isReady;
 
-  useEffect(() => {
-    if (!fetchOnMount || !groupings || !handle || groupingIsReady) return;
-    setGrouping(getProductGroupingByHandle(handle));
-  }, [fetchOnMount, groupings, handle]);
-
-  useEffect(() => {
-    if (!grouping?.allProducts || groupingIsReady) return;
+  const apiPath = useMemo(() => {
+    if (!grouping?.allProducts || groupingIsReady) return null;
     const idsQuery = grouping.allProducts
       .map(({id}) => `id:${id?.split('/').pop()}`)
       .join(' OR ');
@@ -61,12 +54,19 @@ export function useProductGroupingByHandle(
       query: idsQuery,
       count: grouping.allProducts.length.toString(),
     });
-    fetcher.load(`${pathPrefix}/api/products?${searchParams}`);
+    return `${pathPrefix}/api/products?${searchParams}`;
   }, [grouping?.id]);
 
+  const {data} = useLoadData<{products: Product[]}>(apiPath);
+
   useEffect(() => {
-    if (!grouping || !fetcher.data?.products) return;
-    const productsByHandle = fetcher.data.products.reduce(
+    if (!fetchOnMount || !groupings || !handle || groupingIsReady) return;
+    setGrouping(getProductGroupingByHandle(handle));
+  }, [fetchOnMount, groupings, handle]);
+
+  useEffect(() => {
+    if (!grouping || !data?.products) return;
+    const productsByHandle = data.products.reduce(
       (acc: Record<string, Product>, product: Product) => {
         if (!product) return acc;
         return {...acc, [product.handle]: product};
@@ -86,7 +86,7 @@ export function useProductGroupingByHandle(
     updatedGroupings[groupingIndex] = readyGrouping;
     setGrouping(readyGrouping);
     setGroupings(updatedGroupings);
-  }, [grouping?.id, fetcher.data?.products]);
+  }, [grouping?.id, data?.products]);
 
   return grouping;
 }

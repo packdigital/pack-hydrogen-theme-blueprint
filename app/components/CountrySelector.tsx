@@ -7,7 +7,7 @@ import {DEFAULT_LOCALE} from '~/lib/constants';
 import type {I18nLocale} from '~/lib/types';
 import {pathWithLocalePrefix, pathWithoutLocalePrefix} from '~/lib/utils';
 import {Select} from '~/components/Select';
-import {useCart, useLocale} from '~/hooks';
+import {useCart, useLoadData, useLocale} from '~/hooks';
 
 export const CountrySelector = memo(
   ({openFrom = 'top'}: {openFrom?: 'top' | 'bottom'}) => {
@@ -16,10 +16,10 @@ export const CountrySelector = memo(
       triggerOnce: true,
     });
     const {pathPrefix, label} = useLocale();
-    const localizationFetcher = useFetcher<{localization: Localization}>({
-      key: 'countries',
-    }); // only countries within the store's markets will be returned
     const redirectFetcher = useFetcher({key: 'redirect'});
+    const {data: countriesData} = useLoadData<{localization: Localization}>(
+      inView ? `/api/countries` : null,
+    ); // only countries within the store's markets will be returned
 
     const [countries, setCountries] = useState<Record<
       string,
@@ -29,9 +29,7 @@ export const CountrySelector = memo(
     const {pathname, search} = useLocation();
     const {buyerIdentityUpdate} = useCart();
 
-    const {availableCountries} = {
-      ...localizationFetcher?.data?.localization,
-    };
+    const {availableCountries} = {...countriesData?.localization};
 
     const countryOptions = useMemo(() => {
       if (!countries) return [];
@@ -61,11 +59,6 @@ export const CountrySelector = memo(
       },
       [buyerIdentityUpdate, countries, pathname, search, pathPrefix],
     );
-
-    useEffect(() => {
-      if (!inView) return;
-      localizationFetcher.load(`${pathPrefix}/api/countries`);
-    }, [inView]);
 
     useEffect(() => {
       if (!availableCountries?.length) return;

@@ -5,13 +5,13 @@ import {CartProvider} from './CartProvider/CartProvider';
 import {GlobalProvider} from './GlobalProvider/GlobalProvider';
 import {GroupingsProvider} from './GroupingsProvider/GroupingsProvider';
 import {MenuProvider} from './MenuProvider/MenuProvider';
-import {PreviewModeCartProvider} from './PreviewModeCartProvider';
+import {ShopifyProvider} from './ShopifyProvider';
 import {PromobarProvider} from './PromobarProvider/PromobarProvider';
 import {SettingsProvider} from './SettingsProvider/SettingsProvider';
 
 export function ContextsProvider({children}: {children: ReactNode}) {
   return (
-    <PreviewModeCartProvider>
+    <ShopifyProvider>
       <CartProvider>
         <SettingsProvider>
           <GlobalProvider>
@@ -25,6 +25,6 @@ export function ContextsProvider({children}: {children: ReactNode}) {
           </GlobalProvider>
         </SettingsProvider>
       </CartProvider>
-    </PreviewModeCartProvider>
+    </ShopifyProvider>
   );
 }

@@ -1,6 +1,9 @@
 import {CartForm} from '@shopify/hydrogen';
 import type {CartQueryDataReturn} from '@shopify/hydrogen';
-import type {Cart} from '@shopify/hydrogen/storefront-api-types';
+import type {
+  AttributeInput,
+  Cart,
+} from '@shopify/hydrogen/storefront-api-types';
 
 import {isLocalPath} from '~/lib/utils';
 
@@ -40,7 +43,7 @@ export async function action({request, context}: Route.ActionArgs) {
     case CartForm.ACTIONS.LinesRemove:
       result = await cart.removeLines(getParsedJson(formData.get('lineIds')));
       break;
-    case CartForm.ACTIONS.DiscountCodesUpdate:
+    case CartForm.ACTIONS.DiscountCodesUpdate: {
       const formDiscountCodes = getParsedJson(formData.get('discountCodes'));
       const discountCodes = (
         Array.isArray(formDiscountCodes) ? formDiscountCodes : []
@@ -56,21 +59,52 @@ export async function action({request, context}: Route.ActionArgs) {
       }
       result = await cart.updateDiscountCodes(discountCodes);
       break;
+    }
     case CartForm.ACTIONS.BuyerIdentityUpdate:
       result = await cart.updateBuyerIdentity(
         getParsedJson(formData.get('buyerIdentity')),
       );
       break;
-    case CartForm.ACTIONS.AttributesUpdateInput:
-      const formAttributes = getParsedJson(formData.get('attributes'));
-      const attributes = Array.isArray(formAttributes) ? formAttributes : [];
-      // Combine cart attributes in cart
+    case CartForm.ACTIONS.AttributesUpdateInput: {
+      const attributeInputs = getParsedJson(
+        formData.get('attributes'),
+      ) as AttributeInput[];
       const existingCartWithAttributes = (await cart.get()) as Cart;
-      if (existingCartWithAttributes) {
-        attributes.push(...(existingCartWithAttributes.attributes || []));
+      const existingAttributes = existingCartWithAttributes?.attributes || [];
+      if (
+        Array.isArray(attributeInputs) &&
+        attributeInputs.every(
+          (a) => typeof a.key === 'string' && typeof a.value === 'string',
+        )
+      ) {
+        // If empty array is passed, it means all attributes should be removed
+        if (!attributeInputs.length) {
+          result = await cart.updateAttributes([]);
+        } else {
+          const mergedMap = new Map(
+            existingAttributes.map((a) => [
+              a.key,
+              {key: a.key, value: a.value || ''},
+            ]),
+          );
+          attributeInputs.forEach((a) => {
+            // If value is empty, it means the attribute should be removed
+            if (!a.value) {
+              mergedMap.delete(a.key);
+              return;
+            }
+            mergedMap.set(a.key, {key: a.key, value: a.value});
+          });
+          result = await cart.updateAttributes([...mergedMap.values()]);
+        }
+      } else {
+        result = {
+          cart: existingCartWithAttributes,
+          userErrors: [{message: 'Invalid `attributes` format.'}],
+        };
       }
-      result = await cart.updateAttributes(attributes);
       break;
+    }
     case CartForm.ACTIONS.NoteUpdate:
       result = await cart.updateNote(formData.get('note') as string);
       break;

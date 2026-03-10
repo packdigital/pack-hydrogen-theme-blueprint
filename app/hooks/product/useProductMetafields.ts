@@ -1,7 +1,4 @@
-import {useEffect} from 'react';
-import {useFetcher} from 'react-router';
-
-import {useLocale} from '~/hooks';
+import {useLoadData, useLocale} from '~/hooks';
 import type {MetafieldIdentifier, ParsedMetafields} from '~/lib/types';
 
 /**
@@ -9,7 +6,7 @@ import type {MetafieldIdentifier, ParsedMetafields} from '~/lib/types';
  * @param handle - The handle of the product
  * @param metafieldIdentifiers - An array of objects with `key` and `namespace` properties
  * @param fetchOnMount - Determines when to fetch
- * @returns Oject with `${namespace}.${key}` as key and the value as the metafield
+ * @returns Object with `${namespace}.${key}` as key and the value as the metafield
  * @example
  * ```js
  * const metafields = useProductMetafields('product-handle', [
@@ -25,20 +22,14 @@ export function useProductMetafields(
   fetchOnMount = true,
 ): ParsedMetafields | null {
   const {pathPrefix} = useLocale();
-  const metafieldIdentifiersString = JSON.stringify(metafieldIdentifiers);
-  const fetcher = useFetcher<{
-    metafields: ParsedMetafields | null;
-  }>();
-  const {metafields} = {...fetcher.data};
 
-  useEffect(() => {
-    if (!fetchOnMount || !handle || !metafieldIdentifiers?.length) return;
-    const searchParams = new URLSearchParams({
-      handle,
-      metafieldIdentifiers: metafieldIdentifiersString,
-    });
-    fetcher.load(`${pathPrefix}/api/product?${searchParams}`);
-  }, [fetchOnMount, handle, metafieldIdentifiersString]);
+  const {data} = useLoadData<{metafields: ParsedMetafields}>(
+    fetchOnMount && handle && metafieldIdentifiers?.length
+      ? `${pathPrefix}/api/product?handle=${handle}&metafieldIdentifiers=${JSON.stringify(
+          metafieldIdentifiers,
+        )}`
+      : null,
+  );
 
-  return (metafields as ParsedMetafields) || null;
+  return (data?.metafields as ParsedMetafields) || null;
 }

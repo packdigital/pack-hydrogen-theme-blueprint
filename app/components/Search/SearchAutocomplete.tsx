@@ -1,7 +1,4 @@
-import {useEffect} from 'react';
-import {useFetcher} from 'react-router';
-
-import {useIsHydrated, useLocale, useSettings} from '~/hooks';
+import {useIsHydrated, useLoadData, useLocale, useSettings} from '~/hooks';
 
 import type {SearchAutocompleteProps} from './Search.types';
 
@@ -17,21 +14,16 @@ export function SearchAutocomplete({
   const {search} = useSettings();
   const isHydrated = useIsHydrated();
   const {pathPrefix} = useLocale();
-  const fetcher = useFetcher<AutocompleteFetcherData>();
 
   const {enabled, heading, limit} = {...search?.autocomplete};
 
-  useEffect(() => {
-    if (!isHydrated) return;
-    const searchParams = new URLSearchParams({
-      q: searchTerm,
-      limit: limit?.toString(),
-      type: 'QUERY',
-    });
-    fetcher.load(`${pathPrefix}/api/predictive-search?${searchParams}`);
-  }, [searchTerm]);
+  const {data} = useLoadData<AutocompleteFetcherData>(
+    isHydrated
+      ? `${pathPrefix}/api/predictive-search?q=${searchTerm}&limit=${limit}&type=QUERY`
+      : null,
+  );
 
-  const autocompleteResults = fetcher?.data?.searchResults?.results?.[0]?.items;
+  const autocompleteResults = data?.searchResults?.results?.[0]?.items;
 
   return enabled && autocompleteResults && autocompleteResults.length > 0 ? (
     <div className="mt-4">

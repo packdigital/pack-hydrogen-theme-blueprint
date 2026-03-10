@@ -2,8 +2,9 @@ import {useMatches} from 'react-router';
 
 import type {loader} from '~/root';
 
+type UnwrapData<T> = T extends {data: infer U} ? U : T;
 export type RootLoaderData = Exclude<
-  Awaited<ReturnType<typeof loader>>,
+  UnwrapData<Awaited<ReturnType<typeof loader>>>,
   Response
 >;
 

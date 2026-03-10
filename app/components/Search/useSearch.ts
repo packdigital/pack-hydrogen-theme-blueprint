@@ -1,18 +1,17 @@
 import {useCallback, useEffect, useRef, useState, useMemo} from 'react';
-import {useFetcher} from 'react-router';
 import debounce from 'lodash/debounce';
 import type {Product} from '@shopify/hydrogen/storefront-api-types';
 
-import {useIsHydrated, useLocale, useSettings} from '~/hooks';
+import {useIsHydrated, useLoadData, useLocale, useSettings} from '~/hooks';
 
 const PRODUCTS_LIMIT = 10;
 const COLLECTIONS_LIMIT = 10;
 
-interface ProductsFetcherData {
+interface ProductsData {
   searchResults: {results: Product[] | null; totalResults: number};
   searchTerm: string;
 }
-interface CollectionsFetcherData {
+interface CollectionsData {
   searchResults: {results: Record<string, any>[] | null; totalResults: number};
   searchTerm: string;
 }
@@ -25,40 +24,26 @@ export function useSearch() {
   const [rawTerm, setRawTerm] = useState('');
   const [searchTerm, setSearchTerm] = useState(rawTerm);
 
-  const productsFetcher = useFetcher<ProductsFetcherData>();
-  const collectionsFetcher = useFetcher<CollectionsFetcherData>();
-
   const collectionsEnabled = search?.results?.collectionsEnabled ?? true;
 
-  useEffect(() => {
-    if (!isHydrated) return;
-    const searchParams = new URLSearchParams({
-      q: searchTerm,
-      count: PRODUCTS_LIMIT.toString(),
-    });
-    productsFetcher.load(`${pathPrefix}/api/search?${searchParams}`);
-  }, [searchTerm]);
+  const {data: productsData} = useLoadData<ProductsData>(
+    isHydrated
+      ? `${pathPrefix}/api/search?q=${searchTerm}&count=${PRODUCTS_LIMIT}`
+      : null,
+  );
 
-  useEffect(() => {
-    if (!isHydrated || !collectionsEnabled) return;
-    const searchParams = new URLSearchParams({
-      q: searchTerm,
-      limit: COLLECTIONS_LIMIT.toString(),
-      type: 'COLLECTION',
-    });
-    collectionsFetcher.load(
-      `${pathPrefix}/api/predictive-search?${searchParams}`,
-    );
-  }, [collectionsEnabled, searchTerm]);
+  const {data: collectionsData} = useLoadData<CollectionsData>(
+    isHydrated && collectionsEnabled
+      ? `${pathPrefix}/api/predictive-search?q=${searchTerm}&limit=${COLLECTIONS_LIMIT}&type=COLLECTION`
+      : null,
+  );
 
-  const totalProductsCount =
-    productsFetcher.data?.searchResults?.totalResults ?? 0;
-  const products = productsFetcher.data?.searchResults?.results ?? [];
-  const collections =
-    collectionsFetcher?.data?.searchResults?.results?.[0]?.items ?? [];
+  const totalProductsCount = productsData?.searchResults?.totalResults ?? 0;
+  const products = productsData?.searchResults?.results ?? [];
+  const collections = collectionsData?.searchResults?.results?.[0]?.items ?? [];
   const hasAnyResults = products.length || collections.length;
   const hasNoProductResults =
-    !!productsFetcher.data?.searchTerm && totalProductsCount === 0;
+    !!productsData?.searchTerm && totalProductsCount === 0;
 
   const handleDebouncedInput = useCallback(() => {
     setSearchTerm(rawTerm.trim());
