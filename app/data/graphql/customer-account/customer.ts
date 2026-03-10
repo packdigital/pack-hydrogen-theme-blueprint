@@ -5,7 +5,6 @@ const CUSTOMER_FRAGMENT = `
     number
     processedAt
     financialStatus
-    fulfillmentStatus
     fulfillments(first: 1) {
       nodes {
         status
@@ -136,7 +135,6 @@ export const CUSTOMER_ORDER_QUERY = `
     statusPageUrl
     processedAt
     financialStatus
-    fulfillmentStatus
     fulfillments(first: 250) {
       nodes {
         status
