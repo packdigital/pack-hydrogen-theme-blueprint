@@ -43,7 +43,7 @@ export async function action({request, context}: Route.ActionArgs) {
     case CartForm.ACTIONS.LinesRemove:
       result = await cart.removeLines(getParsedJson(formData.get('lineIds')));
       break;
-    case CartForm.ACTIONS.DiscountCodesUpdate:
+    case CartForm.ACTIONS.DiscountCodesUpdate: {
       const formDiscountCodes = getParsedJson(formData.get('discountCodes'));
       const discountCodes = (
         Array.isArray(formDiscountCodes) ? formDiscountCodes : []
@@ -59,12 +59,13 @@ export async function action({request, context}: Route.ActionArgs) {
       }
       result = await cart.updateDiscountCodes(discountCodes);
       break;
+    }
     case CartForm.ACTIONS.BuyerIdentityUpdate:
       result = await cart.updateBuyerIdentity(
         getParsedJson(formData.get('buyerIdentity')),
       );
       break;
-    case CartForm.ACTIONS.AttributesUpdateInput:
+    case CartForm.ACTIONS.AttributesUpdateInput: {
       const attributeInputs = getParsedJson(
         formData.get('attributes'),
       ) as AttributeInput[];
@@ -103,6 +104,7 @@ export async function action({request, context}: Route.ActionArgs) {
         };
       }
       break;
+    }
     case CartForm.ACTIONS.NoteUpdate:
       result = await cart.updateNote(formData.get('note') as string);
       break;
