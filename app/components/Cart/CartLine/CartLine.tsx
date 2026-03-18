@@ -13,9 +13,9 @@ import {useCartLineImage} from './useCartLineImage';
 import {useCartLinePrices} from './useCartLinePrices';
 
 export const CartLine = memo(({closeCart, line}: CartLineProps) => {
-  const {discountAllocations, merchandise} = line;
+  const {discountAllocations, merchandise, quantity} = line;
 
-  const {handleDecrement, handleIncrement, handleRemove, optimisticQuantity} =
+  const {handleDecrement, handleIncrement, handleRemove, isUpdatingLine} =
     useCartLine({line});
 
   const {price, compareAtPrice} = useCartLinePrices({line});
@@ -30,7 +30,7 @@ export const CartLine = memo(({closeCart, line}: CartLineProps) => {
     return `/products/${merchandise.product.handle}?${searchParams}`;
   }, [merchandise.id]);
 
-  return optimisticQuantity > 0 ? (
+  return (
     <div className="relative grid grid-cols-[auto_1fr] items-center gap-3 p-4 ">
       <Link
         aria-label={`View ${merchandise.product.title}`}
@@ -85,8 +85,9 @@ export const CartLine = memo(({closeCart, line}: CartLineProps) => {
           <QuantitySelector
             handleDecrement={handleDecrement}
             handleIncrement={handleIncrement}
+            isUpdating={isUpdatingLine}
             productTitle={merchandise.product.title}
-            quantity={optimisticQuantity}
+            quantity={quantity}
           />
 
           <div className="flex flex-1 flex-col items-end pb-1">
@@ -125,7 +126,7 @@ export const CartLine = memo(({closeCart, line}: CartLineProps) => {
         </div>
       </div>
     </div>
-  ) : null;
+  );
 });
 
 CartLine.displayName = 'CartLine';
