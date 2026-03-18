@@ -147,7 +147,9 @@ export const useCart = (): CartWithActions => {
 
   return (
     isPreviewModeEnabled
-      ? // eslint-disable-next-line react-hooks/rules-of-hooks
+      ? // isPreviewModeEnabled will not change during the session (i.e. between renders),
+        // so it's safe to call this hook conditionally
+        // eslint-disable-next-line react-hooks/rules-of-hooks
         useClientSideCart()
       : {
           ...cart,
