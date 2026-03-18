@@ -151,7 +151,7 @@ export const useCart = (): CartWithActions => {
         useClientSideCart()
       : {
           ...cart,
-          ...(cart?.lines ? {lines: flattenConnection(cart.lines)} : null),
+          lines: cart?.lines ? flattenConnection(cart.lines) : [],
           buyerIdentityUpdate,
           cartAttributesUpdate,
           cartCreate,

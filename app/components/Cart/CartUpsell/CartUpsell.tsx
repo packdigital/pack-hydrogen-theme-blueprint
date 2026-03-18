@@ -17,7 +17,7 @@ import type {CartUpsellProps} from '../Cart.types';
 import {CartUpsellItem} from './CartUpsellItem';
 
 export const CartUpsell = memo(({closeCart, settings}: CartUpsellProps) => {
-  const {lines = [], status, updatedAt} = useCart();
+  const {lines, status, updatedAt} = useCart();
   const cartLines = lines as CartLine[];
 
   const {
