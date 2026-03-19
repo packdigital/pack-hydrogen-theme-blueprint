@@ -16,7 +16,7 @@ import {FreeShippingMeter} from './FreeShippingMeter';
 export const Cart = memo(() => {
   const {cart: cartSettings} = useSettings();
   const cart = useCart();
-  const {lines = [], totalQuantity = 0} = cart;
+  const {lines, totalQuantity = 0} = cart;
   const {cartOpen, closeCart} = useMenu();
 
   const cartLines = lines as CartLineType[];

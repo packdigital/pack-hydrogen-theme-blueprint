@@ -13,7 +13,7 @@ import {normalizeAdminProduct} from '~/lib/utils';
 import {getPage, getProductGroupings} from '~/lib/server-utils/pack.server';
 import {getShop, getSiteSettings} from '~/lib/server-utils/settings.server';
 import {
-  getGrouping,
+  getProductWithInitialGrouping,
   getSelectedProductOptions,
 } from '~/lib/server-utils/product.server';
 import {seoPayload} from '~/lib/server-utils/seo.server';
@@ -106,30 +106,11 @@ export async function loader({params, context, request}: Route.LoaderArgs) {
     throw new Response(null, {status: 404});
   }
 
-  let grouping = undefined;
-  let groupingProducts = undefined;
-
-  if (productGroupings) {
-    const groupingData = await getGrouping({
-      context,
-      handle,
-      productGroupings,
-    });
-    grouping = groupingData.grouping;
-    groupingProducts = groupingData.groupingProducts;
-  }
-
-  const product = {
-    ...queriedProduct,
-    ...(grouping
-      ? {
-          initialGrouping: {
-            ...grouping,
-            allProducts: [queriedProduct, ...(groupingProducts || [])],
-          },
-        }
-      : null),
-  } as ProductWithInitialGrouping;
+  const product = await getProductWithInitialGrouping({
+    context,
+    product: storefrontProduct,
+    productGroupings,
+  });
 
   const selectedVariant = product.selectedVariant ?? product.variants?.nodes[0];
 

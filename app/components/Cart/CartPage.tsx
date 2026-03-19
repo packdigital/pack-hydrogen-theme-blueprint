@@ -14,7 +14,7 @@ export function CartPage() {
   const {cart: cartSettings} = useSettings();
   const {isCartReady} = useGlobal();
   const cart = useCart();
-  const {lines = [], totalQuantity = 0} = cart;
+  const {lines, totalQuantity = 0} = cart;
   const cartLines = lines as CartLineType[];
   const heading = cartSettings?.heading ?? 'My Cart';
   const hasCartLines = totalQuantity > 0;

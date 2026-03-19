@@ -10,7 +10,7 @@ import type {
 } from '@shopify/hydrogen';
 import type {Pack} from '@pack/hydrogen';
 
-import type {OxygenEnv} from '~/lib/utils';
+import type {OxygenEnv} from '~/lib/server-utils/oxygen.server';
 import type {Admin} from '~/lib/admin-api-api';
 
 import type {HydrogenSession} from './server';

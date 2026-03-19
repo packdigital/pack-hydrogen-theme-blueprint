@@ -78,10 +78,11 @@ export function ResponsivePicture({
         sizes={sizesMobile}
         alt={alt || imageMobile.altText || imageDesktop.altText || ''}
         loading={loading}
-        fetchPriority={fetchPriority}
         decoding="async"
         className={className}
         style={style}
+        // Spread in fetchPriority as fetchpriority to avoid React warning
+        {...(fetchPriority ? {fetchpriority: fetchPriority} : {})}
       />
     </picture>
   );
