@@ -28,7 +28,9 @@ export const CollectionFilterOption = memo(
     let optionImageUrl: string | undefined;
 
     if (isColor) {
-      const color = parsedInput.variantOption.value.toLowerCase();
+      const color =
+        option.label?.toLowerCase() ||
+        parsedInput.variantOption.value.toLowerCase();
       const swatchFromCms = swatchesMap?.[color];
       const colorFromCms = swatchFromCms?.color;
       const colorFromShopify = swatch?.color;

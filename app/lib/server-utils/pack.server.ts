@@ -1,24 +1,29 @@
 import type {AppLoadContext} from 'react-router';
+import type {Pack} from '@pack/hydrogen';
 
 import {PRODUCT_GROUPINGS_QUERY} from '~/data/graphql/pack/settings';
 import type {Group, Page} from '~/lib/types';
+
+type QueryReturn = Awaited<ReturnType<Pack['query']>>;
+type PackTestInfo = QueryReturn['packTestInfo'];
 
 /*
  * Fetches page data from Pack with all sections,
  * using recursive calls in case there are more than 25 sections
  */
-export const getPage = async ({
+export const getPage = async <K extends string = 'page'>({
   context,
   handle,
-  pageKey = 'page',
+  pageKey = 'page' as K,
   query,
 }: {
   context: AppLoadContext;
   handle: string;
-  pageKey?: string;
+  pageKey?: K;
   query: string;
 }) => {
   const {pack, storefront} = context;
+  let packTestInfo: PackTestInfo;
   const getPageWithAllSections = async ({
     accumulatedPage,
     cursor,
@@ -26,7 +31,7 @@ export const getPage = async ({
     accumulatedPage: Page | null;
     cursor: string | null;
   }): Promise<Page | undefined> => {
-    const {data} = await pack.query(query, {
+    const {data, packTestInfo: queriedPackTestInfo} = await pack.query(query, {
       variables: {
         handle,
         cursor,
@@ -37,6 +42,10 @@ export const getPage = async ({
     });
 
     if (!data?.[pageKey]) return undefined;
+
+    if (!packTestInfo && queriedPackTestInfo) {
+      packTestInfo = queriedPackTestInfo;
+    }
 
     const {nodes = [], pageInfo} = {...data[pageKey].sections};
     const combinedSections = {
@@ -59,7 +68,9 @@ export const getPage = async ({
     accumulatedPage: null,
     cursor: null,
   });
-  return {[pageKey]: page};
+  return {[pageKey]: page, packTestInfo} as Record<K, Page | undefined> & {
+    packTestInfo?: PackTestInfo;
+  };
 };
 
 export const getProductGroupings = async (context: AppLoadContext) => {

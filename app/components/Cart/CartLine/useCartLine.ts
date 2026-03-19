@@ -1,79 +1,49 @@
-import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import debounce from 'lodash/debounce';
+import {useCallback, useState} from 'react';
 import type {CartLine} from '@shopify/hydrogen/storefront-api-types';
 
 import {useCart} from '~/hooks';
 
 export const useCartLine = ({line}: {line: CartLine}) => {
   const {id, quantity} = {...line};
-  const {linesRemove, linesUpdate, status} = useCart();
+  const {linesRemove, linesUpdate} = useCart();
 
-  const [optimisticQuantity, setOptimisticQuantity] = useState(quantity);
+  const [isUpdatingLine, setIsUpdatingLine] = useState(false);
+  const [isRemovingLine, setIsRemovingLine] = useState(false);
 
-  /*
-   * Optimistic quantity debounce logic
-   */
-  const handleDebouncedDecrement = useCallback(async () => {
-    if (optimisticQuantity > 0) {
-      const data = await linesUpdate([{id, quantity: optimisticQuantity}]);
-      if (data && !data.cart) setOptimisticQuantity(quantity);
+  const handleDecrement = useCallback(async () => {
+    if (quantity > 1) {
+      setIsUpdatingLine(true);
+      await linesUpdate([{id, quantity: quantity - 1}]);
+      setIsUpdatingLine(false);
     } else {
-      const data = await linesRemove([id]);
-      if (data && !data.cart) setOptimisticQuantity(quantity);
+      setIsRemovingLine(true);
+      await linesRemove([id]);
+      setIsRemovingLine(false);
     }
-  }, [id, linesRemove, linesUpdate, optimisticQuantity, quantity, status]);
+  }, [id, linesRemove, linesUpdate, quantity]);
 
-  const handleDebouncedIncrement = useCallback(async () => {
-    const data = await linesUpdate([{id, quantity: optimisticQuantity}]);
-    if (data && !data.cart) setOptimisticQuantity(quantity);
-  }, [id, linesUpdate, optimisticQuantity, quantity, status]);
-
-  const debouncedDecrementRef = useRef(handleDebouncedDecrement);
-  const debouncedIncrementRef = useRef(handleDebouncedIncrement);
-
-  useEffect(() => {
-    debouncedDecrementRef.current = handleDebouncedDecrement;
-    debouncedIncrementRef.current = handleDebouncedIncrement;
-  }, [handleDebouncedDecrement, handleDebouncedIncrement]);
-
-  const doDecrementCallbackWithDebounce = useMemo(() => {
-    const callback = () => debouncedDecrementRef.current();
-    return debounce(callback, 200);
-  }, []);
-
-  const doIncrementCallbackWithDebounce = useMemo(() => {
-    const callback = () => debouncedIncrementRef.current();
-    return debounce(callback, 200);
-  }, []);
-
-  /*
-   * Cart line handlers
-   */
-  const handleDecrement = useCallback(() => {
-    if (optimisticQuantity > 0) {
-      doDecrementCallbackWithDebounce();
-      setOptimisticQuantity(optimisticQuantity - 1);
-    } else {
-      setOptimisticQuantity(0);
-      linesRemove([id]);
-    }
-  }, [doDecrementCallbackWithDebounce, id, linesRemove, optimisticQuantity]);
-
-  const handleIncrement = useCallback(() => {
-    doIncrementCallbackWithDebounce();
-    setOptimisticQuantity(optimisticQuantity + 1);
-  }, [doIncrementCallbackWithDebounce, optimisticQuantity]);
+  const handleIncrement = useCallback(async () => {
+    setIsUpdatingLine(true);
+    await linesUpdate([
+      {
+        id,
+        quantity: quantity + 1,
+      },
+    ]);
+    setIsUpdatingLine(false);
+  }, [id, linesUpdate, quantity]);
 
   const handleRemove = useCallback(async () => {
-    setOptimisticQuantity(0);
-    const data = await linesRemove([id]);
-    if (data && !data.cart) setOptimisticQuantity(quantity);
-  }, [id, linesRemove, quantity, status]);
+    setIsRemovingLine(true);
+    await linesRemove([id]);
+    setIsRemovingLine(false);
+  }, [id, linesRemove]);
 
   return {
     handleDecrement,
     handleIncrement,
     handleRemove,
-    optimisticQuantity,
+    isRemovingLine,
+    isUpdatingLine,
   };
 };

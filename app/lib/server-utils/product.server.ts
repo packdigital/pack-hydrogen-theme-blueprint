@@ -218,6 +218,41 @@ export const getGrouping = async ({
   return {grouping, groupingProducts};
 };
 
+export const getProductWithInitialGrouping = async ({
+  context,
+  product,
+  productGroupings,
+}: {
+  context: AppLoadContext;
+  product: Product;
+  productGroupings: Group[] | null;
+}): Promise<ProductWithInitialGrouping> => {
+  let grouping = undefined;
+  let groupingProducts = undefined;
+
+  if (productGroupings) {
+    const groupingData = await getGrouping({
+      context,
+      handle: product.handle,
+      productGroupings,
+    });
+    grouping = groupingData.grouping;
+    groupingProducts = groupingData.groupingProducts;
+  }
+
+  return {
+    ...product,
+    ...(grouping
+      ? {
+          initialGrouping: {
+            ...grouping,
+            allProducts: [product, ...(groupingProducts || [])],
+          },
+        }
+      : null),
+  } as ProductWithInitialGrouping;
+};
+
 export const getModalProduct = async ({
   context,
   request,
@@ -358,6 +393,7 @@ export const getProductsMapForPage = async ({
         );
         const productsWithDrafts = await Promise.all(
           productIds.map(async (id) => {
+            if (!id) return null;
             if (productsById?.[id]) return productsById[id];
             const {productByIdentifier: adminProduct} = await admin.query(
               ADMIN_PRODUCT_ITEM_BY_ID_QUERY,

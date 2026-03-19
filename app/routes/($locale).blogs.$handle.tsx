@@ -36,19 +36,15 @@ export async function loader({params, context, request}: Route.LoaderArgs) {
     blog: BlogPage | null;
     cursor: string | null;
   }): Promise<BlogPage | undefined> => {
-    const {pack, storefront} = context;
-    const {data} = await pack.query(BLOG_PAGE_QUERY, {
-      variables: {
-        handle,
-        articlesCursor: cursor,
-        country: storefront.i18n.country,
-        language: storefront.i18n.language,
-      },
-      cache: storefront.CacheLong(),
+    const {blog: queriedBlog} = await getPage({
+      context,
+      handle,
+      pageKey: 'blog',
+      query: BLOG_PAGE_QUERY,
     });
-    if (!data?.blog) return undefined;
 
-    const queriedBlog = data.blog;
+    if (!queriedBlog) return undefined;
+
     const queriedBlogArticles = queriedBlog.articles;
 
     const queriedBlogArticlesNodes = queriedBlogArticles?.nodes || [];
