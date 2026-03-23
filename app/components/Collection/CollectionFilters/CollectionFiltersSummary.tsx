@@ -1,7 +1,6 @@
 import {memo} from 'react';
 import startCase from 'lodash/startCase';
 import clsx from 'clsx';
-import {filter} from 'lodash';
 
 import {Svg} from '~/components/Svg';
 

@@ -14,10 +14,11 @@ import {parseMetafieldsFromProduct} from './product.utils';
 export const getMetafieldsQueryString = (
   identifiers: MetafieldIdentifier[] = [],
 ) => {
-  const identifiersString = JSON.stringify(identifiers)
-    .replaceAll('"namespace"', 'namespace')
-    .replaceAll('"key"', 'key');
-  return `
+  try {
+    const identifiersString = JSON.stringify(identifiers)
+      .replaceAll('"namespace"', 'namespace')
+      .replaceAll('"key"', 'key');
+    return `
     metafields(identifiers: ${identifiersString}) {
       createdAt
       description
@@ -39,6 +40,10 @@ export const getMetafieldsQueryString = (
         }
       }
     }`;
+  } catch (error) {
+    console.error('getMetafieldsQueryString:error:', error);
+    return '';
+  }
 };
 
 /* Metafields graphql query with Admin API for draft products */
@@ -79,71 +84,76 @@ export const getMetafields = async (
     identifiers: MetafieldIdentifier[];
   },
 ): Promise<Record<string, Metafield | null> | null> => {
-  const {admin, storefront} = context;
+  try {
+    const {admin, storefront} = context;
 
-  if (!handle || !identifiers?.length) return null;
+    if (!handle || !identifiers?.length) return null;
 
-  let metafields;
+    let metafields;
 
-  if (admin && isDraftProduct) {
-    const ADMIN_PRODUCT_METAFIELDS_QUERY = `
-      query AdminProductMetafields(
-        $handle: String!
-      ) {
-        productByIdentifier(identifier: {handle: $handle}) {
-          ${ADMIN_PRODUCTS_METAFIELDS_QUERY_STRING}
+    if (admin && isDraftProduct) {
+      const ADMIN_PRODUCT_METAFIELDS_QUERY = `
+        query AdminProductMetafields(
+          $handle: String!
+        ) {
+          productByIdentifier(identifier: {handle: $handle}) {
+            ${ADMIN_PRODUCTS_METAFIELDS_QUERY_STRING}
+          }
         }
-      }
-    `;
+      `;
 
-    const {productByIdentifier: adminProduct} = await admin.query(
-      ADMIN_PRODUCT_METAFIELDS_QUERY,
-      {
-        variables: {
-          handle,
+      const {productByIdentifier: adminProduct} = await admin.query(
+        ADMIN_PRODUCT_METAFIELDS_QUERY,
+        {
+          variables: {
+            handle,
+          },
+          cache: admin.CacheShort(),
         },
-        cache: admin.CacheShort(),
-      },
-    );
+      );
 
-    if (!adminProduct) return {};
+      if (!adminProduct) return {};
 
-    metafields = parseMetafieldsFromProduct({
-      product: {...adminProduct, metafields: adminProduct.metafields?.nodes},
-      identifiers,
-    });
-  } else {
-    const PRODUCT_METAFIELDS_QUERY = `#graphql
-      query ProductMetafields(
-        $handle: String!
-        $country: CountryCode
-        $language: LanguageCode
-      ) @inContext(country: $country, language: $language) {
-        product(handle: $handle) {
-          ${getMetafieldsQueryString(identifiers)}
+      metafields = parseMetafieldsFromProduct({
+        product: {...adminProduct, metafields: adminProduct.metafields?.nodes},
+        identifiers,
+      });
+    } else {
+      const PRODUCT_METAFIELDS_QUERY = `#graphql
+        query ProductMetafields(
+          $handle: String!
+          $country: CountryCode
+          $language: LanguageCode
+        ) @inContext(country: $country, language: $language) {
+          product(handle: $handle) {
+            ${getMetafieldsQueryString(identifiers)}
+          }
         }
-      }
-    `;
+      `;
 
-    const {product: storefrontProduct} = await storefront.query(
-      PRODUCT_METAFIELDS_QUERY,
-      {
-        variables: {
-          handle,
-          country: storefront.i18n.country,
-          language: storefront.i18n.language,
+      const {product: storefrontProduct} = await storefront.query(
+        PRODUCT_METAFIELDS_QUERY,
+        {
+          variables: {
+            handle,
+            country: storefront.i18n.country,
+            language: storefront.i18n.language,
+          },
+          cache: storefront.CacheShort(),
         },
-        cache: storefront.CacheShort(),
-      },
-    );
+      );
 
-    if (!storefrontProduct) return {};
+      if (!storefrontProduct) return {};
 
-    metafields = parseMetafieldsFromProduct({
-      product: storefrontProduct,
-      identifiers,
-    });
+      metafields = parseMetafieldsFromProduct({
+        product: storefrontProduct,
+        identifiers,
+      });
+    }
+
+    return metafields;
+  } catch (error) {
+    console.error('getMetafields:error:', error);
+    return null;
   }
-
-  return metafields;
 };

@@ -23,13 +23,18 @@ export function useProductMetafields(
 ): ParsedMetafields | null {
   const {pathPrefix} = useLocale();
 
-  const {data} = useLoadData<{metafields: ParsedMetafields}>(
-    fetchOnMount && handle && metafieldIdentifiers?.length
-      ? `${pathPrefix}/api/product?handle=${handle}&metafieldIdentifiers=${JSON.stringify(
-          metafieldIdentifiers,
-        )}`
-      : null,
-  );
+  let apiPath: string | null = null;
+  try {
+    if (fetchOnMount && handle && metafieldIdentifiers?.length) {
+      apiPath = `${pathPrefix}/api/product?handle=${handle}&metafieldIdentifiers=${JSON.stringify(
+        metafieldIdentifiers,
+      )}`;
+    }
+  } catch (error) {
+    console.error('useProductMetafields:error:', error);
+  }
+
+  const {data} = useLoadData<{metafields: ParsedMetafields}>(apiPath);
 
   return (data?.metafields as ParsedMetafields) || null;
 }

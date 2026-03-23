@@ -22,20 +22,25 @@ export function useLoadData<TData = unknown>(
   const {data, error, isLoading, isValidating, mutate} = useSWR<TData>(
     apiPath,
     async (url: string) => {
-      const response = await fetch(url);
+      try {
+        const response = await fetch(url);
 
-      if (!response.ok) {
-        const error = new Error(
-          `Request failed with status ${response.status}: ${response.statusText}`,
-        );
-        (error as Error & {status: number; statusText: string}).status =
-          response.status;
-        (error as Error & {status: number; statusText: string}).statusText =
-          response.statusText;
+        if (!response.ok) {
+          const error = new Error(
+            `Request failed with status ${response.status}: ${response.statusText}`,
+          );
+          (error as Error & {status: number; statusText: string}).status =
+            response.status;
+          (error as Error & {status: number; statusText: string}).statusText =
+            response.statusText;
+          throw error;
+        }
+
+        return response.json();
+      } catch (error) {
+        console.error('useLoadData:error:', error);
         throw error;
       }
-
-      return response.json();
     },
     {
       ...DEFAULT_OPTIONS,
