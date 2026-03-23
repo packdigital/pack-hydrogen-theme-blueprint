@@ -39,18 +39,27 @@ export function useVariantPrices(variant: ProductVariant | undefined | null): {
   });
 
   return useMemo(() => {
-    if (!price?.amount) {
+    try {
+      if (!price?.amount) {
+        return {price: undefined, compareAtPrice: undefined};
+      }
+      const amount = parseFloat(price.amount);
+      const compareAtAmount = parseFloat(compareAtPrice?.amount || '0');
+
+      if (isNaN(amount)) {
+        return {price: undefined, compareAtPrice: undefined};
+      }
+
+      return {
+        price: prefixNonUsdDollar(formattedPrice),
+        compareAtPrice:
+          !isNaN(compareAtAmount) && compareAtAmount > amount
+            ? prefixNonUsdDollar(formattedCompareAtPrice)
+            : undefined,
+      };
+    } catch (error) {
+      console.error('useVariantPrices:error:', error);
       return {price: undefined, compareAtPrice: undefined};
     }
-    const amount = parseFloat(price.amount);
-    const compareAtAmount = parseFloat(compareAtPrice?.amount || '0');
-
-    return {
-      price: prefixNonUsdDollar(formattedPrice),
-      compareAtPrice:
-        compareAtAmount > amount
-          ? prefixNonUsdDollar(formattedCompareAtPrice)
-          : undefined,
-    };
   }, [id]);
 }

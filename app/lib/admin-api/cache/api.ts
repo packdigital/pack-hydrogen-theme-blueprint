@@ -147,18 +147,23 @@ async function deleteItem(cache: Cache, request: Request) {
 }
 
 function calculateAge(response: Response, responseDate: string) {
-  const cacheControl = response.headers.get('real-cache-control');
-  let responseMaxAge = 0;
+  try {
+    const cacheControl = response.headers.get('real-cache-control');
+    let responseMaxAge = 0;
 
-  if (cacheControl) {
-    const maxAgeMatch = cacheControl.match(/max-age=(\d*)/);
-    if (maxAgeMatch && maxAgeMatch.length > 1) {
-      responseMaxAge = parseFloat(maxAgeMatch[1]);
+    if (cacheControl) {
+      const maxAgeMatch = cacheControl.match(/max-age=(\d*)/);
+      if (maxAgeMatch && maxAgeMatch.length > 1) {
+        responseMaxAge = parseFloat(maxAgeMatch[1]) || 0;
+      }
     }
-  }
 
-  const ageInMs = Date.now() - Number(responseDate as string);
-  return [ageInMs / 1000, responseMaxAge];
+    const ageInMs = Date.now() - (Number(responseDate) || 0);
+    return [ageInMs / 1000, responseMaxAge];
+  } catch (error) {
+    console.error('calculateAge:error:', error);
+    return [0, 0];
+  }
 }
 
 /**

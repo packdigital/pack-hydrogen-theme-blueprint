@@ -72,7 +72,14 @@ export async function setItemInCache(
 
   const url = getKeyUrl(key);
   const request = new Request(url);
-  const response = new Response(JSON.stringify(value));
+  let stringifiedValue: string;
+  try {
+    stringifiedValue = JSON.stringify(value);
+  } catch (error) {
+    console.error('setItemInCache:error:', error);
+    return;
+  }
+  const response = new Response(stringifiedValue);
 
   await CacheAPI.set(
     cache,
