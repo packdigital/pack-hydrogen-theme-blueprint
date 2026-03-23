@@ -37,45 +37,50 @@ export const getSelectedProductOptions = async ({
   context: AppLoadContext;
   request: Request;
 }) => {
-  const {storefront} = context;
-  const searchParams = new URL(request.url).searchParams;
-  const selectedOptions: Record<string, any>[] = [];
+  try {
+    const {storefront} = context;
+    const searchParams = new URL(request.url).searchParams;
+    const selectedOptions: Record<string, any>[] = [];
 
-  if (searchParams.size) {
-    // Query for product's options
-    const {product: productWithOptions} = await storefront.query(
-      PRODUCT_OPTIONS_QUERY,
-      {
-        variables: {
-          handle,
-          country: storefront.i18n.country,
-          language: storefront.i18n.language,
+    if (searchParams.size) {
+      // Query for product's options
+      const {product: productWithOptions} = await storefront.query(
+        PRODUCT_OPTIONS_QUERY,
+        {
+          variables: {
+            handle,
+            country: storefront.i18n.country,
+            language: storefront.i18n.language,
+          },
+          cache: storefront.CacheShort(),
         },
-        cache: storefront.CacheShort(),
-      },
-    );
-    if (productWithOptions) {
-      const optionValuesByOptionName = Object.values({
-        ...productWithOptions.options,
-      } as Product['options']).reduce(
-        (acc: Record<string, ProductOptionValue[]>, option) => {
-          return {...acc, [option.name]: option.optionValues};
-        },
-        {},
       );
-      // Set selected options from the query string
-      searchParams.forEach((value, name) => {
-        // Filter out non-option or invalid value search params
-        const isValidOptionName = optionValuesByOptionName[name]?.some(
-          (optionValue) => optionValue.name === value,
+      if (productWithOptions) {
+        const optionValuesByOptionName = Object.values({
+          ...productWithOptions.options,
+        } as Product['options']).reduce(
+          (acc: Record<string, ProductOptionValue[]>, option) => {
+            return {...acc, [option.name]: option.optionValues};
+          },
+          {},
         );
-        if (!isValidOptionName) return;
-        selectedOptions.push({name, value});
-      });
+        // Set selected options from the query string
+        searchParams.forEach((value, name) => {
+          // Filter out non-option or invalid value search params
+          const isValidOptionName = optionValuesByOptionName[name]?.some(
+            (optionValue) => optionValue.name === value,
+          );
+          if (!isValidOptionName) return;
+          selectedOptions.push({name, value});
+        });
+      }
     }
-  }
 
-  return selectedOptions;
+    return selectedOptions;
+  } catch (error) {
+    console.error('Error fetching selected product options:', error);
+    return [];
+  }
 };
 
 const FIRST = 250;
@@ -93,55 +98,60 @@ export const queryProducts = async ({
   variables,
   count: passedCount = 10,
 }: QueryProductsProps) => {
-  if (!context || !query) return {products: [], hasMoreProducts: false};
-  const {storefront} = context;
+  try {
+    if (!context || !query) return {products: [], hasMoreProducts: false};
+    const {storefront} = context;
 
-  let count = Number(passedCount);
-  if (!count) count = 10;
-  const isAll = count === Infinity; // only advisable for small inventory stores
+    let count = Number(passedCount);
+    if (!count) count = 10;
+    const isAll = count === Infinity; // only advisable for small inventory stores
 
-  const initialFirst = isAll ? FIRST : count > FIRST ? FIRST : count;
+    const initialFirst = isAll ? FIRST : count > FIRST ? FIRST : count;
 
-  const getProducts = async ({
-    products,
-    cursor,
-    first,
-  }: {
-    products: Product[] | null;
-    cursor: string | null;
-    first: number;
-  }): Promise<{products: Product[]; hasMoreProducts: boolean}> => {
-    const {products: queriedProducts} = await storefront.query(query, {
-      variables: {
-        ...variables,
-        first,
-        endCursor: cursor,
-        country: storefront.i18n.country,
-        language: storefront.i18n.language,
-      },
-      cache: storefront.CacheShort(),
-    });
-    const {endCursor, hasNextPage} = queriedProducts.pageInfo;
-    const compiledProducts = [...(products || []), ...queriedProducts.nodes];
-    if (hasNextPage && compiledProducts.length < count) {
-      return getProducts({
-        products: compiledProducts,
-        cursor: endCursor,
-        first: Math.min(first, count - compiledProducts.length),
+    const getProducts = async ({
+      products,
+      cursor,
+      first,
+    }: {
+      products: Product[] | null;
+      cursor: string | null;
+      first: number;
+    }): Promise<{products: Product[]; hasMoreProducts: boolean}> => {
+      const {products: queriedProducts} = await storefront.query(query, {
+        variables: {
+          ...variables,
+          first,
+          endCursor: cursor,
+          country: storefront.i18n.country,
+          language: storefront.i18n.language,
+        },
+        cache: storefront.CacheShort(),
       });
-    }
-    return {products: compiledProducts, hasMoreProducts: hasNextPage};
-  };
+      const {endCursor, hasNextPage} = queriedProducts.pageInfo;
+      const compiledProducts = [...(products || []), ...queriedProducts.nodes];
+      if (hasNextPage && compiledProducts.length < count) {
+        return getProducts({
+          products: compiledProducts,
+          cursor: endCursor,
+          first: Math.min(first, count - compiledProducts.length),
+        });
+      }
+      return {products: compiledProducts, hasMoreProducts: hasNextPage};
+    };
 
-  const {products, hasMoreProducts} = await getProducts({
-    products: null,
-    cursor: null,
-    first: initialFirst,
-  });
+    const {products, hasMoreProducts} = await getProducts({
+      products: null,
+      cursor: null,
+      first: initialFirst,
+    });
 
-  invariant(products, 'No data returned from top search query');
+    invariant(products, 'No data returned from top search query');
 
-  return {products, hasMoreProducts};
+    return {products, hasMoreProducts};
+  } catch (error) {
+    console.error('Error querying products:', error);
+    return {products: [], hasMoreProducts: false};
+  }
 };
 
 export const getGrouping = async ({
@@ -153,69 +163,74 @@ export const getGrouping = async ({
   handle?: string;
   productGroupings: Group[];
 }): Promise<{grouping?: Group; groupingProducts?: Product[]}> => {
-  const {admin, pack} = context;
-  const isPreviewModeEnabled = pack.isPreviewModeEnabled();
+  try {
+    const {admin, pack} = context;
+    const isPreviewModeEnabled = pack.isPreviewModeEnabled();
 
-  let groupingProducts = undefined;
+    let groupingProducts = undefined;
 
-  const grouping: Group | undefined = [...(productGroupings || [])].find(
-    (grouping: Group) => {
-      const groupingProducts = [
-        ...grouping.products,
-        ...grouping.subgroups.flatMap(({products}) => products),
-      ];
-      return groupingProducts.some(
-        (groupProduct) => groupProduct.handle === handle,
-      );
-    },
-  );
+    const grouping: Group | undefined = [...(productGroupings || [])].find(
+      (grouping: Group) => {
+        const groupingProducts = [
+          ...grouping.products,
+          ...grouping.subgroups.flatMap(({products}) => products),
+        ];
+        return groupingProducts.some(
+          (groupProduct) => groupProduct.handle === handle,
+        );
+      },
+    );
 
-  if (!grouping) return {grouping, groupingProducts};
+    if (!grouping) return {grouping, groupingProducts};
 
-  const productsToQuery = [
-    ...grouping.products,
-    ...grouping.subgroups.flatMap(({products}) => products),
-  ];
+    const productsToQuery = [
+      ...grouping.products,
+      ...grouping.subgroups.flatMap(({products}) => products),
+    ];
 
-  const idsQuery = productsToQuery
-    .map(({id}) => `id:${id?.split('/').pop()}`)
-    .join(' OR ');
+    const idsQuery = productsToQuery
+      .map(({id}) => `id:${id?.split('/').pop()}`)
+      .join(' OR ');
 
-  const {products: queriedGroupingProducts} = await queryProducts({
-    context,
-    query: PRODUCTS_QUERY,
-    variables: {query: idsQuery},
-    count: productsToQuery.length,
-  });
+    const {products: queriedGroupingProducts} = await queryProducts({
+      context,
+      query: PRODUCTS_QUERY,
+      variables: {query: idsQuery},
+      count: productsToQuery.length,
+    });
 
-  groupingProducts = queriedGroupingProducts;
+    groupingProducts = queriedGroupingProducts;
 
-  if (admin && isPreviewModeEnabled) {
-    if (queriedGroupingProducts?.length !== productsToQuery.length) {
-      const groupingProductsById = queriedGroupingProducts?.reduce(
-        (acc: Record<string, Product>, product) => {
-          return {...acc, [product.id]: product};
-        },
-        {},
-      );
+    if (admin && isPreviewModeEnabled) {
+      if (queriedGroupingProducts?.length !== productsToQuery.length) {
+        const groupingProductsById = queriedGroupingProducts?.reduce(
+          (acc: Record<string, Product>, product) => {
+            return {...acc, [product.id]: product};
+          },
+          {},
+        );
 
-      const groupingProductsWithDrafts = await Promise.all(
-        productsToQuery.map(async (groupProduct) => {
-          if (groupingProductsById[groupProduct.id])
-            return groupingProductsById[groupProduct.id];
-          const {productByIdentifier: adminProduct} = await admin.query(
-            ADMIN_PRODUCT_ITEM_BY_ID_QUERY,
-            {variables: {id: groupProduct.id}, cache: admin.CacheShort()},
-          );
-          if (!adminProduct) return null;
-          return normalizeAdminProduct(adminProduct);
-        }),
-      );
-      groupingProducts = groupingProductsWithDrafts.filter(Boolean);
+        const groupingProductsWithDrafts = await Promise.all(
+          productsToQuery.map(async (groupProduct) => {
+            if (groupingProductsById[groupProduct.id])
+              return groupingProductsById[groupProduct.id];
+            const {productByIdentifier: adminProduct} = await admin.query(
+              ADMIN_PRODUCT_ITEM_BY_ID_QUERY,
+              {variables: {id: groupProduct.id}, cache: admin.CacheShort()},
+            );
+            if (!adminProduct) return null;
+            return normalizeAdminProduct(adminProduct);
+          }),
+        );
+        groupingProducts = groupingProductsWithDrafts.filter(Boolean);
+      }
     }
-  }
 
-  return {grouping, groupingProducts};
+    return {grouping, groupingProducts};
+  } catch (error) {
+    console.error('Error fetching product grouping:', error);
+    return {grouping: undefined, groupingProducts: undefined};
+  }
 };
 
 export const getProductWithInitialGrouping = async ({
@@ -260,71 +275,79 @@ export const getModalProduct = async ({
   context: AppLoadContext;
   request: Request;
 }) => {
-  const {admin, pack, storefront} = context;
-  const isPreviewModeEnabled = pack.isPreviewModeEnabled();
-  const searchParams = new URL(request.url).searchParams;
-  const modalProductHandle = String(
-    searchParams.get(MODAL_PRODUCT_URL_PARAM) || '',
-  );
-  let modalProduct: ProductWithInitialGrouping | undefined;
-  let modalSelectedVariant: ProductVariant | undefined;
-  if (modalProductHandle) {
-    const [handle, options] = modalProductHandle.split('?');
-    const variantParams = new URLSearchParams(options);
-    const selectedOptions: Record<string, any>[] = [];
-    variantParams.forEach((value, name) => {
-      selectedOptions.push({name, value});
-    });
-    let queriedProduct = undefined;
-
-    const {product: storefrontProduct} = await storefront.query(PRODUCT_QUERY, {
-      variables: {
-        handle,
-        selectedOptions,
-        country: storefront.i18n.country,
-        language: storefront.i18n.language,
-      },
-      cache: storefront.CacheShort(),
-    });
-    queriedProduct = storefrontProduct;
-
-    if (admin && isPreviewModeEnabled && !queriedProduct) {
-      const {productByIdentifier: adminProduct} = await admin.query(
-        ADMIN_PRODUCT_QUERY,
-        {variables: {handle}, cache: admin.CacheShort()},
-      );
-      if (adminProduct) queriedProduct = normalizeAdminProduct(adminProduct);
-    }
-
-    modalProduct = queriedProduct;
-    modalSelectedVariant =
-      (modalProduct as Product & {selectedVariant?: ProductVariant})
-        ?.selectedVariant ?? modalProduct?.variants?.nodes[0];
-
-    const productGroupings = await getProductGroupings(context);
-
-    if (productGroupings) {
-      const groupingData = await getGrouping({
-        context,
-        handle: modalProduct?.handle,
-        productGroupings,
+  try {
+    const {admin, pack, storefront} = context;
+    const isPreviewModeEnabled = pack.isPreviewModeEnabled();
+    const searchParams = new URL(request.url).searchParams;
+    const modalProductHandle = String(
+      searchParams.get(MODAL_PRODUCT_URL_PARAM) || '',
+    );
+    let modalProduct: ProductWithInitialGrouping | undefined;
+    let modalSelectedVariant: ProductVariant | undefined;
+    if (modalProductHandle) {
+      const [handle, options] = modalProductHandle.split('?');
+      const variantParams = new URLSearchParams(options);
+      const selectedOptions: Record<string, any>[] = [];
+      variantParams.forEach((value, name) => {
+        selectedOptions.push({name, value});
       });
-      const grouping = groupingData.grouping;
-      const groupingProducts = groupingData.groupingProducts;
+      let queriedProduct = undefined;
 
-      if (grouping) {
-        modalProduct = {
-          ...modalProduct,
-          initialGrouping: {
-            ...grouping,
-            allProducts: [modalProduct, ...(groupingProducts || [])],
+      const {product: storefrontProduct} = await storefront.query(
+        PRODUCT_QUERY,
+        {
+          variables: {
+            handle,
+            selectedOptions,
+            country: storefront.i18n.country,
+            language: storefront.i18n.language,
           },
-        } as ProductWithInitialGrouping;
+          cache: storefront.CacheShort(),
+        },
+      );
+      queriedProduct = storefrontProduct;
+
+      if (admin && isPreviewModeEnabled && !queriedProduct) {
+        const {productByIdentifier: adminProduct} = await admin.query(
+          ADMIN_PRODUCT_QUERY,
+          {variables: {handle}, cache: admin.CacheShort()},
+        );
+        if (adminProduct) queriedProduct = normalizeAdminProduct(adminProduct);
+      }
+
+      modalProduct = queriedProduct;
+      modalSelectedVariant =
+        (modalProduct as Product & {selectedVariant?: ProductVariant})
+          ?.selectedVariant ?? modalProduct?.variants?.nodes[0];
+
+      const productGroupings = await getProductGroupings(context);
+
+      if (productGroupings) {
+        const groupingData = await getGrouping({
+          context,
+          handle: modalProduct?.handle,
+          productGroupings,
+        });
+        const grouping = groupingData.grouping;
+        const groupingProducts = groupingData.groupingProducts;
+
+        if (grouping) {
+          modalProduct = {
+            ...modalProduct,
+            initialGrouping: {
+              ...grouping,
+              allProducts: [modalProduct, ...(groupingProducts || [])],
+            },
+          } as ProductWithInitialGrouping;
+        }
       }
     }
-  }
 
-  return {modalProduct, modalSelectedVariant};
+    return {modalProduct, modalSelectedVariant};
+  } catch (error) {
+    console.error('Error fetching modal product:', error);
+    return {modalProduct: undefined, modalSelectedVariant: undefined};
+  }
 };
 
 export const getProductsMapForPage = async ({
@@ -334,83 +357,88 @@ export const getProductsMapForPage = async ({
   context: AppLoadContext;
   page: Page;
 }) => {
-  const {admin, pack} = context;
-  const isPreviewModeEnabled = pack.isPreviewModeEnabled();
+  try {
+    const {admin, pack} = context;
+    const isPreviewModeEnabled = pack.isPreviewModeEnabled();
 
-  const productsMap: ProductsMap = {};
-  const sectionsByKey = page.sections?.nodes?.reduce(
-    (acc: Record<string, Record<string, any>[]>, section) => {
-      return {
-        ...acc,
-        [section.data?._template]: [
-          ...(acc[section.data?._template] || []),
-          section,
-        ],
-      };
-    },
-    {},
-  ) as Record<string, Record<string, any>[]>;
-  const shoppableSocialVideoSectionsProductIds =
-    sectionsByKey?.[SHOPPABLE_SOCIAL_VIDEO_SECTION_KEY]?.filter((section) => {
-      return section.data?.sectionVisibility === 'visible';
-    })
-      ?.flatMap((section) => {
-        return section.data?.products?.map(({product}) => product?.id) || [];
-      })
-      ?.filter(Boolean) || [];
-  const productSectionsProductIds =
-    sectionsByKey?.[PRODUCT_SECTION_KEY]?.filter((section) => {
-      return section.data?.sectionVisibility === 'visible';
-    })?.map((section) => section.data?.product?.id) || [];
-  const productIds = [
-    ...shoppableSocialVideoSectionsProductIds,
-    ...productSectionsProductIds,
-  ];
-
-  if (productIds?.length) {
-    let {products} = await queryProducts({
-      context,
-      query: PRODUCTS_QUERY,
-      variables: {
-        query: productIds
-          .filter(Boolean)
-          .map((id) => {
-            return `id:${typeof id === 'number' ? id : id.split('/').pop()}`;
-          })
-          .join(' OR '),
+    const productsMap: ProductsMap = {};
+    const sectionsByKey = page.sections?.nodes?.reduce(
+      (acc: Record<string, Record<string, any>[]>, section) => {
+        return {
+          ...acc,
+          [section.data?._template]: [
+            ...(acc[section.data?._template] || []),
+            section,
+          ],
+        };
       },
-      count: productIds.length,
-    });
+      {},
+    ) as Record<string, Record<string, any>[]>;
+    const shoppableSocialVideoSectionsProductIds =
+      sectionsByKey?.[SHOPPABLE_SOCIAL_VIDEO_SECTION_KEY]?.filter((section) => {
+        return section.data?.sectionVisibility === 'visible';
+      })
+        ?.flatMap((section) => {
+          return section.data?.products?.map(({product}) => product?.id) || [];
+        })
+        ?.filter(Boolean) || [];
+    const productSectionsProductIds =
+      sectionsByKey?.[PRODUCT_SECTION_KEY]?.filter((section) => {
+        return section.data?.sectionVisibility === 'visible';
+      })?.map((section) => section.data?.product?.id) || [];
+    const productIds = [
+      ...shoppableSocialVideoSectionsProductIds,
+      ...productSectionsProductIds,
+    ];
 
-    if (admin && isPreviewModeEnabled) {
-      if (products?.length !== productIds.length) {
-        const productsById = products?.reduce(
-          (acc, product) => {
-            if (product.id) acc[product.id] = product;
-            return acc;
-          },
-          {} as Record<string, Product>,
-        );
-        const productsWithDrafts = await Promise.all(
-          productIds.map(async (id) => {
-            if (!id) return null;
-            if (productsById?.[id]) return productsById[id];
-            const {productByIdentifier: adminProduct} = await admin.query(
-              ADMIN_PRODUCT_ITEM_BY_ID_QUERY,
-              {variables: {id}, cache: admin.CacheShort()},
-            );
-            if (!adminProduct) return null;
-            return normalizeAdminProduct(adminProduct);
-          }),
-        );
-        products = productsWithDrafts.filter(Boolean) as Product[];
+    if (productIds?.length) {
+      let {products} = await queryProducts({
+        context,
+        query: PRODUCTS_QUERY,
+        variables: {
+          query: productIds
+            .filter(Boolean)
+            .map((id) => {
+              return `id:${typeof id === 'number' ? id : id.split('/').pop()}`;
+            })
+            .join(' OR '),
+        },
+        count: productIds.length,
+      });
+
+      if (admin && isPreviewModeEnabled) {
+        if (products?.length !== productIds.length) {
+          const productsById = products?.reduce(
+            (acc, product) => {
+              if (product.id) acc[product.id] = product;
+              return acc;
+            },
+            {} as Record<string, Product>,
+          );
+          const productsWithDrafts = await Promise.all(
+            productIds.map(async (id) => {
+              if (!id) return null;
+              if (productsById?.[id]) return productsById[id];
+              const {productByIdentifier: adminProduct} = await admin.query(
+                ADMIN_PRODUCT_ITEM_BY_ID_QUERY,
+                {variables: {id}, cache: admin.CacheShort()},
+              );
+              if (!adminProduct) return null;
+              return normalizeAdminProduct(adminProduct);
+            }),
+          );
+          products = productsWithDrafts.filter(Boolean) as Product[];
+        }
       }
-    }
 
-    products.forEach((product) => {
-      if (!product) return;
-      productsMap[product.handle] = product;
-    });
+      products.forEach((product) => {
+        if (!product) return;
+        productsMap[product.handle] = product;
+      });
+    }
+    return productsMap;
+  } catch (error) {
+    console.error('Error fetching products for page:', error);
+    return {};
   }
-  return productsMap;
 };
