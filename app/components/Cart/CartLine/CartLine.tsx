@@ -13,7 +13,11 @@ import {useCartLineImage} from './useCartLineImage';
 import {useCartLinePrices} from './useCartLinePrices';
 
 export const CartLine = memo(({closeCart, line}: CartLineProps) => {
-  const {discountAllocations, merchandise, quantity} = line;
+  const {attributes, discountAllocations, merchandise, quantity} = line;
+
+  const preOrderShippingDate = attributes?.find(
+    (attr) => attr.key === 'Estimated Ship Date',
+  )?.value;
 
   const {handleDecrement, handleIncrement, handleRemove, isUpdatingLine} =
     useCartLine({line});
@@ -65,6 +69,12 @@ export const CartLine = memo(({closeCart, line}: CartLineProps) => {
 
           {merchandise.title !== 'Default Title' && (
             <p className="text-sm text-neutralMedium">{merchandise.title}</p>
+          )}
+
+          {preOrderShippingDate && (
+            <p className="mt-0.5 text-sm text-neutralMedium">
+              Estimated ship date: {preOrderShippingDate}
+            </p>
           )}
 
           <button

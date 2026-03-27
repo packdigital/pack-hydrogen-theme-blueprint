@@ -22,6 +22,7 @@ export const QuickShopOption = memo(
       cartIsUpdating,
       isAdding,
       isNotifyMe,
+      isPreorder,
       isSoldOut,
       handleAddToCart,
       handleNotifyMe,
@@ -45,6 +46,7 @@ export const QuickShopOption = memo(
         aria-label={optionValue.name}
         className={clsx(
           'group/option relative flex size-full items-center justify-center whitespace-nowrap text-center text-sm transition',
+          isPreorder ? 'border-primary bg-primary/10' : '',
           validClass,
           unavailableClass,
           isUpdatingClass,

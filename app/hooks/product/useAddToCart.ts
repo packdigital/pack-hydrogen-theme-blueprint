@@ -43,7 +43,9 @@ interface UseAddToCartReturn {
   isAdded: boolean;
   isAdding: boolean;
   isNotifyMe: boolean;
+  isPreorder: boolean;
   isSoldOut: boolean;
+  preOrderShippingText: string;
   subtext: string;
 }
 
@@ -67,6 +69,12 @@ export function useAddToCart({
   const variantIsSoldOut = selectedVariant && !selectedVariant.availableForSale;
   const variantIsPreorder = !!selectedVariant?.currentlyNotInStock;
 
+  const preOrderOverride = variantIsPreorder
+    ? productSettings?.preOrderOverrides?.find(
+        (o) => o.product?.handle === selectedVariant?.product?.handle,
+      )
+    : undefined;
+
   let buttonText = '';
   if (failed) {
     buttonText = productSettings?.addToCart?.failedText || 'Failed To Add';
@@ -89,9 +97,18 @@ export function useAddToCart({
     if (!selectedVariant?.id || isAdding || cartIsUpdating) return;
     setIsAdding(true);
     setFailed(false);
+
+    const lineAttributes = [...(attributes || [])];
+    if (variantIsPreorder && preOrderOverride?.shippingDateText) {
+      lineAttributes.push({
+        key: 'Estimated Ship Date',
+        value: preOrderOverride.shippingDateText,
+      });
+    }
+
     const data = await linesAdd([
       {
-        attributes,
+        attributes: lineAttributes,
         merchandiseId: selectedVariant.id,
         quantity,
         sellingPlanId,
@@ -113,10 +130,12 @@ export function useAddToCart({
     attributes,
     isAdding,
     linesAdd,
+    preOrderOverride?.shippingDateText,
     quantity,
     selectedVariant?.id,
     sellingPlanId,
     status,
+    variantIsPreorder,
   ]);
 
   const handleNotifyMe = useCallback(
@@ -157,7 +176,9 @@ export function useAddToCart({
     isAdded, // line is added (true for only a second)
     isAdding, // line is adding
     isNotifyMe: !!variantIsSoldOut && enabledNotifyMe,
+    isPreorder: variantIsPreorder,
     isSoldOut: !!variantIsSoldOut,
+    preOrderShippingText: preOrderOverride?.shippingDateText || '',
     subtext: productSettings?.addToCart?.subtext,
   };
 }
