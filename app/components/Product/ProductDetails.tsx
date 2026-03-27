@@ -2,6 +2,8 @@ import {forwardRef, useMemo} from 'react';
 import {useProduct} from '@shopify/hydrogen-react';
 import sanitizeHtml from 'sanitize-html';
 
+import {COLOR_OPTION_NAME} from '~/lib/constants';
+import type {ProductWithGrouping} from '~/lib/types';
 import {useColorSwatches} from '~/hooks';
 
 import {ProductAddToCart} from './ProductAddToCart';
@@ -25,14 +27,25 @@ export const ProductDetails = forwardRef(
 
     const selectedOptionsMap = useMemo(() => {
       if (!selectedVariant) return null;
-      return selectedVariant.selectedOptions.reduce(
+      const map = selectedVariant.selectedOptions.reduce(
         (acc: Record<string, string>, {name, value}) => ({
           ...acc,
           [name]: value,
         }),
         {},
       );
-    }, [selectedVariant]);
+      // Add synthetic color from grouping subgroup if product doesn't have Color option
+      const productWithGrouping = product as unknown as ProductWithGrouping;
+      if (productWithGrouping.grouping && !map[COLOR_OPTION_NAME]) {
+        const subgroup = productWithGrouping.grouping.subgroups?.find((sg) =>
+          sg.products?.some(({handle}) => handle === product.handle),
+        );
+        if (subgroup) {
+          map[COLOR_OPTION_NAME] = subgroup.title;
+        }
+      }
+      return map;
+    }, [selectedVariant, product]);
 
     const sanitizedDescription = useMemo(() => {
       return sanitizeHtml(product.descriptionHtml || '', {
