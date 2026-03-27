@@ -39,6 +39,7 @@ export const VARIANT_FRAGMENT = `#graphql
     id
     title
     availableForSale
+    currentlyNotInStock
     sku
     weight
     weightUnit
