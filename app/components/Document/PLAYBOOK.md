@@ -37,7 +37,7 @@ export function PlaybookSDK({
   // making requests first-party and invisible to ad blockers.
   // Set PUBLIC_PLAYBOOK_PROXY_ENABLED=false to send API calls direct to heyplaybook.com.
   const useProxy = ENV.PUBLIC_PLAYBOOK_PROXY_ENABLED !== 'false';
-  const sdkUrl = 'https://cdn.heyplaybook.com/playbook.js';
+  const sdkUrl = ENV.PUBLIC_PLAYBOOK_SDK_URL || 'https://cdn.heyplaybook.com/playbook.js';
   const apiEndpoint = useProxy
     ? '/apps/playbook'
     : 'https://www.heyplaybook.com';
@@ -170,6 +170,7 @@ The SDK needs these to attach attribution data to Shopify carts. These are stand
 | Variable | Type | Purpose |
 |----------|------|---------|
 | `PUBLIC_PLAYBOOK_PROXY_ENABLED` | Public | Proxy is on by default. Set to `'false'` to disable (API calls go direct to heyplaybook.com). |
+| `PUBLIC_PLAYBOOK_SDK_URL` | Public | Override the SDK JS bundle URL. Defaults to `https://cdn.heyplaybook.com/playbook.js`. Useful for pinning to a specific version. |
 | `PLAYBOOK_PLATFORM_URL` | Private | Override the Playbook backend URL (used by the proxy route). Defaults to `https://www.heyplaybook.com`. |
 
 ### TypeScript Types

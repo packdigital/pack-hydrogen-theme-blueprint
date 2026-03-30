@@ -19,7 +19,7 @@ export function PlaybookSDK({
   // making requests first-party and invisible to ad blockers.
   // Set PUBLIC_PLAYBOOK_PROXY_ENABLED=false to send API calls direct to heyplaybook.com.
   const useProxy = ENV.PUBLIC_PLAYBOOK_PROXY_ENABLED !== 'false';
-  const sdkUrl = 'https://cdn.heyplaybook.com/playbook.js';
+  const sdkUrl = ENV.PUBLIC_PLAYBOOK_SDK_URL || 'https://cdn.heyplaybook.com/playbook.js';
   const apiEndpoint = useProxy
     ? '/apps/playbook'
     : 'https://www.heyplaybook.com';
