@@ -33,13 +33,10 @@ function buildBackendUrl(request: Request, env: Env): string {
   const subPath = idx !== -1 ? url.pathname.slice(idx + proxyPrefix.length) : '';
 
   // Map paths:
-  //   "sdk"      → /api/sdk        (the compiled SDK JS)
   //   "api/..."  → /api/...        (all API routes)
   //   anything else → /api/{path}  (fallback)
   let backendPath: string;
-  if (subPath === 'sdk' || subPath === 'sdk/playbook.js') {
-    backendPath = '/api/sdk';
-  } else if (subPath.startsWith('api/')) {
+  if (subPath.startsWith('api/')) {
     backendPath = `/${subPath}`;
   } else {
     backendPath = `/api/${subPath}`;
@@ -95,19 +92,8 @@ async function proxyRequest(request: Request, env: Env): Promise<Response> {
     'Content-Type',
   );
 
-  // SDK responses get aggressive caching; API responses don't
-  const url = new URL(request.url);
-  const isSdkRequest =
-    url.pathname.endsWith('/sdk') ||
-    url.pathname.endsWith('/sdk/playbook.js');
-  if (isSdkRequest && backendResponse.ok) {
-    responseHeaders.set(
-      'cache-control',
-      'public, max-age=3600, s-maxage=3600',
-    );
-  } else if (!isSdkRequest) {
-    responseHeaders.set('cache-control', 'no-store');
-  }
+  // API responses should not be cached
+  responseHeaders.set('cache-control', 'no-store');
 
   return new Response(backendResponse.body, {
     status: backendResponse.status,

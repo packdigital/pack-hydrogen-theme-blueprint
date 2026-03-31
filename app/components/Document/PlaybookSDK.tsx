@@ -15,13 +15,14 @@ export function PlaybookSDK({
 }) {
   if (!ENV.PUBLIC_PLAYBOOK_SHOP_ID) return null;
 
-  // Proxy enabled by default — loads SDK through the store's own domain,
+  // Proxy enabled by default — routes API calls through the store's own domain,
   // making requests first-party and invisible to ad blockers.
-  // Set PUBLIC_PLAYBOOK_PROXY_ENABLED=false to disable.
+  // Set PUBLIC_PLAYBOOK_PROXY_ENABLED=false to send API calls direct to heyplaybook.com.
   const useProxy = ENV.PUBLIC_PLAYBOOK_PROXY_ENABLED !== 'false';
-  const sdkUrl = useProxy
-    ? '/apps/playbook/sdk'
-    : 'https://www.heyplaybook.com/sdk/playbook.js';
+  const sdkUrl = ENV.PUBLIC_PLAYBOOK_SDK_URL || 'https://cdn.heyplaybook.com/playbook.js';
+  const apiEndpoint = useProxy
+    ? '/apps/playbook'
+    : 'https://www.heyplaybook.com';
 
   const revealScript = `
     (function(){
@@ -52,7 +53,14 @@ export function PlaybookSDK({
         />
       )}
       <script dangerouslySetInnerHTML={{__html: revealScript}} />
-      <script src={sdkUrl} data-shop-id={ENV.PUBLIC_PLAYBOOK_SHOP_ID} async />
+      <script
+        src={sdkUrl}
+        data-pb-config={JSON.stringify({
+          shopId: ENV.PUBLIC_PLAYBOOK_SHOP_ID,
+          apiEndpoint,
+        })}
+        async
+      />
     </>
   );
 }
