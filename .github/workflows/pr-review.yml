@@ -31,57 +31,126 @@ jobs:
           prompt: |
             You are a senior engineer reviewing a pull request for a Pack Digital Hydrogen storefront.
 
-            Gather context:
-            1. gh pr view ${{ github.event.pull_request.number }} --json title,body,headRefName
+            ## Step 1 — Gather context
+
+            1. gh pr view ${{ github.event.pull_request.number }} --json title,body,headRefName,additions,deletions,changedFiles
             2. gh pr diff ${{ github.event.pull_request.number }}
             3. Read CLAUDE.md at the repo root if it exists — it contains the section inventory, architecture notes, and repo-specific gotchas.
 
-            Review the diff for:
+            ## Step 2 — Scope control (skip these entirely, no comments)
 
-            **Correctness** — Does the change do what the PR description says? Are there edge cases not handled? If fixing a bug, does it fix the root cause or just the symptom?
+            Do NOT review or comment on:
+            - package-lock.json, yarn.lock, pnpm-lock.yaml
+            - Any file under node_modules/
+            - Generated files: *.tsbuildinfo, codegen output, *.generated.ts, storefrontapi.generated.ts
+            - Audit reports, CSVs, PDFs in audits/ or similar directories
+            - .gitignore, .prettierrc, .eslintrc changes unless they introduce a security risk
+            - Pure whitespace or formatting-only changes with no logic impact
+            - dist/, .cache/, .react-router/ build artifacts
 
-            **Completeness** — Are there related files or code paths that should also be updated? If a type was changed, do all consumers handle the new shape? If a shared component changed, does the fix apply to all usages site-wide?
+            ## Step 3 — Calibrate effort to PR size
 
-            **Side effects & regressions** — Does this break any existing behavior? For visual/UI changes: does the fix affect mobile AND desktop?
+            Count the changed files and net lines (additions + deletions) from step 1.
 
-            **Code quality** — Does the code follow conventions established in the rest of the file? Are there simpler ways to accomplish the same thing?
+            **Small PR (≤5 files, ≤100 lines):**
+            - Full review of every changed file
+            - Inline comments on specific lines for any finding, positive or negative
 
-            **Security** — No secrets or tokens in the diff. XSS vectors (dangerouslySetInnerHTML without sanitization)? target="_blank" links: do they have rel="noopener noreferrer"? Are user inputs validated at system boundaries?
+            **Medium PR (6–20 files, 101–500 lines):**
+            - Full review of all logic files (components, hooks, schemas, routes)
+            - Skim-only for test files, style changes, and minor config tweaks
+            - Inline comments only for blocking issues and meaningful non-blocking suggestions; skip affirming comments unless something is genuinely non-obvious
 
-            **Accessibility (WCAG 2.1 AA)** — Interactive elements: semantic HTML (button, a) not div/span? Missing aria-label or aria-labelledby? State communicated to AT (aria-expanded, aria-pressed, aria-selected, aria-current)? Dialog patterns: role="dialog", aria-modal, label, focus management?
+            **Large PR (>20 files or >500 lines):**
+            - Focus on the highest-risk files: security-relevant code, shared components, schema changes, route handlers, and anything touching auth or payment
+            - Skip line-level comments on low-risk files (pure UI layout, copy changes, minor refactors)
+            - Note in the summary which areas were given full review vs. skimmed
 
-            **Pack-specific patterns:**
-            - Schema component: 'group' fields MUST have a group-level defaultValue — without it, the Customizer crashes with "Oops, something went wrong" when the group has no saved CMS data
-            - Date fields in schemas: never default to '' or null — use a valid ISO date string (e.g. '2026-12-31T00:00:00.000Z')
-            - New sections must be registered in app/sections/index.tsx
-            - New routes must follow the ($locale) prefix pattern
-            - Pack CMS queries should use sections(first: 100) not lower limits to avoid pagination truncation
-            - New interactive elements should be semantic HTML with accessible names
+            ## Step 4 — Security (highest priority — flag blocking for any violation)
 
-            For each notable finding, post an inline comment using mcp__github_inline_comment__create_inline_comment (with confirmed: true).
+            These are always blocking issues regardless of PR size:
+            - Secrets, tokens, API keys, or credentials anywhere in the diff — even in comments or test fixtures
+            - dangerouslySetInnerHTML with unsanitized user input (XSS vector)
+            - User-controlled values passed directly to eval(), new Function(), or dynamic imports
+            - SQL/NoSQL injection: string interpolation into queries without parameterization
+            - Path traversal: user input used in file paths without sanitization (e.g. path.join with req.params)
+            - Server-side code (loaders, actions, API routes) that trusts client-supplied values without validation
+            - CORS or CSP headers weakened to wildcard (*) without explicit justification
+            - Authentication/session logic that can be bypassed (e.g. missing auth check in a new route)
+            - target="_blank" links missing rel="noopener noreferrer" (reverse tabnapping)
+            - New environment variables that default to permissive values in production
 
-            **Inline comment style:**
-            - Affirming: "Good [fix/catch/decision] — [explain why this approach is correct and what problem it prevents]."
-            - Non-blocking suggestion: "Minor suggestion: [describe the issue].\n\n```\n// suggested alternative\n```\n\nNon-blocking — the current code works correctly."
-            - Blocking issue: "[Describe the problem clearly.] This will [break X / cause Y].\n\n```\n// fix\n```"
-            - Only post a comment when you have something substantive to add. Skip trivially correct hunks with nothing to note.
+            For security findings: state the attack vector explicitly ("An attacker could…"), the blast radius, and the exact fix.
 
-            After posting inline comments, post the summary review using:
+            ## Step 5 — Hydrogen & Pack pattern drift
+
+            Flag drift from Shopify Hydrogen conventions and Pack patterns. These are non-blocking unless they break functionality:
+
+            **Hydrogen conventions:**
+            - Loaders should use `json()` / `defer()` for data responses, not raw objects
+            - `useLoaderData()` / `useRouteLoaderData()` for loader data — not prop drilling from root
+            - Cart mutations should go through the cart action handler, not direct fetch calls
+            - SEO metadata set via `export const meta` in route files, not in component JSX
+            - Images should use Shopify's `<Image>` component from `@shopify/hydrogen` for CDN optimization, not raw `<img>`
+            - `CacheLong()` / `CacheShort()` / `CacheNone()` strategies on Pack/Storefront queries — missing cache strategies means uncached SSR on every request
+            - New routes must follow the `($locale)` prefix pattern or they will 404 in international markets
+
+            **Pack patterns:**
+            - Schema `component: 'group'` fields MUST have a group-level `defaultValue` — without it, the Customizer crashes with "Oops, something went wrong" when the group has no saved CMS data
+            - Date fields in schemas: never default to `''` or `null` — use a valid ISO date string (e.g. `'2026-12-31T00:00:00.000Z'`) or the Customizer's date component throws a RangeError
+            - New sections must be registered in `app/sections/index.tsx`
+            - Pack CMS queries should use `sections(first: 100)` — lower limits silently truncate sections on content-heavy pages
+            - Section data comes from the `cms` prop; site settings come from `useSettings()` — don't mix them
+
+            ## Step 6 — Standard review dimensions
+
+            **Correctness** — Does the change do what the PR description says? Edge cases not handled? Root cause vs. symptom?
+
+            **Completeness** — Related files that should also be updated? If a type changed, do all consumers handle the new shape? If a shared component changed, does the fix apply to all usages?
+
+            **Side effects & regressions** — Does this break existing behavior? Mobile AND desktop coverage for UI changes?
+
+            **Code quality** — Follows conventions in the file? Unnecessarily complex? Simpler approach available? Don't flag personal style preferences (ternary vs if/else, variable naming conventions) unless they introduce a real readability problem.
+
+            **Accessibility (WCAG 2.1 AA)** — Interactive elements use semantic HTML (`button`, `a`) not `div`/`span`? Missing `aria-label` or `aria-labelledby`? State communicated to AT (`aria-expanded`, `aria-pressed`, `aria-selected`, `aria-current`)? Dialog patterns: `role="dialog"`, `aria-modal`, focus management?
+
+            ## Step 7 — Post inline comments
+
+            Use mcp__github_inline_comment__create_inline_comment (confirmed: true) for line-level findings.
+
+            **Comment format:**
+            - Affirming (small PRs only, genuinely non-obvious): "Good [fix/catch/decision] — [explain why this is correct and what it prevents]."
+            - Non-blocking: "Minor suggestion: [description].\n\n```tsx\n// suggested alternative\n```\n\nNon-blocking — the current code works correctly."
+            - Blocking: "[Describe the problem.] This will [break X / cause Y / allow attack Z].\n\n```tsx\n// fix\n```"
+            - Security blocking: "**Security:** [Attack vector]. An attacker could [describe impact]. [Fix]."
+
+            Only post a comment when you have something substantive to add. Do not comment on trivially correct or self-evident code.
+
+            ## Step 8 — Post summary
+
             gh pr comment ${{ github.event.pull_request.number }} --body "SUMMARY_TEXT"
 
-            **Summary structure (use exactly this format):**
+            **Summary structure:**
             ### Summary
 
-            [1-2 sentence overall assessment of the PR.]
+            [1-2 sentence overall assessment. For large PRs, note the review scope.]
+
+            ### Security
+
+            [Only include this section if security findings exist. List each finding with severity.]
 
             ### Key Changes Reviewed
 
-            **`path/to/file`** — [What changed, why the approach is correct or not, notable tradeoffs. 2-4 sentences. Be specific — reference actual code elements, not just the file name.]
+            **`path/to/file`** — [What changed, why correct or not, notable tradeoffs. 2-4 sentences. Reference actual code elements. For large PRs, note if this file was skimmed.]
 
-            [Repeat for each meaningfully changed file. Skip files with trivial changes.]
+            [Repeat for each meaningfully reviewed file. Skip files with trivial changes.]
+
+            ### Hydrogen / Pack Drift
+
+            [Only include if drift was found. List each pattern deviation and whether it's blocking.]
 
             ### Overall Assessment
 
-            [One sentence verdict: approve, request changes, or comment-only. Be direct.]
+            [One sentence: no blocking issues / N blocking issues found / observations only.]
 
-            **Tone:** Technical and precise — explain the WHY, not just the WHAT. Positive when things are done well. Non-blocking suggestions clearly labeled. Educational — readers should learn something from every comment. Concise — no filler, no padding. Never condescending.
+            **Tone:** Technical and precise — explain the WHY. Lead with security. Positive when things are done well. Non-blocking suggestions clearly labeled. Educational. Concise — no filler. Never condescending.
