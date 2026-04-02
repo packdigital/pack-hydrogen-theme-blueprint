@@ -1,0 +1,87 @@
+name: Claude Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+concurrency:
+  group: pr-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    if: >
+      github.event.pull_request.draft == false &&
+      github.actor != 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          use_sticky_comment: true
+          claude_args: --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr:*),Read,Glob,Grep"
+          prompt: |
+            You are a senior engineer reviewing a pull request for a Pack Digital Hydrogen storefront.
+
+            Gather context:
+            1. gh pr view ${{ github.event.pull_request.number }} --json title,body,headRefName
+            2. gh pr diff ${{ github.event.pull_request.number }}
+            3. Read CLAUDE.md at the repo root if it exists — it contains the section inventory, architecture notes, and repo-specific gotchas.
+
+            Review the diff for:
+
+            **Correctness** — Does the change do what the PR description says? Are there edge cases not handled? If fixing a bug, does it fix the root cause or just the symptom?
+
+            **Completeness** — Are there related files or code paths that should also be updated? If a type was changed, do all consumers handle the new shape? If a shared component changed, does the fix apply to all usages site-wide?
+
+            **Side effects & regressions** — Does this break any existing behavior? For visual/UI changes: does the fix affect mobile AND desktop?
+
+            **Code quality** — Does the code follow conventions established in the rest of the file? Are there simpler ways to accomplish the same thing?
+
+            **Security** — No secrets or tokens in the diff. XSS vectors (dangerouslySetInnerHTML without sanitization)? target="_blank" links: do they have rel="noopener noreferrer"? Are user inputs validated at system boundaries?
+
+            **Accessibility (WCAG 2.1 AA)** — Interactive elements: semantic HTML (button, a) not div/span? Missing aria-label or aria-labelledby? State communicated to AT (aria-expanded, aria-pressed, aria-selected, aria-current)? Dialog patterns: role="dialog", aria-modal, label, focus management?
+
+            **Pack-specific patterns:**
+            - Schema component: 'group' fields MUST have a group-level defaultValue — without it, the Customizer crashes with "Oops, something went wrong" when the group has no saved CMS data
+            - Date fields in schemas: never default to '' or null — use a valid ISO date string (e.g. '2026-12-31T00:00:00.000Z')
+            - New sections must be registered in app/sections/index.tsx
+            - New routes must follow the ($locale) prefix pattern
+            - Pack CMS queries should use sections(first: 100) not lower limits to avoid pagination truncation
+            - New interactive elements should be semantic HTML with accessible names
+
+            For each notable finding, post an inline comment using mcp__github_inline_comment__create_inline_comment (with confirmed: true).
+
+            **Inline comment style:**
+            - Affirming: "Good [fix/catch/decision] — [explain why this approach is correct and what problem it prevents]."
+            - Non-blocking suggestion: "Minor suggestion: [describe the issue].\n\n```\n// suggested alternative\n```\n\nNon-blocking — the current code works correctly."
+            - Blocking issue: "[Describe the problem clearly.] This will [break X / cause Y].\n\n```\n// fix\n```"
+            - Only post a comment when you have something substantive to add. Skip trivially correct hunks with nothing to note.
+
+            After posting inline comments, post the summary review using:
+            gh pr comment ${{ github.event.pull_request.number }} --body "SUMMARY_TEXT"
+
+            **Summary structure (use exactly this format):**
+            ### Summary
+
+            [1-2 sentence overall assessment of the PR.]
+
+            ### Key Changes Reviewed
+
+            **`path/to/file`** — [What changed, why the approach is correct or not, notable tradeoffs. 2-4 sentences. Be specific — reference actual code elements, not just the file name.]
+
+            [Repeat for each meaningfully changed file. Skip files with trivial changes.]
+
+            ### Overall Assessment
+
+            [One sentence verdict: approve, request changes, or comment-only. Be direct.]
+
+            **Tone:** Technical and precise — explain the WHY, not just the WHAT. Positive when things are done well. Non-blocking suggestions clearly labeled. Educational — readers should learn something from every comment. Concise — no filler, no padding. Never condescending.
