@@ -11,7 +11,7 @@
 | File | Purpose |
 |------|---------|
 | `app/components/Document/PlaybookSDK.tsx` | SDK loader + anti-flicker script |
-| `app/routes/apps.playbook.$.tsx` | Reverse proxy route (first-party SDK loading) |
+| `app/routes/apps.playbook.$.tsx` | Reverse proxy route (first-party API calls) |
 | `app/routes/($locale).cart.$lines.tsx` | Direct checkout route with Playbook attribution |
 | `app/root.tsx` | Root loader detects Playbook URL params |
 | `app/components/Document/Document.tsx` | Renders `<PlaybookSDK>` in `<head>` |
@@ -33,13 +33,14 @@ export function PlaybookSDK({
 }) {
   if (!ENV.PUBLIC_PLAYBOOK_SHOP_ID) return null;
 
-  // Loads SDK through the store's own domain via the proxy route,
+  // Proxy enabled by default — routes API calls through the store's own domain,
   // making requests first-party and invisible to ad blockers.
-  // Set PUBLIC_PLAYBOOK_PROXY_ENABLED=false to load directly from heyplaybook.com.
+  // Set PUBLIC_PLAYBOOK_PROXY_ENABLED=false to send API calls direct to heyplaybook.com.
   const useProxy = ENV.PUBLIC_PLAYBOOK_PROXY_ENABLED !== 'false';
-  const sdkUrl = useProxy
-    ? '/apps/playbook/sdk'
-    : 'https://www.heyplaybook.com/sdk/playbook.js';
+  const sdkUrl = ENV.PUBLIC_PLAYBOOK_SDK_URL || 'https://cdn.heyplaybook.com/playbook.js';
+  const apiEndpoint = useProxy
+    ? '/apps/playbook'
+    : 'https://www.heyplaybook.com';
 
   const revealScript = `
     (function(){
@@ -68,13 +69,23 @@ export function PlaybookSDK({
         />
       )}
       <script dangerouslySetInnerHTML={{ __html: revealScript }} />
-      <script src={sdkUrl} data-shop-id={ENV.PUBLIC_PLAYBOOK_SHOP_ID} async />
+      <script
+        src={sdkUrl}
+        data-pb-config={JSON.stringify({
+          shopId: ENV.PUBLIC_PLAYBOOK_SHOP_ID,
+          apiEndpoint,
+        })}
+        async
+      />
     </>
   );
 }
 ```
 
-**Anti-flicker:** When Playbook URL params are present (`_pv=`, `_ptid=`, etc.), the page is hidden until the SDK reveals it. This prevents a flash of the original page before the experience renders. The 3-second timeout is a safety fallback.
+**How it works:**
+- The SDK JS bundle loads from `cdn.heyplaybook.com` (Cloudflare R2 CDN)
+- The `data-pb-config` attribute tells the SDK where to send API calls — either through the proxy (first-party, default) or direct to `heyplaybook.com`
+- Anti-flicker: When Playbook URL params are present (`_pv=`, `_ptid=`, etc.), the page is hidden until the SDK reveals it. The 3-second timeout is a safety fallback.
 
 **Important:** This component must render inside `<head>`, not `<body>`.
 
@@ -122,19 +133,18 @@ const { ENV, hasPlaybookParams } = useRootLoaderData();
 
 ## Step 4: Proxy Route
 
-The proxy route makes all Playbook requests first-party — they go through the store's own domain instead of `heyplaybook.com`. This avoids ad blockers that block cross-origin tracking scripts (est. 20-40% data loss without it).
+The proxy route makes Playbook API calls first-party — they go through the store's own domain instead of `heyplaybook.com`. This avoids ad blockers that block cross-origin tracking scripts (est. 20-40% data loss without it).
 
 Copy `app/routes/apps.playbook.$.tsx` into your project. This catch-all route handles:
 
 ```
-yourdomain.com/apps/playbook/sdk          → heyplaybook.com/api/sdk
 yourdomain.com/apps/playbook/api/hero     → heyplaybook.com/api/hero
 yourdomain.com/apps/playbook/api/track/*  → heyplaybook.com/api/track/*
 ```
 
-The SDK auto-detects that it was loaded from `/apps/playbook/` and routes all subsequent API calls through the same proxy — no additional configuration needed.
+The SDK reads `apiEndpoint` from the `data-pb-config` attribute and routes all API calls through the proxy automatically.
 
-**Caching:** SDK responses are cached for 1 hour. API responses (tracking, hero data) are not cached.
+**Note:** The SDK JS bundle loads directly from the CDN (`cdn.heyplaybook.com`) — only API calls go through the proxy.
 
 ---
 
@@ -159,7 +169,8 @@ The SDK needs these to attach attribution data to Shopify carts. These are stand
 
 | Variable | Type | Purpose |
 |----------|------|---------|
-| `PUBLIC_PLAYBOOK_PROXY_ENABLED` | Public | Proxy is on by default. Set to `'false'` to disable. |
+| `PUBLIC_PLAYBOOK_PROXY_ENABLED` | Public | Proxy is on by default. Set to `'false'` to disable (API calls go direct to heyplaybook.com). |
+| `PUBLIC_PLAYBOOK_SDK_URL` | Public | Override the SDK JS bundle URL. Defaults to `https://cdn.heyplaybook.com/playbook.js`. Useful for pinning to a specific version. |
 | `PLAYBOOK_PLATFORM_URL` | Private | Override the Playbook backend URL (used by the proxy route). Defaults to `https://www.heyplaybook.com`. |
 
 ### TypeScript Types
@@ -177,13 +188,13 @@ PLAYBOOK_PLATFORM_URL?: string;
 If your store enforces a CSP (in `entry.server.tsx`), add these directives:
 
 ```
-script-src:   https://www.heyplaybook.com
+script-src:   https://cdn.heyplaybook.com
 connect-src:  https://www.heyplaybook.com  https://*.myshopify.com
 img-src:      https://cdn.shopify.com  https://placehold.co
 frame-src:    https://www.heyplaybook.com
 ```
 
-> With the proxy enabled (default), `script-src` and `connect-src` for `heyplaybook.com` are only needed as a fallback. The proxy makes SDK and API requests same-origin.
+> With the proxy enabled (default), `connect-src` for `heyplaybook.com` is only needed as a fallback. The proxy makes API requests same-origin. The SDK JS bundle always loads from `cdn.heyplaybook.com`.
 
 ---
 
@@ -236,8 +247,8 @@ if (pbVariant && pbImpressionId && pbTestId) {
 
 After setup, verify:
 
-- [ ] SDK loads in Network tab (`/apps/playbook/sdk` returns 200)
-- [ ] No cross-origin requests to `heyplaybook.com` (proxy is working)
+- [ ] SDK loads from `cdn.heyplaybook.com/playbook.js` in Network tab (200)
+- [ ] API calls go through `/apps/playbook/api/*` (not direct to heyplaybook.com)
 - [ ] Visit a test link — page hides briefly then reveals with the experience
 - [ ] No CSP errors in console
 - [ ] Cart attribution: after adding to cart via a test link, cart attributes include `pb_variant__`, `pb_impression_id__`, `pb_test_id__`
@@ -250,10 +261,10 @@ After setup, verify:
 | Symptom | Cause | Fix |
 |---------|-------|-----|
 | SDK doesn't load | Missing shop ID | Set `PUBLIC_PLAYBOOK_SHOP_ID` env var |
-| SDK loads from `heyplaybook.com` instead of same-origin | Proxy disabled | Remove `PUBLIC_PLAYBOOK_PROXY_ENABLED=false` or don't set it |
-| 502 on `/apps/playbook/sdk` | Backend unreachable | Check `PLAYBOOK_PLATFORM_URL` or that `heyplaybook.com` is up |
+| API calls go to `cdn.heyplaybook.com` (CORS error) | Missing `data-pb-config` | Ensure the script tag uses `data-pb-config` with `apiEndpoint` (not `data-shop-id`) |
+| 502 on `/apps/playbook/api/*` | Backend unreachable | Check `PLAYBOOK_PLATFORM_URL` or that `heyplaybook.com` is up |
 | Hero doesn't render | Test not on this environment | Verify `PLAYBOOK_PLATFORM_URL` points to the correct Playbook deployment |
 | Page flashes before experience | Anti-flicker not working | Ensure `PlaybookSDK` is in `<head>` and `hasPlaybookParams` is from root loader (not `useLocation`) |
 | Cart attribution missing | Env vars not exposed | Verify `PUBLIC_STOREFRONT_API_TOKEN` and `PUBLIC_STORE_DOMAIN` are in `window.ENV` |
 | Direct checkout attribution missing | Server-side route not reading cookies | Add Playbook cookie reading to `cart.$lines.tsx` (see Step 7) |
-| CSP errors in console | Missing directives | Add `heyplaybook.com` to `script-src` and `connect-src` |
+| CSP errors in console | Missing directives | Add `cdn.heyplaybook.com` to `script-src` and `heyplaybook.com` to `connect-src` |

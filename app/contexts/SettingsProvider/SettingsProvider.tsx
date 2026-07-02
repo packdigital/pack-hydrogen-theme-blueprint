@@ -28,12 +28,17 @@ export function SettingsProvider({children}: {children: ReactNode}) {
       ?.pageHandles;
 
   const isTransparentNavPage = useMemo(() => {
-    if (!transparentNavPageHandles?.length) return false;
-    const {pathname} = new URL(url);
-    const [route, handle] = pathname.split('/').slice(1);
-    const pageHandle = route === 'pages' ? handle : undefined;
-    if (!pageHandle) return false;
-    return transparentNavPageHandles.includes(pageHandle);
+    try {
+      if (!transparentNavPageHandles?.length) return false;
+      const {pathname} = new URL(url);
+      const [route, handle] = pathname.split('/').slice(1);
+      const pageHandle = route === 'pages' ? handle : undefined;
+      if (!pageHandle) return false;
+      return transparentNavPageHandles.includes(pageHandle);
+    } catch (error) {
+      console.error('SettingsProvider:isTransparentNavPage:error:', error);
+      return false;
+    }
   }, [url, JSON.stringify(transparentNavPageHandles)]);
 
   const [state, dispatch] = useReducer(reducer, {
