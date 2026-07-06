@@ -223,7 +223,13 @@ This blueprint's `($locale).cart.$lines.tsx` already includes the fix. If your s
 function getCookie(request: Request, name: string): string | null {
   const cookies = request.headers.get('cookie') || '';
   const match = cookies.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
-  return match ? decodeURIComponent(match[1]) : null;
+  if (!match) return null;
+  try {
+    return decodeURIComponent(match[1]);
+  } catch {
+    // Malformed encoding — treat as absent rather than 500 the checkout link
+    return null;
+  }
 }
 
 function getPlaybookCartAttributes(
@@ -254,19 +260,21 @@ function getPlaybookCartAttributes(
 }
 ```
 
-Then in your loader, after `cart.create()`:
+Then pass the attributes into `cart.create()` — creating the cart with the
+attributes already on it is atomic and saves a round-trip before the checkout
+redirect:
 
 ```tsx
-// Read Playbook attribution cookies
+// Read Playbook attribution cookies and inject as private cart attributes
+// (double-underscore suffix hides them from customers but persists to the
+// order's note_attributes)
 const playbookAttributes = getPlaybookCartAttributes(request);
 
-// ... cart.create() ...
-
-// Inject as private cart attributes (double-underscore suffix hides
-// them from customers but persists to the order's note_attributes)
-if (playbookAttributes.length) {
-  await cart.updateAttributes(playbookAttributes);
-}
+const result = await cart.create({
+  lines: linesMap,
+  discountCodes: discountArray,
+  ...(playbookAttributes.length ? {attributes: playbookAttributes} : {}),
+});
 ```
 
 **When this is NOT needed:** If a checkout route is client-side (uses `useCart().cartCreate()` and navigates to `/cart` instead of redirecting to checkout), the SDK has time to inject attributes before the user reaches checkout.

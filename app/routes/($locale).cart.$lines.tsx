@@ -37,7 +37,13 @@ import type {Route} from './+types/($locale).cart.$lines';
 function getCookie(request: Request, name: string): string | null {
   const cookies = request.headers.get('cookie') || '';
   const match = cookies.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
-  return match ? decodeURIComponent(match[1]) : null;
+  if (!match) return null;
+  try {
+    return decodeURIComponent(match[1]);
+  } catch {
+    // Malformed encoding — treat as absent rather than 500 the checkout link
+    return null;
+  }
 }
 
 function getPlaybookCartAttributes(
@@ -87,13 +93,17 @@ export async function loader({request, context, params}: Route.LoaderArgs) {
   const discount = searchParams.get('discount');
   const discountArray = discount ? [discount] : [];
 
-  // Playbook attribution — read cookies set by the Playbook SDK
+  // Playbook attribution — read cookies set by the Playbook SDK and pass them
+  // at cart creation as private attributes (double-underscore suffix hides
+  // them from customers but persists to the Shopify order's note_attributes,
+  // where the Playbook webhook picks them up)
   const playbookAttributes = getPlaybookCartAttributes(request);
 
   // Create a cart
   const result = await cart.create({
     lines: linesMap,
     discountCodes: discountArray,
+    ...(playbookAttributes.length ? {attributes: playbookAttributes} : {}),
   });
 
   const cartResult = result.cart;
@@ -102,13 +112,6 @@ export async function loader({request, context, params}: Route.LoaderArgs) {
     throw new Response('Link may be expired. Try checking the URL.', {
       status: 410,
     });
-  }
-
-  // Playbook attribution — inject into the new cart as private attributes
-  // (double-underscore suffix hides them from customers but persists to the
-  // Shopify order's note_attributes, where our webhook picks them up)
-  if (playbookAttributes.length) {
-    await cart.updateAttributes(playbookAttributes);
   }
 
   // Update cart id in cookie
