@@ -21,7 +21,7 @@ const FORWARDED_REQUEST_HEADERS = [
  */
 const FORWARDED_RESPONSE_HEADERS = ['content-type', 'cache-control', 'etag'];
 
-function buildBackendUrl(request: Request, env: Env): string {
+function buildBackendUrl(request: Request, env: Env): string | null {
   const platformUrl = env.PLAYBOOK_PLATFORM_URL || PLATFORM_URL_DEFAULT;
   const url = new URL(request.url);
 
@@ -30,7 +30,8 @@ function buildBackendUrl(request: Request, env: Env): string {
   //        /apps/playbook/api/hero → "api/hero"
   const proxyPrefix = '/apps/playbook/';
   const idx = url.pathname.indexOf(proxyPrefix);
-  const subPath = idx !== -1 ? url.pathname.slice(idx + proxyPrefix.length) : '';
+  const subPath =
+    idx !== -1 ? url.pathname.slice(idx + proxyPrefix.length) : '';
 
   // Map paths:
   //   "api/..."  → /api/...        (all API routes)
@@ -43,6 +44,14 @@ function buildBackendUrl(request: Request, env: Env): string {
   }
 
   const backendUrl = new URL(backendPath, platformUrl);
+
+  // URL normalization resolves ".." segments, so a crafted sub-path could
+  // escape the /api/* scope (the host is fixed, so this only guards against
+  // reaching non-API platform paths through the store's domain)
+  if (!backendUrl.pathname.startsWith('/api/')) {
+    return null;
+  }
+
   // Forward query params
   backendUrl.search = url.search;
   return backendUrl.toString();
@@ -50,6 +59,9 @@ function buildBackendUrl(request: Request, env: Env): string {
 
 async function proxyRequest(request: Request, env: Env): Promise<Response> {
   const backendUrl = buildBackendUrl(request, env);
+  if (!backendUrl) {
+    return new Response('Not Found', {status: 404});
+  }
 
   // Build headers to forward
   const headers = new Headers();
@@ -83,14 +95,8 @@ async function proxyRequest(request: Request, env: Env): Promise<Response> {
   // Add CORS headers — the storefront domain is always same-origin,
   // but include these for consistency with direct platform responses
   responseHeaders.set('access-control-allow-origin', '*');
-  responseHeaders.set(
-    'access-control-allow-methods',
-    'GET, POST, OPTIONS',
-  );
-  responseHeaders.set(
-    'access-control-allow-headers',
-    'Content-Type',
-  );
+  responseHeaders.set('access-control-allow-methods', 'GET, POST, OPTIONS');
+  responseHeaders.set('access-control-allow-headers', 'Content-Type');
 
   // API responses should not be cached
   responseHeaders.set('cache-control', 'no-store');
@@ -102,7 +108,17 @@ async function proxyRequest(request: Request, env: Env): Promise<Response> {
 }
 
 export async function loader({request, context}: LoaderFunctionArgs) {
-  // Handle CORS preflight
+  try {
+    return await proxyRequest(request, context.env);
+  } catch (error) {
+    console.error('[Playbook Proxy] Backend request failed:', error);
+    return new Response('Bad Gateway', {status: 502});
+  }
+}
+
+export async function action({request, context}: ActionFunctionArgs) {
+  // Handle CORS preflight — React Router dispatches non-GET/HEAD methods
+  // (including OPTIONS) to the action, not the loader
   if (request.method === 'OPTIONS') {
     return new Response(null, {
       status: 204,
@@ -115,15 +131,6 @@ export async function loader({request, context}: LoaderFunctionArgs) {
     });
   }
 
-  try {
-    return await proxyRequest(request, context.env);
-  } catch (error) {
-    console.error('[Playbook Proxy] Backend request failed:', error);
-    return new Response('Bad Gateway', {status: 502});
-  }
-}
-
-export async function action({request, context}: ActionFunctionArgs) {
   try {
     return await proxyRequest(request, context.env);
   } catch (error) {
