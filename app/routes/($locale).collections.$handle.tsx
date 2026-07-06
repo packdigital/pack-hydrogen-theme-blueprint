@@ -40,6 +40,18 @@ export async function loader({params, context, request}: Route.LoaderArgs) {
   if (urlRedirect) return urlRedirect;
 
   const searchParams = new URL(request.url).searchParams;
+
+  // Kick off fetches that don't depend on site settings or filters so they
+  // run concurrently with the settings/filters resolution below instead of
+  // waiting behind it.
+  const collectionPagePromise = getPage({
+    context,
+    handle,
+    pageKey: 'collectionPage',
+    query: COLLECTION_PAGE_QUERY,
+  });
+  const shopPromise = getShop(context);
+
   const siteSettings = await getSiteSettings(context);
 
   const {activeFilterValues, filters} = await getFilters({
@@ -66,12 +78,7 @@ export async function loader({params, context, request}: Route.LoaderArgs) {
   });
 
   const [{collectionPage}, {collection}, shop] = await Promise.all([
-    getPage({
-      context,
-      handle,
-      pageKey: 'collectionPage',
-      query: COLLECTION_PAGE_QUERY,
-    }),
+    collectionPagePromise,
     storefront.query(COLLECTION_QUERY, {
       variables: {
         handle,
@@ -84,7 +91,7 @@ export async function loader({params, context, request}: Route.LoaderArgs) {
       },
       cache: storefront.CacheShort(),
     }),
-    getShop(context),
+    shopPromise,
   ]);
 
   if (!collection) {

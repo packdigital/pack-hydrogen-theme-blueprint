@@ -51,6 +51,21 @@ export async function loader({params, context, request}: Route.LoaderArgs) {
 
   const storeDomain = storefront.getShopifyDomain();
   const isPreviewModeEnabled = pack.isPreviewModeEnabled();
+
+  // Kick off fetches that don't depend on selectedOptions immediately so they
+  // run concurrently with getSelectedProductOptions (which can itself query
+  // the Storefront API) rather than waiting behind it. Only PRODUCT_QUERY
+  // needs the resolved options.
+  const productPagePromise = getPage({
+    context,
+    handle,
+    pageKey: 'productPage',
+    query: PRODUCT_PAGE_QUERY,
+  });
+  const productGroupingsPromise = getProductGroupings(context);
+  const shopPromise = getShop(context);
+  const siteSettingsPromise = getSiteSettings(context);
+
   const selectedOptions = await getSelectedProductOptions({
     handle,
     context,
@@ -64,12 +79,7 @@ export async function loader({params, context, request}: Route.LoaderArgs) {
     shop,
     siteSettings,
   ] = await Promise.all([
-    getPage({
-      context,
-      handle,
-      pageKey: 'productPage',
-      query: PRODUCT_PAGE_QUERY,
-    }),
+    productPagePromise,
     storefront.query(PRODUCT_QUERY, {
       variables: {
         handle,
@@ -79,9 +89,9 @@ export async function loader({params, context, request}: Route.LoaderArgs) {
       },
       cache: storefront.CacheShort(),
     }),
-    getProductGroupings(context),
-    getShop(context),
-    getSiteSettings(context),
+    productGroupingsPromise,
+    shopPromise,
+    siteSettingsPromise,
   ]);
 
   let queriedProduct = storefrontProduct;
