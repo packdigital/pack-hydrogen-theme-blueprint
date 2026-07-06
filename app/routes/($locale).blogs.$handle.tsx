@@ -28,23 +28,38 @@ export async function loader({params, context, request}: Route.LoaderArgs) {
   const urlRedirect = checkForTrailingEncodedSpaces(request);
   if (urlRedirect) return urlRedirect;
 
+  const MAX_PAGINATION_DEPTH = 50;
+
   // if the number of articles is in the several of hundreds, consider paginating the query
   const getBlogWithAllArticles = async ({
     blog,
     cursor,
+    depth = 0,
   }: {
     blog: BlogPage | null;
     cursor: string | null;
+    depth?: number;
   }): Promise<BlogPage | undefined> => {
-    const {blog: queriedBlog} = await getPage({
-      context,
-      handle,
-      pageKey: 'blog',
-      query: BLOG_PAGE_QUERY,
+    if (depth >= MAX_PAGINATION_DEPTH) {
+      console.warn(
+        `Blog "${handle}" pagination exceeded ${MAX_PAGINATION_DEPTH} pages, stopping`,
+      );
+      return blog ?? undefined;
+    }
+
+    const {pack, storefront} = context;
+    const {data} = await pack.query(BLOG_PAGE_QUERY, {
+      variables: {
+        handle,
+        articlesCursor: cursor,
+        country: storefront.i18n.country,
+        language: storefront.i18n.language,
+      },
+      cache: storefront.CacheLong(),
     });
+    if (!data?.blog) return blog ?? undefined;
 
-    if (!queriedBlog) return undefined;
-
+    const queriedBlog = data.blog;
     const queriedBlogArticles = queriedBlog.articles;
 
     const queriedBlogArticlesNodes = queriedBlogArticles?.nodes || [];
@@ -57,10 +72,11 @@ export async function loader({params, context, request}: Route.LoaderArgs) {
         pageInfo: {endCursor, hasNextPage},
       },
     };
-    if (hasNextPage) {
+    if (hasNextPage && endCursor && endCursor !== cursor) {
       return getBlogWithAllArticles({
         blog: compiledBlog,
         cursor: endCursor,
+        depth: depth + 1,
       });
     }
     return compiledBlog;
