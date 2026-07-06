@@ -24,10 +24,11 @@ import type {Route} from './+types/($locale).cart.$lines';
 
 /**
  * Playbook (heyplaybook.com) A/B testing attribution.
- * The Playbook SDK sets cookies (_pb_variant, _pb_impression_id, _pb_test_id)
- * when a visitor lands on a Playbook experience. These need to be carried
+ * The Playbook SDK sets cookies when a visitor lands on a Playbook experience:
+ * `_pb_impression_id` + `_pb_variant`, plus either `_pb_test_id` (tests) or
+ * `_pb_experiment_id` + `_pb_arm_id` (experiments). These need to be carried
  * through to the Shopify order as cart attributes so the orders/paid webhook
- * can attribute the purchase back to the correct test variant.
+ * can attribute the purchase back to the correct variant.
  *
  * This route creates a brand-new cart server-side from a URL, so the SDK's
  * client-side cart injection never runs. We read the cookies and inject them
@@ -36,7 +37,40 @@ import type {Route} from './+types/($locale).cart.$lines';
 function getCookie(request: Request, name: string): string | null {
   const cookies = request.headers.get('cookie') || '';
   const match = cookies.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
-  return match ? decodeURIComponent(match[1]) : null;
+  if (!match) return null;
+  try {
+    return decodeURIComponent(match[1]);
+  } catch {
+    // Malformed encoding — treat as absent rather than 500 the checkout link
+    return null;
+  }
+}
+
+function getPlaybookCartAttributes(
+  request: Request,
+): Array<{key: string; value: string}> {
+  const impressionId = getCookie(request, '_pb_impression_id');
+  const variant = getCookie(request, '_pb_variant');
+  if (!impressionId || !variant) return [];
+
+  const attributes = [
+    {key: 'pb_impression_id__', value: impressionId},
+    {key: 'pb_variant__', value: variant},
+  ];
+
+  const testId = getCookie(request, '_pb_test_id');
+  if (testId) attributes.push({key: 'pb_test_id__', value: testId});
+
+  const experimentId = getCookie(request, '_pb_experiment_id');
+  const armId = getCookie(request, '_pb_arm_id');
+  if (experimentId && armId) {
+    attributes.push(
+      {key: 'pb_experiment_id__', value: experimentId},
+      {key: 'pb_arm_id__', value: armId},
+    );
+  }
+
+  return attributes;
 }
 
 export async function loader({request, context, params}: Route.LoaderArgs) {
@@ -59,15 +93,17 @@ export async function loader({request, context, params}: Route.LoaderArgs) {
   const discount = searchParams.get('discount');
   const discountArray = discount ? [discount] : [];
 
-  // Playbook attribution — read cookies set by the Playbook SDK
-  const pbVariant = getCookie(request, '_pb_variant');
-  const pbImpressionId = getCookie(request, '_pb_impression_id');
-  const pbTestId = getCookie(request, '_pb_test_id');
+  // Playbook attribution — read cookies set by the Playbook SDK and pass them
+  // at cart creation as private attributes (double-underscore suffix hides
+  // them from customers but persists to the Shopify order's note_attributes,
+  // where the Playbook webhook picks them up)
+  const playbookAttributes = getPlaybookCartAttributes(request);
 
   // Create a cart
   const result = await cart.create({
     lines: linesMap,
     discountCodes: discountArray,
+    ...(playbookAttributes.length ? {attributes: playbookAttributes} : {}),
   });
 
   const cartResult = result.cart;
@@ -76,17 +112,6 @@ export async function loader({request, context, params}: Route.LoaderArgs) {
     throw new Response('Link may be expired. Try checking the URL.', {
       status: 410,
     });
-  }
-
-  // Playbook attribution — inject into the new cart as private attributes
-  // (double-underscore suffix hides them from customers but persists to the
-  // Shopify order's note_attributes, where our webhook picks them up)
-  if (pbVariant && pbImpressionId && pbTestId) {
-    await cart.updateAttributes([
-      {key: 'pb_variant__', value: pbVariant},
-      {key: 'pb_impression_id__', value: pbImpressionId},
-      {key: 'pb_test_id__', value: pbTestId},
-    ]);
   }
 
   // Update cart id in cookie

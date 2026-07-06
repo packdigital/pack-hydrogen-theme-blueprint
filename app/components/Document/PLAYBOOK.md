@@ -200,7 +200,16 @@ frame-src:    https://www.heyplaybook.com
 
 ## Step 7: Cart Attribution for Direct Checkout Routes
 
-The Playbook SDK automatically injects cart attributes (`pb_variant__`, `pb_impression_id__`, `pb_test_id__`) on standard add-to-cart flows. However, **server-side routes that create a cart and redirect straight to checkout bypass the SDK entirely** — the page never renders client-side, so the SDK's attribution never runs.
+The Playbook SDK automatically injects cart attributes on standard add-to-cart flows. However, **server-side routes that create a cart and redirect straight to checkout bypass the SDK entirely** — the page never renders client-side, so the SDK's attribution never runs.
+
+Playbook sets two attribution cookie shapes, depending on what the visitor landed on:
+
+| Visit type | Cookies set |
+|------------|-------------|
+| Test (legacy) | `_pb_impression_id`, `_pb_variant`, `_pb_test_id` |
+| Experiment (A/B experiences) | `_pb_impression_id`, `_pb_variant`, `_pb_experiment_id`, `_pb_arm_id` |
+
+An experiment visit deliberately clears `_pb_test_id`, so direct-checkout attribution must handle both shapes — a `_pb_test_id`-only implementation writes nothing for experiment visitors.
 
 This blueprint's `($locale).cart.$lines.tsx` already includes the fix. If your store has additional direct-checkout routes (e.g., "buy now" endpoints, quick checkout), apply the same pattern:
 
@@ -214,29 +223,58 @@ This blueprint's `($locale).cart.$lines.tsx` already includes the fix. If your s
 function getCookie(request: Request, name: string): string | null {
   const cookies = request.headers.get('cookie') || '';
   const match = cookies.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
-  return match ? decodeURIComponent(match[1]) : null;
+  if (!match) return null;
+  try {
+    return decodeURIComponent(match[1]);
+  } catch {
+    // Malformed encoding — treat as absent rather than 500 the checkout link
+    return null;
+  }
+}
+
+function getPlaybookCartAttributes(
+  request: Request,
+): Array<{key: string; value: string}> {
+  const impressionId = getCookie(request, '_pb_impression_id');
+  const variant = getCookie(request, '_pb_variant');
+  if (!impressionId || !variant) return [];
+
+  const attributes = [
+    {key: 'pb_impression_id__', value: impressionId},
+    {key: 'pb_variant__', value: variant},
+  ];
+
+  const testId = getCookie(request, '_pb_test_id');
+  if (testId) attributes.push({key: 'pb_test_id__', value: testId});
+
+  const experimentId = getCookie(request, '_pb_experiment_id');
+  const armId = getCookie(request, '_pb_arm_id');
+  if (experimentId && armId) {
+    attributes.push(
+      {key: 'pb_experiment_id__', value: experimentId},
+      {key: 'pb_arm_id__', value: armId},
+    );
+  }
+
+  return attributes;
 }
 ```
 
-Then in your loader, after `cart.create()`:
+Then pass the attributes into `cart.create()` — creating the cart with the
+attributes already on it is atomic and saves a round-trip before the checkout
+redirect:
 
 ```tsx
-// Read Playbook attribution cookies
-const pbVariant = getCookie(request, '_pb_variant');
-const pbImpressionId = getCookie(request, '_pb_impression_id');
-const pbTestId = getCookie(request, '_pb_test_id');
+// Read Playbook attribution cookies and inject as private cart attributes
+// (double-underscore suffix hides them from customers but persists to the
+// order's note_attributes)
+const playbookAttributes = getPlaybookCartAttributes(request);
 
-// ... cart.create() ...
-
-// Inject as private cart attributes (double-underscore suffix hides
-// them from customers but persists to the order's note_attributes)
-if (pbVariant && pbImpressionId && pbTestId) {
-  await cart.updateAttributes([
-    {key: 'pb_variant__', value: pbVariant},
-    {key: 'pb_impression_id__', value: pbImpressionId},
-    {key: 'pb_test_id__', value: pbTestId},
-  ]);
-}
+const result = await cart.create({
+  lines: linesMap,
+  discountCodes: discountArray,
+  ...(playbookAttributes.length ? {attributes: playbookAttributes} : {}),
+});
 ```
 
 **When this is NOT needed:** If a checkout route is client-side (uses `useCart().cartCreate()` and navigates to `/cart` instead of redirecting to checkout), the SDK has time to inject attributes before the user reaches checkout.
@@ -251,7 +289,7 @@ After setup, verify:
 - [ ] API calls go through `/apps/playbook/api/*` (not direct to heyplaybook.com)
 - [ ] Visit a test link — page hides briefly then reveals with the experience
 - [ ] No CSP errors in console
-- [ ] Cart attribution: after adding to cart via a test link, cart attributes include `pb_variant__`, `pb_impression_id__`, `pb_test_id__`
+- [ ] Cart attribution: after adding to cart via a test link, cart attributes include `pb_impression_id__`, `pb_variant__`, and `pb_test_id__` (or `pb_experiment_id__` + `pb_arm_id__` for an experiment link)
 - [ ] Direct checkout attribution: use a `/cart/variant:qty` link after visiting a Playbook test link — order should have Playbook attributes
 
 ---
