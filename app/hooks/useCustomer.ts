@@ -1,4 +1,3 @@
-import {useMemo} from 'react';
 import {useMatches} from 'react-router';
 import type {Customer} from '@shopify/hydrogen/customer-account-api-types';
 
@@ -19,7 +18,5 @@ export function useCustomer(): Customer | null | undefined {
   const customerFromAccount = (account?.loaderData as {customer: Customer})
     ?.customer;
 
-  return useMemo(() => {
-    return customerFromAccount || customerFromRoot || null;
-  }, [customerFromRoot, customerFromAccount]);
+  return customerFromAccount || customerFromRoot || null;
 }

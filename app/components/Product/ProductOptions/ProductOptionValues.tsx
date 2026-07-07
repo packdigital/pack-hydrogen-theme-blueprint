@@ -1,4 +1,4 @@
-import {memo, useEffect, useMemo, useState} from 'react';
+import {memo, useEffect, useState} from 'react';
 import {useLocation} from 'react-router';
 
 import type {OptionWithGroups} from '~/lib/types';
@@ -31,13 +31,11 @@ export const ProductOptionValues = memo(
       setOptimisticSelectedSubgroupIndex,
     ] = useState<number>(0);
 
-    const option = useMemo((): OptionWithGroups | undefined => {
-      return product.grouping
-        ? product.grouping.options?.find(
-            (option) => option.name === initialOption.name,
-          )
-        : initialOption;
-    }, [product]);
+    const option: OptionWithGroups | undefined = product.grouping
+      ? product.grouping.options?.find(
+          (option) => option.name === initialOption.name,
+        )
+      : initialOption;
 
     useEffect(() => {
       // reset optimisticSelectedIndex and optimisticSelectedSubgroupIndex after navigation

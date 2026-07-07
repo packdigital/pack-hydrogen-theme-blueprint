@@ -1,4 +1,3 @@
-import {useMemo} from 'react';
 import {useLoaderData} from 'react-router';
 import {
   Analytics,
@@ -133,13 +132,12 @@ export default function CollectionRoute() {
 
   // determines if default collection heading should be shown
   // logic will apply once the hero section is saved and page is refreshed
-  const hasVisibleHeroSection = useMemo(() => {
-    if (!collectionPage) return false;
-    const HERO_KEYS = ['hero', 'banner'];
-    return collectionPage.sections.nodes.some(({data}: any) => {
-      return HERO_KEYS.includes(data?._template);
-    });
-  }, [collectionPage]);
+  const HERO_KEYS = ['hero', 'banner'];
+  const hasVisibleHeroSection = !collectionPage
+    ? false
+    : collectionPage.sections.nodes.some(({data}: any) => {
+        return HERO_KEYS.includes(data?._template);
+      });
 
   return (
     <div data-comp="CollectionRoute">

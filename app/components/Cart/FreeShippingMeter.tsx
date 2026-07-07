@@ -26,9 +26,11 @@ export const FreeShippingMeter = memo(({settings}: FreeShippingMeterProps) => {
     }, 0);
   }, [discountAllocations]);
 
-  const progress = useMemo(() => {
-    if (!showMeter) return {percent: 0, message: ''};
-
+  let progress: {percent: number; message: string | undefined} = {
+    percent: 0,
+    message: '',
+  };
+  if (showMeter) {
     // total = subtotal - discountAmount (discount code applied to cart level)
     const total = cost?.subtotalAmount?.amount
       ? Number(cost.subtotalAmount.amount) - discountAmount
@@ -36,27 +38,20 @@ export const FreeShippingMeter = memo(({settings}: FreeShippingMeterProps) => {
     const fraction = total / minCartSpend;
     const remainder = minCartSpend - total;
 
-    if (fraction >= 1) {
-      return {
-        percent: 100,
-        message: qualifiedMessage,
-      };
-    }
-    return {
-      percent: fraction * 100,
-      message: progressMessage?.replace(
-        '{{amount}}',
-        `$${remainder.toFixed(2).replace('.00', '')}`,
-      ),
-    };
-  }, [
-    cost?.subtotalAmount,
-    discountAmount,
-    minCartSpend,
-    progressMessage,
-    qualifiedMessage,
-    showMeter,
-  ]);
+    progress =
+      fraction >= 1
+        ? {
+            percent: 100,
+            message: qualifiedMessage,
+          }
+        : {
+            percent: fraction * 100,
+            message: progressMessage?.replace(
+              '{{amount}}',
+              `$${remainder.toFixed(2).replace('.00', '')}`,
+            ),
+          };
+  }
 
   return showMeter ? (
     <div className="border-b border-b-border p-4">

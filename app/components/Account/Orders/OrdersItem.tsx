@@ -1,28 +1,24 @@
-import {useMemo} from 'react';
+import {memo} from 'react';
 import startCase from 'lodash/startCase';
 import {Money} from '@shopify/hydrogen-react';
 import type {Order} from '@shopify/hydrogen/customer-account-api-types';
 
 import {Link} from '~/components/Link';
 
-export function OrdersItem({order}: {order: Order}) {
-  const orderDate = useMemo(() => {
-    const newDate = new Date(order.processedAt);
-    return newDate.toLocaleDateString('default', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-    });
-  }, [order.processedAt]);
+// Rendered in a list (Orders.tsx maps over orders); memo skips re-rendering
+// unchanged rows when the list's parent re-renders (e.g. pagination state).
+export const OrdersItem = memo(({order}: {order: Order}) => {
+  const newDate = new Date(order.processedAt);
+  const orderDate = newDate.toLocaleDateString('default', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
 
-  const products = useMemo(() => {
-    return order.lineItems.edges.map(({node}) => node.title).join(', ');
-  }, [order.id]);
+  const products = order.lineItems.edges.map(({node}) => node.title).join(', ');
 
-  const orderUrl = useMemo(() => {
-    const [legacyOrderId, key] = order!.id!.split('/').pop()!.split('?');
-    return `/account/orders/${legacyOrderId}?${key}`;
-  }, [order.id]);
+  const [legacyOrderId, key] = order!.id!.split('/').pop()!.split('?');
+  const orderUrl = `/account/orders/${legacyOrderId}?${key}`;
 
   const financialStatus = startCase(order.financialStatus?.toLowerCase());
   const fulfillmentStatus = startCase(order.fulfillmentStatus?.toLowerCase());
@@ -78,6 +74,6 @@ export function OrdersItem({order}: {order: Order}) {
       </div>
     </>
   );
-}
+});
 
 OrdersItem.displayName = 'OrdersItem';

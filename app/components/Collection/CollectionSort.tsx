@@ -80,16 +80,14 @@ export const CollectionSort = memo(
   ({isSearchResults, settings}: CollectionSortProps) => {
     const [searchParams, setSearchParams] = useSearchParams();
 
-    const options = useMemo(() => {
-      const KEYS = isSearchResults ? SEARCH_SORT_KEYS : COLLECTION_SORT_KEYS;
-      return KEYS.map((option) => {
-        const labelOverride = settings?.sort?.[`${option.key}Label`];
-        return {
-          ...option,
-          label: labelOverride || option.label,
-        };
-      });
-    }, [isSearchResults, settings?.sort]);
+    const KEYS = isSearchResults ? SEARCH_SORT_KEYS : COLLECTION_SORT_KEYS;
+    const options = KEYS.map((option) => {
+      const labelOverride = settings?.sort?.[`${option.key}Label`];
+      return {
+        ...option,
+        label: labelOverride || option.label,
+      };
+    });
 
     const selectedSort = useMemo(() => {
       let sortKey;

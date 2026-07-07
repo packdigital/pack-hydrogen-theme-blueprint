@@ -1,4 +1,4 @@
-import {memo, useCallback, useMemo} from 'react';
+import {memo, useCallback} from 'react';
 import {useAnalytics} from '@shopify/hydrogen';
 
 import {COLOR_OPTION_NAME, PRODUCT_IMAGE_ASPECT_RATIO} from '~/lib/constants';
@@ -25,17 +25,13 @@ export const SearchItem = memo(
       closeSearch();
     }, [index, product.id, publish, searchTerm]);
 
-    const color = useMemo(() => {
-      return firstVariant?.selectedOptions.find(
-        (option) => option.name === COLOR_OPTION_NAME,
-      )?.value;
-    }, [firstVariant?.id]);
+    const color = firstVariant?.selectedOptions.find(
+      (option) => option.name === COLOR_OPTION_NAME,
+    )?.value;
 
-    const image = useMemo(() => {
-      return product.media.nodes.find((media) => {
-        return media.mediaContentType === 'IMAGE';
-      })?.previewImage;
-    }, [product]);
+    const image = product.media.nodes.find((media) => {
+      return media.mediaContentType === 'IMAGE';
+    })?.previewImage;
 
     return (
       <Link

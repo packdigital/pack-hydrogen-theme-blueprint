@@ -1,4 +1,3 @@
-import {useMemo} from 'react';
 import {
   CartProvider as HydrogenCartProvider,
   ShopifyProvider as HydrogenShopifyProvider,
@@ -13,9 +12,10 @@ export function ShopifyProvider({children}: {children: ReactNode}) {
   const {ENV, isPreviewModeEnabled} = useRootLoaderData();
   const locale = useLocale();
 
-  const previewModeCartFragment = useMemo(() => {
-    return CART_FRAGMENT.replace('CartApiQuery', 'CartFragment');
-  }, [CART_FRAGMENT]);
+  const previewModeCartFragment = CART_FRAGMENT.replace(
+    'CartApiQuery',
+    'CartFragment',
+  );
 
   return (
     <HydrogenShopifyProvider

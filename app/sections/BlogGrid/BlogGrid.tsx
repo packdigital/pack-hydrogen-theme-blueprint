@@ -26,16 +26,13 @@ export function BlogGrid({cms}: {cms: BlogGridCms}) {
     return params.get('category')?.toLowerCase().trim() || '';
   }, [search]);
 
-  const filteredArticles = useMemo(() => {
-    if (categoryParam) {
-      return blog?.articles?.nodes?.filter(({category}) => {
+  const filteredArticles = categoryParam
+    ? blog?.articles?.nodes?.filter(({category}) => {
         return (
           category?.toLowerCase().trim() === categoryParam?.toLowerCase().trim()
         );
-      });
-    }
-    return blog?.articles?.nodes;
-  }, [blog, categoryParam]);
+      })
+    : blog?.articles?.nodes;
 
   const {currentPage, endIndex, setCurrentPage, startIndex} = usePagination({
     resultsPerPage: RESULTS_PER_PAGE,

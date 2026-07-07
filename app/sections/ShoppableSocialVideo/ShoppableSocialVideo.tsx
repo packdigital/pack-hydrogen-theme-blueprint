@@ -1,4 +1,4 @@
-import {useMemo, useRef, useState} from 'react';
+import {useRef, useState} from 'react';
 import {useLoaderData} from 'react-router';
 import {Scrollbar} from 'swiper/modules';
 import {Swiper, SwiperSlide} from 'swiper/react';
@@ -37,23 +37,20 @@ export function ShoppableSocialVideo({cms}: {cms: ShoppableSocialVideoCms}) {
     background,
   } = cms;
 
-  const sliderProducts = useMemo(() => {
-    return (
-      products?.reduce((acc: Record<string, any>[], productItem) => {
-        const handle = productItem?.product?.handle;
-        if (!handle) return acc;
-        const fullProduct = productsMap?.[handle];
-        if (!fullProduct && !isPreviewModeEnabled) return acc;
-        return [
-          ...acc,
-          {
-            ...productItem,
-            product: fullProduct || {handle},
-          },
-        ];
-      }, []) || []
-    );
-  }, [isPreviewModeEnabled, products, productsMap]);
+  const sliderProducts =
+    products?.reduce((acc: Record<string, any>[], productItem) => {
+      const handle = productItem?.product?.handle;
+      if (!handle) return acc;
+      const fullProduct = productsMap?.[handle];
+      if (!fullProduct && !isPreviewModeEnabled) return acc;
+      return [
+        ...acc,
+        {
+          ...productItem,
+          product: fullProduct || {handle},
+        },
+      ];
+    }, []) || [];
 
   const {
     heading = textDefaults.heading,

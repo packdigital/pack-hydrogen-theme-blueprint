@@ -78,25 +78,19 @@ export const ProductItem = memo(
       selectedVariant,
     });
 
-    const productUrl = useMemo(() => {
-      if (openProductUrl) return openProductUrl;
-      const productHandle = selectedVariant?.product?.handle;
-      if (!productHandle) return '';
+    let productUrl = openProductUrl || '';
+    const productHandle = selectedVariant?.product?.handle;
+    if (!openProductUrl && productHandle) {
       const searchParams = new URLSearchParams();
       selectedVariant.selectedOptions.forEach(({name, value}) => {
-        if (name !== COLOR_OPTION_NAME) return;
-        searchParams.set(name, value);
+        if (name === COLOR_OPTION_NAME) searchParams.set(name, value);
       });
-      return `/products/${productHandle}${
-        searchParams ? `?${searchParams}` : ''
-      }`;
-    }, [openProductUrl, selectedVariant]);
+      productUrl = `/products/${productHandle}?${searchParams}`;
+    }
 
-    const color = useMemo(() => {
-      return selectedVariant?.selectedOptions.find(
-        (option) => option.name === COLOR_OPTION_NAME,
-      )?.value;
-    }, [selectedVariant]);
+    const color = selectedVariant?.selectedOptions.find(
+      (option) => option.name === COLOR_OPTION_NAME,
+    )?.value;
 
     const title = selectedProduct?.title;
 

@@ -1,4 +1,3 @@
-import {useMemo} from 'react';
 import clsx from 'clsx';
 
 import {Svg} from '~/components/Svg';
@@ -18,19 +17,18 @@ export function BYOBQuickShopOption({
   product,
   setActiveQtySelectorIndex,
 }: BYOBQuickShopOptionProps) {
-  const variantToAdd = useMemo(() => {
-    const variant = product?.variants?.nodes?.find((variant) => {
-      const variantOption = variant.selectedOptions?.find(
-        (option) => option.name === optionName,
-      )?.value;
-      return variantOption === optionValue.name;
-    });
-    if (!variant) return undefined;
-    return {
-      ...variant,
-      image: variant.image || product?.featuredImage,
-    };
-  }, [optionName, product, optionValue.name]);
+  const variant = product?.variants?.nodes?.find((variant) => {
+    const variantOption = variant.selectedOptions?.find(
+      (option) => option.name === optionName,
+    )?.value;
+    return variantOption === optionValue.name;
+  });
+  const variantToAdd = variant
+    ? {
+        ...variant,
+        image: variant.image || product?.featuredImage,
+      }
+    : undefined;
 
   const showQtySelector = activeQtySelectorIndex === index;
   const variantInBundle = bundleMapById[variantToAdd?.id || ''];

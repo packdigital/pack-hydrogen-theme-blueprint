@@ -72,19 +72,13 @@ export function useProductMedia({
     return mediaFromAltText || product.media.nodes || [];
   }, [product.id, mediaFromAltText]);
 
-  const initialIndex = useMemo(() => {
-    if (!hasMultiColorsNotFromGroup || !selectedVariant || mediaFromAltText)
-      return 0;
-    const mediaIndex = product.media.nodes.findIndex(
-      ({previewImage}) => previewImage?.url === selectedVariant?.image?.url,
-    );
-    return mediaIndex >= 0 ? mediaIndex : 0;
-  }, [
-    hasMultiColorsNotFromGroup,
-    product.id,
-    mediaFromAltText,
-    selectedVariant?.id,
-  ]);
+  const mediaIndex =
+    hasMultiColorsNotFromGroup && selectedVariant && !mediaFromAltText
+      ? product.media.nodes.findIndex(
+          ({previewImage}) => previewImage?.url === selectedVariant?.image?.url,
+        )
+      : -1;
+  const initialIndex = mediaIndex >= 0 ? mediaIndex : 0;
 
   const maybeHasImagesByVariant =
     !!hasMultiColorsNotFromGroup && !mediaFromAltText;

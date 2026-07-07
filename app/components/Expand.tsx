@@ -129,15 +129,13 @@ export function Expand({
     };
   }, [defaultExpandStyle, JSON.stringify(styles)]);
 
-  const style = useMemo(() => {
-    const transition = transitions
-      .map((attr) => `${attr} ${duration}ms ${easing}`)
-      .join(',');
-    return {
-      ...expandStyle,
-      transition,
-    };
-  }, [duration, easing, expandStyle, JSON.stringify(transitions)]);
+  const transition = transitions
+    .map((attr) => `${attr} ${duration}ms ${easing}`)
+    .join(',');
+  const style = {
+    ...expandStyle,
+    transition,
+  };
 
   useEffect(() => {
     toggle(open);

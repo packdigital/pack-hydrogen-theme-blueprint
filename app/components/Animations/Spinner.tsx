@@ -1,4 +1,3 @@
-import {useMemo} from 'react';
 import clsx from 'clsx';
 
 const baseWidth = 32;
@@ -28,8 +27,8 @@ export function Spinner({
   color = 'currentColor',
   width = baseWidth,
 }: SpinnerProps) {
-  const formattedWidth = useMemo(() => formatWidth(width), [width]);
-  const borderWidth = useMemo(() => getBorderWidth(width), [width]);
+  const formattedWidth = formatWidth(width);
+  const borderWidth = getBorderWidth(width);
 
   return (
     <div

@@ -1,4 +1,4 @@
-import {useMemo, useState} from 'react';
+import {useState} from 'react';
 import {useLocation} from 'react-router';
 import {flattenConnection} from '@shopify/hydrogen';
 import type {CustomerAddress} from '@shopify/hydrogen/customer-account-api-types';
@@ -18,12 +18,9 @@ export function Addresses() {
   const customer = useCustomer();
   const defaultAddress = customer?.defaultAddress as CustomerAddress | null;
 
-  const addresses: CustomerAddress[] = useMemo(() => {
-    if (customer?.addresses) {
-      return flattenConnection(customer.addresses);
-    }
-    return [];
-  }, [customer]);
+  const addresses: CustomerAddress[] = customer?.addresses
+    ? flattenConnection(customer.addresses)
+    : [];
 
   const defaultAddressId = defaultAddress?.id?.split('?')[0];
   const addressesWithDefaultFirst = addresses?.reduce(

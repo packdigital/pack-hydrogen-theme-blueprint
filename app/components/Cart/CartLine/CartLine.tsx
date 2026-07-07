@@ -1,4 +1,4 @@
-import {memo, useMemo} from 'react';
+import {memo} from 'react';
 
 import {Image} from '~/components/Image';
 import {Link} from '~/components/Link';
@@ -22,13 +22,11 @@ export const CartLine = memo(({closeCart, line}: CartLineProps) => {
 
   const image = useCartLineImage({line});
 
-  const url = useMemo(() => {
-    const searchParams = new URLSearchParams();
-    merchandise.selectedOptions.forEach(({name, value}) => {
-      searchParams.set(name, value);
-    });
-    return `/products/${merchandise.product.handle}?${searchParams}`;
-  }, [merchandise.id]);
+  const searchParams = new URLSearchParams();
+  merchandise.selectedOptions.forEach(({name, value}) => {
+    searchParams.set(name, value);
+  });
+  const url = `/products/${merchandise.product.handle}?${searchParams}`;
 
   return (
     <div className="relative grid grid-cols-[auto_1fr] items-center gap-3 p-4 ">

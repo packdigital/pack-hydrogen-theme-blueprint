@@ -1,4 +1,3 @@
-import {useMemo} from 'react';
 import type {CSSProperties} from 'react';
 
 import type {Crop, MediaCms} from '~/lib/types';
@@ -54,14 +53,12 @@ export function ResponsivePicture({
   const mobileUrl = imageMobile.url;
   const desktopUrl = imageDesktop.url;
 
-  const desktopSrcSet = useMemo(
-    () => (desktopUrl ? generateShopifySrcSet(desktopUrl, cropDesktop) : ''),
-    [desktopUrl, cropDesktop],
-  );
-  const mobileSrcSet = useMemo(
-    () => (mobileUrl ? generateShopifySrcSet(mobileUrl, cropMobile) : ''),
-    [mobileUrl, cropMobile],
-  );
+  const desktopSrcSet = desktopUrl
+    ? generateShopifySrcSet(desktopUrl, cropDesktop)
+    : '';
+  const mobileSrcSet = mobileUrl
+    ? generateShopifySrcSet(mobileUrl, cropMobile)
+    : '';
 
   if (!mobileUrl || !desktopUrl) return null;
 

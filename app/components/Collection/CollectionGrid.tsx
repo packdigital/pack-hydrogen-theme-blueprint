@@ -30,15 +30,13 @@ export const CollectionGrid = memo(
       return products;
     }, [JSON.stringify(products.pageInfo)]);
 
-    const promoTilesByPosition = useMemo(() => {
-      return promoTiles?.reduce(
-        (acc, tile) => {
-          acc[tile.position] = tile;
-          return acc;
-        },
-        {} as Record<number, (typeof promoTiles)[0]>,
-      );
-    }, [promoTiles]);
+    const promoTilesByPosition = promoTiles?.reduce(
+      (acc, tile) => {
+        acc[tile.position] = tile;
+        return acc;
+      },
+      {} as Record<number, (typeof promoTiles)[0]>,
+    );
 
     return (
       <Pagination connection={connection}>

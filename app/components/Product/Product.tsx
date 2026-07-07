@@ -41,11 +41,9 @@ export const Product = memo(
         : providerSelectedVariant;
     }, [initialSelectedVariant, providerSelectedVariant, product]);
 
-    const selectedVariantColor = useMemo(() => {
-      return selectedVariant?.selectedOptions?.find(
-        ({name}) => name === COLOR_OPTION_NAME,
-      )?.value;
-    }, [selectedVariant]);
+    const selectedVariantColor = selectedVariant?.selectedOptions?.find(
+      ({name}) => name === COLOR_OPTION_NAME,
+    )?.value;
 
     // set variant url param on selected variant change unless has one variant
     useEffect(() => {

@@ -30,12 +30,10 @@ export function AddressForm({
   const [country, setCountry] = useState(initialAddress?.territoryCode || '');
   const [isDefault, setIsDefault] = useState(false);
 
-  const countries = useMemo(() => {
-    return countryNamesData.map((countryData) => ({
-      label: countryData.countryName,
-      value: countryData.countryShortCode,
-    }));
-  }, [countryNames]);
+  const countries = countryNamesData.map((countryData) => ({
+    label: countryData.countryName,
+    value: countryData.countryShortCode,
+  }));
 
   const countriesByShortCode = useMemo(() => {
     return countryNamesData.reduce((acc, countryData) => {
@@ -52,12 +50,13 @@ export function AddressForm({
     })) as {label: string; value: string}[];
   }, [country, countriesByShortCode]);
 
-  const provincesByShortCode = useMemo(() => {
-    return provinces?.reduce((acc: Record<string, string>, provinceData) => {
+  const provincesByShortCode = provinces?.reduce(
+    (acc: Record<string, string>, provinceData) => {
       acc[provinceData.value] = provinceData.label;
       return acc;
-    }, {});
-  }, [provinces]);
+    },
+    {},
+  );
 
   useEffect(() => {
     if (!formRef.current) return;

@@ -1,4 +1,3 @@
-import {useMemo} from 'react';
 import {Money} from '@shopify/hydrogen-react';
 import clsx from 'clsx';
 
@@ -6,54 +5,50 @@ import type {OrderTotalsProps} from './Order.types';
 
 export function OrderTotals({order}: OrderTotalsProps) {
   const currencyCode = order.totalPrice?.currencyCode;
-  const totals = useMemo(() => {
-    let subtotalAmount = order.subtotal?.amount;
-    let discountAmount;
+  let subtotalAmount = order.subtotal?.amount;
+  let discountAmount;
 
-    if (
-      order.discountApplications?.edges?.[0]?.node?.targetType === 'LINE_ITEM'
-    ) {
-      let subtotal = 0;
-      let discountTotal = 0;
-      order.lineItems.edges?.forEach(({node: item}) => {
-        subtotal += Number(item.price?.amount || '0');
-        discountTotal += Number(
-          item.discountAllocations?.[0]?.allocatedAmount?.amount || '0',
-        );
-      });
-      subtotalAmount = subtotal.toFixed(2);
-      discountAmount = discountTotal;
-    }
+  if (order.discountApplications?.edges?.[0]?.node?.targetType === 'LINE_ITEM') {
+    let subtotal = 0;
+    let discountTotal = 0;
+    order.lineItems.edges?.forEach(({node: item}) => {
+      subtotal += Number(item.price?.amount || '0');
+      discountTotal += Number(
+        item.discountAllocations?.[0]?.allocatedAmount?.amount || '0',
+      );
+    });
+    subtotalAmount = subtotal.toFixed(2);
+    discountAmount = discountTotal;
+  }
 
-    return [
-      {
-        label: 'Subtotal',
-        amount: subtotalAmount,
-      },
-      ...(discountAmount
-        ? [
-            {
-              label: 'Discount',
-              amount: `-${discountAmount}`,
-            },
-          ]
-        : []),
-      {
-        label: 'Shipping',
-        amount: order.totalShipping?.amount,
-      },
-      {label: 'Tax', amount: order.totalTax?.amount || '0'},
-      {label: 'Total', amount: order.totalPrice?.amount || '0'},
-      ...(Number(order.totalRefunded?.amount) > 0
-        ? [
-            {
-              label: 'Refunded',
-              amount: `-${order.totalRefunded.amount}`,
-            },
-          ]
-        : []),
-    ];
-  }, [order]);
+  const totals = [
+    {
+      label: 'Subtotal',
+      amount: subtotalAmount,
+    },
+    ...(discountAmount
+      ? [
+          {
+            label: 'Discount',
+            amount: `-${discountAmount}`,
+          },
+        ]
+      : []),
+    {
+      label: 'Shipping',
+      amount: order.totalShipping?.amount,
+    },
+    {label: 'Tax', amount: order.totalTax?.amount || '0'},
+    {label: 'Total', amount: order.totalPrice?.amount || '0'},
+    ...(Number(order.totalRefunded?.amount) > 0
+      ? [
+          {
+            label: 'Refunded',
+            amount: `-${order.totalRefunded.amount}`,
+          },
+        ]
+      : []),
+  ];
 
   return (
     <div>

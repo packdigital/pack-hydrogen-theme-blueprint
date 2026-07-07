@@ -20,13 +20,12 @@ export function useCartLinePrices({line}: {line: CartLine}) {
   }, [discountAllocations]);
 
   /* use over cost.amountPerQuantity.amount to account for discounts */
-  const totalAmountPerQuantity = useMemo(() => {
-    if (!cost?.subtotalAmount?.amount) return '';
-    return (
-      (Number(cost.subtotalAmount.amount) - discountAmount) /
-      quantity
-    ).toFixed(2);
-  }, [cost?.subtotalAmount, discountAmount, quantity]);
+  const totalAmountPerQuantity = !cost?.subtotalAmount?.amount
+    ? ''
+    : (
+        (Number(cost.subtotalAmount.amount) - discountAmount) /
+        quantity
+      ).toFixed(2);
 
   const formattedPrice = useMoney({
     amount: totalAmountPerQuantity,
