@@ -31,6 +31,7 @@ import {
 } from './ShoppableSocialVideo';
 import {SocialMediaGrid} from './SocialMediaGrid';
 import {TabbedTilesSlider} from './TabbedTilesSlider';
+import {Tabs} from './Tabs';
 import {TestimonialSlider} from './TestimonialSlider';
 import {TextBlock} from './TextBlock';
 import {TilesSlider} from './TilesSlider';
@@ -48,6 +49,7 @@ export function registerSections() {
   registerSection(Accordions as Section, {name: 'accordions'});
   registerSection(IconRow as Section, {name: 'icon-row'});
   registerSection(Marquee as Section, {name: 'marquee'});
+  registerSection(Tabs as Section, {name: 'tabs'});
 
   /* Hero ---------- */
   registerSection(Hero as Section, {name: 'hero'});
