@@ -16,7 +16,22 @@ export const RichText = forwardRef(
     // Docs: https://www.npmjs.com/package/sanitize-html
     const sanitizedHtml = useMemo(() => {
       return typeof children === 'string'
-        ? sanitizeHtml(children, {allowedAttributes: false})
+        ? sanitizeHtml(children, {
+            allowedTags: sanitizeHtml.defaults.allowedTags.concat([
+              'img',
+              'span',
+            ]),
+            allowedAttributes: {
+              ...sanitizeHtml.defaults.allowedAttributes,
+              '*': ['style'],
+            },
+            allowedStyles: {
+              '*': {
+                color: [/.*/],
+                'background-color': [/.*/],
+              },
+            },
+          })
         : '';
     }, [children]);
 
