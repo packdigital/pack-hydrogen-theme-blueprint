@@ -108,7 +108,7 @@ export async function loader({params, context, request}: Route.LoaderArgs) {
 
   const product = await getProductWithInitialGrouping({
     context,
-    product: storefrontProduct,
+    product: queriedProduct,
     productGroupings,
   });
 
