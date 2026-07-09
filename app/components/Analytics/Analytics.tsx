@@ -17,6 +17,7 @@ import {GA4Events} from './GA4Events';
 import {KlaviyoEvents} from './KlaviyoEvents';
 import {MetaPixelEvents} from './MetaPixelEvents';
 import {TikTokPixelEvents} from './TikTokPixelEvents';
+import {IntentnowEvents} from './IntentnowEvents';
 
 const DEBUG =
   typeof document !== 'undefined' &&
@@ -37,6 +38,7 @@ export const Analytics = memo(() => {
   const enabledKlaviyo = !!ENV.PUBLIC_KLAVIYO_API_KEY;
   const enabledMetaPixel = !!ENV.PUBLIC_META_PIXEL_ID;
   const enabledTikTokPixel = !!ENV.PUBLIC_TIKTOK_PIXEL_ID;
+  const enabledIntentnow = !!ENV.PUBLIC_INTENTNOW_STORE_API_KEY;
 
   return (
     <>
@@ -105,6 +107,18 @@ export const Analytics = memo(() => {
           subscribe={subscribe}
           customer={customer}
           debug={DEBUG}
+        />
+      )}
+
+      {enabledIntentnow && (
+        <IntentnowEvents
+          register={register}
+          subscribe={subscribe}
+          customer={customer}
+          debug={DEBUG}
+          storeApiKey={ENV.PUBLIC_INTENTNOW_STORE_API_KEY}
+          myshopifyDomain={ENV.PUBLIC_STORE_DOMAIN}
+          runWidget={true}
         />
       )}
 
