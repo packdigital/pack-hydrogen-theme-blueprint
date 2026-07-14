@@ -15,7 +15,7 @@ export const ProductMediaThumbnail = memo(
     index,
     isActive,
     mediaContentType = 'IMAGE',
-    swiper,
+    onThumbClick,
   }: ProductMediaThumbnailProps) => {
     return (
       <button
@@ -24,7 +24,7 @@ export const ProductMediaThumbnail = memo(
           'relative flex aspect-square w-full select-none items-center justify-center overflow-hidden rounded border transition',
           isActive ? 'border-black' : 'border-transparent',
         )}
-        onClick={() => swiper?.slideTo(index)}
+        onClick={() => onThumbClick(index)}
         type="button"
       >
         <Image

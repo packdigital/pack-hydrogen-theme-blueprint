@@ -125,22 +125,19 @@ export function Schema() {
           {
             label: 'Slides Per View (desktop)',
             name: 'slidesPerViewDesktop',
-            description: 'Save and refresh page to observe change',
             component: 'number',
           },
           {
             label: 'Slides Per View (tablet)',
             name: 'slidesPerViewTablet',
             component: 'number',
-            description:
-              'Save and refresh page to observe change\nTip: use decimals to show partial slides',
+            description: 'Tip: use decimals to show partial slides',
           },
           {
             label: 'Slides Per View (mobile)',
             name: 'slidesPerViewMobile',
             component: 'number',
-            description:
-              'Save and refresh page to observe change\nTip: use decimals to show partial slides',
+            description: 'Tip: use decimals to show partial slides',
           },
         ],
         defaultValue: {

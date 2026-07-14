@@ -62,10 +62,6 @@ export const links: LinksFunction = () => {
   return [
     {rel: 'stylesheet', href: styles},
     {
-      rel: 'stylesheet',
-      href: 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css',
-    },
-    {
       rel: 'preconnect',
       href: 'https://cdn.shopify.com',
     },

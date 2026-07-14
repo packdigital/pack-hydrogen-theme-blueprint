@@ -1,9 +1,7 @@
-import {useState, forwardRef} from 'react';
-import {Swiper, SwiperSlide} from 'swiper/react';
+import {forwardRef} from 'react';
 import clsx from 'clsx';
-import type {SwiperClass} from 'swiper/react';
 
-import {SwiperSkeleton} from '~/components/SwiperSkeleton';
+import {Carousel} from '~/components/Carousel';
 import type {MediaCms} from '~/lib/types';
 
 import {TilesSliderTile} from './TilesSliderTile';
@@ -39,81 +37,32 @@ export const TilesSlider = forwardRef(
     }: TilesSliderProps,
     ref: React.Ref<HTMLDivElement> | undefined,
   ) => {
-    const [swiper, setSwiper] = useState<SwiperClass | null>(null);
-
-    const breakpoints = {
-      mobile: {
-        slidesPerView: tilesPerViewMobile,
-        slidesOffsetBefore: 16,
-        slidesOffsetAfter: 16,
-        spaceBetween: 16,
-      },
-      tablet: {
-        slidesPerView: tilesPerViewTablet,
-        slidesOffsetBefore: 32,
-        slidesOffsetAfter: 32,
-        spaceBetween: 20,
-      },
-      desktop: {
-        slidesPerView: tilesPerViewDesktop,
-        slidesOffsetBefore: 0,
-        slidesOffsetAfter: 0,
-        spaceBetween: 20,
-      },
-    };
-
     const isGridOnDesktop = tiles?.length === tilesPerViewDesktop;
 
     return tiles?.length > 0 ? (
       <div className={clsx('mx-auto', maxWidthClass)} ref={ref}>
         {/* mobile/tablet/desktop */}
-        <div
-          className={clsx(
-            'relative',
-            Number.isInteger(tilesPerViewDesktop)
-              ? '[&_.swiper]:max-lg:overflow-visible'
-              : '[&_.swiper]:overflow-visible',
-            isGridOnDesktop && 'lg:hidden',
-          )}
-        >
-          <Swiper
-            grabCursor
-            onSwiper={setSwiper}
-            slidesOffsetAfter={breakpoints.mobile.slidesOffsetAfter}
-            slidesOffsetBefore={breakpoints.mobile.slidesOffsetBefore}
-            slidesPerView={breakpoints.mobile.slidesPerView}
-            spaceBetween={breakpoints.mobile.spaceBetween}
-            breakpoints={{
-              768: breakpoints.tablet,
-              1024: breakpoints.desktop,
+        <div className={clsx('relative', isGridOnDesktop && 'lg:hidden')}>
+          <Carousel
+            ariaLabel="Tiles"
+            gap={{base: 16, md: 20}}
+            slides={tiles.map((item, index) => (
+              <TilesSliderTile
+                aspectRatio={aspectRatio}
+                item={item}
+                key={index}
+                textAlign={textAlign}
+                textColor={textColor}
+                tileHeadingSize={tileHeadingSize}
+              />
+            ))}
+            slidesPerView={{
+              base: tilesPerViewMobile,
+              md: tilesPerViewTablet,
+              lg: tilesPerViewDesktop,
             }}
-          >
-            {tiles.map((item, index) => {
-              return (
-                <SwiperSlide
-                  className={clsx('w-full', !swiper && '!hidden')}
-                  key={index}
-                >
-                  <TilesSliderTile
-                    aspectRatio={aspectRatio}
-                    item={item}
-                    textAlign={textAlign}
-                    textColor={textColor}
-                    tileHeadingSize={tileHeadingSize}
-                  />
-                </SwiperSlide>
-              );
-            })}
-          </Swiper>
-
-          {!swiper && (
-            <SwiperSkeleton breakpoints={breakpoints}>
-              <div className="animate-pulse">
-                <div className={clsx('bg-neutralLightest', aspectRatio)} />
-                <div className="mt-4 h-[29px] w-[150px] bg-neutralLightest md:h-8" />
-              </div>
-            </SwiperSkeleton>
-          )}
+            viewportClassName="max-md:px-4 md:max-lg:px-8"
+          />
         </div>
 
         {/* desktop */}

@@ -302,7 +302,6 @@ export default {
           label: 'Effect Between Transitions',
           name: 'effect',
           component: 'select',
-          description: 'Refresh page to observe change',
           options: [
             {label: 'Fade', value: 'fade'},
             {label: 'Horizontal Slide', value: 'slide-horizontal'},
