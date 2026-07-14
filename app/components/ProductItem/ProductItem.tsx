@@ -117,6 +117,7 @@ export const ProductItem = memo(
           >
             <ProductItemMedia
               hasGrouping={!!grouping}
+              priority={priority}
               selectedProduct={selectedProduct}
               selectedVariant={selectedVariant}
             />
