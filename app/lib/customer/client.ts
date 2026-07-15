@@ -1,5 +1,9 @@
 import type {AppLoadContext} from 'react-router';
-import type {Customer} from '@shopify/hydrogen/customer-account-api-types';
+import type {
+  Customer,
+  UserErrorsCustomerAddressUserErrors,
+  UserErrorsCustomerUserErrors,
+} from '@shopify/hydrogen/customer-account-api-types';
 
 import {
   DELETE_ADDRESS_MUTATION,
@@ -51,8 +55,9 @@ export const addressCreateClient = async (
 
     const apiErrors = createErrors?.map((error) => error?.message) || [];
     const formErrors =
-      data?.customerAddressCreate?.userErrors?.map((error) => error?.message) ||
-      [];
+      data?.customerAddressCreate?.userErrors?.map(
+        (error: UserErrorsCustomerAddressUserErrors) => error?.message,
+      ) || [];
     const customerAddress = data?.customerAddressCreate?.customerAddress;
     if (!customerAddress?.id) {
       if (!apiErrors.length)
@@ -108,8 +113,9 @@ export const addressUpdateClient = async (
 
     const apiErrors = updateErrors?.map((error) => error?.message) || [];
     const formErrors =
-      data?.customerAddressUpdate?.userErrors?.map((error) => error?.message) ||
-      [];
+      data?.customerAddressUpdate?.userErrors?.map(
+        (error: UserErrorsCustomerAddressUserErrors) => error?.message,
+      ) || [];
     const customerAddress = data?.customerAddressUpdate?.customerAddress;
     if (!customerAddress?.id) {
       if (!apiErrors.length)
@@ -148,8 +154,9 @@ export const addressDeleteClient = async (
 
     const apiErrors = deleteErrors?.map((error) => error?.message) || [];
     const formErrors =
-      data?.customerAddressCreate?.userErrors?.map((error) => error?.message) ||
-      [];
+      data?.customerAddressCreate?.userErrors?.map(
+        (error: UserErrorsCustomerAddressUserErrors) => error?.message,
+      ) || [];
     const deletedCustomerAddressId =
       data?.customerAddressDelete?.deletedAddressId;
     if (!deletedCustomerAddressId) {
@@ -189,7 +196,9 @@ export const customerUpdateClient = async (
 
     const apiErrors = updateErrors?.map((error) => error?.message) || [];
     const formErrors =
-      data?.customerUpdate?.userErrors?.map((error) => error?.message) || [];
+      data?.customerUpdate?.userErrors?.map(
+        (error: UserErrorsCustomerUserErrors) => error?.message,
+      ) || [];
 
     return {
       apiErrors,

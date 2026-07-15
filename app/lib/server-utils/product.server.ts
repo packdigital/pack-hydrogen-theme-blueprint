@@ -379,7 +379,11 @@ export const getProductsMapForPage = async ({
         return section.data?.sectionVisibility === 'visible';
       })
         ?.flatMap((section) => {
-          return section.data?.products?.map(({product}) => product?.id) || [];
+          return (
+            section.data?.products?.map(
+              ({product}: {product?: {id?: string} | null}) => product?.id,
+            ) || []
+          );
         })
         ?.filter(Boolean) || [];
     const productSectionsProductIds =

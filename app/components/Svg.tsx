@@ -36,7 +36,11 @@ export const Svg = forwardRef(
 
 Svg.displayName = 'Svg';
 Svg.propTypes = {
-  src(props, propName, componentName) {
+  src(
+    props: Record<string, string>,
+    propName: string,
+    componentName: string,
+  ) {
     if (!props[propName]) {
       return new Error(
         `The prop \`${propName}\` is marked as required in \`${componentName}\`, but its value is \`${props[propName]}\`.`,
