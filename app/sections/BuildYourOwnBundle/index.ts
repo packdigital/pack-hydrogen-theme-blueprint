@@ -1,1 +1,0 @@
-export {BuildYourOwnBundle} from './BuildYourOwnBundle';
