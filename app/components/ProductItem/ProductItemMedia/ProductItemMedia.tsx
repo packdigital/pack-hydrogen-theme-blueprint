@@ -73,6 +73,7 @@ export const ProductItemMedia = memo(
                 }}
                 className="media-fill"
                 loading={priority ? 'eager' : 'lazy'}
+                fetchPriority={priority ? 'high' : 'auto'}
                 sizes="(min-width: 768px) 30vw, 45vw"
               />
             )}

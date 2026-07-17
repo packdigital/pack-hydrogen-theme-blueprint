@@ -40,7 +40,6 @@
     "hex-to-rgba": "^2.0.1",
     "isbot": "^5.1.32",
     "lodash": "^4.17.21",
-    "markdown-to-jsx": "^9.1.2",
     "react": "19.2.7",
     "react-dom": "19.2.7",
     "react-error-boundary": "^6.0.0",

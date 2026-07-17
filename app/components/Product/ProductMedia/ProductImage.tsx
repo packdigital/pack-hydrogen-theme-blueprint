@@ -23,6 +23,7 @@ export function ProductImage({
       onLoad={onLoad}
       className="media-fill"
       loading={priority ? 'eager' : 'lazy'}
+      fetchPriority={priority ? 'high' : 'auto'}
       sizes="(min-width: 1440px) 900px, (min-width: 768px) 50vw, 100vw"
     />
   );
