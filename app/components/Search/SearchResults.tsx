@@ -26,7 +26,7 @@ export function SearchResults({
             {productResults.slice(0, 10).map((item, index) => {
               return (
                 <li
-                  key={index}
+                  key={item.id}
                   className="border-b border-b-border p-4 last:border-none"
                 >
                   <SearchItem
@@ -47,9 +47,9 @@ export function SearchResults({
           <h3 className="text-h5 mb-3">Collections</h3>
 
           <ul className="flex flex-col items-start gap-3">
-            {collectionResults.map(({handle, title}, index) => {
+            {collectionResults.map(({handle, title}) => {
               return (
-                <li key={index}>
+                <li key={handle}>
                   <Link aria-label={title} href={`/collections/${handle}`}>
                     <p className="text-underline">{title}</p>
                   </Link>

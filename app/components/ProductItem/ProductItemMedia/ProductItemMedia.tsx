@@ -64,7 +64,9 @@ export const ProductItemMedia = memo(
             )}
           >
             {primaryMedia.mediaContentType === 'VIDEO' ? (
-              <ProductItemVideo autoPlay media={primaryMedia as Video} />
+              inView && (
+                <ProductItemVideo autoPlay media={primaryMedia as Video} />
+              )
             ) : (
               <Image
                 data={{

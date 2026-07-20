@@ -52,7 +52,7 @@ export const getSelectedProductOptions = async ({
             country: storefront.i18n.country,
             language: storefront.i18n.language,
           },
-          cache: storefront.CacheShort(),
+          cache: storefront.CacheLong(),
         },
       );
       if (productWithOptions) {
