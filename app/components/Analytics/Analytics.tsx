@@ -1,4 +1,4 @@
-import {memo} from 'react';
+import {lazy, memo, Suspense} from 'react';
 import {Analytics as HydrogenAnalytics, useAnalytics} from '@shopify/hydrogen';
 
 import {
@@ -10,13 +10,32 @@ import {
 } from '~/hooks';
 
 import {AnalyticsEvent} from './constants';
-import {BlotoutEvents} from './BlotoutEvents';
-import {ElevarEvents} from './ElevarEvents';
-import {FueledEvents} from './FueledEvents';
-import {GA4Events} from './GA4Events';
-import {KlaviyoEvents} from './KlaviyoEvents';
-import {MetaPixelEvents} from './MetaPixelEvents';
-import {TikTokPixelEvents} from './TikTokPixelEvents';
+
+// Each pixel integration is its own chunk, loaded only when its ENV flag is
+// enabled (see gates below). A store typically enables 1-2 of these, so the
+// rest never ship to the client. The components render null / side-effects
+// only, so a null Suspense fallback is invisible.
+const BlotoutEvents = lazy(() =>
+  import('./BlotoutEvents').then((m) => ({default: m.BlotoutEvents})),
+);
+const ElevarEvents = lazy(() =>
+  import('./ElevarEvents').then((m) => ({default: m.ElevarEvents})),
+);
+const FueledEvents = lazy(() =>
+  import('./FueledEvents').then((m) => ({default: m.FueledEvents})),
+);
+const GA4Events = lazy(() =>
+  import('./GA4Events').then((m) => ({default: m.GA4Events})),
+);
+const KlaviyoEvents = lazy(() =>
+  import('./KlaviyoEvents').then((m) => ({default: m.KlaviyoEvents})),
+);
+const MetaPixelEvents = lazy(() =>
+  import('./MetaPixelEvents').then((m) => ({default: m.MetaPixelEvents})),
+);
+const TikTokPixelEvents = lazy(() =>
+  import('./TikTokPixelEvents').then((m) => ({default: m.TikTokPixelEvents})),
+);
 
 const DEBUG =
   typeof document !== 'undefined' &&
@@ -39,7 +58,7 @@ export const Analytics = memo(() => {
   const enabledTikTokPixel = !!ENV.PUBLIC_TIKTOK_PIXEL_ID;
 
   return (
-    <>
+    <Suspense fallback={null}>
       {enabledFueled && (
         <FueledEvents
           register={register}
@@ -114,6 +133,6 @@ export const Analytics = memo(() => {
           customData={{customer, cart}}
         />
       )}
-    </>
+    </Suspense>
   );
 });

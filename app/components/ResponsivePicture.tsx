@@ -78,8 +78,7 @@ export function ResponsivePicture({
         decoding="async"
         className={className}
         style={style}
-        // Spread in fetchPriority as fetchpriority to avoid React warning
-        {...(fetchPriority ? {fetchpriority: fetchPriority} : {})}
+        fetchPriority={fetchPriority}
       />
     </picture>
   );

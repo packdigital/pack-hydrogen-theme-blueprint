@@ -1,13 +1,10 @@
 import {useEffect, useMemo, useReducer} from 'react';
-import {load} from '@fingerprintjs/botd';
 import type {ReactNode} from 'react';
 
 import {useCart} from '~/hooks';
 import type {Action, Dispatch, GlobalState} from '~/lib/types';
 
 import {Context} from './useGlobalContext';
-
-const botdPromise = load();
 
 const globalState = {
   isCartReady: false,
@@ -72,10 +69,20 @@ export function GlobalProvider({children}: {children: ReactNode}) {
   }, [cartIsIdle]);
 
   useEffect(() => {
-    botdPromise
+    // Bot detection isn't above-the-fold; load @fingerprintjs/botd lazily so
+    // it stays off the critical path / out of the entry chunk.
+    let active = true;
+    import('@fingerprintjs/botd')
+      .then(({load}) => load())
       .then((botd) => botd.detect())
-      .then((result) => value.actions.setIsBot(result.bot));
-  }, [botdPromise]);
+      .then((result) => {
+        if (active) value.actions.setIsBot(result.bot);
+      });
+    return () => {
+      active = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return <Context.Provider value={value}>{children}</Context.Provider>;
 }
