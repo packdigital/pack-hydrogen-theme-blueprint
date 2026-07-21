@@ -2,6 +2,7 @@ import type {AppLoadContext} from 'react-router';
 import type {
   Customer,
   UserErrorsCustomerAddressUserErrors,
+  UserErrorsCustomerEmailMarketingUserErrors,
   UserErrorsCustomerUserErrors,
 } from '@shopify/hydrogen/customer-account-api-types';
 
@@ -10,6 +11,8 @@ import {
   CREATE_ADDRESS_MUTATION,
   UPDATE_ADDRESS_MUTATION,
   CUSTOMER_UPDATE_MUTATION,
+  CUSTOMER_EMAIL_MARKETING_SUBSCRIBE_MUTATION,
+  CUSTOMER_EMAIL_MARKETING_UNSUBSCRIBE_MUTATION,
 } from '~/data/graphql/customer-account/customer';
 
 const formatError = (error = '') => {
@@ -172,6 +175,40 @@ export const addressDeleteClient = async (
       apiErrors,
       formErrors,
       response: {deletedCustomerAddressId},
+    };
+  } catch (error) {
+    return errorsResponse(error);
+  }
+};
+
+export const customerEmailMarketingUpdateClient = async (
+  context: AppLoadContext,
+  {subscribe}: {subscribe: boolean},
+) => {
+  try {
+    const {customerAccount} = context;
+
+    // Both mutations act on the authenticated customer and take no variables.
+    const {data, errors: mutationErrors} = await customerAccount.mutate(
+      subscribe
+        ? CUSTOMER_EMAIL_MARKETING_SUBSCRIBE_MUTATION
+        : CUSTOMER_EMAIL_MARKETING_UNSUBSCRIBE_MUTATION,
+    );
+
+    const result = subscribe
+      ? data?.customerEmailMarketingSubscribe
+      : data?.customerEmailMarketingUnsubscribe;
+
+    const apiErrors = mutationErrors?.map((error) => error?.message) || [];
+    const formErrors =
+      result?.userErrors?.map(
+        (error: UserErrorsCustomerEmailMarketingUserErrors) => error?.message,
+      ) || [];
+
+    return {
+      apiErrors,
+      formErrors,
+      response: null,
     };
   } catch (error) {
     return errorsResponse(error);

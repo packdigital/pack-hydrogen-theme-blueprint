@@ -3,6 +3,7 @@ import forgot from './forgot';
 import login from './login';
 import menu from './menu';
 import orders from './orders';
+import profile from './profile';
 import register from './register';
 import reset from './reset';
 import type {ActivateSettings} from './activate';
@@ -10,6 +11,7 @@ import type {ForgotSettings} from './forgot';
 import type {LoginSettings} from './login';
 import type {MenuSettings} from './menu';
 import type {OrdersSettings} from './orders';
+import type {ProfileSettings} from './profile';
 import type {RegisterSettings} from './register';
 import type {ResetSettings} from './reset';
 
@@ -18,10 +20,11 @@ export default {
   name: 'account',
   component: 'group',
   description:
-    'Menu, orders, login, register, forgot password, password reset, activate',
+    'Menu, orders, profile, login, register, forgot password, password reset, activate',
   fields: [
     menu,
     orders,
+    profile,
     login,
     register,
     forgot,
@@ -58,6 +61,7 @@ export interface AccountSettings {
   login: LoginSettings;
   menu: MenuSettings;
   orders: OrdersSettings;
+  profile: ProfileSettings;
   register: RegisterSettings;
   reset: ResetSettings;
   noIndex: boolean;
