@@ -97,7 +97,7 @@ export default defineConfig({
       'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
       'Access-Control-Allow-Headers': '*',
     },
-    allowedHosts: [],
+    allowedHosts: ['.trycloudflare.com', '.tryhydrogen.dev'],
   },
   build: {
     // Allow a strict Content-Security-Policy
