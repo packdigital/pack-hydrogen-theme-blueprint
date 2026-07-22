@@ -98,6 +98,18 @@ export function Carousel({
     setThumbSize(Math.min(100, (inView / total) * 100));
   }, []);
 
+  // Named so it can be detached in cleanup — an inline handler would leak on
+  // every effect re-run.
+  const onEmblaReInit = useCallback(
+    (api: EmblaCarouselType) => {
+      setSnapCount(api.scrollSnapList().length);
+      onEmblaSelect(api);
+      onEmblaScroll(api);
+      updateThumbSize(api);
+    },
+    [onEmblaSelect, onEmblaScroll, updateThumbSize],
+  );
+
   useEffect(() => {
     if (!emblaApi) return;
     onApi?.(emblaApi);
@@ -107,17 +119,20 @@ export function Carousel({
     updateThumbSize(emblaApi);
     emblaApi.on('select', onEmblaSelect);
     emblaApi.on('scroll', onEmblaScroll);
-    emblaApi.on('reInit', (api) => {
-      setSnapCount(api.scrollSnapList().length);
-      onEmblaSelect(api);
-      onEmblaScroll(api);
-      updateThumbSize(api);
-    });
+    emblaApi.on('reInit', onEmblaReInit);
     return () => {
       emblaApi.off('select', onEmblaSelect);
       emblaApi.off('scroll', onEmblaScroll);
+      emblaApi.off('reInit', onEmblaReInit);
     };
-  }, [emblaApi, onApi, onEmblaSelect, onEmblaScroll, updateThumbSize]);
+  }, [
+    emblaApi,
+    onApi,
+    onEmblaSelect,
+    onEmblaScroll,
+    onEmblaReInit,
+    updateThumbSize,
+  ]);
 
   // Drag / click the scrollbar track to scrub to the nearest snap.
   const scrubToPointer = useCallback(
