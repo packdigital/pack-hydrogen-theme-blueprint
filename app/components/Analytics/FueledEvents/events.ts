@@ -274,7 +274,7 @@ const viewSearchResultsEvent = ({
     if (debug) logSubscription({data, analyticsEvent});
 
     const {searchResults, searchTerm, customer, shop} = data;
-    if (!searchResults || !searchTerm)
+    if (!searchResults || !searchTerm || !searchResults.length)
       throw new Error(
         '`searchTerm` and/or `searchResults` parameters are missing.',
       );
@@ -290,7 +290,9 @@ const viewSearchResultsEvent = ({
           list: 'search results',
           search_term: searchTerm,
         },
-        products: searchResults.slice(0, 12).map(mapProductItemProduct()),
+        products: searchResults
+          .slice(0, 12)
+          .map(mapProductItemProduct('search results')),
       },
     };
     dispatchEvent({event, debug});
@@ -486,7 +488,9 @@ const clickProductItemEvent = ({
             action: 'click',
             ...(!!searchTerm && {search_term: searchTerm}),
           },
-          products: [variant].map(mapProductItemVariant(list)),
+          products: [variant].map(
+            mapProductItemVariant(searchTerm ? 'search results' : list),
+          ),
         },
       },
     };
