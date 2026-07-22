@@ -1,9 +1,8 @@
-import {memo} from 'react';
+import {memo, useCallback} from 'react';
 import {useMoney} from '@shopify/hydrogen-react';
 import clsx from 'clsx';
 import type {CartCodeDiscountAllocation} from '@shopify/hydrogen/storefront-api-types';
 
-import {Link} from '~/components/Link';
 import {prefixNonUsdDollar} from '~/hooks/product/useVariantPrices';
 import {useCart, useCustomer, useLocale} from '~/hooks';
 
@@ -18,6 +17,7 @@ export const CartTotals = memo(({settings}: CartTotalsProps) => {
     checkoutUrl = '',
     cost,
     discountAllocations = [],
+    flushPendingCartUpdates,
     totalQuantity = 0,
   } = useCart();
 
@@ -29,6 +29,14 @@ export const CartTotals = memo(({settings}: CartTotalsProps) => {
     }
     authenticatedCheckoutUrl = url.toString();
   }
+
+  // Flush any pending optimistic quantity changes to the server before leaving
+  // for checkout, so the buyer can't check out with a stale quantity.
+  const handleCheckout = useCallback(async () => {
+    if (!authenticatedCheckoutUrl) return;
+    await flushPendingCartUpdates?.();
+    window.location.href = authenticatedCheckoutUrl;
+  }, [authenticatedCheckoutUrl, flushPendingCartUpdates]);
 
   const seenDiscountCodes: string[] = [];
   const parsedDiscountAllocations = discountAllocations.reduce(
@@ -58,15 +66,12 @@ export const CartTotals = memo(({settings}: CartTotalsProps) => {
     [],
   );
 
-  const discountAmount = discountAllocations.reduce(
-    (acc: number, discount) => {
-      if (discount?.discountedAmount?.amount) {
-        return acc + Number(discount.discountedAmount.amount);
-      }
-      return acc;
-    },
-    0,
-  );
+  const discountAmount = discountAllocations.reduce((acc: number, discount) => {
+    if (discount?.discountedAmount?.amount) {
+      return acc + Number(discount.discountedAmount.amount);
+    }
+    return acc;
+  }, 0);
 
   const formattedSubtotal = useMoney({
     amount: cost?.subtotalAmount?.amount || '',
@@ -122,9 +127,14 @@ export const CartTotals = memo(({settings}: CartTotalsProps) => {
         {subtext && <p className="text-xs">{subtext}</p>}
       </div>
 
-      <Link className="btn-primary w-full" to={authenticatedCheckoutUrl}>
+      <button
+        aria-label={checkoutText}
+        className="btn-primary w-full"
+        onClick={() => void handleCheckout()}
+        type="button"
+      >
         {checkoutText}
-      </Link>
+      </button>
     </div>
   );
 });

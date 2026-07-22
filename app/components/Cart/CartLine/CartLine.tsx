@@ -19,8 +19,13 @@ export const CartLine = memo(({closeCart, line}: CartLineProps) => {
     (attr) => attr.key === 'Estimated Ship Date',
   )?.value;
 
-  const {handleDecrement, handleIncrement, handleRemove, isUpdatingLine} =
-    useCartLine({line});
+  const {
+    handleDecrement,
+    handleIncrement,
+    handleRemove,
+    isSyncingLine,
+    isUpdatingLine,
+  } = useCartLine({line});
 
   const {price, compareAtPrice} = useCartLinePrices({line});
 
@@ -93,6 +98,7 @@ export const CartLine = memo(({closeCart, line}: CartLineProps) => {
           <QuantitySelector
             handleDecrement={handleDecrement}
             handleIncrement={handleIncrement}
+            isSyncing={isSyncingLine}
             isUpdating={isUpdatingLine}
             productTitle={merchandise.product.title}
             quantity={quantity}

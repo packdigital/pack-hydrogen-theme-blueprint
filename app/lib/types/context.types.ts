@@ -66,24 +66,42 @@ export interface PromobarContext {
  */
 
 export type CartStatus =
-  | 'uninitialized'
-  | 'creating'
-  | 'fetching'
-  | 'updating'
-  | 'idle';
+  'uninitialized' | 'creating' | 'fetching' | 'updating' | 'idle';
 
 export type CartError = unknown;
+
+/**
+ * Transient, client-only overlay of optimistic cart line quantities keyed by
+ * cart line id. Each entry carries a monotonically increasing `seq` so a stale
+ * in-flight server response can't clobber a newer optimistic value during
+ * reconciliation. This is purely a visual layer — the server cart is always the
+ * source of truth and these entries are dropped on reconcile.
+ */
+export interface OptimisticLine {
+  quantity: number;
+  seq: number;
+}
+
+export type OptimisticLines = Record<string, OptimisticLine>;
 
 export interface CartState {
   cart: Cart | null;
   status: CartStatus;
   error: CartError;
+  optimisticLines: OptimisticLines;
 }
 
 export interface CartActions {
   setCart: (cart: Cart) => void;
   setStatus: (status: CartState['status']) => void;
   setError: (error: unknown) => void;
+  setOptimisticLine: (lineId: string, quantity: number, seq: number) => void;
+  /**
+   * Drop optimistic overlay entries that have been reconciled against the
+   * server cart. Only clears an entry when its current seq matches the seq that
+   * was flushed (`flushedSeqs`), preserving newer clicks made mid-flight.
+   */
+  reconcileOptimisticLines: (flushedSeqs: Record<string, number>) => void;
 }
 
 export interface CartContext {

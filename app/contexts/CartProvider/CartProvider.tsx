@@ -11,6 +11,7 @@ const cartState = {
   cart: null,
   status: 'uninitialized',
   error: null,
+  optimisticLines: {},
 };
 
 const reducer = (state: CartState, action: Action) => {
@@ -30,6 +31,31 @@ const reducer = (state: CartState, action: Action) => {
         ...state,
         error: action.payload,
       };
+    case 'SET_OPTIMISTIC_LINE': {
+      const {lineId, quantity, seq} = action.payload;
+      return {
+        ...state,
+        optimisticLines: {
+          ...state.optimisticLines,
+          [lineId]: {quantity, seq},
+        },
+      };
+    }
+    case 'RECONCILE_OPTIMISTIC_LINES': {
+      const flushedSeqs: Record<string, number> = action.payload;
+      const next = {...state.optimisticLines};
+      let changed = false;
+      Object.entries(flushedSeqs).forEach(([lineId, seq]) => {
+        // Only clear if the overlay hasn't advanced past the flushed seq —
+        // a newer click made mid-flight must survive reconciliation.
+        if (next[lineId] && next[lineId].seq === seq) {
+          delete next[lineId];
+          changed = true;
+        }
+      });
+      if (!changed) return state;
+      return {...state, optimisticLines: next};
+    }
     default:
       throw new Error(`Invalid Context action of type: ${action.type}`);
   }
@@ -40,6 +66,13 @@ const actions = (dispatch: Dispatch) => ({
   setStatus: (status: CartState['status']) =>
     dispatch({type: 'SET_STATUS', payload: status}),
   setError: (error: unknown) => dispatch({type: 'SET_ERROR', payload: error}),
+  setOptimisticLine: (lineId: string, quantity: number, seq: number) =>
+    dispatch({
+      type: 'SET_OPTIMISTIC_LINE',
+      payload: {lineId, quantity, seq},
+    }),
+  reconcileOptimisticLines: (flushedSeqs: Record<string, number>) =>
+    dispatch({type: 'RECONCILE_OPTIMISTIC_LINES', payload: flushedSeqs}),
 });
 
 export function CartProvider({children}: {children: ReactNode}) {
