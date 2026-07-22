@@ -17,6 +17,3 @@ tsconfig.tsbuildinfo
 
 # IntelliJ
 .idea
-
-# Claude Code personal settings (not shared)
-.claude/settings.local.json
