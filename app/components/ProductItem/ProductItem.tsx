@@ -136,13 +136,24 @@ export const ProductItem = memo(
             </div>
           )}
 
-          <Link aria-label={title} to={productUrl} onClick={handleClick}>
-            <h3 className="min-h-6 text-base">{title}</h3>
-          </Link>
+          {selectedProduct ? (
+            <>
+              <Link aria-label={title} to={productUrl} onClick={handleClick}>
+                <h3 className="min-h-6 text-base">{title}</h3>
+              </Link>
 
-          {color && <p className="text-sm text-neutralMedium">{color}</p>}
+              {color && <p className="text-sm text-neutralMedium">{color}</p>}
 
-          <ProductItemPrice selectedVariant={selectedVariant} />
+              <ProductItemPrice selectedVariant={selectedVariant} />
+            </>
+          ) : (
+            /* Loading skeleton bars for the title / variant / price rows */
+            <div className="flex w-full animate-pulse flex-col items-start gap-1.5">
+              <div className="h-5 w-full max-w-[240px] bg-neutralLightest" />
+              <div className="h-4 w-20 bg-neutralLightest" />
+              <div className="h-4 w-10 bg-neutralLightest" />
+            </div>
+          )}
 
           {enabledColorSelector && (
             <ColorVariantSelector

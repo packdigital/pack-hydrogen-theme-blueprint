@@ -28,7 +28,16 @@ export function ProductsSlider({
       : 'max-w-[var(--content-max-width)]';
 
   const slidesPerViewDesktop = slider?.slidesPerViewDesktop || 4;
-  const enableLoop = isLoop && products?.length >= slidesPerViewDesktop * 2;
+  const productsLoaded = products?.length > 0;
+  // Expected slide count from the CMS config — available at SSR, before the
+  // async products fetch resolves — so the carousel renders a skeleton
+  // immediately instead of the whole slider popping in once products load.
+  // Count only linked products (those with an id), matching what the section
+  // actually fetches, so unlinked entries don't leave a perpetual skeleton.
+  const expectedCount =
+    cms.products?.filter(({product}) => product?.id).length || 0;
+  const slideCount = productsLoaded ? products.length : expectedCount;
+  const enableLoop = isLoop && slideCount >= slidesPerViewDesktop * 2;
 
   return (
     <div
@@ -40,10 +49,10 @@ export function ProductsSlider({
       <div className="m-auto flex flex-col items-center">
         <h2 className="text-h2 px-4 text-center">{heading}</h2>
 
-        {products?.length > 0 && (
+        {slideCount > 0 && (
           <Carousel
             ariaLabel={heading || 'Products'}
-            arrows={products.length > slidesPerViewDesktop}
+            arrows={slideCount > slidesPerViewDesktop}
             className={clsx(
               'mt-10 w-full',
               maxWidthClass,
@@ -55,7 +64,15 @@ export function ProductsSlider({
               loop: enableLoop,
               align: isFullBleedAndCentered ? 'center' : 'start',
             }}
-            slides={products.map((product, index) => {
+            slides={(productsLoaded
+              ? products
+              : Array.from({length: expectedCount}, () => null)
+            ).map((product, index) => {
+              // Render ProductItem in every state (loading included): with a
+              // null product it shows its own skeleton (via ProductItemMedia),
+              // then the SAME instance fills in when the product loads.
+              // Swapping in a separate skeleton component would unmount/remount
+              // the slide.
               const hasFullProduct = !!product?.variants;
               return (
                 <ProductItem
