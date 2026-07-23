@@ -141,16 +141,22 @@ export const formatGroupingWithOptions = ({
 
     // by default break up subgroups based on color option
     let groupingOptionName: string = COLOR_OPTION_NAME;
-    // if there are no color options, use the first option from the first product
+    let syntheticColorFromSubgroups = false;
     if (!hasColorOption) {
-      const parentProductFirstOptionName =
-        parentGroupProducts[0]?.options?.[0]?.name;
-      const subGroupFirstProductFirstOptionName =
-        subGroupProductsByIndex?.['0']?.[0]?.options?.[0]?.name;
-      groupingOptionName =
-        parentProductFirstOptionName ||
-        subGroupFirstProductFirstOptionName ||
-        COLOR_OPTION_NAME;
+      if (hasSubgroupsWithProducts) {
+        // Synthesize color from subgroup titles — keep groupingOptionName as COLOR_OPTION_NAME
+        syntheticColorFromSubgroups = true;
+      } else {
+        // if there are no color options, use the first option from the first product
+        const parentProductFirstOptionName =
+          parentGroupProducts[0]?.options?.[0]?.name;
+        const subGroupFirstProductFirstOptionName =
+          subGroupProductsByIndex?.['0']?.[0]?.options?.[0]?.name;
+        groupingOptionName =
+          parentProductFirstOptionName ||
+          subGroupFirstProductFirstOptionName ||
+          COLOR_OPTION_NAME;
+      }
     }
 
     const combinedGroupOptionsInitialMap: Record<string, OptionWithGroups> = {};
@@ -222,6 +228,25 @@ export const formatGroupingWithOptions = ({
       },
       {},
     );
+
+    // If colors were synthesized from subgroup titles, inject Color option
+    if (syntheticColorFromSubgroups) {
+      const syntheticColorOptionValues = grouping.subgroups
+        .map((subgroup: {title: string}, index: number) => {
+          if (!validSubgroupProductHandlesByIndex[index]?.length) return null;
+          return {name: subgroup.title} as ProductOptionValue;
+        })
+        .filter(Boolean) as ProductOptionValue[];
+
+      if (syntheticColorOptionValues.length > 1) {
+        combinedGroupOptions.unshift({
+          name: COLOR_OPTION_NAME,
+          optionValues: syntheticColorOptionValues,
+        });
+        combinedGroupOptionsMap[COLOR_OPTION_NAME] =
+          syntheticColorOptionValues;
+      }
+    }
 
     const updatedSubgroups = hasSubgroupsWithProducts
       ? grouping.subgroups.map((subgroup: any, index: number) => {
