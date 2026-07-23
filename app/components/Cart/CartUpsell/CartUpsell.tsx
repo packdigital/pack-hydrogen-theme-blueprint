@@ -1,6 +1,4 @@
 import {Fragment, memo, useEffect, useMemo, useState} from 'react';
-import {Navigation} from 'swiper/modules';
-import {Swiper, SwiperSlide} from 'swiper/react';
 import {
   Disclosure,
   DisclosureButton,
@@ -9,6 +7,7 @@ import {
 } from '@headlessui/react';
 import type {CartLine} from '@shopify/hydrogen/storefront-api-types';
 
+import {Carousel} from '~/components/Carousel';
 import {Svg} from '~/components/Svg';
 import {useCart, useProductsByIds, useProductRecommendations} from '~/hooks';
 
@@ -112,50 +111,19 @@ export const CartUpsell = memo(({closeCart, settings}: CartUpsellProps) => {
             leaveTo="transform scale-97 opacity-0"
           >
             <DisclosurePanel as={Fragment}>
-              <Swiper
+              <Carousel
+                ariaLabel={message || 'Cart upsell products'}
+                arrows
                 className="mb-4 w-full px-2"
-                grabCursor
-                modules={[Navigation]}
-                navigation={{
-                  nextEl: '.swiper-button-next',
-                  prevEl: '.swiper-button-prev',
-                }}
-                slidesPerView={1}
-                spaceBetween={0}
-              >
-                {productsNotInCart.map((product, index) => {
-                  return (
-                    <SwiperSlide key={index}>
-                      <CartUpsellItem
-                        closeCart={closeCart}
-                        isOnlyUpsell={products?.length === 1}
-                        product={product}
-                      />
-                    </SwiperSlide>
-                  );
-                })}
-
-                {/* Navigation */}
-                <div>
-                  <div className="swiper-button-prev left-0 after:hidden">
-                    <Svg
-                      className="max-w-4 text-text"
-                      src="/svgs/chevron-left.svg#chevron-left"
-                      title="Arrow Left"
-                      viewBox="0 0 24 24"
-                    />
-                  </div>
-
-                  <div className="swiper-button-next right-0 after:hidden">
-                    <Svg
-                      className="max-w-4 text-text"
-                      src="/svgs/chevron-right.svg#chevron-right"
-                      title="Arrow Right"
-                      viewBox="0 0 24 24"
-                    />
-                  </div>
-                </div>
-              </Swiper>
+                slides={productsNotInCart.map((product, index) => (
+                  <CartUpsellItem
+                    closeCart={closeCart}
+                    isOnlyUpsell={products?.length === 1}
+                    key={index}
+                    product={product}
+                  />
+                ))}
+              />
             </DisclosurePanel>
           </Transition>
         </>

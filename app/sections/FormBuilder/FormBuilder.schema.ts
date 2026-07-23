@@ -2,7 +2,7 @@ import snakeCase from 'lodash/snakeCase';
 
 import {containerSettings} from '~/settings/container';
 
-const inputField = (type) => ({
+const inputField = (type: string) => ({
   label: type,
   key: snakeCase(type),
   defaultItem: {
@@ -70,7 +70,7 @@ const inputField = (type) => ({
   ],
 });
 
-const multiChoiceField = (type) => ({
+const multiChoiceField = (type: string) => ({
   label: type,
   key: snakeCase(type),
   defaultItem: {

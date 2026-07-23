@@ -1,4 +1,4 @@
-import {memo, useCallback, useEffect, useMemo, useState} from 'react';
+import {memo, useCallback, useEffect, useState} from 'react';
 import {useFetcher, useLocation} from 'react-router';
 import {useInView} from 'react-intersection-observer';
 import type {Localization} from '@shopify/hydrogen/storefront-api-types';
@@ -31,12 +31,11 @@ export const CountrySelector = memo(
 
     const {availableCountries} = {...countriesData?.localization};
 
-    const countryOptions = useMemo(() => {
-      if (!countries) return [];
-      return Object.values(countries).map(({pathPrefix, label}) => {
-        return {label, value: pathPrefix};
-      });
-    }, [countries]);
+    const countryOptions = !countries
+      ? []
+      : Object.values(countries).map(({pathPrefix, label}) => {
+          return {label, value: pathPrefix};
+        });
 
     const handleSelect = useCallback(
       ({value}: {value: string}) => {

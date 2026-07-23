@@ -54,6 +54,7 @@ export interface QuickShopOptionProps {
 
 export interface ProductItemMediaProps {
   hasGrouping: boolean;
+  priority?: boolean;
   selectedProduct: SelectedProduct;
   selectedVariant: SelectedVariant;
 }

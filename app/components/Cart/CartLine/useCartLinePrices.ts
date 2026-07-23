@@ -1,13 +1,18 @@
 import {useMemo} from 'react';
 import {useMoney} from '@shopify/hydrogen-react';
-import type {CartLine} from '@shopify/hydrogen/storefront-api-types';
 
 import {useLocale} from '~/hooks';
 import {prefixNonUsdDollar} from '~/hooks/product/useVariantPrices';
+import type {OptimisticCartLine} from '~/lib/types';
 
-export function useCartLinePrices({line}: {line: CartLine}) {
-  const {cost, discountAllocations, id, quantity = 1} = {...line};
+export function useCartLinePrices({line}: {line: OptimisticCartLine}) {
+  const {cost, discountAllocations, id} = {...line};
   const {currency} = useLocale();
+
+  // When a line's quantity is optimistic, `cost` is still the last server value
+  // (money is never optimistic), so divide by the server quantity that matches
+  // that cost to keep the displayed per-unit price stable until reconcile.
+  const quantity = line._serverQuantity ?? line.quantity ?? 1;
 
   const discountAmount = useMemo(() => {
     if (!discountAllocations) return 0;
@@ -20,13 +25,12 @@ export function useCartLinePrices({line}: {line: CartLine}) {
   }, [discountAllocations]);
 
   /* use over cost.amountPerQuantity.amount to account for discounts */
-  const totalAmountPerQuantity = useMemo(() => {
-    if (!cost?.subtotalAmount?.amount) return '';
-    return (
-      (Number(cost.subtotalAmount.amount) - discountAmount) /
-      quantity
-    ).toFixed(2);
-  }, [cost?.subtotalAmount, discountAmount, quantity]);
+  const totalAmountPerQuantity = !cost?.subtotalAmount?.amount
+    ? ''
+    : (
+        (Number(cost.subtotalAmount.amount) - discountAmount) /
+        quantity
+      ).toFixed(2);
 
   const formattedPrice = useMoney({
     amount: totalAmountPerQuantity,

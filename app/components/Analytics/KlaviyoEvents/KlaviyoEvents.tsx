@@ -1,4 +1,4 @@
-import {useEffect} from 'react';
+import {useEffect, useRef} from 'react';
 import type {Customer} from '@shopify/hydrogen/customer-account-api-types';
 
 import {useLoadScript} from '~/hooks';
@@ -41,6 +41,14 @@ export function KlaviyoEvents({
     !!klaviyoApiKey,
   );
 
+  // Keep the latest customer in a ref so the subscribe-once effect below reads
+  // current customer data without re-subscribing on every login/logout (which
+  // would stack duplicate handlers — Hydrogen's subscribe has no unsubscribe).
+  const customerRef = useRef(customer);
+  useEffect(() => {
+    customerRef.current = customer;
+  }, [customer]);
+
   useEffect(() => {
     if (!klaviyoApiKey) {
       console.error(
@@ -56,17 +64,17 @@ export function KlaviyoEvents({
     }
     /* register analytics events only until script is ready */
     subscribe(AnalyticsEvent.PRODUCT_VIEWED, (data: Data) => {
-      viewProductEvent({...data, customer, debug});
+      viewProductEvent({...data, customer: customerRef.current, debug});
     });
     subscribe(AnalyticsEvent.PRODUCT_ADD_TO_CART, (data: Data) => {
-      addToCartEvent({...data, customer, debug});
+      addToCartEvent({...data, customer: customerRef.current, debug});
     });
     subscribe(AnalyticsEvent.CUSTOMER_SUBSCRIBED, (data: Data) => {
       customerSubscribeEvent({...data, debug});
     });
     ready();
     if (debug) console.log(`${ANALYTICS_NAME}: 🔄 subscriptions are ready.`);
-  }, [customer?.id, debug, scriptStatus]);
+  }, [scriptStatus]);
 
   return null;
 }

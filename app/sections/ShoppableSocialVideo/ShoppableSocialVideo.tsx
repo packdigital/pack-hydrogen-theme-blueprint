@@ -1,10 +1,9 @@
-import {useMemo, useRef, useState} from 'react';
+import {useRef, useState} from 'react';
 import {useLoaderData} from 'react-router';
-import {Scrollbar} from 'swiper/modules';
-import {Swiper, SwiperSlide} from 'swiper/react';
 import hexToRgba from 'hex-to-rgba';
 import clsx from 'clsx';
 
+import {Carousel} from '~/components/Carousel';
 import {RichText} from '~/components/RichText';
 import {Svg} from '~/components/Svg';
 import {useRootLoaderData, useColorSwatches} from '~/hooks';
@@ -26,7 +25,6 @@ export function ShoppableSocialVideo({cms}: {cms: ShoppableSocialVideoCms}) {
   const swatchesMap = useColorSwatches();
 
   const [activeIndex, setActiveIndex] = useState(0);
-  const [swiper, setSwiper] = useState<any>(null);
 
   const {
     video,
@@ -37,23 +35,20 @@ export function ShoppableSocialVideo({cms}: {cms: ShoppableSocialVideoCms}) {
     background,
   } = cms;
 
-  const sliderProducts = useMemo(() => {
-    return (
-      products?.reduce((acc: Record<string, any>[], productItem) => {
-        const handle = productItem?.product?.handle;
-        if (!handle) return acc;
-        const fullProduct = productsMap?.[handle];
-        if (!fullProduct && !isPreviewModeEnabled) return acc;
-        return [
-          ...acc,
-          {
-            ...productItem,
-            product: fullProduct || {handle},
-          },
-        ];
-      }, []) || []
-    );
-  }, [isPreviewModeEnabled, products, productsMap]);
+  const sliderProducts =
+    products?.reduce((acc: Record<string, any>[], productItem) => {
+      const handle = productItem?.product?.handle;
+      if (!handle) return acc;
+      const fullProduct = productsMap?.[handle];
+      if (!fullProduct && !isPreviewModeEnabled) return acc;
+      return [
+        ...acc,
+        {
+          ...productItem,
+          product: fullProduct || {handle},
+        },
+      ];
+    }, []) || [];
 
   const {
     heading = textDefaults.heading,
@@ -69,11 +64,9 @@ export function ShoppableSocialVideo({cms}: {cms: ShoppableSocialVideoCms}) {
     thirdColor = bgDefaults.thirdColor,
   } = {...background};
   const {
+    slideTextColor = sliderDefaults.slideTextColor,
     enabledScrollbar = sliderDefaults.enabledScrollbar,
     scrollbarColor = sliderDefaults.scrollbarColor,
-    slideBgColor = sliderDefaults.slideBgColor,
-    slideBgOpacity = sliderDefaults.slideBgOpacity,
-    slideTextColor = sliderDefaults.slideTextColor,
   } = {...sliderSettings};
   const slideTextColorFaded = hexToRgba(slideTextColor, 0.6);
   const slideBorderColor = hexToRgba(slideTextColor, 0.2);
@@ -126,66 +119,37 @@ export function ShoppableSocialVideo({cms}: {cms: ShoppableSocialVideoCms}) {
                 !enabledScrollForMore && 'pb-5',
               )}
             >
-              <style>
-                {`.swiper-scrollbar-drag { background-color: ${scrollbarColor}; }`}
-              </style>
               {/* Products slider */}
-              <div
-                className={clsx(
-                  'relative text-clip px-6 [&_.swiper]:overflow-visible',
-                  sliderProducts.length > 1 &&
-                    enabledScrollbar &&
-                    '[&_.swiper]:pt-8',
-                )}
-              >
+              <div className="relative text-clip px-6">
                 <style>
                   {`.theme-product-option { border-color: ${slideBorderColor}; } .theme-product-option:first-of-type { border-top: 0; } .theme-product-option-label, .theme-product-option-label > button, .theme-product-card-text-color-faded, .theme-product-option-label .theme-selected-option-value { color: ${slideTextColorFaded}; } .theme-product-card-text-color { color: ${slideTextColor}; } .theme-product-card-text-color-faded { color: ${slideTextColorFaded}; }`}
                 </style>
 
-                <Swiper
-                  className={clsx(
-                    !swiper &&
-                      '[&_.swiper-wrapper]:flex [&_.swiper-wrapper]:gap-3',
+                <Carousel
+                  ariaLabel={heading || 'Shoppable products'}
+                  gap={12}
+                  onSelect={setActiveIndex}
+                  scrollbar={enabledScrollbar}
+                  scrollbarClassName="!absolute !inset-x-0 !top-0 !mt-0 !h-1.5"
+                  scrollbarColor={scrollbarColor}
+                  slidesPerView={{base: 1}}
+                  viewportClassName={enabledScrollbar ? 'pt-6' : undefined}
+                  slides={sliderProducts.map(
+                    ({product, image, badge, description}, index) => (
+                      <ShoppableSocialVideoProductCard
+                        product={product}
+                        image={image}
+                        isActive={activeIndex === index}
+                        badge={badge}
+                        description={description}
+                        productSettings={productSettings}
+                        sliderSettings={sliderSettings}
+                        swatchesMap={swatchesMap}
+                        key={index}
+                      />
+                    ),
                   )}
-                  grabCursor
-                  onSlideChange={({activeIndex}) => setActiveIndex(activeIndex)}
-                  onSwiper={setSwiper}
-                  modules={[Scrollbar]}
-                  slidesPerView={1}
-                  spaceBetween={12}
-                  scrollbar={{
-                    enabled: !!enabledScrollbar,
-                    draggable: true,
-                    el: '.swiper-scrollbar',
-                  }}
-                >
-                  {sliderProducts.map(
-                    ({product, image, badge, description}, index) => {
-                      const isActive = activeIndex === index;
-                      return (
-                        <SwiperSlide key={index}>
-                          <ShoppableSocialVideoProductCard
-                            product={product}
-                            image={image}
-                            isActive={isActive}
-                            badge={badge}
-                            description={description}
-                            productSettings={productSettings}
-                            sliderSettings={sliderSettings}
-                            swatchesMap={swatchesMap}
-                          />
-                        </SwiperSlide>
-                      );
-                    },
-                  )}
-
-                  <div
-                    className="swiper-scrollbar !bottom-auto !left-0 !top-0 !z-0 !h-1.5 !w-full"
-                    style={{
-                      backgroundColor: hexToRgba(slideBgColor, slideBgOpacity),
-                    }}
-                  />
-                </Swiper>
+                />
               </div>
 
               {/* Subtext */}

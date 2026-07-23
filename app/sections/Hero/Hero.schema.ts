@@ -360,7 +360,6 @@ export const Schema = () => {
             label: 'Enable Pagination Bullets',
             name: 'pagination',
             component: 'toggle',
-            description: 'Save and refresh page to observe change',
             toggleLabels: {
               true: 'On',
               false: 'Off',
@@ -377,7 +376,6 @@ export const Schema = () => {
             component: 'radio-group',
             direction: 'horizontal',
             variant: 'radio',
-            description: 'Save and refresh page to observe change',
             options: [
               {label: 'Slide', value: 'slide'},
               {label: 'Fade', value: 'fade'},
@@ -387,7 +385,6 @@ export const Schema = () => {
             label: 'Active Bullet Color',
             name: 'activeBulletColor',
             component: 'color',
-            description: 'Save and refresh page to observe change',
             colors: COLOR_PICKER_DEFAULTS,
           },
         ],

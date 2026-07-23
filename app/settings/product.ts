@@ -1,4 +1,4 @@
-import type {Swatch} from '~/lib/types';
+import type {ProductCms, Swatch} from '~/lib/types';
 
 import {COLOR_PICKER_DEFAULTS, COLOR_SCHEMA_DEFAULT_VALUE} from './common';
 
@@ -10,6 +10,10 @@ export interface ProductSettings {
     failedText: string;
     subtext: string;
   };
+  preOrderOverrides: {
+    product: ProductCms;
+    shippingDateText: string;
+  }[];
   backInStock: {
     enabled: boolean;
     notifyMeText: string;
@@ -91,6 +95,35 @@ export default {
         failedText: 'Failed To Add',
         subtext: '',
       },
+    },
+    {
+      label: 'Pre-Order Overrides',
+      name: 'preOrderOverrides',
+      component: 'group-list',
+      description:
+        'Per-product pre-order shipping date configuration. Enable "Continue selling when out of stock" in Shopify admin for each product.',
+      itemProps: {
+        label: '{{item.product.handle}}',
+      },
+      defaultItem: {
+        shippingDateText: 'TBD',
+      },
+      fields: [
+        {
+          label: 'Product',
+          name: 'product',
+          component: 'productSearch',
+        },
+        {
+          label: 'Shipping Date Text',
+          name: 'shippingDateText',
+          component: 'text',
+          description:
+            'Enter the date only (e.g. "April 15, 2026"). Displayed as "Estimated ship date: [value]" on PDP, cart, and checkout.',
+          defaultValue: 'TBD',
+        },
+      ],
+      defaultValue: [],
     },
     {
       label: 'Back In Stock',

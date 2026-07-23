@@ -40,8 +40,8 @@ export function Banner({cms}: {cms: BannerCms}) {
               imageMobile={image.imageMobile}
               imageDesktop={image.imageDesktop}
               alt={image.alt}
-              loading="eager"
-              fetchPriority="high"
+              loading={section?.aboveTheFold ? 'eager' : 'lazy'}
+              fetchPriority={section?.aboveTheFold ? 'high' : 'auto'}
               className={clsx(
                 'media-fill',
                 image.positionMobile,
@@ -69,7 +69,7 @@ export function Banner({cms}: {cms: BannerCms}) {
                     url: image.imageMobile.url,
                   }}
                   className={clsx('media-fill', image.positionMobile)}
-                  loading="eager"
+                  loading={section?.aboveTheFold ? 'eager' : 'lazy'}
                   sizes="100vw"
                 />
               )}
@@ -91,7 +91,7 @@ export function Banner({cms}: {cms: BannerCms}) {
                     url: image.imageDesktop.url,
                   }}
                   className={clsx('media-fill', image.positionDesktop)}
-                  loading="eager"
+                  loading={section?.aboveTheFold ? 'eager' : 'lazy'}
                   sizes="100vw"
                 />
               )}

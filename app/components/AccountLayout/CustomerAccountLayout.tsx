@@ -1,4 +1,3 @@
-import {useMemo} from 'react';
 import {useLocation} from 'react-router';
 import {
   Menu,
@@ -21,11 +20,9 @@ export function CustomerAccountLayout({children}: {children: React.ReactNode}) {
 
   const {helpHeading, helpItems, menuItems} = {...account?.menu};
 
-  const activeMenuItem = useMemo(() => {
-    return menuItems?.find(({link}) => {
-      return pathname.startsWith(link?.url);
-    });
-  }, [pathname, menuItems]);
+  const activeMenuItem = menuItems?.find(({link}) => {
+    return pathname.startsWith(link?.url);
+  });
 
   return (
     <section

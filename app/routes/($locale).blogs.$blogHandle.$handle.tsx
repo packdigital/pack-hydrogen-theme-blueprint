@@ -1,4 +1,3 @@
-import {useMemo} from 'react';
 import {useLoaderData} from 'react-router';
 import {
   AnalyticsPageType,
@@ -73,14 +72,12 @@ export default function ArticleRoute() {
 
   const atDate =
     article.firstPublishedAt || article.publishedAt || article.createdAt;
-  const date = useMemo(() => {
-    const options = {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    } as Intl.DateTimeFormatOptions;
-    return new Date(atDate).toLocaleDateString('en-US', options);
-  }, [atDate]);
+  const options = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  } as Intl.DateTimeFormatOptions;
+  const date = new Date(atDate).toLocaleDateString('en-US', options);
 
   return (
     <div className="py-contained" data-comp="ArticleRoute">

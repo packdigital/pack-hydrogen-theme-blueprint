@@ -1,4 +1,4 @@
-import {useMemo, useState} from 'react';
+import {useState} from 'react';
 
 import {QuantitySelector} from '~/components/QuantitySelector';
 import {Svg} from '~/components/Svg';
@@ -17,42 +17,33 @@ export function BYOBQuickShop({
 }: BYOBQuickShopProps) {
   const [optionsVisible, setOptionsVisible] = useState(false);
 
-  const variantToAdd = useMemo(() => {
-    if (!selectedVariant) return undefined;
-    return {
-      ...selectedVariant,
-      image: selectedVariant.image || product?.featuredImage,
-    };
-  }, [selectedVariant?.id]);
+  const variantToAdd = !selectedVariant
+    ? undefined
+    : {
+        ...selectedVariant,
+        image: selectedVariant.image || product?.featuredImage,
+      };
 
-  const quantityInBundle = useMemo(() => {
-    return bundle.filter(
-      (variant) => variant.product.handle === product?.handle,
-    ).length;
-  }, [bundle, product]);
+  const quantityInBundle = bundle.filter(
+    (variant) => variant.product.handle === product?.handle,
+  ).length;
 
   const variantInBundle = bundleMapById[selectedVariant?.id || ''];
 
   const lastBundleIndexOfVariant =
     variantInBundle?.indexes[variantInBundle?.indexes.length - 1] || -1;
 
-  const qualifiesForQuickShop = useMemo(() => {
-    if (!product) return false;
-
-    const initialOptions = product.options;
-    const options = initialOptions;
-
-    const hasOnlySingleValueOptions =
-      options?.every((option) => {
-        return option.optionValues.length === 1;
-      }) || false;
-    const hasOnlyOneOptionWithMultipleValues =
-      options?.reduce((acc, option) => {
-        return acc + (option.optionValues.length > 1 ? 1 : 0);
-      }, 0) === 1 || false;
-
-    return hasOnlySingleValueOptions || hasOnlyOneOptionWithMultipleValues;
-  }, [product?.id]);
+  const hasOnlySingleValueOptions =
+    product?.options?.every((option) => option.optionValues.length === 1) ||
+    false;
+  const hasOnlyOneOptionWithMultipleValues =
+    product?.options?.reduce(
+      (acc, option) => acc + (option.optionValues.length > 1 ? 1 : 0),
+      0,
+    ) === 1 || false;
+  const qualifiesForQuickShop =
+    !!product &&
+    (hasOnlySingleValueOptions || hasOnlyOneOptionWithMultipleValues);
 
   const hasOneVariant = product?.variants?.nodes?.length === 1;
 

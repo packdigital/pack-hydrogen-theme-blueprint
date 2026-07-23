@@ -22,17 +22,22 @@ export function Profile() {
   const {account} = useSettings();
 
   const [buttonText, setButtonText] = useState('Save');
+  const [acceptsMarketing, setAcceptsMarketing] = useState(false);
 
   const {menuItems} = {...account?.menu};
   const heading = menuItems?.find(({link}) => pathname.startsWith(link?.url))
     ?.link?.text;
+
+  const {enableMarketingOptIn, marketingOptInText} = {...account?.profile};
+  const isSubscribed = customer?.emailAddress?.marketingState === 'SUBSCRIBED';
 
   useEffect(() => {
     if (!formRef.current) return;
     if (!customer) return;
     formRef.current.elements.firstName.value = customer.firstName || '';
     formRef.current.elements.lastName.value = customer.lastName || '';
-  }, [customer]);
+    setAcceptsMarketing(isSubscribed);
+  }, [customer, isSubscribed]);
 
   useEffect(() => {
     if (!status.success) return;
@@ -86,6 +91,31 @@ export function Profile() {
             value={customer?.emailAddress?.emailAddress || ''}
           />
         </label>
+
+        {enableMarketingOptIn && (
+          <label
+            htmlFor="acceptsMarketing"
+            className="col-span-2 flex cursor-pointer items-start gap-2"
+          >
+            <input
+              checked={acceptsMarketing}
+              className="mt-0.5 size-4 shrink-0 cursor-pointer accent-black"
+              id="acceptsMarketing"
+              name="acceptsMarketing"
+              onChange={(e) => setAcceptsMarketing(e.target.checked)}
+              type="checkbox"
+            />
+            <span className="text-sm">
+              {marketingOptInText || 'Email me with news and offers'}
+            </span>
+
+            <input
+              name="acceptsMarketingInitial"
+              type="hidden"
+              value={isSubscribed ? 'true' : 'false'}
+            />
+          </label>
+        )}
 
         <div className="col-span-2 flex justify-center">
           <button

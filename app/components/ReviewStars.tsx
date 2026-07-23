@@ -1,4 +1,3 @@
-import {useMemo} from 'react';
 import clsx from 'clsx';
 
 import {Svg} from '~/components/Svg';
@@ -14,31 +13,29 @@ export function ReviewStars({
   rating = 0, // 0 - 5
   size = 'large', // small | large
 }: ReviewStarsProps) {
-  const stars = useMemo(() => {
-    const fullStar = {
-      key: 'star-full',
-      label: 'Full Star',
-    };
-    const emptyStar = {
-      key: 'star-empty',
-      label: 'Empty Star',
-    };
-    const halfStar = {
-      key: 'star-half-empty',
-      label: 'Half Star',
-    };
+  const fullStar = {
+    key: 'star-full',
+    label: 'Full Star',
+  };
+  const emptyStar = {
+    key: 'star-empty',
+    label: 'Empty Star',
+  };
+  const halfStar = {
+    key: 'star-half-empty',
+    label: 'Half Star',
+  };
 
-    return [...Array(5).keys()].map((index) => {
-      const diff = Number(rating) - index;
-      if (diff >= 0.75) {
-        return fullStar;
-      }
-      if (diff >= 0.25) {
-        return halfStar;
-      }
-      return emptyStar;
-    });
-  }, [rating]);
+  const stars = [...Array(5).keys()].map((index) => {
+    const diff = Number(rating) - index;
+    if (diff >= 0.75) {
+      return fullStar;
+    }
+    if (diff >= 0.25) {
+      return halfStar;
+    }
+    return emptyStar;
+  });
 
   const classBySize = {
     small: {

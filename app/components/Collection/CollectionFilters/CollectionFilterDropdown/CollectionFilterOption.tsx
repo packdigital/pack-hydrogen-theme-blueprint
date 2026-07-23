@@ -1,4 +1,4 @@
-import {memo, useMemo} from 'react';
+import {memo} from 'react';
 import clsx from 'clsx';
 
 import {COLOR_OPTION_NAME, PRICE_FILTER_ID} from '~/lib/constants';
@@ -41,11 +41,13 @@ export const CollectionFilterOption = memo(
       optionImageUrl = optionImage?.url;
     }
 
-    const checkmarkColor = useMemo(() => {
-      if (!isColor) return 'text-white';
-      if (!optionColor) return 'text-black';
-      return isLightHexColor(optionColor) ? 'text-black' : 'text-white';
-    }, [isColor, optionColor]);
+    const checkmarkColor = !isColor
+      ? 'text-white'
+      : !optionColor
+        ? 'text-black'
+        : isLightHexColor(optionColor)
+          ? 'text-black'
+          : 'text-white';
 
     const colorBackground = optionColor || 'var(--neutral-lightest)';
     const nonColorBackground = isActive

@@ -48,15 +48,6 @@ export async function action({request, context}: Route.ActionArgs) {
       const discountCodes = (
         Array.isArray(formDiscountCodes) ? formDiscountCodes : []
       ) as string[];
-      // Combine discount codes already applied on cart
-      const existingCartWithDiscountCodes = (await cart.get()) as Cart;
-      if (existingCartWithDiscountCodes) {
-        discountCodes.push(
-          ...(existingCartWithDiscountCodes.discountCodes?.map(
-            ({code}) => code,
-          ) || []),
-        );
-      }
       result = await cart.updateDiscountCodes(discountCodes);
       break;
     }

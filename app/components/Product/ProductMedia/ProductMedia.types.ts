@@ -1,4 +1,3 @@
-import type {SwiperClass} from 'swiper/react';
 import type {
   Image,
   MediaEdge,
@@ -33,16 +32,14 @@ export interface ProductMediaThumbnailProps {
   index: number;
   isActive: boolean;
   mediaContentType: string;
-  swiper?: SwiperClass;
+  onThumbClick: (index: number) => void;
 }
 
 export interface ProductMediaThumbnailsProps {
   activeIndex: number | null;
-  initialIndex: number;
   media: MediaEdge['node'][];
+  onThumbClick: (index: number) => void;
   productTitle: string;
-  setActiveIndex: (index: number) => void;
-  swiper: SwiperClass | null;
 }
 
 export interface ProductVideoProps {

@@ -1,4 +1,4 @@
-import {useMemo, useState} from 'react';
+import {useState} from 'react';
 
 import {BYOBQuickShopOption} from './BYOBQuickShopOption';
 import type {BYOBQuickShopOptionsProps} from './BYOBProductItem.types';
@@ -14,16 +14,13 @@ export function BYOBQuickShopOptions({
   const [activeQtySelectorIndex, setActiveQtySelectorIndex] = useState<
     number | null
   >(null);
-  const option = useMemo(() => {
-    if (!product) return {name: '', optionValues: [], text: ''};
-    const _option = product.options?.find(({optionValues}) => {
-      return optionValues.length > 1;
-    });
-    return {
-      name: _option?.name || '',
-      optionValues: _option?.optionValues || [],
-    };
-  }, [product?.id]);
+  const _option = product?.options?.find(({optionValues}) => {
+    return optionValues.length > 1;
+  });
+  const option = {
+    name: _option?.name || '',
+    optionValues: _option?.optionValues || [],
+  };
 
   return (
     <div className="relative flex h-12 w-full items-center justify-center overflow-hidden rounded border border-black bg-background">

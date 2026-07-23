@@ -1,4 +1,3 @@
-import {useMemo} from 'react';
 import clsx from 'clsx';
 
 import {Image} from '~/components/Image';
@@ -13,9 +12,7 @@ export function InnerColorOptionValue({
   optionValue,
   swatch,
 }: InnerColorOptionValueProps) {
-  const isLightColor = useMemo(() => {
-    return isLightHexColor(swatch?.color);
-  }, [swatch?.color]);
+  const isLightColor = isLightHexColor(swatch?.color);
 
   const validClass = !isDisabled
     ? 'md:group-hover:border-text'

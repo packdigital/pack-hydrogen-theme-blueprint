@@ -1,4 +1,4 @@
-import {memo, useMemo} from 'react';
+import {memo} from 'react';
 
 import {Image} from '~/components/Image';
 import {Link} from '~/components/Link';
@@ -13,22 +13,29 @@ import {useCartLineImage} from './useCartLineImage';
 import {useCartLinePrices} from './useCartLinePrices';
 
 export const CartLine = memo(({closeCart, line}: CartLineProps) => {
-  const {discountAllocations, merchandise, quantity} = line;
+  const {attributes, discountAllocations, merchandise, quantity} = line;
 
-  const {handleDecrement, handleIncrement, handleRemove, isUpdatingLine} =
-    useCartLine({line});
+  const preOrderShippingDate = attributes?.find(
+    (attr) => attr.key === 'Estimated Ship Date',
+  )?.value;
+
+  const {
+    handleDecrement,
+    handleIncrement,
+    handleRemove,
+    isSyncingLine,
+    isUpdatingLine,
+  } = useCartLine({line});
 
   const {price, compareAtPrice} = useCartLinePrices({line});
 
   const image = useCartLineImage({line});
 
-  const url = useMemo(() => {
-    const searchParams = new URLSearchParams();
-    merchandise.selectedOptions.forEach(({name, value}) => {
-      searchParams.set(name, value);
-    });
-    return `/products/${merchandise.product.handle}?${searchParams}`;
-  }, [merchandise.id]);
+  const searchParams = new URLSearchParams();
+  merchandise.selectedOptions.forEach(({name, value}) => {
+    searchParams.set(name, value);
+  });
+  const url = `/products/${merchandise.product.handle}?${searchParams}`;
 
   return (
     <div className="relative grid grid-cols-[auto_1fr] items-center gap-3 p-4 ">
@@ -67,6 +74,12 @@ export const CartLine = memo(({closeCart, line}: CartLineProps) => {
             <p className="text-sm text-neutralMedium">{merchandise.title}</p>
           )}
 
+          {preOrderShippingDate && (
+            <p className="mt-0.5 text-sm text-neutralMedium">
+              Estimated ship date: {preOrderShippingDate}
+            </p>
+          )}
+
           <button
             aria-label={`Remove ${merchandise.product.title} from cart`}
             className="absolute right-0 top-0 w-3"
@@ -85,6 +98,7 @@ export const CartLine = memo(({closeCart, line}: CartLineProps) => {
           <QuantitySelector
             handleDecrement={handleDecrement}
             handleIncrement={handleIncrement}
+            isSyncing={isSyncingLine}
             isUpdating={isUpdatingLine}
             productTitle={merchandise.product.title}
             quantity={quantity}

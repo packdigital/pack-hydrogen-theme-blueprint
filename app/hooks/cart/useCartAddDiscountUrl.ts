@@ -7,7 +7,7 @@ import {useCart} from '~/hooks';
 const DISCOUNT_COOKIE_NAME = 'discount_code';
 
 export const useCartAddDiscountUrl = () => {
-  const {discountCodesUpdate, id} = useCart();
+  const {discountCodesUpdate, discountCodes, id} = useCart();
 
   useEffect(() => {
     const {search} = window.location;
@@ -27,7 +27,11 @@ export const useCartAddDiscountUrl = () => {
     }
 
     if (discountCode && id) {
-      discountCodesUpdate([discountCode]);
+      const existingCodes =
+        discountCodes
+          ?.filter((dc: {applicable: boolean}) => dc.applicable)
+          ?.map((dc: {code: string}) => dc.code) || [];
+      discountCodesUpdate([...existingCodes, discountCode]);
       deleteCookie(DISCOUNT_COOKIE_NAME);
     }
   }, [id]);

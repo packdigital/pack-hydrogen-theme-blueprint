@@ -1,4 +1,4 @@
-import {useEffect, useMemo, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {useInView} from 'react-intersection-observer';
 import clsx from 'clsx';
 import type {ProductVariant} from '@shopify/hydrogen-react/storefront-api-types';
@@ -29,20 +29,14 @@ export function BYOBProductItem({
     ProductVariant | undefined
   >(product?.variants?.nodes?.[0]);
 
-  const primaryOptionValue = useMemo(() => {
-    if (!product) return null;
-    return (
-      product.options.find((option) => option.name === COLOR_OPTION_NAME)
-        ?.optionValues?.[0] || null
-    );
-  }, [product]);
+  const primaryOptionValue = !product
+    ? null
+    : product.options.find((option) => option.name === COLOR_OPTION_NAME)
+        ?.optionValues?.[0] || null;
 
-  const isSoldOut = useMemo(() => {
-    return (
-      !!product &&
-      product.variants?.nodes.every((variant) => !variant.availableForSale)
-    );
-  }, [product]);
+  const isSoldOut =
+    !!product &&
+    product.variants?.nodes.every((variant) => !variant.availableForSale);
 
   /* Default BYOB item logic only set up for selecting the first variant
    * if an options selector is needed, change selectedVariant to a useState and add in an options selector below

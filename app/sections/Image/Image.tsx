@@ -1,4 +1,3 @@
-import {useMemo} from 'react';
 import clsx from 'clsx';
 
 import {Container} from '~/components/Container';
@@ -27,9 +26,7 @@ export function Image({cms}: {cms: ImageCms}) {
   const {caption, link} = {...content};
   const {maxWidth, enablePadding} = {...section};
 
-  const sizes = useMemo(() => {
-    return /[0-9]+(?:px)|[0-9]+(?:rem)/.exec(maxWidth)?.[0] || '100vw';
-  }, [maxWidth]);
+  const sizes = /[0-9]+(?:px)|[0-9]+(?:rem)/.exec(maxWidth)?.[0] || '100vw';
 
   return (
     <Container container={cms.container}>

@@ -1,4 +1,3 @@
-import {useMemo} from 'react';
 import {useLocation} from 'react-router';
 
 import {Link} from '~/components/Link';
@@ -91,16 +90,16 @@ function ProductOptionValuePdpLink({
 }: ProductOptionValueLinkIntermediaryProps) {
   const {search} = useLocation();
 
-  const url = useMemo(() => {
-    if (!selectedVariantFromOptions) return null;
+  let url: string | null = null;
+  if (selectedVariantFromOptions) {
     const params = new URLSearchParams(search);
     selectedVariantFromOptions.selectedOptions.forEach(
       ({name: optionName, value}) => {
         params.set(optionName, value);
       },
     );
-    return `/products/${selectedVariantFromOptions.product.handle}?${params}`;
-  }, [search, selectedVariantFromOptions]);
+    url = `/products/${selectedVariantFromOptions.product.handle}?${params}`;
+  }
 
   return (
     <ProductOptionValueLinkComponent

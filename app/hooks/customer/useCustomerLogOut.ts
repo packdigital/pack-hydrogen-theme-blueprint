@@ -8,7 +8,6 @@ export function useCustomerLogOut() {
 
   const customerLogOut = useCallback(() => {
     fetcher.submit(null, {method: 'POST', action: '/account/logout'});
-    deleteCookie('og_auth');
   }, []);
 
   return {customerLogOut};

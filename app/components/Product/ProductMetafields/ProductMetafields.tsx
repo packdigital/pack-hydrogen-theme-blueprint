@@ -1,4 +1,4 @@
-import {memo, useMemo} from 'react';
+import {memo} from 'react';
 import type {Metafield, Product} from '@shopify/hydrogen/storefront-api-types';
 
 import {ProductMetafieldsAccordion} from './ProductMetafieldsAccordion';
@@ -26,16 +26,14 @@ interface ProductMetafieldsProps {
 }
 
 export const ProductMetafields = memo(({product}: ProductMetafieldsProps) => {
-  const metafields = useMemo(() => {
-    // if (!product.metafields) return null;
-    // const metafieldsMap = product.metafields;
-    const metafieldsMap = EXAMPLE_METAFIELDS_MAP; // example purposes
-    return METAFIELDS_ORDER.reduce((acc: Metafield[], key) => {
-      const metafield = metafieldsMap[key];
-      if (!metafield) return acc;
-      return [...acc, metafield];
-    }, []);
-  }, [product.metafields]);
+  // if (!product.metafields) return null;
+  // const metafieldsMap = product.metafields;
+  const metafieldsMap = EXAMPLE_METAFIELDS_MAP; // example purposes
+  const metafields = METAFIELDS_ORDER.reduce((acc: Metafield[], key) => {
+    const metafield = metafieldsMap[key];
+    if (!metafield) return acc;
+    return [...acc, metafield];
+  }, []);
 
   return metafields?.length ? (
     <ul className="grid grid-cols-1 gap-4">

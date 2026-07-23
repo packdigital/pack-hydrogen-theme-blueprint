@@ -1,6 +1,13 @@
-/* Example @font-face */
-/* @font-face {
-  font-family:"Some Font Family";
+/* Self-hosted Poppins (via @fontsource) — replaces the render-blocking
+   Google Fonts stylesheet. Weights 400/500/600, latin subset, display: swap. */
+@import '@fontsource/poppins/latin-400.css';
+@import '@fontsource/poppins/latin-500.css';
+@import '@fontsource/poppins/latin-600.css';
+
+/* To self-host a different font instead, drop woff2 files in public/fonts and
+   declare them here:
+@font-face {
+  font-family: "Some Font Family";
   src: url("../../public/fonts/Some-Font-Family.woff2") format("woff2");
   font-weight: 100 900;
   font-display: swap;

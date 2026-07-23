@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useMemo, useState, useRef} from 'react';
+import {useCallback, useEffect, useState, useRef} from 'react';
 import clsx from 'clsx';
 import type {ChangeEvent} from 'react';
 
@@ -37,15 +37,9 @@ export const MultiRangeSlider = ({
   const range = useRef<HTMLDivElement>(null);
   const locale = useLocale();
 
-  const displayedMinVal = useMemo(() => {
-    if (!isPrice) return minVal;
-    return parseAsCurrency(minVal, locale);
-  }, [isPrice, locale, minVal]);
+  const displayedMinVal = !isPrice ? minVal : parseAsCurrency(minVal, locale);
 
-  const displayedMaxVal = useMemo(() => {
-    if (!isPrice) return maxVal;
-    return parseAsCurrency(maxVal, locale);
-  }, [isPrice, locale, maxVal]);
+  const displayedMaxVal = !isPrice ? maxVal : parseAsCurrency(maxVal, locale);
 
   // Convert to percentage
   const getPercent = useCallback(

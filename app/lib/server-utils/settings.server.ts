@@ -6,7 +6,7 @@ import type {RootSiteSettings} from '~/lib/types';
 
 export const getShop = async (context: AppLoadContext) => {
   const layout = await context.storefront.query(LAYOUT_QUERY, {
-    cache: context.storefront.CacheShort(),
+    cache: context.storefront.CacheLong(),
   });
   return layout?.shop;
 };
