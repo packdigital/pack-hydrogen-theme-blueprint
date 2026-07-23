@@ -34,8 +34,10 @@ export function ProductsSlider({
   // immediately instead of the whole slider popping in once products load.
   // Count only linked products (those with an id), matching what the section
   // actually fetches, so unlinked entries don't leave a perpetual skeleton.
+  // Fall back to `cms.limit` for the recommendations variant, which reuses
+  // this component but has no configured `cms.products`.
   const expectedCount =
-    cms.products?.filter(({product}) => product?.id).length || 0;
+    cms.products?.filter(({product}) => product?.id).length || cms.limit || 0;
   const slideCount = productsLoaded ? products.length : expectedCount;
   const enableLoop = isLoop && slideCount >= slidesPerViewDesktop * 2;
 
