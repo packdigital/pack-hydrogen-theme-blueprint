@@ -44,7 +44,7 @@ export function ImageTile({
   return (
     <Link
       aria-label={firstLink?.text}
-      className="w-full"
+      className="relative block w-full"
       to={clickableImage ? firstLink?.url : ''}
       newTab={firstLink?.newTab}
       type={firstLink?.type}
