@@ -70,12 +70,13 @@ export function CollectionFilterDropdown({
     });
   }, [activeFilterValues, parsedValues]);
 
-  const totalSelectedOptions: number = useMemo(() => {
-    return parsedValuesWithIsActive.reduce((acc, value) => {
+  const totalSelectedOptions: number = parsedValuesWithIsActive.reduce(
+    (acc, value) => {
       if (value.isActive) acc++;
       return acc;
-    }, 0);
-  }, [parsedValuesWithIsActive]);
+    },
+    0,
+  );
 
   const showMoreCountMax = Math.min(
     showMoreCount,

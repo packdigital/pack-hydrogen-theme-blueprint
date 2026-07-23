@@ -1,10 +1,7 @@
-import {useState} from 'react';
-import {Swiper, SwiperSlide} from 'swiper/react';
 import clsx from 'clsx';
-import type {SwiperClass} from 'swiper/react';
 
+import {Carousel} from '~/components/Carousel';
 import {Container} from '~/components/Container';
-import {SwiperSkeleton} from '~/components/SwiperSkeleton';
 
 import type {ImageTilesCms} from './ImageTiles.types';
 import {ImageTile} from './ImageTile';
@@ -25,29 +22,6 @@ export function ImageTiles({cms}: {cms: ImageTilesCms}) {
     textColor = 'var(--text)',
     fullWidth,
   } = {...section};
-
-  const [swiper, setSwiper] = useState<SwiperClass | null>(null);
-
-  const breakpoints = {
-    mobile: {
-      slidesPerView: tilesPerViewMobile,
-      slidesOffsetBefore: 16,
-      slidesOffsetAfter: 16,
-      spaceBetween: 16,
-    },
-    tablet: {
-      slidesPerView: tilesPerViewTablet,
-      slidesOffsetBefore: 32,
-      slidesOffsetAfter: 32,
-      spaceBetween: 20,
-    },
-    desktop: {
-      slidesPerView: tilesPerViewDesktop,
-      slidesOffsetBefore: 0,
-      slidesOffsetAfter: 0,
-      spaceBetween: 20,
-    },
-  };
 
   const maxWidthClass = fullWidth
     ? 'max-w-none'
@@ -75,53 +49,25 @@ export function ImageTiles({cms}: {cms: ImageTilesCms}) {
           {tiles?.length > 0 && (
             <>
               {/* mobile/tablet/desktop */}
-              <div
-                className={clsx(
-                  'relative',
-                  Number.isInteger(tilesPerViewDesktop)
-                    ? '[&_.swiper]:max-lg:overflow-visible'
-                    : '[&_.swiper]:overflow-visible',
-                  isGridOnDesktop && 'lg:hidden',
-                )}
-              >
-                <Swiper
-                  grabCursor
-                  onSwiper={setSwiper}
-                  slidesOffsetAfter={breakpoints.mobile.slidesOffsetAfter}
-                  slidesOffsetBefore={breakpoints.mobile.slidesOffsetBefore}
-                  slidesPerView={breakpoints.mobile.slidesPerView}
-                  spaceBetween={breakpoints.mobile.spaceBetween}
-                  breakpoints={{
-                    768: breakpoints.tablet,
-                    1024: breakpoints.desktop,
-                  }}
-                >
-                  {tiles.map((tile, index) => {
-                    return (
-                      <SwiperSlide
-                        key={index}
-                        className={clsx(!swiper && '!hidden')}
-                      >
-                        <ImageTile
-                          aspectRatio={aspectRatio}
-                          content={content}
-                          tile={tile}
-                        />
-                      </SwiperSlide>
-                    );
-                  })}
-                </Swiper>
-
-                {!swiper && (
-                  <SwiperSkeleton breakpoints={breakpoints}>
-                    <div
-                      className={clsx(
-                        'animate-pulse bg-neutralLightest',
-                        aspectRatio,
-                      )}
+              <div className={clsx('relative', isGridOnDesktop && 'lg:hidden')}>
+                <Carousel
+                  ariaLabel={heading || 'Image tiles'}
+                  gap={{base: 16, md: 20}}
+                  slides={tiles.map((tile, index) => (
+                    <ImageTile
+                      aspectRatio={aspectRatio}
+                      content={content}
+                      key={index}
+                      tile={tile}
                     />
-                  </SwiperSkeleton>
-                )}
+                  ))}
+                  slidesPerView={{
+                    base: tilesPerViewMobile,
+                    md: tilesPerViewTablet,
+                    lg: tilesPerViewDesktop,
+                  }}
+                  viewportClassName="max-md:px-4 md:max-lg:px-8"
+                />
               </div>
 
               {/* desktop */}

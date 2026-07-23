@@ -1,4 +1,4 @@
-import {memo, useEffect, useMemo, useState} from 'react';
+import {memo, useEffect, useState} from 'react';
 import clsx from 'clsx';
 
 import {COLOR_OPTION_NAME} from '~/lib/constants';
@@ -18,19 +18,17 @@ export const QuickShopOptions = memo(
 
     const [optionsVisible, setOptionsVisible] = useState(false);
 
-    const option = useMemo(() => {
-      if (!selectedProduct) return {name: '', optionValues: [], text: ''};
-      // Find first non-color option that has more than one value for quick shop
-      const _option = selectedProduct.options?.find(({name, optionValues}) => {
-        return name !== COLOR_OPTION_NAME && optionValues.length > 1;
-      });
-      return {
-        name: _option?.name || '',
-        optionValues: _option?.optionValues || [],
-        text:
-          quickShopMultiText?.replace('{{option}}', _option?.name || '') || '',
-      };
-    }, [quickShopMultiText, selectedProduct.id]);
+    // Find first non-color option that has more than one value for quick shop
+    const _option = selectedProduct?.options?.find(({name, optionValues}) => {
+      return name !== COLOR_OPTION_NAME && optionValues.length > 1;
+    });
+    const option = {
+      name: _option?.name || '',
+      optionValues: _option?.optionValues || [],
+      text: selectedProduct
+        ? quickShopMultiText?.replace('{{option}}', _option?.name || '') || ''
+        : '',
+    };
 
     useEffect(() => {
       if (!quickShopMobileHidden && cartOpen) setOptionsVisible(false);

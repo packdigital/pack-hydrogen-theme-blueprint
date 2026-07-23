@@ -44,14 +44,14 @@ export function ShoppableProductsGrid({
     );
   }, [products]);
 
-  const placeholderProducts = useMemo(() => {
-    return Array.from({length: productIds.length}).map((_, index) => {
+  const placeholderProducts = Array.from({length: productIds.length}).map(
+    (_, index) => {
       return {
         id: `${index}`,
         handle: '',
       } as Product;
-    });
-  }, [productIds]);
+    },
+  );
 
   const fullProducts = useProductsByIds(productIds, inView);
 

@@ -1,4 +1,3 @@
-import {useMemo} from 'react';
 import clsx from 'clsx';
 
 import {useSettings} from '~/hooks';
@@ -12,26 +11,21 @@ export function Badges({className = '', tags = []}: BadgesProps) {
   const {product} = useSettings();
   const {badgeColors} = {...product?.badges};
 
-  const badgeColorsMap = useMemo((): Record<
-    string,
-    (typeof badgeColors)[number]
-  > => {
-    if (!badgeColors) return {};
-    return badgeColors.reduce((acc, badge) => {
-      return {...acc, [badge.tag?.trim()]: badge};
-    }, {});
-  }, [badgeColors]);
+  const badgeColorsMap: Record<string, (typeof badgeColors)[number]> =
+    !badgeColors
+      ? {}
+      : badgeColors.reduce((acc, badge) => {
+          return {...acc, [badge.tag?.trim()]: badge};
+        }, {});
 
-  const badges = useMemo(() => {
-    return tags.reduce((acc: string[], tag) => {
-      if (tag.startsWith('badge::')) {
-        const value = tag.split('badge::')[1]?.trim();
-        if (!value) return acc;
-        return [...acc, value];
-      }
-      return acc;
-    }, []);
-  }, [tags]);
+  const badges = tags.reduce((acc: string[], tag) => {
+    if (tag.startsWith('badge::')) {
+      const value = tag.split('badge::')[1]?.trim();
+      if (!value) return acc;
+      return [...acc, value];
+    }
+    return acc;
+  }, []);
 
   return (
     <div

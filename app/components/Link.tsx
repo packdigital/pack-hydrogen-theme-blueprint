@@ -1,4 +1,4 @@
-import {forwardRef, useMemo} from 'react';
+import {forwardRef} from 'react';
 import {Link as ReactRouterLink} from 'react-router';
 import type {ReactNode} from 'react';
 import type {LinkProps as ReactRouterLinkProps} from 'react-router';
@@ -86,13 +86,11 @@ export const Link = forwardRef(
     const {pathPrefix} = useLocale();
     const initialHref = (to || href || url) as string;
 
-    const finalHref = useMemo(() => {
-      return getValidatedHref({
-        href: initialHref,
-        type: isExternal ? 'isExternal' : type,
-        pathPrefix,
-      });
-    }, [initialHref, isExternal, pathPrefix, type]);
+    const finalHref = getValidatedHref({
+      href: initialHref,
+      type: isExternal ? 'isExternal' : type,
+      pathPrefix,
+    });
 
     return finalHref ? (
       <ReactRouterLink

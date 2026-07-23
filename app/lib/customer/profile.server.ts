@@ -1,7 +1,10 @@
 import type {Customer} from '@shopify/hydrogen/customer-account-api-types';
 import type {AppLoadContext} from 'react-router';
 
-import {customerUpdateClient} from './client';
+import {
+  customerEmailMarketingUpdateClient,
+  customerUpdateClient,
+} from './client';
 
 const getFormError = (message = 'We could not perform this address action') => {
   return `Sorry. ${message}. Please try again later.`;
@@ -41,14 +44,37 @@ export const customerUpdateProfileAction = async ({
       return {data, status: 400};
     }
 
+    // Unchecked checkboxes are omitted from FormData, so absence means opted out.
+    const acceptsMarketing =
+      String(body?.get('acceptsMarketing') || '') === 'on';
+    // Hidden field capturing the marketing state at page load, so we only call
+    // the subscribe/unsubscribe mutation when the customer actually changed it.
+    const acceptsMarketingInitial =
+      String(body?.get('acceptsMarketingInitial') || '') === 'true';
+
+    const apiErrors: string[] = [];
+    const formErrors: string[] = [];
+
     const customer = {firstName, lastName} as Customer;
-    const {apiErrors, formErrors} = await customerUpdateClient(context, {
-      customer,
-    });
+    const {apiErrors: updateApiErrors, formErrors: updateFormErrors} =
+      await customerUpdateClient(context, {customer});
+    apiErrors.push(...updateApiErrors);
+    formErrors.push(...updateFormErrors);
+
+    // Marketing consent lives outside customerUpdate — it has dedicated
+    // subscribe/unsubscribe mutations in the Customer Account API.
+    if (acceptsMarketing !== acceptsMarketingInitial) {
+      const {apiErrors: marketingApiErrors, formErrors: marketingFormErrors} =
+        await customerEmailMarketingUpdateClient(context, {
+          subscribe: acceptsMarketing,
+        });
+      apiErrors.push(...marketingApiErrors);
+      formErrors.push(...marketingFormErrors);
+    }
 
     const errors = [...new Set([...apiErrors, ...formErrors])];
     if (errors?.length) {
-      console.error('customerUpdateClient:errors', errors);
+      console.error('customerUpdateProfileAction:errors', errors);
       data.errors = apiErrors;
       data.formErrors = formErrors;
       return {data, status: 400};

@@ -1,4 +1,4 @@
-import {memo, useMemo} from 'react';
+import {memo} from 'react';
 import clsx from 'clsx';
 
 import {AddToCart} from '~/components/AddToCart';
@@ -21,25 +21,22 @@ export const QuickShop = memo(
       ...collectionSettings?.productItem,
     };
 
-    const qualifiesForQuickShop = useMemo(() => {
-      if (!selectedProduct) return false;
-
-      const initialOptions = selectedProduct.options;
-      const options = enabledColorSelector
-        ? initialOptions?.filter((option) => option.name !== COLOR_OPTION_NAME)
-        : initialOptions;
-
-      const hasOnlySingleValueOptions =
-        options?.every((option) => {
-          return option.optionValues.length === 1;
-        }) || false;
-      const hasOnlyOneOptionWithMultipleValues =
-        options?.reduce((acc, option) => {
-          return acc + (option.optionValues.length > 1 ? 1 : 0);
-        }, 0) === 1 || false;
-
-      return hasOnlySingleValueOptions || hasOnlyOneOptionWithMultipleValues;
-    }, [enabledColorSelector, selectedProduct?.id]);
+    const quickShopOptions = enabledColorSelector
+      ? selectedProduct?.options?.filter(
+          (option) => option.name !== COLOR_OPTION_NAME,
+        )
+      : selectedProduct?.options;
+    const hasOnlySingleValueOptions =
+      quickShopOptions?.every((option) => option.optionValues.length === 1) ||
+      false;
+    const hasOnlyOneOptionWithMultipleValues =
+      quickShopOptions?.reduce(
+        (acc, option) => acc + (option.optionValues.length > 1 ? 1 : 0),
+        0,
+      ) === 1 || false;
+    const qualifiesForQuickShop =
+      !!selectedProduct &&
+      (hasOnlySingleValueOptions || hasOnlyOneOptionWithMultipleValues);
 
     const hasOneVariant = selectedProduct?.variants?.nodes?.length === 1;
     const hasOnlyColorOption =

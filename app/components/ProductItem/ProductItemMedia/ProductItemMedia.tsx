@@ -15,7 +15,12 @@ import {ProductItemVideo} from './ProductItemVideo';
 import {useProductItemMedia} from './useProductItemMedia';
 
 export const ProductItemMedia = memo(
-  ({hasGrouping, selectedProduct, selectedVariant}: ProductItemMediaProps) => {
+  ({
+    hasGrouping,
+    priority,
+    selectedProduct,
+    selectedVariant,
+  }: ProductItemMediaProps) => {
     const {ref: inViewRef, inView} = useInView({
       rootMargin: '200px',
       triggerOnce: true,
@@ -59,7 +64,9 @@ export const ProductItemMedia = memo(
             )}
           >
             {primaryMedia.mediaContentType === 'VIDEO' ? (
-              <ProductItemVideo autoPlay media={primaryMedia as Video} />
+              inView && (
+                <ProductItemVideo autoPlay media={primaryMedia as Video} />
+              )
             ) : (
               <Image
                 data={{
@@ -67,7 +74,8 @@ export const ProductItemMedia = memo(
                   altText: selectedProduct?.title,
                 }}
                 className="media-fill"
-                loading="eager"
+                loading={priority ? 'eager' : 'lazy'}
+                fetchPriority={priority ? 'high' : 'auto'}
                 sizes="(min-width: 768px) 30vw, 45vw"
               />
             )}

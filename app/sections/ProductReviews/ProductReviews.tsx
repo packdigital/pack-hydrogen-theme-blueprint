@@ -1,4 +1,3 @@
-import {useMemo} from 'react';
 import {useLoaderData} from 'react-router';
 import {useInView} from 'react-intersection-observer';
 import type {Product} from '@shopify/hydrogen/storefront-api-types';
@@ -18,9 +17,8 @@ export function ProductReviews({cms}: {cms: {container: ContainerSettings}}) {
     triggerOnce: true,
   });
 
-  const productId = useMemo(() => {
-    return modalProduct?.id?.split('/').pop() || product?.id?.split('/').pop();
-  }, [modalProduct?.id, product?.id]);
+  const productId =
+    modalProduct?.id?.split('/').pop() || product?.id?.split('/').pop();
 
   /* Example script loading, if applicable */
   // useLoadScript(

@@ -1,106 +1,45 @@
-import {useEffect, useState} from 'react';
-import type {SwiperClass} from 'swiper/react';
-import {Swiper, SwiperSlide} from 'swiper/react';
-import {Navigation} from 'swiper/modules';
+import {useEffect, useRef} from 'react';
 
 import {ProductMediaThumbnail} from './ProductMediaThumbnail';
 import type {ProductMediaThumbnailsProps} from './ProductMedia.types';
 
 export function ProductMediaThumbnails({
   activeIndex,
-  initialIndex,
   media,
+  onThumbClick,
   productTitle,
-  setActiveIndex,
-  swiper,
 }: ProductMediaThumbnailsProps) {
-  const [thumbsSwiper, setThumbsSwiper] = useState<SwiperClass | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
+  // Keep the active thumbnail scrolled into view (works for both the mobile
+  // horizontal strip and the desktop vertical column).
   useEffect(() => {
-    if (!thumbsSwiper || thumbsSwiper.destroyed) return;
-    thumbsSwiper.slideTo(activeIndex || 0);
-  }, [activeIndex, thumbsSwiper]);
+    const el = containerRef.current?.children[activeIndex ?? 0] as
+      HTMLElement | undefined;
+    el?.scrollIntoView({block: 'nearest', inline: 'nearest'});
+  }, [activeIndex]);
 
   return (
-    <>
-      {/* placeholder thumbs while swiper inits */}
-      {!thumbsSwiper && (
-        <div className="absolute left-0 top-0 z-[2] grid w-full grid-cols-6 gap-2 lg:grid-cols-1 lg:gap-3">
-          {media
-            .slice(initialIndex, initialIndex + 6)
-            .map((mediaItem, index) => {
-              const {id, mediaContentType} = mediaItem;
-              const isActive = index === activeIndex;
-              const image = mediaItem.previewImage;
-              return (
-                <ProductMediaThumbnail
-                  alt={productTitle}
-                  image={image}
-                  index={index}
-                  isActive={isActive}
-                  key={id}
-                  mediaContentType={mediaContentType}
-                />
-              );
-            })}
+    <div
+      className="scrollbar-hide flex h-full gap-2 overflow-x-auto max-lg:flex-row lg:flex-col lg:gap-3 lg:overflow-y-auto lg:overflow-x-hidden"
+      ref={containerRef}
+    >
+      {media.map((mediaItem, index) => (
+        <div
+          className="shrink-0 basis-[calc((100%-5*8px)/6)] lg:basis-auto"
+          key={mediaItem.id}
+        >
+          <ProductMediaThumbnail
+            alt={productTitle}
+            image={mediaItem.previewImage}
+            index={index}
+            isActive={index === activeIndex}
+            mediaContentType={mediaItem.mediaContentType}
+            onThumbClick={onThumbClick}
+          />
         </div>
-      )}
-
-      <Swiper
-        modules={[Navigation]}
-        className="max-lg:!absolute max-lg:left-0 max-lg:top-0 max-lg:w-full lg:h-full"
-        grabCursor
-        initialSlide={initialIndex}
-        onSwiper={setThumbsSwiper}
-        preventClicks={false}
-        preventClicksPropagation={false}
-        slidesPerView={6}
-        spaceBetween={8}
-        onSlideChange={(_swiper) => {
-          if (!swiper) return;
-          setActiveIndex(_swiper.realIndex);
-        }}
-        navigation={{
-          nextEl: '.swiper-button-next',
-          prevEl: '.swiper-button-prev',
-        }}
-        breakpoints={{
-          1024: {
-            direction: 'vertical',
-            slidesPerView: 5,
-            spaceBetween: 12,
-          },
-          1280: {
-            direction: 'vertical',
-            slidesPerView: 6,
-            spaceBetween: 12,
-          },
-        }}
-      >
-        {!!thumbsSwiper &&
-          media.map((mediaItem, index) => {
-            const {id, mediaContentType} = mediaItem;
-            const isActive = index === activeIndex;
-            const image = mediaItem.previewImage;
-            return (
-              <SwiperSlide key={id}>
-                <ProductMediaThumbnail
-                  alt={productTitle}
-                  image={image}
-                  index={index}
-                  isActive={isActive}
-                  mediaContentType={mediaContentType}
-                  swiper={swiper}
-                />
-              </SwiperSlide>
-            );
-          })}
-
-        <div className="swiper-button-prev !left-0 !text-black opacity-90 after:flex after:size-5 after:items-center after:justify-center after:overflow-hidden after:rounded-[50%] after:bg-white after:!text-[0.6rem] after:!content-['prev'] lg:!left-1/2 lg:!top-5 lg:!-translate-x-1/2 lg:!rotate-90" />
-
-        <div className="swiper-button-next !right-0 !text-black opacity-90 after:flex after:size-5 after:items-center after:justify-center after:overflow-hidden after:rounded-[50%] after:bg-white after:!text-[0.6rem] after:!content-['next'] lg:!bottom-0 lg:!left-1/2 lg:!top-auto lg:!-translate-x-1/2 lg:!rotate-90" />
-      </Swiper>
-    </>
+      ))}
+    </div>
   );
 }
 

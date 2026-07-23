@@ -53,6 +53,7 @@ const CUSTOMER_FRAGMENT = `
     }
     emailAddress {
       emailAddress
+      marketingState
     }
     defaultAddress {
       ...AddressPartial
@@ -196,6 +197,42 @@ mutation customerUpdate($customer: CustomerUpdateInput!) {
   }
 }
 `;
+
+// Docs: https://shopify.dev/docs/api/customer/latest/mutations/customerEmailMarketingSubscribe
+// Acts on the authenticated customer; takes no arguments.
+export const CUSTOMER_EMAIL_MARKETING_SUBSCRIBE_MUTATION = `
+mutation customerEmailMarketingSubscribe {
+  customerEmailMarketingSubscribe {
+    emailAddress {
+      emailAddress
+      marketingState
+    }
+    userErrors {
+      code
+      field
+      message
+    }
+  }
+}
+` as const;
+
+// Docs: https://shopify.dev/docs/api/customer/latest/mutations/customerEmailMarketingUnsubscribe
+// Acts on the authenticated customer; takes no arguments.
+export const CUSTOMER_EMAIL_MARKETING_UNSUBSCRIBE_MUTATION = `
+mutation customerEmailMarketingUnsubscribe {
+  customerEmailMarketingUnsubscribe {
+    emailAddress {
+      emailAddress
+      marketingState
+    }
+    userErrors {
+      code
+      field
+      message
+    }
+  }
+}
+` as const;
 
 // Docs: https://shopify.dev/docs/api/customer/latest/mutations/customerAddressUpdate
 export const UPDATE_ADDRESS_MUTATION = `

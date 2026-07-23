@@ -1,11 +1,18 @@
 import type {AppLoadContext} from 'react-router';
-import type {Customer} from '@shopify/hydrogen/customer-account-api-types';
+import type {
+  Customer,
+  UserErrorsCustomerAddressUserErrors,
+  UserErrorsCustomerEmailMarketingUserErrors,
+  UserErrorsCustomerUserErrors,
+} from '@shopify/hydrogen/customer-account-api-types';
 
 import {
   DELETE_ADDRESS_MUTATION,
   CREATE_ADDRESS_MUTATION,
   UPDATE_ADDRESS_MUTATION,
   CUSTOMER_UPDATE_MUTATION,
+  CUSTOMER_EMAIL_MARKETING_SUBSCRIBE_MUTATION,
+  CUSTOMER_EMAIL_MARKETING_UNSUBSCRIBE_MUTATION,
 } from '~/data/graphql/customer-account/customer';
 
 const formatError = (error = '') => {
@@ -51,8 +58,9 @@ export const addressCreateClient = async (
 
     const apiErrors = createErrors?.map((error) => error?.message) || [];
     const formErrors =
-      data?.customerAddressCreate?.userErrors?.map((error) => error?.message) ||
-      [];
+      data?.customerAddressCreate?.userErrors?.map(
+        (error: UserErrorsCustomerAddressUserErrors) => error?.message,
+      ) || [];
     const customerAddress = data?.customerAddressCreate?.customerAddress;
     if (!customerAddress?.id) {
       if (!apiErrors.length)
@@ -108,8 +116,9 @@ export const addressUpdateClient = async (
 
     const apiErrors = updateErrors?.map((error) => error?.message) || [];
     const formErrors =
-      data?.customerAddressUpdate?.userErrors?.map((error) => error?.message) ||
-      [];
+      data?.customerAddressUpdate?.userErrors?.map(
+        (error: UserErrorsCustomerAddressUserErrors) => error?.message,
+      ) || [];
     const customerAddress = data?.customerAddressUpdate?.customerAddress;
     if (!customerAddress?.id) {
       if (!apiErrors.length)
@@ -148,8 +157,9 @@ export const addressDeleteClient = async (
 
     const apiErrors = deleteErrors?.map((error) => error?.message) || [];
     const formErrors =
-      data?.customerAddressCreate?.userErrors?.map((error) => error?.message) ||
-      [];
+      data?.customerAddressCreate?.userErrors?.map(
+        (error: UserErrorsCustomerAddressUserErrors) => error?.message,
+      ) || [];
     const deletedCustomerAddressId =
       data?.customerAddressDelete?.deletedAddressId;
     if (!deletedCustomerAddressId) {
@@ -165,6 +175,40 @@ export const addressDeleteClient = async (
       apiErrors,
       formErrors,
       response: {deletedCustomerAddressId},
+    };
+  } catch (error) {
+    return errorsResponse(error);
+  }
+};
+
+export const customerEmailMarketingUpdateClient = async (
+  context: AppLoadContext,
+  {subscribe}: {subscribe: boolean},
+) => {
+  try {
+    const {customerAccount} = context;
+
+    // Both mutations act on the authenticated customer and take no variables.
+    const {data, errors: mutationErrors} = await customerAccount.mutate(
+      subscribe
+        ? CUSTOMER_EMAIL_MARKETING_SUBSCRIBE_MUTATION
+        : CUSTOMER_EMAIL_MARKETING_UNSUBSCRIBE_MUTATION,
+    );
+
+    const result = subscribe
+      ? data?.customerEmailMarketingSubscribe
+      : data?.customerEmailMarketingUnsubscribe;
+
+    const apiErrors = mutationErrors?.map((error) => error?.message) || [];
+    const formErrors =
+      result?.userErrors?.map(
+        (error: UserErrorsCustomerEmailMarketingUserErrors) => error?.message,
+      ) || [];
+
+    return {
+      apiErrors,
+      formErrors,
+      response: null,
     };
   } catch (error) {
     return errorsResponse(error);
@@ -189,7 +233,9 @@ export const customerUpdateClient = async (
 
     const apiErrors = updateErrors?.map((error) => error?.message) || [];
     const formErrors =
-      data?.customerUpdate?.userErrors?.map((error) => error?.message) || [];
+      data?.customerUpdate?.userErrors?.map(
+        (error: UserErrorsCustomerUserErrors) => error?.message,
+      ) || [];
 
     return {
       apiErrors,

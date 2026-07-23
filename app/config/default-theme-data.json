@@ -352,6 +352,10 @@
             "loginText": "Already have an account?",
             "pageHeading": "Welcome!",
             "loginLinkText": "Sign In"
+          },
+          "profile": {
+            "enableMarketingOptIn": true,
+            "marketingOptInText": "Keep me up to date with special offers and promotions"
           }
         },
         "product": {

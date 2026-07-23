@@ -1,4 +1,3 @@
-import {useMemo} from 'react';
 import {Links, Meta, Scripts, ScrollRestoration} from 'react-router';
 import {PreviewProvider} from '@pack/react';
 import type {ReactNode} from 'react';
@@ -30,18 +29,18 @@ export function Document({children, title}: DocumentProps) {
   const keywords =
     siteSettings?.data?.siteSettings?.seo?.keywords?.join(', ') ?? '';
 
-  const canonicalUrl = useMemo(() => {
-    if (!url) return undefined;
+  let canonicalUrl: string | undefined;
+  if (url) {
     try {
       const primaryUrl = new URL(ENV.PRIMARY_DOMAIN);
       const routeUrl = new URL(url);
-      return `${primaryUrl.origin}${
+      canonicalUrl = `${primaryUrl.origin}${
         routeUrl.pathname === '/' ? '' : routeUrl.pathname
       }`;
     } catch (error) {
-      return undefined;
+      canonicalUrl = undefined;
     }
-  }, [url]);
+  }
 
   return (
     <html lang={locale.language.toLowerCase()}>

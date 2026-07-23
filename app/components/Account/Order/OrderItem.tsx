@@ -1,4 +1,4 @@
-import {memo, useMemo} from 'react';
+import {memo} from 'react';
 import {Money} from '@shopify/hydrogen-react';
 
 import {Image} from '~/components/Image';
@@ -13,23 +13,19 @@ export const OrderItem = memo(({item}: OrderItemProps) => {
 
   const fullProduct = useProductById(productId);
 
-  const {originalPrice, discountedPrice} = useMemo(() => {
-    const discountNum = Number(totalDiscount?.amount || 0);
-    const priceNum = Number(price?.amount || 0);
-    const originalPriceNum = priceNum + discountNum;
-    return {
-      originalPrice: {
-        amount: (originalPriceNum / quantity).toFixed(2),
+  const discountNum = Number(totalDiscount?.amount || 0);
+  const priceNum = Number(price?.amount || 0);
+  const originalPriceNum = priceNum + discountNum;
+  const originalPrice = {
+    amount: (originalPriceNum / quantity).toFixed(2),
+    currencyCode: price?.currencyCode,
+  };
+  const discountedPrice = discountNum
+    ? {
+        amount: (priceNum / quantity).toFixed(2),
         currencyCode: price?.currencyCode,
-      },
-      discountedPrice: discountNum
-        ? {
-            amount: (priceNum / quantity).toFixed(2),
-            currencyCode: price?.currencyCode,
-          }
-        : null,
-    };
-  }, [quantity, price, totalDiscount]);
+      }
+    : null;
 
   return (
     <div className="grid grid-cols-[10fr_auto] items-center gap-3 border-b border-b-border py-4 text-sm md:grid-cols-[6fr_2fr_1fr_1fr_1fr]">

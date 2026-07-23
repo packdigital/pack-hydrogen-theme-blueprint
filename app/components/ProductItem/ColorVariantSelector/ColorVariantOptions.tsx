@@ -1,4 +1,4 @@
-import {memo, useMemo, useState} from 'react';
+import {memo, useState} from 'react';
 import type {ProductOptionValue} from '@shopify/hydrogen-react/storefront-api-types';
 
 import {COLOR_OPTION_NAME} from '~/lib/constants';
@@ -28,11 +28,9 @@ export const ColorVariantOptions = memo(
 
     const [maxCount, setMaxCount] = useState(7);
 
-    const selectedVariantColor = useMemo(() => {
-      return selectedVariant?.selectedOptions.find(
-        (option) => option.name === COLOR_OPTION_NAME,
-      )?.value;
-    }, [selectedVariant]);
+    const selectedVariantColor = selectedVariant?.selectedOptions.find(
+      (option) => option.name === COLOR_OPTION_NAME,
+    )?.value;
 
     const slicedColorOptions: ProductOptionValue[] = colorOptions.slice(
       0,

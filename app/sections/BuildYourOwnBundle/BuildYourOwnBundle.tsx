@@ -39,26 +39,24 @@ export function BuildYourOwnBundle({cms}: {cms: BuildYourOwnBundleCms}) {
     }, []);
   }, [preselects, productGroupings]);
 
-  const bundleMapById = useMemo(() => {
-    return bundle.reduce((acc: BundleMapById, variant, index) => {
-      if (acc[variant.id]) {
-        return {
-          ...acc,
-          [variant.id]: {
-            ...acc[variant.id],
-            indexes: [...acc[variant.id].indexes, index],
-          },
-        };
-      }
+  const bundleMapById = bundle.reduce((acc: BundleMapById, variant, index) => {
+    if (acc[variant.id]) {
       return {
         ...acc,
         [variant.id]: {
-          ...variant,
-          indexes: [index],
+          ...acc[variant.id],
+          indexes: [...acc[variant.id].indexes, index],
         },
       };
-    }, {});
-  }, [bundle]);
+    }
+    return {
+      ...acc,
+      [variant.id]: {
+        ...variant,
+        indexes: [index],
+      },
+    };
+  }, {});
 
   const preselectedProducts = useProductsByIds(validPreselectedIds);
 

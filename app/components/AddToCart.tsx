@@ -44,7 +44,9 @@ export function AddToCart({
     isAdded,
     isAdding,
     isNotifyMe,
+    isPreorder,
     isSoldOut,
+    preOrderShippingText,
     subtext,
     handleAddToCart,
     handleNotifyMe,
@@ -63,14 +65,23 @@ export function AddToCart({
   }, [isAdded, onAddToCart]);
 
   const isUpdatingClass = isAdding || cartIsUpdating ? 'cursor-default' : '';
-  const isNotifyMeClass = isNotifyMe ? 'btn-inverse-dark' : 'btn-primary';
+  const buttonClass = isPreorder
+    ? 'btn-inverse-dark'
+    : isNotifyMe
+      ? 'btn-inverse-dark'
+      : 'btn-primary';
 
   return (
     <div className={clsx(containerClassName)}>
+      {isPdp && isPreorder && preOrderShippingText && (
+        <p className="mb-3 text-sm">
+          Estimated ship date: {preOrderShippingText}
+        </p>
+      )}
       <button
         aria-label={buttonText}
         className={clsx(
-          isNotifyMeClass,
+          buttonClass,
           'relative w-full',
           isUpdatingClass,
           className,

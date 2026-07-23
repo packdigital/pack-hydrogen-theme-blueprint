@@ -49,13 +49,8 @@ export function usePagination({
     return Number(params.get('page')) || 1;
   }, [search]);
 
-  const startIndex = useMemo(() => {
-    return (currentPage - 1) * resultsPerPage;
-  }, [currentPage, resultsPerPage]);
-
-  const endIndex = useMemo(() => {
-    return startIndex + resultsPerPage;
-  }, [startIndex, resultsPerPage]);
+  const startIndex = (currentPage - 1) * resultsPerPage;
+  const endIndex = startIndex + resultsPerPage;
 
   useEffect(() => {
     setCurrentPage(pageParam);

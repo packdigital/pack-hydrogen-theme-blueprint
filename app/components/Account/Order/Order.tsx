@@ -1,4 +1,3 @@
-import {useMemo} from 'react';
 import {useLoaderData} from 'react-router';
 import type {Order as OrderType} from '@shopify/hydrogen/customer-account-api-types';
 
@@ -13,17 +12,15 @@ import {OrderTotals} from './OrderTotals';
 export function Order() {
   const {order} = useLoaderData<typeof loader>();
 
-  const orderDate = useMemo(() => {
-    if (!order?.processedAt) return null;
-    const date = new Date(order.processedAt);
-    return date.toLocaleString('en-US', {
-      month: 'long',
-      day: 'numeric',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-  }, [order?.processedAt]);
+  const orderDate = !order?.processedAt
+    ? null
+    : new Date(order.processedAt).toLocaleString('en-US', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      });
 
   return (
     <div className="flex flex-col gap-10">

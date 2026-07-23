@@ -29,9 +29,9 @@ export function BYOBSummary({
     return tiers[tierIndex];
   }, [tiers, bundle.length]);
 
-  const tierIndexWithFirstDiscount = useMemo(() => {
-    return tiers?.findIndex(({type}) => !!type && type !== 'none');
-  }, [tiers]);
+  const tierIndexWithFirstDiscount = tiers?.findIndex(
+    ({type}) => !!type && type !== 'none',
+  );
 
   const addToCartUnlocked =
     tierIndexWithFirstDiscount >= 0 &&
@@ -39,10 +39,11 @@ export function BYOBSummary({
   const heading =
     activeTier?.heading || defaultHeading || 'Customize your bundle';
 
-  const prices = useMemo(() => {
-    if (!activeTier || activeTier.type === 'none' || !addToCartUnlocked) {
-      return {compareAtTotal: '', total: ''};
-    }
+  let prices: {compareAtTotal: string; total: string} = {
+    compareAtTotal: '',
+    total: '',
+  };
+  if (activeTier && activeTier.type !== 'none' && addToCartUnlocked) {
     const compareAtTotal = bundle.reduce((acc, variant) => {
       return acc + Number(variant.price.amount);
     }, 0);
@@ -55,11 +56,11 @@ export function BYOBSummary({
     } else {
       total = compareAtTotal - (compareAtTotal * activeTier.percent) / 100;
     }
-    return {
+    prices = {
       compareAtTotal: parseAsCurrency(compareAtTotal, locale),
       total: parseAsCurrency(total, locale),
     };
-  }, [addToCartUnlocked, bundle, activeTier, locale]);
+  }
 
   useEffect(() => {
     if (bundle.length === tiers?.length) {

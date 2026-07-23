@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import type {Customer} from '@shopify/hydrogen/customer-account-api-types';
 
 import {AnalyticsEvent} from '../constants';
@@ -43,6 +43,14 @@ export function GA4Events({
   }
 
   const [scriptLoaded, setScriptLoaded] = useState(false);
+
+  // Keep the latest customer in a ref so the subscribe-once effect below reads
+  // current customer data without re-subscribing on every login/logout (which
+  // would stack duplicate handlers — Hydrogen's subscribe has no unsubscribe).
+  const customerRef = useRef(customer);
+  useEffect(() => {
+    customerRef.current = customer;
+  }, [customer]);
 
   /* Inject GA4 script and set state when successful */
   useEffect(() => {
@@ -92,34 +100,34 @@ export function GA4Events({
     /* register analytics events only until script is ready */
     if (!scriptLoaded) return;
     subscribe(AnalyticsEvent.PAGE_VIEWED, (data: Data) => {
-      viewPageEvent({...data, customer, debug});
+      viewPageEvent({...data, customer: customerRef.current, debug});
     });
     subscribe(AnalyticsEvent.PRODUCT_VIEWED, (data: Data) => {
-      viewProductEvent({...data, customer, debug});
+      viewProductEvent({...data, customer: customerRef.current, debug});
     });
     subscribe(AnalyticsEvent.COLLECTION_VIEWED, (data: Data) => {
-      viewCollectionEvent({...data, customer, debug});
+      viewCollectionEvent({...data, customer: customerRef.current, debug});
     });
     subscribe(AnalyticsEvent.SEARCH_VIEWED, (data: Data) => {
-      viewSearchResultsEvent({...data, customer, debug});
+      viewSearchResultsEvent({...data, customer: customerRef.current, debug});
     });
     subscribe(AnalyticsEvent.CART_VIEWED, (data: Data) => {
-      viewCartEvent({...data, customer, debug});
+      viewCartEvent({...data, customer: customerRef.current, debug});
     });
     subscribe(AnalyticsEvent.PRODUCT_VARIANT_SELECTED, (data: Data) => {
-      clickProductVariantEvent({...data, customer, debug});
+      clickProductVariantEvent({...data, customer: customerRef.current, debug});
     });
     subscribe(AnalyticsEvent.PRODUCT_ITEM_CLICKED, (data: Data) => {
-      clickProductItemEvent({...data, customer, debug});
+      clickProductItemEvent({...data, customer: customerRef.current, debug});
     });
     subscribe(AnalyticsEvent.PRODUCT_ADD_TO_CART, (data: Data) => {
-      addToCartEvent({...data, customer, debug});
+      addToCartEvent({...data, customer: customerRef.current, debug});
     });
     subscribe(AnalyticsEvent.PRODUCT_REMOVED_FROM_CART, (data: Data) => {
-      removeFromCartEvent({...data, customer, debug});
+      removeFromCartEvent({...data, customer: customerRef.current, debug});
     });
     subscribe(AnalyticsEvent.CUSTOMER, (data: Data) => {
-      customerEvent({...data, customer, debug});
+      customerEvent({...data, customer: customerRef.current, debug});
     });
     subscribe(AnalyticsEvent.CUSTOMER_LOGGED_IN, (data: Data) => {
       customerLogInEvent({...data, debug});
@@ -132,7 +140,9 @@ export function GA4Events({
     });
     ready();
     if (debug) console.log(`${ANALYTICS_NAME}: 🔄 subscriptions are ready.`);
-  }, [scriptLoaded, customer?.id, debug]);
+    // Subscribe once when the script is ready; handlers read customerRef for
+    // the latest customer instead of re-subscribing on customer changes.
+  }, [scriptLoaded]);
 
   useEffect(() => {
     if (!customer || !ga4TagId) return;

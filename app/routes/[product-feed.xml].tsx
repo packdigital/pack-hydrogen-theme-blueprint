@@ -40,7 +40,7 @@ export async function loader({context, request}: Route.LoaderArgs) {
           country: storefront.i18n.country,
           language: storefront.i18n.language,
         },
-        cache: storefront.CacheShort(),
+        cache: storefront.CacheLong(),
       },
     );
     const {endCursor, hasNextPage} = queriedProducts.pageInfo;

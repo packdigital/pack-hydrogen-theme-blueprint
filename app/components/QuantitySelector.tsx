@@ -12,6 +12,13 @@ interface QuantitySelectorProps {
   handleIncrement: () => void;
   hideButtons?: boolean;
   isUpdating?: boolean;
+  /*
+   * Optimistic-sync hint: dims the quantity while a debounced cart update is
+   * pending/in flight, but keeps the number visible and the buttons enabled so
+   * the user can keep clicking. Unlike `isUpdating`, it never shows a spinner
+   * or disables the controls. Ignored when `isUpdating` is true.
+   */
+  isSyncing?: boolean;
   productTitle?: string;
   quantity: number;
 }
@@ -25,6 +32,7 @@ export function QuantitySelector({
   handleIncrement,
   hideButtons = false,
   isUpdating = false,
+  isSyncing = false,
   productTitle = 'product',
   quantity = 1,
 }: QuantitySelectorProps) {
@@ -62,7 +70,14 @@ export function QuantitySelector({
         {isUpdating ? (
           <Spinner color="var(--neutral-light)" width="20" />
         ) : (
-          <p className="w-full text-center outline-none">{quantity}</p>
+          <p
+            className={clsx(
+              'w-full text-center outline-none transition-opacity',
+              isSyncing && 'opacity-50',
+            )}
+          >
+            {quantity}
+          </p>
         )}
       </div>
 

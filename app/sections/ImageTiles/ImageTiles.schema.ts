@@ -261,22 +261,19 @@ export function Schema() {
           {
             label: 'Tiles Per View (desktop)',
             name: 'tilesPerViewDesktop',
-            description: 'Save and refresh page to observe change',
             component: 'number',
           },
           {
             label: 'Tiles Per View (tablet)',
             name: 'tilesPerViewTablet',
             component: 'number',
-            description:
-              'Save and refresh page to observe change\nTip: use decimals to show partial tiles',
+            description: 'Tip: use decimals to show partial tiles',
           },
           {
             label: 'Tiles Per View (mobile)',
             name: 'tilesPerViewMobile',
             component: 'number',
-            description:
-              'Save and refresh page to observe change\nTip: use decimals to show partial tiles',
+            description: 'Tip: use decimals to show partial tiles',
           },
           {
             label: 'Image Aspect Ratio',

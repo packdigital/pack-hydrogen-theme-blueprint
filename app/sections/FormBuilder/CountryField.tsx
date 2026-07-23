@@ -1,4 +1,3 @@
-import {useMemo} from 'react';
 import clsx from 'clsx';
 
 import {useCountriesList} from '~/hooks';
@@ -23,10 +22,9 @@ export function CountryField({
 }: CountryFieldProps) {
   const {countryNames} = useCountriesList();
 
-  const countryOptions = useMemo(() => {
-    if (!countryNames?.length) return null;
-    return ['', ...firstCountries, ...countryNames];
-  }, [countryNames?.length, firstCountries]);
+  const countryOptions = !countryNames?.length
+    ? null
+    : ['', ...firstCountries, ...countryNames];
 
   return (
     <select

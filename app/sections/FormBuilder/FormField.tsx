@@ -142,7 +142,7 @@ export function FormField({field}: Record<string, any>) {
               direction === 'vertical' ? 'flex-col' : 'flex-row',
             )}
           >
-            {options?.map((value) => (
+            {options?.map((value: string) => (
               <label
                 key={`${name}.${value}`}
                 className="flex gap-1"
@@ -167,7 +167,7 @@ export function FormField({field}: Record<string, any>) {
               direction === 'vertical' ? 'flex-col' : 'flex-row',
             )}
           >
-            {options?.map((value) => (
+            {options?.map((value: string) => (
               <label
                 className="flex gap-1"
                 htmlFor={`${name}.${value}`}

@@ -1,13 +1,11 @@
-import {useEffect, useState} from 'react';
-import type {SwiperClass} from 'swiper/react';
-import {Swiper, SwiperSlide} from 'swiper/react';
-import {A11y, Pagination} from 'swiper/modules';
+import {useCallback, useEffect, useState} from 'react';
+import type {EmblaCarouselType} from 'embla-carousel';
 import type {Image} from '@shopify/hydrogen/storefront-api-types';
 
 import {Badges} from '~/components/Badges';
+import {Carousel} from '~/components/Carousel';
 import type {ProductWithStatus} from '~/lib/types';
 
-import {ProductImage} from './ProductImage';
 import {ProductMediaFile} from './ProductMediaFile';
 import {ProductMediaThumbnails} from './ProductMediaThumbnails';
 import {ProductDraftMediaOverlay} from './ProductDraftMediaOverlay';
@@ -19,7 +17,7 @@ export function ProductMedia({
   selectedVariant,
   selectedVariantColor,
 }: ProductMediaProps) {
-  const [swiper, setSwiper] = useState<SwiperClass | null>(null);
+  const [mainApi, setMainApi] = useState<EmblaCarouselType | null>(null);
 
   const {initialIndex, maybeHasImagesByVariant, media} = useProductMedia({
     product,
@@ -28,25 +26,29 @@ export function ProductMedia({
 
   const [activeIndex, setActiveIndex] = useState<number>(initialIndex);
 
-  // Reset the active index when the selected color changes
+  // Reset/advance the gallery when the selected color changes
   useEffect(() => {
-    if (!swiper || swiper.destroyed) return;
+    if (!mainApi) return;
     if (maybeHasImagesByVariant) {
       const mediaIndex = product.media.nodes.findIndex(
         ({previewImage}) => previewImage?.url === selectedVariant?.image?.url,
       );
       const index = mediaIndex >= 0 ? mediaIndex : 0;
-      swiper.slideTo(index);
+      mainApi.scrollTo(index);
       setActiveIndex(index);
       return;
     }
     setActiveIndex(0);
-    swiper.slideTo(0);
-  }, [maybeHasImagesByVariant, selectedVariantColor, swiper]);
+    mainApi.scrollTo(0);
+  }, [maybeHasImagesByVariant, selectedVariantColor, mainApi]);
+
+  const scrollToIndex = useCallback(
+    (index: number) => mainApi?.scrollTo(index),
+    [mainApi],
+  );
 
   const firstMediaImageOnMount = media[initialIndex]?.previewImage as
-    | Image
-    | undefined;
+    Image | undefined;
 
   return (
     <div className="grid grid-cols-1 justify-between gap-4 lg:grid-cols-[80px_calc(100%-100px)] xl:gap-5">
@@ -62,50 +64,29 @@ export function ProductMedia({
                 : 'var(--product-image-aspect-ratio)',
           }}
         >
-          <Swiper
-            onSwiper={setSwiper}
-            modules={[A11y, Pagination]}
-            onSlideChange={(_swiper) => {
-              setActiveIndex(_swiper.realIndex);
-            }}
-            slidesPerView={1}
-            grabCursor
-            initialSlide={initialIndex}
-            pagination={{
-              el: '.swiper-pagination',
-              clickable: true,
-            }}
-            className="max-md:!pb-5 md:pb-0"
+          <Carousel
+            ariaLabel={`${product.title} media`}
+            className="size-full"
+            dots
+            dotsClassName="md:hidden"
+            onApi={setMainApi}
+            onSelect={setActiveIndex}
+            options={{startIndex: initialIndex}}
+            slideClassName="size-full"
+            slides={media.map((mediaItem, index) => (
+              <ProductMediaFile
+                alt={product.title}
+                key={mediaItem.id}
+                media={mediaItem}
+                priority={index === initialIndex}
+              />
+            ))}
+            viewportClassName="size-full"
           >
-            {media.map((media, index) => {
-              return (
-                <SwiperSlide key={media.id}>
-                  <ProductMediaFile
-                    alt={product.title}
-                    media={media}
-                    priority={index === initialIndex}
-                  />
-                </SwiperSlide>
-              );
-            })}
-
-            <div className="active-bullet-black swiper-pagination !top-[calc(100%-8px)] flex w-full justify-center gap-2.5 md:hidden" />
-
             {(product as ProductWithStatus).status === 'DRAFT' && (
               <ProductDraftMediaOverlay />
             )}
-          </Swiper>
-
-          {/* placeholder image while swiper inits */}
-          {!swiper && (
-            <div className="absolute inset-0 z-[1] size-full max-md:hidden">
-              <ProductImage
-                alt={product.title}
-                image={firstMediaImageOnMount}
-                priority
-              />
-            </div>
-          )}
+          </Carousel>
 
           <div className="pointer-events-none absolute left-0 top-0 z-[1] p-2.5 xs:p-4 md:p-3 xl:p-4">
             <Badges tags={product.tags} />
@@ -114,22 +95,17 @@ export function ProductMedia({
       </div>
 
       {/*
-       * Height classes breakdown for a vertical stack. For horizontal stack, use inverse logic with width instead
-       * Example: "h-[calc(90px*4+10px*3)]" (with w-[90px])
-       * 90px = height of each thumbnail. In this case, this implies a square aspect ratio because it's the same as the width. For anything else, update px height accordingly in relation to its width
-       * 4 = number of thumbnails
-       * 10px = gutter between thumbnails
-       * 3 = number of gutters between thumbnails
+       * Thumbnails: a native scrollable strip (horizontal on mobile, vertical
+       * column on desktop) synced to the gallery. Clicking a thumb scrolls the
+       * gallery; the active thumb is scrolled into view.
        */}
-      <div className="scrollbar-hide relative order-2 hidden w-full overflow-x-auto md:block md:max-lg:pb-[calc((100%-5*8px)/6)] lg:order-1 lg:h-[calc(80px*5+12px*4)] xl:h-[calc(80px*6+12px*5)]">
+      <div className="relative order-2 hidden w-full md:block lg:order-1 lg:h-[calc(80px*5+12px*4)] xl:h-[calc(80px*6+12px*5)]">
         {media.length > 0 && (
           <ProductMediaThumbnails
             activeIndex={activeIndex}
-            initialIndex={initialIndex}
             media={media}
+            onThumbClick={scrollToIndex}
             productTitle={product.title}
-            setActiveIndex={setActiveIndex}
-            swiper={swiper}
           />
         )}
       </div>

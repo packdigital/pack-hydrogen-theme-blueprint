@@ -1,5 +1,3 @@
-import {useMemo} from 'react';
-
 import {Image} from '~/components/Image';
 import {Link} from '~/components/Link';
 import type {Article} from '~/lib/types';
@@ -13,14 +11,12 @@ export function BlogGridItem({
 }) {
   const atDate =
     article.firstPublishedAt || article.publishedAt || article.createdAt;
-  const date = useMemo(() => {
-    const options: Intl.DateTimeFormatOptions = {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    };
-    return new Date(atDate).toLocaleDateString('en-US', options);
-  }, [atDate]);
+  const dateOptions: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  };
+  const date = new Date(atDate).toLocaleDateString('en-US', dateOptions);
 
   const url = `/blogs/${blogHandle}/${article.handle}`;
 

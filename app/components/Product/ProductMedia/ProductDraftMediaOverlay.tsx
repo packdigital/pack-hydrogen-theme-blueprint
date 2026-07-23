@@ -1,6 +1,6 @@
 export function ProductDraftMediaOverlay() {
   return (
-    <div className="pointer-events-none absolute inset-0 z-[1] size-full font-sans opacity-5">
+    <div className="pointer-events-none absolute inset-0 z-[1] size-full overflow-hidden font-sans opacity-5">
       <svg width="100vw" height="100vh" id="background-svg">
         <defs>
           <pattern
