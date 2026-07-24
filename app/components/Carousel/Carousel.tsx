@@ -57,6 +57,8 @@ export function Carousel({
       Autoplay({
         delay: typeof autoplay === 'number' ? autoplay : DEFAULT_AUTOPLAY_DELAY,
         stopOnInteraction: false,
+        stopOnMouseEnter: true,
+        stopOnFocusIn: true,
       }),
     );
   }
