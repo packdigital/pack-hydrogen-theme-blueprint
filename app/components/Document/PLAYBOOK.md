@@ -42,6 +42,10 @@ export function PlaybookSDK({
     ? '/apps/playbook'
     : 'https://www.heyplaybook.com';
 
+  // Set PUBLIC_PLAYBOOK_CONSENT_REQUIRED=true only if this store runs a consent
+  // manager (see "Cookie consent" below). Leave unset on stores with no CMP.
+  const consentRequired = ENV.PUBLIC_PLAYBOOK_CONSENT_REQUIRED === 'true';
+
   const revealScript = `
     (function(){
       function reveal() {
@@ -75,6 +79,9 @@ export function PlaybookSDK({
           shopId: ENV.PUBLIC_PLAYBOOK_SHOP_ID,
           apiEndpoint,
         })}
+        // Present only when a consent manager runs on this store (see "Cookie
+        // consent" below). Omitted entirely otherwise.
+        data-pb-consent={consentRequired ? 'required' : undefined}
         async
       />
     </>
@@ -85,6 +92,7 @@ export function PlaybookSDK({
 **How it works:**
 - The SDK JS bundle loads from `cdn.heyplaybook.com` (Cloudflare R2 CDN)
 - The `data-pb-config` attribute tells the SDK where to send API calls — either through the proxy (first-party, default) or direct to `heyplaybook.com`
+- The `data-pb-consent` attribute (present only when `PUBLIC_PLAYBOOK_CONSENT_REQUIRED=true`) gates tracking on the shopper's cookie-consent choice — see [Cookie consent](#cookie-consent-cmp) below
 - Anti-flicker: When Playbook URL params are present (`_pv=`, `_ptid=`, etc.), the page is hidden until the SDK reveals it. The 3-second timeout is a safety fallback.
 
 **Important:** This component must render inside `<head>`, not `<body>`.
@@ -171,6 +179,7 @@ The SDK needs these to attach attribution data to Shopify carts. These are stand
 |----------|------|---------|
 | `PUBLIC_PLAYBOOK_PROXY_ENABLED` | Public | Proxy is on by default. Set to `'false'` to disable (API calls go direct to heyplaybook.com). |
 | `PUBLIC_PLAYBOOK_SDK_URL` | Public | Override the SDK JS bundle URL. Defaults to `https://cdn.heyplaybook.com/playbook.js`. Useful for pinning to a specific version. |
+| `PUBLIC_PLAYBOOK_CONSENT_REQUIRED` | Public | Set to `'true'` **only if this store runs a cookie-consent manager** (Transcend Airgap, OneTrust, Shopify's own banner, …). Gates tracking on the shopper's choice. Leave unset on stores with no CMP. See [Cookie consent](#cookie-consent-cmp). |
 | `PLAYBOOK_PLATFORM_URL` | Private | Override the Playbook backend URL (used by the proxy route). Defaults to `https://www.heyplaybook.com`. |
 
 ### TypeScript Types
@@ -195,6 +204,30 @@ frame-src:    https://www.heyplaybook.com
 ```
 
 > With the proxy enabled (default), `connect-src` for `heyplaybook.com` is only needed as a fallback. The proxy makes API requests same-origin. The SDK JS bundle always loads from `cdn.heyplaybook.com`.
+
+---
+
+## Cookie consent (CMP)
+
+**Only relevant if this store runs a consent manager.** Skip this section entirely if it doesn't — the SDK works unchanged and this is a no-op.
+
+Playbook gates all tracking on **Shopify's Customer Privacy API**. Any CMP that writes to that API — Transcend Airgap, OneTrust, Shopify's own cookie banner — works with no extra integration; we read Shopify's API and never talk to the CMP directly.
+
+**What's gated, and what isn't:**
+- **Rendering the experience is never gated.** A shopper who declines still sees the experience — they clicked an ad for it.
+- **Tracking is gated.** When a shopper declines analytics consent, no impression is recorded, no attribution cookies are set, and no cart attributes are written.
+
+**Turn it on:**
+
+```bash
+PUBLIC_PLAYBOOK_CONSENT_REQUIRED=true
+```
+
+That adds `data-pb-consent="required"` to the SDK script tag, which tells the SDK to **wait** for Shopify's Customer Privacy API before making any tracking decision.
+
+**Why the flag is needed on headless stores.** The SDK can auto-detect a consent system (via `window.Shopify` or the `_tracking_consent` cookie) — but on Hydrogen the CMP often initializes `Shopify.customerPrivacy` *after* the SDK boots, and a first-time visitor has no `_tracking_consent` cookie yet. Without the flag, that first ad-click pageview could be recorded before the banner is answered (the SDK fails open when it sees no consent system, per [Shopify's guidance](https://shopify.dev/docs/api/customer-privacy)). The flag removes that race by making the SDK wait for the API.
+
+Leave the flag **unset** on stores with no CMP — there's nothing to wait for, and fail-open is correct there.
 
 ---
 
@@ -291,6 +324,7 @@ After setup, verify:
 - [ ] No CSP errors in console
 - [ ] Cart attribution: after adding to cart via a test link, cart attributes include `pb_impression_id__`, `pb_variant__`, and `pb_test_id__` (or `pb_experiment_id__` + `pb_arm_id__` for an experiment link)
 - [ ] Direct checkout attribution: use a `/cart/variant:qty` link after visiting a Playbook test link — order should have Playbook attributes
+- [ ] Consent (only if a CMP runs): with `PUBLIC_PLAYBOOK_CONSENT_REQUIRED=true`, decline analytics in the banner then load a test link — the experience renders but no `_pb_impression_id` cookie is set and no impression is recorded; accept, and both appear
 
 ---
 
@@ -306,3 +340,5 @@ After setup, verify:
 | Cart attribution missing | Env vars not exposed | Verify `PUBLIC_STOREFRONT_API_TOKEN` and `PUBLIC_STORE_DOMAIN` are in `window.ENV` |
 | Direct checkout attribution missing | Server-side route not reading cookies | Add Playbook cookie reading to `cart.$lines.tsx` (see Step 7) |
 | CSP errors in console | Missing directives | Add `cdn.heyplaybook.com` to `script-src` and `heyplaybook.com` to `connect-src` |
+| Tracking still fires after a shopper declines | `PUBLIC_PLAYBOOK_CONSENT_REQUIRED` not set, or the CMP isn't writing to Shopify's Customer Privacy API | Set `PUBLIC_PLAYBOOK_CONSENT_REQUIRED=true`; confirm the CMP calls `Shopify.customerPrivacy.setTrackingConsent(...)`. See [Cookie consent](#cookie-consent-cmp) |
+| Nothing is ever tracked, even after accepting | Consent flag set but `Shopify.customerPrivacy` never loads on the page | Ensure Shopify's Customer Privacy API is initialized (Hydrogen customer-privacy setup / the store's CMP); the SDK fails closed while it waits |
