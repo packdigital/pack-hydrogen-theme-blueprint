@@ -1,5 +1,3 @@
-import {Analytics} from '@shopify/hydrogen';
-
 import {useSettings} from '~/hooks';
 
 import type {SearchSuggestionsProps} from './Search.types';
@@ -7,24 +5,16 @@ import type {SearchSuggestionsProps} from './Search.types';
 export function SearchSuggestions({
   handleSuggestion,
   hasNoProductResults,
-  searchTerm,
 }: SearchSuggestionsProps) {
   const {search} = useSettings();
-  const {results, suggestions, input} = {...search};
+  const {results, suggestions} = {...search};
   const {noResultsText} = {...results};
   const {heading, terms} = {...suggestions};
-  const characterMin = Number(input?.characterMin || 1);
 
   return (
     <div className="scrollbar-hide flex flex-1 flex-col gap-8 overflow-y-auto p-8">
       {hasNoProductResults && (
-        <>
-          <h3 className="text-base font-normal">{noResultsText}</h3>
-
-          {searchTerm?.length >= characterMin && (
-            <Analytics.SearchView data={{searchTerm, searchResults: []}} />
-          )}
-        </>
+        <h3 className="text-base font-normal">{noResultsText}</h3>
       )}
 
       {terms?.length > 0 && (
