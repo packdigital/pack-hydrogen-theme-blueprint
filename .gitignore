@@ -13,6 +13,7 @@ node_modules
 .shopify
 .hydrogen
 .react-router
+tsconfig.tsbuildinfo
 
 # IntelliJ
 .idea

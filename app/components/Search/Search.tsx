@@ -54,7 +54,6 @@ export const Search = memo(() => {
         <SearchSuggestions
           handleSuggestion={handleSuggestion}
           hasNoProductResults={hasNoProductResults}
-          searchTerm={searchTerm}
         />
       )}
 

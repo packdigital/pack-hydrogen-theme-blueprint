@@ -36,5 +36,4 @@ export interface SearchResultsProps {
 export interface SearchSuggestionsProps {
   handleSuggestion: HandleSuggestion;
   hasNoProductResults: boolean;
-  searchTerm: string;
 }

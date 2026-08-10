@@ -1,5 +1,3 @@
-import {Analytics} from '@shopify/hydrogen';
-
 import {Link} from '~/components/Link';
 import {useSettings} from '~/hooks';
 
@@ -60,14 +58,10 @@ export function SearchResults({
         </div>
       )}
 
-      {searchTerm && !!productResults?.length && (
-        <Analytics.SearchView
-          data={{
-            searchTerm,
-            searchResults: productResults,
-          }}
-        />
-      )}
+      {/* No `Analytics.SearchView` here on purpose. `search_viewed` is
+      published once, from the /search route, when the user commits to a search
+      (clicks the results link or presses Enter). Publishing it from the
+      predictive drawer too produced two events per search. */}
     </div>
   );
 }
