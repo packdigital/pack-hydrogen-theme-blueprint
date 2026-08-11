@@ -1,6 +1,6 @@
 import type {Customer} from '@shopify/hydrogen/customer-account-api-types';
 
-import {AnalyticsEvent} from '../constants';
+import {AnalyticsEvent, SEARCH_RESULTS_LIST} from '../constants';
 
 import {
   flattenConnection,
@@ -265,6 +265,31 @@ const viewCollectionEvent = ({
   }
 };
 
+// Hydrogen's `Analytics.SearchView` publishes from a `useEffect` keyed on
+// `[publish, url, shop?.shopId]`, so the event count follows component mount
+// timing rather than user intent: twice under React StrictMode in dev, again
+// when `publish` swaps from a no-op to the real function as consent resolves,
+// and again on any remount. Collapse repeats of the same term on the same
+// surface inside a short window so the count can't drift with render behavior.
+// Keyed by term *and* list so the drawer and /search stay separate signals.
+const SEARCH_DEDUPE_MS = 1000;
+let lastSearch: {key: string; at: number} | null = null;
+
+const isDuplicateSearch = (searchTerm: string, list: string) => {
+  const now = Date.now();
+  const key = `${searchTerm}|${list}`;
+  const previous = lastSearch;
+  if (
+    previous &&
+    previous.key === key &&
+    now - previous.at < SEARCH_DEDUPE_MS
+  ) {
+    return true;
+  }
+  lastSearch = {key, at: now};
+  return false;
+};
+
 const viewSearchResultsEvent = ({
   debug,
   ...data
@@ -274,10 +299,19 @@ const viewSearchResultsEvent = ({
     if (debug) logSubscription({data, analyticsEvent});
 
     const {searchResults, searchTerm, customer, shop} = data;
-    if (!searchResults || !searchTerm)
+    if (!searchResults || !searchTerm || !searchResults.length)
       throw new Error(
         '`searchTerm` and/or `searchResults` parameters are missing.',
       );
+
+    const list = data.customData?.list || SEARCH_RESULTS_LIST;
+    if (isDuplicateSearch(searchTerm, list)) {
+      if (debug)
+        console.log(
+          `${ANALYTICS_NAME}: ⏭️ skipped duplicate \`${analyticsEvent}\` for "${searchTerm}" (${list})`,
+        );
+      return;
+    }
 
     const event = {
       event: 'dl_view_search_results',
@@ -287,10 +321,10 @@ const viewSearchResultsEvent = ({
           flattenConnection(searchResults[0]?.variants)?.[0]?.price
             ?.currencyCode || shop?.currency,
         actionField: {
-          list: 'search results',
+          list,
           search_term: searchTerm,
         },
-        products: searchResults.slice(0, 12).map(mapProductItemProduct()),
+        products: searchResults.slice(0, 12).map(mapProductItemProduct(list)),
       },
     };
     dispatchEvent({event, debug});

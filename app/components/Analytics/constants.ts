@@ -11,6 +11,13 @@ import {AnalyticsEvent as HydrogenAnalyticsEvent} from '@shopify/hydrogen';
 // PRODUCT_REMOVED_FROM_CART: "product_removed_from_cart";
 // CUSTOM_EVENT: `custom_${string}`;
 
+// `actionField.list` values for the two search surfaces. They publish the same
+// `SEARCH_VIEWED` event, so these are what let downstream tell "a shopper
+// searched" (typeahead drawer) apart from "a shopper opened full results"
+// (/search route) instead of summing them as one metric.
+export const SEARCH_RESULTS_LIST = 'search results';
+export const PREDICTIVE_SEARCH_LIST = 'predictive search results';
+
 export const AnalyticsEvent = {
   ...HydrogenAnalyticsEvent,
   PRODUCT_VARIANT_SELECTED: 'custom_product_variant_selected',

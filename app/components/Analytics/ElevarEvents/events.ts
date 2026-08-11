@@ -1,6 +1,6 @@
 import type {Customer} from '@shopify/hydrogen/customer-account-api-types';
 
-import {AnalyticsEvent} from '../constants';
+import {AnalyticsEvent, SEARCH_RESULTS_LIST} from '../constants';
 
 import {
   flattenConnection,
@@ -264,6 +264,29 @@ const viewCollectionEvent = ({
   }
 };
 
+// See the note in FueledEvents/events.ts — Hydrogen's `Analytics.SearchView`
+// publishes on mount, so the count follows render behavior (StrictMode in dev,
+// consent resolving, remounts) rather than user intent. Collapse repeats of the
+// same term on the same surface, keyed by term *and* list so the drawer and
+// /search stay separate signals.
+const SEARCH_DEDUPE_MS = 1000;
+let lastSearch: {key: string; at: number} | null = null;
+
+const isDuplicateSearch = (searchTerm: string, list: string) => {
+  const now = Date.now();
+  const key = `${searchTerm}|${list}`;
+  const previous = lastSearch;
+  if (
+    previous &&
+    previous.key === key &&
+    now - previous.at < SEARCH_DEDUPE_MS
+  ) {
+    return true;
+  }
+  lastSearch = {key, at: now};
+  return false;
+};
+
 const viewSearchResultsEvent = ({
   debug,
   ...data
@@ -273,10 +296,19 @@ const viewSearchResultsEvent = ({
     if (debug) logSubscription({data, analyticsEvent});
 
     const {searchResults, searchTerm, customer, shop} = data;
-    if (!searchResults || !searchTerm)
+    if (!searchResults || !searchTerm || !searchResults.length)
       throw new Error(
         '`searchTerm` and/or `searchResults` parameters are missing.',
       );
+
+    const list = data.customData?.list || SEARCH_RESULTS_LIST;
+    if (isDuplicateSearch(searchTerm, list)) {
+      if (debug)
+        console.log(
+          `${ANALYTICS_NAME}: ⏭️ skipped duplicate \`${analyticsEvent}\` for "${searchTerm}" (${list})`,
+        );
+      return;
+    }
 
     const event = {
       event: 'dl_view_search_results',
@@ -286,10 +318,10 @@ const viewSearchResultsEvent = ({
           flattenConnection(searchResults[0]?.variants)?.[0]?.price
             ?.currencyCode || shop?.currency,
         actionField: {
-          list: 'search results',
+          list,
           search_term: searchTerm,
         },
-        impressions: searchResults.slice(0, 7).map(mapProductItemProduct()),
+        impressions: searchResults.slice(0, 7).map(mapProductItemProduct(list)),
       },
     };
     // Elevar requires a `dl_user_data` event before `dl_view_search_results`

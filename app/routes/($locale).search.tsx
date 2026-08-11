@@ -12,6 +12,7 @@ import type {
 } from '@shopify/hydrogen/storefront-api-types';
 
 import {Collection} from '~/components/Collection';
+import {SEARCH_RESULTS_LIST} from '~/components/Analytics/constants';
 import {PRODUCTS_SEARCH_QUERY} from '~/data/graphql/storefront/search';
 import {getFilters} from '~/lib/server-utils/collection.server';
 import {getShop, getSiteSettings} from '~/lib/server-utils/settings.server';
@@ -165,6 +166,7 @@ export default function SearchRoute() {
             searchTerm,
             searchResults: collection.products.nodes,
           }}
+          customData={{list: SEARCH_RESULTS_LIST}}
         />
       )}
     </section>

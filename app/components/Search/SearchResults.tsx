@@ -1,4 +1,7 @@
+import {Analytics} from '@shopify/hydrogen';
+
 import {Link} from '~/components/Link';
+import {PREDICTIVE_SEARCH_LIST} from '~/components/Analytics/constants';
 import {useSettings} from '~/hooks';
 
 import {SearchItem} from './SearchItem';
@@ -48,7 +51,11 @@ export function SearchResults({
             {collectionResults.map(({handle, title}, index) => {
               return (
                 <li key={index}>
-                  <Link aria-label={title} href={`/collections/${handle}`}>
+                  <Link
+                    aria-label={title}
+                    href={`/collections/${handle}`}
+                    onClick={closeSearch}
+                  >
                     <p className="text-underline">{title}</p>
                   </Link>
                 </li>
@@ -58,10 +65,19 @@ export function SearchResults({
         </div>
       )}
 
-      {/* No `Analytics.SearchView` here on purpose. `search_viewed` is
-      published once, from the /search route, when the user commits to a search
-      (clicks the results link or presses Enter). Publishing it from the
-      predictive drawer too produced two events per search. */}
+      {/* The drawer and the /search route are two distinct signals: "a shopper
+      searched" versus "a shopper opened full results". They're tagged with
+      different `list` values so downstream can count them separately instead of
+      summing them as one metric. */}
+      {searchTerm && !!productResults?.length && (
+        <Analytics.SearchView
+          data={{
+            searchTerm,
+            searchResults: productResults,
+          }}
+          customData={{list: PREDICTIVE_SEARCH_LIST}}
+        />
+      )}
     </div>
   );
 }
