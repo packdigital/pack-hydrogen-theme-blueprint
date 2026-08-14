@@ -163,8 +163,29 @@ export default {
         }),
       );
 
+      /**
+       * Commit the Hydrogen session.
+       *
+       * This MUST be `append`, not `set`. `Set-Cookie` is the one response
+       * header that is legitimately repeated — one line per cookie — and
+       * `Headers.set` deletes every existing value before adding this one.
+       *
+       * By the time this runs, the response already carries every other
+       * cookie the request produced: Hydrogen's `collectTrackingInformation`
+       * (default `true`) has appended the Storefront API's `_shopify_essential`
+       * / `_analytics` / `_marketing` / `_y` / `_s`, Pack has appended
+       * `pack_session` / `__pack`, and a cart mutation would have appended the
+       * cart id via `cartSetIdDefault`. With `set`, all of them are dropped on
+       * any request that writes the session — customer login, OAuth callback,
+       * logout, B2B buyer selection, and access-token refresh on any document
+       * request for a signed-in buyer.
+       *
+       * Losing the Shopify tracking cookies makes Shopify mint a fresh session
+       * token on the following request, which inflates session counts and
+       * depresses pageviews-per-session. Losing the cart id loses the cart.
+       */
       if (session.isPending) {
-        response.headers.set('Set-Cookie', await session.commit());
+        response.headers.append('Set-Cookie', await session.commit());
       }
 
       if (response.status === 404) {
