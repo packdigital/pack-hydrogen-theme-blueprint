@@ -17,6 +17,31 @@ module.exports = {
   rules: {
     'no-console': 'off',
     'no-inline-styles': 'off',
+    /**
+     * `Set-Cookie` is the one response header that is legitimately repeated —
+     * one line per cookie. `Headers.set()` deletes every existing value before
+     * adding its own, so it silently drops every cookie already on the
+     * response: Shopify's tracking cookies (appended by Hydrogen's
+     * `collectTrackingInformation`), Pack's `pack_session` / `__pack`, and the
+     * cart id from `cartSetIdDefault`. Dropping the tracking cookies makes
+     * Shopify count a new session on the next request; dropping the cart id
+     * loses the cart.
+     *
+     * This reads as correct in review — `set` looks more deliberate than
+     * `append` — which is why it needs a rule rather than vigilance.
+     *
+     * Building a brand-new Response with a single cookie is fine: that uses a
+     * `headers` object literal, not `.set()`, and is not matched here.
+     */
+    'no-restricted-syntax': [
+      'error',
+      {
+        selector:
+          'CallExpression[callee.property.name="set"][arguments.0.value=/^[Ss]et-[Cc]ookie$/]',
+        message:
+          "`Set-Cookie` is a repeated header — `Headers.set()` deletes every cookie already on the response (Shopify tracking, Pack session, cart id). Use `headers.append('Set-Cookie', …)` instead.",
+      },
+    ],
     'react-hooks/exhaustive-deps': 'off',
     'react/forbid-prop-types': 'off',
     'react/no-array-index-key': 'off',
