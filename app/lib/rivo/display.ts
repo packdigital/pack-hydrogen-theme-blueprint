@@ -456,6 +456,32 @@ export const getReferrals = async ({
 };
 
 /**
+ * Point a referral link at the Hydrogen storefront.
+ *
+ * Rivo builds `referral_url` from the shop's myshopify domain. On a headless
+ * setup that domain serves the Liquid online store, so a friend following the
+ * link lands somewhere the referral-capture hook does not run and the referral is
+ * never attributed. Rewriting the origin to `PRIMARY_DOMAIN` keeps the code and
+ * path intact while sending them to the storefront that can actually record it.
+ */
+export const toStorefrontReferralUrl = (
+  referralUrl: string | null,
+  primaryDomain?: string,
+) => {
+  if (!referralUrl || !primaryDomain) return referralUrl;
+  try {
+    const target = new URL(referralUrl);
+    const origin = new URL(primaryDomain);
+    target.protocol = origin.protocol;
+    target.host = origin.host;
+    return target.toString();
+  } catch (error) {
+    // A malformed value from either side shouldn't break the section.
+    return referralUrl;
+  }
+};
+
+/**
  * Referral link plus counts.
  *
  * There is no single stats endpoint on this surface — `/customers/:id/advocate_stats`
@@ -484,7 +510,10 @@ export const getReferralStats = async ({
     status: 200,
     error: null,
     data: {
-      referralUrl: customer.data.referralUrl,
+      referralUrl: toStorefrontReferralUrl(
+        customer.data.referralUrl,
+        env.PRIMARY_DOMAIN,
+      ),
       referralCode: customer.data.referralCode,
       completedCount,
       pendingCount: all.length - completedCount,

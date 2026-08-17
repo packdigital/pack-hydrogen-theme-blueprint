@@ -16,6 +16,13 @@
 
 export interface RivoEnv {
   PRIVATE_RIVO_API_KEY?: string;
+  /**
+   * The storefront's canonical origin. Used to rewrite Rivo's referral links,
+   * which are generated against the myshopify domain — that serves the Liquid
+   * online store, not Hydrogen, so a referred friend would never reach the
+   * capture hook.
+   */
+  PRIMARY_DOMAIN?: string;
   /** @deprecated Misnamed — this is a Merchant API key. Use `PRIVATE_RIVO_API_KEY`. */
   PRIVATE_RIVO_STOREFRONT_API_KEY?: string;
   RIVO_API_BASE_URL?: string;
