@@ -233,3 +233,27 @@ export const getCartStrategy = (
       return 'discount_code';
   }
 };
+
+/**
+ * Triggers the storefront is allowed to award.
+ *
+ * Everything else — `order_placed`, `customer_birthday`,
+ * `customer_member_enabled`, `referral_complete` — is awarded by Rivo itself from
+ * its own signals and must never be awardable from a browser request.
+ *
+ * `manual` is deliberately excluded: it is the admin grant path and accepts an
+ * arbitrary `points_amount`, so exposing it would let anyone mint points.
+ */
+export const STOREFRONT_AWARDABLE_TRIGGERS = new Set([
+  'instagram_follow',
+  'tiktok_follow',
+  'facebook_like',
+  'facebook_share',
+  'twitter_follow',
+  'twitter_share',
+  'visit_url',
+  'custom_action',
+]);
+
+export const isClaimableTrigger = (trigger?: string | null) =>
+  !!trigger && STOREFRONT_AWARDABLE_TRIGGERS.has(trigger);

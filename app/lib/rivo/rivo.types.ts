@@ -144,6 +144,8 @@ export interface RivoRawEarningRule {
   url?: string | null;
   button_text?: string | null;
   card_click_method?: string | null;
+  /** Required by `POST /points_events` for `custom_action` / `visit_url` rules. */
+  custom_action_name?: string | null;
   hidden_from_ui?: boolean | null;
   multipliers?: unknown[] | null;
   multi_balance_settings_by_tiers?: Record<string, unknown> | null;
@@ -317,8 +319,16 @@ export interface RivoEarningRule {
   earningsText: string | null;
   url: string | null;
   buttonText: string | null;
+  /** Needed when awarding a `custom_action` / `visit_url` rule. */
+  customActionName: string | null;
   /** True when the signed-in customer has already completed this rule. */
   isCompleted: boolean;
+  /**
+   * True when the storefront is allowed to award this rule — social follows,
+   * URL visits and custom actions. Order, birthday, signup and referral rules
+   * are awarded by Rivo itself and are display-only here.
+   */
+  isClaimable: boolean;
 }
 
 export interface RivoLedgerEntry {
@@ -399,7 +409,7 @@ export type RivoLoaderAction =
   | 'getUnusedRewards'
   | 'getLoyaltySummary';
 
-export type RivoFormAction = 'redeemReward';
+export type RivoFormAction = 'redeemReward' | 'completeEarningRule';
 
 /** Aggregate payload backing the loyalty sections in one request. */
 export interface RivoLoyaltySummary {

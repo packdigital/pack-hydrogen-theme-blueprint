@@ -1,4 +1,5 @@
 import {
+  completeEarningRule,
   getCustomer,
   getEarningRules,
   getLoyaltySummary,
@@ -127,7 +128,10 @@ export async function action({request, context}: Route.ActionArgs) {
 
   const requestedAction = String(body?.get('action') || '');
 
-  if (requestedAction !== 'redeemReward') {
+  if (
+    requestedAction !== 'redeemReward' &&
+    requestedAction !== 'completeEarningRule'
+  ) {
     return Response.json(
       {
         data: null,
@@ -142,6 +146,32 @@ export async function action({request, context}: Route.ActionArgs) {
 
   if (!customerId) {
     return unauthorized(`/api/rivo: ${sessionError}`);
+  }
+
+  if (requestedAction === 'completeEarningRule') {
+    const ruleId = String(body?.get('ruleId') || '');
+
+    if (!ruleId) {
+      return Response.json(
+        {data: null, error: '/api/rivo: Missing `ruleId`'},
+        {status: 400},
+      );
+    }
+
+    // Only the rule id crosses the wire. The trigger, and therefore the points
+    // awarded, are resolved server-side from Rivo's own rule config.
+    const {data, error, status} = await completeEarningRule({
+      env: context.env as RivoEnv,
+      customerId,
+      ruleId,
+    });
+
+    if (error) {
+      console.error('/api/rivo: completeEarningRule:error:', error);
+      return Response.json({data: null, error}, {status: status || 500});
+    }
+
+    return Response.json({data, error: null});
   }
 
   const rewardId = String(body?.get('rewardId') || '');

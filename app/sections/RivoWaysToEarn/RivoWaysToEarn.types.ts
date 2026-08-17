@@ -14,8 +14,10 @@ export interface RivoWaysToEarnCms {
     image?: {url?: string; altText?: string};
   }[];
   labels?: {
+    claimText?: string;
     completedText?: string;
     emptyMessage?: string;
+    signInToEarnText?: string;
   };
   section?: {
     aboveTheFold?: boolean;

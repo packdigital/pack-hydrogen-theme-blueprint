@@ -68,6 +68,20 @@ export function Schema() {
             defaultValue: 'Completed',
           },
           {
+            label: 'Claim Button Text',
+            name: 'claimText',
+            component: 'text',
+            description:
+              'Shown on rules the storefront can award — social follows and custom actions',
+            defaultValue: 'Claim',
+          },
+          {
+            label: 'Sign In To Earn Text',
+            name: 'signInToEarnText',
+            component: 'text',
+            defaultValue: 'Sign in to earn',
+          },
+          {
             label: 'Empty Message',
             name: 'emptyMessage',
             component: 'text',
@@ -77,6 +91,8 @@ export function Schema() {
         ],
         defaultValue: {
           completedText: 'Completed',
+          claimText: 'Claim',
+          signInToEarnText: 'Sign in to earn',
           emptyMessage:
             'Ways to earn will appear here once the program is configured.',
         },

@@ -1,5 +1,6 @@
 import {
   getCartStrategy,
+  isClaimableTrigger,
   rivoRequest,
   toNumber,
   toTierName,
@@ -166,7 +167,9 @@ const normalizeEarningRule = (
         (points === null ? null : `${points.toLocaleString()} points`),
     url: raw.url || null,
     buttonText: raw.button_text || null,
+    customActionName: raw.custom_action_name || null,
     isCompleted: completed.has(String(raw.id)),
+    isClaimable: isClaimableTrigger(raw.trigger),
   };
 };
 

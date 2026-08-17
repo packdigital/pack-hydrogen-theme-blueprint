@@ -19,7 +19,16 @@ const GRID_CLASSES: Record<string, string> = {
 
 export function RivoWaysToEarn({cms}: {cms: RivoWaysToEarnCms}) {
   const {eyebrow, heading, icons, labels, section, subtext} = cms;
-  const {error, isLoading, rules} = useRivoEarningRules();
+  const {
+    claim,
+    claimError,
+    claimingId,
+    claimMessage,
+    error,
+    isLoading,
+    isLoggedIn,
+    rules,
+  } = useRivoEarningRules();
 
   // Rivo has no icon field on earning rules, so icons are matched by trigger
   // from the CMS, e.g. `order_placed` -> a cart icon.
@@ -62,16 +71,38 @@ export function RivoWaysToEarn({cms}: {cms: RivoWaysToEarnCms}) {
           ) : error ? (
             <RivoStateMessage message={error} variant="error" />
           ) : rules.length ? (
-            <ul className={clsx('grid gap-4', gridClass)}>
-              {rules.map((rule) => (
-                <RivoEarningRuleCard
-                  key={rule.id}
-                  completedText={labels?.completedText}
-                  icon={rule.trigger ? iconByTrigger[rule.trigger] : null}
-                  rule={rule}
-                />
-              ))}
-            </ul>
+            <>
+              {(claimMessage || claimError) && (
+                <p
+                  aria-live="polite"
+                  className={clsx(
+                    'text-body-sm rounded-lg border p-4 text-center',
+                    claimError
+                      ? 'border-red-400 text-red-500'
+                      : 'border-primary',
+                  )}
+                  role={claimError ? 'alert' : 'status'}
+                >
+                  {claimError || claimMessage}
+                </p>
+              )}
+
+              <ul className={clsx('grid gap-4', gridClass)}>
+                {rules.map((rule) => (
+                  <RivoEarningRuleCard
+                    key={rule.id}
+                    claimText={labels?.claimText}
+                    completedText={labels?.completedText}
+                    icon={rule.trigger ? iconByTrigger[rule.trigger] : null}
+                    isClaiming={claimingId === String(rule.id)}
+                    isLoggedIn={isLoggedIn}
+                    onClaim={claim}
+                    rule={rule}
+                    signInText={labels?.signInToEarnText}
+                  />
+                ))}
+              </ul>
+            </>
           ) : (
             <RivoStateMessage
               message={
