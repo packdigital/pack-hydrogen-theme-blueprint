@@ -87,6 +87,9 @@ export async function loader({request, context}: Route.LoaderArgs) {
   const limit = Number(searchParams.get('limit')) || undefined;
   const page = Number(searchParams.get('page')) || undefined;
 
+  // Shop-scoped reads go through Hydrogen's subrequest cache; see display.ts.
+  const {withCache} = context;
+
   let completedIds: (number | string)[] = [];
   if (customerId && action === 'getEarningRules') {
     const {data: customer} = await getCustomer({env, customerId});
@@ -99,6 +102,7 @@ export async function loader({request, context}: Route.LoaderArgs) {
     limit,
     page,
     completedIds,
+    withCache,
   });
 
   if (error) {
@@ -222,7 +226,11 @@ export async function action({request, context}: Route.ActionArgs) {
   // Look the reward up server-side rather than trusting the client's copy: the
   // variant ids and reward type decide which cart mutations run, and the points
   // price decides affordability.
-  const {data: rewards} = await getRewards({env, customerId});
+  const {data: rewards} = await getRewards({
+    env,
+    customerId,
+    withCache: context.withCache,
+  });
   const reward =
     (rewards as RivoReward[] | null)?.find(({id}) => String(id) === rewardId) ||
     null;

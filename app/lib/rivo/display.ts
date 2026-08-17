@@ -1,3 +1,5 @@
+import type {createWithCache} from '@shopify/hydrogen';
+
 import {
   getCartStrategy,
   isClaimableTrigger,
@@ -39,7 +41,50 @@ interface CustomerScopedProps {
   page?: number;
   /** Only used by `getEarningRules`; accepted by all so the route can dispatch uniformly. */
   completedIds?: (number | string)[];
+  /**
+   * Hydrogen's subrequest cache, from `context.withCache`.
+   *
+   * Only the shop-scoped reads use it — the program config is identical for
+   * every visitor and changes only when the merchant edits it, so caching it
+   * removes most of the per-view load on Rivo's 15 req/s budget.
+   *
+   * Customer-scoped reads are deliberately **not** cached. Points and tier move
+   * the instant someone redeems or earns, and serving a stale balance next to a
+   * Redeem button is worse than the extra call.
+   */
+  withCache?: RivoWithCache;
 }
+
+/**
+ * Hydrogen's own cache type. Duplicating its shape here fails structurally —
+ * `addDebugData` is contravariant — so the real one is imported.
+ */
+export type RivoWithCache = ReturnType<typeof createWithCache>;
+
+/** Program config changes only when the merchant edits it. */
+const SHOP_CACHE_STRATEGY = {maxAge: 60, staleWhileRevalidate: 600};
+
+/**
+ * Run a shop-scoped read through the subrequest cache when one is available.
+ *
+ * Errors are never cached — a rate-limited or timed-out response must not be
+ * pinned for the next 60 seconds.
+ */
+const cachedShopRead = <TData>(
+  withCache: RivoWithCache | undefined,
+  cacheKey: readonly unknown[],
+  fn: () => Promise<RivoResult<TData>>,
+) => {
+  if (!withCache) return fn();
+  return withCache.run(
+    {
+      cacheKey: ['rivo', ...cacheKey],
+      cacheStrategy: SHOP_CACHE_STRATEGY,
+      shouldCacheResult: (result: RivoResult<TData>) => !result.error,
+    },
+    fn,
+  );
+};
 
 /* Normalizers ---------- */
 
@@ -207,17 +252,19 @@ export const getCustomer = async ({
  */
 export const getRewards = async ({
   env,
-}: CustomerScopedProps): Promise<RivoResult<RivoReward[]>> => {
-  const result = await rivoRequest<RivoRawCollection<RivoRawReward>>({
-    env,
-    path: '/rewards',
-    searchParams: {pagination: {per_page: 100}},
+  withCache,
+}: CustomerScopedProps): Promise<RivoResult<RivoReward[]>> =>
+  cachedShopRead(withCache, ['rewards'], async () => {
+    const result = await rivoRequest<RivoRawCollection<RivoRawReward>>({
+      env,
+      path: '/rewards',
+      searchParams: {pagination: {per_page: 100}},
+    });
+    const rewards = unwrapCollection(result.data)
+      .filter((raw) => raw.enabled !== false && raw.source === 'points')
+      .map(normalizeReward);
+    return {...result, data: rewards};
   });
-  const rewards = unwrapCollection(result.data)
-    .filter((raw) => raw.enabled !== false && raw.source === 'points')
-    .map(normalizeReward);
-  return {...result, data: rewards};
-};
 
 /**
  * `GET /earning_rules` — the "ways to earn" actions.
@@ -229,34 +276,51 @@ export const getRewards = async ({
 export const getEarningRules = async ({
   env,
   completedIds = [],
+  withCache,
 }: CustomerScopedProps): Promise<RivoResult<RivoEarningRule[]>> => {
-  const result = await rivoRequest<RivoRawCollection<RivoRawEarningRule>>({
-    env,
-    path: '/earning_rules',
-    searchParams: {pagination: {per_page: 100}},
-  });
+  // The rules themselves are shop-scoped and cacheable; only the per-customer
+  // completion marking is not, so that is applied after the cached read.
+  const cached = await cachedShopRead(
+    withCache,
+    ['earning_rules'],
+    async () => {
+      const result = await rivoRequest<RivoRawCollection<RivoRawEarningRule>>({
+        env,
+        path: '/earning_rules',
+        searchParams: {pagination: {per_page: 100}},
+      });
+      const raw = unwrapCollection(result.data).filter(
+        (rule) =>
+          !!rule.title && !rule.hidden_from_ui && rule.status !== 'disabled',
+      );
+      return {...result, data: raw};
+    },
+  );
+
   const completed = new Set(completedIds.map(String));
-  const rules = unwrapCollection(result.data)
-    .filter(
-      (raw) => !!raw.title && !raw.hidden_from_ui && raw.status !== 'disabled',
-    )
-    .map((raw) => normalizeEarningRule(raw, completed));
-  return {...result, data: rules};
+  return {
+    ...cached,
+    data: (cached.data || []).map((raw) =>
+      normalizeEarningRule(raw, completed),
+    ),
+  };
 };
 
 /** `GET /vip_tiers` — the program's VIP tier ladder, ascending by threshold. */
 export const getVipTiers = async ({
   env,
-}: CustomerScopedProps): Promise<RivoResult<RivoVipTier[]>> => {
-  const result = await rivoRequest<RivoRawCollection<RivoRawVipTier>>({
-    env,
-    path: '/vip_tiers',
+  withCache,
+}: CustomerScopedProps): Promise<RivoResult<RivoVipTier[]>> =>
+  cachedShopRead(withCache, ['vip_tiers'], async () => {
+    const result = await rivoRequest<RivoRawCollection<RivoRawVipTier>>({
+      env,
+      path: '/vip_tiers',
+    });
+    const tiers = unwrapCollection(result.data)
+      .map(normalizeVipTier)
+      .sort((a, b) => (a.threshold ?? 0) - (b.threshold ?? 0));
+    return {...result, data: tiers};
   });
-  const tiers = unwrapCollection(result.data)
-    .map(normalizeVipTier)
-    .sort((a, b) => (a.threshold ?? 0) - (b.threshold ?? 0));
-  return {...result, data: tiers};
-};
 
 /**
  * `GET /points_events` — the customer's loyalty ledger.
@@ -437,11 +501,12 @@ export const getReferralStats = async ({
 export const getLoyaltySummary = async ({
   env,
   customerId,
+  withCache,
 }: CustomerScopedProps): Promise<RivoResult<RivoLoyaltySummary>> => {
   const [customer, rewards, vipTiers] = await Promise.all([
     getCustomer({env, customerId}),
-    getRewards({env, customerId}),
-    getVipTiers({env, customerId}),
+    getRewards({env, customerId, withCache}),
+    getVipTiers({env, customerId, withCache}),
   ]);
 
   if (!customer.data) {
@@ -453,6 +518,7 @@ export const getLoyaltySummary = async ({
     env,
     customerId,
     completedIds: customer.data.completedEarningRuleIds,
+    withCache,
   });
 
   return {

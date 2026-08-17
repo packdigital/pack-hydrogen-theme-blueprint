@@ -7,6 +7,7 @@ import type {
   CustomerAccount,
   HydrogenCart,
   Storefront,
+  createWithCache,
 } from '@shopify/hydrogen';
 import type {Pack} from '@pack/hydrogen';
 
@@ -83,5 +84,7 @@ declare module 'react-router' {
     oxygen: OxygenEnv;
     cart: HydrogenCart;
     customerAccount: CustomerAccount;
+    /** Subrequest cache for non-Storefront upstreams. See `app/lib/rivo`. */
+    withCache: ReturnType<typeof createWithCache>;
   }
 }

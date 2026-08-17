@@ -24,6 +24,7 @@ Last updated: 2026-08-17. Verified against `pack-hydrogen-essentials`.
 | **Earning rules** | `GET /earning_rules`, null rows filtered, multipliers rendered as "1 point per $1" |
 | **Loyalty page** | `/pages/loyalty` created via Pack Content Management API with 8 sections, published, 0 console errors |
 | **8 sections** | Hero (+background image), Ways to Earn, Rewards, Tier Benefits, Points History, Referral, plus IconRow + Accordions |
+| **Shop-scoped caching** | `rewards`, `vip_tiers`, `earning_rules` through Hydrogen's subrequest cache (60s / 600s SWR). **Measured: 417ms → 2–4ms**, and repeat reads never reach Rivo |
 
 ## Done, not yet verified end-to-end
 
@@ -32,6 +33,7 @@ Last updated: 2026-08-17. Verified against `pack-hydrogen-essentials`.
 | **Claiming an earning rule** | Whether Rivo derives the award amount when `points_amount` is omitted. Allowlist and guest-401 are verified | Sign in, click **Follow on TikTok** on `/pages/loyalty`. Expect +20 and balance 300→320. If it moves by 0, pass the amount explicitly |
 | **Inbound referral capture** | The `POST /referrals` call itself. Guards verified (guest 401, missing code rejected) | Open `/?referral_code=<code>` in a fresh browser profile, then sign in as a *different* customer. Check `GET /referrals` |
 | **Unused rewards UI** | Endpoint returns correct data; the rendered list wasn't seen signed-in (dev worker crashed mid-check) | Sign in, open `/pages/loyalty` |
+| **429 retry / `Retry-After`** | Written to spec but never seen against a real 429 — deliberately rate-limiting the store to force one seemed worse than leaving it untested. Normal requests and non-retryable 4xx paths work | Hammer a non-cached customer-scoped action past 15 req/s, or stub `RIVO_API_BASE_URL` at a local server returning 429 |
 | **Free-product rewards** | `cartLinesAdd` + discount, the riskiest path — two cart mutations | Configure a `free_product` reward in Rivo |
 | **`free_shipping`, `gift_card`, `points_to_credit`** | Written; store only has `fixed_amount` | Configure one of each in Rivo |
 | **Incremental rewards** | Points-input UI never run against a real rule | Configure an incremental reward in Rivo |
@@ -46,8 +48,8 @@ Last updated: 2026-08-17. Verified against `pack-hydrogen-essentials`.
 
 **Operational**
 
-- **No 429 / `Retry-After` handling.** Rivo rate-limits at 15 req/s per store; Rivo timeouts were observed under light load during development.
-- **No caching on customer-scoped calls.** An authenticated loyalty page view costs roughly 8 Rivo calls (summary 3, earning rules 2, ledger 1, referral stats 2). Fine for one visitor, not for traffic.
+- **Customer-scoped calls are intentionally uncached.** Points and tier move the instant someone redeems or earns, and serving a stale balance beside a Redeem button is worse than the extra call. An authenticated page view still costs ~4 Rivo calls (customer ×2 via summary and referral stats, ledger, referrals) now that program config is cached. Deduping the repeated `getCustomer` within a request would be the next win.
+- **Retries are deliberately asymmetric.** A 429 is retried on any method, since the request was rejected before any work happened. Timeouts and 5xx are retried on `GET` only — a failed `POST` to `/points_redemptions` or `/points_events` may have landed with only the response lost, and repeating it would double-spend. Capped at 3 attempts and a 12s overall deadline.
 - **Redemption isn't idempotent.** If the connection drops between Rivo spending the points and the response arriving, the code is only recoverable via the unused-rewards list — which is the mitigation, not a fix.
 - **Admin-scoped key.** It can delete rewards and adjust anyone's points. Worth asking Rivo for a scoped storefront key, or proxying through a backend.
 - **No webhooks.** Tier changes, expiry warnings and program edits produce no reaction and no cache invalidation.
