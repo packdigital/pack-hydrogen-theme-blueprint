@@ -32,7 +32,14 @@ export function RivoStateMessage({
       <p className="text-body-sm">{message}</p>
 
       {variant === 'signedOut' && (
-        <Link aria-label={loginText} className="btn-primary" to={loginUrl}>
+        // `prefetch="none"`: the login route only issues an OAuth redirect, so
+        // Link's default viewport prefetch just 400s on its `.data` request.
+        <Link
+          aria-label={loginText}
+          className="btn-primary"
+          prefetch="none"
+          to={loginUrl}
+        >
           {loginText || 'Sign in'}
         </Link>
       )}
