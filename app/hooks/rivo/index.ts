@@ -3,6 +3,7 @@ export {useRivoEarningRules} from './useRivoEarningRules';
 export {useRivoLedger} from './useRivoLedger';
 export {useRivoLoyalty} from './useRivoLoyalty';
 export {useRivoRedeem} from './useRivoRedeem';
+export {useRivoReferralCapture} from './useRivoReferralCapture';
 export {useRivoReferrals} from './useRivoReferrals';
 export {useRivoUnusedRewards} from './useRivoUnusedRewards';
 export type {RivoApplyResult} from './useRivoApplyCode';

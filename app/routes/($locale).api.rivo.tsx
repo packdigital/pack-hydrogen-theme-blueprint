@@ -1,6 +1,8 @@
 import {
+  captureReferral,
   completeEarningRule,
   getCustomer,
+  getRemoteIp,
   getEarningRules,
   getLoyaltySummary,
   getPointsLogs,
@@ -128,10 +130,13 @@ export async function action({request, context}: Route.ActionArgs) {
 
   const requestedAction = String(body?.get('action') || '');
 
-  if (
-    requestedAction !== 'redeemReward' &&
-    requestedAction !== 'completeEarningRule'
-  ) {
+  const FORM_ACTIONS = [
+    'redeemReward',
+    'completeEarningRule',
+    'captureReferral',
+  ];
+
+  if (!FORM_ACTIONS.includes(requestedAction)) {
     return Response.json(
       {
         data: null,
@@ -146,6 +151,33 @@ export async function action({request, context}: Route.ActionArgs) {
 
   if (!customerId) {
     return unauthorized(`/api/rivo: ${sessionError}`);
+  }
+
+  if (requestedAction === 'captureReferral') {
+    const referralCode = String(body?.get('referralCode') || '');
+
+    if (!referralCode) {
+      return Response.json(
+        {data: null, error: '/api/rivo: Missing `referralCode`'},
+        {status: 400},
+      );
+    }
+
+    const {data, error, status} = await captureReferral({
+      env: context.env as RivoEnv,
+      customerId,
+      referralCode,
+      // From headers, not the request body.
+      remoteIp: getRemoteIp(request),
+    });
+
+    if (error) {
+      // Expected rejections (self-referral, already referred) are not faults.
+      console.warn('/api/rivo: captureReferral:', error);
+      return Response.json({data: null, error}, {status: status || 500});
+    }
+
+    return Response.json({data, error: null});
   }
 
   if (requestedAction === 'completeEarningRule') {

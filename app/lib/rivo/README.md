@@ -1,5 +1,8 @@
 # Rivo loyalty integration
 
+> Build status, what is unverified, and what is still missing:
+> [`STATUS.md`](./STATUS.md).
+
 Headless Rivo loyalty for Hydrogen: read the customer's loyalty state, redeem
 points, and apply the resulting reward to the Shopify cart.
 
