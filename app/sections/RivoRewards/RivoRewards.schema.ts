@@ -55,9 +55,25 @@ export function Schema() {
             component: 'text',
             defaultValue: 'Sign in',
           },
+          {
+            label: 'Unused Rewards Heading',
+            name: 'unusedHeading',
+            component: 'text',
+            defaultValue: 'Your unused rewards',
+          },
+          {
+            label: 'Unused Rewards Subtext',
+            name: 'unusedSubtext',
+            component: 'text',
+            defaultValue:
+              'You’ve already redeemed these. Apply one to your cart, or enter the code at checkout.',
+          },
         ],
         defaultValue: {
           redeemText: 'Redeem',
+          unusedHeading: 'Your unused rewards',
+          unusedSubtext:
+            'You’ve already redeemed these. Apply one to your cart, or enter the code at checkout.',
           emptyMessage: 'No rewards are available right now. Check back soon.',
           signedOutMessage: 'Sign in to redeem your points for rewards.',
           signInText: 'Sign in',
@@ -94,6 +110,17 @@ export function Schema() {
             label: 'Show Points Balance',
             name: 'showBalance',
             component: 'toggle',
+            toggleLabels: {
+              true: 'On',
+              false: 'Off',
+            },
+          },
+          {
+            label: 'Show Unused Rewards',
+            name: 'showUnusedRewards',
+            component: 'toggle',
+            description:
+              'Lists codes the customer already spent points on but has not used, so a failed apply is recoverable. Strongly recommended.',
             toggleLabels: {
               true: 'On',
               false: 'Off',
@@ -137,6 +164,7 @@ export function Schema() {
           aboveTheFold: false,
           gridColumns: '3',
           showBalance: true,
+          showUnusedRewards: true,
           openCartOnRedeem: true,
           buttonStyle: 'btn-primary',
           textColor: COLOR_SCHEMA_DEFAULT_VALUE.text,

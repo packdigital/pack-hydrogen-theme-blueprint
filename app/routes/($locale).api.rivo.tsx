@@ -7,6 +7,7 @@ import {
   getReferrals,
   getRewards,
   getRivoCustomerIdFromSession,
+  getUnusedRewards,
   getVipTiers,
   redeemReward,
 } from '~/lib/rivo';
@@ -39,6 +40,7 @@ const CUSTOMER_ACTIONS = {
   getPointsLogs,
   getReferrals,
   getReferralStats,
+  getUnusedRewards,
   getLoyaltySummary,
 } as const;
 

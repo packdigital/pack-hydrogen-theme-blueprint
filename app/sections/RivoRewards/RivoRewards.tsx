@@ -7,8 +7,14 @@ import {
   RivoRewardCard,
   RivoSkeleton,
   RivoStateMessage,
+  RivoUnusedRewards,
 } from '~/components/Rivo';
-import {useMenu, useRivoLoyalty, useRivoRedeem} from '~/hooks';
+import {
+  useMenu,
+  useRivoLoyalty,
+  useRivoRedeem,
+  useRivoUnusedRewards,
+} from '~/hooks';
 import type {RivoReward} from '~/lib/rivo';
 
 import {Schema} from './RivoRewards.schema';
@@ -33,10 +39,22 @@ export function RivoRewards({cms}: {cms: RivoRewardsCms}) {
     rewards,
   } = useRivoLoyalty();
 
+  const {
+    appliedCode,
+    apply,
+    applyError,
+    applyingCode,
+    refresh: refreshUnused,
+    rewards: unusedRewards,
+  } = useRivoUnusedRewards();
+
   const {isRedeeming, redeem, result} = useRivoRedeem({
     onSuccess: (redemption) => {
       // Balances moved server-side; pull the new tallies.
       refresh();
+      // A redemption whose cart apply failed becomes an unused reward, so this
+      // list has to re-fetch either way.
+      refreshUnused();
       // Gift-card and store-credit rewards never touch the cart, so opening it
       // would be misleading.
       if (section?.openCartOnRedeem && redemption.cartStrategy !== 'none') {
@@ -91,6 +109,20 @@ export function RivoRewards({cms}: {cms: RivoRewardsCms}) {
                 <RivoBalance
                   creditsTally={creditsTally}
                   pointsTally={pointsTally}
+                />
+              )}
+
+              {/* Codes already paid for but not used — shown first so a failed
+                  apply is recoverable rather than lost. */}
+              {section?.showUnusedRewards !== false && (
+                <RivoUnusedRewards
+                  appliedCode={appliedCode}
+                  applyError={applyError}
+                  applyingCode={applyingCode}
+                  heading={labels?.unusedHeading || undefined}
+                  onApply={apply}
+                  rewards={unusedRewards}
+                  subtext={labels?.unusedSubtext || undefined}
                 />
               )}
 

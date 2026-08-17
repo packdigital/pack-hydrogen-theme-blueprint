@@ -1,7 +1,9 @@
 import {
+  getCartStrategy,
   rivoRequest,
   toNumber,
   toTierName,
+  toVariantGid,
   unwrapCollection,
   unwrapSingle,
 } from './rivo-client';
@@ -15,6 +17,7 @@ import type {
   RivoRawCustomer,
   RivoRawEarningRule,
   RivoRawPointsEvent,
+  RivoRawPointsRedemption,
   RivoRawReferral,
   RivoRawReward,
   RivoRawSingle,
@@ -24,6 +27,7 @@ import type {
   RivoResult,
   RivoReward,
   RivoRewardType,
+  RivoUnusedReward,
   RivoVipTier,
 } from './rivo.types';
 
@@ -282,6 +286,86 @@ export const getPointsLogs = async ({
     .map(normalizePointsEvent)
     .filter(({amount, creditsAmount}) => !!amount || !!creditsAmount);
   return {...result, data: entries};
+};
+
+/**
+ * `GET /points_redemptions` — rewards the customer has paid points for but not
+ * used yet.
+ *
+ * Points are deducted the instant a redemption is created, so a code whose cart
+ * application failed is still owed to the customer. Without surfacing these, a
+ * failed apply silently destroys a paid-for reward.
+ *
+ * Excludes anything consumed (`used_at`), reversed (`refunded_at`,
+ * `revoked_at`), or expired. Note the API returns `used_at`, not the boolean
+ * `used` the docs list.
+ */
+export const getUnusedRewards = async ({
+  env,
+  customerId,
+  limit = 25,
+}: CustomerScopedProps): Promise<RivoResult<RivoUnusedReward[]>> => {
+  const result = await rivoRequest<RivoRawCollection<RivoRawPointsRedemption>>({
+    env,
+    path: '/points_redemptions',
+    searchParams: {
+      filters: {customer_identifier: customerId},
+      pagination: {per_page: limit},
+    },
+  });
+
+  const now = Date.now();
+  const rewards = unwrapCollection(result.data)
+    .filter((raw) => {
+      if (!raw.code) return false;
+      if (raw.used_at || raw.refunded_at || raw.revoked_at) return false;
+      if (raw.expires_at && new Date(raw.expires_at).getTime() < now)
+        return false;
+      return true;
+    })
+    .map((raw) => {
+      const rewardType = (raw.reward?.reward_type as RivoRewardType) || null;
+      const cartStrategy = getCartStrategy(rewardType);
+      const variantIds = (
+        raw.variant_ids?.length
+          ? raw.variant_ids
+          : raw.reward?.variant_ids || []
+      )
+        .filter(Boolean)
+        .map(toVariantGid);
+
+      return {
+        id: raw.id ?? null,
+        code: raw.code as string,
+        name: raw.name || raw.reward?.name || null,
+        pointsSpent:
+          raw.points_amount === null || raw.points_amount === undefined
+            ? null
+            : toNumber(raw.points_amount),
+        creditsSpent:
+          raw.credits_amount === null || raw.credits_amount === undefined
+            ? null
+            : toNumber(raw.credits_amount),
+        appliedAt: raw.applied_at || null,
+        expiresAt: raw.expires_at || null,
+        rewardType,
+        // A free-product reward with no variant degrades to code-only, matching
+        // how a fresh redemption is handled.
+        cartStrategy:
+          cartStrategy === 'discount_code_and_line' && !variantIds.length
+            ? 'discount_code'
+            : cartStrategy,
+        variantIds,
+      };
+    })
+    // Newest first.
+    .sort(
+      (a, b) =>
+        new Date(b.appliedAt || 0).getTime() -
+        new Date(a.appliedAt || 0).getTime(),
+    );
+
+  return {...result, data: rewards};
 };
 
 /** `GET /referrals` — the customer's referrals as the advocate. */

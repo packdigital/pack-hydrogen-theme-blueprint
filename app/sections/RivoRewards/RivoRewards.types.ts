@@ -9,6 +9,8 @@ export interface RivoRewardsCms {
     redeemText?: string;
     signedOutMessage?: string;
     signInText?: string;
+    unusedHeading?: string;
+    unusedSubtext?: string;
     viewCartText?: string;
   };
   section?: {
@@ -18,6 +20,7 @@ export interface RivoRewardsCms {
     gridColumns?: string;
     openCartOnRedeem?: boolean;
     showBalance?: boolean;
+    showUnusedRewards?: boolean;
     textColor?: string;
   };
 }

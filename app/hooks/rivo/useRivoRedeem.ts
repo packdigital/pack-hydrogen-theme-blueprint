@@ -1,11 +1,9 @@
 import {useCallback, useState} from 'react';
-import type {CartDiscountCode} from '@shopify/hydrogen/storefront-api-types';
 
-import {useCart, useLocale} from '~/hooks';
+import {useLocale} from '~/hooks';
 import type {RivoRedemption, RivoReward} from '~/lib/rivo';
 
-/** Shopify applies at most 5 discount codes per order. */
-const MAX_DISCOUNT_CODES = 5;
+import {useRivoApplyCode} from './useRivoApplyCode';
 
 export interface RivoRedeemResult {
   redemption: RivoRedemption | null;
@@ -54,6 +52,10 @@ const buildMessage = (redemption: RivoRedemption) => {
  * variant with `cartLinesAdd`. Gift-card and store-credit rewards touch the
  * cart not at all — Shopify settles those at checkout.
  *
+ * Points are spent before the cart mutation runs, so a cart failure never
+ * discards the reward: the code is surfaced in the error, and it also shows up
+ * in the unused-rewards list until it is used.
+ *
  * @example
  * ```js
  * const {redeem, isRedeeming, result} = useRivoRedeem({onSuccess: refresh});
@@ -64,7 +66,7 @@ export function useRivoRedeem({
   onSuccess,
 }: {onSuccess?: (redemption: RivoRedemption) => void} = {}) {
   const {pathPrefix} = useLocale();
-  const {discountCodes, discountCodesUpdate, linesAdd} = useCart();
+  const {applyCode} = useRivoApplyCode();
   const [isRedeeming, setIsRedeeming] = useState(false);
   const [result, setResult] = useState<RivoRedeemResult>({
     redemption: null,
@@ -82,8 +84,11 @@ export function useRivoRedeem({
       pointsAmount,
       creditsAmount,
     }: RedeemArgs): Promise<RivoRedeemResult> => {
-      const fail = (error: string) => {
-        const failure = {redemption: null, message: null, error};
+      const fail = (
+        error: string,
+        redemption: RivoRedemption | null = null,
+      ) => {
+        const failure = {redemption, message: null, error};
         setResult(failure);
         return failure;
       };
@@ -114,57 +119,17 @@ export function useRivoRedeem({
 
         const redemption = payload.data;
 
-        // Points are already spent at this point. Cart failures below are
-        // reported with the code so the customer can still apply it manually.
-        if (redemption.cartStrategy !== 'none' && redemption.code) {
-          const existingCodes = ((discountCodes || []) as CartDiscountCode[])
-            .map(({code}) => code)
-            .filter(Boolean) as string[];
-
-          if (existingCodes.includes(redemption.code)) {
-            const message = buildMessage(redemption);
-            const success = {redemption, message, error: null};
-            setResult(success);
+        if (redemption.code) {
+          const {error} = await applyCode({
+            code: redemption.code,
+            cartStrategy: redemption.cartStrategy,
+            variantIds: redemption.variantIds,
+          });
+          // The points are spent either way, so still report the redemption and
+          // let the caller refresh — the code will appear in unused rewards.
+          if (error) {
             onSuccess?.(redemption);
-            return success;
-          }
-
-          if (existingCodes.length >= MAX_DISCOUNT_CODES) {
-            return fail(
-              `Your reward code is ${redemption.code}, but your cart already has the maximum of ${MAX_DISCOUNT_CODES} discount codes. Remove one and apply it manually.`,
-            );
-          }
-
-          if (redemption.cartStrategy === 'discount_code_and_line') {
-            // Add the free variant first so the discount has a line to apply to.
-            await linesAdd(
-              redemption.variantIds.map((merchandiseId) => ({
-                merchandiseId,
-                quantity: 1,
-              })),
-            );
-          }
-
-          const cartData = await discountCodesUpdate([
-            ...existingCodes,
-            redemption.code,
-          ]);
-
-          const userError = cartData?.userErrors?.[0]?.message;
-          if (userError) {
-            return fail(
-              `Your reward code is ${redemption.code}, but it couldn't be applied: ${userError}`,
-            );
-          }
-
-          const applied = (
-            (cartData?.cart?.discountCodes || []) as CartDiscountCode[]
-          ).find(({code}) => code === redemption.code);
-
-          if (applied && applied.applicable === false) {
-            return fail(
-              `Your reward code is ${redemption.code}, but it isn't applicable to the items in your cart yet.`,
-            );
+            return fail(error, redemption);
           }
         }
 
@@ -184,7 +149,7 @@ export function useRivoRedeem({
         setIsRedeeming(false);
       }
     },
-    [discountCodes, discountCodesUpdate, linesAdd, onSuccess, pathPrefix],
+    [applyCode, onSuccess, pathPrefix],
   );
 
   return {redeem, isRedeeming, result, reset};

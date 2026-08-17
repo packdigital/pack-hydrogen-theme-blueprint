@@ -201,14 +201,26 @@ export interface RivoRawPointsRedemption {
   customer_identifier?: number | string | null;
   source?: string | null;
   reward_id?: number | null;
+  /** Reward name at time of redemption, e.g. `"$5 off coupon"`. */
+  name?: string | null;
   /** The generated Shopify discount code. */
   code?: string | null;
-  used?: boolean | null;
+  /**
+   * Timestamp the code was consumed — **not** a boolean `used` field, which the
+   * docs list but the API does not return. Null means still redeemable.
+   */
+  used_at?: string | null;
+  refunded_at?: string | null;
+  revoked_at?: string | null;
+  expires_at?: string | null;
   referred_email?: string | null;
   purchase_type?: string | null;
   applied_at?: string | null;
   points_diff?: number | null;
   points_amount?: number | null;
+  credits_amount?: number | string | null;
+  /** The full reward is nested here, including type and free-product variants. */
+  reward?: RivoRawReward | null;
   /** Present on free-product rewards. */
   variant_ids?: (number | string)[] | null;
   /** Present on store-credit rewards. */
@@ -339,6 +351,26 @@ export interface RivoReferralStats {
 }
 
 /**
+ * A reward the customer has already paid points for but has not used.
+ *
+ * Points are spent the moment a redemption is created, so if the cart mutation
+ * fails — an empty cart, the 5-code ceiling, a dropped connection — the code is
+ * still owed to them. These are surfaced so a paid-for reward is never lost.
+ */
+export interface RivoUnusedReward {
+  id: number | string | null;
+  code: string;
+  name: string | null;
+  pointsSpent: number | null;
+  creditsSpent: number | null;
+  appliedAt: string | null;
+  expiresAt: string | null;
+  rewardType: RivoRewardType | null;
+  cartStrategy: RivoCartStrategy;
+  variantIds: string[];
+}
+
+/**
  * Normalized redemption result the storefront acts on. `cartStrategy` tells the
  * client what to do next; `variantIds` are Shopify variant GIDs, already
  * converted from Rivo's numeric ids.
@@ -364,6 +396,7 @@ export type RivoLoaderAction =
   | 'getPointsLogs'
   | 'getReferrals'
   | 'getReferralStats'
+  | 'getUnusedRewards'
   | 'getLoyaltySummary';
 
 export type RivoFormAction = 'redeemReward';
