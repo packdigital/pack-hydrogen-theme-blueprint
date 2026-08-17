@@ -15,17 +15,15 @@ export interface RivoRedeemResult {
 }
 
 interface RedeemArgs {
-  /** Fixed reward. Pass the reward, or `rewardId` for a bare id. */
-  reward?: RivoReward | null;
-  rewardId?: string | number | null;
-  /** Incremental / custom reward: points to redeem. */
-  points?: number | null;
-  /** Incremental / custom reward: credits to redeem. */
-  credits?: number | null;
+  reward: RivoReward;
+  /** Incremental rewards only: points to spend. */
+  pointsAmount?: number | null;
+  /** Incremental rewards only: credits to spend. */
+  creditsAmount?: number | null;
 }
 
 const buildMessage = (redemption: RivoRedemption) => {
-  const value = redemption.formattedValue;
+  const name = redemption.rewardName;
 
   switch (redemption.rewardType) {
     case 'gift_card':
@@ -35,14 +33,14 @@ const buildMessage = (redemption: RivoRedemption) => {
         ? `${redemption.formattedStoreCreditAmount} in store credit added to your account.`
         : 'Store credit added to your account.';
     case 'free_product':
-      return value
-        ? `${value} added to your cart.`
+      return name
+        ? `${name} added to your cart.`
         : 'Your free gift has been added to your cart.';
     case 'free_shipping':
       return 'Free shipping applied to your cart.';
     default:
-      return value
-        ? `${value} applied to your cart.`
+      return name
+        ? `${name} applied to your cart.`
         : 'Your reward has been applied to your cart.';
   }
 };
@@ -51,7 +49,7 @@ const buildMessage = (redemption: RivoRedemption) => {
  * Redeem a Rivo reward and apply the result to the Hydrogen cart.
  *
  * Rivo redemptions produce standard Shopify discount codes, so the flow is:
- * redeem server-side → receive `points_purchase.code` → apply it with
+ * redeem server-side → receive the discount code → apply it with
  * `cartDiscountCodesUpdate`. Free-product rewards additionally add the free
  * variant with `cartLinesAdd`. Gift-card and store-credit rewards touch the
  * cart not at all — Shopify settles those at checkout.
@@ -81,9 +79,8 @@ export function useRivoRedeem({
   const redeem = useCallback(
     async ({
       reward,
-      rewardId,
-      points,
-      credits,
+      pointsAmount,
+      creditsAmount,
     }: RedeemArgs): Promise<RivoRedeemResult> => {
       const fail = (error: string) => {
         const failure = {redemption: null, message: null, error};
@@ -95,17 +92,12 @@ export function useRivoRedeem({
       setResult({redemption: null, message: null, error: null});
 
       try {
-        const id = rewardId ?? reward?.id;
         const formData = new FormData();
-        formData.append('action', 'spendPoints');
-        if (id) formData.append('rewardId', String(id));
-        if (points) formData.append('points', String(points));
-        if (credits) formData.append('credits', String(credits));
-        // Fallback for free-product rewards whose variants live on the reward
-        // config rather than on the redemption response.
-        if (reward?.variant_ids?.length) {
-          formData.append('variantIds', JSON.stringify(reward.variant_ids));
-        }
+        formData.append('action', 'redeemReward');
+        formData.append('rewardId', String(reward.id));
+        if (pointsAmount) formData.append('pointsAmount', String(pointsAmount));
+        if (creditsAmount)
+          formData.append('creditsAmount', String(creditsAmount));
 
         const response = await fetch(`${pathPrefix}/api/rivo`, {
           method: 'POST',

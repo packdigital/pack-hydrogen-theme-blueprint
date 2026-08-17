@@ -1,20 +1,23 @@
 #!/usr/bin/env node
 /*
- * Probe Rivo's storefront API against a real store and print what each endpoint
+ * Probe Rivo's Merchant API against a real store and print what each endpoint
  * actually returns, so payload drift surfaces before it reaches the UI.
  *
  * Usage:
- *   npm run rivo:probe -- --customer <shopify_customer_id>
- *   npm run rivo:probe -- --customer 1234 --spend <reward_id>   # spends real points
+ *   npm run rivo:probe                              # shop + catalog only
+ *   npm run rivo:probe -- --customer <shopify_id>   # + customer-scoped reads
+ *   npm run rivo:probe -- --customer <id> --full    # print full payloads
  *
- * Reads PRIVATE_RIVO_STOREFRONT_API_KEY, PRIVATE_RIVO_SHOP_DOMAIN (or
- * PUBLIC_STORE_DOMAIN) and RIVO_API_BASE_URL from .env / the environment.
+ * Reads PRIVATE_RIVO_API_KEY (or the legacy PRIVATE_RIVO_STOREFRONT_API_KEY)
+ * and RIVO_API_BASE_URL from .env / the environment.
+ *
+ * Reads only — this script never creates points events or redemptions.
  */
 
 import {readFileSync} from 'node:fs';
 import {resolve} from 'node:path';
 
-const DEFAULT_BASE_URL = 'https://loyalty-api.rivo.io';
+const DEFAULT_BASE_URL = 'https://developer-api.rivo.io/merchant_api/v1';
 
 /* Env ---------- */
 
@@ -84,7 +87,7 @@ const describe = (value, depth = 0) => {
   }
   if (typeof value === 'object') {
     const keys = Object.keys(value);
-    if (depth >= 2) return `{${keys.length} keys}`;
+    if (depth >= 3) return `{${keys.length} keys}`;
     return `{${keys
       .map((key) => `${key}: ${describe(value[key], depth + 1)}`)
       .join(', ')}}`;
@@ -95,48 +98,57 @@ const describe = (value, depth = 0) => {
   return String(value);
 };
 
+/**
+ * Rivo wraps everything in a JSON:API envelope. Show the `attributes` of the
+ * first member, which is what the integration actually normalizes.
+ */
+const summarize = (json) => {
+  if (!json || typeof json !== 'object') return describe(json);
+  if (Array.isArray(json.data)) {
+    const count = json.data.length;
+    if (!count) return 'data: [] (empty)';
+    return `data: [${count}] attributes: ${describe(json.data[0]?.attributes ?? json.data[0], 1)}`;
+  }
+  if (json.data?.attributes) {
+    return `attributes: ${describe(json.data.attributes, 1)}`;
+  }
+  return describe(json, 1);
+};
+
 /* Probe ---------- */
 
 const main = async () => {
   const env = loadDotEnv();
   const args = parseArgs(process.argv.slice(2));
 
-  const apiKey = env.PRIVATE_RIVO_STOREFRONT_API_KEY;
-  const shop = env.PRIVATE_RIVO_SHOP_DOMAIN || env.PUBLIC_STORE_DOMAIN;
+  const apiKey =
+    env.PRIVATE_RIVO_API_KEY || env.PRIVATE_RIVO_STOREFRONT_API_KEY;
   const baseUrl = (env.RIVO_API_BASE_URL || DEFAULT_BASE_URL).replace(
     /\/$/,
     '',
   );
   const customerId = args.customer || env.RIVO_PROBE_CUSTOMER_ID;
 
-  const missing = [];
-  if (!apiKey) missing.push('PRIVATE_RIVO_STOREFRONT_API_KEY');
-  if (!shop) missing.push('PRIVATE_RIVO_SHOP_DOMAIN or PUBLIC_STORE_DOMAIN');
-  if (!customerId) missing.push('--customer <shopify_customer_id>');
-
-  if (missing.length) {
-    console.error(red('Missing required config:'));
-    missing.forEach((item) => console.error(`  - ${item}`));
+  if (!apiKey) {
+    console.error(red('Missing PRIVATE_RIVO_API_KEY.'));
     process.exit(1);
   }
 
-  console.log(`${dim('base  ')} ${baseUrl}`);
-  console.log(`${dim('shop  ')} ${shop}`);
-  console.log(`${dim('customer')} ${customerId}`);
-  console.log(`${dim('key   ')} ${String(apiKey).slice(0, 4)}…\n`);
+  console.log(`${dim('base    ')} ${baseUrl}`);
+  console.log(`${dim('key     ')} ${String(apiKey).slice(0, 4)}…`);
+  console.log(
+    `${dim('customer')} ${customerId || dim('(none — pass --customer to include customer reads)')}\n`,
+  );
 
-  const request = async (method, path, body) => {
-    const url = new URL(`${baseUrl}${path}`);
-    url.searchParams.set('shop', shop);
+  const request = async (path) => {
+    const url = `${baseUrl}${path}`;
     try {
-      const response = await fetch(url.toString(), {
-        method,
+      const response = await fetch(url, {
         headers: {
           Accept: 'application/json',
-          Authorization: `Bearer ${apiKey}`,
-          ...(body ? {'Content-Type': 'application/json'} : {}),
+          // Raw key — a `Bearer` prefix gets a 401 from this API.
+          Authorization: apiKey,
         },
-        ...(body ? {body: JSON.stringify(body)} : {}),
       });
       const text = await response.text();
       let json = null;
@@ -161,58 +173,44 @@ const main = async () => {
     console.log(`${badge}  ${label}`);
     if (result.error) console.log(`       ${red(result.error)}`);
     if (result.raw) console.log(`       ${yellow(`non-JSON: ${result.raw}`)}`);
-    if (result.json !== null)
-      console.log(`       ${dim(describe(result.json))}`);
+    if (result.json !== null) {
+      console.log(`       ${dim(summarize(result.json))}`);
+      if (args.full) {
+        console.log(dim(JSON.stringify(result.json, null, 2)));
+      }
+    }
     console.log();
     return ok;
   };
 
   const reads = [
-    ['status', `/api/customers/${customerId}/status`],
-    ['properties', `/api/customers/${customerId}/properties`],
-    ['vip_tiers', `/api/customers/${customerId}/vip_tiers`],
-    ['points_logs', `/api/customers/${customerId}/points_logs`],
-    ['credits_logs', `/api/customers/${customerId}/credits_logs`],
-    ['referrals', `/api/customers/${customerId}/referrals`],
-    ['referral_stats', `/api/customers/${customerId}/referral_stats`],
-    // Shop-scoped, not customer-scoped: /api/customers/:id/rewards 404s.
-    ['rewards', '/api/rewards'],
+    ['shop', '/shop'],
+    ['rewards', '/rewards'],
+    ['vip_tiers', '/vip_tiers'],
   ];
+
+  if (customerId) {
+    const filter = `filters[customer_identifier]=${customerId}`;
+    reads.push(
+      ['customer', `/customers/${customerId}`],
+      ['points_events', `/points_events?${filter}`],
+      ['points_redemptions', `/points_redemptions?${filter}`],
+      ['referrals', `/referrals?${filter}`],
+    );
+  }
 
   const results = [];
   for (const [label, path] of reads) {
-    const result = await request('GET', path);
-    results.push([
-      label,
-      report(`GET ${path.replace(customerId, ':id')}`, result),
-    ]);
+    const result = await request(path);
+    const displayPath = customerId ? path.split(customerId).join(':id') : path;
+    results.push([label, report(`GET ${displayPath}`, result)]);
   }
 
-  if (args.spend) {
-    console.log(yellow('--spend passed: this consumes real points.\n'));
-    const result = await request(
-      'POST',
-      `/api/customers/${customerId}/spend_points`,
-      {reward_name: String(args.spend)},
-    );
-    results.push([
-      'spend_points',
-      report(`POST /api/customers/:id/spend_points`, result),
-    ]);
-    const code = result.json?.points_purchase?.code;
-    if (code) {
-      console.log(`${green('discount code')} ${code}`);
-      console.log(
-        dim('Apply with cartDiscountCodesUpdate to verify the cart path.\n'),
-      );
-    }
-  } else {
-    console.log(
-      dim(
-        'spend_points skipped. Pass --spend <reward_id> to test a redemption.\n',
-      ),
-    );
-  }
+  console.log(
+    dim(
+      'Redemption (POST /points_redemptions) is not probed — it spends real points.\n',
+    ),
+  );
 
   const failed = results.filter(([, ok]) => !ok);
   console.log(

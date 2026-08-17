@@ -21,7 +21,7 @@ export function RivoReferral({cms}: {cms: RivoReferralCms}) {
     ? 'max-w-none'
     : 'max-w-[var(--content-max-width)]';
   const Heading = section?.aboveTheFold ? 'h1' : 'h2';
-  const referralLink = stats?.referral_link;
+  const referralLink = stats?.referralUrl;
 
   return (
     <Container container={cms.container}>
@@ -53,10 +53,10 @@ export function RivoReferral({cms}: {cms: RivoReferralCms}) {
             <>
               <RivoReferralLink
                 buttonStyle={section?.buttonStyle}
-                completedCount={stats?.completed_count}
+                completedCount={stats?.completedCount}
                 copiedText={labels?.copiedText}
                 copyText={labels?.copyText}
-                pendingCount={stats?.pending_count}
+                pendingCount={stats?.pendingCount}
                 referralLink={referralLink}
               />
 
@@ -68,7 +68,7 @@ export function RivoReferral({cms}: {cms: RivoReferralCms}) {
                       className="flex items-center justify-between gap-4 py-3"
                     >
                       <p className="text-body-sm">
-                        {referral.friend_email || 'Referral'}
+                        {referral.referredEmail || 'Referral'}
                       </p>
 
                       {referral.status && (

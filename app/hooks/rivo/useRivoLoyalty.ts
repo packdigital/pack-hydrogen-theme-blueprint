@@ -7,25 +7,25 @@ interface RivoApiResponse<TData> {
 }
 
 /**
- * Fetch the logged-in customer's Rivo loyalty summary — status, properties, VIP
- * tiers and redeemable rewards — in a single request.
+ * Fetch the logged-in customer's Rivo loyalty summary — their loyalty record,
+ * the redeemable rewards catalog and the VIP tier ladder — in one request.
  *
- * Returns `null` data when no customer is logged in; Rivo is customer-scoped so
+ * Returns `null` when no customer is logged in; Rivo is customer-scoped so
  * there is nothing to show for guests.
  *
  * @example
  * ```js
- * const {summary, isLoading, error, refresh} = useRivoLoyalty();
+ * const {customer, rewards, pointsTally, refresh} = useRivoLoyalty();
  * ```
  */
 export function useRivoLoyalty(fetchOnMount = true) {
-  const customer = useCustomer();
+  const shopifyCustomer = useCustomer();
   const {pathPrefix} = useLocale();
 
   const {data, error, isLoading, isValidating, mutate} = useLoadData<
     RivoApiResponse<RivoLoyaltySummary>
   >(
-    fetchOnMount && customer
+    fetchOnMount && shopifyCustomer
       ? `${pathPrefix}/api/rivo?action=getLoyaltySummary`
       : null,
   );
@@ -34,19 +34,12 @@ export function useRivoLoyalty(fetchOnMount = true) {
 
   return {
     summary,
-    status: summary?.status || null,
-    properties: summary?.properties || null,
-    vipTiers: summary?.vipTiers || [],
+    customer: summary?.customer || null,
     rewards: summary?.rewards || [],
-    pointsTally:
-      summary?.status?.points_tally ??
-      summary?.properties?.points_tally ??
-      null,
-    creditsTally:
-      summary?.status?.credits_tally ??
-      summary?.properties?.credits_tally ??
-      null,
-    isLoggedIn: !!customer,
+    vipTiers: summary?.vipTiers || [],
+    pointsTally: summary?.customer?.pointsTally ?? null,
+    creditsTally: summary?.customer?.creditsTally ?? null,
+    isLoggedIn: !!shopifyCustomer,
     isLoading,
     isValidating,
     error: data?.error || (error ? 'Unable to load loyalty data.' : null),

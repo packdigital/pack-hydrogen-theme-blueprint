@@ -16,8 +16,8 @@ const REWARD_TYPE_LABELS: Record<string, string> = {
 /**
  * A single redeemable Rivo reward.
  *
- * Incremental rewards (no fixed `points_price`) get a points input bounded by
- * the reward's min/max/increment config; fixed rewards redeem straight off.
+ * Incremental rewards let the customer choose how many points to spend, bounded
+ * below by the reward's points amount; fixed rewards redeem straight off.
  */
 export function RivoRewardCard({
   buttonStyle = 'btn-primary',
@@ -31,23 +31,23 @@ export function RivoRewardCard({
   buttonStyle?: string;
   className?: string;
   isRedeeming?: boolean;
-  onRedeem: (args: {reward: RivoReward; points?: number}) => void;
+  onRedeem: (args: {reward: RivoReward; pointsAmount?: number}) => void;
   pointsTally?: number | null;
   reward: RivoReward;
   redeemText?: string;
 }) {
-  const isIncremental =
-    !!reward.incremental || typeof reward.points_price !== 'number';
-  const minPoints = reward.min_points || reward.points_increment || 100;
-  const [points, setPoints] = useState(minPoints);
+  const minPoints = reward.pointsAmount || 100;
+  const [pointsAmount, setPointsAmount] = useState(minPoints);
 
-  const requiredPoints = isIncremental ? points : reward.points_price || 0;
+  const requiredPoints = reward.isIncremental
+    ? pointsAmount
+    : (reward.pointsAmount ?? 0);
   const canAfford =
     typeof pointsTally !== 'number' || pointsTally >= requiredPoints;
-  const isDisabled = !!isRedeeming || !canAfford || reward.enabled === false;
+  const isDisabled = !!isRedeeming || !canAfford || !reward.enabled;
 
-  const typeLabel = reward.reward_type
-    ? REWARD_TYPE_LABELS[reward.reward_type]
+  const typeLabel = reward.rewardType
+    ? REWARD_TYPE_LABELS[reward.rewardType]
     : null;
 
   return (
@@ -57,9 +57,9 @@ export function RivoRewardCard({
         className,
       )}
     >
-      {reward.image_url && (
+      {reward.iconUrl && (
         <Image
-          data={{altText: reward.title || 'Reward', url: reward.image_url}}
+          data={{altText: reward.name, url: reward.iconUrl}}
           aspectRatio="1/1"
           className="rounded-md"
           width="120"
@@ -71,41 +71,49 @@ export function RivoRewardCard({
           <p className="text-caption uppercase text-neutralDark">{typeLabel}</p>
         )}
 
-        <h3 className="text-label">
-          {reward.title || reward.formatted_value || 'Reward'}
-        </h3>
+        <h3 className="text-label">{reward.name}</h3>
 
         {reward.description && (
           <p className="text-body-sm text-neutralDark">{reward.description}</p>
         )}
+
+        {reward.minOrderValueInCents ? (
+          <p className="text-caption text-neutralDark">
+            {`Minimum order of $${(reward.minOrderValueInCents / 100).toFixed(2)}`}
+          </p>
+        ) : null}
       </div>
 
-      {isIncremental ? (
+      {reward.isIncremental ? (
         <label className="flex flex-col gap-1">
           <span className="input-label">Points to redeem</span>
           <input
             className="input-text"
             inputMode="numeric"
-            max={reward.max_points ?? undefined}
             min={minPoints}
-            onChange={(event) => setPoints(Number(event.target.value) || 0)}
-            step={reward.points_increment ?? 1}
+            onChange={(event) =>
+              setPointsAmount(Number(event.target.value) || 0)
+            }
+            step={minPoints}
             type="number"
-            value={points}
+            value={pointsAmount}
           />
         </label>
       ) : (
         <p className="text-body-sm font-bold">
-          {`${(reward.points_price || 0).toLocaleString()} points`}
+          {`${(reward.pointsAmount ?? 0).toLocaleString()} points`}
         </p>
       )}
 
       <button
-        aria-label={`${redeemText} ${reward.title || 'reward'}`}
+        aria-label={`${redeemText} ${reward.name}`}
         className={clsx(buttonStyle, 'mt-auto')}
         disabled={isDisabled}
         onClick={() =>
-          onRedeem({reward, points: isIncremental ? points : undefined})
+          onRedeem({
+            reward,
+            pointsAmount: reward.isIncremental ? pointsAmount : undefined,
+          })
         }
         type="button"
       >

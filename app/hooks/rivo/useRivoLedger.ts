@@ -7,28 +7,26 @@ interface RivoApiResponse<TData> {
 }
 
 /**
- * Fetch the logged-in customer's points or store-credit history.
+ * Fetch the logged-in customer's points history (`GET /points_events`).
  *
- * @param type - `points` (`/points_logs`) or `credits` (`/credits_logs`)
+ * There is no store-credit equivalent on Rivo's Merchant API — `/credits_events`
+ * and `/credits_logs` both 404 — so credit is only available as a tally via
+ * {@link useRivoLoyalty}.
+ *
  * @example
  * ```js
- * const {entries, isLoading} = useRivoLedger('points', 10);
+ * const {entries, isLoading} = useRivoLedger(10);
  * ```
  */
-export function useRivoLedger(
-  type: 'points' | 'credits' = 'points',
-  limit = 10,
-  fetchOnMount = true,
-) {
+export function useRivoLedger(limit = 10, fetchOnMount = true) {
   const customer = useCustomer();
   const {pathPrefix} = useLocale();
-  const action = type === 'credits' ? 'getCreditsLogs' : 'getPointsLogs';
 
   const {data, error, isLoading, mutate} = useLoadData<
     RivoApiResponse<RivoLedgerEntry[]>
   >(
     fetchOnMount && customer
-      ? `${pathPrefix}/api/rivo?action=${action}&limit=${limit}`
+      ? `${pathPrefix}/api/rivo?action=getPointsLogs&limit=${limit}`
       : null,
   );
 

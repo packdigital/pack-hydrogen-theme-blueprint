@@ -51,19 +51,8 @@ export function Schema() {
         label: 'Section Settings',
         name: 'section',
         component: 'group',
-        description: 'History type, entries shown, text color, full width',
+        description: 'Entries shown, text color, full width',
         fields: [
-          {
-            label: 'History Type',
-            name: 'ledgerType',
-            component: 'select',
-            description:
-              'Points history, or store credit history if credits are enabled in Rivo',
-            options: [
-              {label: 'Points', value: 'points'},
-              {label: 'Store Credit', value: 'credits'},
-            ],
-          },
           {
             label: 'Entries Shown',
             name: 'limit',
@@ -88,7 +77,6 @@ export function Schema() {
           },
         ],
         defaultValue: {
-          ledgerType: 'points',
           limit: 10,
           textColor: COLOR_SCHEMA_DEFAULT_VALUE.text,
           fullWidth: false,

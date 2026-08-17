@@ -1,20 +1,23 @@
 /*
- * Types for Rivo's customer-facing ("storefront") loyalty API.
+ * Types for Rivo's Merchant REST API.
  *
- * Base URL: https://loyalty-api.rivo.io
- * Auth: `Authorization: Bearer <RIVO_STOREFRONT_API_KEY>` — server-side only.
+ * Base URL: https://developer-api.rivo.io/merchant_api/v1
+ * Auth: `Authorization: <api key>` — raw, NOT `Bearer`. Server-side only.
  *
- * Rivo's responses are loosely typed on their end (fields come and go with the
- * merchant's program config), so most fields here are optional and the client
- * normalizes what the UI depends on. See `./README.md`.
+ * Two shapes live here:
+ * - `RivoRaw*` mirrors Rivo's JSON:API payloads (snake_case, inside
+ *   `data[].attributes`).
+ * - Everything else is the normalized camelCase shape the storefront consumes,
+ *   produced at the server boundary so the UI never depends on Rivo's field
+ *   names. See `./README.md`.
  */
 
 /* Env ---------- */
 
 export interface RivoEnv {
+  PRIVATE_RIVO_API_KEY?: string;
+  /** @deprecated Misnamed — this is a Merchant API key. Use `PRIVATE_RIVO_API_KEY`. */
   PRIVATE_RIVO_STOREFRONT_API_KEY?: string;
-  PRIVATE_RIVO_SHOP_DOMAIN?: string;
-  PUBLIC_STORE_DOMAIN?: string;
   RIVO_API_BASE_URL?: string;
 }
 
@@ -22,13 +25,20 @@ export interface RivoEnv {
 
 export interface RivoRequestOptions {
   env: RivoEnv;
-  /** Path after the base URL, e.g. `/api/customers/123/status`. */
+  /** Path after the base URL, e.g. `/customers/123`. */
   path: string;
-  method?: 'GET' | 'POST';
-  /** Appended to the query string alongside the required `shop` param. */
-  searchParams?: Record<string, string | number | undefined | null>;
-  /** JSON body for POST requests. */
-  body?: Record<string, unknown>;
+  method?: 'GET' | 'POST' | 'PUT';
+  /** Query params. Nested objects become `filters[key]=value`. */
+  searchParams?: Record<
+    string,
+    | string
+    | number
+    | undefined
+    | null
+    | Record<string, string | number | undefined | null>
+  >;
+  /** POST/PUT body. Sent as `application/x-www-form-urlencoded`, which is what Rivo expects. */
+  body?: Record<string, string | number | boolean | undefined | null>;
   signal?: AbortSignal;
 }
 
@@ -38,7 +48,139 @@ export interface RivoResult<TData> {
   error: string | null;
 }
 
-/* Reward types ---------- */
+/** Rivo wraps every resource in a JSON:API envelope. */
+export interface RivoRawResource<TAttributes> {
+  type?: string;
+  id?: number | string;
+  attributes?: TAttributes;
+}
+
+export interface RivoRawCollection<TAttributes> {
+  links?: {self?: string; next?: string; last?: string};
+  data?: RivoRawResource<TAttributes>[];
+}
+
+export interface RivoRawSingle<TAttributes> {
+  data?: RivoRawResource<TAttributes>;
+}
+
+/* Raw payloads ---------- */
+
+/** `GET /customers/:customer_identifier` */
+export interface RivoRawCustomer {
+  id?: number;
+  email?: string | null;
+  first_name?: string | null;
+  last_name?: string | null;
+  accepts_marketing?: boolean;
+  orders_count?: number;
+  verified_email?: boolean;
+  total_spent?: number;
+  shopify_tags?: string[];
+  loyalty_status?: string | null;
+  points_tally?: number | null;
+  /** Rivo returns credits as a *string*, e.g. `"0.0"`. */
+  credits_tally?: string | number | null;
+  dob?: string | null;
+  referral_url?: string | null;
+  referral_code?: string | null;
+  vip_tier?: string | {name?: string | null} | null;
+  next_vip_tier?:
+    string | {name?: string | null; threshold?: number | null} | null;
+  points_expire_at?: string | null;
+  lifetime_earnings_tally?: number | null;
+  completed_earning_rule_ids?: (number | string)[];
+  [key: string]: unknown;
+}
+
+/** `GET /rewards` */
+export interface RivoRawReward {
+  id?: number;
+  name?: string | null;
+  enabled?: boolean;
+  points_amount?: number | null;
+  /** `fixed` for a set price; anything else is treated as incremental. */
+  points_type?: string | null;
+  reward_type?: string | null;
+  /** `points` rewards are customer-redeemable; `referrer` ones are auto-granted. */
+  source?: string | null;
+  pretty_display_rewards?: string | null;
+  min_order_value_in_cents?: number | null;
+  min_order_quantity?: number | null;
+  expiry_months?: number | null;
+  reward_value?: number | null;
+  redeemed_count?: number | null;
+  purchase_type?: string | null;
+  recurring_cycle_limit?: number | null;
+  icon_url?: string | null;
+  product_id?: number | null;
+  variant_ids?: (number | string)[] | null;
+  terms_of_service?: {
+    reward_type?: string | null;
+    applies_to?: string | null;
+    show_tos?: boolean | null;
+  } | null;
+  [key: string]: unknown;
+}
+
+/** `GET /vip_tiers` */
+export interface RivoRawVipTier {
+  id?: number;
+  name?: string | null;
+  threshold?: number | null;
+  icon_url?: string | null;
+  perks?: string[] | null;
+  [key: string]: unknown;
+}
+
+/** `GET /points_events` */
+export interface RivoRawPointsEvent {
+  id?: number;
+  customer_identifier?: number | string | null;
+  points_amount?: number | null;
+  credits_amount?: number | string | null;
+  source?: string | null;
+  internal_note?: string | null;
+  external_note?: string | null;
+  applied_at?: string | null;
+  expires_at?: string | null;
+  created_at?: string | null;
+  [key: string]: unknown;
+}
+
+/** `GET|POST /points_redemptions` */
+export interface RivoRawPointsRedemption {
+  id?: number;
+  customer_identifier?: number | string | null;
+  source?: string | null;
+  reward_id?: number | null;
+  /** The generated Shopify discount code. */
+  code?: string | null;
+  used?: boolean | null;
+  referred_email?: string | null;
+  purchase_type?: string | null;
+  applied_at?: string | null;
+  points_diff?: number | null;
+  points_amount?: number | null;
+  /** Present on free-product rewards. */
+  variant_ids?: (number | string)[] | null;
+  /** Present on store-credit rewards. */
+  formatted_store_credit_amount?: string | null;
+  [key: string]: unknown;
+}
+
+/** `GET /referrals` */
+export interface RivoRawReferral {
+  id?: number;
+  status?: string | null;
+  advocate_email?: string | null;
+  referred_email?: string | null;
+  completed_at?: string | null;
+  created_at?: string | null;
+  [key: string]: unknown;
+}
+
+/* Normalized shapes ---------- */
 
 export type RivoRewardType =
   | 'fixed_amount'
@@ -57,139 +199,73 @@ export type RivoRewardType =
 export type RivoCartStrategy =
   'discount_code' | 'discount_code_and_line' | 'none';
 
+export interface RivoCustomer {
+  id: number | string | null;
+  email: string | null;
+  firstName: string | null;
+  lastName: string | null;
+  loyaltyStatus: string | null;
+  pointsTally: number;
+  /** Parsed to a number; Rivo sends this as a string. */
+  creditsTally: number;
+  lifetimeEarningsTally: number | null;
+  vipTierName: string | null;
+  nextVipTierName: string | null;
+  nextVipTierThreshold: number | null;
+  referralUrl: string | null;
+  referralCode: string | null;
+  pointsExpireAt: string | null;
+}
+
 export interface RivoReward {
   id: number | string;
-  title?: string;
-  description?: string | null;
-  reward_type?: RivoRewardType;
-  /** Points required for a fixed reward. */
-  points_price?: number | null;
-  /** Discount value, e.g. `10` for $10 off or 10% off. */
-  value?: number | string | null;
-  formatted_value?: string | null;
-  /** Present on `free_product` rewards. */
-  variant_ids?: (number | string)[] | null;
-  image_url?: string | null;
-  /** Rivo flags incremental rewards, which take `points`/`credits` instead of a fixed price. */
-  incremental?: boolean | null;
-  min_points?: number | null;
-  max_points?: number | null;
-  points_increment?: number | null;
-  enabled?: boolean | null;
+  name: string;
+  description: string | null;
+  enabled: boolean;
+  rewardType: RivoRewardType | null;
+  /** Points required for a fixed reward; the minimum for an incremental one. */
+  pointsAmount: number | null;
+  isIncremental: boolean;
+  rewardValue: number | null;
+  iconUrl: string | null;
+  productId: number | string | null;
+  variantIds: (number | string)[];
+  minOrderValueInCents: number | null;
 }
 
-/* Display endpoints ---------- */
-
-/** `GET /api/customers/:customer_id/status` */
-export interface RivoCustomerStatus {
-  id?: number | string;
-  shopify_customer_id?: number | string | null;
-  email?: string | null;
-  loyalty_status?: string | null;
-  points_tally?: number | null;
-  credits_tally?: number | null;
-  formatted_credits_tally?: string | null;
-  lifetime_earnings_tally?: number | null;
-  vip_tier_name?: string | null;
-  vip_tier?: RivoVipTier | null;
-  birthday?: string | null;
-  referral_code?: string | null;
-  referral_link?: string | null;
-  [key: string]: unknown;
-}
-
-/** `GET /api/customers/:customer_id/properties` */
-export interface RivoCustomerProperties {
-  points_tally?: number | null;
-  credits_tally?: number | null;
-  /** Rivo's "available unused reward" — an already-generated discount code. */
-  loy_unused_reward?: {
-    id?: number | string;
-    code?: string | null;
-    reward_type?: RivoRewardType | null;
-    formatted_value?: string | null;
-  } | null;
-  rewards?: RivoReward[] | null;
-  [key: string]: unknown;
-}
-
-/** `GET /api/customers/:customer_id/vip_tiers` */
 export interface RivoVipTier {
-  id?: number | string;
-  name?: string | null;
-  description?: string | null;
-  /** Threshold to enter the tier (points or spend, per program config). */
-  threshold?: number | null;
-  entry_points?: number | null;
-  icon_url?: string | null;
-  perks?: string[] | null;
-  current?: boolean | null;
-  [key: string]: unknown;
+  id: number | string | null;
+  name: string | null;
+  threshold: number | null;
+  iconUrl: string | null;
+  perks: string[];
 }
 
-/** `GET /api/customers/:customer_id/points_logs` and `/credits_logs` */
 export interface RivoLedgerEntry {
-  id?: number | string;
-  /** Signed amount — negative for spends. */
-  amount?: number | null;
-  formatted_amount?: string | null;
-  action?: string | null;
-  reason?: string | null;
-  description?: string | null;
-  created_at?: string | null;
-  expires_at?: string | null;
-  [key: string]: unknown;
+  id: number | string | null;
+  /** Signed — negative for spends. */
+  amount: number | null;
+  source: string | null;
+  /** Customer-facing note only; internal notes are never sent to the browser. */
+  note: string | null;
+  appliedAt: string | null;
+  expiresAt: string | null;
 }
 
-/** `GET /api/customers/:customer_id/referrals` */
 export interface RivoReferral {
-  id?: number | string;
-  status?: string | null;
-  advocate_email?: string | null;
-  friend_email?: string | null;
-  reward_given?: boolean | null;
-  created_at?: string | null;
-  [key: string]: unknown;
+  id: number | string | null;
+  status: string | null;
+  referredEmail: string | null;
+  completedAt: string | null;
+  createdAt: string | null;
 }
 
-/** `GET /api/customers/:customer_id/referral_stats` */
 export interface RivoReferralStats {
-  referral_link?: string | null;
-  referral_code?: string | null;
-  completed_count?: number | null;
-  pending_count?: number | null;
-  total_count?: number | null;
-  total_earned?: number | null;
-  [key: string]: unknown;
-}
-
-/* Redemption ---------- */
-
-/** `POST /api/customers/:customer_id/spend_points` */
-export interface RivoPointsPurchase {
-  id?: number | string;
-  /** The generated Shopify discount code. */
-  code?: string | null;
-  reward_type?: RivoRewardType | null;
-  formatted_value?: string | null;
-  /** Present on `free_product` rewards. */
-  variant_ids?: (number | string)[] | null;
-  /** Present on `points_to_credit` rewards. */
-  formatted_store_credit_amount?: string | null;
-  [key: string]: unknown;
-}
-
-export interface RivoSpendPointsResponse {
-  success?: boolean;
-  points_tally?: number | null;
-  credits_tally?: number | null;
-  points_purchase?: RivoPointsPurchase | null;
-  /** Rivo surfaces validation failures here rather than as an HTTP error. */
-  error?: string | null;
-  errors?: string[] | Record<string, string[]> | null;
-  message?: string | null;
-  formatted_store_credit_amount?: string | null;
-  [key: string]: unknown;
+  referralUrl: string | null;
+  referralCode: string | null;
+  completedCount: number;
+  pendingCount: number;
+  totalCount: number;
 }
 
 /**
@@ -198,12 +274,12 @@ export interface RivoSpendPointsResponse {
  * converted from Rivo's numeric ids.
  */
 export interface RivoRedemption {
+  id: number | string | null;
   code: string | null;
   rewardType: RivoRewardType | null;
-  formattedValue: string | null;
+  rewardName: string | null;
+  pointsSpent: number | null;
   formattedStoreCreditAmount: string | null;
-  pointsTally: number | null;
-  creditsTally: number | null;
   cartStrategy: RivoCartStrategy;
   variantIds: string[];
 }
@@ -211,22 +287,19 @@ export interface RivoRedemption {
 /* Route payloads ---------- */
 
 export type RivoLoaderAction =
-  | 'getCustomerStatus'
-  | 'getCustomerProperties'
+  | 'getCustomer'
+  | 'getRewards'
   | 'getVipTiers'
   | 'getPointsLogs'
-  | 'getCreditsLogs'
   | 'getReferrals'
   | 'getReferralStats'
-  | 'getRewards'
   | 'getLoyaltySummary';
 
-export type RivoFormAction = 'spendPoints';
+export type RivoFormAction = 'redeemReward';
 
 /** Aggregate payload backing the loyalty sections in one request. */
 export interface RivoLoyaltySummary {
-  status: RivoCustomerStatus | null;
-  properties: RivoCustomerProperties | null;
-  vipTiers: RivoVipTier[];
+  customer: RivoCustomer | null;
   rewards: RivoReward[];
+  vipTiers: RivoVipTier[];
 }

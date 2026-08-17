@@ -24,14 +24,13 @@ export function RivoRewards({cms}: {cms: RivoRewardsCms}) {
   const {heading, labels, section, subtext} = cms;
   const {openCart} = useMenu();
   const {
+    creditsTally,
     error,
     isLoading,
     isLoggedIn,
     pointsTally,
-    creditsTally,
     refresh,
     rewards,
-    status,
   } = useRivoLoyalty();
 
   const {isRedeeming, redeem, result} = useRivoRedeem({
@@ -47,8 +46,8 @@ export function RivoRewards({cms}: {cms: RivoRewardsCms}) {
   });
 
   const onRedeem = useCallback(
-    ({reward, points}: {reward: RivoReward; points?: number}) => {
-      redeem({reward, points});
+    ({reward, pointsAmount}: {reward: RivoReward; pointsAmount?: number}) => {
+      redeem({reward, pointsAmount});
     },
     [redeem],
   );
@@ -91,7 +90,6 @@ export function RivoRewards({cms}: {cms: RivoRewardsCms}) {
               {section?.showBalance !== false && (
                 <RivoBalance
                   creditsTally={creditsTally}
-                  formattedCreditsTally={status?.formatted_credits_tally}
                   pointsTally={pointsTally}
                 />
               )}
@@ -115,9 +113,9 @@ export function RivoRewards({cms}: {cms: RivoRewardsCms}) {
 
               {rewards.length ? (
                 <ul className={clsx('grid gap-4', gridClass)}>
-                  {rewards.map((reward, index) => (
+                  {rewards.map((reward) => (
                     <RivoRewardCard
-                      key={reward.id ?? index}
+                      key={reward.id}
                       buttonStyle={section?.buttonStyle}
                       isRedeeming={isRedeeming}
                       onRedeem={onRedeem}

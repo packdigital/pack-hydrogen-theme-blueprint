@@ -1,7 +1,5 @@
 import {
-  getCreditsLogs,
-  getCustomerProperties,
-  getCustomerStatus,
+  getCustomer,
   getLoyaltySummary,
   getPointsLogs,
   getReferralStats,
@@ -9,29 +7,27 @@ import {
   getRewards,
   getRivoCustomerIdFromSession,
   getVipTiers,
-  spendPoints,
+  redeemReward,
 } from '~/lib/rivo';
-import type {RivoEnv} from '~/lib/rivo';
+import type {RivoEnv, RivoReward} from '~/lib/rivo';
 
 import type {Route} from './+types/($locale).api.rivo';
 
 /*
- * Server-side proxy for Rivo's loyalty API.
+ * Server-side proxy for Rivo's Merchant API.
  *
- * The Rivo storefront API key is shop-scoped — it can read and spend points for
- * *any* customer in the shop — so it never leaves the server, and the customer
+ * The Rivo API key is admin-scoped — it can adjust any customer's points and
+ * manage the rewards catalog — so it never leaves the server, and the customer
  * id always comes from the authenticated session rather than the request.
  */
 
 const LOADER_ACTIONS = {
-  getCustomerStatus,
-  getCustomerProperties,
+  getCustomer,
+  getRewards,
   getVipTiers,
   getPointsLogs,
-  getCreditsLogs,
   getReferrals,
   getReferralStats,
-  getRewards,
   getLoyaltySummary,
 } as const;
 
@@ -91,7 +87,7 @@ export async function action({request, context}: Route.ActionArgs) {
 
   const requestedAction = String(body?.get('action') || '');
 
-  if (requestedAction !== 'spendPoints') {
+  if (requestedAction !== 'redeemReward') {
     return Response.json(
       {
         data: null,
@@ -108,30 +104,48 @@ export async function action({request, context}: Route.ActionArgs) {
     return unauthorized(`/api/rivo: ${sessionError}`);
   }
 
-  const rewardId = String(body?.get('rewardId') || '') || null;
-  const points = Number(body?.get('points')) || null;
-  const credits = Number(body?.get('credits')) || null;
+  const rewardId = String(body?.get('rewardId') || '');
 
-  let fallbackVariantIds: (number | string)[] | null = null;
-  const rawVariantIds = String(body?.get('variantIds') || '');
-  if (rawVariantIds) {
-    try {
-      const parsed = JSON.parse(rawVariantIds);
-      if (Array.isArray(parsed)) fallbackVariantIds = parsed;
-    } catch (error) {}
+  if (!rewardId) {
+    return Response.json(
+      {data: null, error: '/api/rivo: Missing `rewardId`'},
+      {status: 400},
+    );
   }
 
-  const {data, error, status} = await spendPoints({
-    env: context.env as RivoEnv,
+  const env = context.env as RivoEnv;
+  const pointsAmount = Number(body?.get('pointsAmount')) || null;
+  const creditsAmount = Number(body?.get('creditsAmount')) || null;
+
+  // Look the reward up server-side rather than trusting the client's copy: the
+  // variant ids and reward type decide which cart mutations run, and the points
+  // price decides affordability.
+  const {data: rewards} = await getRewards({env, customerId});
+  const reward =
+    (rewards as RivoReward[] | null)?.find(({id}) => String(id) === rewardId) ||
+    null;
+
+  if (!reward) {
+    return Response.json(
+      {
+        data: null,
+        error: '/api/rivo: That reward is not available for redemption.',
+      },
+      {status: 400},
+    );
+  }
+
+  const {data, error, status} = await redeemReward({
+    env,
     customerId,
     rewardId,
-    points,
-    credits,
-    fallbackVariantIds,
+    pointsAmount: reward.isIncremental ? pointsAmount : null,
+    creditsAmount: reward.isIncremental ? creditsAmount : null,
+    reward,
   });
 
   if (error) {
-    console.error('/api/rivo: spendPoints:error:', error);
+    console.error('/api/rivo: redeemReward:error:', error);
     return Response.json({data: null, error}, {status: status || 500});
   }
 

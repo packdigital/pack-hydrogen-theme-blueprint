@@ -205,9 +205,8 @@ PACK_STOREFRONT_ID="XXX"
 Optional, for the Rivo loyalty sections — see [`app/lib/rivo/README.md`](./app/lib/rivo/README.md):
 
 ```dotenv
-PRIVATE_RIVO_STOREFRONT_API_KEY="XXX"
-PRIVATE_RIVO_SHOP_DOMAIN="XXX.myshopify.com" # optional, defaults to PUBLIC_STORE_DOMAIN
-RIVO_API_BASE_URL="XXX"                      # optional, defaults to https://loyalty-api.rivo.io
+PRIVATE_RIVO_API_KEY="XXX"
+RIVO_API_BASE_URL="XXX" # optional, defaults to Rivo's Merchant API base
 ```
 
 ### Building for production

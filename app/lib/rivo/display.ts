@@ -1,14 +1,27 @@
-import {rivoRequest} from './rivo-client';
+import {
+  rivoRequest,
+  toNumber,
+  toTierName,
+  unwrapCollection,
+  unwrapSingle,
+} from './rivo-client';
 import type {
-  RivoCustomerProperties,
-  RivoCustomerStatus,
+  RivoCustomer,
   RivoEnv,
   RivoLedgerEntry,
   RivoLoyaltySummary,
+  RivoRawCollection,
+  RivoRawCustomer,
+  RivoRawPointsEvent,
+  RivoRawReferral,
+  RivoRawReward,
+  RivoRawSingle,
+  RivoRawVipTier,
   RivoReferral,
   RivoReferralStats,
   RivoResult,
   RivoReward,
+  RivoRewardType,
   RivoVipTier,
 } from './rivo.types';
 
@@ -19,185 +32,259 @@ interface CustomerScopedProps {
   page?: number;
 }
 
+/* Normalizers ---------- */
+
+const normalizeCustomer = (raw: RivoRawCustomer): RivoCustomer => {
+  const nextTier = raw.next_vip_tier;
+  return {
+    id: raw.id ?? null,
+    email: raw.email || null,
+    firstName: raw.first_name || null,
+    lastName: raw.last_name || null,
+    loyaltyStatus: raw.loyalty_status || null,
+    pointsTally: toNumber(raw.points_tally),
+    creditsTally: toNumber(raw.credits_tally),
+    lifetimeEarningsTally:
+      raw.lifetime_earnings_tally === null ||
+      raw.lifetime_earnings_tally === undefined
+        ? null
+        : toNumber(raw.lifetime_earnings_tally),
+    vipTierName: toTierName(raw.vip_tier),
+    nextVipTierName: toTierName(nextTier),
+    nextVipTierThreshold:
+      nextTier && typeof nextTier === 'object' && nextTier.threshold != null
+        ? toNumber(nextTier.threshold)
+        : null,
+    referralUrl: raw.referral_url || null,
+    referralCode: raw.referral_code || null,
+    pointsExpireAt: raw.points_expire_at || null,
+  };
+};
+
+const normalizeReward = (raw: RivoRawReward): RivoReward => ({
+  id: raw.id ?? '',
+  name: raw.name || 'Reward',
+  // `pretty_display_rewards` reads like "$5 off coupon (100 points required)",
+  // which duplicates the name and points shown in the UI, so it's not used as
+  // the description.
+  description: null,
+  enabled: raw.enabled !== false,
+  rewardType: (raw.reward_type as RivoRewardType) || null,
+  pointsAmount:
+    raw.points_amount === null || raw.points_amount === undefined
+      ? null
+      : toNumber(raw.points_amount),
+  // Rivo marks a set price as `points_type: 'fixed'`; anything else lets the
+  // customer choose how many points to spend.
+  isIncremental: !!raw.points_type && raw.points_type !== 'fixed',
+  rewardValue:
+    raw.reward_value === null || raw.reward_value === undefined
+      ? null
+      : toNumber(raw.reward_value),
+  iconUrl: raw.icon_url || null,
+  productId: raw.product_id ?? null,
+  variantIds: raw.variant_ids || [],
+  minOrderValueInCents:
+    raw.min_order_value_in_cents === null ||
+    raw.min_order_value_in_cents === undefined
+      ? null
+      : toNumber(raw.min_order_value_in_cents),
+});
+
+const normalizeVipTier = (raw: RivoRawVipTier): RivoVipTier => ({
+  id: raw.id ?? null,
+  name: raw.name || null,
+  threshold:
+    raw.threshold === null || raw.threshold === undefined
+      ? null
+      : toNumber(raw.threshold),
+  iconUrl: raw.icon_url || null,
+  perks: raw.perks || [],
+});
+
+const normalizePointsEvent = (raw: RivoRawPointsEvent): RivoLedgerEntry => ({
+  id: raw.id ?? null,
+  amount:
+    raw.points_amount === null || raw.points_amount === undefined
+      ? null
+      : toNumber(raw.points_amount),
+  source: raw.source || null,
+  // Only the external note is customer-facing; internal_note stays server-side.
+  note: raw.external_note || null,
+  appliedAt: raw.applied_at || raw.created_at || null,
+  expiresAt: raw.expires_at || null,
+});
+
+const normalizeReferral = (raw: RivoRawReferral): RivoReferral => ({
+  id: raw.id ?? null,
+  status: raw.status || null,
+  referredEmail: raw.referred_email || null,
+  completedAt: raw.completed_at || null,
+  createdAt: raw.created_at || null,
+});
+
+/* Endpoints ---------- */
+
 /**
- * Rivo wraps collections inconsistently — sometimes a bare array, sometimes
- * `{data: []}` or a named key. Pull the array out wherever it is.
+ * `GET /customers/:customer_identifier` — loyalty status, points, credits, VIP
+ * tier and referral link. This one call backs most of the loyalty UI.
  */
-const unwrapCollection = <TItem>(
-  payload: unknown,
-  ...keys: string[]
-): TItem[] => {
-  if (Array.isArray(payload)) return payload as TItem[];
-  if (!payload || typeof payload !== 'object') return [];
-  const record = payload as Record<string, unknown>;
-  for (const key of [...keys, 'data', 'results', 'items']) {
-    if (Array.isArray(record[key])) return record[key] as TItem[];
-  }
-  return [];
-};
-
-/** `GET /api/customers/:customer_id/status` — loyalty status and points. */
-export const getCustomerStatus = async ({
+export const getCustomer = async ({
   env,
   customerId,
-}: CustomerScopedProps): Promise<RivoResult<RivoCustomerStatus>> => {
-  const result = await rivoRequest<Record<string, any>>({
+}: CustomerScopedProps): Promise<RivoResult<RivoCustomer>> => {
+  const result = await rivoRequest<RivoRawSingle<RivoRawCustomer>>({
     env,
-    path: `/api/customers/${customerId}/status`,
+    path: `/customers/${customerId}`,
   });
-  // Some Rivo responses nest the customer under `customer`.
-  const data = (result.data?.customer ||
-    result.data) as RivoCustomerStatus | null;
-  return {...result, data};
+  const raw = unwrapSingle(result.data);
+  return {...result, data: raw ? normalizeCustomer(raw) : null};
 };
 
 /**
- * `GET /api/customers/:customer_id/properties` — points plus the customer's
- * available unused reward (`loy_unused_reward.code`).
- */
-export const getCustomerProperties = async ({
-  env,
-  customerId,
-}: CustomerScopedProps): Promise<RivoResult<RivoCustomerProperties>> => {
-  return rivoRequest<RivoCustomerProperties>({
-    env,
-    path: `/api/customers/${customerId}/properties`,
-  });
-};
-
-/** `GET /api/customers/:customer_id/vip_tiers` — the program's VIP tiers. */
-export const getVipTiers = async ({
-  env,
-  customerId,
-}: CustomerScopedProps): Promise<RivoResult<RivoVipTier[]>> => {
-  const result = await rivoRequest<unknown>({
-    env,
-    path: `/api/customers/${customerId}/vip_tiers`,
-  });
-  return {
-    ...result,
-    data: unwrapCollection<RivoVipTier>(result.data, 'vip_tiers'),
-  };
-};
-
-/** `GET /api/customers/:customer_id/points_logs` — points history. */
-export const getPointsLogs = async ({
-  env,
-  customerId,
-  limit,
-  page,
-}: CustomerScopedProps): Promise<RivoResult<RivoLedgerEntry[]>> => {
-  const result = await rivoRequest<unknown>({
-    env,
-    path: `/api/customers/${customerId}/points_logs`,
-    searchParams: {limit, page},
-  });
-  return {
-    ...result,
-    data: unwrapCollection<RivoLedgerEntry>(
-      result.data,
-      'points_logs',
-      'logs',
-      'points_events',
-    ),
-  };
-};
-
-/** `GET /api/customers/:customer_id/credits_logs` — store-credit history. */
-export const getCreditsLogs = async ({
-  env,
-  customerId,
-  limit,
-  page,
-}: CustomerScopedProps): Promise<RivoResult<RivoLedgerEntry[]>> => {
-  const result = await rivoRequest<unknown>({
-    env,
-    path: `/api/customers/${customerId}/credits_logs`,
-    searchParams: {limit, page},
-  });
-  return {
-    ...result,
-    data: unwrapCollection<RivoLedgerEntry>(
-      result.data,
-      'credits_logs',
-      'logs',
-      'credits_events',
-    ),
-  };
-};
-
-/** `GET /api/customers/:customer_id/referrals` — the customer's referrals. */
-export const getReferrals = async ({
-  env,
-  customerId,
-}: CustomerScopedProps): Promise<RivoResult<RivoReferral[]>> => {
-  const result = await rivoRequest<unknown>({
-    env,
-    path: `/api/customers/${customerId}/referrals`,
-  });
-  return {
-    ...result,
-    data: unwrapCollection<RivoReferral>(result.data, 'referrals'),
-  };
-};
-
-/** `GET /api/customers/:customer_id/referral_stats` — referral link + stats. */
-export const getReferralStats = async ({
-  env,
-  customerId,
-}: CustomerScopedProps): Promise<RivoResult<RivoReferralStats>> => {
-  const result = await rivoRequest<Record<string, any>>({
-    env,
-    path: `/api/customers/${customerId}/referral_stats`,
-  });
-  const data = (result.data?.referral_stats ||
-    result.data) as RivoReferralStats | null;
-  return {...result, data};
-};
-
-/**
- * `GET /api/rewards` — the shop's rewards catalog.
+ * `GET /rewards` — the shop's rewards catalog (shop-scoped, not per customer).
  *
- * Unlike the other endpoints this one is shop-scoped, not customer-scoped
- * (`/api/customers/:id/rewards` does not exist — it 404s). Affordability is
- * therefore computed client-side against the customer's points tally.
+ * Filtered to enabled, points-sourced rewards: `source: 'referrer'` rewards are
+ * granted automatically by Rivo and are not customer-redeemable.
  */
 export const getRewards = async ({
   env,
 }: CustomerScopedProps): Promise<RivoResult<RivoReward[]>> => {
-  const result = await rivoRequest<unknown>({env, path: '/api/rewards'});
+  const result = await rivoRequest<RivoRawCollection<RivoRawReward>>({
+    env,
+    path: '/rewards',
+    searchParams: {pagination: {per_page: 100}},
+  });
+  const rewards = unwrapCollection(result.data)
+    .filter((raw) => raw.enabled !== false && raw.source === 'points')
+    .map(normalizeReward);
+  return {...result, data: rewards};
+};
+
+/** `GET /vip_tiers` — the program's VIP tier ladder, ascending by threshold. */
+export const getVipTiers = async ({
+  env,
+}: CustomerScopedProps): Promise<RivoResult<RivoVipTier[]>> => {
+  const result = await rivoRequest<RivoRawCollection<RivoRawVipTier>>({
+    env,
+    path: '/vip_tiers',
+  });
+  const tiers = unwrapCollection(result.data)
+    .map(normalizeVipTier)
+    .sort((a, b) => (a.threshold ?? 0) - (b.threshold ?? 0));
+  return {...result, data: tiers};
+};
+
+/**
+ * `GET /points_events` — the customer's points history.
+ *
+ * Note there is no credits equivalent: `/credits_events` and `/credits_logs`
+ * both 404. Store credit is only exposed as a tally on the customer.
+ */
+export const getPointsLogs = async ({
+  env,
+  customerId,
+  limit = 25,
+  page,
+}: CustomerScopedProps): Promise<RivoResult<RivoLedgerEntry[]>> => {
+  const result = await rivoRequest<RivoRawCollection<RivoRawPointsEvent>>({
+    env,
+    path: '/points_events',
+    searchParams: {
+      filters: {customer_identifier: customerId},
+      pagination: {per_page: limit, page},
+    },
+  });
   return {
     ...result,
-    data: unwrapCollection<RivoReward>(result.data, 'rewards'),
+    data: unwrapCollection(result.data).map(normalizePointsEvent),
+  };
+};
+
+/** `GET /referrals` — the customer's referrals as the advocate. */
+export const getReferrals = async ({
+  env,
+  customerId,
+  limit = 25,
+}: CustomerScopedProps): Promise<RivoResult<RivoReferral[]>> => {
+  const result = await rivoRequest<RivoRawCollection<RivoRawReferral>>({
+    env,
+    path: '/referrals',
+    searchParams: {
+      filters: {customer_identifier: customerId},
+      pagination: {per_page: limit},
+    },
+  });
+  return {
+    ...result,
+    data: unwrapCollection(result.data).map(normalizeReferral),
   };
 };
 
 /**
- * Everything the loyalty sections need, in one round trip. Individual failures
- * degrade to `null`/`[]` rather than failing the whole page.
+ * Referral link plus counts.
+ *
+ * There is no single stats endpoint on this surface — `/customers/:id/advocate_stats`
+ * returns the plain customer object — so the link comes from the customer and
+ * the counts are derived from `/referrals`.
+ */
+export const getReferralStats = async ({
+  env,
+  customerId,
+}: CustomerScopedProps): Promise<RivoResult<RivoReferralStats>> => {
+  const [customer, referrals] = await Promise.all([
+    getCustomer({env, customerId}),
+    getReferrals({env, customerId, limit: 100}),
+  ]);
+
+  if (!customer.data) {
+    return {status: customer.status, data: null, error: customer.error};
+  }
+
+  const all = referrals.data || [];
+  const completedCount = all.filter(
+    ({status, completedAt}) => !!completedAt || status === 'completed',
+  ).length;
+
+  return {
+    status: 200,
+    error: null,
+    data: {
+      referralUrl: customer.data.referralUrl,
+      referralCode: customer.data.referralCode,
+      completedCount,
+      pendingCount: all.length - completedCount,
+      totalCount: all.length,
+    },
+  };
+};
+
+/**
+ * Everything the loyalty sections need, in one round trip. The rewards and tier
+ * calls degrade to `[]` rather than failing the page; only the customer lookup
+ * is load-bearing.
  */
 export const getLoyaltySummary = async ({
   env,
   customerId,
 }: CustomerScopedProps): Promise<RivoResult<RivoLoyaltySummary>> => {
-  const [status, properties, vipTiers, rewards] = await Promise.all([
-    getCustomerStatus({env, customerId}),
-    getCustomerProperties({env, customerId}),
-    getVipTiers({env, customerId}),
+  const [customer, rewards, vipTiers] = await Promise.all([
+    getCustomer({env, customerId}),
     getRewards({env, customerId}),
+    getVipTiers({env, customerId}),
   ]);
 
-  const errors = [status.error, properties.error].filter(Boolean);
+  if (!customer.data) {
+    return {status: customer.status, data: null, error: customer.error};
+  }
 
   return {
-    // Only fail hard if neither of the two core calls came back.
-    status: status.data || properties.data ? 200 : status.status,
+    status: 200,
+    error: null,
     data: {
-      status: status.data,
-      properties: properties.data,
-      vipTiers: vipTiers.data || [],
+      customer: customer.data,
       rewards: rewards.data || [],
+      vipTiers: vipTiers.data || [],
     },
-    error: status.data || properties.data ? null : errors.join(' | ') || null,
   };
 };

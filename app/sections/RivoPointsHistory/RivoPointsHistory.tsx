@@ -20,18 +20,29 @@ const formatDate = (value?: string | null) => {
       });
 };
 
+/** Rivo's `source` values are snake_case, e.g. `referral_complete`. */
+const formatSource = (source?: string | null) => {
+  if (!source) return null;
+  return source
+    .split('_')
+    .map((word, index) =>
+      index === 0 ? word.charAt(0).toUpperCase() + word.slice(1) : word,
+    )
+    .join(' ');
+};
+
+const getLabel = (entry: RivoLedgerEntry) =>
+  entry.note || formatSource(entry.source) || 'Activity';
+
 const getAmount = (entry: RivoLedgerEntry) => {
-  if (entry.formatted_amount) return entry.formatted_amount;
   if (typeof entry.amount !== 'number') return null;
-  // Rivo returns spends as negatives; make the sign explicit either way.
+  // Spends come back negative; make the sign explicit either way.
   return `${entry.amount > 0 ? '+' : ''}${entry.amount.toLocaleString()}`;
 };
 
 export function RivoPointsHistory({cms}: {cms: RivoPointsHistoryCms}) {
   const {heading, labels, section} = cms;
-  const type = section?.ledgerType === 'credits' ? 'credits' : 'points';
   const {entries, error, isLoading, isLoggedIn} = useRivoLedger(
-    type,
     Number(section?.limit) || 10,
   );
 
@@ -63,7 +74,7 @@ export function RivoPointsHistory({cms}: {cms: RivoPointsHistoryCms}) {
           ) : entries.length ? (
             <ul className="flex flex-col divide-y divide-border border-y border-border">
               {entries.map((entry, index) => {
-                const date = formatDate(entry.created_at);
+                const date = formatDate(entry.appliedAt);
                 const amount = getAmount(entry);
 
                 return (
@@ -72,12 +83,7 @@ export function RivoPointsHistory({cms}: {cms: RivoPointsHistoryCms}) {
                     className="flex items-center justify-between gap-4 py-4"
                   >
                     <div className="flex flex-col">
-                      <p className="text-body-sm">
-                        {entry.reason ||
-                          entry.description ||
-                          entry.action ||
-                          'Activity'}
-                      </p>
+                      <p className="text-body-sm">{getLabel(entry)}</p>
 
                       {date && (
                         <p className="text-caption text-neutralDark">{date}</p>

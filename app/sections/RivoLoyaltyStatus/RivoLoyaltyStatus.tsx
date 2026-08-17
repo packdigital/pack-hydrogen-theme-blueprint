@@ -14,15 +14,8 @@ import type {RivoLoyaltyStatusCms} from './RivoLoyaltyStatus.types';
 
 export function RivoLoyaltyStatus({cms}: {cms: RivoLoyaltyStatusCms}) {
   const {heading, labels, section, subtext} = cms;
-  const {
-    creditsTally,
-    error,
-    isLoading,
-    isLoggedIn,
-    pointsTally,
-    status,
-    vipTiers,
-  } = useRivoLoyalty();
+  const {customer, error, isLoading, isLoggedIn, pointsTally, vipTiers} =
+    useRivoLoyalty();
 
   const maxWidthClass = section?.fullWidth
     ? 'max-w-none'
@@ -60,10 +53,9 @@ export function RivoLoyaltyStatus({cms}: {cms: RivoLoyaltyStatusCms}) {
             <>
               <RivoBalance
                 creditsLabel={labels?.creditsLabel}
-                creditsTally={creditsTally}
-                formattedCreditsTally={status?.formatted_credits_tally}
+                creditsTally={customer?.creditsTally}
                 lifetimeLabel={labels?.lifetimeLabel}
-                lifetimeTally={status?.lifetime_earnings_tally}
+                lifetimeTally={customer?.lifetimeEarningsTally}
                 pointsLabel={labels?.pointsLabel}
                 pointsTally={pointsTally}
                 showCredits={section?.showCredits !== false}
@@ -77,9 +69,7 @@ export function RivoLoyaltyStatus({cms}: {cms: RivoLoyaltyStatusCms}) {
                   )}
 
                   <RivoVipTiers
-                    currentTierName={
-                      status?.vip_tier_name || status?.vip_tier?.name
-                    }
+                    currentTierName={customer?.vipTierName}
                     pointsTally={pointsTally}
                     tiers={vipTiers}
                   />

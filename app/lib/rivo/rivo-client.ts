@@ -1,40 +1,42 @@
 import type {
+  RivoCartStrategy,
   RivoEnv,
+  RivoRawCollection,
+  RivoRawSingle,
   RivoRequestOptions,
   RivoResult,
-  RivoCartStrategy,
   RivoRewardType,
-  RivoPointsPurchase,
 } from './rivo.types';
 
-export const RIVO_DEFAULT_BASE_URL = 'https://loyalty-api.rivo.io';
+export const RIVO_DEFAULT_BASE_URL =
+  'https://developer-api.rivo.io/merchant_api/v1';
 
 const REQUEST_TIMEOUT_MS = 10_000;
 
 /**
- * Strip anything that could leak the bearer token or internal request ids into
- * a response the browser sees.
+ * Strip anything that could leak the API key into a response the browser sees.
  */
 const sanitizeError = (message: string, apiKey?: string) => {
   let sanitized = message;
   if (apiKey) sanitized = sanitized.split(apiKey).join('[redacted]');
-  sanitized = sanitized.replace(/Bearer\s+\S+/gi, 'Bearer [redacted]');
   return sanitized.trim();
 };
 
 export const getRivoConfig = (env: RivoEnv) => {
-  const apiKey = env.PRIVATE_RIVO_STOREFRONT_API_KEY;
-  const shop = env.PRIVATE_RIVO_SHOP_DOMAIN || env.PUBLIC_STORE_DOMAIN;
+  // PRIVATE_RIVO_STOREFRONT_API_KEY is the historical (misleading) name.
+  const apiKey =
+    env.PRIVATE_RIVO_API_KEY || env.PRIVATE_RIVO_STOREFRONT_API_KEY;
   const baseUrl = (env.RIVO_API_BASE_URL || RIVO_DEFAULT_BASE_URL).replace(
     /\/$/,
     '',
   );
-  return {apiKey, shop, baseUrl};
+  return {apiKey, baseUrl};
 };
 
 /**
- * Core Rivo request. Server-side only — the storefront API key is shop-scoped
- * and must never reach the browser.
+ * Core Rivo Merchant API request. Server-side only — this key is admin-scoped
+ * (it can adjust any customer's points and manage rewards), so it must never
+ * reach the browser.
  */
 export const rivoRequest = async <TData>({
   env,
@@ -44,28 +46,32 @@ export const rivoRequest = async <TData>({
   body,
   signal,
 }: RivoRequestOptions): Promise<RivoResult<TData>> => {
-  const {apiKey, shop, baseUrl} = getRivoConfig(env);
+  const {apiKey, baseUrl} = getRivoConfig(env);
 
   if (!apiKey) {
     return {
       status: 500,
       data: null,
-      error: 'Rivo: `PRIVATE_RIVO_STOREFRONT_API_KEY` is not set.',
-    };
-  }
-  if (!shop) {
-    return {
-      status: 500,
-      data: null,
-      error:
-        'Rivo: shop domain is not set. Set `PRIVATE_RIVO_SHOP_DOMAIN` or `PUBLIC_STORE_DOMAIN`.',
+      error: 'Rivo: `PRIVATE_RIVO_API_KEY` is not set.',
     };
   }
 
   const url = new URL(`${baseUrl}${path}`);
-  url.searchParams.set('shop', shop);
   Object.entries(searchParams || {}).forEach(([key, value]) => {
     if (value === undefined || value === null || value === '') return;
+    if (typeof value === 'object') {
+      // Rivo takes nested params as `filters[customer_identifier]=123`.
+      Object.entries(value).forEach(([nestedKey, nestedValue]) => {
+        if (
+          nestedValue === undefined ||
+          nestedValue === null ||
+          nestedValue === ''
+        )
+          return;
+        url.searchParams.set(`${key}[${nestedKey}]`, String(nestedValue));
+      });
+      return;
+    }
     url.searchParams.set(key, String(value));
   });
 
@@ -75,15 +81,28 @@ export const rivoRequest = async <TData>({
   const timeoutId = setTimeout(() => timeout.abort(), REQUEST_TIMEOUT_MS);
   if (signal) signal.addEventListener('abort', () => timeout.abort());
 
+  let encodedBody: string | undefined;
+  if (body) {
+    const params = new URLSearchParams();
+    Object.entries(body).forEach(([key, value]) => {
+      if (value === undefined || value === null || value === '') return;
+      params.set(key, String(value));
+    });
+    encodedBody = params.toString();
+  }
+
   try {
     const response = await fetch(url.toString(), {
       method,
       headers: {
         Accept: 'application/json',
-        Authorization: `Bearer ${apiKey}`,
-        ...(body ? {'Content-Type': 'application/json'} : {}),
+        // Raw key — Rivo's Merchant API rejects a `Bearer` prefix with a 401.
+        Authorization: apiKey,
+        ...(encodedBody
+          ? {'Content-Type': 'application/x-www-form-urlencoded'}
+          : {}),
       },
-      ...(body ? {body: JSON.stringify(body)} : {}),
+      ...(encodedBody ? {body: encodedBody} : {}),
       signal: timeout.signal,
     });
 
@@ -106,7 +125,8 @@ export const rivoRequest = async <TData>({
         json?.error ||
         json?.message ||
         (Array.isArray(json?.errors) ? json.errors.join(', ') : null) ||
-        response.statusText;
+        response.statusText ||
+        'Unknown error';
       return {
         status: response.status,
         data: null,
@@ -132,11 +152,43 @@ export const rivoRequest = async <TData>({
   }
 };
 
+/* JSON:API unwrapping ---------- */
+
+/** Pull `attributes` out of a single-resource envelope. */
+export const unwrapSingle = <TAttributes>(
+  payload: RivoRawSingle<TAttributes> | null,
+): TAttributes | null => payload?.data?.attributes || null;
+
+/** Pull `attributes` out of every member of a collection envelope. */
+export const unwrapCollection = <TAttributes>(
+  payload: RivoRawCollection<TAttributes> | null,
+): TAttributes[] =>
+  (payload?.data || [])
+    .map((resource) => resource?.attributes)
+    .filter(Boolean) as TAttributes[];
+
 /* Helpers ---------- */
 
-/**
- * Rivo returns numeric Shopify ids; the Storefront API takes GIDs.
- */
+/** Rivo sends money-ish values as strings, e.g. `credits_tally: "0.0"`. */
+export const toNumber = (value: unknown, fallback = 0) => {
+  if (typeof value === 'number')
+    return Number.isFinite(value) ? value : fallback;
+  if (typeof value === 'string') {
+    const parsed = Number.parseFloat(value);
+    return Number.isFinite(parsed) ? parsed : fallback;
+  }
+  return fallback;
+};
+
+/** VIP tier fields come back as either a bare name or an object. */
+export const toTierName = (
+  tier: string | {name?: string | null} | null | undefined,
+) => {
+  if (!tier) return null;
+  return typeof tier === 'string' ? tier : tier.name || null;
+};
+
+/** Rivo returns numeric Shopify ids; the Storefront API takes GIDs. */
 export const toVariantGid = (id: number | string) => {
   const asString = String(id);
   return asString.startsWith('gid://')
@@ -144,9 +196,7 @@ export const toVariantGid = (id: number | string) => {
     : `gid://shopify/ProductVariant/${asString}`;
 };
 
-/**
- * Shopify customer GID -> the numeric id Rivo expects as a path segment.
- */
+/** Shopify customer GID -> the numeric id Rivo uses as `customer_identifier`. */
 export const toRivoCustomerId = (customerGid: string) => {
   const numeric = customerGid.split('/').pop();
   return numeric && /^\d+$/.test(numeric) ? numeric : null;
@@ -155,11 +205,9 @@ export const toRivoCustomerId = (customerGid: string) => {
 /**
  * Which cart mutations a redeemed reward requires. Gift cards and store credit
  * are settled by Shopify at checkout, so the cart is left alone.
- *
- * @see the reward-type table in the Rivo × Hydrogen redemption spec
  */
 export const getCartStrategy = (
-  rewardType?: RivoRewardType | null,
+  rewardType?: RivoRewardType | string | null,
 ): RivoCartStrategy => {
   switch (rewardType) {
     case 'free_product':
@@ -175,14 +223,4 @@ export const getCartStrategy = (
       // Unknown/new reward type: a code is the safe default if one came back.
       return 'discount_code';
   }
-};
-
-export const getRedemptionVariantGids = (
-  pointsPurchase?: RivoPointsPurchase | null,
-  fallbackVariantIds?: (number | string)[] | null,
-) => {
-  const ids = pointsPurchase?.variant_ids?.length
-    ? pointsPurchase.variant_ids
-    : fallbackVariantIds || [];
-  return ids.filter(Boolean).map(toVariantGid);
 };

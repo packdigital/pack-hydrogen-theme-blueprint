@@ -10,7 +10,6 @@ export interface RivoPointsHistoryCms {
   };
   section?: {
     fullWidth?: boolean;
-    ledgerType?: 'points' | 'credits';
     limit?: string | number;
     textColor?: string;
   };

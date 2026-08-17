@@ -2,18 +2,10 @@ import clsx from 'clsx';
 
 import type {RivoVipTier} from '~/lib/rivo';
 
-const getThreshold = (tier: RivoVipTier) =>
-  typeof tier.threshold === 'number'
-    ? tier.threshold
-    : typeof tier.entry_points === 'number'
-      ? tier.entry_points
-      : null;
-
 /**
  * VIP tier ladder with the customer's progress toward the next tier.
  *
- * Rivo programs can key tiers off points or spend; the progress bar is only
- * rendered when the tiers expose a numeric threshold to compare against.
+ * Tiers arrive sorted ascending by threshold from the server.
  */
 export function RivoVipTiers({
   className,
@@ -28,30 +20,34 @@ export function RivoVipTiers({
 }) {
   if (!tiers?.length) return null;
 
-  const sorted = [...tiers].sort(
-    (a, b) => (getThreshold(a) ?? 0) - (getThreshold(b) ?? 0),
-  );
-
-  const nextTier = sorted.find((tier) => {
-    const threshold = getThreshold(tier);
-    return (
-      threshold !== null &&
-      typeof pointsTally === 'number' &&
-      threshold > pointsTally
-    );
-  });
-  const nextThreshold = nextTier ? getThreshold(nextTier) : null;
+  const nextTier =
+    typeof pointsTally === 'number'
+      ? tiers.find(
+          ({threshold}) => threshold !== null && threshold > pointsTally,
+        )
+      : undefined;
+  const nextThreshold = nextTier?.threshold ?? null;
   const progress =
     nextThreshold && typeof pointsTally === 'number'
       ? Math.min(100, Math.round((pointsTally / nextThreshold) * 100))
       : null;
 
+  // With no explicit tier name, the highest threshold at or below the balance is
+  // the customer's current tier.
+  const derivedCurrentTier =
+    currentTierName ||
+    (typeof pointsTally === 'number'
+      ? [...tiers]
+          .reverse()
+          .find(({threshold}) => (threshold ?? 0) <= pointsTally)?.name
+      : null);
+
   return (
     <div className={clsx('flex flex-col gap-4', className)}>
-      {progress !== null && nextTier && (
+      {progress !== null && nextTier && nextThreshold !== null && (
         <div className="flex flex-col gap-2">
           <p className="text-body-sm">
-            {`${(nextThreshold! - (pointsTally || 0)).toLocaleString()} points to ${
+            {`${(nextThreshold - (pointsTally || 0)).toLocaleString()} points to ${
               nextTier.name || 'the next tier'
             }`}
           </p>
@@ -72,12 +68,10 @@ export function RivoVipTiers({
       )}
 
       <ul className="grid gap-3 sm:grid-cols-3">
-        {sorted.map((tier, index) => {
-          const threshold = getThreshold(tier);
-          const isCurrent = tier.current
-            ? true
-            : !!currentTierName &&
-              tier.name?.toLowerCase() === currentTierName.toLowerCase();
+        {tiers.map((tier, index) => {
+          const isCurrent =
+            !!derivedCurrentTier &&
+            tier.name?.toLowerCase() === derivedCurrentTier.toLowerCase();
 
           return (
             <li
@@ -91,9 +85,9 @@ export function RivoVipTiers({
             >
               <p className="text-label-sm">{tier.name}</p>
 
-              {threshold !== null && (
+              {tier.threshold !== null && (
                 <p className="text-caption text-neutralDark">
-                  {`${threshold.toLocaleString()}+ points`}
+                  {`${tier.threshold.toLocaleString()}+ points`}
                 </p>
               )}
 
@@ -101,7 +95,7 @@ export function RivoVipTiers({
                 <p className="text-caption text-primary">Your current tier</p>
               )}
 
-              {!!tier.perks?.length && (
+              {!!tier.perks.length && (
                 <ul className="mt-1 flex flex-col gap-0.5">
                   {tier.perks.map((perk, perkIndex) => (
                     <li

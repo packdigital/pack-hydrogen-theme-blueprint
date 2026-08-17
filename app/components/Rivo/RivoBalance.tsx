@@ -7,7 +7,7 @@ export function RivoBalance({
   className,
   creditsLabel = 'Store credit',
   creditsTally,
-  formattedCreditsTally,
+  currencyCode = 'USD',
   lifetimeLabel = 'Lifetime points',
   lifetimeTally,
   pointsLabel = 'Points balance',
@@ -18,7 +18,7 @@ export function RivoBalance({
   className?: string;
   creditsLabel?: string;
   creditsTally?: number | null;
-  formattedCreditsTally?: string | null;
+  currencyCode?: string;
   lifetimeLabel?: string;
   lifetimeTally?: number | null;
   pointsLabel?: string;
@@ -35,9 +35,14 @@ export function RivoBalance({
     },
     {
       label: creditsLabel,
+      // Rivo's Merchant API returns a bare credits number, so format it here.
       value:
-        formattedCreditsTally ||
-        (typeof creditsTally === 'number' ? creditsTally.toFixed(2) : null),
+        typeof creditsTally === 'number'
+          ? creditsTally.toLocaleString(undefined, {
+              style: 'currency',
+              currency: currencyCode,
+            })
+          : null,
       show: showCredits,
     },
     {
