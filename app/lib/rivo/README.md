@@ -1,8 +1,5 @@
 # Rivo loyalty integration
 
-> Build status, what is unverified, and what is still missing:
-> [`STATUS.md`](./STATUS.md).
-
 Headless Rivo loyalty for Hydrogen: read the customer's loyalty state, redeem
 points, and apply the resulting reward to the Shopify cart.
 
@@ -80,6 +77,23 @@ Rivo's payloads are normalized to camelCase at the server boundary, so the UI
 never depends on Rivo's field names. `RivoRaw*` types mirror the wire format;
 everything else is the normalized shape.
 
+**Never import a runtime value from the `~/lib/rivo` barrel in client code.** It
+re-exports `session.server`, so doing so pulls server-only modules into the
+browser bundle and fails the build. Type-only imports are fine (they are erased);
+anything both sides need at runtime goes in a leaf module with no imports of its
+own, as `referral.constants.ts` does.
+
+Shop-scoped reads (`rewards`, `vip_tiers`, `earning_rules`) run through
+Hydrogen's subrequest cache via `context.withCache` — 60s with 600s
+stale-while-revalidate. Customer-scoped reads are deliberately uncached: points
+move the moment someone redeems, and a stale balance beside a Redeem button is
+worse than the extra call. Errors are never cached.
+
+Retries are asymmetric. A 429 is retried on any method, since the request was
+rejected before any work happened; timeouts and 5xx are retried on `GET` only,
+because a failed POST to `/points_redemptions` or `/points_events` may have
+landed with only the response lost.
+
 ## Endpoints
 
 | Endpoint | Wrapper | Notes |
@@ -113,6 +127,12 @@ Verified by probing the live store — worth knowing before promising features:
   `/credits_logs` (both 404) — instead a store-credit grant is a `points_event`
   with `points_amount: 0` and a non-zero `credits_amount` (a *string*). The
   history section renders whichever side of an event actually moved.
+- **`points_amount` is a magnitude, `points_diff` is the signed delta.** A
+  redemption reports `points_amount: 100, points_diff: -100`. Reading
+  `points_amount` alone renders every spend as a gain.
+- **A redemption's "used" flag is `used_at`, a timestamp.** The boolean `used`
+  the docs list is not returned at all, so a check against it silently matches
+  everything.
 - **Ledger events can be revoked or hidden.** Rivo reverses an event by setting
   `revoked_at` rather than deleting it, and can set `hidden`. Both are filtered
   out of the customer-facing ledger.
@@ -182,6 +202,11 @@ points, auto-apply gifts) run there via Shopify Checkout Extensibility (Shopify
 Plus / Rivo Plus) — no headless work required.
 
 ## Building the page
+
+> Published Pack changes can take one request to appear locally: `getPage` uses
+> `CacheLong`, so the first request after publishing serves stale content and
+> revalidates behind it. Reload once before concluding an edit didn't save.
+
 
 The four sections register under the **Loyalty** category in the Pack
 customizer:
