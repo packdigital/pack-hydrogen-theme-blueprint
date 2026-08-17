@@ -133,18 +133,38 @@ export interface RivoRawVipTier {
   [key: string]: unknown;
 }
 
-/** `GET /points_events` */
+/**
+ * `GET /points_events`
+ *
+ * Covers both points and credits: a credits grant is a points_event with
+ * `points_amount: 0` and a non-zero `credits_amount`.
+ */
 export interface RivoRawPointsEvent {
-  id?: number;
+  /**
+   * The resource-level id is a scalar; the *attribute* of the same name is a
+   * composite `[shop_id, event_id]` array. `unwrapCollection` prefers the former.
+   */
+  id?: number | (number | string)[];
   customer_identifier?: number | string | null;
   points_amount?: number | null;
+  points_diff?: number | null;
+  /** Rivo sends this as a string, e.g. `"1000.0"`. */
   credits_amount?: number | string | null;
   source?: string | null;
+  /** Customer-facing title, usually mirroring `external_note`. */
+  title?: string | null;
+  /** Never expose: contains operator identity, e.g. `"someone@x.com: extra"`. */
   internal_note?: string | null;
   external_note?: string | null;
   applied_at?: string | null;
+  approved_at?: string | null;
   expires_at?: string | null;
+  per_event_expiration_at?: string | null;
   created_at?: string | null;
+  /** Set when an event has been reversed; must not appear in the ledger. */
+  revoked_at?: string | null;
+  /** Set when Rivo hides an event from the customer. */
+  hidden?: boolean | null;
   [key: string]: unknown;
 }
 
@@ -243,10 +263,12 @@ export interface RivoVipTier {
 
 export interface RivoLedgerEntry {
   id: number | string | null;
-  /** Signed — negative for spends. */
+  /** Points delta. Signed — negative for spends. */
   amount: number | null;
+  /** Store-credit delta on the same event; points and credits share a ledger. */
+  creditsAmount: number | null;
   source: string | null;
-  /** Customer-facing note only; internal notes are never sent to the browser. */
+  /** Customer-facing label only; internal notes are never sent to the browser. */
   note: string | null;
   appliedAt: string | null;
   expiresAt: string | null;

@@ -103,16 +103,24 @@ const normalizeVipTier = (raw: RivoRawVipTier): RivoVipTier => ({
 });
 
 const normalizePointsEvent = (raw: RivoRawPointsEvent): RivoLedgerEntry => ({
-  id: raw.id ?? null,
+  // `unwrapCollection` has already preferred the scalar resource id over the
+  // composite `[shop_id, event_id]` attribute.
+  id: Array.isArray(raw.id)
+    ? (raw.id[raw.id.length - 1] ?? null)
+    : (raw.id ?? null),
   amount:
     raw.points_amount === null || raw.points_amount === undefined
       ? null
       : toNumber(raw.points_amount),
+  creditsAmount:
+    raw.credits_amount === null || raw.credits_amount === undefined
+      ? null
+      : toNumber(raw.credits_amount),
   source: raw.source || null,
-  // Only the external note is customer-facing; internal_note stays server-side.
-  note: raw.external_note || null,
-  appliedAt: raw.applied_at || raw.created_at || null,
-  expiresAt: raw.expires_at || null,
+  // Only customer-facing copy: `internal_note` carries operator identity.
+  note: raw.title || raw.external_note || null,
+  appliedAt: raw.applied_at || raw.approved_at || raw.created_at || null,
+  expiresAt: raw.expires_at || raw.per_event_expiration_at || null,
 });
 
 const normalizeReferral = (raw: RivoRawReferral): RivoReferral => ({
@@ -176,10 +184,16 @@ export const getVipTiers = async ({
 };
 
 /**
- * `GET /points_events` — the customer's points history.
+ * `GET /points_events` — the customer's loyalty ledger.
  *
- * Note there is no credits equivalent: `/credits_events` and `/credits_logs`
- * both 404. Store credit is only exposed as a tally on the customer.
+ * This covers credits as well as points: a store-credit grant comes back as a
+ * points_event with `points_amount: 0` and a non-zero `credits_amount`. There is
+ * no separate credits endpoint (`/credits_events` and `/credits_logs` both 404).
+ *
+ * Revoked and hidden events are dropped — Rivo reverses events rather than
+ * deleting them, and showing a reversed grant to the customer would be wrong.
+ * Events with no points *and* no credits movement are dropped too, since they
+ * would render as a meaningless "0" row.
  */
 export const getPointsLogs = async ({
   env,
@@ -195,10 +209,11 @@ export const getPointsLogs = async ({
       pagination: {per_page: limit, page},
     },
   });
-  return {
-    ...result,
-    data: unwrapCollection(result.data).map(normalizePointsEvent),
-  };
+  const entries = unwrapCollection(result.data)
+    .filter((raw) => !raw.revoked_at && !raw.hidden)
+    .map(normalizePointsEvent)
+    .filter(({amount, creditsAmount}) => !!amount || !!creditsAmount);
+  return {...result, data: entries};
 };
 
 /** `GET /referrals` — the customer's referrals as the advocate. */

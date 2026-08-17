@@ -34,11 +34,31 @@ const formatSource = (source?: string | null) => {
 const getLabel = (entry: RivoLedgerEntry) =>
   entry.note || formatSource(entry.source) || 'Activity';
 
-const getAmount = (entry: RivoLedgerEntry) => {
-  if (typeof entry.amount !== 'number') return null;
-  // Spends come back negative; make the sign explicit either way.
-  return `${entry.amount > 0 ? '+' : ''}${entry.amount.toLocaleString()}`;
+const signed = (value: number, formatted: string) =>
+  `${value > 0 ? '+' : ''}${formatted}`;
+
+/**
+ * Rivo's ledger carries points and credits on the same event, so show whichever
+ * one actually moved. Spends come back negative; the sign is made explicit.
+ */
+const getAmount = (entry: RivoLedgerEntry, currencyCode: string) => {
+  if (entry.amount) {
+    return signed(entry.amount, entry.amount.toLocaleString());
+  }
+  if (entry.creditsAmount) {
+    return signed(
+      entry.creditsAmount,
+      entry.creditsAmount.toLocaleString(undefined, {
+        style: 'currency',
+        currency: currencyCode,
+      }),
+    );
+  }
+  return null;
 };
+
+const getDelta = (entry: RivoLedgerEntry) =>
+  entry.amount || entry.creditsAmount || 0;
 
 export function RivoPointsHistory({cms}: {cms: RivoPointsHistoryCms}) {
   const {heading, labels, section} = cms;
@@ -75,7 +95,8 @@ export function RivoPointsHistory({cms}: {cms: RivoPointsHistoryCms}) {
             <ul className="flex flex-col divide-y divide-border border-y border-border">
               {entries.map((entry, index) => {
                 const date = formatDate(entry.appliedAt);
-                const amount = getAmount(entry);
+                const amount = getAmount(entry, 'USD');
+                const delta = getDelta(entry);
 
                 return (
                   <li
@@ -94,9 +115,7 @@ export function RivoPointsHistory({cms}: {cms: RivoPointsHistoryCms}) {
                       <p
                         className={clsx(
                           'text-label whitespace-nowrap',
-                          typeof entry.amount === 'number' && entry.amount < 0
-                            ? 'text-neutralDark'
-                            : 'text-primary',
+                          delta < 0 ? 'text-neutralDark' : 'text-primary',
                         )}
                       >
                         {amount}

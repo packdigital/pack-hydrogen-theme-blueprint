@@ -20,27 +20,50 @@ export function RivoVipTiers({
 }) {
   if (!tiers?.length) return null;
 
-  const nextTier =
-    typeof pointsTally === 'number'
-      ? tiers.find(
-          ({threshold}) => threshold !== null && threshold > pointsTally,
+  // Rivo's tier assignment is not necessarily points-driven (it can key off
+  // spend or status), so trust the name it gives us and fall back to the ladder
+  // only when it gives us nothing.
+  const currentIndex = currentTierName
+    ? tiers.findIndex(
+        ({name}) => name?.toLowerCase() === currentTierName.toLowerCase(),
+      )
+    : typeof pointsTally === 'number'
+      ? tiers.reduce(
+          (acc, {threshold}, index) =>
+            (threshold ?? 0) <= pointsTally ? index : acc,
+          -1,
         )
-      : undefined;
-  const nextThreshold = nextTier?.threshold ?? null;
-  const progress =
-    nextThreshold && typeof pointsTally === 'number'
-      ? Math.min(100, Math.round((pointsTally / nextThreshold) * 100))
-      : null;
+      : -1;
 
-  // With no explicit tier name, the highest threshold at or below the balance is
-  // the customer's current tier.
   const derivedCurrentTier =
-    currentTierName ||
-    (typeof pointsTally === 'number'
-      ? [...tiers]
-          .reverse()
-          .find(({threshold}) => (threshold ?? 0) <= pointsTally)?.name
-      : null);
+    currentIndex >= 0 ? tiers[currentIndex]?.name : null;
+
+  // The next tier is the one *after* the current one in the ladder — not simply
+  // the first threshold above the points tally, which would name the tier the
+  // customer already holds whenever tiers aren't points-based.
+  const nextTier = currentIndex >= 0 ? tiers[currentIndex + 1] : tiers[0];
+  const nextThreshold = nextTier?.threshold ?? null;
+
+  const currentThreshold =
+    currentIndex >= 0 ? (tiers[currentIndex]?.threshold ?? 0) : 0;
+
+  // Only show progress when the balance is actually consistent with the ladder.
+  // A Silver customer sitting at 0 points means tiers are driven by something
+  // other than points, and a bar would be misleading.
+  const tiersTrackPoints =
+    typeof pointsTally === 'number' && pointsTally >= currentThreshold;
+
+  const progress =
+    tiersTrackPoints && nextThreshold && nextThreshold > currentThreshold
+      ? Math.min(
+          100,
+          Math.round(
+            ((pointsTally! - currentThreshold) /
+              (nextThreshold - currentThreshold)) *
+              100,
+          ),
+        )
+      : null;
 
   return (
     <div className={clsx('flex flex-col gap-4', className)}>

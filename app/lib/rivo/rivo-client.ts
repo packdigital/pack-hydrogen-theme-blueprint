@@ -159,13 +159,22 @@ export const unwrapSingle = <TAttributes>(
   payload: RivoRawSingle<TAttributes> | null,
 ): TAttributes | null => payload?.data?.attributes || null;
 
-/** Pull `attributes` out of every member of a collection envelope. */
-export const unwrapCollection = <TAttributes>(
+/**
+ * Pull `attributes` out of every member of a collection envelope.
+ *
+ * The resource-level `id` wins over `attributes.id`: on some resources
+ * (`points_event`) the attribute is a composite `[shop_id, event_id]` array
+ * while the resource id is the plain scalar.
+ */
+export const unwrapCollection = <TAttributes extends {id?: unknown}>(
   payload: RivoRawCollection<TAttributes> | null,
 ): TAttributes[] =>
   (payload?.data || [])
-    .map((resource) => resource?.attributes)
-    .filter(Boolean) as TAttributes[];
+    .filter((resource) => !!resource?.attributes)
+    .map((resource) => ({
+      ...(resource.attributes as TAttributes),
+      id: resource.id ?? resource.attributes?.id,
+    }));
 
 /* Helpers ---------- */
 

@@ -7,11 +7,11 @@ interface RivoApiResponse<TData> {
 }
 
 /**
- * Fetch the logged-in customer's points history (`GET /points_events`).
+ * Fetch the logged-in customer's loyalty ledger (`GET /points_events`).
  *
- * There is no store-credit equivalent on Rivo's Merchant API — `/credits_events`
- * and `/credits_logs` both 404 — so credit is only available as a tally via
- * {@link useRivoLoyalty}.
+ * Covers both points and store credit — Rivo puts them on the same event, so an
+ * entry carries `amount` (points) and `creditsAmount`. Revoked, hidden and
+ * no-movement events are already filtered out server-side.
  *
  * @example
  * ```js

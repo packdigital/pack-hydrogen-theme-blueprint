@@ -106,9 +106,23 @@ pagination is `?pagination[per_page]=25&pagination[page]=1`.
 
 Verified by probing the live store — worth knowing before promising features:
 
-- **No store-credit ledger.** `/credits_events` and `/credits_logs` both 404.
-  Credit is only available as `credits_tally` on the customer, so there is no
-  credit history section.
+- **Points and credits share one ledger.** There is no `/credits_events` or
+  `/credits_logs` (both 404) — instead a store-credit grant is a `points_event`
+  with `points_amount: 0` and a non-zero `credits_amount` (a *string*). The
+  history section renders whichever side of an event actually moved.
+- **Ledger events can be revoked or hidden.** Rivo reverses an event by setting
+  `revoked_at` rather than deleting it, and can set `hidden`. Both are filtered
+  out of the customer-facing ledger.
+- **`internal_note` leaks operator identity** (observed: `"someone@x.com: extra"`).
+  Only `title` / `external_note` are ever sent to the browser.
+- **`points_event.id` is a composite array** `[shop_id, event_id]` in
+  `attributes`, while the resource-level `id` is the plain scalar.
+  `unwrapCollection` prefers the resource id.
+- **`vip_tier` is an object, `next_vip_tier` is null** even when higher tiers
+  exist, and the tier is not necessarily points-driven — a customer can sit in
+  Silver (threshold 500) with a 0 points tally. `RivoVipTiers` therefore trusts
+  Rivo's tier name, derives the next tier from ladder position, and suppresses
+  the progress bar when the balance is inconsistent with the ladder.
 - **`/customers/:id/advocate_stats` returns the plain customer object**, not
   referral stats. `getReferralStats` therefore takes the link from the customer
   and derives counts from `/referrals`.
