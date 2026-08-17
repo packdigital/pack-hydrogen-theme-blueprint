@@ -12,7 +12,8 @@
     "format": "prettier --write --ignore-unknown .",
     "format:check": "prettier --check --ignore-unknown .",
     "typecheck": "tsc --noEmit",
-    "codegen": "shopify hydrogen codegen"
+    "codegen": "shopify hydrogen codegen",
+    "rivo:probe": "node scripts/rivo-probe.mjs"
   },
   "browserslist": [
     "defaults"

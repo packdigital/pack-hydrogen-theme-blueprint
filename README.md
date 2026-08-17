@@ -202,6 +202,14 @@ PACK_SECRET_TOKEN="XXX"
 PACK_STOREFRONT_ID="XXX"
 ```
 
+Optional, for the Rivo loyalty sections — see [`app/lib/rivo/README.md`](./app/lib/rivo/README.md):
+
+```dotenv
+PRIVATE_RIVO_STOREFRONT_API_KEY="XXX"
+PRIVATE_RIVO_SHOP_DOMAIN="XXX.myshopify.com" # optional, defaults to PUBLIC_STORE_DOMAIN
+RIVO_API_BASE_URL="XXX"                      # optional, defaults to https://loyalty-api.rivo.io
+```
+
 ### Building for production
 
 This command will simulate the same deployment job that Shopify Oxygen will use when deploying your live site.
