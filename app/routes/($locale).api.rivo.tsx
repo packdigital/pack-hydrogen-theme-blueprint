@@ -1,5 +1,6 @@
 import {
   getCustomer,
+  getEarningRules,
   getLoyaltySummary,
   getPointsLogs,
   getReferralStats,
@@ -21,15 +22,34 @@ import type {Route} from './+types/($locale).api.rivo';
  * id always comes from the authenticated session rather than the request.
  */
 
-const LOADER_ACTIONS = {
-  getCustomer,
+/**
+ * Shop-scoped program config. No customer session required — a loyalty landing
+ * page has to sell the program to people who haven't joined yet, which is
+ * exactly what these three describe. They contain no customer data.
+ */
+const PUBLIC_ACTIONS = {
+  getEarningRules,
   getRewards,
   getVipTiers,
+} as const;
+
+/** Everything that reads or derives from a specific customer. */
+const CUSTOMER_ACTIONS = {
+  getCustomer,
   getPointsLogs,
   getReferrals,
   getReferralStats,
   getLoyaltySummary,
 } as const;
+
+const LOADER_ACTIONS = {...PUBLIC_ACTIONS, ...CUSTOMER_ACTIONS} as const;
+
+/**
+ * Cache the public program config at the edge. It changes only when the merchant
+ * edits the program, and this route is reachable unauthenticated, so caching
+ * also keeps traffic off Rivo's 15 req/s budget.
+ */
+const PUBLIC_CACHE_CONTROL = 'public, max-age=60, stale-while-revalidate=600';
 
 const unauthorized = (error: string) =>
   Response.json({data: null, error}, {status: 401});
@@ -47,21 +67,33 @@ export async function loader({request, context}: Route.LoaderArgs) {
     );
   }
 
+  const isPublic = action in PUBLIC_ACTIONS;
+
+  // Public actions still resolve the session when there is one, so signed-in
+  // customers get their completed earning rules marked — they just don't require it.
   const {customerId, error: sessionError} =
     await getRivoCustomerIdFromSession(context);
 
-  if (!customerId) {
+  if (!customerId && !isPublic) {
     return unauthorized(`/api/rivo: ${sessionError}`);
   }
 
+  const env = context.env as RivoEnv;
   const limit = Number(searchParams.get('limit')) || undefined;
   const page = Number(searchParams.get('page')) || undefined;
 
+  let completedIds: (number | string)[] = [];
+  if (customerId && action === 'getEarningRules') {
+    const {data: customer} = await getCustomer({env, customerId});
+    completedIds = customer?.completedEarningRuleIds || [];
+  }
+
   const {data, error, status} = await rivoAction({
-    env: context.env as RivoEnv,
-    customerId,
+    env,
+    customerId: customerId || '',
     limit,
     page,
+    completedIds,
   });
 
   if (error) {
@@ -69,7 +101,13 @@ export async function loader({request, context}: Route.LoaderArgs) {
     return Response.json({data: null, error}, {status: status || 500});
   }
 
-  return Response.json({data, error: null});
+  return Response.json(
+    {data, error: null},
+    // Never cache a response that was personalized with session data.
+    isPublic && !customerId
+      ? {headers: {'Cache-Control': PUBLIC_CACHE_CONTROL}}
+      : undefined,
+  );
 }
 
 export async function action({request, context}: Route.ActionArgs) {

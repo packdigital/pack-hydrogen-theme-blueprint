@@ -123,6 +123,33 @@ export interface RivoRawReward {
   [key: string]: unknown;
 }
 
+/** `GET /earning_rules` */
+export interface RivoRawEarningRule {
+  id?: number;
+  title?: string | null;
+  name?: string | null;
+  description?: string | null;
+  status?: string | null;
+  /** e.g. `order_placed`, `customer_birthday`, `tiktok_follow`. */
+  trigger?: string | null;
+  points_amount?: number | null;
+  credits_amount?: number | null;
+  balance_amount?: number | null;
+  /** `fixed` for a flat award; `multiplier` earns per currency unit. */
+  points_type?: string | null;
+  currency_base_amount?: number | null;
+  /** Rivo's own copy, e.g. `"100 Points"`. Misleading for multipliers. */
+  pretty_earnings_text?: string | null;
+  /** Present on social/action rules — makes the card a link. */
+  url?: string | null;
+  button_text?: string | null;
+  card_click_method?: string | null;
+  hidden_from_ui?: boolean | null;
+  multipliers?: unknown[] | null;
+  multi_balance_settings_by_tiers?: Record<string, unknown> | null;
+  [key: string]: unknown;
+}
+
 /** `GET /vip_tiers` */
 export interface RivoRawVipTier {
   id?: number;
@@ -221,6 +248,8 @@ export type RivoCartStrategy =
 
 export interface RivoCustomer {
   id: number | string | null;
+  /** Earning-rule ids the customer has already completed. */
+  completedEarningRuleIds: (number | string)[];
   email: string | null;
   firstName: string | null;
   lastName: string | null;
@@ -259,6 +288,25 @@ export interface RivoVipTier {
   threshold: number | null;
   iconUrl: string | null;
   perks: string[];
+}
+
+export interface RivoEarningRule {
+  id: number | string;
+  title: string;
+  description: string | null;
+  /** Rivo's trigger key, useful for picking an icon per action. */
+  trigger: string | null;
+  pointsAmount: number | null;
+  /** True when points accrue per currency unit rather than as a flat award. */
+  isMultiplier: boolean;
+  /** Currency amount a multiplier is measured against (usually 1). */
+  currencyBaseAmount: number | null;
+  /** Display string, corrected for multipliers rather than Rivo's "1 Points". */
+  earningsText: string | null;
+  url: string | null;
+  buttonText: string | null;
+  /** True when the signed-in customer has already completed this rule. */
+  isCompleted: boolean;
 }
 
 export interface RivoLedgerEntry {
@@ -310,6 +358,7 @@ export interface RivoRedemption {
 
 export type RivoLoaderAction =
   | 'getCustomer'
+  | 'getEarningRules'
   | 'getRewards'
   | 'getVipTiers'
   | 'getPointsLogs'
@@ -324,4 +373,5 @@ export interface RivoLoyaltySummary {
   customer: RivoCustomer | null;
   rewards: RivoReward[];
   vipTiers: RivoVipTier[];
+  earningRules: RivoEarningRule[];
 }

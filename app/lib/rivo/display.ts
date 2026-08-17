@@ -7,11 +7,13 @@ import {
 } from './rivo-client';
 import type {
   RivoCustomer,
+  RivoEarningRule,
   RivoEnv,
   RivoLedgerEntry,
   RivoLoyaltySummary,
   RivoRawCollection,
   RivoRawCustomer,
+  RivoRawEarningRule,
   RivoRawPointsEvent,
   RivoRawReferral,
   RivoRawReward,
@@ -30,6 +32,8 @@ interface CustomerScopedProps {
   customerId: string;
   limit?: number;
   page?: number;
+  /** Only used by `getEarningRules`; accepted by all so the route can dispatch uniformly. */
+  completedIds?: (number | string)[];
 }
 
 /* Normalizers ---------- */
@@ -58,6 +62,7 @@ const normalizeCustomer = (raw: RivoRawCustomer): RivoCustomer => {
     referralUrl: raw.referral_url || null,
     referralCode: raw.referral_code || null,
     pointsExpireAt: raw.points_expire_at || null,
+    completedEarningRuleIds: raw.completed_earning_rule_ids || [],
   };
 };
 
@@ -108,10 +113,15 @@ const normalizePointsEvent = (raw: RivoRawPointsEvent): RivoLedgerEntry => ({
   id: Array.isArray(raw.id)
     ? (raw.id[raw.id.length - 1] ?? null)
     : (raw.id ?? null),
+  // `points_diff` is the *signed* delta; `points_amount` is only its magnitude,
+  // so a redemption reports `points_amount: 100, points_diff: -100`. Reading
+  // `points_amount` alone renders every spend as a gain.
   amount:
-    raw.points_amount === null || raw.points_amount === undefined
-      ? null
-      : toNumber(raw.points_amount),
+    raw.points_diff !== null && raw.points_diff !== undefined
+      ? toNumber(raw.points_diff)
+      : raw.points_amount === null || raw.points_amount === undefined
+        ? null
+        : toNumber(raw.points_amount),
   creditsAmount:
     raw.credits_amount === null || raw.credits_amount === undefined
       ? null
@@ -122,6 +132,39 @@ const normalizePointsEvent = (raw: RivoRawPointsEvent): RivoLedgerEntry => ({
   appliedAt: raw.applied_at || raw.approved_at || raw.created_at || null,
   expiresAt: raw.expires_at || raw.per_event_expiration_at || null,
 });
+
+const normalizeEarningRule = (
+  raw: RivoRawEarningRule,
+  completed: Set<string>,
+): RivoEarningRule => {
+  const isMultiplier = raw.points_type === 'multiplier';
+  const points =
+    raw.points_amount === null || raw.points_amount === undefined
+      ? null
+      : toNumber(raw.points_amount);
+  const base = toNumber(raw.currency_base_amount, 1) || 1;
+
+  return {
+    id: raw.id ?? '',
+    title: raw.title || raw.name || 'Earn points',
+    description: raw.description || null,
+    trigger: raw.trigger || null,
+    pointsAmount: points,
+    isMultiplier,
+    currencyBaseAmount: base,
+    // Rivo's `pretty_earnings_text` renders a multiplier as "1 Points", which
+    // reads as a flat award. Spell the rate out instead.
+    earningsText: isMultiplier
+      ? points === null
+        ? null
+        : `${points.toLocaleString()} ${points === 1 ? 'point' : 'points'} per $${base}`
+      : raw.pretty_earnings_text ||
+        (points === null ? null : `${points.toLocaleString()} points`),
+    url: raw.url || null,
+    buttonText: raw.button_text || null,
+    isCompleted: completed.has(String(raw.id)),
+  };
+};
 
 const normalizeReferral = (raw: RivoRawReferral): RivoReferral => ({
   id: raw.id ?? null,
@@ -167,6 +210,31 @@ export const getRewards = async ({
     .filter((raw) => raw.enabled !== false && raw.source === 'points')
     .map(normalizeReward);
   return {...result, data: rewards};
+};
+
+/**
+ * `GET /earning_rules` — the "ways to earn" actions.
+ *
+ * Rules with no title are dropped: Rivo returns partially-null rows for rules
+ * that exist but aren't configured. `hidden_from_ui` and inactive rules are
+ * dropped too. Pass `completedIds` to mark what the customer has already done.
+ */
+export const getEarningRules = async ({
+  env,
+  completedIds = [],
+}: CustomerScopedProps): Promise<RivoResult<RivoEarningRule[]>> => {
+  const result = await rivoRequest<RivoRawCollection<RivoRawEarningRule>>({
+    env,
+    path: '/earning_rules',
+    searchParams: {pagination: {per_page: 100}},
+  });
+  const completed = new Set(completedIds.map(String));
+  const rules = unwrapCollection(result.data)
+    .filter(
+      (raw) => !!raw.title && !raw.hidden_from_ui && raw.status !== 'disabled',
+    )
+    .map((raw) => normalizeEarningRule(raw, completed));
+  return {...result, data: rules};
 };
 
 /** `GET /vip_tiers` — the program's VIP tier ladder, ascending by threshold. */
@@ -293,6 +361,13 @@ export const getLoyaltySummary = async ({
     return {status: customer.status, data: null, error: customer.error};
   }
 
+  // Sequenced after the customer so completed rules can be marked.
+  const earningRules = await getEarningRules({
+    env,
+    customerId,
+    completedIds: customer.data.completedEarningRuleIds,
+  });
+
   return {
     status: 200,
     error: null,
@@ -300,6 +375,7 @@ export const getLoyaltySummary = async ({
       customer: customer.data,
       rewards: rewards.data || [],
       vipTiers: vipTiers.data || [],
+      earningRules: earningRules.data || [],
     },
   };
 };
