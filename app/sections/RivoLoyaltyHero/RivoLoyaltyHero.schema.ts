@@ -2,6 +2,7 @@ import {
   BUTTONS,
   COLOR_PICKER_DEFAULTS,
   COLOR_SCHEMA_DEFAULT_VALUE,
+  OBJECT_POSITIONS,
 } from '~/settings/common';
 import {containerSettings} from '~/settings/container';
 
@@ -35,6 +36,87 @@ export function Schema() {
         name: 'image',
         component: 'image',
         description: 'Optional program logo shown above the heading',
+      },
+      {
+        label: 'Background Image',
+        name: 'backgroundImage',
+        component: 'group',
+        description:
+          'Full-bleed image behind the hero content. Set both breakpoints, or one and it is used for both.',
+        fields: [
+          {
+            label: 'Image Alt',
+            name: 'alt',
+            component: 'text',
+            description:
+              'Alt text set in the media manager takes priority. Leave blank for a purely decorative background.',
+          },
+          {
+            label: 'Image (tablet/desktop)',
+            name: 'imageDesktop',
+            component: 'image',
+          },
+          {
+            label: 'Image Position (tablet/desktop)',
+            name: 'positionDesktop',
+            component: 'select',
+            options: OBJECT_POSITIONS.desktop,
+          },
+          {
+            label: 'Image (mobile)',
+            name: 'imageMobile',
+            component: 'image',
+          },
+          {
+            label: 'Image Position (mobile)',
+            name: 'positionMobile',
+            component: 'select',
+            options: OBJECT_POSITIONS.mobile,
+          },
+          {
+            label: 'Dark Overlay',
+            name: 'darkOverlay',
+            component: 'toggle',
+            description:
+              'Adds a 20% black overlay so light text stays readable over the image',
+            toggleLabels: {
+              true: 'On',
+              false: 'Off',
+            },
+          },
+          {
+            label: 'Min Height (tablet/desktop)',
+            name: 'minHeightDesktop',
+            component: 'select',
+            options: [
+              {label: 'Auto', value: 'md:min-h-0'},
+              {label: 'Small (24rem)', value: 'md:min-h-[24rem]'},
+              {label: 'Medium (32rem)', value: 'md:min-h-[32rem]'},
+              {label: 'Large (40rem)', value: 'md:min-h-[40rem]'},
+              {label: 'Screen', value: 'md:min-h-screen'},
+            ],
+          },
+          {
+            label: 'Min Height (mobile)',
+            name: 'minHeightMobile',
+            component: 'select',
+            options: [
+              {label: 'Auto', value: 'max-md:min-h-0'},
+              {label: 'Small (20rem)', value: 'max-md:min-h-[20rem]'},
+              {label: 'Medium (24rem)', value: 'max-md:min-h-[24rem]'},
+              {label: 'Large (32rem)', value: 'max-md:min-h-[32rem]'},
+              {label: 'Screen', value: 'max-md:min-h-screen'},
+            ],
+          },
+        ],
+        defaultValue: {
+          alt: '',
+          positionDesktop: 'md:object-center',
+          positionMobile: 'object-center',
+          darkOverlay: true,
+          minHeightDesktop: 'md:min-h-[32rem]',
+          minHeightMobile: 'max-md:min-h-[24rem]',
+        },
       },
       {
         label: 'Guest Buttons',
