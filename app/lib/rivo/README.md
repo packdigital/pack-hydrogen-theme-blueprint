@@ -183,6 +183,29 @@ Because points are spent server-side before the cart mutation runs, any cart
 failure after a successful redemption reports the discount code in the error
 message rather than swallowing it — the customer can always still apply it.
 
+## Tests
+
+```bash
+npm test          # vitest run
+npm run test:watch
+```
+
+98 tests colocated as `app/lib/rivo/*.test.ts`, covering the server layer — the
+UI is not tested. They exist because every bug in this integration so far was in
+a pure normalizer, caused by a live payload disagreeing with Rivo's docs, so the
+fixtures are payloads captured verbatim from a real store and each regression is
+commented with the bug it pins.
+
+Two groups are load-bearing and should not be weakened:
+
+- **`completeEarningRule.test.ts`** asserts the award allowlist — that `manual`
+  and Rivo's own triggers are refused, that the trigger is resolved server-side
+  rather than taken from the caller, and that `points_amount` is never sent. If
+  these regress, a browser request could mint points.
+- **`rivo-request.test.ts`** asserts the retry asymmetry — a 5xx or network
+  failure on a `POST` must *not* be retried, because the write may have landed
+  with only the response lost. If that regresses, a redemption could double-spend.
+
 ## Verifying against a store
 
 ```bash
