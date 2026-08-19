@@ -17,6 +17,79 @@ store-credit rewards are settled natively by Shopify and never touch the cart.
 This headless flow requires no `/cart.js`, cart attributes, or `localStorage` —
 those belong to Rivo's legacy Liquid widgets, which are not used here.
 
+## What this integration owns
+
+Rivo's Liquid widgets ship the whole customer journey. Headless, they ship none of
+it — Rivo provides the data and the writes, and the storefront is responsible for
+the journey between them. Worth knowing before scoping this for a client, because
+none of it is called out as the integrator's job:
+
+| Journey step | Rivo provides | This integration had to build |
+| --- | --- | --- |
+| Earning on orders | Automatic, server-side | nothing |
+| Earning on social / custom actions | `POST /points_events` | The whole thing — which triggers are safe to award, the completion check, and an allowlist, since `manual` accepts an arbitrary amount |
+| Redeeming | `POST /points_redemptions` → a discount code | Applying it to the cart, plus the free-product cart line |
+| A failed redemption | Nothing — points are already gone | Surfacing unused codes so a paid-for reward is recoverable |
+| Referrals | A link and a `POST /referrals` | Capturing `?referral_code=`, persisting it through signup, attributing it, and rewriting the link to the Hydrogen origin |
+| Tier marketing | Names and thresholds only; `perks` is empty | All tier copy, CMS-authored |
+| Birthday rule | Awards on the date | The UI to capture `dob` — **not built** |
+| Rate limits | 15 req/s per store | Caching, backoff, and retry-safety per method |
+
+Two consequences are structural rather than incidental:
+
+**Redemption is not idempotent.** Points are deducted the moment
+`/points_redemptions` succeeds, before the cart mutation runs. There is no
+idempotency key, so a dropped connection can spend points with the code lost. The
+unused-rewards list is the mitigation, not a fix.
+
+**Nothing is verifiable.** Awarding a social follow is trust-based — Rivo's own
+widgets work the same way. The protections here are the allowlist and the
+completion check, not verification.
+
+There is also no headless SDK, typed client, or reference implementation from
+Rivo, which is why the client, the types and the normalizers in this directory are
+all hand-written. Every bug listed under
+[Gaps in this API surface](#gaps-in-this-api-surface) came from that hand-rolling
+meeting a payload the docs described incorrectly.
+
+## Credential scope
+
+This uses Rivo's **Merchant API key**, which is admin-scoped. Rivo also documents
+a Storefront API key against `loyalty-api.rivo.io`, but that surface rejected our
+key with 403 and is absent from the developer docs, so it was not usable.
+
+Neither key is browser-safe — Rivo describes both as shop-scoped and server-side
+only. The difference is what an attacker gets if one leaks:
+
+| | Storefront key | Merchant key (used here) |
+| --- | --- | --- |
+| Read a customer's points and tier | yes | yes |
+| Spend a customer's points | yes | yes |
+| Read every customer — email, points, referral code | no | **yes** |
+| Grant arbitrary points or credits to anyone | no | **yes** |
+| Create, modify or delete the rewards catalog | no | **yes** |
+| Update customer records and VIP tiers | no | **yes** |
+| Manage webhooks | no | **yes** |
+
+Both are shop-scoped in the same way: Rivo's customer endpoints take the customer
+id as a **path segment with no per-customer token**, so either key can act as any
+customer. That is why `getRivoCustomerIdFromSession` derives the id from the
+session and the route never accepts it from a request — that requirement does not
+change with a narrower key.
+
+What does change is the worst case. A leaked storefront key lets someone read and
+spend loyalty points. A leaked Merchant key lets someone mint unlimited discount
+codes, zero every balance, delete the rewards program, and export the customer
+list.
+
+The current mitigations are real and tested — the key never reaches the client
+(asserted against `dist/client` on every build), errors are redacted, and only
+`/api/rivo` touches it. But this is a least-privilege problem, not a vulnerability:
+we hold a key that can destroy the loyalty program in order to do something a
+read-and-spend key would cover. **If Rivo can issue a scoped storefront key for a
+headless storefront, switch to it** — only `getRivoConfig` and the base URL would
+need to change.
+
 ## Which API this uses
 
 Rivo has two HTTP surfaces. This integration targets the **Merchant API**:
