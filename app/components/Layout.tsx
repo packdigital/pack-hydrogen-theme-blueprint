@@ -11,6 +11,7 @@ import {Search} from '~/components/Search';
 import {
   useCartAddDiscountUrl,
   usePromobar,
+  useRivoReferralCapture,
   useScrollToHashOnNavigation,
   useSetViewportHeightCssVar,
 } from '~/hooks';
@@ -18,6 +19,8 @@ import {
 export function Layout({children}: {children: ReactNode}) {
   const {mainPaddingTopClass} = usePromobar();
   useCartAddDiscountUrl();
+  // Rivo referral links land on any page, so capture has to be global.
+  useRivoReferralCapture();
   useScrollToHashOnNavigation();
   useSetViewportHeightCssVar();
 

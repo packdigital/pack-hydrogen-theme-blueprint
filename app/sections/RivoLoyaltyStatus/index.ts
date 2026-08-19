@@ -1,0 +1,1 @@
+export {RivoLoyaltyStatus} from './RivoLoyaltyStatus';

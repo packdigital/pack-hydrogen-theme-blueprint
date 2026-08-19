@@ -3,6 +3,7 @@ export * from './customer';
 export * from './document';
 export * from './locale';
 export * from './product';
+export * from './rivo';
 export * from './useArticles';
 export * from './useBackInStock';
 export * from './useCollectionByHandle';
