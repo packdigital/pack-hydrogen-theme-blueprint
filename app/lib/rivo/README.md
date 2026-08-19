@@ -24,16 +24,16 @@ it — Rivo provides the data and the writes, and the storefront is responsible 
 the journey between them. Worth knowing before scoping this for a client, because
 none of it is called out as the integrator's job:
 
-| Journey step | Rivo provides | This integration had to build |
-| --- | --- | --- |
-| Earning on orders | Automatic, server-side | nothing |
-| Earning on social / custom actions | `POST /points_events` | The whole thing — which triggers are safe to award, the completion check, and an allowlist, since `manual` accepts an arbitrary amount |
-| Redeeming | `POST /points_redemptions` → a discount code | Applying it to the cart, plus the free-product cart line |
-| A failed redemption | Nothing — points are already gone | Surfacing unused codes so a paid-for reward is recoverable |
-| Referrals | A link and a `POST /referrals` | Capturing `?referral_code=`, persisting it through signup, attributing it, and rewriting the link to the Hydrogen origin |
-| Tier marketing | Names and thresholds only; `perks` is empty | All tier copy, CMS-authored |
-| Birthday rule | Awards on the date | The UI to capture `dob` — **not built** |
-| Rate limits | 15 req/s per store | Caching, backoff, and retry-safety per method |
+| Journey step                       | Rivo provides                                | This integration had to build                                                                                                          |
+| ---------------------------------- | -------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| Earning on orders                  | Automatic, server-side                       | nothing                                                                                                                                |
+| Earning on social / custom actions | `POST /points_events`                        | The whole thing — which triggers are safe to award, the completion check, and an allowlist, since `manual` accepts an arbitrary amount |
+| Redeeming                          | `POST /points_redemptions` → a discount code | Applying it to the cart, plus the free-product cart line                                                                               |
+| A failed redemption                | Nothing — points are already gone            | Surfacing unused codes so a paid-for reward is recoverable                                                                             |
+| Referrals                          | A link and a `POST /referrals`               | Capturing `?referral_code=`, persisting it through signup, attributing it, and rewriting the link to the Hydrogen origin               |
+| Tier marketing                     | Names and thresholds only; `perks` is empty  | All tier copy, CMS-authored                                                                                                            |
+| Birthday rule                      | Awards on the date                           | The UI to capture `dob` — **not built**                                                                                                |
+| Rate limits                        | 15 req/s per store                           | Caching, backoff, and retry-safety per method                                                                                          |
 
 Two consequences are structural rather than incidental:
 
@@ -61,15 +61,15 @@ key with 403 and is absent from the developer docs, so it was not usable.
 Neither key is browser-safe — Rivo describes both as shop-scoped and server-side
 only. The difference is what an attacker gets if one leaks:
 
-| | Storefront key | Merchant key (used here) |
-| --- | --- | --- |
-| Read a customer's points and tier | yes | yes |
-| Spend a customer's points | yes | yes |
-| Read every customer — email, points, referral code | no | **yes** |
-| Grant arbitrary points or credits to anyone | no | **yes** |
-| Create, modify or delete the rewards catalog | no | **yes** |
-| Update customer records and VIP tiers | no | **yes** |
-| Manage webhooks | no | **yes** |
+|                                                    | Storefront key | Merchant key (used here) |
+| -------------------------------------------------- | -------------- | ------------------------ |
+| Read a customer's points and tier                  | yes            | yes                      |
+| Spend a customer's points                          | yes            | yes                      |
+| Read every customer — email, points, referral code | no             | **yes**                  |
+| Grant arbitrary points or credits to anyone        | no             | **yes**                  |
+| Create, modify or delete the rewards catalog       | no             | **yes**                  |
+| Update customer records and VIP tiers              | no             | **yes**                  |
+| Manage webhooks                                    | no             | **yes**                  |
 
 Both are shop-scoped in the same way: Rivo's customer endpoints take the customer
 id as a **path segment with no per-customer token**, so either key can act as any
@@ -94,14 +94,14 @@ need to change.
 
 Rivo has two HTTP surfaces. This integration targets the **Merchant API**:
 
-| | Merchant API (used here) | Storefront API |
-| --- | --- | --- |
-| Base URL | `https://developer-api.rivo.io/merchant_api/v1` | `https://loyalty-api.rivo.io/api` |
-| Auth header | `Authorization: <key>` — **raw, no `Bearer`** | `Authorization: Bearer <key>` |
-| Shop param | not needed | `?shop=<shop>.myshopify.com` required |
-| Envelope | JSON:API — `data[].attributes` | flat JSON |
-| Documented | yes, versioned `/v1` | no — RivoJS internal |
-| Scope | admin | read + spend points |
+|             | Merchant API (used here)                        | Storefront API                        |
+| ----------- | ----------------------------------------------- | ------------------------------------- |
+| Base URL    | `https://developer-api.rivo.io/merchant_api/v1` | `https://loyalty-api.rivo.io/api`     |
+| Auth header | `Authorization: <key>` — **raw, no `Bearer`**   | `Authorization: Bearer <key>`         |
+| Shop param  | not needed                                      | `?shop=<shop>.myshopify.com` required |
+| Envelope    | JSON:API — `data[].attributes`                  | flat JSON                             |
+| Documented  | yes, versioned `/v1`                            | no — RivoJS internal                  |
+| Scope       | admin                                           | read + spend points                   |
 
 A `Bearer` prefix on the Merchant API returns `401`. Sending a Merchant key to
 the Storefront API returns `403`. Both are easy to mistake for a bad key.
@@ -114,10 +114,10 @@ the Storefront API returns `403`. Both are easy to mistake for a bad key.
 
 ## Configuration
 
-| Env var                | Required | Notes                                                    |
-| ---------------------- | -------- | -------------------------------------------------------- |
-| `PRIVATE_RIVO_API_KEY` | yes      | Rivo admin → Developer Toolkit. **Server-side only.**     |
-| `RIVO_API_BASE_URL`    | no       | Defaults to the Merchant API base above.                 |
+| Env var                | Required | Notes                                                 |
+| ---------------------- | -------- | ----------------------------------------------------- |
+| `PRIVATE_RIVO_API_KEY` | yes      | Rivo admin → Developer Toolkit. **Server-side only.** |
+| `RIVO_API_BASE_URL`    | no       | Defaults to the Merchant API base above.              |
 
 Set this locally in `.env` **and** as a secret variable in the Hydrogen app's
 environment for each deployed environment. The legacy name
@@ -169,28 +169,28 @@ landed with only the response lost.
 
 ## Endpoints
 
-| Endpoint | Wrapper | Notes |
-| --- | --- | --- |
-| `POST /points_redemptions` | `redeemReward` | Returns the discount code |
-| `GET /customers/:id` | `getCustomer` | Points, credits, tier, referral link |
-| `GET /rewards` | `getRewards` | Shop-scoped catalog |
-| `GET /vip_tiers` | `getVipTiers` | Note the **underscore** |
-| `GET /points_events` | `getPointsLogs` | Filter by customer |
-| `GET /referrals` | `getReferrals` | Filter by customer |
-| — | `getReferralStats` | Derived; see below |
-| — | `getLoyaltySummary` | Aggregate for the sections |
+| Endpoint                   | Wrapper             | Notes                                |
+| -------------------------- | ------------------- | ------------------------------------ |
+| `POST /points_redemptions` | `redeemReward`      | Returns the discount code            |
+| `GET /customers/:id`       | `getCustomer`       | Points, credits, tier, referral link |
+| `GET /rewards`             | `getRewards`        | Shop-scoped catalog                  |
+| `GET /vip_tiers`           | `getVipTiers`       | Note the **underscore**              |
+| `GET /points_events`       | `getPointsLogs`     | Filter by customer                   |
+| `GET /referrals`           | `getReferrals`      | Filter by customer                   |
+| —                          | `getReferralStats`  | Derived; see below                   |
+| —                          | `getLoyaltySummary` | Aggregate for the sections           |
 
 Customer-scoped collections filter with `?filters[customer_identifier]=<id>`;
 pagination is `?pagination[per_page]=25&pagination[page]=1`.
 
 `POST /points_redemptions` takes `application/x-www-form-urlencoded`:
 
-| Param | Required | Value |
-| --- | --- | --- |
-| `customer_identifier` | yes | Shopify customer ID or email |
-| `reward_id` | yes | The reward being redeemed |
-| `points_amount` | no | Incremental points rewards |
-| `credits_amount` | no | Incremental credits rewards |
+| Param                 | Required | Value                        |
+| --------------------- | -------- | ---------------------------- |
+| `customer_identifier` | yes      | Shopify customer ID or email |
+| `reward_id`           | yes      | The reward being redeemed    |
+| `points_amount`       | no       | Incremental points rewards   |
+| `credits_amount`      | no       | Incremental credits rewards  |
 
 ### Gaps in this API surface
 
@@ -198,7 +198,7 @@ Verified by probing the live store — worth knowing before promising features:
 
 - **Points and credits share one ledger.** There is no `/credits_events` or
   `/credits_logs` (both 404) — instead a store-credit grant is a `points_event`
-  with `points_amount: 0` and a non-zero `credits_amount` (a *string*). The
+  with `points_amount: 0` and a non-zero `credits_amount` (a _string_). The
   history section renders whichever side of an event actually moved.
 - **`points_amount` is a magnitude, `points_diff` is the signed delta.** A
   redemption reports `points_amount: 100, points_diff: -100`. Reading
@@ -276,7 +276,7 @@ Two groups are load-bearing and should not be weakened:
   rather than taken from the caller, and that `points_amount` is never sent. If
   these regress, a browser request could mint points.
 - **`rivo-request.test.ts`** asserts the retry asymmetry — a 5xx or network
-  failure on a `POST` must *not* be retried, because the write may have landed
+  failure on a `POST` must _not_ be retried, because the write may have landed
   with only the response lost. If that regresses, a redemption could double-spend.
 
 ## Verifying against a store
@@ -302,7 +302,6 @@ Plus / Rivo Plus) — no headless work required.
 > Published Pack changes can take one request to appear locally: `getPage` uses
 > `CacheLong`, so the first request after publishing serves stale content and
 > revalidates behind it. Reload once before concluding an edit didn't save.
-
 
 The four sections register under the **Loyalty** category in the Pack
 customizer:
