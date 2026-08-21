@@ -20,4 +20,4 @@ export * from './usePagination';
 export * from './usePromobar';
 export * from './useRootLoaderData';
 export * from './useSettings';
-export * from './useGlobalPrivacyControl';
+export * from './useConsentBridge';

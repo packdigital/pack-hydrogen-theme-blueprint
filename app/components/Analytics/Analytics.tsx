@@ -5,7 +5,7 @@ import {
   useCart,
   useCustomer,
   useGlobal,
-  useGlobalPrivacyControl,
+  useConsentBridge,
   usePathStorage,
   useRootLoaderData,
 } from '~/hooks';
@@ -45,8 +45,9 @@ const DEBUG =
 export const Analytics = memo(() => {
   const {ENV} = useRootLoaderData();
 
-  // Honor Global Privacy Control before any pixel makes a tracking decision.
-  useGlobalPrivacyControl();
+  // Release Hydrogen's analytics queue and honor GPC before any pixel makes a
+  // tracking decision. See useConsentBridge for why both are one write.
+  useConsentBridge();
   const {register, subscribe} = useAnalytics();
   const {isCartReady} = useGlobal();
   const cart = useCart();

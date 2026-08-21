@@ -126,12 +126,43 @@ back through `setTrackingConsent` sends them as booleans. Comparing raw values
 across that boundary flaps `undefined` <-> `false` forever, which re-renders the
 integration on a loop (~1x/sec in the wild).
 
+## Hydrogen's own analytics deadlock
+
+**This one bites every storefront with `withPrivacyBanner: true`, and it kills
+_all_ analytics — not just one vendor.**
+
+Hydrogen's `<ShopifyAnalytics>` registers a consumer you don't control,
+`Internal_Shopify_Analytics`, and only reports it ready once its internal
+`privacyReady` flips. That has exactly two sources:
+
+```js
+onReady: () => !consent.withPrivacyBanner && setPrivacyReady(true),
+onVisitorConsentCollected: (c) => { ...; setPrivacyReady(true); }
+```
+
+With `withPrivacyBanner: true` the first is disabled. The second is
+`visitorConsentCollected` — the event Shopify never dispatches in a region with
+no cookie banner. So that register never readies, `areRegistersReady()` is
+permanently false, and Hydrogen parks **every** event in `waitForReadyQueue`.
+
+The symptom is maximally confusing: vendor libraries load fine, subscriptions
+report ready, `analyticsProcessingAllowed()` returns `true`, `shop` resolves —
+and nothing is ever published. Shopify's own analytics is equally silent, which
+is the tell that it isn't a vendor integration problem.
+
+`useConsentBridge()` fixes it by committing the resolved consent, which makes
+Shopify dispatch the event and releases the queue.
+
+Note `withPrivacyBanner: false` (or omitted — Hydrogen defaults it to `false`)
+is immune, because `!consent.withPrivacyBanner` is then `true` and `privacyReady`
+flips as soon as the API is ready.
+
 ## Global Privacy Control
 
 Hydrogen has **no** GPC handling — no references to `globalPrivacyControl` or
 `Sec-GPC` anywhere in `@shopify/hydrogen` or `@shopify/hydrogen-react`.
 
-`useGlobalPrivacyControl()` (called from `Analytics.tsx`) reads the signal and
+`useConsentBridge()` (called from `Analytics.tsx`) reads the signal and
 pushes `sale_of_data: false` through `setTrackingConsent`, so the opt-out reaches
 every downstream consumer rather than living in one hook.
 
