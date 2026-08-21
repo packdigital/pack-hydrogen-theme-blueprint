@@ -71,7 +71,7 @@ useEffect(() => {
 Keep the `onVisitorConsentCollected` handler as well — it's how you learn about
 _changes_. It just can't be the only source.
 
-### Two further rules
+### Three further rules
 
 **Never gate `register()`/`ready()` on consent.** Hydrogen's
 `Analytics.Provider` holds every event in `waitForReadyQueue` until all
@@ -84,6 +84,41 @@ useEffect(() => {
   if (consent) ready();
 }, [consent]);
 ```
+
+**Never gate `ready()` on a third-party script either.** Same deadlock, different
+trigger, and this one is far easier to hit. `ready()` means "this consumer has
+finished registering its subscriptions" — not "the third-party pixel is alive":
+
+```ts
+// WRONG — one ad-blocked pixel stalls ALL analytics, permanently
+const ready = register('my-pixel').ready;
+useEffect(() => {
+  if (!scriptIsLoaded) return;
+  window.addEventListener('dl_view_item', handler);
+  ready();
+}, [scriptIsLoaded]);
+```
+
+```ts
+// RIGHT — ready on mount; wire listeners when the script actually arrives
+useEffect(() => {
+  ready();
+}, []);
+
+useEffect(() => {
+  if (!scriptIsLoaded) return;
+  window.addEventListener('dl_view_item', handler);
+  return () => window.removeEventListener('dl_view_item', handler);
+}, [scriptIsLoaded]);
+```
+
+Pixel domains like `sc-static.net` (Snapchat) are on essentially every tracking
+blocklist, so this reproduces on any machine with an ad blocker, Brave Shields,
+or Safari/Firefox tracking protection. The symptom is confusing: the analytics
+library loads fine and makes **zero** network calls, because no subscriber ever
+receives an event, so no `dl_*` event is ever dispatched and nothing reaches the
+vendor. Note that `useWaitForLoadScript`-style helpers give up after a fixed
+number of polls, so the stall is permanent rather than slow.
 
 **Normalize to booleans on both sides of the round-trip.** `ConsentStatus` is
 `boolean | undefined`. Shopify omits categories a banner never set, while a push
