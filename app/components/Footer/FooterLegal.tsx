@@ -3,6 +3,8 @@ import clsx from 'clsx';
 import {Link} from '~/components/Link';
 import type {Settings} from '~/lib/types';
 
+import {PrivacyChoices} from './PrivacyChoices';
+
 export function FooterLegal({settings}: {settings: Settings['footer']}) {
   const {links, copyrightNotice} = {...settings?.legal};
 
@@ -42,6 +44,10 @@ export function FooterLegal({settings}: {settings: Settings['footer']}) {
             </li>
           );
         })}
+        <li className="flex">
+          <p className={clsx('pr-4', 'hidden md:block')}>|</p>
+          <PrivacyChoices settings={settings} />
+        </li>
       </ul>
     </div>
   );

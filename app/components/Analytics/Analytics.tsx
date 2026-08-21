@@ -5,6 +5,7 @@ import {
   useCart,
   useCustomer,
   useGlobal,
+  useGlobalPrivacyControl,
   usePathStorage,
   useRootLoaderData,
 } from '~/hooks';
@@ -43,6 +44,9 @@ const DEBUG =
 
 export const Analytics = memo(() => {
   const {ENV} = useRootLoaderData();
+
+  // Honor Global Privacy Control before any pixel makes a tracking decision.
+  useGlobalPrivacyControl();
   const {register, subscribe} = useAnalytics();
   const {isCartReady} = useGlobal();
   const cart = useCart();
