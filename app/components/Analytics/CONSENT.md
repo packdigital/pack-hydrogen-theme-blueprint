@@ -1,7 +1,19 @@
 # Consent
 
-How this blueprint handles shopper consent, and the one mistake to avoid when
+How this blueprint handles shopper consent, and the mistakes to avoid when
 wiring a new analytics integration.
+
+## Triage
+
+| Symptom                                                                | Likely cause                                                                                                              |
+| ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| **No analytics at all** — every vendor silent, including Shopify's own | [Hydrogen's analytics deadlock](#hydrogens-own-analytics-deadlock). Check `withPrivacyBanner`.                            |
+| One vendor's library never loads                                       | That integration derives consent solely from `onVisitorConsentCollected` — [fail open, not closed](#fail-open-not-closed) |
+| One vendor loads but sends nothing                                     | Its `ready()` is gated on a third-party script that's blocked — [third rule](#three-further-rules)                        |
+| Console spams `Visitor consent collected` ~1x/sec                      | `undefined` vs `false` flapping across the round-trip — [third rule](#three-further-rules)                                |
+
+The first row is the one that wastes the most time, because every obvious signal
+reads healthy. Start there if nothing is reporting.
 
 ## The model
 
@@ -22,6 +34,37 @@ const consent = {
   language: storefront.i18n.language,
 };
 ```
+
+## Hydrogen's own analytics deadlock
+
+**This one bites every storefront with `withPrivacyBanner: true`, and it kills
+_all_ analytics — not just one vendor.**
+
+Hydrogen's `<ShopifyAnalytics>` registers a consumer you don't control,
+`Internal_Shopify_Analytics`, and only reports it ready once its internal
+`privacyReady` flips. That has exactly two sources:
+
+```js
+onReady: () => !consent.withPrivacyBanner && setPrivacyReady(true),
+onVisitorConsentCollected: (c) => { ...; setPrivacyReady(true); }
+```
+
+With `withPrivacyBanner: true` the first is disabled. The second is
+`visitorConsentCollected` — the event Shopify never dispatches in a region with
+no cookie banner. So that register never readies, `areRegistersReady()` is
+permanently false, and Hydrogen parks **every** event in `waitForReadyQueue`.
+
+The symptom is maximally confusing: vendor libraries load fine, subscriptions
+report ready, `analyticsProcessingAllowed()` returns `true`, `shop` resolves —
+and nothing is ever published. Shopify's own analytics is equally silent, which
+is the tell that it isn't a vendor integration problem.
+
+`useConsentBridge()` fixes it by committing the resolved consent, which makes
+Shopify dispatch the event and releases the queue.
+
+Note `withPrivacyBanner: false` (or omitted — Hydrogen defaults it to `false`)
+is immune, because `!consent.withPrivacyBanner` is then `true` and `privacyReady`
+flips as soon as the API is ready.
 
 ## Fail open, not closed
 
@@ -117,45 +160,14 @@ blocklist, so this reproduces on any machine with an ad blocker, Brave Shields,
 or Safari/Firefox tracking protection. The symptom is confusing: the analytics
 library loads fine and makes **zero** network calls, because no subscriber ever
 receives an event, so no `dl_*` event is ever dispatched and nothing reaches the
-vendor. Note that `useWaitForLoadScript`-style helpers give up after a fixed
-number of polls, so the stall is permanent rather than slow.
+vendor. Note that poll-until-loaded helpers typically give up after a fixed
+number of attempts, so the stall is permanent rather than slow.
 
 **Normalize to booleans on both sides of the round-trip.** `ConsentStatus` is
 `boolean | undefined`. Shopify omits categories a banner never set, while a push
 back through `setTrackingConsent` sends them as booleans. Comparing raw values
 across that boundary flaps `undefined` <-> `false` forever, which re-renders the
 integration on a loop (~1x/sec in the wild).
-
-## Hydrogen's own analytics deadlock
-
-**This one bites every storefront with `withPrivacyBanner: true`, and it kills
-_all_ analytics — not just one vendor.**
-
-Hydrogen's `<ShopifyAnalytics>` registers a consumer you don't control,
-`Internal_Shopify_Analytics`, and only reports it ready once its internal
-`privacyReady` flips. That has exactly two sources:
-
-```js
-onReady: () => !consent.withPrivacyBanner && setPrivacyReady(true),
-onVisitorConsentCollected: (c) => { ...; setPrivacyReady(true); }
-```
-
-With `withPrivacyBanner: true` the first is disabled. The second is
-`visitorConsentCollected` — the event Shopify never dispatches in a region with
-no cookie banner. So that register never readies, `areRegistersReady()` is
-permanently false, and Hydrogen parks **every** event in `waitForReadyQueue`.
-
-The symptom is maximally confusing: vendor libraries load fine, subscriptions
-report ready, `analyticsProcessingAllowed()` returns `true`, `shop` resolves —
-and nothing is ever published. Shopify's own analytics is equally silent, which
-is the tell that it isn't a vendor integration problem.
-
-`useConsentBridge()` fixes it by committing the resolved consent, which makes
-Shopify dispatch the event and releases the queue.
-
-Note `withPrivacyBanner: false` (or omitted — Hydrogen defaults it to `false`)
-is immune, because `!consent.withPrivacyBanner` is then `true` and `privacyReady`
-flips as soon as the API is ready.
 
 ## Global Privacy Control
 
