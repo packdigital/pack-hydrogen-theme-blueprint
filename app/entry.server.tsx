@@ -15,7 +15,7 @@ export default async function handleRequest(
       signal: request.signal,
       onError(error) {
         console.error(error);
-        responseStatusCode = 500;
+        responseStatusCode = 503;
       },
     },
   );
@@ -25,6 +25,9 @@ export default async function handleRequest(
   }
 
   responseHeaders.set('Content-Type', 'text/html');
+  if (responseStatusCode === 503) {
+    responseHeaders.set('Retry-After', '60');
+  }
   return new Response(body, {
     headers: responseHeaders,
     status: responseStatusCode,

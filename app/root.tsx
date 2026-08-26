@@ -191,10 +191,11 @@ export function ErrorBoundary() {
 
   if (!root?.loaderData) return <ServerError error={routeError} />;
 
-  const title = isRouteError ? 'Not Found' : 'Application Error';
+  const siteTitle = (root.loaderData as {siteTitle?: string})?.siteTitle;
+  const title = isRouteError ? 'Not Found' : siteTitle || 'Error';
 
   return (
-    <Document title={title}>
+    <Document title={title} noindex={!isRouteError}>
       {isRouteError ? <NotFound /> : <ApplicationError error={routeError} />}
     </Document>
   );
