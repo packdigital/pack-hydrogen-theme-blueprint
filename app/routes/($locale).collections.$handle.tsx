@@ -3,7 +3,6 @@ import {
   Analytics,
   AnalyticsPageType,
   getPaginationVariables,
-  getSeoMeta,
   storefrontRedirect,
 } from '@shopify/hydrogen';
 import {RenderSections} from '@pack/react';
@@ -12,6 +11,7 @@ import type {
   ProductCollectionSortKeys,
 } from '@shopify/hydrogen/storefront-api-types';
 
+import {getRouteSeoMeta} from '~/lib/utils';
 import {Collection} from '~/components/Collection';
 import {COLLECTION_QUERY} from '~/data/graphql/storefront/collection';
 import {COLLECTION_PAGE_QUERY} from '~/data/graphql/pack/collection-page';
@@ -123,10 +123,8 @@ export async function loader({params, context, request}: Route.LoaderArgs) {
   };
 }
 
-export const meta: Route.MetaFunction = ({matches}) => {
-  return (
-    getSeoMeta(...matches.map((match) => (match?.loaderData as any).seo)) || []
-  );
+export const meta: Route.MetaFunction = ({matches, error}) => {
+  return getRouteSeoMeta({matches, error});
 };
 
 export default function CollectionRoute() {

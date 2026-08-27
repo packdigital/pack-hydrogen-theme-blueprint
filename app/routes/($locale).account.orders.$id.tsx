@@ -1,7 +1,8 @@
 import {redirect} from 'react-router';
-import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
+import {AnalyticsPageType} from '@shopify/hydrogen';
 import type {Order as OrderType} from '@shopify/hydrogen/customer-account-api-types';
 
+import {getRouteSeoMeta} from '~/lib/utils';
 import {getAccountSeo} from '~/lib/server-utils/seo.server';
 import {CustomerAccountLayout} from '~/components/AccountLayout/CustomerAccountLayout';
 import {Order} from '~/components/Account/Order/Order';
@@ -43,10 +44,8 @@ export async function loader({request, context, params}: Route.LoaderArgs) {
   }
 }
 
-export const meta: Route.MetaFunction = ({matches}) => {
-  return (
-    getSeoMeta(...matches.map((match) => (match?.loaderData as any).seo)) || []
-  );
+export const meta: Route.MetaFunction = ({matches, error}) => {
+  return getRouteSeoMeta({matches, error});
 };
 
 export default function OrderRoute() {

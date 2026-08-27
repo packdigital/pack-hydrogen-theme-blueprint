@@ -13,10 +13,9 @@ import {Scripts as RootScripts} from './Scripts';
 interface DocumentProps {
   children: ReactNode;
   title?: string;
-  noindex?: boolean;
 }
 
-export function Document({children, title, noindex}: DocumentProps) {
+export function Document({children, title}: DocumentProps) {
   const {
     customizerMeta,
     ENV,
@@ -47,7 +46,6 @@ export function Document({children, title, noindex}: DocumentProps) {
     <html lang={locale.language.toLowerCase()}>
       <head>
         {title && <title>{title}</title>}
-        {noindex && <meta name="robots" content="noindex" />}
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="og:type" content="website" />
