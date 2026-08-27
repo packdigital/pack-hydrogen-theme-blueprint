@@ -15,7 +15,10 @@ export default async function handleRequest(
       signal: request.signal,
       onError(error) {
         console.error(error);
-        responseStatusCode = 503;
+        // A render-phase crash: flag it as a server error so the transient
+        // handling below applies. Loader errors don't reach this callback —
+        // React Router renders the ErrorBoundary and hands us a 500 directly.
+        if (responseStatusCode < 500) responseStatusCode = 500;
       },
     },
   );
@@ -25,7 +28,12 @@ export default async function handleRequest(
   }
 
   responseHeaders.set('Content-Type', 'text/html');
-  if (responseStatusCode === 503) {
+  // Any uncaught server error — whether it originated in a loader (React
+  // Router hands us a 500 here) or during render (onError above) — is
+  // temporary. Signal 503 + Retry-After so crawlers back off and re-crawl
+  // instead of caching the error page in the SERP.
+  if (responseStatusCode >= 500) {
+    responseStatusCode = 503;
     responseHeaders.set('Retry-After', '60');
   }
   return new Response(body, {
