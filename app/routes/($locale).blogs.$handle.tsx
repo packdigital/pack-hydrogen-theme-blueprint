@@ -1,11 +1,11 @@
 import {useLoaderData} from 'react-router';
 import {
   AnalyticsPageType,
-  getSeoMeta,
   storefrontRedirect,
 } from '@shopify/hydrogen';
 import {RenderSections} from '@pack/react';
 
+import {getRouteSeoMeta} from '~/lib/utils';
 import {BLOG_PAGE_QUERY} from '~/data/graphql/pack/blog-page';
 import {getPage} from '~/lib/server-utils/pack.server';
 import {getShop, getSiteSettings} from '~/lib/server-utils/settings.server';
@@ -138,10 +138,8 @@ export async function loader({params, context, request}: Route.LoaderArgs) {
   };
 }
 
-export const meta: Route.MetaFunction = ({matches}) => {
-  return (
-    getSeoMeta(...matches.map((match) => (match?.loaderData as any).seo)) || []
-  );
+export const meta: Route.MetaFunction = ({matches, error}) => {
+  return getRouteSeoMeta({matches, error});
 };
 
 export default function BlogRoute() {

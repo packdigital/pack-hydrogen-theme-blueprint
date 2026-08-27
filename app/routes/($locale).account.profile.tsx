@@ -1,5 +1,6 @@
-import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
+import {AnalyticsPageType} from '@shopify/hydrogen';
 
+import {getRouteSeoMeta} from '~/lib/utils';
 import {getAccountSeo} from '~/lib/server-utils/seo.server';
 import {CustomerAccountLayout} from '~/components/AccountLayout/CustomerAccountLayout';
 import {Profile} from '~/components/Account/Profile';
@@ -22,10 +23,8 @@ export async function loader({context}: Route.LoaderArgs) {
   return {analytics, seo};
 }
 
-export const meta: Route.MetaFunction = ({matches}) => {
-  return (
-    getSeoMeta(...matches.map((match) => (match?.loaderData as any).seo)) || []
-  );
+export const meta: Route.MetaFunction = ({matches, error}) => {
+  return getRouteSeoMeta({matches, error});
 };
 
 export default function ProfileRoute() {

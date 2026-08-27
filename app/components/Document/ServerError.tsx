@@ -17,7 +17,8 @@ export function ServerError({error}: ServerErrorProps) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Server Error</title>
+        <meta name="robots" content="noindex" />
+        <title>Error</title>
       </head>
 
       <body>

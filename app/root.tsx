@@ -6,11 +6,7 @@ import {
   useRouteError,
 } from 'react-router';
 import type {LinksFunction, ShouldRevalidateFunction} from 'react-router';
-import {
-  getSeoMeta,
-  getShopAnalytics,
-  ShopifySalesChannel,
-} from '@shopify/hydrogen';
+import {getShopAnalytics, ShopifySalesChannel} from '@shopify/hydrogen';
 import type {Shop} from '@shopify/hydrogen/storefront-api-types';
 import type {Customer} from '@shopify/hydrogen/customer-account-api-types';
 
@@ -20,7 +16,7 @@ import {
   NotFound,
   ServerError,
 } from '~/components/Document';
-import {getCookieDomain} from '~/lib/utils';
+import {getCookieDomain, getRouteSeoMeta} from '~/lib/utils';
 import {
   getPublicEnvs,
   getShop,
@@ -170,10 +166,8 @@ export async function loader({context, request}: Route.LoaderArgs) {
   };
 }
 
-export const meta: Route.MetaFunction = ({matches}) => {
-  return (
-    getSeoMeta(...matches.map((match) => (match?.loaderData as any).seo)) || []
-  );
+export const meta: Route.MetaFunction = ({matches, error}) => {
+  return getRouteSeoMeta({matches, error});
 };
 
 export default function App() {
@@ -191,7 +185,8 @@ export function ErrorBoundary() {
 
   if (!root?.loaderData) return <ServerError error={routeError} />;
 
-  const title = isRouteError ? 'Not Found' : 'Application Error';
+  const siteTitle = (root.loaderData as {siteTitle?: string})?.siteTitle;
+  const title = isRouteError ? 'Not Found' : siteTitle || 'Error';
 
   return (
     <Document title={title}>
