@@ -15,10 +15,7 @@ export default async function handleRequest(
       signal: request.signal,
       onError(error) {
         console.error(error);
-        // A render-phase crash: flag it as a server error so the transient
-        // handling below applies. Loader errors don't reach this callback —
-        // React Router renders the ErrorBoundary and hands us a 500 directly.
-        if (responseStatusCode < 500) responseStatusCode = 500;
+        responseStatusCode = 500;
       },
     },
   );
