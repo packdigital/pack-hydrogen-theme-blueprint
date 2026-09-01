@@ -1,156 +1,255 @@
-name: Claude Code Review
+name: Claude PR Review
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
+    # `synchronize` fires on every push to a PR's head branch. `concurrency`
+    # below cancels an in-flight review when a newer push arrives, so back-to-
+    # back commits collapse into a single review of the final SHA rather than
+    # queueing up. `opened` / `ready_for_review` / `reopened` cover the first
+    # review and the draft-to-ready flow.
+    types: [opened, ready_for_review, reopened, synchronize]
+    branches:
+      - main
+  # Manual escape hatch: re-review a PR on demand.
+  #   gh workflow run pr-review.yml -f pr_number=<num>
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'PR number to review'
+        required: true
+        type: string
 
 concurrency:
-  group: pr-review-${{ github.event.pull_request.number }}
+  group: claude-pr-review-${{ github.event.pull_request.number || inputs.pr_number }}
   cancel-in-progress: true
 
 jobs:
-  review:
+  claude-review:
+    # Skip drafts (both `opened` and `synchronize` on draft PRs carry
+    # draft == true) and dependabot. workflow_dispatch always runs — the
+    # caller explicitly asked for the review.
     if: >
-      github.event.pull_request.draft == false &&
-      github.actor != 'dependabot[bot]'
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.pull_request.draft == false &&
+       github.actor != 'dependabot[bot]')
     runs-on: ubuntu-latest
     permissions:
       contents: read
       pull-requests: write
+      checks: read
+      actions: read
       id-token: write
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 1
+      # Resolve PR number and head SHA for both trigger types. pull_request
+      # payloads carry them; workflow_dispatch runs against the default branch
+      # by default, so we look up the current head via the API instead.
+      - name: Resolve PR head
+        id: pr
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            NUM="${{ inputs.pr_number }}"
+            SHA=$(gh pr view "$NUM" --repo "${{ github.repository }}" --json headRefOid -q .headRefOid)
+          else
+            NUM="${{ github.event.pull_request.number }}"
+            SHA="${{ github.event.pull_request.head.sha }}"
+          fi
+          echo "number=$NUM" >> "$GITHUB_OUTPUT"
+          echo "sha=$SHA" >> "$GITHUB_OUTPUT"
 
-      - uses: anthropics/claude-code-action@v1
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ steps.pr.outputs.sha }}
+          # Deep enough for `git diff` against a prior review's baseline SHA on
+          # any realistic PR. If the baseline is deeper (or was rebased away),
+          # the "Detect prior review baseline" step falls back to a full review.
+          fetch-depth: 50
+
+      # Look for a marker in the most recent claude[bot] summary comment on
+      # this PR. The marker (`<!-- claude-review-sha: <sha> -->`) is written by
+      # this workflow's own summary output and points to the SHA that was
+      # reviewed. If none is found (first review of this PR, or existing
+      # comments were written before this feature landed), we run a full
+      # review. If the baseline SHA isn't reachable from HEAD (rebase or
+      # force-push cleared it), same — full review.
+      - name: Detect prior review baseline
+        id: prior
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NUM: ${{ steps.pr.outputs.number }}
+          REPO: ${{ github.repository }}
+          HEAD: ${{ steps.pr.outputs.sha }}
+        run: |
+          mkdir -p .review-context
+
+          COMMENTS=$(gh api "repos/${REPO}/issues/${NUM}/comments?per_page=100" \
+            --jq '[.[] | select(.user.login == "claude[bot]")] | reverse')
+
+          LAST_SHA=$(echo "$COMMENTS" | jq -r '
+            [.[] | .body
+              | capture("<!-- claude-review-sha: (?<sha>[a-f0-9]{40}) -->")?
+              | .sha
+            ] | .[0] // ""')
+
+          if [ -z "$LAST_SHA" ]; then
+            echo "mode=full" >> "$GITHUB_OUTPUT"
+            echo "no prior review found → full"
+            exit 0
+          fi
+
+          if ! git cat-file -e "${LAST_SHA}^{commit}" 2>/dev/null; then
+            echo "mode=full" >> "$GITHUB_OUTPUT"
+            echo "prior sha ${LAST_SHA} not reachable from HEAD → full"
+            exit 0
+          fi
+
+          if [ "$LAST_SHA" = "$HEAD" ]; then
+            echo "mode=noop" >> "$GITHUB_OUTPUT"
+            echo "head == baseline; nothing new"
+            exit 0
+          fi
+
+          echo "mode=incremental" >> "$GITHUB_OUTPUT"
+          echo "baseline_sha=$LAST_SHA" >> "$GITHUB_OUTPUT"
+
+          # Prior summary is passed to the review agent verbatim (as a file it
+          # can Read); Claude extracts the findings from its own prose. The
+          # incremental diff is also pre-computed so the review agent doesn't
+          # have to derive it — one `Read .review-context/incremental.diff` and
+          # it has the exact bytes to review.
+          echo "$COMMENTS" | jq -r '.[0].body' > .review-context/prior-summary.md
+          git diff "$LAST_SHA" "$HEAD" > .review-context/incremental.diff
+          echo "baseline: $LAST_SHA → HEAD: $HEAD"
+          echo "delta files: $(git diff --name-only "$LAST_SHA" "$HEAD" | wc -l)"
+
+      - name: Claude Code Review
+        uses: anthropics/claude-code-action@v1
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-          use_sticky_comment: true
-          claude_args: --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr:*),Read,Glob,Grep"
+          # The Claude App token from the OIDC exchange only carries these scopes
+          # if requested here AND granted in the job-level permissions block above.
+          additional_permissions: |
+            checks: read
+            actions: read
           prompt: |
-            You are a senior engineer reviewing a pull request for a Pack Digital Hydrogen storefront.
+            REPO: ${{ github.repository }}
+            PR NUMBER: ${{ steps.pr.outputs.number }}
+            HEAD SHA: ${{ steps.pr.outputs.sha }}
+            REVIEW MODE: ${{ steps.prior.outputs.mode }}
+            BASELINE SHA: ${{ steps.prior.outputs.baseline_sha }}
 
-            ## Step 1 — Gather context
+            ## Review mode
 
-            1. gh pr view ${{ github.event.pull_request.number }} --json title,body,headRefName,additions,deletions,changedFiles
-            2. gh pr diff ${{ github.event.pull_request.number }}
-            3. Read CLAUDE.md at the repo root if it exists — it contains the section inventory, architecture notes, and repo-specific gotchas.
+            The `REVIEW MODE` value above tells you what to do:
 
-            ## Step 2 — Scope control (skip these entirely, no comments)
+            - `full` — first review of this PR, or the previous baseline was
+              rebased away. Read the complete PR diff via `gh pr diff` and
+              review it end to end. This is the same review shape you would
+              produce without any prior context.
 
-            Do NOT review or comment on:
-            - package-lock.json, yarn.lock, pnpm-lock.yaml
-            - Any file under node_modules/
-            - Generated files: *.tsbuildinfo, codegen output, *.generated.ts, storefrontapi.generated.ts
-            - Audit reports, CSVs, PDFs in audits/ or similar directories
-            - .gitignore, .prettierrc, .eslintrc changes unless they introduce a security risk
-            - Pure whitespace or formatting-only changes with no logic impact
-            - dist/, .cache/, .react-router/ build artifacts
+            - `incremental` — this PR has been reviewed before at BASELINE SHA.
+              The prior top-level summary is at `.review-context/prior-summary.md`
+              and the diff from BASELINE to HEAD is at
+              `.review-context/incremental.diff`. Do BOTH of the following:
 
-            ## Step 3 — Calibrate effort to PR size
+                1. Read the prior summary. Extract every discrete finding it
+                   listed (each `[P0]`/`[P1]`/`[P2]`/`[P3]` entry, plus any
+                   still-outstanding items it carried forward from earlier
+                   rounds). For each, inspect the current code at HEAD and post
+                   ONE inline comment stating its status: `[Addressed]`,
+                   `[Still present]`, or `[No longer applicable]` followed by a
+                   one-sentence reason. Anchor the comment on the line most
+                   relevant to the fix (for Addressed) or to the still-broken
+                   code (for Still present).
 
-            Count the changed files and net lines (additions + deletions) from step 1.
+                2. Review ONLY `.review-context/incremental.diff` for net-new
+                   issues introduced by these commits. Do NOT re-review lines
+                   the delta doesn't touch — the earlier review already covered
+                   them. Post inline comments for net-new findings using the
+                   `[P0]`/`[P1]`/`[P2]`/`[P3]` prefixes as usual.
 
-            **Small PR (≤5 files, ≤100 lines):**
-            - Full review of every changed file
-            - Inline comments on specific lines for any finding, positive or negative
+            - `noop` — HEAD equals BASELINE. Post the summary described below
+              with the body `No new commits since last review.` and stop.
 
-            **Medium PR (6–20 files, 101–500 lines):**
-            - Full review of all logic files (components, hooks, schemas, routes)
-            - Skim-only for test files, style changes, and minor config tweaks
-            - Inline comments only for blocking issues and meaningful non-blocking suggestions; skip affirming comments unless something is genuinely non-obvious
+            ## Standard review guidance (both modes)
 
-            **Large PR (>20 files or >500 lines):**
-            - Focus on the highest-risk files: security-relevant code, shared components, schema changes, route handlers, and anything touching auth or payment
-            - Skip line-level comments on low-risk files (pure UI layout, copy changes, minor refactors)
-            - Note in the summary which areas were given full review vs. skimmed
+            Follow applicable CLAUDE.md guidance. Inspect surrounding code, call
+            sites, and tests in the checkout before judging each changed path.
+            Use `gh pr view` for stated intent and `gh pr checks` for CI status.
+            You may write and run small self-contained scripts (node, python3)
+            in a `.review-probes/` scratch directory to test how changed logic
+            behaves on specific inputs; do not run builds, test suites, or
+            linters, do not modify the files under review, and never make
+            network calls from probe scripts.
 
-            ## Step 4 — Security (highest priority — flag blocking for any violation)
+            Report every discrete, actionable issue introduced by this diff
+            that could cause incorrect behavior, a security vulnerability, data
+            loss, a material performance regression, a test failure or
+            misleading test, or a clear violation of a documented repository
+            invariant (see the Code Review section in CLAUDE.md). Include
+            low-severity bugs and continue through the entire diff. Omit
+            pre-existing problems, speculative concerns without a demonstrable
+            affected path, intentional behavior changes, and pure style or
+            naming preferences.
 
-            These are always blocking issues regardless of PR size:
-            - Secrets, tokens, API keys, or credentials anywhere in the diff — even in comments or test fixtures
-            - dangerouslySetInnerHTML with unsanitized user input (XSS vector)
-            - User-controlled values passed directly to eval(), new Function(), or dynamic imports
-            - SQL/NoSQL injection: string interpolation into queries without parameterization
-            - Path traversal: user input used in file paths without sanitization (e.g. path.join with req.params)
-            - Server-side code (loaders, actions, API routes) that trusts client-supplied values without validation
-            - CORS or CSP headers weakened to wildcard (*) without explicit justification
-            - Authentication/session logic that can be bypassed (e.g. missing auth check in a new route)
-            - target="_blank" links missing rel="noopener noreferrer" (reverse tabnapping)
-            - New environment variables that default to permissive values in production
+            Where code parses, transforms, copies, or reconstructs data, work
+            out what the output drops that callers need and what it keeps that
+            it must not, then trace one maximally-featured input through the
+            new path (optional parameters, sentinel values, extreme size, a
+            retried or concurrent execution). Where a change repeats across
+            call sites or requires a companion edit elsewhere (registration,
+            scoping, configuration), enumerate the full set and look for the
+            one left behind.
 
-            For security findings: state the attack vector explicitly ("An attacker could…"), the blast radius, and the exact fix.
+            For each finding, state the triggering scenario, impact, and fix
+            direction in one concise paragraph.
 
-            ## Step 5 — Hydrogen & Pack pattern drift
+            Post one inline comment per issue with
+            `mcp__github_inline_comment__create_inline_comment`, `confirmed:
+            true`, and the smallest changed line range that shows the problem.
+            Priority prefixes: `[P0]` release blocker, `[P1]` high-impact
+            issue that should be fixed before merge, `[P2]` ordinary defect,
+            `[P3]` low-impact but concrete defect. Prior-finding status
+            comments (incremental mode only) use `[Addressed]` / `[Still
+            present]` / `[No longer applicable]` in the same slot instead of
+            a priority.
 
-            Flag drift from Shopify Hydrogen conventions and Pack patterns. These are non-blocking unless they break functionality:
+            ## Top-level summary
 
-            **Hydrogen conventions:**
-            - Loaders should use `json()` / `defer()` for data responses, not raw objects
-            - `useLoaderData()` / `useRouteLoaderData()` for loader data — not prop drilling from root
-            - Cart mutations should go through the cart action handler, not direct fetch calls
-            - SEO metadata set via `export const meta` in route files, not in component JSX
-            - Images should use Shopify's `<Image>` component from `@shopify/hydrogen` for CDN optimization, not raw `<img>`
-            - `CacheLong()` / `CacheShort()` / `CacheNone()` strategies on Pack/Storefront queries — missing cache strategies means uncached SSR on every request
-            - New routes must follow the `($locale)` prefix pattern or they will 404 in international markets
+            Post exactly ONE short top-level summary with `gh pr comment`. It
+            MUST begin with this marker on its very first line so future runs
+            can locate the baseline SHA — do not omit, alter, or rename it:
 
-            **Pack patterns:**
-            - Schema `component: 'group'` fields MUST have a group-level `defaultValue` — without it, the Customizer crashes with "Oops, something went wrong" when the group has no saved CMS data
-            - Date fields in schemas: never default to `''` or `null` — use a valid ISO date string (e.g. `'2026-12-31T00:00:00.000Z'`) or the Customizer's date component throws a RangeError
-            - New sections must be registered in `app/sections/index.tsx`
-            - Pack CMS queries should use `sections(first: 100)` — lower limits silently truncate sections on content-heavy pages
-            - Section data comes from the `cms` prop; site settings come from `useSettings()` — don't mix them
+              <!-- claude-review-sha: ${{ steps.pr.outputs.sha }} -->
 
-            ## Step 6 — Standard review dimensions
+            After the marker:
 
-            **Correctness** — Does the change do what the PR description says? Edge cases not handled? Root cause vs. symptom?
+            - `full` mode: finding counts by priority (e.g. `2 × P1, 1 × P2`)
+              and any auth/multipass, session, cart/checkout, Pack schema,
+              locale routing, or third-party integration changes that require
+              careful human review. If nothing to report, write `No actionable
+              issues found.` after the marker.
 
-            **Completeness** — Related files that should also be updated? If a type changed, do all consumers handle the new shape? If a shared component changed, does the fix apply to all usages?
+            - `incremental` mode: a one-line status ledger for prior findings
+              (e.g. `Prior findings: 3 Addressed, 1 Still present, 0 No longer
+              applicable`), and any Still-present items must be listed in the
+              summary so they carry forward into the NEXT round's prior-summary
+              read. Then a one-line count of net-new findings from the delta
+              (e.g. `Net-new: 1 × P2`). If neither carries over nor anything
+              net-new, write `No prior items still open; no net-new findings.`
+              after the marker.
 
-            **Side effects & regressions** — Does this break existing behavior? Mobile AND desktop coverage for UI changes?
+            - `noop` mode: after the marker, write only `No new commits since
+              last review.`
 
-            **Code quality** — Follows conventions in the file? Unnecessarily complex? Simpler approach available? Don't flag personal style preferences (ternary vs if/else, variable naming conventions) unless they introduce a real readability problem.
+            Do not repeat inline findings in the summary body, add praise or
+            checklists, approve or block the PR, or modify files. Only GitHub
+            comments are visible to the user.
 
-            **Accessibility (WCAG 2.1 AA)** — Interactive elements use semantic HTML (`button`, `a`) not `div`/`span`? Missing `aria-label` or `aria-labelledby`? State communicated to AT (`aria-expanded`, `aria-pressed`, `aria-selected`, `aria-current`)? Dialog patterns: `role="dialog"`, `aria-modal`, focus management?
-
-            ## Step 7 — Post inline comments
-
-            Use mcp__github_inline_comment__create_inline_comment (confirmed: true) for line-level findings.
-
-            **Comment format:**
-            - Affirming (small PRs only, genuinely non-obvious): "Good [fix/catch/decision] — [explain why this is correct and what it prevents]."
-            - Non-blocking: "Minor suggestion: [description].\n\n```tsx\n// suggested alternative\n```\n\nNon-blocking — the current code works correctly."
-            - Blocking: "[Describe the problem.] This will [break X / cause Y / allow attack Z].\n\n```tsx\n// fix\n```"
-            - Security blocking: "**Security:** [Attack vector]. An attacker could [describe impact]. [Fix]."
-
-            Only post a comment when you have something substantive to add. Do not comment on trivially correct or self-evident code.
-
-            ## Step 8 — Post summary
-
-            gh pr comment ${{ github.event.pull_request.number }} --body "SUMMARY_TEXT"
-
-            **Summary structure:**
-            ### Summary
-
-            [1-2 sentence overall assessment. For large PRs, note the review scope.]
-
-            ### Security
-
-            [Only include this section if security findings exist. List each finding with severity.]
-
-            ### Key Changes Reviewed
-
-            **`path/to/file`** — [What changed, why correct or not, notable tradeoffs. 2-4 sentences. Reference actual code elements. For large PRs, note if this file was skimmed.]
-
-            [Repeat for each meaningfully reviewed file. Skip files with trivial changes.]
-
-            ### Hydrogen / Pack Drift
-
-            [Only include if drift was found. List each pattern deviation and whether it's blocking.]
-
-            ### Overall Assessment
-
-            [One sentence: no blocking issues / N blocking issues found / observations only.]
-
-            **Tone:** Technical and precise — explain the WHY. Lead with security. Positive when things are done well. Non-blocking suggestions clearly labeled. Educational. Concise — no filler. Never condescending.
+          claude_args: |
+            --model claude-opus-5
+            --effort xhigh
+            --permission-mode acceptEdits
+            --allowedTools "Read,Grep,Glob,LS,mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr checks:*),Bash(gh run view:*),Bash(git diff:*),Bash(git log:*),Bash(git show:*),Bash(git status:*),Bash(git blame:*),Bash(git grep:*),Bash(node:*),Bash(python3:*)"
