@@ -1,6 +1,7 @@
-import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
+import {AnalyticsPageType} from '@shopify/hydrogen';
 import {Outlet} from 'react-router';
 
+import {getRouteSeoMeta} from '~/lib/utils';
 import {CartPage} from '~/components/Cart';
 import {getShop, getSiteSettings} from '~/lib/server-utils/settings.server';
 import {seoPayload} from '~/lib/server-utils/seo.server';
@@ -22,10 +23,8 @@ export async function loader({context, request}: Route.LoaderArgs) {
   return {analytics, seo, url: request.url};
 }
 
-export const meta: Route.MetaFunction = ({matches}) => {
-  return (
-    getSeoMeta(...matches.map((match) => (match?.loaderData as any).seo)) || []
-  );
+export const meta: Route.MetaFunction = ({matches, error}) => {
+  return getRouteSeoMeta({matches, error});
 };
 
 export default function CartRoute() {
