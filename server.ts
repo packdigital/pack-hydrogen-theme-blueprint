@@ -136,6 +136,25 @@ export default {
         testSession: packTestSession,
         contentEnvironment: env.PUBLIC_PACK_CONTENT_ENVIRONMENT,
         defaultThemeData,
+        /**
+         * Who is signed in, for audiences that ask (`auth_status`).
+         *
+         * `isLoggedIn` is a TRI-STATE and the distinction is load-bearing:
+         * `true`/`false` are both real answers, and `undefined` means "the theme
+         * did not say". Returning `false` when you do not actually know reads as
+         * a known guest and lets a guests-only audience serve to signed-in
+         * customers — so let it stay unknown instead. Pack refuses those
+         * audiences rather than guessing.
+         *
+         * A session check is the cheap half and is all `auth_status` needs; add
+         * `shopifyCustomerId` only where the id itself is required, since that
+         * costs a Customer Account API query. Pack calls this only when an
+         * audience actually reads a customer signal, and bounds it at 300ms
+         * (`customerContextTimeoutMs`).
+         */
+        getCustomerContext: async () => ({
+          isLoggedIn: await customerAccount.isLoggedIn(),
+        }),
       });
 
       /**
