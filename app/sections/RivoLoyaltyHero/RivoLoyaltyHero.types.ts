@@ -30,8 +30,11 @@ export interface RivoLoyaltyHeroCms {
     greetingFallback?: string;
     pointsSuffix?: string;
     tierPrefix?: string;
-    link?: LinkCms;
-    linkStyle?: string;
+    /** Max of two, mirroring Rivo's Earn / Redeem hero buttons. */
+    buttons?: {
+      link?: LinkCms;
+      style?: string;
+    }[];
   };
   section?: {
     aboveTheFold?: boolean;

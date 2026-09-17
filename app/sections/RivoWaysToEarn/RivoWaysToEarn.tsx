@@ -49,6 +49,7 @@ export function RivoWaysToEarn({cms}: {cms: RivoWaysToEarnCms}) {
     <Container container={cms.container}>
       <div
         className="px-contained py-contained"
+        id={section?.anchorId || 'rivo-ways-to-earn'}
         style={{color: section?.textColor}}
       >
         <div className={clsx('mx-auto flex flex-col gap-6', maxWidthClass)}>

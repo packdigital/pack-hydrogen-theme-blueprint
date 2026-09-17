@@ -23,6 +23,28 @@ export function Schema() {
         description: 'Empty state and signed-out message',
         fields: [
           {
+            label: 'Show More Button Text',
+            name: 'showMoreText',
+            component: 'text',
+            defaultValue: 'Show more',
+          },
+          {
+            label: 'Pending Badge Text',
+            name: 'pendingText',
+            component: 'text',
+            description:
+              'Only shown on stores where Rivo holds order earnings before releasing them',
+            defaultValue: 'Pending',
+          },
+          {
+            label: 'Points Expiry Warning',
+            name: 'expiryWarning',
+            component: 'text',
+            description:
+              'Shown when the customer has an expiry date. Use {{date}} for the date',
+            defaultValue: 'Your points expire on {{date}}.',
+          },
+          {
             label: 'Empty Message',
             name: 'emptyMessage',
             component: 'text',

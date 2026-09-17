@@ -28,13 +28,28 @@ export function Schema() {
         label: 'Labels',
         name: 'labels',
         component: 'group',
-        description: 'Redeem button, empty state, signed-out message',
+        description:
+          'Redeem and confirm buttons, empty state, signed-out message',
         fields: [
           {
             label: 'Redeem Button Text',
             name: 'redeemText',
             component: 'text',
             defaultValue: 'Redeem',
+          },
+          {
+            label: 'Confirm Button Text',
+            name: 'confirmText',
+            component: 'text',
+            description:
+              'Second click confirms the spend — Rivo deducts points immediately and it cannot be undone',
+            defaultValue: 'Confirm redemption',
+          },
+          {
+            label: 'Cancel Text',
+            name: 'cancelText',
+            component: 'text',
+            defaultValue: 'Cancel',
           },
           {
             label: 'Empty Message',
@@ -71,6 +86,8 @@ export function Schema() {
         ],
         defaultValue: {
           redeemText: 'Redeem',
+          confirmText: 'Confirm redemption',
+          cancelText: 'Cancel',
           unusedHeading: 'Your unused rewards',
           unusedSubtext:
             'You’ve already redeemed these. Apply one to your cart, or enter the code at checkout.',
@@ -86,6 +103,14 @@ export function Schema() {
         description:
           'Above the fold, grid columns, balance, open cart on redeem, button style, text color, full width',
         fields: [
+          {
+            label: 'Anchor ID',
+            name: 'anchorId',
+            component: 'text',
+            description:
+              'Optional id for in-page links, e.g. "rivo-ways-to-earn" — link to it from the loyalty hero as #rivo-ways-to-earn',
+          },
+
           {
             label: 'Above The Fold',
             name: 'aboveTheFold',

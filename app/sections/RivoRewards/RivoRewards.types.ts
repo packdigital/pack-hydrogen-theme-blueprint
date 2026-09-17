@@ -5,6 +5,8 @@ export interface RivoRewardsCms {
   heading?: string;
   subtext?: string;
   labels?: {
+    cancelText?: string;
+    confirmText?: string;
     emptyMessage?: string;
     redeemText?: string;
     signedOutMessage?: string;
@@ -14,6 +16,7 @@ export interface RivoRewardsCms {
     viewCartText?: string;
   };
   section?: {
+    anchorId?: string;
     aboveTheFold?: boolean;
     buttonStyle?: string;
     fullWidth?: boolean;

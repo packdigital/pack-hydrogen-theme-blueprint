@@ -2,7 +2,12 @@ import clsx from 'clsx';
 
 import {Container} from '~/components/Container';
 import {RivoSkeleton, RivoStateMessage} from '~/components/Rivo';
-import {useRivoLedger} from '~/hooks';
+import {
+  useLocale,
+  useRivoLedger,
+  useRivoLoyalty,
+  useRivoProgramConfig,
+} from '~/hooks';
 import type {RivoLedgerEntry} from '~/lib/rivo';
 
 import {Schema} from './RivoPointsHistory.schema';
@@ -62,9 +67,26 @@ const getDelta = (entry: RivoLedgerEntry) =>
 
 export function RivoPointsHistory({cms}: {cms: RivoPointsHistoryCms}) {
   const {heading, labels, section} = cms;
-  const {entries, error, isLoading, isLoggedIn} = useRivoLedger(
-    Number(section?.limit) || 10,
-  );
+  const {currency} = useLocale();
+  const {
+    entries,
+    error,
+    hasMore,
+    isLoading,
+    isLoadingMore,
+    isLoggedIn,
+    loadMore,
+  } = useRivoLedger(Number(section?.limit) || 10);
+  // Whether points expire, and whether earnings are held, are program settings
+  // Rivo only exposes on the shop metafield — not on the Merchant API.
+  const {config} = useRivoProgramConfig();
+  const {customer} = useRivoLoyalty();
+
+  const showExpiry = !!config?.perEventExpiryEnabled;
+  const showPending = !!config?.orderEarningsDelaySeconds;
+  const pointsExpireAt = config?.pointsExpiryEnabled
+    ? formatDate(customer?.pointsExpireAt)
+    : null;
 
   const maxWidthClass = section?.fullWidth
     ? 'max-w-none'
@@ -92,39 +114,86 @@ export function RivoPointsHistory({cms}: {cms: RivoPointsHistoryCms}) {
           ) : error ? (
             <RivoStateMessage message={error} variant="error" />
           ) : entries.length ? (
-            <ul className="flex flex-col divide-y divide-border border-y border-border">
-              {entries.map((entry, index) => {
-                const date = formatDate(entry.appliedAt);
-                const amount = getAmount(entry, 'USD');
-                const delta = getDelta(entry);
+            <>
+              {/* Rivo shows this warning above the activity table whenever the
+                  customer has a dated balance expiry. */}
+              {pointsExpireAt && (
+                <p
+                  className="text-body-sm rounded-lg border border-border p-4 text-center"
+                  role="status"
+                >
+                  {(
+                    labels?.expiryWarning || 'Your points expire on {{date}}.'
+                  ).replace('{{date}}', pointsExpireAt)}
+                </p>
+              )}
 
-                return (
-                  <li
-                    key={entry.id ?? index}
-                    className="flex items-center justify-between gap-4 py-4"
-                  >
-                    <div className="flex flex-col">
-                      <p className="text-body-sm">{getLabel(entry)}</p>
+              <ul className="flex flex-col divide-y divide-border border-y border-border">
+                {entries.map((entry, index) => {
+                  const date = formatDate(entry.appliedAt);
+                  const amount = getAmount(entry, currency);
+                  const delta = getDelta(entry);
 
-                      {date && (
-                        <p className="text-caption text-neutralDark">{date}</p>
-                      )}
-                    </div>
+                  return (
+                    <li
+                      key={entry.id ?? index}
+                      className="flex items-center justify-between gap-4 py-4"
+                    >
+                      <div className="flex flex-col">
+                        <p className="text-body-sm">
+                          {getLabel(entry)}
+                          {/* Only on stores that hold order earnings before
+                            releasing them, matching Rivo's status column. */}
+                          {showPending && entry.isPending && (
+                            <span className="text-caption ml-2 rounded-full border border-border px-2 py-0.5 capitalize text-neutralDark">
+                              {entry.status || labels?.pendingText || 'Pending'}
+                            </span>
+                          )}
+                        </p>
 
-                    {amount && (
-                      <p
-                        className={clsx(
-                          'text-label whitespace-nowrap',
-                          delta < 0 ? 'text-neutralDark' : 'text-primary',
+                        {date && (
+                          <p className="text-caption text-neutralDark">
+                            {date}
+                          </p>
                         )}
-                      >
-                        {amount}
-                      </p>
-                    )}
-                  </li>
-                );
-              })}
-            </ul>
+
+                        {showExpiry && (
+                          <p className="text-caption text-neutralDark">
+                            {formatDate(entry.expiresAt)
+                              ? `Expires ${formatDate(entry.expiresAt)}`
+                              : '—'}
+                          </p>
+                        )}
+                      </div>
+
+                      {amount && (
+                        <p
+                          className={clsx(
+                            'text-label whitespace-nowrap',
+                            delta < 0 ? 'text-neutralDark' : 'text-primary',
+                          )}
+                        >
+                          {amount}
+                        </p>
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
+
+              {hasMore && (
+                <button
+                  className="btn-secondary mx-auto"
+                  disabled={isLoadingMore}
+                  onClick={loadMore}
+                  type="button"
+                >
+                  {isLoadingMore
+                    ? 'Loading…'
+                    : labels?.showMoreText || 'Show more'}
+                </button>
+              )}
+            </>
           ) : (
             <RivoStateMessage
               message={labels?.emptyMessage || 'No activity yet.'}

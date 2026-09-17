@@ -86,6 +86,17 @@ export function Schema() {
             },
           },
           {
+            label: 'Show Share Buttons',
+            name: 'showShareButtons',
+            component: 'toggle',
+            description:
+              'Channels come from Rivo admin — only the ones enabled there are shown',
+            toggleLabels: {
+              true: 'On',
+              false: 'Off',
+            },
+          },
+          {
             label: 'Show Referral List',
             name: 'showReferralList',
             component: 'toggle',

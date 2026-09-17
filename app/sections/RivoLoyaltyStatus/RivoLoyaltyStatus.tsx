@@ -3,19 +3,29 @@ import clsx from 'clsx';
 import {Container} from '~/components/Container';
 import {
   RivoBalance,
+  RivoRewardProgress,
   RivoSkeleton,
   RivoStateMessage,
   RivoVipTiers,
 } from '~/components/Rivo';
-import {useRivoLoyalty} from '~/hooks';
+import {useLocale, useRivoLoyalty, useRivoProgramConfig} from '~/hooks';
 
 import {Schema} from './RivoLoyaltyStatus.schema';
 import type {RivoLoyaltyStatusCms} from './RivoLoyaltyStatus.types';
 
 export function RivoLoyaltyStatus({cms}: {cms: RivoLoyaltyStatusCms}) {
   const {heading, labels, section, subtext} = cms;
-  const {customer, error, isLoading, isLoggedIn, pointsTally, vipTiers} =
-    useRivoLoyalty();
+  const {currency} = useLocale();
+  const {config} = useRivoProgramConfig();
+  const {
+    customer,
+    error,
+    isLoading,
+    isLoggedIn,
+    pointsTally,
+    rewards,
+    vipTiers,
+  } = useRivoLoyalty();
 
   const maxWidthClass = section?.fullWidth
     ? 'max-w-none'
@@ -53,6 +63,7 @@ export function RivoLoyaltyStatus({cms}: {cms: RivoLoyaltyStatusCms}) {
             <>
               <RivoBalance
                 creditsLabel={labels?.creditsLabel}
+                currencyCode={currency}
                 creditsTally={customer?.creditsTally}
                 lifetimeLabel={labels?.lifetimeLabel}
                 lifetimeTally={customer?.lifetimeEarningsTally}
@@ -62,6 +73,16 @@ export function RivoLoyaltyStatus({cms}: {cms: RivoLoyaltyStatusCms}) {
                 showLifetime={!!section?.showLifetimePoints}
               />
 
+              {!!section?.showRewardProgress && (
+                <RivoRewardProgress
+                  completedText={labels?.rewardProgressCompleted}
+                  heading={labels?.rewardProgressHeading}
+                  pointsTally={pointsTally}
+                  rewards={rewards}
+                  subtext={labels?.rewardProgressSubtext}
+                />
+              )}
+
               {section?.showVipTiers !== false && !!vipTiers.length && (
                 <div className="flex flex-col gap-3">
                   {labels?.tiersHeading && (
@@ -70,6 +91,8 @@ export function RivoLoyaltyStatus({cms}: {cms: RivoLoyaltyStatusCms}) {
 
                   <RivoVipTiers
                     currentTierName={customer?.vipTierName}
+                    highestTierText={labels?.highestTierText}
+                    showHighestTier={config?.vipShowHighestTier !== false}
                     pointsTally={pointsTally}
                     tiers={vipTiers}
                   />

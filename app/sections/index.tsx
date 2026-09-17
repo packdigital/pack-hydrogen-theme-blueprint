@@ -26,7 +26,9 @@ import {ProductsSlider} from './ProductsSlider';
 import {RichText} from './RichText';
 import {RivoLoyaltyHero} from './RivoLoyaltyHero';
 import {RivoLoyaltyStatus} from './RivoLoyaltyStatus';
+import {RivoMembershipBenefits} from './RivoMembershipBenefits';
 import {RivoPointsHistory} from './RivoPointsHistory';
+import {RivoPotentialPoints} from './RivoPotentialPoints';
 import {RivoReferral} from './RivoReferral';
 import {RivoRewards} from './RivoRewards';
 import {RivoTierBenefits} from './RivoTierBenefits';
@@ -100,9 +102,15 @@ export function registerSections() {
   registerSection(RivoLoyaltyHero as Section, {name: 'rivo-loyalty-hero'});
   registerSection(RivoLoyaltyStatus as Section, {name: 'rivo-loyalty-status'});
   registerSection(RivoWaysToEarn as Section, {name: 'rivo-ways-to-earn'});
+  registerSection(RivoMembershipBenefits as Section, {
+    name: 'rivo-membership-benefits',
+  });
   registerSection(RivoTierBenefits as Section, {name: 'rivo-tier-benefits'});
   registerSection(RivoRewards as Section, {name: 'rivo-rewards'});
   registerSection(RivoPointsHistory as Section, {name: 'rivo-points-history'});
+  registerSection(RivoPotentialPoints as Section, {
+    name: 'rivo-potential-points',
+  });
   registerSection(RivoReferral as Section, {name: 'rivo-referral'});
 
   /* Form ---------- */

@@ -5,6 +5,10 @@ export interface RivoLoyaltyStatusCms {
   heading?: string;
   subtext?: string;
   labels?: {
+    rewardProgressHeading?: string;
+    rewardProgressSubtext?: string;
+    rewardProgressCompleted?: string;
+    highestTierText?: string;
     creditsLabel?: string;
     lifetimeLabel?: string;
     pointsLabel?: string;
@@ -13,6 +17,7 @@ export interface RivoLoyaltyStatusCms {
     tiersHeading?: string;
   };
   section?: {
+    showRewardProgress?: boolean;
     aboveTheFold?: boolean;
     fullWidth?: boolean;
     showCredits?: boolean;

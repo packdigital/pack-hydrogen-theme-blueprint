@@ -4,6 +4,9 @@ export interface RivoPointsHistoryCms {
   container: ContainerSettings;
   heading?: string;
   labels?: {
+    expiryWarning?: string;
+    pendingText?: string;
+    showMoreText?: string;
     emptyMessage?: string;
     signedOutMessage?: string;
     signInText?: string;

@@ -150,17 +150,38 @@ export function RivoLoyaltyHero({cms}: {cms: RivoLoyaltyHeroCms}) {
                     </p>
                   )}
 
-                  {member?.link?.url && (
-                    <Link
-                      aria-label={member.link.text}
-                      className={clsx(
-                        member.linkStyle || 'btn-primary',
-                        'mt-2',
-                      )}
-                      to={member.link.url}
-                    >
-                      {member.link.text}
-                    </Link>
+                  {!!member?.buttons?.length && (
+                    <ul className="mt-2 flex flex-col justify-center gap-4 xs:flex-row">
+                      {member.buttons
+                        .slice(0, 2)
+                        .map(({link, style}, index) => (
+                          <li key={index}>
+                            {/* An in-page hash is a plain anchor: Link would treat
+                              it as a route and try to prefetch it. */}
+                            {link?.url?.startsWith('#') ? (
+                              <a
+                                aria-label={link.text}
+                                className={clsx(style || 'btn-primary')}
+                                href={link.url}
+                              >
+                                {link.text}
+                              </a>
+                            ) : (
+                              link?.url && (
+                                <Link
+                                  aria-label={link.text}
+                                  className={clsx(style || 'btn-primary')}
+                                  newTab={link.newTab}
+                                  to={link.url}
+                                  type={link.type}
+                                >
+                                  {link.text}
+                                </Link>
+                              )
+                            )}
+                          </li>
+                        ))}
+                    </ul>
                   )}
                 </div>
               )

@@ -53,6 +53,31 @@ export function Schema() {
             defaultValue: 'VIP tiers',
           },
           {
+            label: 'Reward Progress Heading',
+            name: 'rewardProgressHeading',
+            component: 'text',
+            defaultValue: 'Your next reward',
+          },
+          {
+            label: 'Reward Progress Subtext',
+            name: 'rewardProgressSubtext',
+            component: 'text',
+            description: 'Use {{points}} and {{reward}}',
+            defaultValue: '{{points}} points away from {{reward}}',
+          },
+          {
+            label: 'Reward Progress Completed Text',
+            name: 'rewardProgressCompleted',
+            component: 'text',
+            defaultValue: 'You have enough points to redeem a reward.',
+          },
+          {
+            label: 'Highest Tier Text',
+            name: 'highestTierText',
+            component: 'text',
+            defaultValue: 'You’re on our highest tier',
+          },
+          {
             label: 'Signed Out Message',
             name: 'signedOutMessage',
             component: 'text',
@@ -105,6 +130,16 @@ export function Schema() {
             label: 'Show Lifetime Points',
             name: 'showLifetimePoints',
             component: 'toggle',
+            toggleLabels: {
+              true: 'On',
+              false: 'Off',
+            },
+          },
+          {
+            label: 'Show Reward Progress',
+            name: 'showRewardProgress',
+            component: 'toggle',
+            description: 'Progress toward the next affordable reward',
             toggleLabels: {
               true: 'On',
               false: 'Off',

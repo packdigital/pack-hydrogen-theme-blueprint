@@ -3,10 +3,11 @@ import clsx from 'clsx';
 import {Container} from '~/components/Container';
 import {
   RivoReferralLink,
+  RivoShareButtons,
   RivoSkeleton,
   RivoStateMessage,
 } from '~/components/Rivo';
-import {useRivoReferrals} from '~/hooks';
+import {useRivoProgramConfig, useRivoReferrals} from '~/hooks';
 
 import {Schema} from './RivoReferral.schema';
 import type {RivoReferralCms} from './RivoReferral.types';
@@ -16,6 +17,8 @@ export function RivoReferral({cms}: {cms: RivoReferralCms}) {
   const {error, isLoading, isLoggedIn, referrals, stats} = useRivoReferrals({
     includeReferrals: !!section?.showReferralList,
   });
+  // Which share channels the merchant enabled lives on Rivo's shop metafield.
+  const {config} = useRivoProgramConfig();
 
   const maxWidthClass = section?.fullWidth
     ? 'max-w-none'
@@ -59,6 +62,13 @@ export function RivoReferral({cms}: {cms: RivoReferralCms}) {
                 pendingCount={stats?.pendingCount}
                 referralLink={referralLink}
               />
+
+              {section?.showShareButtons !== false && (
+                <RivoShareButtons
+                  referralLink={referralLink}
+                  social={config?.referralSocial}
+                />
+              )}
 
               {section?.showReferralList && !!referrals.length && (
                 <ul className="flex flex-col divide-y divide-border border-y border-border">

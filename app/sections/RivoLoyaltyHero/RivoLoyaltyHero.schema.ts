@@ -191,15 +191,31 @@ export function Schema() {
             defaultValue: 'Your tier',
           },
           {
-            label: 'Link',
-            name: 'link',
-            component: 'link',
-          },
-          {
-            label: 'Link Style',
-            name: 'linkStyle',
-            component: 'select',
-            options: BUTTONS,
+            label: 'Member Buttons',
+            name: 'buttons',
+            component: 'group-list',
+            description:
+              'Max of two. Link to #rivo-ways-to-earn or #rivo-ways-to-redeem to scroll to those sections, matching Rivo’s Earn/Redeem hero buttons',
+            itemProps: {
+              label: '{{item.link.text}}',
+            },
+            fields: [
+              {
+                label: 'Link',
+                name: 'link',
+                component: 'link',
+              },
+              {
+                label: 'Button Style',
+                name: 'style',
+                component: 'select',
+                options: BUTTONS,
+              },
+            ],
+            defaultItem: {
+              link: {text: 'Ways to earn', url: '#rivo-ways-to-earn'},
+              style: 'btn-primary',
+            },
           },
         ],
         defaultValue: {
@@ -207,8 +223,16 @@ export function Schema() {
           greetingFallback: 'Welcome back',
           pointsSuffix: 'points available',
           tierPrefix: 'Your tier',
-          link: {text: 'Redeem points', url: ''},
-          linkStyle: 'btn-primary',
+          buttons: [
+            {
+              link: {text: 'Ways to earn', url: '#rivo-ways-to-earn'},
+              style: 'btn-primary',
+            },
+            {
+              link: {text: 'Redeem points', url: '#rivo-ways-to-redeem'},
+              style: 'btn-secondary',
+            },
+          ],
         },
       },
       {

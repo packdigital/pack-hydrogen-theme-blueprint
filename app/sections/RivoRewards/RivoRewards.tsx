@@ -10,9 +10,11 @@ import {
   RivoUnusedRewards,
 } from '~/components/Rivo';
 import {
+  useLocale,
   useMenu,
   useRivoLoyalty,
   useRivoRedeem,
+  useRivoRewards,
   useRivoUnusedRewards,
 } from '~/hooks';
 import type {RivoReward} from '~/lib/rivo';
@@ -28,6 +30,7 @@ const GRID_CLASSES: Record<string, string> = {
 
 export function RivoRewards({cms}: {cms: RivoRewardsCms}) {
   const {heading, labels, section, subtext} = cms;
+  const {currency} = useLocale();
   const {openCart} = useMenu();
   const {
     creditsTally,
@@ -36,8 +39,17 @@ export function RivoRewards({cms}: {cms: RivoRewardsCms}) {
     isLoggedIn,
     pointsTally,
     refresh,
-    rewards,
+    rewards: memberRewards,
   } = useRivoLoyalty();
+
+  // The catalog is shop-scoped and guest-safe, so signed-out visitors still see
+  // what their points would buy — as Rivo's own Liquid widget does. Signed-in
+  // customers already have it from the summary, so this doesn't fetch for them.
+  const {rewards: guestRewards, isLoading: isLoadingGuest} = useRivoRewards({
+    enabled: !isLoggedIn,
+  });
+
+  const rewards = isLoggedIn ? memberRewards : guestRewards;
 
   const {
     appliedCode,
@@ -80,6 +92,7 @@ export function RivoRewards({cms}: {cms: RivoRewardsCms}) {
     <Container container={cms.container}>
       <div
         className="px-contained py-contained"
+        id={section?.anchorId || 'rivo-ways-to-redeem'}
         style={{color: section?.textColor}}
       >
         <div className={clsx('mx-auto flex flex-col gap-6', maxWidthClass)}>
@@ -91,14 +104,38 @@ export function RivoRewards({cms}: {cms: RivoRewardsCms}) {
           )}
 
           {!isLoggedIn ? (
-            <RivoStateMessage
-              loginText={labels?.signInText}
-              message={
-                labels?.signedOutMessage ||
-                'Sign in to redeem your points for rewards.'
-              }
-              variant="signedOut"
-            />
+            <>
+              <RivoStateMessage
+                loginText={labels?.signInText}
+                message={
+                  labels?.signedOutMessage ||
+                  'Sign in to redeem your points for rewards.'
+                }
+                variant="signedOut"
+              />
+
+              {isLoadingGuest ? (
+                <RivoSkeleton count={3} />
+              ) : (
+                !!rewards.length && (
+                  <ul className={clsx('grid gap-4', gridClass)}>
+                    {rewards.map((reward) => (
+                      <RivoRewardCard
+                        key={reward.id}
+                        buttonStyle={section?.buttonStyle}
+                        currencyCode={currency}
+                        // Guests can browse the catalog but not spend: there is
+                        // no balance to spend from until they sign in.
+                        isSignedOut
+                        onRedeem={onRedeem}
+                        redeemText={labels?.signInText || 'Sign in to redeem'}
+                        reward={reward}
+                      />
+                    ))}
+                  </ul>
+                )
+              )}
+            </>
           ) : isLoading ? (
             <RivoSkeleton count={3} />
           ) : error ? (
@@ -108,6 +145,7 @@ export function RivoRewards({cms}: {cms: RivoRewardsCms}) {
               {section?.showBalance !== false && (
                 <RivoBalance
                   creditsTally={creditsTally}
+                  currencyCode={currency}
                   pointsTally={pointsTally}
                 />
               )}
@@ -149,6 +187,9 @@ export function RivoRewards({cms}: {cms: RivoRewardsCms}) {
                     <RivoRewardCard
                       key={reward.id}
                       buttonStyle={section?.buttonStyle}
+                      cancelText={labels?.cancelText}
+                      confirmText={labels?.confirmText}
+                      currencyCode={currency}
                       isRedeeming={isRedeeming}
                       onRedeem={onRedeem}
                       pointsTally={pointsTally}

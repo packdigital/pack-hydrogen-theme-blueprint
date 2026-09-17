@@ -12,6 +12,7 @@ export interface RivoReferralCms {
     signInText?: string;
   };
   section?: {
+    showShareButtons?: boolean;
     aboveTheFold?: boolean;
     buttonStyle?: string;
     fullWidth?: boolean;

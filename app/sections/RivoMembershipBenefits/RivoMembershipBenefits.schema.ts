@@ -7,94 +7,71 @@ import {containerSettings} from '~/settings/container';
 export function Schema() {
   return {
     category: 'Loyalty',
-    label: 'Rivo Ways To Earn',
-    key: 'rivo-ways-to-earn',
+    label: 'Rivo Membership Benefits',
+    key: 'rivo-membership-benefits',
     fields: [
       {
         label: 'Eyebrow',
         name: 'eyebrow',
         component: 'text',
-        defaultValue: 'Rewards with benefits',
       },
       {
         label: 'Heading',
         name: 'heading',
         component: 'text',
-        defaultValue: 'How to earn',
+        defaultValue: 'Membership benefits',
       },
       {
         label: 'Subtext',
         name: 'subtext',
         component: 'text',
-        defaultValue: 'Earn points on every order and action. It’s that easy.',
       },
       {
-        label: 'Icons',
-        name: 'icons',
+        label: 'Tier Content',
+        name: 'tiers',
         component: 'group-list',
         description:
-          'Optional icons matched to a Rivo earning rule by its trigger key, e.g. order_placed, customer_birthday, customer_member_enabled, tiktok_follow',
+          'Optional. Tier names and benefits come from Rivo admin — this only adds a tagline and image, matched by tier name',
         itemProps: {
-          label: '{{item.trigger}}',
+          label: '{{item.name}}',
         },
         fields: [
           {
-            label: 'Rivo Trigger Key',
-            name: 'trigger',
+            label: 'Rivo Tier Name',
+            name: 'name',
             component: 'text',
-            description: 'Must match the rule’s trigger exactly',
+            description: 'Must match the tier name in Rivo exactly',
           },
           {
-            label: 'Icon',
+            label: 'Tagline',
+            name: 'tagline',
+            component: 'text',
+          },
+          {
+            label: 'Image',
             name: 'image',
             component: 'image',
           },
         ],
-        defaultItem: {
-          trigger: 'order_placed',
-        },
-        defaultValue: [],
+        defaultItem: {name: 'Member'},
       },
       {
         label: 'Labels',
         name: 'labels',
         component: 'group',
-        description: 'Completed badge and empty state',
+        description: 'Empty state',
         fields: [
-          {
-            label: 'Completed Text',
-            name: 'completedText',
-            component: 'text',
-            defaultValue: 'Completed',
-          },
-          {
-            label: 'Claim Button Text',
-            name: 'claimText',
-            component: 'text',
-            description:
-              'Shown on rules the storefront can award — social follows and custom actions',
-            defaultValue: 'Claim',
-          },
-          {
-            label: 'Sign In To Earn Text',
-            name: 'signInToEarnText',
-            component: 'text',
-            defaultValue: 'Sign in to earn',
-          },
           {
             label: 'Empty Message',
             name: 'emptyMessage',
             component: 'text',
             defaultValue:
-              'Ways to earn will appear here once the program is configured.',
+              'Membership tiers will appear here once they are configured in Rivo.',
           },
         ],
         defaultValue: {
-          completedText: 'Completed',
-          claimText: 'Claim',
-          signInToEarnText: 'Sign in to earn',
           emptyMessage:
-            'Ways to earn will appear here once the program is configured.',
+            'Membership tiers will appear here once they are configured in Rivo.',
         },
       },
       {
@@ -104,18 +81,10 @@ export function Schema() {
         description: 'Above the fold, grid columns, text color, full width',
         fields: [
           {
-            label: 'Anchor ID',
-            name: 'anchorId',
-            component: 'text',
-            description:
-              'Optional id for in-page links, e.g. "rivo-ways-to-earn" — link to it from the loyalty hero as #rivo-ways-to-earn',
-          },
-
-          {
             label: 'Above The Fold',
             name: 'aboveTheFold',
             component: 'toggle',
-            description: 'Sets the heading as H1',
+            description: 'Renders the heading as an h1 instead of an h2',
             toggleLabels: {
               true: 'On',
               false: 'Off',
@@ -150,7 +119,7 @@ export function Schema() {
         ],
         defaultValue: {
           aboveTheFold: false,
-          gridColumns: '4',
+          gridColumns: '3',
           textColor: COLOR_SCHEMA_DEFAULT_VALUE.text,
           fullWidth: false,
         },

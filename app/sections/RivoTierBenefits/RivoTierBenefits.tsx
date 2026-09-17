@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 
 import {Container} from '~/components/Container';
+import {Image} from '~/components/Image';
 import {RivoSkeleton, RivoStateMessage} from '~/components/Rivo';
 import {useRivoLoyalty} from '~/hooks';
 import type {RivoVipTier} from '~/lib/rivo';
@@ -117,6 +118,18 @@ export function RivoTierBenefits({cms}: {cms: RivoTierBenefitsCms}) {
                             ? `${tier.threshold.toLocaleString()}+ points`
                             : labels?.freeTierLabel || 'Free to join')}
                       </p>
+
+                      {tier.iconUrl && (
+                        <Image
+                          data={{
+                            altText: tier.name || 'Tier',
+                            url: tier.iconUrl,
+                          }}
+                          aspectRatio="1/1"
+                          className="size-10"
+                          width="80"
+                        />
+                      )}
 
                       <p className="text-h5">{tier.name}</p>
 
