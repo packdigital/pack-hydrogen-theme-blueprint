@@ -1,7 +1,8 @@
-import {useState} from 'react';
+import {useCallback, useState} from 'react';
 import clsx from 'clsx';
 
 import {Image} from '~/components/Image';
+import {Link} from '~/components/Link';
 import type {RivoReward} from '~/lib/rivo';
 
 const REWARD_TYPE_LABELS: Record<string, string> = {
@@ -18,11 +19,20 @@ const REWARD_TYPE_LABELS: Record<string, string> = {
  *
  * Incremental rewards let the customer choose how many points to spend, bounded
  * below by the reward's points amount; fixed rewards redeem straight off.
+ *
+ * Redeeming is two-step. Rivo deducts the points the instant the redemption is
+ * created — before the cart mutation runs, with no idempotency key — so a stray
+ * click is unrecoverable. Rivo's own Liquid widget gates this behind a modal;
+ * this is the same guard without the modal dependency.
  */
 export function RivoRewardCard({
   buttonStyle = 'btn-primary',
   className,
+  cancelText = 'Cancel',
+  confirmText = 'Confirm redemption',
+  currencyCode = 'USD',
   isRedeeming,
+  isSignedOut,
   onRedeem,
   pointsTally,
   reward,
@@ -30,7 +40,12 @@ export function RivoRewardCard({
 }: {
   buttonStyle?: string;
   className?: string;
+  cancelText?: string;
+  confirmText?: string;
+  currencyCode?: string;
   isRedeeming?: boolean;
+  /** Browse-only: render a sign-in link in place of the redeem control. */
+  isSignedOut?: boolean;
   onRedeem: (args: {reward: RivoReward; pointsAmount?: number}) => void;
   pointsTally?: number | null;
   reward: RivoReward;
@@ -38,6 +53,19 @@ export function RivoRewardCard({
 }) {
   const minPoints = reward.pointsAmount || 100;
   const [pointsAmount, setPointsAmount] = useState(minPoints);
+  const [isConfirming, setIsConfirming] = useState(false);
+
+  const onClick = useCallback(() => {
+    if (!isConfirming) {
+      setIsConfirming(true);
+      return;
+    }
+    setIsConfirming(false);
+    onRedeem({
+      reward,
+      pointsAmount: reward.isIncremental ? pointsAmount : undefined,
+    });
+  }, [isConfirming, onRedeem, pointsAmount, reward]);
 
   const requiredPoints = reward.isIncremental
     ? pointsAmount
@@ -79,12 +107,40 @@ export function RivoRewardCard({
 
         {reward.minOrderValueInCents ? (
           <p className="text-caption text-neutralDark">
-            {`Minimum order of $${(reward.minOrderValueInCents / 100).toFixed(2)}`}
+            {`Minimum order of ${(
+              reward.minOrderValueInCents / 100
+            ).toLocaleString(undefined, {
+              style: 'currency',
+              currency: currencyCode,
+            })}`}
           </p>
         ) : null}
+
+        {reward.minOrderQuantity ? (
+          <p className="text-caption text-neutralDark">
+            {`Minimum of ${reward.minOrderQuantity.toLocaleString()} ${
+              reward.minOrderQuantity === 1 ? 'item' : 'items'
+            } in your cart`}
+          </p>
+        ) : null}
+
+        {reward.expiryMonths ? (
+          <p className="text-caption text-neutralDark">
+            {`Expires ${reward.expiryMonths} ${
+              reward.expiryMonths === 1 ? 'month' : 'months'
+            } after redeeming`}
+          </p>
+        ) : null}
+
+        {/* Rendered only when the merchant enabled `show_tos` in Rivo. */}
+        {reward.termsOfService && (
+          <p className="text-caption text-neutralDark">
+            {reward.termsOfService}
+          </p>
+        )}
       </div>
 
-      {reward.isIncremental ? (
+      {reward.isIncremental && !isSignedOut ? (
         <label className="flex flex-col gap-1">
           <span className="input-label">Points to redeem</span>
           <input
@@ -102,27 +158,60 @@ export function RivoRewardCard({
       ) : (
         <p className="text-body-sm font-bold">
           {`${(reward.pointsAmount ?? 0).toLocaleString()} points`}
+          {reward.isIncremental && ' and up'}
         </p>
       )}
 
-      <button
-        aria-label={`${redeemText} ${reward.name}`}
-        className={clsx(buttonStyle, 'mt-auto')}
-        disabled={isDisabled}
-        onClick={() =>
-          onRedeem({
-            reward,
-            pointsAmount: reward.isIncremental ? pointsAmount : undefined,
-          })
-        }
-        type="button"
-      >
-        {isRedeeming
-          ? 'Redeeming…'
-          : canAfford
-            ? redeemText
-            : 'Not enough points'}
-      </button>
+      {isSignedOut ? (
+        <Link
+          aria-label={`${redeemText} — ${reward.name}`}
+          className={clsx(buttonStyle, 'mt-auto text-center')}
+          // The login route only issues an OAuth redirect, so there is nothing
+          // worth prefetching.
+          prefetch="none"
+          to="/account/login"
+        >
+          {redeemText}
+        </Link>
+      ) : (
+        <div className="mt-auto flex flex-col gap-2">
+          {isConfirming && !isRedeeming && (
+            <p className="text-caption text-neutralDark" role="status">
+              {`This spends ${requiredPoints.toLocaleString()} points and can't be undone.`}
+            </p>
+          )}
+
+          <button
+            aria-label={
+              isConfirming
+                ? `${confirmText} — redeem ${reward.name}`
+                : `${redeemText} ${reward.name}`
+            }
+            className={clsx(buttonStyle)}
+            disabled={isDisabled}
+            onClick={onClick}
+            type="button"
+          >
+            {isRedeeming
+              ? 'Redeeming…'
+              : !canAfford
+                ? 'Not enough points'
+                : isConfirming
+                  ? confirmText
+                  : redeemText}
+          </button>
+
+          {isConfirming && !isRedeeming && (
+            <button
+              className="text-caption underline"
+              onClick={() => setIsConfirming(false)}
+              type="button"
+            >
+              {cancelText}
+            </button>
+          )}
+        </div>
+      )}
     </li>
   );
 }

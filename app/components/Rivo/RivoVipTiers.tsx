@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 
+import {Image} from '~/components/Image';
 import type {RivoVipTier} from '~/lib/rivo';
 
 /**
@@ -10,12 +11,20 @@ import type {RivoVipTier} from '~/lib/rivo';
 export function RivoVipTiers({
   className,
   currentTierName,
+  highestTierText = 'You’re on our highest tier',
   pointsTally,
+  showHighestTier = true,
   tiers,
 }: {
   className?: string;
   currentTierName?: string | null;
+  highestTierText?: string;
   pointsTally?: number | null;
+  /**
+   * Rivo's `vip_progress_block_show_highest_tier`: whether a customer already on
+   * the top tier still sees the progress block, filled, rather than nothing.
+   */
+  showHighestTier?: boolean;
   tiers: RivoVipTier[];
 }) {
   if (!tiers?.length) return null;
@@ -53,6 +62,10 @@ export function RivoVipTiers({
   const tiersTrackPoints =
     typeof pointsTally === 'number' && pointsTally >= currentThreshold;
 
+  // Liquid keeps the block visible on the top tier, pinned at 100%, instead of
+  // letting it vanish — otherwise the most loyal customers see the least.
+  const isHighestTier = currentIndex >= 0 && currentIndex === tiers.length - 1;
+
   const progress =
     tiersTrackPoints && nextThreshold && nextThreshold > currentThreshold
       ? Math.min(
@@ -67,28 +80,47 @@ export function RivoVipTiers({
 
   return (
     <div className={clsx('flex flex-col gap-4', className)}>
-      {progress !== null && nextTier && nextThreshold !== null && (
+      {isHighestTier && showHighestTier && (
         <div className="flex flex-col gap-2">
-          <p className="text-body-sm">
-            {`${(nextThreshold - (pointsTally || 0)).toLocaleString()} points to ${
-              nextTier.name || 'the next tier'
-            }`}
-          </p>
+          <p className="text-body-sm">{highestTierText}</p>
           <div
-            aria-label={`Progress to ${nextTier.name || 'the next tier'}`}
+            aria-label={highestTierText}
             aria-valuemax={100}
             aria-valuemin={0}
-            aria-valuenow={progress}
+            aria-valuenow={100}
             className="h-2 w-full overflow-hidden rounded-full bg-neutralLighter"
             role="progressbar"
           >
-            <div
-              className="h-full rounded-full bg-primary transition-[width] duration-500"
-              style={{width: `${progress}%`}}
-            />
+            <div className="size-full rounded-full bg-primary" />
           </div>
         </div>
       )}
+
+      {!isHighestTier &&
+        progress !== null &&
+        nextTier &&
+        nextThreshold !== null && (
+          <div className="flex flex-col gap-2">
+            <p className="text-body-sm">
+              {`${(nextThreshold - (pointsTally || 0)).toLocaleString()} points to ${
+                nextTier.name || 'the next tier'
+              }`}
+            </p>
+            <div
+              aria-label={`Progress to ${nextTier.name || 'the next tier'}`}
+              aria-valuemax={100}
+              aria-valuemin={0}
+              aria-valuenow={progress}
+              className="h-2 w-full overflow-hidden rounded-full bg-neutralLighter"
+              role="progressbar"
+            >
+              <div
+                className="h-full rounded-full bg-primary transition-[width] duration-500"
+                style={{width: `${progress}%`}}
+              />
+            </div>
+          </div>
+        )}
 
       <ul className="grid gap-3 sm:grid-cols-3">
         {tiers.map((tier, index) => {
@@ -106,6 +138,17 @@ export function RivoVipTiers({
                   : 'border-border',
               )}
             >
+              {/* Rivo hosts the tier icon; the merchant uploads it once in Rivo
+                  admin rather than again in the customizer. */}
+              {tier.iconUrl && (
+                <Image
+                  data={{altText: tier.name || 'Tier', url: tier.iconUrl}}
+                  aspectRatio="1/1"
+                  className="size-8"
+                  width="64"
+                />
+              )}
+
               <p className="text-label-sm">{tier.name}</p>
 
               {tier.threshold !== null && (
