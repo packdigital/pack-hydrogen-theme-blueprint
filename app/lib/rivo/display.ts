@@ -119,9 +119,11 @@ const normalizeCustomer = (raw: RivoRawCustomer): RivoCustomer => {
 const normalizeReward = (raw: RivoRawReward): RivoReward => ({
   id: raw.id ?? '',
   name: raw.name || 'Reward',
-  // `pretty_display_rewards` reads like "$5 off coupon (100 points required)",
-  // which duplicates the name and points shown in the UI, so it's not used as
-  // the description.
+  // Rivo rewards carry no description on either surface — verified against both
+  // `/rewards` and the `ba_loy.config` payload. Liquid's `reward.description` is
+  // synthesised by Rivo's own widget JS. `pretty_display_rewards` is the closest
+  // field but reads "$5 off coupon (100 points required)", duplicating the name
+  // and cost the card already shows, so it is deliberately not used here.
   description: null,
   enabled: raw.enabled !== false,
   rewardType: (raw.reward_type as RivoRewardType) || null,
@@ -144,6 +146,18 @@ const normalizeReward = (raw: RivoRawReward): RivoReward => ({
     raw.min_order_value_in_cents === undefined
       ? null
       : toNumber(raw.min_order_value_in_cents),
+  minOrderQuantity:
+    raw.min_order_quantity === null || raw.min_order_quantity === undefined
+      ? null
+      : toNumber(raw.min_order_quantity),
+  expiryMonths:
+    raw.expiry_months === null || raw.expiry_months === undefined
+      ? null
+      : toNumber(raw.expiry_months),
+  // Only surfaced when the merchant opted in via `show_tos`.
+  termsOfService: raw.terms_of_service?.show_tos
+    ? raw.pretty_terms_of_service || null
+    : null,
 });
 
 const normalizeVipTier = (raw: RivoRawVipTier): RivoVipTier => ({
@@ -181,6 +195,13 @@ const normalizePointsEvent = (raw: RivoRawPointsEvent): RivoLedgerEntry => ({
   note: raw.title || raw.external_note || null,
   appliedAt: raw.applied_at || raw.approved_at || raw.created_at || null,
   expiresAt: raw.expires_at || raw.per_event_expiration_at || null,
+  status: raw.status || null,
+  // Two signals, because Rivo only sends `status` on some payloads: an explicit
+  // pending status, or an event that exists but has not been approved yet. The
+  // UI only surfaces this on stores that actually delay order earnings.
+  isPending: raw.status
+    ? raw.status.toLowerCase() === 'pending'
+    : !raw.approved_at && !raw.applied_at,
 });
 
 const normalizeEarningRule = (

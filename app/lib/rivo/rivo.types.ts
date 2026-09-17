@@ -127,6 +127,11 @@ export interface RivoRawReward {
     applies_to?: string | null;
     show_tos?: boolean | null;
   } | null;
+  /**
+   * Rendered terms copy. Present on the `ba_loy.config` payload only — the REST
+   * `/rewards` response carries the structured `terms_of_service` with no text.
+   */
+  pretty_terms_of_service?: string | null;
   [key: string]: unknown;
 }
 
@@ -194,6 +199,11 @@ export interface RivoRawPointsEvent {
   external_note?: string | null;
   applied_at?: string | null;
   approved_at?: string | null;
+  /**
+   * Release state while a store holds order earnings — Liquid renders this in a
+   * status column gated on `order_earnings_delay_in_seconds`.
+   */
+  status?: string | null;
   expires_at?: string | null;
   per_event_expiration_at?: string | null;
   created_at?: string | null;
@@ -301,6 +311,15 @@ export interface RivoReward {
   productId: number | string | null;
   variantIds: (number | string)[];
   minOrderValueInCents: number | null;
+  /** Minimum cart quantity the reward requires, when configured. */
+  minOrderQuantity: number | null;
+  /** Months until an issued code expires, when configured. */
+  expiryMonths: number | null;
+  /**
+   * Rivo only intends terms to be shown when `show_tos` is set, so this is
+   * `null` unless the merchant enabled it.
+   */
+  termsOfService: string | null;
 }
 
 export interface RivoVipTier {
@@ -349,6 +368,13 @@ export interface RivoLedgerEntry {
   note: string | null;
   appliedAt: string | null;
   expiresAt: string | null;
+  /**
+   * True while Rivo is still holding the earning. Only meaningful on stores with
+   * `orderEarningsDelaySeconds` set — everywhere else earnings land immediately.
+   */
+  isPending: boolean;
+  /** Rivo's own status word, when it sends one, for display. */
+  status: string | null;
 }
 
 export interface RivoReferral {
@@ -424,4 +450,82 @@ export interface RivoLoyaltySummary {
   rewards: RivoReward[];
   vipTiers: RivoVipTier[];
   earningRules: RivoEarningRule[];
+}
+
+/* Program config (shop metafield) ---------- */
+
+/**
+ * Potential-points config for the product page, from
+ * `frontend.potential_points.order_placed`.
+ *
+ * `multiBalanceByTier` keys off the VIP tier *name*, matching how
+ * `potential-points.liquid` looks the rate up from the customer's tier metafield.
+ */
+export interface RivoPotentialPointsConfig {
+  enabled: boolean;
+  /** `multiplier` earns per currency unit; anything else is a flat award. */
+  isMultiplier: boolean;
+  pointsAmount: number;
+  currencyBaseAmount: number;
+  multiBalanceByTier: Record<
+    string,
+    {currencyBaseAmount: number; balanceAmount: number}
+  >;
+}
+
+/** One row of Rivo's VIP tier comparison table. */
+export interface RivoTierTableRow {
+  perk: string;
+  /** Cell values keyed by Rivo tier id. */
+  valuesByTierId: Record<string, string>;
+}
+
+/** Which share channels the merchant enabled, from `referral_social_settings`. */
+export interface RivoReferralSocialConfig {
+  channels: string[];
+  smsMessage: string | null;
+  twitterMessage: string | null;
+  whatsappMessage: string | null;
+}
+
+export interface RivoReferralCampaign {
+  id: string;
+  name: string | null;
+}
+
+export interface RivoMembershipTier {
+  id: string;
+  name: string | null;
+  benefits: {title: string | null; description: string | null}[];
+}
+
+/**
+ * Normalized Rivo program config.
+ *
+ * Every field has a safe default: on a store where the merchant has not
+ * configured a given feature the subtree is absent or empty, and on a store
+ * without an Admin API token the whole config is `null`. Nothing here may be
+ * load-bearing for rendering.
+ */
+export interface RivoProgramConfig {
+  pointsProgramEnabled: boolean;
+  referralProgramEnabled: boolean;
+  membershipProgramEnabled: boolean;
+  vipProgramEnabled: boolean;
+  /** Seconds Rivo holds order earnings before releasing them; drives the pending column. */
+  orderEarningsDelaySeconds: number | null;
+  pointsExpiryEnabled: boolean;
+  creditsExpiryEnabled: boolean;
+  /** Either per-event expiry flag — the ledger shows an expiry column when set. */
+  perEventExpiryEnabled: boolean;
+  vipShowHighestTier: boolean;
+  vipTierType: string | null;
+  vipTierPeriod: string | null;
+  tiersTable: RivoTierTableRow[];
+  potentialPoints: RivoPotentialPointsConfig | null;
+  referralSocial: RivoReferralSocialConfig | null;
+  referralCampaigns: RivoReferralCampaign[];
+  membershipTiers: RivoMembershipTier[];
+  /** Rivo's own translation strings, used to seed customizer defaults. */
+  translations: Record<string, string>;
 }

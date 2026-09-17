@@ -18,6 +18,9 @@ const reward: RivoReward = {
   productId: null,
   variantIds: [],
   minOrderValueInCents: null,
+  minOrderQuantity: null,
+  expiryMonths: null,
+  termsOfService: null,
 };
 
 /** Stub the POST /points_redemptions response, capturing the request body. */

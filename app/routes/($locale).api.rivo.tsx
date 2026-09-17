@@ -10,6 +10,7 @@ import {
   getReferrals,
   getRewards,
   getRivoCustomerIdFromSession,
+  getRivoProgramConfig,
   getUnusedRewards,
   getVipTiers,
   redeemReward,
@@ -62,6 +63,19 @@ const unauthorized = (error: string) =>
 export async function loader({request, context}: Route.LoaderArgs) {
   const searchParams = new URL(request.url).searchParams;
   const action = String(searchParams.get('action') || '');
+
+  /*
+   * Program config is shop-scoped and comes from the Shopify Admin API rather
+   * than Rivo, so it doesn't fit the uniform Rivo dispatch below. It carries no
+   * customer data and is safe to serve — and cache — unauthenticated.
+   */
+  if (action === 'getProgramConfig') {
+    const {data} = await getRivoProgramConfig({admin: context.admin});
+    return Response.json(
+      {data, error: null},
+      {headers: {'Cache-Control': PUBLIC_CACHE_CONTROL}},
+    );
+  }
 
   const rivoAction = LOADER_ACTIONS[action as keyof typeof LOADER_ACTIONS];
 
