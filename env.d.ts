@@ -7,6 +7,7 @@ import type {
   CustomerAccount,
   HydrogenCart,
   Storefront,
+  createWithCache,
 } from '@shopify/hydrogen';
 import type {Pack} from '@pack/hydrogen';
 
@@ -31,6 +32,7 @@ declare global {
     PRIMARY_DOMAIN: string;
     PRIVATE_ADMIN_API_TOKEN: string;
     PRIVATE_SHOPIFY_CHECKOUT_DOMAIN?: string;
+    PRIVATE_RIVO_API_KEY?: string;
     PRIVATE_STOREFRONT_API_TOKEN: string;
     PUBLIC_CHECKOUT_DOMAIN: string;
     PUBLIC_CUSTOMER_ACCOUNT_API_CLIENT_ID: string;
@@ -39,6 +41,7 @@ declare global {
     PUBLIC_STORE_DOMAIN: string;
     PUBLIC_STOREFRONT_API_TOKEN: string;
     PUBLIC_STOREFRONT_ID: string;
+    RIVO_API_BASE_URL?: string;
     SESSION_SECRET: string;
     SHOP_ID: string;
     PLAYBOOK_PLATFORM_URL?: string;
@@ -81,5 +84,7 @@ declare module 'react-router' {
     oxygen: OxygenEnv;
     cart: HydrogenCart;
     customerAccount: CustomerAccount;
+    /** Subrequest cache for non-Storefront upstreams. See `app/lib/rivo`. */
+    withCache: ReturnType<typeof createWithCache>;
   }
 }

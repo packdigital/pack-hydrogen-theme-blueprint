@@ -17,3 +17,7 @@ tsconfig.tsbuildinfo
 
 # IntelliJ
 .idea
+
+# Browser-automation artifacts (console logs, screenshots, traces).
+# Never commit: these come from live-store sessions and this repo is public.
+.playwright-mcp/

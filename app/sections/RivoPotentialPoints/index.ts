@@ -1,0 +1,1 @@
+export {RivoPotentialPoints} from './RivoPotentialPoints';
