@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import type {HeroContainerProps} from './Hero.types';
 
 const FALLBACK_DESKTOP_HEIGHT_CLASS = 'md:h-[43.75rem]';
-const FALLBACK_DESKTOP_ASPECT_RATIO_CLASS = 'md:aspect-ratio[16/9]';
+const FALLBACK_DESKTOP_ASPECT_RATIO_CLASS = 'md:aspect-ratio[16/9]'; // invalid tailwind class
 const FALLBACK_DESKTOP_ASPECT_RATIO = '16 / 9';
 const FALLBACK_MOBILE_HEIGHT_CLASS = 'max-md:h-[31.25rem]';
 const FALLBACK_MOBILE_ASPECT_RATIO_CLASS = 'max-md:aspect-[3/4]';
@@ -88,7 +88,7 @@ export function HeroContainer({children, cms, sectionId}: HeroContainerProps) {
 
       <div
         className={clsx(
-          'relative mx-auto flex w-full flex-col bg-neutralLightest',
+          'relative mx-auto flex w-full flex-col overflow-hidden bg-neutralLightest',
           nativeAspectRatiosClass,
           heightContainerClasses,
           maxWidthContainerClass,
