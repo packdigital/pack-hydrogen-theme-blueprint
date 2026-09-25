@@ -2,20 +2,15 @@ name: Claude Code Review
 
 on:
   pull_request:
-    types: [opened, ready_for_review, reopened, labeled]
+    types: [opened, synchronize, ready_for_review, reopened]
 
 jobs:
   review:
-    # Review once, when the PR is ready: opening as a draft fires `opened`, and
-    # marking it ready later fires `ready_for_review`, so the draft guard keeps
-    # it to a single run. To re-review after new pushes, add the `claude-review`
-    # label (remove and re-add it for later rounds).
+    # Drafts are skipped; marking one ready fires `ready_for_review`. Every push
+    # to a ready PR re-runs the review, and a newer push cancels an older run.
     if: >
       github.event.pull_request.draft == false &&
-      github.actor != 'dependabot[bot]' &&
-      (github.event.action != 'labeled' || github.event.label.name == 'claude-review')
-    # Job-level so unrelated label events, which skip this job, don't cancel a
-    # review already in progress.
+      github.actor != 'dependabot[bot]'
     concurrency:
       group: pr-review-${{ github.event.pull_request.number }}
       cancel-in-progress: true
@@ -81,10 +76,16 @@ jobs:
             and the smallest changed line range that shows the problem. Prefix it
             with `[P0]` for a release blocker, `[P1]` for a high-impact issue that
             should be fixed before merge, `[P2]` for an ordinary defect, or `[P3]`
-            for a low-impact but concrete defect. On a re-review, first list
-            existing inline comments with
+            for a low-impact but concrete defect.
+
+            This runs on every push. Before posting, list existing inline comments
+            with
             `gh api repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/comments`
-            and don't post an issue a previous review already raised.
+            and check `gh pr view --comments` for an earlier Claude summary. If a
+            previous Claude review exists, this is a re-review: focus on code
+            changed since that review, never re-post an issue already raised, and
+            post only new `[P0]` and `[P1]` findings. Mention a fixed issue only in
+            the summary count, not inline.
 
             Finally, post exactly one short top-level summary with
             `gh pr comment --edit-last --create-if-none`: give finding counts by
