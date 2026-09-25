@@ -9,7 +9,7 @@ import type {Route} from './+types/($locale).discounts.$code';
  * @example
  * Example path applying a discount and redirecting
  * ```ts
- * /discount/FREESHIPPING?redirect=/products
+ * /discounts/FREESHIPPING?redirect=/products
  *
  * ```
  * @preserve
