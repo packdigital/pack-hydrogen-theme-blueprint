@@ -7,6 +7,7 @@ import type {EmblaCarouselType, EmblaPluginType} from 'embla-carousel';
 import clsx from 'clsx';
 
 import {Svg} from '~/components/Svg';
+import {usePrefersReducedMotion} from '~/hooks';
 
 import type {CarouselProps} from './Carousel.types';
 
@@ -18,7 +19,10 @@ const DEFAULT_AUTOPLAY_DELAY = 5000;
  *   from CSS, not JS)
  * - optional autoplay / crossfade plugins
  * - optional prev/next arrows and pagination dots built from the Embla API
- * - accessible: labelled region, slide groups, labelled controls
+ * - accessible: labelled region, slide groups, labelled controls, a
+ *   pause/play control whenever it autoplays (WCAG 2.2.2), no autoplay under
+ *   prefers-reduced-motion, and off-screen slides made inert when there are
+ *   controls to reach them
  * The Embla API is exposed via `onApi` for advanced cases (e.g. synced
  * thumbnails).
  */
@@ -31,6 +35,7 @@ export function Carousel({
   fade,
   arrows,
   arrowClassName,
+  pauseButtonClassName,
   arrowColor,
   arrowIcon,
   renderArrow,
@@ -50,15 +55,23 @@ export function Carousel({
   children,
 }: CarouselProps) {
   const isVertical = options?.axis === 'y';
+  const prefersReducedMotion = usePrefersReducedMotion();
+  // A user pause is sticky: the plugin is removed so hover/focus-out can't
+  // resume it. Pressing play adds it back.
+  const [userPaused, setUserPaused] = useState(false);
+  const hasAutoplay = !!autoplay && !prefersReducedMotion;
+  const isAutoplaying = hasAutoplay && !userPaused;
 
   const plugins: EmblaPluginType[] = [];
-  if (autoplay) {
+  if (isAutoplaying) {
     plugins.push(
       Autoplay({
         delay: typeof autoplay === 'number' ? autoplay : DEFAULT_AUTOPLAY_DELAY,
         stopOnInteraction: false,
         stopOnMouseEnter: true,
         stopOnFocusIn: true,
+        // Listen on the outer wrapper so hovering the arrows/dots also pauses
+        rootNode: (emblaRoot) => emblaRoot.parentElement,
       }),
     );
   }
@@ -77,6 +90,7 @@ export function Carousel({
   // of slides currently in view).
   const [scrollProgress, setScrollProgress] = useState(0);
   const [thumbSize, setThumbSize] = useState(100);
+  const [slidesInView, setSlidesInView] = useState<number[] | null>(null);
   const scrollbarTrackRef = useRef<HTMLDivElement>(null);
 
   const onEmblaSelect = useCallback(
@@ -89,6 +103,10 @@ export function Carousel({
     },
     [onSelect],
   );
+
+  const onEmblaSlidesInView = useCallback((api: EmblaCarouselType) => {
+    setSlidesInView(api.slidesInView());
+  }, []);
 
   const onEmblaScroll = useCallback((api: EmblaCarouselType) => {
     setScrollProgress(Math.max(0, Math.min(1, api.scrollProgress())));
@@ -119,13 +137,16 @@ export function Carousel({
     onEmblaSelect(emblaApi);
     onEmblaScroll(emblaApi);
     updateThumbSize(emblaApi);
+    onEmblaSlidesInView(emblaApi);
     emblaApi.on('select', onEmblaSelect);
     emblaApi.on('scroll', onEmblaScroll);
     emblaApi.on('reInit', onEmblaReInit);
+    emblaApi.on('slidesInView', onEmblaSlidesInView);
     return () => {
       emblaApi.off('select', onEmblaSelect);
       emblaApi.off('scroll', onEmblaScroll);
       emblaApi.off('reInit', onEmblaReInit);
+      emblaApi.off('slidesInView', onEmblaSlidesInView);
     };
   }, [
     emblaApi,
@@ -133,8 +154,19 @@ export function Carousel({
     onEmblaSelect,
     onEmblaScroll,
     onEmblaReInit,
+    onEmblaSlidesInView,
     updateThumbSize,
   ]);
+
+  // Off-screen slides are removed from the tab order and accessibility tree,
+  // but only when arrows/dots exist to bring them into view; otherwise
+  // keyboard users would have no way to reach them.
+  const hasKeyboardControls = (arrows || dots) && snapCount > 1;
+  const isSlideHidden = (index: number) => {
+    if (!hasKeyboardControls) return false;
+    if (fade) return index !== selectedIndex;
+    return !!slidesInView && !slidesInView.includes(index);
+  };
 
   // Drag / click the scrollbar track to scrub to the nearest snap.
   const scrubToPointer = useCallback(
@@ -242,6 +274,7 @@ export function Carousel({
                   : 'min-w-0 pl-[var(--cv-gap)] md:pl-[var(--cv-gap-md)] lg:pl-[var(--cv-gap-lg)]',
                 slideClassName,
               )}
+              inert={isSlideHidden(index)}
               key={index}
               role="group"
             >
@@ -314,10 +347,29 @@ export function Carousel({
           </>
         ))}
 
+      {hasAutoplay && snapCount > 1 && (
+        <button
+          aria-label={userPaused ? 'Play slideshow' : 'Pause slideshow'}
+          className={clsx(
+            'absolute bottom-3 right-3 z-[1] flex size-8 items-center justify-center rounded-full border border-border bg-white text-black',
+            pauseButtonClassName,
+          )}
+          onClick={() => setUserPaused(!userPaused)}
+          style={arrowColor ? {color: arrowColor} : undefined}
+          type="button"
+        >
+          <Svg
+            className="w-3 text-current"
+            src={userPaused ? '/svgs/play.svg#play' : '/svgs/pause.svg#pause'}
+            viewBox="0 0 24 24"
+          />
+        </button>
+      )}
+
       {dots && snapCount > 1 && (
         <div
           className={clsx(
-            'absolute bottom-4 left-1/2 z-[1] flex -translate-x-1/2 justify-center gap-2',
+            'absolute bottom-2 left-1/2 z-[1] flex -translate-x-1/2 justify-center',
             dotsClassName,
           )}
         >
@@ -330,15 +382,20 @@ export function Carousel({
                 // Inline bg + opacity (not `bg-text/30`): the theme text color is
                 // a hex var, and Tailwind's /opacity modifier on a var() color
                 // emits invalid CSS, so faded dots would render invisibly.
-                className="size-2 rounded-full transition"
+                // 24px hit area around an 8px dot (WCAG 2.5.8)
+                className="flex size-6 items-center justify-center"
                 key={index}
                 onClick={() => emblaApi?.scrollTo(index)}
-                style={{
-                  backgroundColor: activeDotColor || 'var(--text)',
-                  opacity: isActive ? 1 : 0.35,
-                }}
                 type="button"
-              />
+              >
+                <span
+                  className="size-2 rounded-full transition"
+                  style={{
+                    backgroundColor: activeDotColor || 'var(--text)',
+                    opacity: isActive ? 1 : 0.35,
+                  }}
+                />
+              </button>
             );
           })}
         </div>

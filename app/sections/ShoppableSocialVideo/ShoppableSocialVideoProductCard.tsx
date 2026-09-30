@@ -172,9 +172,9 @@ export function ShoppableSocialVideoProductCard({
                   </div>
                 )}
 
-                <h1 className="text-h5 theme-product-card-text-color flex-1">
+                <h3 className="text-h5 theme-product-card-text-color flex-1">
                   {product?.title}
-                </h1>
+                </h3>
               </div>
 
               <button

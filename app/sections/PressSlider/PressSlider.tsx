@@ -44,12 +44,13 @@ export function PressSlider({cms}: {cms: PressSliderCms}) {
               options={{align: 'center'}}
               slideClassName="py-2"
               slides={slides.map(({quote}, index) => (
-                <h2
+                // A rotating quote is not a heading
+                <blockquote
                   className="mx-auto max-w-[50rem] px-4 text-center text-3xl font-bold md:text-4xl"
                   key={index}
                 >
                   &quot;{quote}&quot;
-                </h2>
+                </blockquote>
               ))}
             />
 

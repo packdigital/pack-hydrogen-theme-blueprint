@@ -17,6 +17,7 @@ import {useProductItemMedia} from './useProductItemMedia';
 export const ProductItemMedia = memo(
   ({
     hasGrouping,
+    primaryVideoRef,
     priority,
     selectedProduct,
     selectedVariant,
@@ -65,7 +66,11 @@ export const ProductItemMedia = memo(
           >
             {primaryMedia.mediaContentType === 'VIDEO' ? (
               inView && (
-                <ProductItemVideo autoPlay media={primaryMedia as Video} />
+                <ProductItemVideo
+                  autoPlay
+                  media={primaryMedia as Video}
+                  ref={primaryVideoRef}
+                />
               )
             ) : (
               <Image

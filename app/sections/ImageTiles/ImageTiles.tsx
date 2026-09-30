@@ -52,6 +52,9 @@ export function ImageTiles({cms}: {cms: ImageTilesCms}) {
               <div className={clsx('relative', isGridOnDesktop && 'lg:hidden')}>
                 <Carousel
                   ariaLabel={heading || 'Image tiles'}
+                  // Non-drag way to change slides (WCAG 2.5.7)
+                  arrowClassName="!size-8"
+                  arrows
                   gap={{base: 16, md: 20}}
                   slides={tiles.map((tile, index) => (
                     <ImageTile

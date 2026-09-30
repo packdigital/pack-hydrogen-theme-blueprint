@@ -5,12 +5,14 @@ import {useAnalytics} from '@shopify/hydrogen';
 import {COLOR_OPTION_NAME} from '~/lib/constants';
 import {Link} from '~/components/Link';
 import {ProductStars} from '~/components/ProductStars';
+import {VideoPlayToggle} from '~/components/VideoPlayToggle';
 import {AnalyticsEvent} from '~/components/Analytics/constants';
 import {
   useParsedProductMetafields,
   useProductByHandle,
   useProductGroupingByHandle,
   useProductModal,
+  useVideoPauseControl,
 } from '~/hooks';
 import type {SelectedProduct, SelectedVariant} from '~/lib/types';
 
@@ -36,6 +38,7 @@ export const ProductItem = memo(
     searchTerm,
     swatchesMap,
   }: ProductItemProps) => {
+    const cardVideo = useVideoPauseControl();
     const {ref: inViewRef, inView} = useInView({
       rootMargin: '200px',
       triggerOnce: true,
@@ -107,6 +110,15 @@ export const ProductItem = memo(
 
     return (
       <div className="group relative flex flex-col gap-2" ref={inViewRef}>
+        {/* Pause for an autoplaying card video; outside the link on purpose */}
+        {cardVideo.video && (
+          <VideoPlayToggle
+            className="!bottom-auto !left-auto right-2 top-2 !size-7"
+            isPaused={cardVideo.isPaused}
+            onToggle={cardVideo.toggle}
+          />
+        )}
+
         <div className="flex flex-col items-start">
           <Link
             aria-label={title}
@@ -117,6 +129,7 @@ export const ProductItem = memo(
           >
             <ProductItemMedia
               hasGrouping={!!grouping}
+              primaryVideoRef={cardVideo.videoRef}
               priority={priority}
               selectedProduct={selectedProduct}
               selectedVariant={selectedVariant}

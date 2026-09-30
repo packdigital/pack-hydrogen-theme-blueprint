@@ -1,10 +1,12 @@
 // eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable jsx-a11y/media-has-caption */
-import {useEffect, useRef, useState} from 'react';
+import {useCallback, useEffect, useRef, useState} from 'react';
 import {useInView} from 'react-intersection-observer';
 import clsx from 'clsx';
 
 import {Svg} from '~/components/Svg';
+import {VideoPlayToggle} from '~/components/VideoPlayToggle';
+import {useVideoPauseControl} from '~/hooks';
 
 import type {HalfHeroVideoProps} from './HalfHero.types';
 
@@ -22,6 +24,15 @@ export function HalfHeroVideo({
   });
 
   const [isPlaying, setIsPlaying] = useState(false);
+  const autoplayControl = useVideoPauseControl();
+  const {videoRef: setAutoplayVideo} = autoplayControl;
+  const setVideoRef = useCallback(
+    (el: HTMLVideoElement | null) => {
+      videoRef.current = el;
+      if (autoplay) setAutoplayVideo(el);
+    },
+    [autoplay, setAutoplayVideo],
+  );
 
   useEffect(() => {
     if (autoplay || isPlaying === null || sound || !videoRef.current) return;
@@ -43,11 +54,18 @@ export function HalfHeroVideo({
           muted={autoplay || !sound}
           playsInline
           poster={posterUrl}
-          ref={videoRef}
+          ref={setVideoRef}
           key={video?.url}
         >
           {video?.url && <source src={video.url} type={video.format} />}
         </video>
+      )}
+
+      {inView && autoplay && (
+        <VideoPlayToggle
+          isPaused={autoplayControl.isPaused}
+          onToggle={autoplayControl.toggle}
+        />
       )}
 
       {!autoplay && !sound && (

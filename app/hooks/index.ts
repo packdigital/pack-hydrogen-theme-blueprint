@@ -22,3 +22,4 @@ export * from './usePrefersReducedMotion';
 export * from './usePromobar';
 export * from './useRootLoaderData';
 export * from './useSettings';
+export * from './useVideoPauseControl';
