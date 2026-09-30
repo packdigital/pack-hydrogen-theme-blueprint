@@ -26,7 +26,9 @@ export function ProductHeader({
       const reviewsSection = productModal?.querySelector(
         `[data-comp="${PRODUCT_REVIEWS_KEY}"]`,
       );
-      reviewsSection?.scrollIntoView({behavior: 'smooth'});
+      if (!reviewsSection) return;
+      reviewsSection.scrollIntoView({behavior: 'smooth'});
+      focusReviews(reviewsSection);
       return;
     }
 
@@ -38,8 +40,12 @@ export function ProductHeader({
     const header = document.querySelector(`[data-comp="${HEADER_NAVIGATION}"]`);
     const headerHeight = header ? (header as HTMLElement).offsetHeight : 80;
 
-    const offsetTop = reviewsSection.getBoundingClientRect().top - headerHeight;
+    const offsetTop =
+      reviewsSection.getBoundingClientRect().top +
+      window.scrollY -
+      headerHeight;
     window.scrollTo({top: offsetTop, behavior: 'smooth'});
+    focusReviews(reviewsSection);
   }, [isModalProduct]);
 
   const isVisibleHeader =
@@ -55,11 +61,8 @@ export function ProductHeader({
     >
       {enabledStarRating && (
         <div className="min-h-6">
-          <button
-            aria-label="Scroll to product reviews"
-            onClick={handleScrollToReviews}
-            type="button"
-          >
+          {/* Named by the star rating and review count inside it */}
+          <button onClick={handleScrollToReviews} type="button">
             <ProductStars id={product.id} />
           </button>
         </div>
@@ -81,12 +84,26 @@ export function ProductHeader({
 
       <div className="mt-2 flex min-h-6 gap-2">
         {compareAtPrice && (
-          <p className="text-neutralMedium line-through">{compareAtPrice}</p>
+          <p className="text-neutralMedium">
+            <span className="sr-only">Regular price </span>
+            <s>{compareAtPrice}</s>
+          </p>
         )}
-        <p>{price}</p>
+        <p>
+          {compareAtPrice && <span className="sr-only">Sale price </span>}
+          {price}
+        </p>
       </div>
     </div>
   );
 }
 
 ProductHeader.displayName = 'ProductHeader';
+
+// Move keyboard focus with the scroll, so the next Tab continues from the
+// reviews rather than the top of the page (WCAG 2.4.3)
+function focusReviews(section: Element) {
+  const el = section as HTMLElement;
+  if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '-1');
+  el.focus({preventScroll: true});
+}

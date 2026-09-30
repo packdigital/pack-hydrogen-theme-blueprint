@@ -6,7 +6,12 @@ import clsx from 'clsx';
 import {Carousel} from '~/components/Carousel';
 import {RichText} from '~/components/RichText';
 import {Svg} from '~/components/Svg';
-import {useRootLoaderData, useColorSwatches} from '~/hooks';
+import {VideoPlayToggle} from '~/components/VideoPlayToggle';
+import {
+  useColorSwatches,
+  useRootLoaderData,
+  useVideoPauseControl,
+} from '~/hooks';
 import type {ProductsMap} from '~/lib/types';
 
 import {ShoppableSocialVideoProductCard} from './ShoppableSocialVideoProductCard';
@@ -25,6 +30,7 @@ export function ShoppableSocialVideo({cms}: {cms: ShoppableSocialVideoCms}) {
   const swatchesMap = useColorSwatches();
 
   const [activeIndex, setActiveIndex] = useState(0);
+  const {videoRef, isPaused, toggle} = useVideoPauseControl();
 
   const {
     video,
@@ -101,16 +107,23 @@ export function ShoppableSocialVideo({cms}: {cms: ShoppableSocialVideoCms}) {
           playsInline
           poster={video?.poster?.url}
           key={video?.video?.url}
+          ref={videoRef}
         >
           {video?.video?.mediaType === 'VIDEO' && (
             <source src={video.video.url} type={video.video.format} />
           )}
         </video>
 
+        <VideoPlayToggle
+          className="!bottom-auto top-3 z-[2]"
+          isPaused={isPaused}
+          onToggle={toggle}
+        />
+
         <div className="absolute flex size-full flex-col justify-end shadow-[inset_0_-400px_100px_-20px_rgba(0,0,0,0.4)]">
           <div className="w-full space-y-2" style={{color}}>
             <div className="px-6">
-              <h1 className="text-h3">{heading}</h1>
+              <h2 className="text-h3">{heading}</h2>
             </div>
 
             <div
@@ -127,6 +140,9 @@ export function ShoppableSocialVideo({cms}: {cms: ShoppableSocialVideoCms}) {
 
                 <Carousel
                   ariaLabel={heading || 'Shoppable products'}
+                  // Arrows give a non-drag way to change slides (WCAG 2.5.7)
+                  arrowClassName="!size-8"
+                  arrows
                   gap={12}
                   onSelect={setActiveIndex}
                   scrollbar={enabledScrollbar}

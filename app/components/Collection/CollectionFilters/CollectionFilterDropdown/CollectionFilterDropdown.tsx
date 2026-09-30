@@ -97,27 +97,27 @@ export function CollectionFilterDropdown({
     >
       {({open}) => (
         <>
-          <DisclosureButton
-            aria-label={filter.label}
-            className="relative flex min-h-12 w-full items-center justify-between gap-4 px-4 py-2 text-left"
-          >
-            <div className="flex flex-1 items-center">
-              <h3 className="text-nav">{filter.label}</h3>
+          <h3 className="m-0">
+            <DisclosureButton className="relative flex min-h-12 w-full items-center justify-between gap-4 px-4 py-2 text-left">
+              <span className="flex flex-1 items-center">
+                <span className="text-nav">{filter.label}</span>
 
-              {totalSelectedOptions > 0 && (
-                <p className="ml-1 text-2xs text-neutralMedium">
-                  ({totalSelectedOptions})
-                </p>
-              )}
-            </div>
+                {totalSelectedOptions > 0 && (
+                  <span className="ml-1 text-2xs text-neutralMedium">
+                    ({totalSelectedOptions}
+                    <span className="sr-only"> selected</span>)
+                  </span>
+                )}
+              </span>
 
-            <Svg
-              className={clsx('w-4 text-text', open && 'rotate-180')}
-              src="/svgs/chevron-down.svg#chevron-down"
-              title="Chevron"
-              viewBox="0 0 24 24"
-            />
-          </DisclosureButton>
+              <Svg
+                className={clsx('w-4 text-text', open && 'rotate-180')}
+                src="/svgs/chevron-down.svg#chevron-down"
+                title="Chevron"
+                viewBox="0 0 24 24"
+              />
+            </DisclosureButton>
+          </h3>
 
           <Transition
             show={open}

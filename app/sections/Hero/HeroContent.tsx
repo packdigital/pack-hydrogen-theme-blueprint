@@ -92,11 +92,13 @@ export function HeroContent({
             <p className="text-superheading max-lg:mb-1">{superheading}</p>
           )}
 
-          {aboveTheFold && isFirstSlide ? (
-            <h1 className="text-h1">{headingWithBreaks}</h1>
-          ) : (
-            <h2 className="text-h1">{headingWithBreaks}</h2>
-          )}
+          {/* No empty headings when the CMS heading is blank (WCAG 1.3.1) */}
+          {heading &&
+            (aboveTheFold && isFirstSlide ? (
+              <h1 className="text-h1">{headingWithBreaks}</h1>
+            ) : (
+              <h2 className="text-h1">{headingWithBreaks}</h2>
+            ))}
 
           {subheading && <p className="mt-4">{subheading}</p>}
         </div>
@@ -112,7 +114,6 @@ export function HeroContent({
               return (
                 <li key={index}>
                   <Link
-                    aria-label={link?.text}
                     className={clsx(style)}
                     to={button.clickableSlide ? null : link?.url}
                     newTab={link?.newTab}

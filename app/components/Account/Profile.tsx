@@ -3,7 +3,12 @@ import {useLocation} from 'react-router';
 import clsx from 'clsx';
 
 import {LoadingDots} from '~/components/Animations';
-import {useCustomer, useCustomerUpdateProfile, useSettings} from '~/hooks';
+import {
+  useAnnounce,
+  useCustomer,
+  useCustomerUpdateProfile,
+  useSettings,
+} from '~/hooks';
 
 interface ProfileFormElements extends HTMLFormControlsCollection {
   firstName: HTMLInputElement;
@@ -22,6 +27,7 @@ export function Profile() {
   const {account} = useSettings();
 
   const [buttonText, setButtonText] = useState('Save');
+  const announce = useAnnounce();
   const [acceptsMarketing, setAcceptsMarketing] = useState(false);
 
   const {menuItems} = {...account?.menu};
@@ -42,6 +48,7 @@ export function Profile() {
   useEffect(() => {
     if (!status.success) return;
     setButtonText('Saved!');
+    announce('Profile saved');
     setTimeout(() => setButtonText('Save'), 1000);
   }, [status.success]);
 
@@ -58,6 +65,7 @@ export function Profile() {
           <span className="input-label">First Name</span>
           <input
             className="input-text"
+            autoComplete="given-name"
             id="firstName"
             name="firstName"
             placeholder="First Name"
@@ -70,6 +78,7 @@ export function Profile() {
           <span className="input-label">Last Name</span>
           <input
             className="input-text"
+            autoComplete="family-name"
             id="lastName"
             name="lastName"
             placeholder="Last Name"
@@ -83,6 +92,7 @@ export function Profile() {
           <input
             className="input-text text-neutralMedium"
             disabled
+            autoComplete="email"
             id="email"
             name="email"
             placeholder="Email"
@@ -119,7 +129,6 @@ export function Profile() {
 
         <div className="col-span-2 flex justify-center">
           <button
-            aria-label="Save to update profile"
             className={clsx(
               'btn-primary mt-4 w-full min-w-40 md:w-auto',
               status.started && 'cursor-default',
@@ -141,10 +150,13 @@ export function Profile() {
         </div>
 
         {errors?.length > 0 && (
-          <ul className="col-span-2 mt-4 flex flex-col items-center gap-1">
+          <ul
+            className="col-span-2 mt-4 flex flex-col items-center gap-1"
+            role="alert"
+          >
             {errors.map((error, index) => {
               return (
-                <li key={index} className="text-center text-sm text-red-500">
+                <li key={index} className="text-center text-sm text-red-700">
                   {error}
                 </li>
               );

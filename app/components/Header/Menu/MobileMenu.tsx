@@ -1,4 +1,4 @@
-import {memo} from 'react';
+import {memo, useEffect, useId, useRef} from 'react';
 import clsx from 'clsx';
 
 import {Link} from '~/components/Link';
@@ -28,6 +28,23 @@ export const MobileMenu = memo(
   }: MobileMenuProps) => {
     const {header} = useSettings();
     const {openSearch} = useMenu();
+    const submenuIdPrefix = useId();
+    const triggerRefs = useRef<(HTMLButtonElement | null)[]>([]);
+    const prevSubmenuIndex = useRef<number | null>(null);
+
+    // Move focus into a submenu when it opens, and back to its trigger when it
+    // closes, so focus never sits on hidden content (WCAG 2.4.3)
+    useEffect(() => {
+      const prevIndex = prevSubmenuIndex.current;
+      prevSubmenuIndex.current = mobileSubmenuIndex;
+      if (typeof mobileSubmenuIndex === 'number') {
+        document
+          .getElementById(`${submenuIdPrefix}-${mobileSubmenuIndex}-back`)
+          ?.focus();
+      } else if (typeof prevIndex === 'number' && mobileMenuOpen) {
+        triggerRefs.current[prevIndex]?.focus();
+      }
+    }, [mobileSubmenuIndex]);
 
     const {
       links: additionalLinks,
@@ -40,14 +57,14 @@ export const MobileMenu = memo(
         : null;
     const activeSubmenuHasContent = Boolean(
       activeSubmenu &&
-        (activeSubmenu.imageLinks?.length > 0 ||
-          activeSubmenu.links?.length > 0 ||
-          !!activeSubmenu.mainLink?.text),
+      (activeSubmenu.imageLinks?.length > 0 ||
+        activeSubmenu.links?.length > 0 ||
+        !!activeSubmenu.mainLink?.text),
     );
 
     return (
       <Drawer
-        ariaName="menu drawer"
+        ariaName="menu"
         className="lg:hidden"
         onClose={handleCloseMobileMenu}
         open={mobileMenuOpen}
@@ -93,7 +110,7 @@ export const MobileMenu = memo(
               activeSubmenuHasContent ? 'invisible' : 'visible',
             )}
           >
-            <nav className="mb-8 flex">
+            <nav aria-label="Main" className="mb-8 flex">
               <ul className="flex w-full flex-col">
                 {navItems?.map((item, index) => {
                   const hasContent =
@@ -106,14 +123,18 @@ export const MobileMenu = memo(
                     >
                       {hasContent ? (
                         <button
-                          aria-label={item.navItem?.text}
+                          aria-controls={`${submenuIdPrefix}-${index}`}
+                          aria-expanded={mobileSubmenuIndex === index}
                           className="flex h-14 w-full items-center justify-between gap-5 p-4"
                           onClick={() => handleMobileSubmenu(index)}
+                          ref={(el) => {
+                            triggerRefs.current[index] = el;
+                          }}
                           type="button"
                         >
-                          <p className="text-nav flex-1 text-left">
+                          <span className="text-nav flex-1 text-left">
                             {item.navItem?.text}
-                          </p>
+                          </span>
 
                           <Svg
                             className="w-5"
@@ -124,7 +145,6 @@ export const MobileMenu = memo(
                         </button>
                       ) : (
                         <Link
-                          aria-label={item.navItem?.text}
                           className="text-nav flex h-14 w-full items-center p-4"
                           newTab={item.navItem?.newTab}
                           onClick={handleCloseMobileMenu}
@@ -148,13 +168,12 @@ export const MobileMenu = memo(
             )}
 
             {additionalLinks?.length > 0 && (
-              <nav className="mb-8">
+              <nav aria-label="Secondary" className="mb-8">
                 <ul className="flex flex-col gap-1 px-5">
                   {additionalLinks.map(({link}, index) => {
                     return (
                       <li key={index}>
                         <Link
-                          aria-label={link?.text}
                           newTab={link?.newTab}
                           onClick={handleCloseMobileMenu}
                           to={link?.url}
@@ -176,6 +195,7 @@ export const MobileMenu = memo(
             handleMobileSubmenu={handleMobileSubmenu}
             mobileSubmenuIndex={mobileSubmenuIndex}
             navItems={navItems}
+            submenuIdPrefix={submenuIdPrefix}
           />
         </div>
       </Drawer>

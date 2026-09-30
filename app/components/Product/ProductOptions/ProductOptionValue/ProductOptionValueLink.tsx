@@ -180,9 +180,13 @@ function ProductOptionValueLinkComponent({
 }: ProductOptionValueLinkComponentProps) {
   return (
     <Link
-      aria-label={optionValue.name}
+      aria-current={isVisiblySelected ? 'true' : undefined}
+      aria-disabled={isDisabled || undefined}
+      aria-label={`${optionValue.name}${!isAvailable ? ', sold out' : ''}`}
       className="group"
       preventScrollReset
+      // Stay on this control after navigating to the grouped product
+      state={{preserveFocus: true}}
       to={url}
       onClick={(e) => {
         if (isSelected || isDisabled) {

@@ -52,6 +52,8 @@ export default {
         text: 'var(--text)',
         background: 'var(--background)',
         border: 'var(--border)',
+        inputBorder: 'var(--input-border)',
+        focusRing: 'var(--focus-ring)',
         overlay: 'var(--overlay)',
       },
       animation: {

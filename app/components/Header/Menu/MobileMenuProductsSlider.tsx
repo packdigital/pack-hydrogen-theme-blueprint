@@ -38,6 +38,9 @@ export function MobileMenuProductsSlider({
 
       <Carousel
         ariaLabel={productsHeading || 'Products'}
+        // Non-drag way to change slides (WCAG 2.5.7)
+        arrowClassName="!size-8"
+        arrows
         className="mb-5"
         gap={16}
         slidesPerView={{base: 1.3}}

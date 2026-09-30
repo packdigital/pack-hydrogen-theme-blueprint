@@ -20,7 +20,7 @@ export const CollectionMobileFilters = memo(
 
     return (
       <Drawer
-        ariaName="cart drawer"
+        ariaName="filters drawer"
         className="md:hidden"
         heading="Filters"
         onClose={() => setMobileFiltersOpen(false)}

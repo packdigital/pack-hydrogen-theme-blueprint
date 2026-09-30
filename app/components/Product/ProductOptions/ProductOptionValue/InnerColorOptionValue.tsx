@@ -46,7 +46,7 @@ export function InnerColorOptionValue({
       {optionImageUrl && (
         <Image
           data={{
-            altText: optionValue.name,
+            altText: '', // the parent control is already named
             url: optionImageUrl,
           }}
           aspectRatio="1/1"

@@ -54,7 +54,9 @@ export function ProductsSlider({
         {slideCount > 0 && (
           <Carousel
             ariaLabel={heading || 'Products'}
-            arrows={slideCount > slidesPerViewDesktop}
+            // Carousel hides arrows when nothing scrolls; always offering
+            // them gives a non-drag option on mobile too (WCAG 2.5.7)
+            arrows
             className={clsx(
               'mt-10 w-full',
               maxWidthClass,

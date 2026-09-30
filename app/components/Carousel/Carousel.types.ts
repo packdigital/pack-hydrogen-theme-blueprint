@@ -42,6 +42,9 @@ export interface CarouselProps {
   /** Classes on the default arrow buttons (both). Use `!` to override the
    *  default size/border/bg/position. */
   arrowClassName?: string;
+  /** Classes on the pause/play button shown when the carousel autoplays.
+   *  Use `!` to override the default size/position (bottom-right). */
+  pauseButtonClassName?: string;
   /** Arrow icon/button color (e.g. a CMS color). Inline style — always wins. */
   arrowColor?: string;
   /** Swap the arrow icon while keeping the default button (styling, color,

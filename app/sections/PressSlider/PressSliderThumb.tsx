@@ -13,7 +13,8 @@ export function PressSliderThumb({
   return (
     <div className="relative mx-auto flex w-full max-w-32 justify-center pb-5">
       <button
-        aria-label={alt}
+        aria-current={isActive}
+        aria-label={`Show quote from ${alt}`}
         className="relative w-full overflow-hidden"
         onClick={onClick}
         style={{aspectRatio: image?.aspectRatio}}
@@ -22,7 +23,7 @@ export function PressSliderThumb({
         {image?.url && (
           <Image
             data={{
-              altText: image.altText || alt,
+              altText: '',
               url: image.url,
             }}
             width="128px"
