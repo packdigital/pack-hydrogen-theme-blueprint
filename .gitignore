@@ -17,3 +17,7 @@ tsconfig.tsbuildinfo
 
 # IntelliJ
 .idea
+
+# Playwright
+/test-results/
+/playwright-report/

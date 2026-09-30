@@ -140,7 +140,13 @@ export const ProductItem = memo(
 
           {enabledStarRating && initialProduct?.id && (
             <div className="mb-1.5">
-              <Link to={productUrl} onClick={handleClick} tabIndex={-1}>
+              {/* Mouse-only duplicate link; empty until ratings load */}
+              <Link
+                aria-hidden
+                to={productUrl}
+                onClick={handleClick}
+                tabIndex={-1}
+              >
                 <ProductStars id={initialProduct.id} />
               </Link>
             </div>
