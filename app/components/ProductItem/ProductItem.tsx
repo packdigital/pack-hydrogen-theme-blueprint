@@ -120,8 +120,10 @@ export const ProductItem = memo(
         )}
 
         <div className="flex flex-col items-start">
+          {/* Mouse-only duplicate of the title link: hidden from AT so screen
+              reader users get one link per product */}
           <Link
-            aria-label={title}
+            aria-hidden
             className="mb-3 w-full"
             to={productUrl}
             onClick={handleClick}
@@ -138,12 +140,7 @@ export const ProductItem = memo(
 
           {enabledStarRating && initialProduct?.id && (
             <div className="mb-1.5">
-              <Link
-                aria-label={`Reviews for ${title}`}
-                to={productUrl}
-                onClick={handleClick}
-                tabIndex={-1}
-              >
+              <Link to={productUrl} onClick={handleClick} tabIndex={-1}>
                 <ProductStars id={initialProduct.id} />
               </Link>
             </div>
@@ -151,7 +148,7 @@ export const ProductItem = memo(
 
           {selectedProduct ? (
             <>
-              <Link aria-label={title} to={productUrl} onClick={handleClick}>
+              <Link to={productUrl} onClick={handleClick}>
                 <h3 className="min-h-6 text-base">{title}</h3>
               </Link>
 

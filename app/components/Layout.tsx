@@ -67,16 +67,21 @@ Layout.displayName = 'Layout';
  * On client-side navigation, move focus to <main> and announce the new page
  * title, so keyboard and screen reader users aren't left on a stale link
  * (WCAG 2.4.3, 4.1.3). Query-string changes (filters, sort) are ignored.
+ * In-place navigations (e.g. picking a grouped product's color) opt out by
+ * passing `state={{preserveFocus: true}}` to the link.
  */
 function useRouteChangeFocus() {
-  const {pathname} = useLocation();
+  const {pathname, state} = useLocation();
   const announce = useAnnounce();
   const isFirstRender = useRef(true);
 
   useEffect(() => {
     if (isFirstRender.current) {
       isFirstRender.current = false;
-      return;
+      return undefined;
+    }
+    if ((state as {preserveFocus?: boolean} | null)?.preserveFocus) {
+      return undefined;
     }
     // Wait for the new route's <title> to render
     const timeout = setTimeout(() => {

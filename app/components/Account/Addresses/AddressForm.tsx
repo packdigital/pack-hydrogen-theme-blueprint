@@ -104,6 +104,7 @@ export function AddressForm({
           <span className="input-label">First Name</span>
           <input
             className="input-text"
+            autoComplete="given-name"
             id="firstName"
             name="firstName"
             placeholder="First Name"
@@ -116,6 +117,7 @@ export function AddressForm({
           <span className="input-label">Last Name</span>
           <input
             className="input-text"
+            autoComplete="family-name"
             id="lastName"
             name="lastName"
             placeholder="Last Name"
@@ -128,6 +130,7 @@ export function AddressForm({
           <span className="input-label">Company</span>
           <input
             className="input-text"
+            autoComplete="organization"
             id="company"
             name="company"
             placeholder="Company"
@@ -139,6 +142,7 @@ export function AddressForm({
           <span className="input-label">Address 1</span>
           <input
             className="input-text"
+            autoComplete="address-line1"
             id="address1"
             name="address1"
             placeholder="Address 1"
@@ -151,6 +155,7 @@ export function AddressForm({
           <span className="input-label">Address 2</span>
           <input
             className="input-text"
+            autoComplete="address-line2"
             id="address2"
             name="address2"
             placeholder="Address 2"
@@ -162,6 +167,7 @@ export function AddressForm({
           <span className="input-label">City</span>
           <input
             className="input-text"
+            autoComplete="address-level2"
             id="city"
             name="city"
             placeholder="City"
@@ -189,6 +195,7 @@ export function AddressForm({
           <span className="input-label">Zip</span>
           <input
             className="input-text"
+            autoComplete="postal-code"
             id="zip"
             name="zip"
             placeholder="Zip"
@@ -218,6 +225,7 @@ export function AddressForm({
           <span className="input-label">Phone</span>
           <input
             className="input-text"
+            autoComplete="tel"
             id="phone"
             name="phoneNumber"
             placeholder="Phone"
@@ -239,11 +247,7 @@ export function AddressForm({
           <span className="ml-2 text-sm">Set as default address</span>
         </label>
 
-        <input
-          type="hidden"
-          name="isDefault"
-          value={`${isDefault}`}
-        />
+        <input type="hidden" name="isDefault" value={`${isDefault}`} />
 
         {!!initialAddress?.id && (
           <input type="hidden" name="id" value={initialAddress.id} />
@@ -273,10 +277,13 @@ export function AddressForm({
         </div>
 
         {errors?.length > 0 && (
-          <ul className="col-span-2 mt-4 flex flex-col items-center gap-1">
+          <ul
+            className="col-span-2 mt-4 flex flex-col items-center gap-1"
+            role="alert"
+          >
             {errors.map((error, index) => {
               return (
-                <li key={index} className="text-center text-sm text-red-500">
+                <li key={index} className="text-center text-sm text-red-700">
                   {error}
                 </li>
               );

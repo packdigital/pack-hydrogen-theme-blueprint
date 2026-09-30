@@ -19,7 +19,8 @@ export const ProductMediaThumbnail = memo(
   }: ProductMediaThumbnailProps) => {
     return (
       <button
-        aria-label={`Slide to product image ${index + 1}`}
+        aria-current={isActive}
+        aria-label={`Show ${mediaContentType === 'VIDEO' ? 'video' : 'image'} ${index + 1}`}
         className={clsx(
           'relative flex aspect-square w-full select-none items-center justify-center overflow-hidden rounded border transition',
           isActive ? 'border-black' : 'border-transparent',
@@ -30,7 +31,7 @@ export const ProductMediaThumbnail = memo(
         <Image
           data={{
             url: image?.url,
-            altText: alt || image?.altText,
+            altText: '', // the button is named; the image is decorative
           }}
           aspectRatio="1/1"
           className="w-full"
@@ -42,7 +43,6 @@ export const ProductMediaThumbnail = memo(
           <Svg
             className="absolute left-1/2 top-1/2 w-1/3 -translate-x-1/2 -translate-y-1/2 text-white"
             src="/svgs/play.svg#play"
-            title="Play"
             viewBox="0 0 24 24"
           />
         )}

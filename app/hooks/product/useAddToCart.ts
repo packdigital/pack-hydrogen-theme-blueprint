@@ -5,7 +5,13 @@ import type {
   SellingPlan,
 } from '@shopify/hydrogen/storefront-api-types';
 
-import {useCart, useMenu, useRootLoaderData, useSettings} from '~/hooks';
+import {
+  useAnnounce,
+  useCart,
+  useMenu,
+  useRootLoaderData,
+  useSettings,
+} from '~/hooks';
 
 /**
  * Add to cart hook
@@ -60,6 +66,7 @@ export function useAddToCart({
   const {isPreviewModeEnabled} = useRootLoaderData();
   const {product: productSettings} = useSettings();
   const {openCart, openModal} = useMenu();
+  const announce = useAnnounce();
 
   const [isAdding, setIsAdding] = useState(false);
   const [isAdded, setIsAdded] = useState(false);
@@ -114,17 +121,25 @@ export function useAddToCart({
         sellingPlanId,
       },
     ]);
-    if (data) {
-      if (data.userErrors?.length) {
-        setIsAdding(false);
-        setFailed(true);
-        setTimeout(() => setFailed(false), 3000);
-      } else {
-        setIsAdding(false);
-        setIsAdded(true);
-        openCart();
-        setTimeout(() => setIsAdded(false), 1000);
-      }
+    const productTitle = selectedVariant.product?.title;
+    if (!data || data.userErrors?.length) {
+      // No response is a failure too; otherwise the button stays "adding"
+      setIsAdding(false);
+      setFailed(true);
+      setTimeout(() => setFailed(false), 3000);
+      const errorMessage = data?.userErrors?.[0]?.message;
+      announce(
+        `Couldn't add ${productTitle || 'item'} to cart.${
+          errorMessage ? ` ${errorMessage}` : ' Please try again.'
+        }`,
+        'assertive',
+      );
+    } else {
+      setIsAdding(false);
+      setIsAdded(true);
+      announce(`${productTitle || 'Item'} added to cart`);
+      openCart();
+      setTimeout(() => setIsAdded(false), 1000);
     }
   }, [
     attributes,

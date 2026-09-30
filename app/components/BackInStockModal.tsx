@@ -1,9 +1,15 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useId, useState} from 'react';
 import {parseGid} from '@shopify/hydrogen';
 import clsx from 'clsx';
 
 import {LoadingDots} from '~/components/Animations';
-import {useBackInStock, useCustomer, useMenu, useSettings} from '~/hooks';
+import {
+  useAnnounce,
+  useBackInStock,
+  useCustomer,
+  useMenu,
+  useSettings,
+} from '~/hooks';
 import type {SelectedVariant} from '~/lib/types';
 
 interface BackInStockModalProps {
@@ -26,6 +32,9 @@ export function BackInStockModal({selectedVariant}: BackInStockModalProps) {
     customer?.emailAddress?.emailAddress || '',
   );
   const [message, setMessage] = useState('');
+  const emailId = useId();
+  const messageId = useId();
+  const announce = useAnnounce();
   const {heading, subtext, submitText, successText} = {
     ...productSettings?.backInStock,
   };
@@ -34,7 +43,10 @@ export function BackInStockModal({selectedVariant}: BackInStockModalProps) {
     if (!submittedAt) return;
     if (success) {
       setEmail('');
-      setMessage(successText || apiMessage || 'Thank you!');
+      const successMessage = successText || apiMessage || 'Thank you!';
+      setMessage(successMessage);
+      // The modal auto-closes, so announce globally rather than in the modal
+      announce(successMessage);
       setTimeout(() => {
         setMessage('');
         closeModal();
@@ -65,8 +77,14 @@ export function BackInStockModal({selectedVariant}: BackInStockModalProps) {
           handleSubmit({email, variantId});
         }}
       >
+        <label className="sr-only" htmlFor={emailId}>
+          Email address
+        </label>
         <input
+          aria-describedby={message ? messageId : undefined}
+          autoComplete="email"
           className="input-text text-text md:max-w-screen-xs"
+          id={emailId}
           name="email"
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Enter your email..."
@@ -75,11 +93,7 @@ export function BackInStockModal({selectedVariant}: BackInStockModalProps) {
           value={email}
         />
 
-        <button
-          aria-label="Notify Me"
-          className="btn-primary mt-3 max-md:w-full"
-          type="submit"
-        >
+        <button className="btn-primary mt-3 max-md:w-full" type="submit">
           <span className={clsx(isSubmitting ? 'invisible' : 'visible')}>
             {submitText}
           </span>
@@ -94,7 +108,10 @@ export function BackInStockModal({selectedVariant}: BackInStockModalProps) {
         </button>
       </form>
 
-      {message && <p>{message}</p>}
+      {/* Always mounted so the result is announced (WCAG 4.1.3) */}
+      <div aria-live="polite" id={messageId} role="status">
+        {message && <p>{message}</p>}
+      </div>
     </div>
   );
 }

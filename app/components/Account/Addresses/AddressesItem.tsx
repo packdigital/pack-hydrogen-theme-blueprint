@@ -68,7 +68,7 @@ export function AddressesItem({
 
           <button
             aria-label="Delete address"
-            className="text-nav text-main-underline font-normal text-red-500"
+            className="text-nav text-main-underline font-normal text-red-700"
             onClick={() => setIsDeleteConfirm(true)}
             type="button"
           >

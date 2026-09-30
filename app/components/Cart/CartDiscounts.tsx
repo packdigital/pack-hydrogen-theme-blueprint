@@ -89,7 +89,7 @@ export const CartDiscounts = memo(() => {
       </form>
 
       {message && (
-        <div className="text-xs text-red-500" role="alert">
+        <div className="text-xs text-red-700" role="alert">
           {message}
         </div>
       )}

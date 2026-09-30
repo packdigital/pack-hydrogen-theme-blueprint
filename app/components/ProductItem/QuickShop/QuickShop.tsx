@@ -48,7 +48,7 @@ export const QuickShop = memo(
     return qualifiesForQuickShop && selectedVariant ? (
       <div
         className={clsx(
-          'mt-5 transition md:block md:opacity-0 md:group-hover:opacity-100 lg:mt-6',
+          'mt-5 transition md:block md:opacity-0 md:focus-within:opacity-100 md:group-hover:opacity-100 lg:mt-6',
           quickShopMobileHidden && 'max-md:hidden',
         )}
       >

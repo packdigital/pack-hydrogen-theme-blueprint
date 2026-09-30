@@ -55,13 +55,20 @@ export function CustomerAccountLayout({children}: {children: React.ReactNode}) {
           </div>
 
           {/* desktop nav */}
-          <nav className="hidden border-b border-b-border py-6 md:block">
+          <nav
+            aria-label="Account"
+            className="hidden border-b border-b-border py-6 md:block"
+          >
             <ul className="flex flex-col items-start md:gap-4 lg:gap-6">
               {menuItems?.map(({link}, index) => {
                 return link?.text ? (
                   <li key={index}>
                     <Link
-                      aria-label={link.text}
+                      aria-current={
+                        link.url === activeMenuItem?.link?.url
+                          ? 'page'
+                          : undefined
+                      }
                       to={link.url}
                       newTab={link.newTab}
                       type={link.type}
@@ -79,11 +86,13 @@ export function CustomerAccountLayout({children}: {children: React.ReactNode}) {
           {/* mobile nav */}
           <Menu as="div" className="relative w-full md:hidden">
             <MenuButton
-              aria-label="Open account menu"
               className="flex h-14 w-full items-center justify-between gap-4 rounded border border-neutralLight px-5 text-base"
               type="button"
             >
-              <p>{activeMenuItem?.link?.text}</p>
+              <span>
+                <span className="sr-only">Account menu: </span>
+                {activeMenuItem?.link?.text}
+              </span>
 
               <Svg
                 className="w-4 text-text ui-open:rotate-180"

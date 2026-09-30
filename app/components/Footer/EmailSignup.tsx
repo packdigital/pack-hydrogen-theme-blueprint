@@ -1,4 +1,4 @@
-import {memo} from 'react';
+import {memo, useId} from 'react';
 import clsx from 'clsx';
 
 import {LoadingDots} from '~/components/Animations';
@@ -26,6 +26,8 @@ export const EmailSignup = memo(
 
     const {formRef, handleSubmit, message, isSubmitting, submitted} =
       useMarketingListSubscribe({listId});
+    const emailId = useId();
+    const messageId = useId();
 
     return enabled ? (
       <form
@@ -39,19 +41,21 @@ export const EmailSignup = memo(
           <p className="mt-2 text-base text-current md:text-sm">{subtext}</p>
         )}
 
+        <label className="sr-only" htmlFor={emailId}>
+          Email address
+        </label>
         <input
+          aria-describedby={message ? messageId : undefined}
+          autoComplete="email"
           className="input-text mt-6 text-text"
+          id={emailId}
           name="email"
           placeholder={placeholder}
           required
           type="email"
         />
 
-        <button
-          aria-label={buttonText}
-          className="btn-primary mt-3 w-full"
-          type="submit"
-        >
+        <button className="btn-primary mt-3 w-full" type="submit">
           <span className={clsx(isSubmitting ? 'invisible' : 'visible')}>
             {buttonText}
           </span>
@@ -65,7 +69,13 @@ export const EmailSignup = memo(
           )}
         </button>
 
-        <div className="pointer-events-none mt-3 min-h-5">
+        {/* Always mounted so the result is announced (WCAG 4.1.3) */}
+        <div
+          aria-live="polite"
+          className="pointer-events-none mt-3 min-h-5"
+          id={messageId}
+          role="status"
+        >
           {message && (
             <p className="pointer-events-auto text-sm">
               {submitted ? thankYouText : message}

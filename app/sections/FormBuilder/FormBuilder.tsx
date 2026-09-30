@@ -124,9 +124,9 @@ export function FormBuilder({cms}: {cms: FormBuilderCms}) {
               </button>
 
               {errors?.length > 0 && (
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-col gap-1" role="alert">
                   {errors.map((error) => (
-                    <p key={error} className="text-red-500">
+                    <p key={error} className="text-red-700">
                       {error}
                     </p>
                   ))}

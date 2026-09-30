@@ -43,7 +43,13 @@ export const QuickShopOption = memo(
 
     return (
       <button
-        aria-label={optionValue.name}
+        aria-label={
+          isNotifyMe
+            ? `${optionValue.name}, sold out. Notify me when back in stock`
+            : `Add ${optionName} ${optionValue.name} to cart${
+                isSoldOut ? ', sold out' : ''
+              }`
+        }
         className={clsx(
           'group/option relative flex size-full items-center justify-center whitespace-nowrap text-center text-sm transition',
           isPreorder ? 'bg-primary/10 border-primary' : '',
@@ -51,7 +57,7 @@ export const QuickShopOption = memo(
           unavailableClass,
           isUpdatingClass,
         )}
-        disabled={disabled || isSoldOut}
+        disabled={disabled || (isSoldOut && !isNotifyMe)}
         onClick={() => {
           if (isNotifyMe) {
             handleNotifyMe(<BackInStockModal selectedVariant={variantToAdd} />);
