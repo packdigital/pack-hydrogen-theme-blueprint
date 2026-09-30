@@ -24,7 +24,10 @@ export const Modal = memo(() => {
       const heading = panel.querySelector('h1, h2, h3, h4, h5, h6');
       if (!heading) return;
       if (!heading.id) heading.id = fallbackHeadingId;
-      panel.setAttribute('aria-labelledby', heading.id);
+      // role="dialog" is on the Dialog wrapper, not the panel
+      panel
+        .closest('[role="dialog"]')
+        ?.setAttribute('aria-labelledby', heading.id);
     },
     [modal.children],
   );

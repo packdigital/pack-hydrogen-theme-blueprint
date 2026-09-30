@@ -54,6 +54,9 @@ export function Drawer({
   return (
     <Transition appear show={open} as={Fragment} unmount={unmount}>
       <Dialog
+        // A string heading names the dialog via DialogTitle;
+        // otherwise fall back to ariaName
+        aria-label={typeof heading === 'string' ? undefined : ariaName}
         as="div"
         className={clsx('relative z-50', className)}
         unmount={unmount}
@@ -92,11 +95,6 @@ export function Drawer({
                 unmount={unmount}
               >
                 <DialogPanel
-                  // A string heading names the dialog via DialogTitle;
-                  // otherwise fall back to ariaName
-                  aria-label={
-                    typeof heading === 'string' ? undefined : ariaName
-                  }
                   data-comp={Drawer.displayName}
                   className="flex h-[var(--viewport-height)] w-screen flex-col justify-between overflow-hidden bg-background align-middle shadow-xl transition-all md:max-w-[var(--drawer-width)]"
                 >

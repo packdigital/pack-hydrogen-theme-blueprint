@@ -12,7 +12,9 @@ export const NavigationCart = memo(
     return (
       <div className="relative flex items-center">
         <button
-          aria-label="Open cart"
+          aria-label={`Open cart, ${totalQuantity || 0} ${
+            totalQuantity === 1 ? 'item' : 'items'
+          }`}
           className={clsx('w-5 text-text', className)}
           onClick={openCart}
           style={{color}}
@@ -27,6 +29,7 @@ export const NavigationCart = memo(
         </button>
 
         <p
+          aria-hidden
           className="text-label-sm w-4 whitespace-nowrap pl-px font-bold text-current"
           style={{color}}
         >

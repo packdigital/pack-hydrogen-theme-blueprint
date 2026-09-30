@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import {usePromobar} from '~/hooks';
 
 import {Navigation, TransparentNavigation} from './Navigation';
-import {DesktopMenu, MobileMenu} from './Menu';
+import {MobileMenu} from './Menu';
 import {Promobar} from './Promobar';
 import {useDesktopMenu} from './useDesktopMenu';
 import {useMobileMenu} from './useMobileMenu';
@@ -38,8 +38,6 @@ export const Header = memo(() => {
       <Promobar />
 
       <Navigation {...desktopMenuContext} {...mobileMenuContext} />
-
-      <DesktopMenu {...desktopMenuContext} />
 
       <MobileMenu {...mobileMenuContext} />
     </header>
