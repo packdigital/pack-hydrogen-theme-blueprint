@@ -33,7 +33,7 @@ export const EmailSignup = memo(
         onSubmit={handleSubmit}
         ref={formRef}
       >
-        <h3 className="text-nav text-current">{heading}</h3>
+        <h2 className="text-nav text-current">{heading}</h2>
 
         {subtext && (
           <p className="mt-2 text-base text-current md:text-sm">{subtext}</p>

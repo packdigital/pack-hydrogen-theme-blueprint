@@ -77,7 +77,7 @@ export function AddressesItem({
         </div>
 
         {isDefaultAddress && (
-          <p className="text-nav text-right text-neutralLight">Default</p>
+          <p className="text-nav text-right text-neutralMedium">Default</p>
         )}
       </div>
 

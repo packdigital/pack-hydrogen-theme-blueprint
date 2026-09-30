@@ -10,7 +10,9 @@
   /* Css variable colors */
   --background: #ffffff;
   --text: #000000;
-  --border: #e8e8e8;
+  --border: #e8e8e8; /* decorative dividers only */
+  --input-border: #8a8a8a; /* form control borders: keep >= 3:1 vs background (WCAG 1.4.11) */
+  --focus-ring: #005fcc; /* keyboard focus indicator: keep >= 3:1 vs background (WCAG 2.4.7) */
 
   --primary: #008464;
   --secondary: #8164bf;
@@ -114,6 +116,29 @@
 
   h6 {
     @apply text-h6;
+  }
+
+  /* Visible keyboard focus for every interactive element (WCAG 2.4.7) */
+  :focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+
+  /* Programmatic focus targets (e.g. <main tabIndex={-1}>) need no ring */
+  [tabindex='-1']:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  /* Respect reduced-motion preferences (WCAG 2.3.3) */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      scroll-behavior: auto !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 
   input::-webkit-outer-spin-button,
@@ -305,7 +330,11 @@
       md:hover:text-[var(--inverse-dark-btn-hover-text-color)];
   }
   .btn-select {
-    @apply relative flex h-12 items-center justify-center overflow-hidden rounded border border-border bg-white px-5 py-3 text-sm text-text transition md:hover:bg-neutralLightest;
+    @apply relative flex h-12 items-center justify-center overflow-hidden rounded border border-inputBorder bg-white px-5 py-3 text-sm text-text transition md:hover:bg-neutralLightest;
+  }
+  /* Skip link: hidden until focused (WCAG 2.4.1) */
+  .skip-link {
+    @apply sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:bg-background focus:px-4 focus:py-3 focus:text-text focus:shadow-lg;
   }
   /* underline specific */
   .hover-text-underline {
@@ -351,7 +380,7 @@
       w-full
       rounded
       border
-      border-border
+      border-inputBorder
       px-3.5
       py-2.5
       text-base;

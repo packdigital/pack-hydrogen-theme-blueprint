@@ -1,3 +1,5 @@
+import {useEffect, useRef} from 'react';
+import {useLocation} from 'react-router';
 import clsx from 'clsx';
 import type {ReactNode} from 'react';
 
@@ -9,6 +11,7 @@ import {Modal} from '~/components/Modal';
 import {ProductModal} from '~/components/Product/ProductModal';
 import {Search} from '~/components/Search';
 import {
+  useAnnounce,
   useCartAddDiscountUrl,
   usePromobar,
   useScrollToHashOnNavigation,
@@ -20,6 +23,7 @@ export function Layout({children}: {children: ReactNode}) {
   useCartAddDiscountUrl();
   useScrollToHashOnNavigation();
   useSetViewportHeightCssVar();
+  useRouteChangeFocus();
 
   return (
     <>
@@ -29,12 +33,16 @@ export function Layout({children}: {children: ReactNode}) {
         className="flex h-[var(--viewport-height)] flex-col"
         data-comp={Layout.displayName}
       >
+        <a className="skip-link" href="#mainContent">
+          Skip to content
+        </a>
+
         <Header />
 
         <main
-          role="main"
           id="mainContent"
           className={clsx('grow', mainPaddingTopClass)}
+          tabIndex={-1}
         >
           {children}
         </main>
@@ -54,3 +62,27 @@ export function Layout({children}: {children: ReactNode}) {
 }
 
 Layout.displayName = 'Layout';
+
+/**
+ * On client-side navigation, move focus to <main> and announce the new page
+ * title, so keyboard and screen reader users aren't left on a stale link
+ * (WCAG 2.4.3, 4.1.3). Query-string changes (filters, sort) are ignored.
+ */
+function useRouteChangeFocus() {
+  const {pathname} = useLocation();
+  const announce = useAnnounce();
+  const isFirstRender = useRef(true);
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    // Wait for the new route's <title> to render
+    const timeout = setTimeout(() => {
+      document.getElementById('mainContent')?.focus({preventScroll: true});
+      if (document.title) announce(document.title);
+    }, 100);
+    return () => clearTimeout(timeout);
+  }, [pathname]);
+}

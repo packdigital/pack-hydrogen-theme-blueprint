@@ -7,7 +7,7 @@ export function FooterSocial({settings}: {settings: Settings['footer']}) {
 
   return links?.length > 0 ? (
     <div className="text-current">
-      {heading && <h3 className="text-nav mb-3">{heading}</h3>}
+      {heading && <h2 className="text-nav mb-3">{heading}</h2>}
 
       <ul className="flex flex-wrap gap-3.5">
         {links.map(({platform, url}, index) => {

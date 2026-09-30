@@ -1,4 +1,4 @@
-import {Fragment, memo} from 'react';
+import {Fragment, memo, useCallback, useId} from 'react';
 import {
   Dialog,
   DialogPanel,
@@ -14,6 +14,20 @@ export const Modal = memo(() => {
   const {modal, closeModal} = useMenu();
 
   const {className = '', ...props} = {...modal.props};
+  const fallbackHeadingId = useId();
+
+  // Name the dialog after the first heading in its content (WCAG 4.1.2),
+  // unless the caller passed aria-label/aria-labelledby via modal props
+  const panelRef = useCallback(
+    (panel: HTMLElement | null) => {
+      if (!panel || props['aria-label'] || props['aria-labelledby']) return;
+      const heading = panel.querySelector('h1, h2, h3, h4, h5, h6');
+      if (!heading) return;
+      if (!heading.id) heading.id = fallbackHeadingId;
+      panel.setAttribute('aria-labelledby', heading.id);
+    },
+    [modal.children],
+  );
 
   return modal.children ? (
     <Transition appear show={!!modal.children} as={Fragment}>
@@ -41,7 +55,7 @@ export const Modal = memo(() => {
           leaveTo="transform scale-95 opacity-0"
         >
           <DialogPanel
-            as="aside"
+            ref={panelRef}
             className={clsx(
               'fixed left-1/2 top-1/2 z-50 max-h-[calc(var(--viewport-height)-2rem)] w-[calc(100%-2rem)] max-w-screen-md -translate-x-1/2 -translate-y-1/2 overflow-hidden bg-background',
               className,

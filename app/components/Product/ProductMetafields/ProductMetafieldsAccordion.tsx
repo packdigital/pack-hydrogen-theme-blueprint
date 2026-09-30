@@ -22,7 +22,6 @@ export const ProductMetafieldsAccordion = memo(
         {({open}) => (
           <>
             <DisclosureButton
-              aria-label={`${open ? 'Close' : 'Open'} accordion for ${title}`}
               className="flex h-14 w-full items-center justify-between gap-x-4 bg-neutralLightest p-4"
               type="button"
             >

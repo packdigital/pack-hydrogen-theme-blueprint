@@ -92,6 +92,9 @@ export const Link = forwardRef(
       pathPrefix,
     });
 
+    const NEW_TAB_TEXT = 'opens in a new tab';
+    const ariaLabel = props['aria-label'];
+
     return finalHref ? (
       <ReactRouterLink
         className={className}
@@ -103,13 +106,31 @@ export const Link = forwardRef(
         replace={replace}
         state={state}
         to={finalHref}
-        {...(newTab ? {target: '_blank'} : null)}
         {...props}
+        {...(newTab
+          ? {
+              target: '_blank',
+              rel: 'noopener noreferrer',
+              ...(ariaLabel
+                ? {'aria-label': `${ariaLabel} (${NEW_TAB_TEXT})`}
+                : null),
+            }
+          : null)}
       >
         {children || text}
+        {newTab && !ariaLabel && (
+          <span className="sr-only"> ({NEW_TAB_TEXT})</span>
+        )}
       </ReactRouterLink>
     ) : (
-      <div className={className} ref={ref} {...props}>
+      // No href: render a plain container. aria-label is not valid on a
+      // generic div, so it is dropped here.
+      <div
+        className={className}
+        ref={ref as unknown as React.Ref<HTMLDivElement>}
+        {...(props as React.HTMLAttributes<HTMLDivElement>)}
+        aria-label={undefined}
+      >
         {children || text}
       </div>
     );
