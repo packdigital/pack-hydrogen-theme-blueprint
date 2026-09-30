@@ -30,65 +30,68 @@ export const Pagination = memo(
     });
 
     return (
-      <ul className="flex gap-2">
-        <li>
-          <button
-            aria-label="Go to previous page"
-            className="disabled:opacity-50"
-            disabled={currentPage === pages[0]}
-            onClick={handlePrevClick}
-            type="button"
-          >
-            Prev
-          </button>
-        </li>
+      <nav aria-label="Pagination">
+        <ul className="flex gap-2">
+          <li>
+            <button
+              aria-label="Go to previous page"
+              className="disabled:opacity-50"
+              disabled={currentPage === pages[0]}
+              onClick={handlePrevClick}
+              type="button"
+            >
+              Prev
+            </button>
+          </li>
 
-        {pages.map((page, index) => {
-          const isActivePage = currentPage === page;
-          return (
-            <li key={index}>
-              {page === 'right' || page === 'left' ? (
-                <button
-                  aria-label={`Jump to more ${
-                    page === 'right' ? 'previous' : 'next'
-                  } pages`}
-                  onClick={
-                    page === 'right'
-                      ? handlePrevSpillClick
-                      : handleNextSpillClick
-                  }
-                  type="button"
-                >
-                  ...
-                </button>
-              ) : (
-                <button
-                  aria-label={`Go to page ${page}`}
-                  className={clsx(
-                    isActivePage && 'underline underline-offset-2',
-                  )}
-                  onClick={() => handlePageClick(page)}
-                  type="button"
-                >
-                  {page}
-                </button>
-              )}
-            </li>
-          );
-        })}
+          {pages.map((page, index) => {
+            const isActivePage = currentPage === page;
+            return (
+              <li key={index}>
+                {page === 'right' || page === 'left' ? (
+                  <button
+                    aria-label={`Jump to more ${
+                      page === 'left' ? 'previous' : 'next'
+                    } pages`}
+                    onClick={
+                      page === 'left'
+                        ? handlePrevSpillClick
+                        : handleNextSpillClick
+                    }
+                    type="button"
+                  >
+                    ...
+                  </button>
+                ) : (
+                  <button
+                    aria-current={isActivePage ? 'page' : undefined}
+                    aria-label={`Go to page ${page}`}
+                    className={clsx(
+                      isActivePage && 'underline underline-offset-2',
+                    )}
+                    onClick={() => handlePageClick(page)}
+                    type="button"
+                  >
+                    {page}
+                  </button>
+                )}
+              </li>
+            );
+          })}
 
-        <li>
-          <button
-            aria-label="Go to previous page"
-            className="disabled:opacity-50"
-            disabled={currentPage === pages[pages.length - 1]}
-            onClick={handleNextClick}
-            type="button"
-          >
-            Next
-          </button>
-        </li>
-      </ul>
+          <li>
+            <button
+              aria-label="Go to next page"
+              className="disabled:opacity-50"
+              disabled={currentPage === pages[pages.length - 1]}
+              onClick={handleNextClick}
+              type="button"
+            >
+              Next
+            </button>
+          </li>
+        </ul>
+      </nav>
     );
   },
 );

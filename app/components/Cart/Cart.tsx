@@ -47,9 +47,9 @@ export const Cart = memo(() => {
     >
       <FreeShippingMeter settings={cartSettings} />
 
-      <ul className="scrollbar-hide relative flex-1 overflow-y-auto">
-        {cartLines?.length ? (
-          cartLines.map((line) => {
+      {cartLines?.length ? (
+        <ul className="scrollbar-hide relative flex-1 overflow-y-auto">
+          {cartLines.map((line) => {
             return (
               <li
                 key={line.id}
@@ -58,11 +58,13 @@ export const Cart = memo(() => {
                 <CartLine line={line} closeCart={closeCart} />
               </li>
             );
-          })
-        ) : (
+          })}
+        </ul>
+      ) : (
+        <div className="scrollbar-hide relative flex-1 overflow-y-auto">
           <CartEmpty closeCart={closeCart} settings={cartSettings} />
-        )}
-      </ul>
+        </div>
+      )}
 
       {hasCartLines && (
         <>

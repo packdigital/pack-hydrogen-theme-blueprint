@@ -171,9 +171,8 @@ export function AddressForm({
         </label>
 
         <div className="z-[11] col-span-2 sm:col-span-1">
-          <p className="input-label">State/Province</p>
-
           <Select
+            label="State/Province"
             name="zoneCode"
             onSelect={({value}) => setProvince(value || '')}
             options={provinces || []}
@@ -199,9 +198,8 @@ export function AddressForm({
         </label>
 
         <div className="col-span-2 sm:col-span-1">
-          <p className="input-label">Country</p>
-
           <Select
+            label="Country"
             name="territoryCode"
             onSelect={({value}) => {
               setCountry(value || '');
@@ -228,12 +226,13 @@ export function AddressForm({
         </label>
 
         <label
-          htmlFor="isDefault"
+          htmlFor="isDefaultCheckbox"
           className="col-span-2 mt-2 flex items-center"
         >
           <input
             checked={isDefault}
             className="cursor-pointer"
+            id="isDefaultCheckbox"
             onChange={(e) => setIsDefault(e.target.checked)}
             type="checkbox"
           />
@@ -242,7 +241,6 @@ export function AddressForm({
 
         <input
           type="hidden"
-          id="isDefault"
           name="isDefault"
           value={`${isDefault}`}
         />
