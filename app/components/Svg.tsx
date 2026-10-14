@@ -6,27 +6,48 @@ import {forwardRef} from 'react';
 // Styles within an svg file within a <style> tag will not work
 // Instead use style prop, e.g. <path style="stroke-width:10;" ... />
 
+// Accessibility: icons are decorative by default (hidden from screen readers).
+// Label the parent button/link instead, e.g. <button aria-label="Close">.
+// Only pass `accessibleLabel` when the icon itself conveys meaning that no
+// surrounding text does.
+
 interface SvgProps {
+  /** Makes the icon meaningful: renders role="img" with this name */
+  accessibleLabel?: string;
   className?: string;
   src: string;
   style?: React.CSSProperties;
+  /** @deprecated Ignored. Icons are decorative; use `accessibleLabel` */
   title?: string;
   viewBox: string;
 }
 
 export const Svg = forwardRef(
   (
-    {className, src, title, viewBox, ...props}: SvgProps,
+    {
+      accessibleLabel,
+      className,
+      src,
+      title: _title,
+      viewBox,
+      ...props
+    }: SvgProps,
     ref: React.ForwardedRef<SVGSVGElement>,
   ) => {
+    const a11yProps = accessibleLabel
+      ? {role: 'img', 'aria-label': accessibleLabel}
+      : {'aria-hidden': true};
+
     return (
       <svg
         ref={ref}
         viewBox={viewBox}
         className={className || 'size-full'}
+        focusable="false"
+        {...a11yProps}
         {...props}
       >
-        {title && <title>{title}</title>}
+        {accessibleLabel && <title>{accessibleLabel}</title>}
 
         <use href={src} className="pointer-events-none" />
       </svg>
@@ -36,11 +57,7 @@ export const Svg = forwardRef(
 
 Svg.displayName = 'Svg';
 Svg.propTypes = {
-  src(
-    props: Record<string, string>,
-    propName: string,
-    componentName: string,
-  ) {
+  src(props: Record<string, string>, propName: string, componentName: string) {
     if (!props[propName]) {
       return new Error(
         `The prop \`${propName}\` is marked as required in \`${componentName}\`, but its value is \`${props[propName]}\`.`,

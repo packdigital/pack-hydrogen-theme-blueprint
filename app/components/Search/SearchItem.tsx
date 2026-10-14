@@ -62,11 +62,15 @@ export const SearchItem = memo(
 
           <div className="flex flex-wrap gap-x-1.5">
             {compareAtPrice && (
-              <p className="text-sm text-neutralMedium line-through">
-                {compareAtPrice}
+              <p className="text-sm text-neutralMedium">
+                <span className="sr-only">Regular price </span>
+                <s>{compareAtPrice}</s>
               </p>
             )}
-            <p className="min-h-5 text-sm">{price}</p>
+            <p className="min-h-5 text-sm">
+              {compareAtPrice && <span className="sr-only">Sale price </span>}
+              {price}
+            </p>
           </div>
         </div>
       </Link>

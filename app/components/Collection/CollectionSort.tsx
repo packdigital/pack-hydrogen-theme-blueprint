@@ -132,6 +132,8 @@ export const CollectionSort = memo(
       <div className="ml-auto w-full md:w-auto md:min-w-32">
         <Select
           className="[&>button]:max-md:pl-4 [&>button]:max-md:pr-2.5"
+          hideLabel
+          label="Sort by"
           onSelect={handleSort}
           options={options}
           placeholder="Sort"

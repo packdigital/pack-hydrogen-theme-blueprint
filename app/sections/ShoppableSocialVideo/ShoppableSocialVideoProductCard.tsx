@@ -172,9 +172,9 @@ export function ShoppableSocialVideoProductCard({
                   </div>
                 )}
 
-                <h1 className="text-h5 theme-product-card-text-color flex-1">
+                <h3 className="text-h5 theme-product-card-text-color flex-1">
                   {product?.title}
-                </h1>
+                </h3>
               </div>
 
               <button
@@ -209,11 +209,15 @@ export function ShoppableSocialVideoProductCard({
 
             <div className="theme-product-card-text-color space-x-1.5 truncate text-base">
               {compareAtPrice && (
-                <span className="line-through opacity-60">
+                <s className="opacity-60">
+                  <span className="sr-only">Regular price </span>
                   {compareAtPrice}
-                </span>
+                </s>
               )}
-              <span className="">{price}</span>
+              <span>
+                {compareAtPrice && <span className="sr-only">Sale price </span>}
+                {price}
+              </span>
             </div>
           </div>
 

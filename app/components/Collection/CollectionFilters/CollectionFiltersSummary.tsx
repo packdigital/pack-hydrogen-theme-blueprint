@@ -56,6 +56,7 @@ export const CollectionFiltersSummary = memo(
                 type="button"
               >
                 <div className="flex-1 truncate">
+                  <span className="sr-only">Remove filter </span>
                   {filterLabel && (
                     <>
                       <span className="font-bold">

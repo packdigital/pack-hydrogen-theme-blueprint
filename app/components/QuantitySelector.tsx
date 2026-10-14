@@ -38,10 +38,12 @@ export function QuantitySelector({
 }: QuantitySelectorProps) {
   return (
     <div
+      aria-label={`Quantity for ${productTitle}`}
       className={clsx(
         'flex w-full max-w-[6.5rem] items-center justify-between',
         className,
       )}
+      role="group"
     >
       <button
         aria-label={`Reduce quantity of ${productTitle} by 1 to ${
@@ -68,14 +70,20 @@ export function QuantitySelector({
 
       <div className="relative flex flex-1 items-center justify-center">
         {isUpdating ? (
-          <Spinner color="var(--neutral-light)" width="20" />
+          <>
+            <Spinner color="var(--neutral-light)" width="20" />
+            <span className="sr-only">Updating quantity</span>
+          </>
         ) : (
+          // Announces the new quantity after +/- (WCAG 4.1.3)
           <p
+            aria-live="polite"
             className={clsx(
-              'w-full text-center outline-none transition-opacity',
+              'w-full text-center transition-opacity',
               isSyncing && 'opacity-50',
             )}
           >
+            <span className="sr-only">Quantity </span>
             {quantity}
           </p>
         )}

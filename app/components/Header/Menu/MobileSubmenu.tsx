@@ -13,6 +13,8 @@ type MobileSubmenuProps = Pick<
 > & {
   activeSubmenuHasContent: boolean;
   navItems: Settings['header']['menu']['navItems'];
+  /** Submenu ids are `${prefix}-${index}`; back buttons add `-back` */
+  submenuIdPrefix: string;
 };
 
 export function MobileSubmenu({
@@ -21,6 +23,7 @@ export function MobileSubmenu({
   handleMobileSubmenu,
   mobileSubmenuIndex,
   navItems,
+  submenuIdPrefix,
 }: MobileSubmenuProps) {
   return (
     <div
@@ -37,16 +40,18 @@ export function MobileSubmenu({
 
         return (
           <nav
+            aria-label={navItem?.text}
             className={clsx(
               'scrollbar-hide size-full overflow-y-auto',
               !isActiveSubmenu && 'hidden',
             )}
+            id={`${submenuIdPrefix}-${index}`}
             inert={!isActiveSubmenu}
             key={index}
           >
             <button
-              aria-label="Go back to main menu"
               className="sticky top-0 z-[1] flex h-14 w-full items-center justify-between gap-4 border-b border-b-border bg-background p-4"
+              id={`${submenuIdPrefix}-${index}-back`}
               onClick={() => handleMobileSubmenu(null)}
               type="button"
             >
@@ -57,7 +62,10 @@ export function MobileSubmenu({
                 viewBox="0 0 24 24"
               />
 
-              <h3 className="text-nav flex-1 text-left">{navItem?.text}</h3>
+              <span className="text-nav flex-1 text-left">
+                <span className="sr-only">Back to main menu: </span>
+                {navItem?.text}
+              </span>
             </button>
 
             <div className="px-4 pt-5">
@@ -66,7 +74,6 @@ export function MobileSubmenu({
                   return (
                     <li key={index}>
                       <Link
-                        aria-label={link?.text}
                         className="hover-text-underline"
                         newTab={link?.newTab}
                         onClick={handleCloseMobileMenu}
@@ -82,7 +89,6 @@ export function MobileSubmenu({
 
               {mainLink?.text && (
                 <Link
-                  aria-label={mainLink.text}
                   className="btn-primary mb-8"
                   newTab={mainLink.newTab}
                   onClick={handleCloseMobileMenu}
@@ -99,7 +105,6 @@ export function MobileSubmenu({
                     return (
                       <li key={index}>
                         <Link
-                          aria-label={caption}
                           newTab={link?.newTab}
                           onClick={handleCloseMobileMenu}
                           to={link?.url}
@@ -108,7 +113,7 @@ export function MobileSubmenu({
                           {isActiveSubmenu && (
                             <Image
                               data={{
-                                altText: image?.altText || alt,
+                                altText: image?.altText || alt || '',
                                 url: image?.url,
                                 width: image?.width,
                                 height: image?.height,

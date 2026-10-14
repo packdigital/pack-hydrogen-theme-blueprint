@@ -4,6 +4,7 @@ import type {Image} from '@shopify/hydrogen/storefront-api-types';
 
 import {Badges} from '~/components/Badges';
 import {Carousel} from '~/components/Carousel';
+import {COLOR_OPTION_NAME} from '~/lib/constants';
 import type {ProductWithStatus} from '~/lib/types';
 
 import {ProductMediaFile} from './ProductMediaFile';
@@ -11,6 +12,31 @@ import {ProductMediaThumbnails} from './ProductMediaThumbnails';
 import {ProductDraftMediaOverlay} from './ProductDraftMediaOverlay';
 import {useProductMedia} from './useProductMedia';
 import type {ProductMediaProps} from './ProductMedia.types';
+
+/**
+ * Prefer the merchant's alt text. Alt text that is only a color name is used
+ * as a color-grouping key (see useProductMedia), so qualify it with the title.
+ * With no alt text, fall back to the title plus position so slides differ.
+ */
+function getMediaAlt({
+  colorNames,
+  index,
+  mediaItem,
+  title,
+  total,
+}: {
+  colorNames: string[];
+  index: number;
+  mediaItem: ProductMediaProps['product']['media']['nodes'][number];
+  title: string;
+  total: number;
+}) {
+  const alt = (mediaItem.alt || mediaItem.previewImage?.altText)?.trim();
+  if (alt && colorNames.includes(alt.toLowerCase()))
+    return `${title} in ${alt}`;
+  if (alt) return alt;
+  return total > 1 ? `${title}, image ${index + 1} of ${total}` : title;
+}
 
 export function ProductMedia({
   product,
@@ -47,6 +73,11 @@ export function ProductMedia({
     [mainApi],
   );
 
+  const colorNames =
+    product.options
+      ?.find((option) => option.name === COLOR_OPTION_NAME)
+      ?.optionValues?.map(({name}) => name.toLowerCase()) || [];
+
   const firstMediaImageOnMount = media[initialIndex]?.previewImage as
     Image | undefined;
 
@@ -75,7 +106,13 @@ export function ProductMedia({
             slideClassName="size-full"
             slides={media.map((mediaItem, index) => (
               <ProductMediaFile
-                alt={product.title}
+                alt={getMediaAlt({
+                  colorNames,
+                  index,
+                  mediaItem,
+                  title: product.title,
+                  total: media.length,
+                })}
                 key={mediaItem.id}
                 media={mediaItem}
                 priority={index === initialIndex}

@@ -91,8 +91,10 @@ export const CollectionFilterOption = memo(
     }
 
     return (
+      // Named by its visible label and count; aria-pressed conveys the
+      // selected state (WCAG 4.1.2)
       <button
-        aria-label={`Add ${label} to filters`}
+        aria-pressed={isActive}
         className={clsx(
           'group flex gap-3 px-4 text-left text-base transition max-md:h-10 max-md:w-full max-md:items-center md:gap-2 hover:md:text-text disabled:hover:md:text-neutralMedium',
           disabled && 'cursor-not-allowed opacity-60',
@@ -122,7 +124,7 @@ export const CollectionFilterOption = memo(
           {optionImageUrl && (
             <Image
               data={{
-                altText: label,
+                altText: '',
                 url: optionImageUrl,
               }}
               aspectRatio="1/1"

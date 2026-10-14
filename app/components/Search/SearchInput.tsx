@@ -28,8 +28,22 @@ export function SearchInput({
   }, [searchOpen]);
 
   return (
-    <div className="border-b border-b-border p-4">
-      <div className="relative flex justify-between gap-3 rounded-full border border-border pl-3 pr-4">
+    <form
+      className="border-b border-b-border p-4"
+      onSubmit={(e) => {
+        e.preventDefault();
+        if (!rawTerm) return;
+        const params = new URLSearchParams(search);
+        params.set('q', rawTerm);
+        closeSearch();
+        navigate({
+          pathname: `${pathPrefix}/search`,
+          search: `?${params.toString()}`,
+        });
+      }}
+      role="search"
+    >
+      <div className="relative flex justify-between gap-3 rounded-full border border-inputBorder pl-3 pr-4 focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-focusRing">
         <Svg
           className="w-5 text-text"
           src="/svgs/search.svg#search"
@@ -39,19 +53,9 @@ export function SearchInput({
 
         <input
           aria-label="Search here"
-          className="min-w-0 flex-1 py-3 text-base outline-none"
+          className="min-w-0 flex-1 py-3 text-base focus-visible:outline-none"
+          enterKeyHint="search"
           onChange={handleInput}
-          onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-            if (e.key === 'Enter' && !!e.currentTarget.value) {
-              const params = new URLSearchParams(search);
-              params.set('q', e.currentTarget.value);
-              closeSearch();
-              navigate({
-                pathname: `${pathPrefix}/search`,
-                search: `?${params.toString()}`,
-              });
-            }
-          }}
           placeholder="Search here"
           ref={inputRef}
           value={rawTerm}
@@ -76,7 +80,7 @@ export function SearchInput({
         handleSuggestion={handleSuggestion}
         searchTerm={searchTerm}
       />
-    </div>
+    </form>
   );
 }
 

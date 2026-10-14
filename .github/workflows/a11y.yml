@@ -1,0 +1,50 @@
+name: Accessibility
+
+# Runs the axe + keyboard suite (tests/a11y) against a deployed storefront.
+# - Automatically when a preview deployment succeeds (e.g. Oxygen previews
+#   reported to GitHub as deployments)
+# - Manually from the Actions tab with any URL
+on:
+  deployment_status:
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: Storefront URL to test (e.g. a preview deployment)
+        required: true
+
+concurrency:
+  group: a11y-${{ github.event.deployment.id || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  a11y:
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      github.event.deployment_status.state == 'success'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      A11Y_BASE_URL: ${{ inputs.base_url || github.event.deployment_status.environment_url || github.event.deployment_status.target_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.deployment.sha || github.sha }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - run: npx playwright install --with-deps chromium
+
+      - run: npm run test:a11y
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: a11y-report
+          path: test-results/
+          retention-days: 7

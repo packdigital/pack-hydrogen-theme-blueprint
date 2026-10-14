@@ -99,11 +99,15 @@ export const CartUpsellItem = memo(
 
             <div className="flex flex-1 flex-wrap justify-end gap-x-1">
               {compareAtPrice && (
-                <p className="text-xs text-neutralMedium line-through">
-                  {compareAtPrice}
+                <p className="text-xs text-neutralMedium">
+                  <span className="sr-only">Regular price </span>
+                  <s>{compareAtPrice}</s>
                 </p>
               )}
-              <p className="text-xs">{price}</p>
+              <p className="text-xs">
+                {compareAtPrice && <span className="sr-only">Sale price </span>}
+                {price}
+              </p>
             </div>
           </div>
         </div>

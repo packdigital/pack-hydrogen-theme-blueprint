@@ -1,10 +1,12 @@
-import {Fragment, memo, useMemo} from 'react';
+import {Fragment, memo, useEffect, useMemo, useRef} from 'react';
+import {useSearchParams} from 'react-router';
 import {Pagination} from '@shopify/hydrogen';
 import clsx from 'clsx';
 import type {Product} from '@shopify/hydrogen/storefront-api-types';
 
 import {LoadingDots} from '~/components/Animations';
 import {ProductItem} from '~/components/ProductItem';
+import {useAnnounce} from '~/hooks';
 
 import type {CollectionGridProps} from './Collection.types';
 import {CollectionPromoTile} from './CollectionPromoTile';
@@ -25,6 +27,28 @@ export const CollectionGrid = memo(
       {
         ...pagination,
       };
+
+    // Announce the result after filtering or sorting (WCAG 4.1.3). Paging
+    // params are ignored so "Load more" doesn't re-announce.
+    const announce = useAnnounce();
+    const [searchParams] = useSearchParams();
+    const resultsKey = [...searchParams.entries()]
+      .filter(([key]) => key !== 'cursor' && key !== 'direction')
+      .map(([key, value]) => `${key}=${value}`)
+      .join('&');
+    const isFirstResults = useRef(true);
+    useEffect(() => {
+      if (isFirstResults.current) {
+        isFirstResults.current = false;
+        return;
+      }
+      const count = products?.nodes?.length || 0;
+      announce(
+        count
+          ? `Showing ${count} ${count === 1 ? 'product' : 'products'}`
+          : 'No products found matching these filters',
+      );
+    }, [resultsKey]);
 
     const connection = useMemo(() => {
       return products;

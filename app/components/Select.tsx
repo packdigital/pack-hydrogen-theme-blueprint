@@ -1,5 +1,6 @@
 import {Fragment} from 'react';
 import {
+  Label,
   Listbox,
   ListboxButton,
   ListboxOptions,
@@ -18,6 +19,11 @@ interface Option {
 interface SelectProps {
   children?: React.ReactNode;
   className?: string;
+  /** Accessible name for the control, e.g. "Sort by" or "Country" */
+  label: string;
+  /** Visually hide the label (still announced by screen readers) */
+  hideLabel?: boolean;
+  labelClassName?: string;
   name?: string;
   onSelect?: (option: Option) => void;
   openFrom?: 'top' | 'bottom';
@@ -32,6 +38,9 @@ interface SelectProps {
 export function Select({
   children, // pass span to customize the selected option label
   className = '',
+  label,
+  hideLabel = false,
+  labelClassName = 'input-label',
   name = 'select',
   onSelect = () => null,
   openFrom = 'bottom',
@@ -53,8 +62,9 @@ export function Select({
         } catch (error) {}
       }}
     >
+      <Label className={hideLabel ? 'sr-only' : labelClassName}>{label}</Label>
+
       <ListboxButton
-        aria-label="Open account menu"
         className={clsx(
           'btn-select w-full justify-between gap-2',
           textClassName,

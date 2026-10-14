@@ -68,7 +68,7 @@ export function AddressesItem({
 
           <button
             aria-label="Delete address"
-            className="text-nav text-main-underline font-normal text-red-500"
+            className="text-nav text-main-underline font-normal text-red-700"
             onClick={() => setIsDeleteConfirm(true)}
             type="button"
           >
@@ -77,7 +77,7 @@ export function AddressesItem({
         </div>
 
         {isDefaultAddress && (
-          <p className="text-nav text-right text-neutralLight">Default</p>
+          <p className="text-nav text-right text-neutralMedium">Default</p>
         )}
       </div>
 

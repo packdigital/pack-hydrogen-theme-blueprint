@@ -15,21 +15,18 @@ export function MobileMenuItem({
     <Disclosure as="div" className="border-b border-b-neutralLight">
       {({open}) => (
         <>
-          <DisclosureButton
-            aria-label={
-              open ? `Close ${item.title} menu` : `Open ${item.title} menu`
-            }
-            className="flex h-14 w-full items-center justify-between p-4"
-          >
-            <h3 className="text-nav">{item.title}</h3>
+          <h2 className="m-0">
+            <DisclosureButton className="flex h-14 w-full items-center justify-between p-4">
+              <span className="text-nav">{item.title}</span>
 
-            <Svg
-              className={clsx('w-4 text-white', open && 'rotate-180')}
-              src="/svgs/chevron-down.svg#chevron-down"
-              title="Chevron"
-              viewBox="0 0 24 24"
-            />
-          </DisclosureButton>
+              <Svg
+                className={clsx('w-4 text-white', open && 'rotate-180')}
+                src="/svgs/chevron-down.svg#chevron-down"
+                title="Chevron"
+                viewBox="0 0 24 24"
+              />
+            </DisclosureButton>
+          </h2>
 
           <Expand open={open}>
             <DisclosurePanel
@@ -45,7 +42,6 @@ export function MobileMenuItem({
                       className="hover-text-underline"
                       to={link?.url}
                       newTab={link?.newTab}
-                      tabIndex={open ? 0 : -1}
                       type={link?.type}
                     >
                       {link?.text}

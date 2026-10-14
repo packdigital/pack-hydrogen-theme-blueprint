@@ -89,6 +89,8 @@ export const CountrySelector = memo(
     return (
       <div ref={ref} className="w-[250px]">
         <Select
+          hideLabel
+          label="Country"
           onSelect={handleSelect}
           options={countryOptions}
           placeholder="Select Country"

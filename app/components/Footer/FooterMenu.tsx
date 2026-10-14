@@ -24,7 +24,7 @@ export function FooterMenu({settings}: {settings: Settings['footer']}) {
         {menuItems?.map(({title, links}, menuIndex) => {
           return (
             <li key={menuIndex}>
-              <h3 className="text-nav mb-2">{title}</h3>
+              <h2 className="text-nav mb-2">{title}</h2>
 
               <ul className="flex flex-col items-start gap-2">
                 {links?.map(({link}, linkIndex) => {

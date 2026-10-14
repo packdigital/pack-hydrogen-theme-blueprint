@@ -50,8 +50,9 @@ export const TransparentNavigation = memo(() => {
     };
   }, [isChangeColorsOnScroll, isScrolled, pixelOffsetChangeColors]);
 
+  // A plain container: this bar has no nav links, so it isn't a nav landmark
   return (
-    <nav
+    <div
       className={clsx(
         'px-contained relative z-[1] grid flex-1 grid-cols-[1fr_auto_1fr] gap-4 transition md:gap-8',
         gridColsClassDesktop,
@@ -76,7 +77,7 @@ export const TransparentNavigation = memo(() => {
           color={isScrolled ? scrolledIconColor : iconColor}
         />
       </div>
-    </nav>
+    </div>
   );
 });
 

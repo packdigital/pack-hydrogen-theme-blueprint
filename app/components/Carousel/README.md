@@ -34,6 +34,7 @@ import {Carousel} from '~/components/Carousel';
 | `arrowColor` | `string` | theme | Arrow icon/button color from a CMS hex (inline style — always wins). |
 | `arrowIcon` | `(dir: 'prev' \| 'next') => ReactNode` | arrow SVGs | Swap the icon while keeping the default button. Give the icon `text-current` so `arrowColor` recolors it. |
 | `renderArrow` | `(dir, {disabled, onClick}) => ReactNode` | — | Full custom arrows — replaces the default buttons entirely. |
+| `pauseButtonClassName` | `string` | — | Classes on the pause/play button shown while autoplaying (default bottom-right; `!` to override). |
 | `dots` | `boolean` | — | Pagination dots, overlaid bottom-center. |
 | `activeDotColor` | `string` | theme text | Active dot color (e.g. a CMS bullet color); inactive dots use it faded. |
 | `dotsClassName` | `string` | — | Extra classes on the dots container (e.g. `'md:hidden'` for mobile-only). |
@@ -149,10 +150,15 @@ Colors that come from the CMS (dynamic hex) should use the dedicated `activeDotC
 
 Built in: the viewport is a labelled `region` (`aria-roledescription="carousel"`), each slide is a labelled `group` ("N of total"), and arrows/dots are real `<button>`s (keyboard-operable, `aria-label`led, arrows `disabled` at the ends, active dot `aria-current`). Always pass a meaningful `ariaLabel`.
 
-Known gaps (not yet handled here — mind them when using):
-- **Off-screen slides remain in the tab order.** Interactive content in non-visible slides is still Tab-focusable / read by screen readers.
-- **Autoplay has no pause control and ignores `prefers-reduced-motion`** — a WCAG 2.2.2 concern for auto-advancing carousels. Prefer not to autoplay content with interactive elements.
-- **The scrollbar is pointer-only** (not keyboard-accessible). Don't make it the *only* navigation control — pair it with `arrows` or `dots`.
+Also built in:
+- **Pause/play button whenever it autoplays** (WCAG 2.2.2). A user pause is sticky; hover/focus pausing still applies while playing. Position it with `pauseButtonClassName` (default bottom-right).
+- **No autoplay under `prefers-reduced-motion`.**
+- **Off-screen slides are `inert`** when `arrows` or `dots` are rendered, so keyboard and screen reader users only reach visible slides and use the controls to move. Without controls, slides stay reachable, since there'd be no other way to them.
+- **Dots have a 24px hit area** (WCAG 2.5.8).
+
+Keep in mind:
+- **Always offer `arrows` or `dots`.** Drag/swipe alone fails WCAG 2.5.7, and the scrollbar is pointer-only.
+- Prefer not to autoplay slides that contain interactive elements.
 
 ## Gotchas
 

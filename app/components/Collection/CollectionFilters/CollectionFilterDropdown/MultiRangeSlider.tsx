@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useState, useRef} from 'react';
+import {useCallback, useEffect, useId, useState, useRef} from 'react';
 import clsx from 'clsx';
 import type {ChangeEvent} from 'react';
 
@@ -35,6 +35,10 @@ export const MultiRangeSlider = ({
   const minValRef = useRef<HTMLInputElement>(null);
   const maxValRef = useRef<HTMLInputElement>(null);
   const range = useRef<HTMLDivElement>(null);
+  // Unique ids: desktop and mobile filters can both be mounted
+  const idPrefix = useId();
+  const minId = `${idPrefix}-min`;
+  const maxId = `${idPrefix}-max`;
   const locale = useLocale();
 
   const displayedMinVal = !isPrice ? minVal : parseAsCurrency(minVal, locale);
@@ -84,7 +88,8 @@ export const MultiRangeSlider = ({
     <div className="flex flex-col items-center">
       <div className="relative flex h-10 w-full items-center justify-center pb-4">
         <input
-          id="multirange-slider-min"
+          aria-valuetext={`${displayedMinVal}`}
+          id={minId}
           type="range"
           min={min}
           max={max}
@@ -100,11 +105,12 @@ export const MultiRangeSlider = ({
             minVal > max - 100 && 'z-[5]',
           )}
         />
-        <label htmlFor="multirange-slider-min" className="sr-only">
-          Min
+        <label htmlFor={minId} className="sr-only">
+          Minimum
         </label>
         <input
-          id="multirange-slider-max"
+          aria-valuetext={`${displayedMaxVal}`}
+          id={maxId}
           type="range"
           min={min}
           max={max}
@@ -117,8 +123,8 @@ export const MultiRangeSlider = ({
           }}
           className="range-thumb z-[4] w-full"
         />
-        <label htmlFor="multirange-slider-max" className="sr-only">
-          Max
+        <label htmlFor={maxId} className="sr-only">
+          Maximum
         </label>
 
         <div className="relative w-full">
@@ -138,7 +144,7 @@ export const MultiRangeSlider = ({
         <div className="flex gap-2">
           <button
             type="button"
-            aria-label={`Set min and max values to ${minVal} and ${maxVal}`}
+            aria-label={`Set range to ${displayedMinVal} – ${displayedMaxVal}`}
             className={clsx(
               'mt-3 rounded border border-border px-1 py-px text-xs font-bold uppercase transition',
               !hasChanges && 'opacity-40',
@@ -154,7 +160,7 @@ export const MultiRangeSlider = ({
 
           <button
             type="button"
-            aria-label={`Set min and max values to ${minVal} and ${maxVal}`}
+            aria-label="Reset range"
             className={clsx(
               'mt-3 rounded border border-border px-1 py-px text-xs font-bold uppercase',
               !canReset && 'opacity-40',

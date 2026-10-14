@@ -15,15 +15,12 @@ export function ReviewStars({
 }: ReviewStarsProps) {
   const fullStar = {
     key: 'star-full',
-    label: 'Full Star',
   };
   const emptyStar = {
     key: 'star-empty',
-    label: 'Empty Star',
   };
   const halfStar = {
     key: 'star-half-empty',
-    label: 'Half Star',
   };
 
   const stars = [...Array(5).keys()].map((index) => {
@@ -48,20 +45,24 @@ export function ReviewStars({
     },
   };
 
+  // One text alternative for the whole rating; individual stars are
+  // decorative (WCAG 1.1.1)
   return (
-    <ul className={clsx('flex items-center', classBySize[size]?.gap)}>
-      {stars.map(({key, label}, index) => (
-        <li key={index}>
-          <Svg
-            className={clsx(classBySize[size]?.width)}
-            src={`/svgs/${key}.svg#${key}`}
-            style={{color}}
-            title={label}
-            viewBox="0 0 24 24"
-          />
-        </li>
+    <div
+      aria-label={`Rated ${Number(rating) || 0} out of 5 stars`}
+      className={clsx('flex items-center', classBySize[size]?.gap)}
+      role="img"
+    >
+      {stars.map(({key}, index) => (
+        <Svg
+          className={clsx(classBySize[size]?.width)}
+          key={index}
+          src={`/svgs/${key}.svg#${key}`}
+          style={{color}}
+          viewBox="0 0 24 24"
+        />
       ))}
-    </ul>
+    </div>
   );
 }
 

@@ -39,7 +39,8 @@ export const ColorVariantOptions = memo(
     const remainingColorCount = colorOptions.length - slicedColorOptions.length;
 
     return (
-      <ul className="flex flex-wrap gap-1">
+      // gap-2 spaces 16px swatches 24px apart (WCAG 2.5.8 spacing)
+      <ul aria-label="Colors" className="flex flex-wrap gap-2">
         {slicedColorOptions.map((color, index) => {
           const productForColor = grouping
             ? productMapByColor?.[color.name]

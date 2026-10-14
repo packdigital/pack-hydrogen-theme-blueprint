@@ -28,7 +28,8 @@ export function ColorVariantOption({
   return (
     <div className="group/color relative">
       <button
-        aria-label={`Select ${color.name} color variant`}
+        aria-label={color.name}
+        aria-pressed={isActive}
         className={clsx(
           'relative flex size-4 items-center justify-center overflow-hidden rounded-[50%] border border-border transition md:hover:border-text',
           isActive && 'border-text',
@@ -40,7 +41,7 @@ export function ColorVariantOption({
         {optionImageUrl && (
           <Image
             data={{
-              altText: color.name,
+              altText: '',
               url: optionImageUrl,
             }}
             width="24px"
@@ -58,7 +59,7 @@ export function ColorVariantOption({
       </button>
 
       {enabledColorNameOnHover && (
-        <p className="pointer-events-none absolute bottom-[calc(100%+2px)] left-1/4 hidden whitespace-nowrap rounded bg-neutralLightest px-1 text-2xs leading-[14px] text-neutralMedium opacity-0 transition duration-75 md:block group-hover/color:md:opacity-100">
+        <p className="pointer-events-none absolute bottom-[calc(100%+2px)] left-1/4 hidden whitespace-nowrap rounded bg-neutralLightest px-1 text-2xs leading-[14px] text-neutralMedium opacity-0 transition duration-75 md:block group-focus-within/color:md:opacity-100 group-hover/color:md:opacity-100">
           {color.name}
         </p>
       )}

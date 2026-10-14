@@ -54,6 +54,9 @@ export interface QuickShopOptionProps {
 
 export interface ProductItemMediaProps {
   hasGrouping: boolean;
+  /** Receives the autoplaying primary video, so its pause control can live
+   *  outside the card link */
+  primaryVideoRef?: (video: HTMLVideoElement | null) => void;
   priority?: boolean;
   selectedProduct: SelectedProduct;
   selectedVariant: SelectedVariant;

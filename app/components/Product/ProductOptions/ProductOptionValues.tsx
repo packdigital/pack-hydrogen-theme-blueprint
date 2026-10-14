@@ -69,7 +69,7 @@ export const ProductOptionValues = memo(
                     selectedValue={groupHasSelectedColor ? selectedColor : null}
                   />
 
-                  <ul className="flex flex-wrap gap-2">
+                  <ul aria-label={group.name} className="flex flex-wrap gap-2">
                     {group.optionValues.map((optionValue, optionValueIndex) => {
                       return (
                         <li key={optionValue.name}>
@@ -113,7 +113,7 @@ export const ProductOptionValues = memo(
               selectedValue={selectedOptionsMap?.[name]}
             />
 
-            <ul className="flex flex-wrap gap-2">
+            <ul aria-label={name} className="flex flex-wrap gap-2">
               {optionValues?.map((optionValue, index) => {
                 return (
                   <li key={optionValue.name}>

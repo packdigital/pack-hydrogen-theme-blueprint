@@ -150,8 +150,12 @@ export function Expand({
     };
   }, [open]);
 
+  // Collapsed content must be unreachable by keyboard and screen readers
+  const collapsed =
+    !open && (status === PHASE.CLOSE || status === PHASE.CLOSED);
+
   return (
-    <div ref={ref} className={className} style={style}>
+    <div ref={ref} className={className} inert={collapsed} style={style}>
       {children}
     </div>
   );

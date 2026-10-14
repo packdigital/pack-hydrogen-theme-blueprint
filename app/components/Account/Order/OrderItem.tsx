@@ -69,11 +69,15 @@ export const OrderItem = memo(({item}: OrderItemProps) => {
           {/* mobile price per qty and quantity */}
           <div className="flex gap-1 text-xs md:hidden">
             {discountedPrice && (
-              <Money
-                as="p"
-                className="text-neutralMedium line-through"
-                data={originalPrice}
-              />
+              <>
+                <span className="sr-only">Original price</span>
+                <Money
+                  as="s"
+                  className="text-neutralMedium"
+                  data={originalPrice}
+                />
+                <span className="sr-only">Discounted price</span>
+              </>
             )}
             <Money as="p" data={discountedPrice || originalPrice} />
             <p>x {quantity}</p>
@@ -89,11 +93,15 @@ export const OrderItem = memo(({item}: OrderItemProps) => {
       {/* desktop price per qty */}
       <div className="hidden md:block">
         {discountedPrice && (
-          <Money
-            as="p"
-            className="text-neutralMedium line-through"
-            data={originalPrice}
-          />
+          <>
+            <span className="sr-only">Original price</span>
+            <Money
+              as="s"
+              className="block text-neutralMedium"
+              data={originalPrice}
+            />
+            <span className="sr-only">Discounted price</span>
+          </>
         )}
         <Money as="p" data={discountedPrice || originalPrice} />
       </div>
@@ -104,11 +112,15 @@ export const OrderItem = memo(({item}: OrderItemProps) => {
       {/* mobile/desktop total price */}
       <div>
         {discountedPrice && (
-          <Money
-            as="p"
-            className="text-neutralMedium line-through"
-            data={originalPrice}
-          />
+          <>
+            <span className="sr-only">Original price</span>
+            <Money
+              as="s"
+              className="block text-neutralMedium"
+              data={originalPrice}
+            />
+            <span className="sr-only">Discounted price</span>
+          </>
         )}
         <Money as="p" data={discountedPrice || originalPrice} />
       </div>

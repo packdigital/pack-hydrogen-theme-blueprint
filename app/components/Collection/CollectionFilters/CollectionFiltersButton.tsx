@@ -15,7 +15,7 @@ export function CollectionFiltersButton({
     <div className="w-full">
       {/* desktop */}
       <button
-        aria-label={`${desktopFiltersOpen ? 'Hide' : 'Show'} filters drawer`}
+        aria-expanded={desktopFiltersOpen}
         className="btn-select flex items-center gap-2 max-md:hidden"
         onClick={() => setDesktopFiltersOpen(!desktopFiltersOpen)}
         type="button"
@@ -31,7 +31,7 @@ export function CollectionFiltersButton({
 
       {/* mobile */}
       <button
-        aria-label="Open filters drawer"
+        aria-haspopup="dialog"
         className="btn-select flex w-full items-center justify-start gap-2 pl-4 pr-2.5 md:hidden"
         onClick={() => setMobileFiltersOpen(true)}
         type="button"

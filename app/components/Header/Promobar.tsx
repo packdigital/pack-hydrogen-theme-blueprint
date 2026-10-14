@@ -84,6 +84,7 @@ export const Promobar = memo(() => {
           arrows={messages.length > 1}
           autoplay={delay || true}
           className="h-full"
+          pauseButtonClassName="!bottom-auto !right-10 !top-1/2 !size-6 !-translate-y-1/2 !border-0 !bg-transparent"
           fade={isFade}
           options={{
             loop: messages.length > 1,

@@ -46,6 +46,7 @@ export function Video({cms}: {cms: VideoCms}) {
           >
             {videoMobile?.mediaType === 'VIDEO' && (
               <VideoElement
+                insideLink={!!isLink}
                 playOptions={play}
                 posterUrl={posterMobile?.url}
                 title={title}
@@ -62,6 +63,7 @@ export function Video({cms}: {cms: VideoCms}) {
           >
             {videoDesktop?.mediaType === 'VIDEO' && (
               <VideoElement
+                insideLink={!!isLink}
                 playOptions={play}
                 posterUrl={posterDesktop?.url}
                 title={title}

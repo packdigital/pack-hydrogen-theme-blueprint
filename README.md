@@ -344,6 +344,10 @@ export async function loader({params, context, request}: LoaderFunctionArgs) {
 }
 ```
 
+## Accessibility
+
+Blueprint targets WCAG 2.2 AA. See [docs/accessibility.md](docs/accessibility.md) for component conventions, the manual test checklist, and known gaps. Run the automated axe + keyboard suite with `npm run test:a11y`.
+
 ## Documentation and Support
 
 View [Pack's developer documentation](https://docs.packdigital.com) for info on how to set up and use the platform.

@@ -5,6 +5,8 @@ import clsx from 'clsx';
 import {getAspectRatioFromClass} from '~/lib/utils';
 import {Image} from '~/components/Image';
 import {Link} from '~/components/Link';
+import {VideoPlayToggle} from '~/components/VideoPlayToggle';
+import {useVideoPauseControl} from '~/hooks';
 
 import type {CollectionPromoTileProps} from './Collection.types';
 
@@ -19,71 +21,80 @@ export const CollectionPromoTile = memo(({tile}: CollectionPromoTileProps) => {
     ...background,
   };
   const hasVideo = media?.mediaType === 'VIDEO';
+  const {videoRef, isPaused, toggle} = useVideoPauseControl();
 
   return (
-    <Link
-      aria-label={text?.heading || link?.text}
-      className="h-full"
-      to={link?.url}
-      newTab={link?.newTab}
-      ref={ref}
-      type={link?.type}
-    >
-      <div
-        className={clsx('relative overflow-hidden', aspectRatio)}
-        style={{
-          backgroundColor: media ? 'var(--neutral-lightest)' : bgColor,
-        }}
+    <div className="relative h-full">
+      <Link
+        aria-label={text?.heading || link?.text}
+        className="h-full"
+        to={link?.url}
+        newTab={link?.newTab}
+        ref={ref}
+        type={link?.type}
       >
-        {inView && (
-          <>
-            {hasVideo && (
-              <video
-                autoPlay
-                className="media-fill"
-                controls={false}
-                loop
-                muted
-                playsInline
-                poster={videoPoster?.url}
-                key={media.url}
-              >
-                <source src={media.url} type={media.format} />
-              </video>
-            )}
+        <div
+          className={clsx('relative overflow-hidden', aspectRatio)}
+          style={{
+            backgroundColor: media ? 'var(--neutral-lightest)' : bgColor,
+          }}
+        >
+          {inView && (
+            <>
+              {hasVideo && (
+                <video
+                  autoPlay
+                  className="media-fill"
+                  controls={false}
+                  loop
+                  muted
+                  playsInline
+                  poster={videoPoster?.url}
+                  key={media.url}
+                  ref={videoRef}
+                >
+                  <source src={media.url} type={media.format} />
+                </video>
+              )}
 
-            {media?.url && !hasVideo && (
-              <Image
-                data={{
-                  altText: media.altText || alt,
-                  url: media.url,
-                }}
-                aspectRatio={getAspectRatioFromClass(aspectRatio)}
-                className="media-fill"
-                sizes="(min-width: 768px) 33vw, 50vw"
-              />
-            )}
+              {media?.url && !hasVideo && (
+                <Image
+                  data={{
+                    altText: media.altText || alt,
+                    url: media.url,
+                  }}
+                  aspectRatio={getAspectRatioFromClass(aspectRatio)}
+                  className="media-fill"
+                  sizes="(min-width: 768px) 33vw, 50vw"
+                />
+              )}
 
-            {(hasVideo || media?.url) && darkOverlay && (
-              <div className="pointer-events-none absolute inset-0 size-full bg-[rgba(0,0,0,0.2)]" />
-            )}
-          </>
-        )}
+              {(hasVideo || media?.url) && darkOverlay && (
+                <div className="pointer-events-none absolute inset-0 size-full bg-[rgba(0,0,0,0.2)]" />
+              )}
+            </>
+          )}
 
-        {(text?.heading || text?.subtext) && (
-          <div
-            className="absolute left-1/2 top-1/2 w-full -translate-x-1/2 -translate-y-1/2 px-4 text-center"
-            style={{color: text?.textColor}}
-          >
-            <h3 className="text-xl lg:text-2xl">{text?.heading}</h3>
+          {(text?.heading || text?.subtext) && (
+            <div
+              className="absolute left-1/2 top-1/2 w-full -translate-x-1/2 -translate-y-1/2 px-4 text-center"
+              style={{color: text?.textColor}}
+            >
+              <h3 className="text-xl lg:text-2xl">{text?.heading}</h3>
 
-            {text?.subtext && (
-              <p className="mt-4 text-sm lg:text-base">{text?.subtext}</p>
-            )}
-          </div>
-        )}
-      </div>
-    </Link>
+              {text?.subtext && (
+                <p className="mt-4 text-sm lg:text-base">{text?.subtext}</p>
+              )}
+            </div>
+          )}
+        </div>
+      </Link>
+
+      {/* Outside the link: a button can't be nested in an <a> */}
+      {inView && hasVideo && (
+        <VideoPlayToggle isPaused={isPaused} onToggle={toggle} />
+      )}
+    </div>
   );
 });
 

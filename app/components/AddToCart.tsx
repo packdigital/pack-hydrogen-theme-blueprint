@@ -78,8 +78,8 @@ export function AddToCart({
           Estimated ship date: {preOrderShippingText}
         </p>
       )}
+      {/* Named by its visible text (including any inline price) */}
       <button
-        aria-label={buttonText}
         className={clsx(
           buttonClass,
           'relative w-full',
@@ -116,8 +116,9 @@ export function AddToCart({
           />
         )}
 
+        {/* Visual only; screen readers hear it via the global announcer */}
         {isAdded && (
-          <span aria-live="assertive" className="absolute-center" role="status">
+          <span aria-hidden className="absolute-center">
             Added To Cart
           </span>
         )}

@@ -1,4 +1,4 @@
-import {memo} from 'react';
+import {memo, useEffect, useId, useRef} from 'react';
 import clsx from 'clsx';
 
 import {Link} from '~/components/Link';
@@ -6,6 +6,8 @@ import {Svg} from '~/components/Svg';
 import {HEADER_NAVIGATION} from '~/lib/constants';
 import {useCustomer, useMenu, useSettings} from '~/hooks';
 
+import {DesktopMenu} from '../Menu/DesktopMenu';
+import {desktopMenuHasContent} from '../Menu/desktopMenu.utils';
 import type {UseDesktopMenuReturn} from '../useDesktopMenu';
 import type {UseMobileMenuReturn} from '../useMobileMenu';
 
@@ -22,6 +24,7 @@ type NavigationProps = Pick<
     | 'handleDesktopMenuClose'
     | 'handleDesktopMenuHoverIn'
     | 'handleDesktopMenuHoverOut'
+    | 'handleDesktopMenuStayOpen'
   >;
 
 export const Navigation = memo(
@@ -31,9 +34,12 @@ export const Navigation = memo(
     handleDesktopMenuClose,
     handleDesktopMenuHoverIn,
     handleDesktopMenuHoverOut,
+    handleDesktopMenuStayOpen,
     handleOpenMobileMenu,
     mobileMenuOpen,
   }: NavigationProps) => {
+    const menuIdPrefix = useId();
+    const toggleRefs = useRef<(HTMLButtonElement | null)[]>([]);
     const customer = useCustomer();
     const {closeAll, openSearch} = useMenu();
     const {header} = useSettings();
@@ -55,6 +61,22 @@ export const Navigation = memo(
     const menuOrderClassDesktop =
       logoPositionDesktop === 'center' ? 'lg:order-1' : 'lg:order-2';
 
+    // Escape dismisses an open dropdown, whether opened by hover or keyboard
+    // (WCAG 1.4.13); focus returns to its toggle if it was inside the menu
+    useEffect(() => {
+      if (desktopMenuIndex === null) return undefined;
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key !== 'Escape') return;
+        const toggle = toggleRefs.current[desktopMenuIndex];
+        const item = toggle?.closest('li');
+        const focusWasInside = item?.contains(document.activeElement);
+        handleDesktopMenuClose();
+        if (focusWasInside) toggle?.focus();
+      };
+      document.addEventListener('keydown', handleKeyDown);
+      return () => document.removeEventListener('keydown', handleKeyDown);
+    }, [desktopMenuIndex]);
+
     return (
       <div
         className={clsx(
@@ -73,32 +95,94 @@ export const Navigation = memo(
         <div
           className={clsx('order-1 flex items-center', menuOrderClassDesktop)}
         >
-          <nav className="hidden h-full lg:flex">
+          <nav aria-label="Main" className="hidden h-full lg:flex">
             <ul className="flex">
               {navItems?.map((item, index) => {
                 const isHovered = index === desktopMenuIndex;
+                const hasMenu = desktopMenuHasContent(item);
+                const menuId = `${menuIdPrefix}-menu-${index}`;
 
                 return (
-                  <li key={index} className="flex">
-                    <Link
-                      aria-label={item.navItem?.text}
-                      className="group relative flex cursor-pointer items-center px-4 transition"
-                      to={item.navItem?.url}
-                      onClick={handleDesktopMenuClose}
-                      onMouseEnter={() => handleDesktopMenuHoverIn(index)}
-                      onMouseLeave={handleDesktopMenuHoverOut}
-                    >
-                      <p className="text-nav text-current">
-                        {item.navItem?.text}
-                      </p>
+                  <li
+                    key={index}
+                    className="flex"
+                    onBlur={(e) => {
+                      // Close when keyboard focus leaves this item and its menu
+                      if (
+                        isHovered &&
+                        e.relatedTarget &&
+                        !e.currentTarget.contains(e.relatedTarget as Node)
+                      ) {
+                        handleDesktopMenuClose();
+                      }
+                    }}
+                  >
+                    <div className="relative flex">
+                      <Link
+                        className="group relative flex cursor-pointer items-center px-4 transition"
+                        to={item.navItem?.url}
+                        onClick={handleDesktopMenuClose}
+                        onMouseEnter={() => handleDesktopMenuHoverIn(index)}
+                        onMouseLeave={handleDesktopMenuHoverOut}
+                      >
+                        <span className="text-nav text-current">
+                          {item.navItem?.text}
+                        </span>
 
-                      <div
-                        className={clsx(
-                          'absolute left-0 top-[calc(100%_-_2px)] h-[3px] w-full origin-center scale-0 border-t-2 border-t-primary bg-transparent transition after:w-full group-hover:scale-100',
-                          isHovered ? 'scale-100' : 'scale-0',
-                        )}
+                        <div
+                          className={clsx(
+                            'absolute left-0 top-[calc(100%_-_2px)] h-[3px] w-full origin-center scale-0 border-t-2 border-t-primary bg-transparent transition after:w-full group-hover:scale-100',
+                            isHovered ? 'scale-100' : 'scale-0',
+                          )}
+                        />
+                      </Link>
+
+                      {/*
+                       * Disclosure toggle for keyboard and screen reader users
+                       * (WCAG 2.1.1, 4.1.2). Hidden until focused so the hover
+                       * design is unchanged; the link itself still navigates.
+                       */}
+                      {hasMenu && (
+                        <button
+                          aria-controls={menuId}
+                          aria-expanded={isHovered}
+                          aria-label={`${item.navItem?.text} menu`}
+                          className="pointer-events-none absolute right-0 top-1/2 flex size-4 -translate-y-1/2 items-center justify-center opacity-0 focus:pointer-events-auto focus:opacity-100"
+                          onClick={() =>
+                            isHovered
+                              ? handleDesktopMenuClose()
+                              : handleDesktopMenuHoverIn(index)
+                          }
+                          ref={(el) => {
+                            toggleRefs.current[index] = el;
+                          }}
+                          type="button"
+                        >
+                          <Svg
+                            className={clsx(
+                              'w-3 text-current transition',
+                              isHovered && 'rotate-180',
+                            )}
+                            src="/svgs/chevron-down.svg#chevron-down"
+                            viewBox="0 0 24 24"
+                          />
+                        </button>
+                      )}
+                    </div>
+
+                    {hasMenu && (
+                      <DesktopMenu
+                        anotherMenuOpen={
+                          desktopMenuIndex !== null && !isHovered
+                        }
+                        handleDesktopMenuClose={handleDesktopMenuClose}
+                        handleDesktopMenuHoverOut={handleDesktopMenuHoverOut}
+                        handleDesktopMenuStayOpen={handleDesktopMenuStayOpen}
+                        id={menuId}
+                        isActiveMenu={isHovered}
+                        item={item}
                       />
-                    </Link>
+                    )}
                   </li>
                 );
               })}
@@ -107,6 +191,7 @@ export const Navigation = memo(
 
           <div className="flex items-center gap-4">
             <button
+              aria-expanded={mobileMenuOpen}
               aria-label={
                 mobileMenuOpen ? 'Close mobile menu' : 'Open mobile menu'
               }

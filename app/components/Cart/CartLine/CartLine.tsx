@@ -130,11 +130,15 @@ export const CartLine = memo(({closeCart, line}: CartLineProps) => {
 
             <div className="flex flex-wrap justify-end gap-x-2">
               {compareAtPrice && (
-                <p className="text-neutralMedium line-through">
-                  {compareAtPrice}
+                <p className="text-neutralMedium">
+                  <span className="sr-only">Regular price </span>
+                  <s>{compareAtPrice}</s>
                 </p>
               )}
-              <p>{price}</p>
+              <p>
+                {compareAtPrice && <span className="sr-only">Sale price </span>}
+                {price}
+              </p>
             </div>
           </div>
         </div>

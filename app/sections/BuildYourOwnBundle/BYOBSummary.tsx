@@ -290,9 +290,13 @@ function BYOBSummaryHeader({
 
       {addToCartUnlocked && (
         <div className="flex flex-col items-end">
-          <p>{prices.total}</p>
-          <p className="text-neutralDarker line-through">
-            {prices.compareAtTotal}
+          <p>
+            <span className="sr-only">Bundle price </span>
+            {prices.total}
+          </p>
+          <p className="text-neutralDarker">
+            <span className="sr-only">Regular price </span>
+            <s>{prices.compareAtTotal}</s>
           </p>
         </div>
       )}
