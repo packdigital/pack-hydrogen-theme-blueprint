@@ -19,6 +19,7 @@ export interface FooterSettings {
       link: LinkCms;
     }[];
     copyrightNotice: string;
+    privacyChoicesFallbackUrl?: string;
   };
   menu: {
     menuItems: {
@@ -146,6 +147,14 @@ export default {
               },
             },
           ],
+        },
+        {
+          label: 'Privacy Choices Fallback Url',
+          name: 'privacyChoicesFallbackUrl',
+          component: 'text',
+          description:
+            "Where 'Your Privacy Choices' goes if Shopify's consent preference center hasn't loaded. Point this at the store's Shopify data-sales opt-out page.",
+          defaultValue: '/policies/privacy-policy',
         },
         {
           label: 'Site Copyright Notice',
