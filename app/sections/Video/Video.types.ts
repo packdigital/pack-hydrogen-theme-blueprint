@@ -1,5 +1,6 @@
 import type {ContainerSettings} from '~/settings/container';
 import type {MediaCms, LinkCms} from '~/lib/types';
+import type {ViewportBreakpoint} from '~/hooks';
 
 interface Media {
   title: string;
@@ -42,4 +43,5 @@ export interface VideoElementProps {
   posterUrl?: string;
   title: string;
   video: MediaCms;
+  viewport: ViewportBreakpoint;
 }

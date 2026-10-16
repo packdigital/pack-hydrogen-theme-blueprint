@@ -1,13 +1,45 @@
 import {useInView} from 'react-intersection-observer';
 import clsx from 'clsx';
 
+import {getVideoSrcWithFirstFrame} from '~/lib/utils';
 import {Container} from '~/components/Container';
 import {Image} from '~/components/Image';
 import {Link} from '~/components/Link';
 import {Svg} from '~/components/Svg';
+import {VideoPlayButton} from '~/components/VideoPlayButton';
+import {usePlayWhileInView} from '~/hooks';
 
 import {Schema} from './SocialMediaGrid.schema';
 import type {SocialMediaGridCms} from './SocialMediaGrid.types';
+
+function SocialMediaGridVideo({
+  posterUrl,
+  videoUrl,
+}: {
+  posterUrl?: string;
+  videoUrl: string;
+}) {
+  const {inViewRef, videoRef, isAutoplayBlocked, play} = usePlayWhileInView();
+
+  return (
+    <div className="media-fill" ref={inViewRef}>
+      <video
+        className="media-fill"
+        loop
+        muted
+        playsInline
+        poster={posterUrl}
+        preload="metadata"
+        ref={videoRef}
+        key={videoUrl}
+      >
+        <source src={getVideoSrcWithFirstFrame(videoUrl)} type="video/mp4" />
+      </video>
+
+      {isAutoplayBlocked && <VideoPlayButton onPlay={play} />}
+    </div>
+  );
+}
 
 export function SocialMediaGrid({cms}: {cms: SocialMediaGridCms}) {
   const {ref, inView} = useInView({
@@ -52,17 +84,10 @@ export function SocialMediaGrid({cms}: {cms: SocialMediaGridCms}) {
                     {inView && (
                       <>
                         {videoUrl ? (
-                          <video
-                            autoPlay
-                            className="media-fill"
-                            loop
-                            muted
-                            playsInline
-                            poster={image?.url}
-                            key={videoUrl}
-                          >
-                            <source src={videoUrl} type="video/mp4" />
-                          </video>
+                          <SocialMediaGridVideo
+                            posterUrl={image?.url}
+                            videoUrl={videoUrl}
+                          />
                         ) : (
                           <Image
                             data={{

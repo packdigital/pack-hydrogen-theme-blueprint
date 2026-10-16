@@ -69,7 +69,10 @@ export const Link = forwardRef(
       href = '', // html property
       isExternal = false, // cms property
       newTab = false,
-      prefetch = 'viewport', // react router property
+      // 'intent' prefetches on hover/focus. 'viewport' fires a route data
+      // request for every link scrolled past, so pass it explicitly only where
+      // that is worth the bandwidth
+      prefetch = 'intent', // react router property
       preventScrollReset = false, // react router property
       relative, // react router property
       reloadDocument = false, // react router property

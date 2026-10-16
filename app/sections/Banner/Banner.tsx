@@ -59,6 +59,7 @@ export function Banner({cms}: {cms: BannerCms}) {
                   aboveTheFold={section?.aboveTheFold}
                   posterUrl={video?.posterMobile?.url}
                   video={video?.videoMobile}
+                  viewport="mobile"
                 />
               )}
 
@@ -81,6 +82,7 @@ export function Banner({cms}: {cms: BannerCms}) {
                   aboveTheFold={section?.aboveTheFold}
                   posterUrl={video?.posterDesktop?.url}
                   video={video?.videoDesktop}
+                  viewport="desktop"
                 />
               )}
 

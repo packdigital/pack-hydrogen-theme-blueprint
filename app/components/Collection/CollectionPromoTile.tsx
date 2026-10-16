@@ -2,11 +2,45 @@ import {memo} from 'react';
 import {useInView} from 'react-intersection-observer';
 import clsx from 'clsx';
 
-import {getAspectRatioFromClass} from '~/lib/utils';
+import {getAspectRatioFromClass, getVideoSrcWithFirstFrame} from '~/lib/utils';
 import {Image} from '~/components/Image';
 import {Link} from '~/components/Link';
+import {VideoPlayButton} from '~/components/VideoPlayButton';
+import {usePlayWhileInView} from '~/hooks';
 
 import type {CollectionPromoTileProps} from './Collection.types';
+
+function CollectionPromoTileVideo({
+  format,
+  posterUrl,
+  url,
+}: {
+  format?: string;
+  posterUrl?: string;
+  url?: string;
+}) {
+  const {inViewRef, videoRef, isAutoplayBlocked, play} = usePlayWhileInView();
+
+  return (
+    <div className="media-fill" ref={inViewRef}>
+      <video
+        className="media-fill"
+        controls={false}
+        loop
+        muted
+        playsInline
+        poster={posterUrl}
+        preload="metadata"
+        ref={videoRef}
+        key={url}
+      >
+        <source src={getVideoSrcWithFirstFrame(url)} type={format} />
+      </video>
+
+      {isAutoplayBlocked && <VideoPlayButton onPlay={play} position="corner" />}
+    </div>
+  );
+}
 
 export const CollectionPromoTile = memo(({tile}: CollectionPromoTileProps) => {
   const {ref, inView} = useInView({
@@ -38,18 +72,11 @@ export const CollectionPromoTile = memo(({tile}: CollectionPromoTileProps) => {
         {inView && (
           <>
             {hasVideo && (
-              <video
-                autoPlay
-                className="media-fill"
-                controls={false}
-                loop
-                muted
-                playsInline
-                poster={videoPoster?.url}
-                key={media.url}
-              >
-                <source src={media.url} type={media.format} />
-              </video>
+              <CollectionPromoTileVideo
+                format={media.format}
+                posterUrl={videoPoster?.url}
+                url={media.url}
+              />
             )}
 
             {media?.url && !hasVideo && (

@@ -25,3 +25,17 @@ export const transformShopifyGids = (obj: any): any => {
   // Return other values as is
   return obj;
 };
+
+/**
+ * Appends a `#t=0.001` media fragment to a native video source URL so
+ * browsers (Safari especially) paint the first frame from the metadata
+ * request instead of a blank box when no poster is set. URLs that already
+ * have a fragment and YouTube/Vimeo URLs are returned unchanged.
+ */
+export const getVideoSrcWithFirstFrame = (url: string | undefined | null) => {
+  if (!url) return url ?? undefined;
+  if (url.includes('#') || /youtube\.com|youtu\.be|vimeo\.com/i.test(url)) {
+    return url;
+  }
+  return `${url}#t=0.001`;
+};

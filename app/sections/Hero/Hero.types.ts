@@ -2,6 +2,7 @@ import type {ReactNode} from 'react';
 
 import type {ContainerSettings} from '~/settings/container';
 import type {MediaCms, LinkCms} from '~/lib/types';
+import type {ViewportBreakpoint} from '~/hooks';
 
 interface Section {
   aboveTheFold: boolean;
@@ -115,7 +116,9 @@ export interface HeroSliderProps {
 export interface HeroVideoProps {
   isVisible?: boolean;
   posterUrl?: string;
+  priority?: boolean;
   video?: MediaCms;
+  viewport: ViewportBreakpoint;
 }
 
 export interface HeroContainerProps {
