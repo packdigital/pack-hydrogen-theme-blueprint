@@ -9,8 +9,11 @@ import {useInView} from 'react-intersection-observer';
  * If the browser refuses to autoplay (power saving, data saver, autoplay
  * policy), `isAutoplayBlocked` becomes true so the caller can show a play
  * button; calling `play` from that button's click handler starts playback from
- * a user gesture. A pause the hook did not make (e.g. native controls) counts
- * as manual, and the video is not auto-resumed until it is played again.
+ * a user gesture. A pause the hook did not make (custom button or native
+ * controls, but not the end of playback) counts as the visitor's, and the
+ * video is not auto-resumed until it is played again. The `<video>` is held in
+ * state via a callback ref, so a late-mounted or re-keyed element is picked up
+ * and its listeners are rebound.
  * @param shouldPlay - whether the video should play while in view (e.g.
  * autoplay, active slide, or the user pressed play). When false the video is
  * paused on the next change, so playback started from native controls keeps
@@ -47,20 +50,27 @@ export function usePlayWhileInView({
     if (!videoEl) return undefined;
     isManuallyPausedRef.current = false;
     setIsAutoplayBlocked(false);
+    const handlePlay = () => {
+      isManuallyPausedRef.current = false;
+    };
     const handlePlaying = () => {
       isManuallyPausedRef.current = false;
       setIsAutoplayBlocked(false);
     };
     const handlePause = () => {
+      // Ignore the hook's own pauses and the pause fired when playback ends
       if (isPausingRef.current) {
         isPausingRef.current = false;
         return;
       }
+      if (videoEl.ended) return;
       isManuallyPausedRef.current = true;
     };
+    videoEl.addEventListener('play', handlePlay);
     videoEl.addEventListener('playing', handlePlaying);
     videoEl.addEventListener('pause', handlePause);
     return () => {
+      videoEl.removeEventListener('play', handlePlay);
       videoEl.removeEventListener('playing', handlePlaying);
       videoEl.removeEventListener('pause', handlePause);
     };
