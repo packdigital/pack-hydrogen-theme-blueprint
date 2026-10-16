@@ -1,4 +1,6 @@
+import {getVideoSrcWithFirstFrame} from '~/lib/utils';
 import {Image} from '~/components/Image';
+import {VideoPlayButton} from '~/components/VideoPlayButton';
 import {usePlayWhileInView, useViewportBreakpoint} from '~/hooks';
 
 import type {BannerVideoProps} from './Banner.types';
@@ -10,7 +12,8 @@ export function BannerVideo({
   viewport,
 }: BannerVideoProps) {
   const breakpoint = useViewportBreakpoint();
-  const {inViewRef, videoRef, hasBeenInView} = usePlayWhileInView();
+  const {inViewRef, videoRef, hasBeenInView, isAutoplayBlocked, play} =
+    usePlayWhileInView();
 
   // Mount only the copy for the current breakpoint; the other copy is hidden
   // with CSS and would otherwise still download and decode
@@ -31,7 +34,12 @@ export function BannerVideo({
           ref={videoRef}
           key={video?.url}
         >
-          {video?.url && <source src={video.url} type={video.format} />}
+          {video?.url && (
+            <source
+              src={getVideoSrcWithFirstFrame(video.url)}
+              type={video.format}
+            />
+          )}
         </video>
       ) : (
         posterUrl && (
@@ -43,6 +51,10 @@ export function BannerVideo({
             withLoadingAnimation={false}
           />
         )
+      )}
+
+      {shouldMountVideo && isAutoplayBlocked && (
+        <VideoPlayButton onPlay={play} position="corner" />
       )}
     </div>
   );

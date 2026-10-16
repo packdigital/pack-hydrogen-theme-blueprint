@@ -1,10 +1,12 @@
 import {useInView} from 'react-intersection-observer';
 import clsx from 'clsx';
 
+import {getVideoSrcWithFirstFrame} from '~/lib/utils';
 import {Container} from '~/components/Container';
 import {Image} from '~/components/Image';
 import {Link} from '~/components/Link';
 import {Svg} from '~/components/Svg';
+import {VideoPlayButton} from '~/components/VideoPlayButton';
 import {usePlayWhileInView} from '~/hooks';
 
 import {Schema} from './SocialMediaGrid.schema';
@@ -17,7 +19,7 @@ function SocialMediaGridVideo({
   posterUrl?: string;
   videoUrl: string;
 }) {
-  const {inViewRef, videoRef} = usePlayWhileInView();
+  const {inViewRef, videoRef, isAutoplayBlocked, play} = usePlayWhileInView();
 
   return (
     <div className="media-fill" ref={inViewRef}>
@@ -31,8 +33,10 @@ function SocialMediaGridVideo({
         ref={videoRef}
         key={videoUrl}
       >
-        <source src={videoUrl} type="video/mp4" />
+        <source src={getVideoSrcWithFirstFrame(videoUrl)} type="video/mp4" />
       </video>
+
+      {isAutoplayBlocked && <VideoPlayButton onPlay={play} />}
     </div>
   );
 }

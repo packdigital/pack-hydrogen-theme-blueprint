@@ -1,5 +1,7 @@
 import {forwardRef} from 'react';
 
+import {getVideoSrcWithFirstFrame} from '~/lib/utils';
+
 import type {ProductItemVideoProps} from '../ProductItem.types';
 
 export const ProductItemVideo = forwardRef(
@@ -29,7 +31,7 @@ export const ProductItemVideo = forwardRef(
               return (
                 <source
                   key={source.url}
-                  src={source.url}
+                  src={getVideoSrcWithFirstFrame(source.url)}
                   type={source.mimeType}
                 />
               );

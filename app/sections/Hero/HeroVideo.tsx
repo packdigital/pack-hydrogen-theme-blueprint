@@ -1,4 +1,6 @@
+import {getVideoSrcWithFirstFrame} from '~/lib/utils';
 import {Image} from '~/components/Image';
+import {VideoPlayButton} from '~/components/VideoPlayButton';
 import {usePlayWhileInView, useViewportBreakpoint} from '~/hooks';
 
 import type {HeroVideoProps} from './Hero.types';
@@ -11,7 +13,9 @@ export function HeroVideo({
   viewport,
 }: HeroVideoProps) {
   const breakpoint = useViewportBreakpoint();
-  const {inViewRef, videoRef} = usePlayWhileInView({shouldPlay: isVisible});
+  const {inViewRef, videoRef, isAutoplayBlocked, play} = usePlayWhileInView({
+    shouldPlay: isVisible,
+  });
 
   // Mount only the copy for the current breakpoint; the other copy is hidden
   // with CSS and would otherwise still download and decode
@@ -31,7 +35,12 @@ export function HeroVideo({
           ref={videoRef}
           key={video?.url}
         >
-          {video?.url && <source src={video.url} type={video.format} />}
+          {video?.url && (
+            <source
+              src={getVideoSrcWithFirstFrame(video.url)}
+              type={video.format}
+            />
+          )}
         </video>
       ) : (
         isVisible &&
@@ -44,6 +53,10 @@ export function HeroVideo({
             withLoadingAnimation={false}
           />
         )
+      )}
+
+      {shouldMountVideo && isAutoplayBlocked && (
+        <VideoPlayButton onPlay={play} position="corner" />
       )}
     </div>
   );

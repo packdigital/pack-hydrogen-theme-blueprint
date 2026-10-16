@@ -3,6 +3,7 @@ import {useLoaderData} from 'react-router';
 import hexToRgba from 'hex-to-rgba';
 import clsx from 'clsx';
 
+import {getVideoSrcWithFirstFrame} from '~/lib/utils';
 import {Carousel} from '~/components/Carousel';
 import {RichText} from '~/components/RichText';
 import {Svg} from '~/components/Svg';
@@ -103,7 +104,10 @@ export function ShoppableSocialVideo({cms}: {cms: ShoppableSocialVideoCms}) {
           key={video?.video?.url}
         >
           {video?.video?.mediaType === 'VIDEO' && (
-            <source src={video.video.url} type={video.video.format} />
+            <source
+              src={getVideoSrcWithFirstFrame(video.video.url)}
+              type={video.video.format}
+            />
           )}
         </video>
 

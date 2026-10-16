@@ -2,9 +2,10 @@ import {memo} from 'react';
 import {useInView} from 'react-intersection-observer';
 import clsx from 'clsx';
 
-import {getAspectRatioFromClass} from '~/lib/utils';
+import {getAspectRatioFromClass, getVideoSrcWithFirstFrame} from '~/lib/utils';
 import {Image} from '~/components/Image';
 import {Link} from '~/components/Link';
+import {VideoPlayButton} from '~/components/VideoPlayButton';
 import {usePlayWhileInView} from '~/hooks';
 
 import type {CollectionPromoTileProps} from './Collection.types';
@@ -18,7 +19,7 @@ function CollectionPromoTileVideo({
   posterUrl?: string;
   url?: string;
 }) {
-  const {inViewRef, videoRef} = usePlayWhileInView();
+  const {inViewRef, videoRef, isAutoplayBlocked, play} = usePlayWhileInView();
 
   return (
     <div className="media-fill" ref={inViewRef}>
@@ -33,8 +34,10 @@ function CollectionPromoTileVideo({
         ref={videoRef}
         key={url}
       >
-        <source src={url} type={format} />
+        <source src={getVideoSrcWithFirstFrame(url)} type={format} />
       </video>
+
+      {isAutoplayBlocked && <VideoPlayButton onPlay={play} />}
     </div>
   );
 }

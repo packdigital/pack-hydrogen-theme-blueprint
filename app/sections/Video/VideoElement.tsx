@@ -1,8 +1,10 @@
 import {useState} from 'react';
 import clsx from 'clsx';
 
+import {getVideoSrcWithFirstFrame} from '~/lib/utils';
 import {Image} from '~/components/Image';
 import {Svg} from '~/components/Svg';
+import {VideoPlayButton} from '~/components/VideoPlayButton';
 import {usePlayWhileInView, useViewportBreakpoint} from '~/hooks';
 
 import type {VideoElementProps} from './Video.types';
@@ -19,9 +21,10 @@ export function VideoElement({
   const [isPlaying, setIsPlaying] = useState(autoplay);
 
   const breakpoint = useViewportBreakpoint();
-  const {inViewRef, videoRef, hasBeenInView} = usePlayWhileInView({
-    shouldPlay: isPlaying,
-  });
+  const {inViewRef, videoRef, hasBeenInView, isAutoplayBlocked, play} =
+    usePlayWhileInView({
+      shouldPlay: isPlaying,
+    });
 
   // Mount only the copy for the current breakpoint; the other copy is hidden
   // with CSS and would otherwise still download and decode
@@ -42,6 +45,8 @@ export function VideoElement({
           muted={autoplay || !sound}
           onClick={() => {
             if (!pauseAndPlay) return;
+            // Call play() directly so it runs from the click's user gesture
+            if (!isPlaying) play();
             setIsPlaying(!isPlaying);
           }}
           playsInline
@@ -50,7 +55,12 @@ export function VideoElement({
           ref={videoRef}
           key={video?.url}
         >
-          {video?.url && <source src={video.url} type={video.format} />}
+          {video?.url && (
+            <source
+              src={getVideoSrcWithFirstFrame(video.url)}
+              type={video.format}
+            />
+          )}
         </video>
       ) : (
         posterUrl && (
@@ -64,7 +74,17 @@ export function VideoElement({
         )
       )}
 
-      {pauseAndPlay && isPlaying && (
+      {shouldMountVideo && isAutoplayBlocked && (
+        <VideoPlayButton
+          label={title ? `Play ${title}` : undefined}
+          onPlay={() => {
+            play();
+            setIsPlaying(true);
+          }}
+        />
+      )}
+
+      {pauseAndPlay && isPlaying && !isAutoplayBlocked && (
         <Svg
           className="pointer-events-none absolute left-1/2 top-1/2 w-10 -translate-x-1/2 -translate-y-1/2 text-white opacity-0 transition md:group-hover:opacity-90"
           src="/svgs/pause.svg#pause"
@@ -73,7 +93,7 @@ export function VideoElement({
         />
       )}
 
-      {pauseAndPlay && !isPlaying && (
+      {pauseAndPlay && !isPlaying && !isAutoplayBlocked && (
         <Svg
           className="pointer-events-none absolute left-1/2 top-1/2 w-10 -translate-x-1/2 -translate-y-1/2 text-white opacity-70 transition md:group-hover:opacity-90"
           src="/svgs/play.svg#play"

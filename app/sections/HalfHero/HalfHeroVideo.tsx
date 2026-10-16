@@ -3,6 +3,7 @@
 import {useState} from 'react';
 import clsx from 'clsx';
 
+import {getVideoSrcWithFirstFrame} from '~/lib/utils';
 import {Image} from '~/components/Image';
 import {Svg} from '~/components/Svg';
 import {usePlayWhileInView, useViewportBreakpoint} from '~/hooks';
@@ -22,13 +23,15 @@ export function HalfHeroVideo({
 
   const breakpoint = useViewportBreakpoint();
   // Videos with sound use native controls, so only pause them out of view
-  const {inViewRef, videoRef, hasBeenInView} = usePlayWhileInView({
-    shouldPlay: autoplay || (!sound && isPlaying),
-  });
+  const {inViewRef, videoRef, hasBeenInView, isAutoplayBlocked, play} =
+    usePlayWhileInView({
+      shouldPlay: autoplay || (!sound && isPlaying),
+    });
 
   // Mount only the copy for the current breakpoint; the other copy is hidden
   // with CSS and would otherwise still download and decode
   const shouldMountVideo = breakpoint === viewport && hasBeenInView;
+  const showPlayIcon = !isPlaying || isAutoplayBlocked;
 
   return (
     <div ref={inViewRef} className="media-fill relative">
@@ -44,7 +47,12 @@ export function HalfHeroVideo({
           ref={videoRef}
           key={video?.url}
         >
-          {video?.url && <source src={video.url} type={video.format} />}
+          {video?.url && (
+            <source
+              src={getVideoSrcWithFirstFrame(video.url)}
+              type={video.format}
+            />
+          )}
         </video>
       ) : (
         posterUrl && (
@@ -58,17 +66,21 @@ export function HalfHeroVideo({
         )
       )}
 
-      {!autoplay && !sound && (
+      {((!autoplay && !sound) || (shouldMountVideo && isAutoplayBlocked)) && (
         <button
           aria-label={`Play video for ${videoAlt}`}
           className={clsx(
             'group absolute inset-0 size-full transition md:hover:bg-transparent',
-            !isPlaying && 'bg-[rgba(0,0,0,0.2)]',
+            showPlayIcon && 'bg-[rgba(0,0,0,0.2)]',
           )}
-          onClick={() => setIsPlaying(!isPlaying)}
+          onClick={() => {
+            // Call play() directly so it runs from the click's user gesture
+            if (isAutoplayBlocked || !isPlaying) play();
+            setIsPlaying(isAutoplayBlocked || !isPlaying);
+          }}
           type="button"
         >
-          {!isPlaying && (
+          {showPlayIcon && (
             <Svg
               className="absolute left-1/2 top-1/2 w-12 -translate-x-1/2 -translate-y-1/2 text-white opacity-90 transition xs:w-16 md:group-hover:opacity-100 lg:w-20"
               src="/svgs/play.svg#play"

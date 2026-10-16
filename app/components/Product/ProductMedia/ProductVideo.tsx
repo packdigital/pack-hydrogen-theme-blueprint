@@ -1,6 +1,8 @@
 import {useEffect, useRef} from 'react';
 import type {Video} from '@shopify/hydrogen/storefront-api-types';
 
+import {getVideoSrcWithFirstFrame} from '~/lib/utils';
+
 import type {ProductVideoProps} from './ProductMedia.types';
 
 export function ProductVideo({
@@ -39,7 +41,7 @@ export function ProductVideo({
             return (
               <source
                 key={source.url}
-                src={source.url}
+                src={getVideoSrcWithFirstFrame(source.url)}
                 type={source.mimeType}
               />
             );

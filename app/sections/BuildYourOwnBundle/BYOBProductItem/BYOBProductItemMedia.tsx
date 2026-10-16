@@ -2,6 +2,7 @@ import {forwardRef, useRef} from 'react';
 import clsx from 'clsx';
 import type {Video} from '@shopify/hydrogen-react/storefront-api-types';
 
+import {getVideoSrcWithFirstFrame} from '~/lib/utils';
 import {Image} from '~/components/Image';
 
 import type {
@@ -110,7 +111,7 @@ export const BYOBProductItemVideo = forwardRef(
               return (
                 <source
                   key={source.url}
-                  src={source.url}
+                  src={getVideoSrcWithFirstFrame(source.url)}
                   type={source.mimeType}
                 />
               );
