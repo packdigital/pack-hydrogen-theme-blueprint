@@ -136,6 +136,13 @@ export default {
         testSession: packTestSession,
         contentEnvironment: env.PUBLIC_PACK_CONTENT_ENVIRONMENT,
         defaultThemeData,
+        // Who is signed in, for audiences that ask (`auth_status`). `isLoggedIn`
+        // is a tri-state: `false` is a known guest, `undefined` means the theme
+        // did not say and Pack refuses those audiences rather than guessing —
+        // so never default it to `false`.
+        getCustomerContext: async () => ({
+          isLoggedIn: await customerAccount.isLoggedIn(),
+        }),
       });
 
       /**
