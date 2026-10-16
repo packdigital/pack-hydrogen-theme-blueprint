@@ -6,6 +6,7 @@ import clsx from 'clsx';
 import {getVideoSrcWithFirstFrame} from '~/lib/utils';
 import {Image} from '~/components/Image';
 import {Svg} from '~/components/Svg';
+import {VideoPlayButton} from '~/components/VideoPlayButton';
 import {usePlayWhileInView, useViewportBreakpoint} from '~/hooks';
 
 import type {HalfHeroVideoProps} from './HalfHero.types';
@@ -31,6 +32,7 @@ export function HalfHeroVideo({
   // Mount only the copy for the current breakpoint; the other copy is hidden
   // with CSS and would otherwise still download and decode
   const shouldMountVideo = breakpoint === viewport && hasBeenInView;
+  const isClickToPlay = !autoplay && !sound;
   const showPlayIcon = !isPlaying || isAutoplayBlocked;
 
   return (
@@ -66,7 +68,15 @@ export function HalfHeroVideo({
         )
       )}
 
-      {((!autoplay && !sound) || (shouldMountVideo && isAutoplayBlocked)) && (
+      {shouldMountVideo && isAutoplayBlocked && !isClickToPlay && (
+        <VideoPlayButton
+          label={`Play video for ${videoAlt}`}
+          onPlay={play}
+          position="corner"
+        />
+      )}
+
+      {isClickToPlay && (
         <button
           aria-label={`Play video for ${videoAlt}`}
           className={clsx(

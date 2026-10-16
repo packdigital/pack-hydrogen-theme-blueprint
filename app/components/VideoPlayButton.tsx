@@ -3,9 +3,14 @@ import clsx from 'clsx';
 import {Svg} from '~/components/Svg';
 
 /**
- * Play button shown when the browser blocks autoplay, so a video never looks
- * like a still image. `onPlay` should call the video's play() directly so it
- * runs from the click's user gesture.
+ * Compact play button shown when the browser blocks autoplay, so a video never
+ * looks like a still image. `onPlay` should call the video's play() directly
+ * so it runs from the click's user gesture. Use `corner` where text or CTAs
+ * sit over the video so the button doesn't cover them.
+ *
+ * z-[2] clears section content layers (z-auto, and the z-[1] clickable-slide
+ * link) so the button stays tappable. Sections don't create a stacking
+ * context, so a higher value would paint over the fixed header (z-20).
  */
 export function VideoPlayButton({
   className,

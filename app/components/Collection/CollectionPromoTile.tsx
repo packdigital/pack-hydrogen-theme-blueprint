@@ -37,7 +37,7 @@ function CollectionPromoTileVideo({
         <source src={getVideoSrcWithFirstFrame(url)} type={format} />
       </video>
 
-      {isAutoplayBlocked && <VideoPlayButton onPlay={play} />}
+      {isAutoplayBlocked && <VideoPlayButton onPlay={play} position="corner" />}
     </div>
   );
 }
