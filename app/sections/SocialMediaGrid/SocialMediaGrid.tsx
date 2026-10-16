@@ -5,9 +5,37 @@ import {Container} from '~/components/Container';
 import {Image} from '~/components/Image';
 import {Link} from '~/components/Link';
 import {Svg} from '~/components/Svg';
+import {usePlayWhileInView} from '~/hooks';
 
 import {Schema} from './SocialMediaGrid.schema';
 import type {SocialMediaGridCms} from './SocialMediaGrid.types';
+
+function SocialMediaGridVideo({
+  posterUrl,
+  videoUrl,
+}: {
+  posterUrl?: string;
+  videoUrl: string;
+}) {
+  const {inViewRef, videoRef} = usePlayWhileInView();
+
+  return (
+    <div className="media-fill" ref={inViewRef}>
+      <video
+        className="media-fill"
+        loop
+        muted
+        playsInline
+        poster={posterUrl}
+        preload="metadata"
+        ref={videoRef}
+        key={videoUrl}
+      >
+        <source src={videoUrl} type="video/mp4" />
+      </video>
+    </div>
+  );
+}
 
 export function SocialMediaGrid({cms}: {cms: SocialMediaGridCms}) {
   const {ref, inView} = useInView({
@@ -52,17 +80,10 @@ export function SocialMediaGrid({cms}: {cms: SocialMediaGridCms}) {
                     {inView && (
                       <>
                         {videoUrl ? (
-                          <video
-                            autoPlay
-                            className="media-fill"
-                            loop
-                            muted
-                            playsInline
-                            poster={image?.url}
-                            key={videoUrl}
-                          >
-                            <source src={videoUrl} type="video/mp4" />
-                          </video>
+                          <SocialMediaGridVideo
+                            posterUrl={image?.url}
+                            videoUrl={videoUrl}
+                          />
                         ) : (
                           <Image
                             data={{

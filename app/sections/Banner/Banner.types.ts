@@ -2,6 +2,7 @@ import type {ReactNode} from 'react';
 
 import type {ContainerSettings} from '~/settings/container';
 import type {MediaCms, LinkCms} from '~/lib/types';
+import type {ViewportBreakpoint} from '~/hooks';
 
 export interface BannerCms {
   image: {
@@ -69,6 +70,7 @@ export interface BannerVideoProps {
   aboveTheFold: boolean | undefined;
   posterUrl?: string;
   video: MediaCms;
+  viewport: ViewportBreakpoint;
 }
 
 export interface BannerContainerProps {

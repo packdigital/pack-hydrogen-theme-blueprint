@@ -65,7 +65,9 @@ export function HeroSlide({
               <HeroVideo
                 isVisible={isVisible}
                 posterUrl={video.posterMobile?.url}
+                priority={shouldEagerLoad}
                 video={video.videoMobile}
+                viewport="mobile"
               />
             )}
 
@@ -87,7 +89,9 @@ export function HeroSlide({
               <HeroVideo
                 isVisible={isVisible}
                 posterUrl={video.posterDesktop?.url}
+                priority={shouldEagerLoad}
                 video={video.videoDesktop}
+                viewport="desktop"
               />
             )}
 

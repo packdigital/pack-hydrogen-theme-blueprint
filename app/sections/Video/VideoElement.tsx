@@ -1,8 +1,9 @@
-import {useRef, useState} from 'react';
-import {useInView} from 'react-intersection-observer';
+import {useState} from 'react';
 import clsx from 'clsx';
 
+import {Image} from '~/components/Image';
 import {Svg} from '~/components/Svg';
+import {usePlayWhileInView, useViewportBreakpoint} from '~/hooks';
 
 import type {VideoElementProps} from './Video.types';
 
@@ -11,23 +12,27 @@ export function VideoElement({
   posterUrl,
   title,
   video,
+  viewport,
 }: VideoElementProps) {
   const {autoplay, loop, pauseAndPlay, sound, controls} = {...playOptions};
 
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const {ref: inViewRef, inView} = useInView({
-    rootMargin: '200px',
-    triggerOnce: true,
-  });
   const [isPlaying, setIsPlaying] = useState(autoplay);
+
+  const breakpoint = useViewportBreakpoint();
+  const {inViewRef, videoRef, hasBeenInView} = usePlayWhileInView({
+    shouldPlay: isPlaying,
+  });
+
+  // Mount only the copy for the current breakpoint; the other copy is hidden
+  // with CSS and would otherwise still download and decode
+  const shouldMountVideo = breakpoint === viewport && hasBeenInView;
 
   return (
     <span className="group absolute inset-0 size-full" ref={inViewRef}>
-      {inView && (
+      {shouldMountVideo ? (
         // eslint-disable-next-line jsx-a11y/media-has-caption
         <video
           aria-label={title}
-          autoPlay={autoplay}
           className={clsx(
             'absolute inset-0 size-full object-cover',
             pauseAndPlay && 'cursor-pointer',
@@ -36,22 +41,27 @@ export function VideoElement({
           loop={loop}
           muted={autoplay || !sound}
           onClick={() => {
-            if (!pauseAndPlay || !videoRef.current) return;
-            if (isPlaying) {
-              videoRef.current.pause();
-              setIsPlaying(false);
-            } else {
-              videoRef.current.play();
-              setIsPlaying(true);
-            }
+            if (!pauseAndPlay) return;
+            setIsPlaying(!isPlaying);
           }}
           playsInline
           poster={posterUrl}
+          preload="metadata"
           ref={videoRef}
           key={video?.url}
         >
           {video?.url && <source src={video.url} type={video.format} />}
         </video>
+      ) : (
+        posterUrl && (
+          <Image
+            data={{url: posterUrl, altText: title}}
+            className="absolute inset-0 size-full object-cover"
+            loading="lazy"
+            sizes="100vw"
+            withLoadingAnimation={false}
+          />
+        )
       )}
 
       {pauseAndPlay && isPlaying && (

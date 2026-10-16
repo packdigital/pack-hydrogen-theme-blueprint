@@ -1,4 +1,5 @@
 import type {Crop, MediaCms} from '~/lib/types';
+import type {ViewportBreakpoint} from '~/hooks';
 import type {ContainerSettings} from '~/settings/container';
 
 interface Image {
@@ -70,9 +71,11 @@ export interface HalfHeroContentProps {
 }
 
 export interface HalfHeroVideoProps {
+  aboveTheFold?: boolean;
   autoplay?: boolean;
   posterUrl?: string;
   sound?: boolean;
   video: MediaCms;
   videoAlt?: string;
+  viewport: ViewportBreakpoint;
 }

@@ -1,5 +1,5 @@
-import {useRef} from 'react';
-import {useInView} from 'react-intersection-observer';
+import {Image} from '~/components/Image';
+import {usePlayWhileInView, useViewportBreakpoint} from '~/hooks';
 
 import type {BannerVideoProps} from './Banner.types';
 
@@ -7,29 +7,42 @@ export function BannerVideo({
   aboveTheFold,
   posterUrl,
   video,
+  viewport,
 }: BannerVideoProps) {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const {ref, inView} = useInView({
-    rootMargin: '200px',
-    triggerOnce: true,
-  });
+  const breakpoint = useViewportBreakpoint();
+  const {inViewRef, videoRef, hasBeenInView} = usePlayWhileInView();
+
+  // Mount only the copy for the current breakpoint; the other copy is hidden
+  // with CSS and would otherwise still download and decode
+  const shouldMountVideo =
+    breakpoint === viewport && (aboveTheFold || hasBeenInView);
 
   return (
-    <div ref={ref} className="absolute inset-0 size-full">
-      {(aboveTheFold || inView) && (
+    <div ref={inViewRef} className="absolute inset-0 size-full">
+      {shouldMountVideo ? (
         <video
           className="media-fill"
-          autoPlay
           controls={false}
           loop
           muted
           playsInline
           poster={posterUrl}
+          preload={aboveTheFold ? 'auto' : 'metadata'}
           ref={videoRef}
           key={video?.url}
         >
           {video?.url && <source src={video.url} type={video.format} />}
         </video>
+      ) : (
+        posterUrl && (
+          <Image
+            data={{url: posterUrl}}
+            className="media-fill"
+            loading={aboveTheFold ? 'eager' : 'lazy'}
+            sizes="100vw"
+            withLoadingAnimation={false}
+          />
+        )
       )}
     </div>
   );

@@ -50,6 +50,7 @@ export function Video({cms}: {cms: VideoCms}) {
                 posterUrl={posterMobile?.url}
                 title={title}
                 video={videoMobile}
+                viewport="mobile"
               />
             )}
           </div>
@@ -66,6 +67,7 @@ export function Video({cms}: {cms: VideoCms}) {
                 posterUrl={posterDesktop?.url}
                 title={title}
                 video={videoDesktop}
+                viewport="desktop"
               />
             )}
           </div>

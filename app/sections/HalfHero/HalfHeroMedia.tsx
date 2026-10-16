@@ -44,11 +44,13 @@ export function HalfHeroMedia({
           <div className="relative size-full overflow-hidden md:hidden">
             {hasMobileVideo && (
               <HalfHeroVideo
+                aboveTheFold={aboveTheFold}
                 autoplay={video.autoplay}
                 posterUrl={video.posterMobile?.url}
                 sound={video.sound}
                 video={video.videoMobile}
                 videoAlt={videoAlt}
+                viewport="mobile"
               />
             )}
 
@@ -70,11 +72,13 @@ export function HalfHeroMedia({
           <div className="relative hidden size-full overflow-hidden md:block">
             {hasDesktopVideo && (
               <HalfHeroVideo
+                aboveTheFold={aboveTheFold}
                 autoplay={video.autoplay}
                 posterUrl={video.posterDesktop?.url}
                 sound={video.sound}
                 video={video.videoDesktop}
                 videoAlt={videoAlt}
+                viewport="desktop"
               />
             )}
 

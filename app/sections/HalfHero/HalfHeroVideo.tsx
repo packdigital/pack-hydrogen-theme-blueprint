@@ -1,53 +1,61 @@
 // eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable jsx-a11y/media-has-caption */
-import {useEffect, useRef, useState} from 'react';
-import {useInView} from 'react-intersection-observer';
+import {useState} from 'react';
 import clsx from 'clsx';
 
+import {Image} from '~/components/Image';
 import {Svg} from '~/components/Svg';
+import {usePlayWhileInView, useViewportBreakpoint} from '~/hooks';
 
 import type {HalfHeroVideoProps} from './HalfHero.types';
 
 export function HalfHeroVideo({
+  aboveTheFold,
   autoplay,
   posterUrl,
   sound,
   video,
   videoAlt,
+  viewport,
 }: HalfHeroVideoProps) {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const {ref, inView} = useInView({
-    rootMargin: '200px',
-    triggerOnce: true,
-  });
-
   const [isPlaying, setIsPlaying] = useState(false);
 
-  useEffect(() => {
-    if (autoplay || isPlaying === null || sound || !videoRef.current) return;
-    if (isPlaying) {
-      videoRef.current.play();
-    } else {
-      videoRef.current.pause();
-    }
-  }, [autoplay, isPlaying, sound]);
+  const breakpoint = useViewportBreakpoint();
+  // Videos with sound use native controls, so only pause them out of view
+  const {inViewRef, videoRef, hasBeenInView} = usePlayWhileInView({
+    shouldPlay: autoplay || (!sound && isPlaying),
+  });
+
+  // Mount only the copy for the current breakpoint; the other copy is hidden
+  // with CSS and would otherwise still download and decode
+  const shouldMountVideo = breakpoint === viewport && hasBeenInView;
 
   return (
-    <div ref={ref} className="media-fill relative">
-      {inView && (
+    <div ref={inViewRef} className="media-fill relative">
+      {shouldMountVideo ? (
         <video
-          autoPlay={autoplay}
           className="size-full object-cover"
           controls={!autoplay && sound}
           loop={autoplay || !sound}
           muted={autoplay || !sound}
           playsInline
           poster={posterUrl}
+          preload={aboveTheFold && autoplay ? 'auto' : 'metadata'}
           ref={videoRef}
           key={video?.url}
         >
           {video?.url && <source src={video.url} type={video.format} />}
         </video>
+      ) : (
+        posterUrl && (
+          <Image
+            data={{url: posterUrl}}
+            className="size-full object-cover"
+            loading={aboveTheFold ? 'eager' : 'lazy'}
+            sizes="(min-width: 768px) 50vw, 100vw"
+            withLoadingAnimation={false}
+          />
+        )
       )}
 
       {!autoplay && !sound && (
