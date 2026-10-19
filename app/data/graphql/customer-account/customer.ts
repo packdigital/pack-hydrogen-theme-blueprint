@@ -86,6 +86,22 @@ export const CUSTOMER_DETAILS_QUERY = `
   ${CUSTOMER_FRAGMENT}
 ` as const;
 
+/**
+ * Minimal identity query for server-side third-party lookups (e.g. loyalty),
+ * where only the customer id is needed and fetching full details is wasteful.
+ */
+// Docs: https://shopify.dev/docs/api/customer/latest/queries/customer
+export const CUSTOMER_ID_QUERY = `
+  query CustomerId {
+    customer {
+      id
+      emailAddress {
+        emailAddress
+      }
+    }
+  }
+` as const;
+
 // Docs: https://shopify.dev/docs/api/customer/latest/queries/order
 export const CUSTOMER_ORDER_QUERY = `
   fragment OrderMoney on MoneyV2 {

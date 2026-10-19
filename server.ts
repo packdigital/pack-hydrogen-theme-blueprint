@@ -8,6 +8,7 @@ import {
   cartSetIdDefault,
   createStorefrontClient,
   storefrontRedirect,
+  createWithCache,
 } from '@shopify/hydrogen';
 import {
   createRequestHandler,
@@ -151,6 +152,11 @@ export default {
           getLoadContext: () => ({
             cache,
             waitUntil,
+            /**
+             * Wraps non-Storefront upstreams (e.g. Rivo) in the same subrequest
+             * cache Hydrogen uses for its own queries.
+             */
+            withCache: createWithCache({cache, waitUntil, request}),
             session,
             storefront,
             customerAccount,

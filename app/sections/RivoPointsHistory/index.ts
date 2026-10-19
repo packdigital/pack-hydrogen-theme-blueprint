@@ -1,0 +1,1 @@
+export {RivoPointsHistory} from './RivoPointsHistory';
