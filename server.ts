@@ -122,8 +122,11 @@ export default {
        * Create Pack client.
        */
 
-      // check if the PACK_SECRET_TOKEN is set
-      if (!env.PACK_SECRET_TOKEN) {
+      // With mock.shop and no Pack token, the Pack client serves the bundled
+      // default theme data, so no Pack account is needed
+      const isMockShopDemo =
+        env.PUBLIC_STORE_DOMAIN === 'mock.shop' && !env.PACK_SECRET_TOKEN;
+      if (!env.PACK_SECRET_TOKEN && !isMockShopDemo) {
         throw new Error('`PACK_SECRET_TOKEN` environment variable is not set.');
       }
 
@@ -131,7 +134,7 @@ export default {
         cache,
         waitUntil,
         token: env.PACK_SECRET_TOKEN,
-        storeId: env.PACK_STOREFRONT_ID,
+        storeId: isMockShopDemo ? 'mock-shop' : env.PACK_STOREFRONT_ID,
         session: packSession,
         testSession: packTestSession,
         contentEnvironment: env.PUBLIC_PACK_CONTENT_ENVIRONMENT,

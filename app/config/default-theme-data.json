@@ -504,621 +504,627 @@
       "/": {
         "title": "Home",
         "description": "This is the home page",
-        "sections": [
-          {
-            "data": {
-              "_template": "hero",
-              "id": "default-hero-data",
-              "slider": {
-                "delay": 8000,
-                "effect": "fade",
-                "autoplay": false,
-                "pagination": true,
-                "activeBulletColor": "#A3A3A3"
-              },
-              "slides": [
-                {
-                  "text": {
-                    "heading": "All new products\nthis season",
-                    "subheading": "New styles and new fits",
-                    "colorMobile": "max-md:text-[#FFFFFF]",
-                    "colorDesktop": "md:text-[#FFFFFF]",
-                    "superheading": "New Collection",
-                    "hideHeadingMobile": false,
-                    "hideHeadingDesktop": false
+        "sections": {
+          "nodes": [
+            {
+              "data": {
+                "_template": "hero",
+                "id": "default-hero-data",
+                "slider": {
+                  "delay": 8000,
+                  "effect": "fade",
+                  "autoplay": false,
+                  "pagination": true,
+                  "activeBulletColor": "#A3A3A3"
+                },
+                "slides": [
+                  {
+                    "text": {
+                      "heading": "All new products\nthis season",
+                      "subheading": "New styles and new fits",
+                      "colorMobile": "max-md:text-[#FFFFFF]",
+                      "colorDesktop": "md:text-[#FFFFFF]",
+                      "superheading": "New Collection",
+                      "hideHeadingMobile": false,
+                      "hideHeadingDesktop": false
+                    },
+                    "image": {
+                      "alt": "Three men outside wearing outerwear",
+                      "imageMobile": {
+                        "id": "gid://shopify/MediaImage/27076979032264",
+                        "url": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/men-posing-in-outerwear.jpg?v=1701459236",
+                        "size": 550781,
+                        "type": "file",
+                        "width": 3000,
+                        "format": "image/jpeg",
+                        "height": 1989,
+                        "altText": "",
+                        "filename": "men-posing-in-outerwear.jpg?v=1701459236",
+                        "directory": "",
+                        "previewSrc": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/men-posing-in-outerwear.jpg?v=1701459236",
+                        "aspectRatio": 1.508295625942685
+                      },
+                      "imageDesktop": {
+                        "id": "gid://shopify/MediaImage/27076979032264",
+                        "url": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/men-posing-in-outerwear.jpg?v=1701459236",
+                        "size": 550781,
+                        "type": "file",
+                        "width": 3000,
+                        "format": "image/jpeg",
+                        "height": 1989,
+                        "altText": "",
+                        "filename": "men-posing-in-outerwear.jpg?v=1701459236",
+                        "directory": "",
+                        "previewSrc": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/men-posing-in-outerwear.jpg?v=1701459236",
+                        "aspectRatio": 1.508295625942685
+                      },
+                      "positionMobile": "object-center",
+                      "positionDesktop": "md:object-center"
+                    },
+                    "button": {
+                      "buttons": [
+                        {
+                          "link": {
+                            "url": "/collections/all",
+                            "text": "Shop Now",
+                            "type": "isExternal"
+                          },
+                          "style": "btn-primary"
+                        }
+                      ],
+                      "clickableSlide": false,
+                      "hideButtonsMobile": false,
+                      "hideButtonsDesktop": false
+                    },
+                    "content": {
+                      "darkOverlay": false,
+                      "maxWidthMobile": "max-w-[22.5rem]",
+                      "positionMobile": "justify-start items-center",
+                      "alignmentMobile": "text-left items-start",
+                      "maxWidthDesktop": "md:max-w-[30rem] lg:max-w-[38rem]",
+                      "positionDesktop": "md:justify-start items-center",
+                      "alignmentDesktop": "md:text-left md:items-start"
+                    }
+                  }
+                ],
+                "section": {
+                  "mobile": {
+                    "maxHeight": "",
+                    "minHeight": "",
+                    "heightType": "aspect-ratio",
+                    "aspectRatio": "max-md:aspect-[4/5]",
+                    "staticHeight": "max-md:h-[31.25rem]"
                   },
+                  "desktop": {
+                    "maxHeight": "",
+                    "minHeight": "",
+                    "heightType": "aspect-ratio",
+                    "aspectRatio": "md:aspect-[16/9]",
+                    "staticHeight": "md:h-[43.75rem]"
+                  },
+                  "fullBleed": true,
+                  "fullWidth": true,
+                  "aboveTheFold": true
+                },
+                "sectionName": "Homepage Hero",
+                "sectionType": "local",
+                "resourceType": "page",
+                "hasReferences": false,
+                "parentContentType": "page",
+                "sectionVisibility": "visible"
+              }
+            },
+            {
+              "data": {
+                "tabs": [
+                  {
+                    "tiles": [
+                      {
+                        "alt": "Man in white and light tan outfit",
+                        "link": {
+                          "url": "/collections/all",
+                          "type": "isExternal"
+                        },
+                        "image": {
+                          "url": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/man-in-white-and-light-tan-outfit.jpg?v=1672348139"
+                        },
+                        "heading": "Headline",
+                        "position": "object-center",
+                        "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+                      },
+                      {
+                        "alt": "Man in brown coat sitting down",
+                        "link": {
+                          "url": "/collections/all",
+                          "type": "isExternal"
+                        },
+                        "image": {
+                          "url": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/austin-wade-d2s8NQ6WD24-unsplash.jpg?v=1672348122"
+                        },
+                        "heading": "Headline",
+                        "position": "object-center",
+                        "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+                      },
+                      {
+                        "alt": "Man in gray sweater and tan coat",
+                        "link": {
+                          "url": "/collections/all",
+                          "type": "isExternal"
+                        },
+                        "image": {
+                          "url": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/man-poses-in-light-colored-overcoat.jpg?v=1672348143"
+                        },
+                        "heading": "Headline",
+                        "position": "object-center",
+                        "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+                      }
+                    ],
+                    "tabName": "Tab Name"
+                  },
+                  {
+                    "tiles": [
+                      {
+                        "alt": "Man in brown coat sitting down",
+                        "image": {
+                          "url": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/austin-wade-d2s8NQ6WD24-unsplash.jpg?v=1672348122"
+                        },
+                        "heading": "Headline",
+                        "position": "object-center",
+                        "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+                      },
+                      {
+                        "alt": "Man in gray sweater and tan coat",
+                        "image": {
+                          "url": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/man-poses-in-light-colored-overcoat.jpg?v=1672348143"
+                        },
+                        "heading": "Headline",
+                        "position": "object-center",
+                        "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+                      },
+                      {
+                        "alt": "Man in white and light tan outfit",
+                        "image": {
+                          "url": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/man-in-white-and-light-tan-outfit.jpg?v=1672348139"
+                        },
+                        "heading": "Headline",
+                        "position": "object-center",
+                        "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+                      }
+                    ],
+                    "tabName": "Tab Name"
+                  }
+                ],
+                "header": {
+                  "heading": "New Collections",
+                  "alignment": "text-center items-center"
+                },
+                "section": {
+                  "tilesPerViewDesktop": 3,
+                  "tilesPerViewTablet": 2.4,
+                  "tilesPerViewMobile": 1.4,
+                  "aspectRatio": "aspect-[3/4]",
+                  "textColor": "#000000",
+                  "textAlign": "text-left items-start",
+                  "tileHeadingSize": "text-h4",
+                  "buttonStyle": "btn-primary",
+                  "fullWidth": false
+                },
+                "_template": "tabbed-tiles-slider",
+                "id": "default-tabbed-tiles-slider-data",
+                "sectionName": "Homepage Tabbed Tiles Slider",
+                "sectionType": "local",
+                "resourceType": "page",
+                "hasReferences": false,
+                "parentContentType": "page",
+                "sectionVisibility": "visible"
+              }
+            },
+            {
+              "data": {
+                "slider": {
+                  "sliderStyle": "contained",
+                  "slidesPerViewMobile": 1.4,
+                  "slidesPerViewTablet": 3.4,
+                  "slidesPerViewDesktop": 4
+                },
+                "heading": "Best Sellers",
+                "section": {
+                  "fullWidth": false,
+                  "buttonStyle": "btn-primary"
+                },
+                "products": [
+                  {
+                    "handle": "",
+                    "product": null
+                  },
+                  {
+                    "handle": "",
+                    "product": null
+                  },
+                  {
+                    "handle": "",
+                    "product": null
+                  },
+                  {
+                    "handle": "",
+                    "product": null
+                  }
+                ],
+                "_template": "products-slider",
+                "id": "default-products-slider-data",
+                "productItem": {
+                  "enabledQuickShop": true,
+                  "quickShopMobileHidden": true,
+                  "enabledStarRating": true,
+                  "enabledColorSelector": true,
+                  "enabledColorNameOnHover": false
+                },
+                "sectionName": "Homepage Products Slider",
+                "sectionType": "local",
+                "resourceType": "page",
+                "hasReferences": false,
+                "parentContentType": "page",
+                "sectionVisibility": "visible"
+              }
+            },
+            {
+              "data": {
+                "media": {
+                  "fill": true,
                   "image": {
-                    "alt": "Three men outside wearing outerwear",
+                    "alt": "Man with backpack crossing the street",
                     "imageMobile": {
-                      "id": "gid://shopify/MediaImage/27076979032264",
-                      "url": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/men-posing-in-outerwear.jpg?v=1701459236",
-                      "size": 550781,
-                      "type": "file",
-                      "width": 3000,
-                      "format": "image/jpeg",
-                      "height": 1989,
-                      "altText": "",
-                      "filename": "men-posing-in-outerwear.jpg?v=1701459236",
-                      "directory": "",
-                      "previewSrc": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/men-posing-in-outerwear.jpg?v=1701459236",
-                      "aspectRatio": 1.508295625942685
+                      "url": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/mad-rabbit-tattoo-tn1yJqxNj-8-unsplash.jpg?v=1672787927"
                     },
                     "imageDesktop": {
-                      "id": "gid://shopify/MediaImage/27076979032264",
-                      "url": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/men-posing-in-outerwear.jpg?v=1701459236",
-                      "size": 550781,
-                      "type": "file",
-                      "width": 3000,
-                      "format": "image/jpeg",
-                      "height": 1989,
-                      "altText": "",
-                      "filename": "men-posing-in-outerwear.jpg?v=1701459236",
-                      "directory": "",
-                      "previewSrc": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/men-posing-in-outerwear.jpg?v=1701459236",
-                      "aspectRatio": 1.508295625942685
+                      "url": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/mad-rabbit-tattoo-tn1yJqxNj-8-unsplash.jpg?v=1672787927"
                     },
                     "positionMobile": "object-center",
                     "positionDesktop": "md:object-center"
                   },
-                  "button": {
+                  "video": {
+                    "sound": false,
+                    "autoplay": true
+                  },
+                  "aspectMobile": "max-md:before:pb-[100%]",
+                  "aspectTablet": "md:before:pb-[100%]",
+                  "aspectDesktop": "md:before:pb-[100%]",
+                  "mediaOrderMobile": "1",
+                  "mediaOrderDesktop": "1"
+                },
+                "content": {
+                  "color": "#000000",
+                  "buttons": [
+                    {
+                      "link": {
+                        "url": "/collections/all",
+                        "text": "Shop Now",
+                        "type": "isExternal"
+                      },
+                      "style": "btn-primary"
+                    }
+                  ],
+                  "heading": "All New Product Colors",
+                  "subtext": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                  "superheading": "",
+                  "alignmentMobile": "text-left items-start",
+                  "maxWidthDesktop": "md:max-w-[30rem] lg:max-w-[38rem]",
+                  "alignmentDesktop": "md:text-left md:items-start"
+                },
+                "section": {
+                  "bgColor": "#FFFFFF",
+                  "fullBleed": true,
+                  "fullWidth": true,
+                  "aboveTheFold": false,
+                  "verticalPadding": false
+                },
+                "_template": "half-hero",
+                "id": "default-half-hero-data-1",
+                "sectionName": "Homepage Half Hero",
+                "sectionType": "local",
+                "resourceType": "page",
+                "hasReferences": false,
+                "parentContentType": "page",
+                "sectionVisibility": "visible"
+              }
+            },
+            {
+              "data": {
+                "media": {
+                  "fill": true,
+                  "image": {
+                    "alt": "Man with backpack crossing the street",
+                    "imageMobile": {
+                      "url": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/mad-rabbit-tattoo-tn1yJqxNj-8-unsplash.jpg?v=1672787927"
+                    },
+                    "imageDesktop": {
+                      "url": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/mad-rabbit-tattoo-tn1yJqxNj-8-unsplash.jpg?v=1672787927"
+                    },
+                    "positionMobile": "object-center",
+                    "positionDesktop": "md:object-center"
+                  },
+                  "video": {
+                    "sound": false,
+                    "autoplay": true
+                  },
+                  "aspectMobile": "max-md:before:pb-[100%]",
+                  "aspectTablet": "md:before:pb-[100%]",
+                  "aspectDesktop": "md:before:pb-[100%]",
+                  "mediaOrderMobile": "1",
+                  "mediaOrderDesktop": "2"
+                },
+                "content": {
+                  "color": "#000000",
+                  "buttons": [
+                    {
+                      "link": {
+                        "url": "/collections/all",
+                        "text": "Shop Now",
+                        "type": "isExternal"
+                      },
+                      "style": "btn-primary"
+                    }
+                  ],
+                  "heading": "Fresh New Arrivals",
+                  "subtext": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                  "superheading": "",
+                  "alignmentMobile": "text-left items-start",
+                  "maxWidthDesktop": "md:max-w-[30rem] lg:max-w-[38rem]",
+                  "alignmentDesktop": "md:text-left md:items-start"
+                },
+                "section": {
+                  "bgColor": "#FFFFFF",
+                  "fullBleed": true,
+                  "fullWidth": true,
+                  "aboveTheFold": false,
+                  "verticalPadding": false
+                },
+                "_template": "half-hero",
+                "id": "default-half-hero-data-2",
+                "sectionName": "Homepage Half Hero",
+                "sectionType": "local",
+                "resourceType": "page",
+                "hasReferences": false,
+                "parentContentType": "page",
+                "sectionVisibility": "visible"
+              }
+            },
+            {
+              "data": {
+                "slides": [
+                  {
+                    "alt": "Press logo",
+                    "image": {
+                      "url": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/forbes-logo-small.png?v=1702422887",
+                      "aspectRatio": 3.8
+                    },
+                    "quote": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt."
+                  },
+                  {
+                    "alt": "Press logo",
+                    "image": {
+                      "url": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/vanity-fair-logo-small.png?v=1702422889",
+                      "aspectRatio": 4.3
+                    },
+                    "quote": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."
+                  },
+                  {
+                    "alt": "Press logo",
+                    "image": {
+                      "url": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/forbes-logo-small.png?v=1702422887",
+                      "aspectRatio": 3.8
+                    },
+                    "quote": "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore."
+                  },
+                  {
+                    "alt": "Press logo",
+                    "image": {
+                      "url": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/vanity-fair-logo-small.png?v=1702422889",
+                      "aspectRatio": 4.3
+                    },
+                    "quote": "Excepteur sint occaecat cupidatat non proident, sunt in culpa."
+                  },
+                  {
+                    "alt": "Press logo",
+                    "image": {
+                      "url": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/forbes-logo-small.png?v=1702422887",
+                      "aspectRatio": 3.8
+                    },
+                    "quote": "Sed ut perspiciatis unde omnis iste natus error sit voluptatem."
+                  },
+                  {
+                    "alt": "Press logo",
+                    "image": {
+                      "url": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/vanity-fair-logo-small.png?v=1702422889",
+                      "aspectRatio": 4.3
+                    },
+                    "quote": "Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit."
+                  }
+                ],
+                "section": {
+                  "bgColor": "#FFFFFF",
+                  "fullWidth": false,
+                  "textColor": "#000000"
+                },
+                "_template": "press-slider",
+                "id": "default-press-slider-data",
+                "sectionName": "Pack Hydrogen Storefront Homepage Press Slider",
+                "sectionType": "local",
+                "resourceType": "page",
+                "sectionVisibility": "visible"
+              }
+            },
+            {
+              "data": {
+                "tiles": [
+                  {
+                    "alt": "Rack of green t-shirts",
+                    "crop": "center",
+                    "image": {
+                      "url": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/keagan-henman-xPJYL0l5Ii8-unsplash_20_281_29.jpg?v=1672349016"
+                    },
+                    "heading": "Headline",
+                    "description": "Nulla vitae elit libero, a pharetra augue."
+                  },
+                  {
+                    "alt": "Dark orange jacket on a hanger",
+                    "crop": "center",
+                    "image": {
+                      "url": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/tobias-tullius-Fg15LdqpWrs-unsplash.jpg?v=1672348152"
+                    },
+                    "heading": "Headline",
+                    "description": "Nulla vitae elit libero, a pharetra augue."
+                  }
+                ],
+                "header": {
+                  "alignment": "text-center items-center"
+                },
+                "section": {
+                  "aspectRatio": "aspect-[5/4]",
+                  "textColor": "#000000",
+                  "textAlign": "text-left items-start",
+                  "tileHeadingSize": "text-h4",
+                  "fullWidth": false
+                },
+                "_template": "tiles-stack",
+                "id": "default-tiles-stack-data",
+                "sectionName": "Homepage Tiles Stack",
+                "sectionType": "local",
+                "resourceType": "page",
+                "hasReferences": false,
+                "parentContentType": "page",
+                "sectionVisibility": "visible"
+              }
+            },
+            {
+              "data": {
+                "heading": "Customer Reviews",
+                "section": {
+                  "bgColor": "#000000",
+                  "fullWidth": false,
+                  "textColor": "#FFFFFF",
+                  "reviewStarColor": "#008464",
+                  "sliderPaginationBulletColor": "#FFFFFF"
+                },
+                "_template": "testimonial-slider",
+                "id": "default-testimonial-slider-data",
+                "sectionName": "Homepage Testimonial Slider",
+                "sectionType": "local",
+                "resourceType": "page",
+                "hasReferences": false,
+                "parentContentType": "page",
+                "sectionVisibility": "visible",
+                "testimonialSlides": [
+                  {
+                    "body": "Praesent commodo cursus magna, vel scelerisque nisl consectetur et.",
+                    "title": "Fermentum fusce",
+                    "author": "– John Doe",
+                    "rating": "5"
+                  },
+                  {
+                    "body": "Praesent commodo cursus magna, vel scelerisque nisl consectetur et.",
+                    "title": "Lorem ipsum dolor",
+                    "author": "– John Doe",
+                    "rating": "5"
+                  },
+                  {
+                    "body": "Praesent commodo cursus magna, vel scelerisque nisl consectetur et.",
+                    "title": "Sed ut perspiciatis",
+                    "author": "– John Doe",
+                    "rating": "5"
+                  }
+                ]
+              }
+            },
+            {
+              "data": {
+                "tiles": [
+                  {
+                    "alt": "Man in white and light tan outfit",
+                    "image": {
+                      "url": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/man-in-white-and-light-tan-outfit.jpg?v=1672348139"
+                    },
                     "buttons": [
                       {
                         "link": {
-                          "url": "/collections/all",
-                          "text": "Shop Now",
-                          "type": "isExternal"
-                        },
-                        "style": "btn-primary"
+                          "url": "",
+                          "text": "Shop Now"
+                        }
                       }
                     ],
-                    "clickableSlide": false,
-                    "hideButtonsMobile": false,
-                    "hideButtonsDesktop": false
+                    "heading": "Headline",
+                    "position": "object-center"
                   },
-                  "content": {
-                    "darkOverlay": false,
-                    "maxWidthMobile": "max-w-[22.5rem]",
-                    "positionMobile": "justify-start items-center",
-                    "alignmentMobile": "text-left items-start",
-                    "maxWidthDesktop": "md:max-w-[30rem] lg:max-w-[38rem]",
-                    "positionDesktop": "md:justify-start items-center",
-                    "alignmentDesktop": "md:text-left md:items-start"
-                  }
-                }
-              ],
-              "section": {
-                "mobile": {
-                  "maxHeight": "",
-                  "minHeight": "",
-                  "heightType": "aspect-ratio",
-                  "aspectRatio": "max-md:aspect-[4/5]",
-                  "staticHeight": "max-md:h-[31.25rem]"
-                },
-                "desktop": {
-                  "maxHeight": "",
-                  "minHeight": "",
-                  "heightType": "aspect-ratio",
-                  "aspectRatio": "md:aspect-[16/9]",
-                  "staticHeight": "md:h-[43.75rem]"
-                },
-                "fullBleed": true,
-                "fullWidth": true,
-                "aboveTheFold": true
-              },
-              "sectionName": "Homepage Hero",
-              "sectionType": "local",
-              "resourceType": "page",
-              "hasReferences": false,
-              "parentContentType": "page",
-              "sectionVisibility": "visible"
-            }
-          },
-          {
-            "data": {
-              "tabs": [
-                {
-                  "tiles": [
-                    {
-                      "alt": "Man in white and light tan outfit",
-                      "link": {
-                        "url": "/collections/all",
-                        "type": "isExternal"
-                      },
-                      "image": {
-                        "url": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/man-in-white-and-light-tan-outfit.jpg?v=1672348139"
-                      },
-                      "heading": "Headline",
-                      "position": "object-center",
-                      "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-                    },
-                    {
-                      "alt": "Man in brown coat sitting down",
-                      "link": {
-                        "url": "/collections/all",
-                        "type": "isExternal"
-                      },
-                      "image": {
-                        "url": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/austin-wade-d2s8NQ6WD24-unsplash.jpg?v=1672348122"
-                      },
-                      "heading": "Headline",
-                      "position": "object-center",
-                      "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-                    },
-                    {
-                      "alt": "Man in gray sweater and tan coat",
-                      "link": {
-                        "url": "/collections/all",
-                        "type": "isExternal"
-                      },
-                      "image": {
-                        "url": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/man-poses-in-light-colored-overcoat.jpg?v=1672348143"
-                      },
-                      "heading": "Headline",
-                      "position": "object-center",
-                      "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-                    }
-                  ],
-                  "tabName": "Tab Name"
-                },
-                {
-                  "tiles": [
-                    {
-                      "alt": "Man in brown coat sitting down",
-                      "image": {
-                        "url": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/austin-wade-d2s8NQ6WD24-unsplash.jpg?v=1672348122"
-                      },
-                      "heading": "Headline",
-                      "position": "object-center",
-                      "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-                    },
-                    {
-                      "alt": "Man in gray sweater and tan coat",
-                      "image": {
-                        "url": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/man-poses-in-light-colored-overcoat.jpg?v=1672348143"
-                      },
-                      "heading": "Headline",
-                      "position": "object-center",
-                      "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-                    },
-                    {
-                      "alt": "Man in white and light tan outfit",
-                      "image": {
-                        "url": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/man-in-white-and-light-tan-outfit.jpg?v=1672348139"
-                      },
-                      "heading": "Headline",
-                      "position": "object-center",
-                      "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-                    }
-                  ],
-                  "tabName": "Tab Name"
-                }
-              ],
-              "header": {
-                "heading": "New Collections",
-                "alignment": "text-center items-center"
-              },
-              "section": {
-                "tilesPerViewDesktop": 3,
-                "tilesPerViewTablet": 2.4,
-                "tilesPerViewMobile": 1.4,
-                "aspectRatio": "aspect-[3/4]",
-                "textColor": "#000000",
-                "textAlign": "text-left items-start",
-                "tileHeadingSize": "text-h4",
-                "buttonStyle": "btn-primary",
-                "fullWidth": false
-              },
-              "_template": "tabbed-tiles-slider",
-              "id": "default-tabbed-tiles-slider-data",
-              "sectionName": "Homepage Tabbed Tiles Slider",
-              "sectionType": "local",
-              "resourceType": "page",
-              "hasReferences": false,
-              "parentContentType": "page",
-              "sectionVisibility": "visible"
-            }
-          },
-          {
-            "data": {
-              "slider": {
-                "sliderStyle": "contained",
-                "slidesPerViewMobile": 1.4,
-                "slidesPerViewTablet": 3.4,
-                "slidesPerViewDesktop": 4
-              },
-              "heading": "Best Sellers",
-              "section": {
-                "fullWidth": false,
-                "buttonStyle": "btn-primary"
-              },
-              "products": [
-                {
-                  "handle": "",
-                  "product": null
-                },
-                {
-                  "handle": "",
-                  "product": null
-                },
-                {
-                  "handle": "",
-                  "product": null
-                },
-                {
-                  "handle": "",
-                  "product": null
-                }
-              ],
-              "_template": "products-slider",
-              "id": "default-products-slider-data",
-              "productItem": {
-                "enabledQuickShop": true,
-                "quickShopMobileHidden": true,
-                "enabledStarRating": true,
-                "enabledColorSelector": true,
-                "enabledColorNameOnHover": false
-              },
-              "sectionName": "Homepage Products Slider",
-              "sectionType": "local",
-              "resourceType": "page",
-              "hasReferences": false,
-              "parentContentType": "page",
-              "sectionVisibility": "visible"
-            }
-          },
-          {
-            "data": {
-              "media": {
-                "fill": true,
-                "image": {
-                  "alt": "Man with backpack crossing the street",
-                  "imageMobile": {
-                    "url": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/mad-rabbit-tattoo-tn1yJqxNj-8-unsplash.jpg?v=1672787927"
-                  },
-                  "imageDesktop": {
-                    "url": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/mad-rabbit-tattoo-tn1yJqxNj-8-unsplash.jpg?v=1672787927"
-                  },
-                  "positionMobile": "object-center",
-                  "positionDesktop": "md:object-center"
-                },
-                "video": {
-                  "sound": false,
-                  "autoplay": true
-                },
-                "aspectMobile": "max-md:before:pb-[100%]",
-                "aspectTablet": "md:before:pb-[100%]",
-                "aspectDesktop": "md:before:pb-[100%]",
-                "mediaOrderMobile": "1",
-                "mediaOrderDesktop": "1"
-              },
-              "content": {
-                "color": "#000000",
-                "buttons": [
                   {
-                    "link": {
-                      "url": "/collections/all",
-                      "text": "Shop Now",
-                      "type": "isExternal"
+                    "alt": "Man in brown coat sitting down",
+                    "image": {
+                      "url": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/austin-wade-d2s8NQ6WD24-unsplash.jpg?v=1672348122"
                     },
-                    "style": "btn-primary"
+                    "buttons": [
+                      {
+                        "link": {
+                          "url": "",
+                          "text": "Shop Now"
+                        }
+                      }
+                    ],
+                    "heading": "Headline",
+                    "position": "object-center"
+                  },
+                  {
+                    "alt": "Man in gray sweater and tan coat",
+                    "image": {
+                      "url": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/man-poses-in-light-colored-overcoat.jpg?v=1672348143"
+                    },
+                    "buttons": [
+                      {
+                        "link": {
+                          "url": "",
+                          "text": "Shop Now"
+                        }
+                      }
+                    ],
+                    "heading": "Headline",
+                    "position": "object-center"
                   }
                 ],
-                "heading": "All New Product Colors",
-                "subtext": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-                "superheading": "",
-                "alignmentMobile": "text-left items-start",
-                "maxWidthDesktop": "md:max-w-[30rem] lg:max-w-[38rem]",
-                "alignmentDesktop": "md:text-left md:items-start"
-              },
-              "section": {
-                "bgColor": "#FFFFFF",
-                "fullBleed": true,
-                "fullWidth": true,
-                "aboveTheFold": false,
-                "verticalPadding": false
-              },
-              "_template": "half-hero",
-              "id": "default-half-hero-data-1",
-              "sectionName": "Homepage Half Hero",
-              "sectionType": "local",
-              "resourceType": "page",
-              "hasReferences": false,
-              "parentContentType": "page",
-              "sectionVisibility": "visible"
+                "content": {
+                  "darkOverlay": true,
+                  "contentPosition": "justify-center items-end",
+                  "contentAlign": "center",
+                  "tileHeadingSize": "text-h3",
+                  "primaryButtonStyle": "btn-inverse-light",
+                  "secondaryButtonStyle": "btn-inverse-light",
+                  "clickableImage": true,
+                  "hideButtons": false
+                },
+                "header": {
+                  "alignment": "text-center items-center"
+                },
+                "section": {
+                  "tilesPerViewDesktop": 3,
+                  "tilesPerViewTablet": 2.4,
+                  "tilesPerViewMobile": 1.4,
+                  "aspectRatio": "aspect-[3/4]",
+                  "textColor": "#000000",
+                  "fullWidth": false
+                },
+                "_template": "image-tiles",
+                "id": "default-image-tiles-data",
+                "sectionName": "Homepage Image Tiles",
+                "sectionType": "local",
+                "resourceType": "page",
+                "hasReferences": false,
+                "parentContentType": "page",
+                "sectionVisibility": "visible"
+              }
             }
-          },
-          {
-            "data": {
-              "media": {
-                "fill": true,
-                "image": {
-                  "alt": "Man with backpack crossing the street",
-                  "imageMobile": {
-                    "url": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/mad-rabbit-tattoo-tn1yJqxNj-8-unsplash.jpg?v=1672787927"
-                  },
-                  "imageDesktop": {
-                    "url": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/mad-rabbit-tattoo-tn1yJqxNj-8-unsplash.jpg?v=1672787927"
-                  },
-                  "positionMobile": "object-center",
-                  "positionDesktop": "md:object-center"
-                },
-                "video": {
-                  "sound": false,
-                  "autoplay": true
-                },
-                "aspectMobile": "max-md:before:pb-[100%]",
-                "aspectTablet": "md:before:pb-[100%]",
-                "aspectDesktop": "md:before:pb-[100%]",
-                "mediaOrderMobile": "1",
-                "mediaOrderDesktop": "2"
-              },
-              "content": {
-                "color": "#000000",
-                "buttons": [
-                  {
-                    "link": {
-                      "url": "/collections/all",
-                      "text": "Shop Now",
-                      "type": "isExternal"
-                    },
-                    "style": "btn-primary"
-                  }
-                ],
-                "heading": "Fresh New Arrivals",
-                "subtext": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-                "superheading": "",
-                "alignmentMobile": "text-left items-start",
-                "maxWidthDesktop": "md:max-w-[30rem] lg:max-w-[38rem]",
-                "alignmentDesktop": "md:text-left md:items-start"
-              },
-              "section": {
-                "bgColor": "#FFFFFF",
-                "fullBleed": true,
-                "fullWidth": true,
-                "aboveTheFold": false,
-                "verticalPadding": false
-              },
-              "_template": "half-hero",
-              "id": "default-half-hero-data-2",
-              "sectionName": "Homepage Half Hero",
-              "sectionType": "local",
-              "resourceType": "page",
-              "hasReferences": false,
-              "parentContentType": "page",
-              "sectionVisibility": "visible"
-            }
-          },
-          {
-            "data": {
-              "slides": [
-                {
-                  "alt": "Press logo",
-                  "image": {
-                    "url": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/forbes-logo-small.png?v=1702422887",
-                    "aspectRatio": 3.8
-                  },
-                  "quote": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt."
-                },
-                {
-                  "alt": "Press logo",
-                  "image": {
-                    "url": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/vanity-fair-logo-small.png?v=1702422889",
-                    "aspectRatio": 4.3
-                  },
-                  "quote": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."
-                },
-                {
-                  "alt": "Press logo",
-                  "image": {
-                    "url": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/forbes-logo-small.png?v=1702422887",
-                    "aspectRatio": 3.8
-                  },
-                  "quote": "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore."
-                },
-                {
-                  "alt": "Press logo",
-                  "image": {
-                    "url": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/vanity-fair-logo-small.png?v=1702422889",
-                    "aspectRatio": 4.3
-                  },
-                  "quote": "Excepteur sint occaecat cupidatat non proident, sunt in culpa."
-                },
-                {
-                  "alt": "Press logo",
-                  "image": {
-                    "url": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/forbes-logo-small.png?v=1702422887",
-                    "aspectRatio": 3.8
-                  },
-                  "quote": "Sed ut perspiciatis unde omnis iste natus error sit voluptatem."
-                },
-                {
-                  "alt": "Press logo",
-                  "image": {
-                    "url": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/vanity-fair-logo-small.png?v=1702422889",
-                    "aspectRatio": 4.3
-                  },
-                  "quote": "Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit."
-                }
-              ],
-              "section": {
-                "bgColor": "#FFFFFF",
-                "fullWidth": false,
-                "textColor": "#000000"
-              },
-              "_template": "press-slider",
-              "id": "default-press-slider-data",
-              "sectionName": "Pack Hydrogen Storefront Homepage Press Slider",
-              "sectionType": "local",
-              "resourceType": "page",
-              "sectionVisibility": "visible"
-            }
-          },
-          {
-            "data": {
-              "tiles": [
-                {
-                  "alt": "Rack of green t-shirts",
-                  "crop": "center",
-                  "image": {
-                    "url": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/keagan-henman-xPJYL0l5Ii8-unsplash_20_281_29.jpg?v=1672349016"
-                  },
-                  "heading": "Headline",
-                  "description": "Nulla vitae elit libero, a pharetra augue."
-                },
-                {
-                  "alt": "Dark orange jacket on a hanger",
-                  "crop": "center",
-                  "image": {
-                    "url": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/tobias-tullius-Fg15LdqpWrs-unsplash.jpg?v=1672348152"
-                  },
-                  "heading": "Headline",
-                  "description": "Nulla vitae elit libero, a pharetra augue."
-                }
-              ],
-              "header": {
-                "alignment": "text-center items-center"
-              },
-              "section": {
-                "aspectRatio": "aspect-[5/4]",
-                "textColor": "#000000",
-                "textAlign": "text-left items-start",
-                "tileHeadingSize": "text-h4",
-                "fullWidth": false
-              },
-              "_template": "tiles-stack",
-              "id": "default-tiles-stack-data",
-              "sectionName": "Homepage Tiles Stack",
-              "sectionType": "local",
-              "resourceType": "page",
-              "hasReferences": false,
-              "parentContentType": "page",
-              "sectionVisibility": "visible"
-            }
-          },
-          {
-            "data": {
-              "heading": "Customer Reviews",
-              "section": {
-                "bgColor": "#000000",
-                "fullWidth": false,
-                "textColor": "#FFFFFF",
-                "reviewStarColor": "#008464",
-                "sliderPaginationBulletColor": "#FFFFFF"
-              },
-              "_template": "testimonial-slider",
-              "id": "default-testimonial-slider-data",
-              "sectionName": "Homepage Testimonial Slider",
-              "sectionType": "local",
-              "resourceType": "page",
-              "hasReferences": false,
-              "parentContentType": "page",
-              "sectionVisibility": "visible",
-              "testimonialSlides": [
-                {
-                  "body": "Praesent commodo cursus magna, vel scelerisque nisl consectetur et.",
-                  "title": "Fermentum fusce",
-                  "author": "– John Doe",
-                  "rating": "5"
-                },
-                {
-                  "body": "Praesent commodo cursus magna, vel scelerisque nisl consectetur et.",
-                  "title": "Lorem ipsum dolor",
-                  "author": "– John Doe",
-                  "rating": "5"
-                },
-                {
-                  "body": "Praesent commodo cursus magna, vel scelerisque nisl consectetur et.",
-                  "title": "Sed ut perspiciatis",
-                  "author": "– John Doe",
-                  "rating": "5"
-                }
-              ]
-            }
-          },
-          {
-            "data": {
-              "tiles": [
-                {
-                  "alt": "Man in white and light tan outfit",
-                  "image": {
-                    "url": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/man-in-white-and-light-tan-outfit.jpg?v=1672348139"
-                  },
-                  "buttons": [
-                    {
-                      "link": {
-                        "url": "",
-                        "text": "Shop Now"
-                      }
-                    }
-                  ],
-                  "heading": "Headline",
-                  "position": "object-center"
-                },
-                {
-                  "alt": "Man in brown coat sitting down",
-                  "image": {
-                    "url": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/austin-wade-d2s8NQ6WD24-unsplash.jpg?v=1672348122"
-                  },
-                  "buttons": [
-                    {
-                      "link": {
-                        "url": "",
-                        "text": "Shop Now"
-                      }
-                    }
-                  ],
-                  "heading": "Headline",
-                  "position": "object-center"
-                },
-                {
-                  "alt": "Man in gray sweater and tan coat",
-                  "image": {
-                    "url": "https://cdn.shopify.com/s/files/1/0671/5074/1778/files/man-poses-in-light-colored-overcoat.jpg?v=1672348143"
-                  },
-                  "buttons": [
-                    {
-                      "link": {
-                        "url": "",
-                        "text": "Shop Now"
-                      }
-                    }
-                  ],
-                  "heading": "Headline",
-                  "position": "object-center"
-                }
-              ],
-              "content": {
-                "darkOverlay": true,
-                "contentPosition": "justify-center items-end",
-                "contentAlign": "center",
-                "tileHeadingSize": "text-h3",
-                "primaryButtonStyle": "btn-inverse-light",
-                "secondaryButtonStyle": "btn-inverse-light",
-                "clickableImage": true,
-                "hideButtons": false
-              },
-              "header": {
-                "alignment": "text-center items-center"
-              },
-              "section": {
-                "tilesPerViewDesktop": 3,
-                "tilesPerViewTablet": 2.4,
-                "tilesPerViewMobile": 1.4,
-                "aspectRatio": "aspect-[3/4]",
-                "textColor": "#000000",
-                "fullWidth": false
-              },
-              "_template": "image-tiles",
-              "id": "default-image-tiles-data",
-              "sectionName": "Homepage Image Tiles",
-              "sectionType": "local",
-              "resourceType": "page",
-              "hasReferences": false,
-              "parentContentType": "page",
-              "sectionVisibility": "visible"
-            }
+          ],
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": ""
           }
-        ]
+        }
       },
       "about-us": {
         "title": "About Us",
@@ -1132,23 +1138,29 @@
           "noFollow": null,
           "noIndex": null
         },
-        "sections": [
-          {
-            "data": {
-              "content": "# About Us\n\n**Lorem ipsum dolor sit amet**, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea _commodo consequat_. Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea _commodo consequat_.\n\n**Lorem ipsum dolor sit amet**, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea _commodo consequat_. Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea _commodo consequat_.",
-              "section": {
-                "maxWidth": "max-w-[60rem]"
-              },
-              "_template": "markdown",
-              "id": "default-about-us-markdown-data",
-              "sectionName": "About Us Page Markdown",
-              "sectionType": "local",
-              "resourceType": "page",
-              "centerAllText": false,
-              "sectionVisibility": "visible"
+        "sections": {
+          "nodes": [
+            {
+              "data": {
+                "content": "# About Us\n\n**Lorem ipsum dolor sit amet**, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea _commodo consequat_. Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea _commodo consequat_.\n\n**Lorem ipsum dolor sit amet**, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea _commodo consequat_. Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea _commodo consequat_.",
+                "section": {
+                  "maxWidth": "max-w-[60rem]"
+                },
+                "_template": "markdown",
+                "id": "default-about-us-markdown-data",
+                "sectionName": "About Us Page Markdown",
+                "sectionType": "local",
+                "resourceType": "page",
+                "centerAllText": false,
+                "sectionVisibility": "visible"
+              }
             }
+          ],
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": ""
           }
-        ]
+        }
       },
       "privacy": {
         "title": "Privacy Policy",
@@ -1162,23 +1174,29 @@
           "noFollow": null,
           "noIndex": null
         },
-        "sections": [
-          {
-            "data": {
-              "content": "# Privacy Policy\n\n**Lorem ipsum dolor sit amet**, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea _commodo consequat_. Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea _commodo consequat_.\n\n**Lorem ipsum dolor sit amet**, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea _commodo consequat_. Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea _commodo consequat_.",
-              "section": {
-                "maxWidth": "max-w-[60rem]"
-              },
-              "_template": "markdown",
-              "id": "default-privacy-markdown-data",
-              "sectionName": "Privacy Policy Page Markdown",
-              "sectionType": "local",
-              "resourceType": "page",
-              "centerAllText": false,
-              "sectionVisibility": "visible"
+        "sections": {
+          "nodes": [
+            {
+              "data": {
+                "content": "# Privacy Policy\n\n**Lorem ipsum dolor sit amet**, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea _commodo consequat_. Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea _commodo consequat_.\n\n**Lorem ipsum dolor sit amet**, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea _commodo consequat_. Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea _commodo consequat_.",
+                "section": {
+                  "maxWidth": "max-w-[60rem]"
+                },
+                "_template": "markdown",
+                "id": "default-privacy-markdown-data",
+                "sectionName": "Privacy Policy Page Markdown",
+                "sectionType": "local",
+                "resourceType": "page",
+                "centerAllText": false,
+                "sectionVisibility": "visible"
+              }
             }
+          ],
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": ""
           }
-        ]
+        }
       },
       "terms": {
         "title": "Terms & Conditions",
@@ -1192,23 +1210,29 @@
           "noFollow": null,
           "noIndex": null
         },
-        "sections": [
-          {
-            "data": {
-              "content": "# Terms & Conditions\n\n**Lorem ipsum dolor sit amet**, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea _commodo consequat_. Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea _commodo consequat_.\n\n**Lorem ipsum dolor sit amet**, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea _commodo consequat_. Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea _commodo consequat_.",
-              "section": {
-                "maxWidth": "max-w-[60rem]"
-              },
-              "_template": "markdown",
-              "id": "default-markdown-data",
-              "sectionName": "Terms & Conditions Page Markdown",
-              "sectionType": "local",
-              "resourceType": "page",
-              "centerAllText": false,
-              "sectionVisibility": "visible"
+        "sections": {
+          "nodes": [
+            {
+              "data": {
+                "content": "# Terms & Conditions\n\n**Lorem ipsum dolor sit amet**, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea _commodo consequat_. Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea _commodo consequat_.\n\n**Lorem ipsum dolor sit amet**, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea _commodo consequat_. Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea _commodo consequat_.",
+                "section": {
+                  "maxWidth": "max-w-[60rem]"
+                },
+                "_template": "markdown",
+                "id": "default-markdown-data",
+                "sectionName": "Terms & Conditions Page Markdown",
+                "sectionType": "local",
+                "resourceType": "page",
+                "centerAllText": false,
+                "sectionVisibility": "visible"
+              }
             }
+          ],
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": ""
           }
-        ]
+        }
       }
     },
     "blog": {
@@ -1224,124 +1248,130 @@
           "noFollow": null,
           "noIndex": null
         },
-        "sections": [
-          {
-            "data": {
-              "slider": {
-                "delay": 8000,
-                "effect": "fade",
-                "autoplay": true,
-                "pagination": true,
-                "activeBulletColor": "#FFFFFF"
-              },
-              "slides": [
-                {
-                  "text": {
-                    "heading": "Blog",
-                    "subheading": "",
-                    "colorMobile": "max-md:text-[#FFFFFF]",
-                    "colorDesktop": "md:text-[#FFFFFF]",
-                    "superheading": "",
-                    "hideHeadingMobile": false,
-                    "hideHeadingDesktop": false
-                  },
-                  "image": {
-                    "alt": "Three men outside wearing outerwear",
-                    "imageMobile": {
-                      "id": "gid://shopify/MediaImage/27033190072520",
-                      "url": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/outfit-flatlay.webp?v=1700370675",
-                      "size": 183848,
-                      "type": "file",
-                      "width": 3000,
-                      "format": "image/webp",
-                      "height": 2013,
-                      "altText": "",
-                      "filename": "outfit-flatlay.webp?v=1700370675",
-                      "directory": "Menswear",
-                      "previewSrc": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/outfit-flatlay.webp?v=1700370675",
-                      "aspectRatio": 1.490312965722802
+        "sections": {
+          "nodes": [
+            {
+              "data": {
+                "slider": {
+                  "delay": 8000,
+                  "effect": "fade",
+                  "autoplay": true,
+                  "pagination": true,
+                  "activeBulletColor": "#FFFFFF"
+                },
+                "slides": [
+                  {
+                    "text": {
+                      "heading": "Blog",
+                      "subheading": "",
+                      "colorMobile": "max-md:text-[#FFFFFF]",
+                      "colorDesktop": "md:text-[#FFFFFF]",
+                      "superheading": "",
+                      "hideHeadingMobile": false,
+                      "hideHeadingDesktop": false
                     },
-                    "imageDesktop": {
-                      "id": "gid://shopify/MediaImage/27033190072520",
-                      "url": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/outfit-flatlay.webp?v=1700370675",
-                      "size": 183848,
-                      "type": "file",
-                      "width": 3000,
-                      "format": "image/webp",
-                      "height": 2013,
-                      "altText": "",
-                      "filename": "outfit-flatlay.webp?v=1700370675",
-                      "directory": "Menswear",
-                      "previewSrc": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/outfit-flatlay.webp?v=1700370675",
-                      "aspectRatio": 1.490312965722802
+                    "image": {
+                      "alt": "Three men outside wearing outerwear",
+                      "imageMobile": {
+                        "id": "gid://shopify/MediaImage/27033190072520",
+                        "url": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/outfit-flatlay.webp?v=1700370675",
+                        "size": 183848,
+                        "type": "file",
+                        "width": 3000,
+                        "format": "image/webp",
+                        "height": 2013,
+                        "altText": "",
+                        "filename": "outfit-flatlay.webp?v=1700370675",
+                        "directory": "Menswear",
+                        "previewSrc": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/outfit-flatlay.webp?v=1700370675",
+                        "aspectRatio": 1.490312965722802
+                      },
+                      "imageDesktop": {
+                        "id": "gid://shopify/MediaImage/27033190072520",
+                        "url": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/outfit-flatlay.webp?v=1700370675",
+                        "size": 183848,
+                        "type": "file",
+                        "width": 3000,
+                        "format": "image/webp",
+                        "height": 2013,
+                        "altText": "",
+                        "filename": "outfit-flatlay.webp?v=1700370675",
+                        "directory": "Menswear",
+                        "previewSrc": "https://cdn.shopify.com/s/files/1/0629/5519/2520/files/outfit-flatlay.webp?v=1700370675",
+                        "aspectRatio": 1.490312965722802
+                      },
+                      "positionMobile": "object-center",
+                      "positionDesktop": "md:object-center"
                     },
-                    "positionMobile": "object-center",
-                    "positionDesktop": "md:object-center"
-                  },
-                  "button": {
-                    "buttons": [],
-                    "clickableSlide": false,
-                    "hideButtonsMobile": false,
-                    "hideButtonsDesktop": false
-                  },
-                  "content": {
-                    "darkOverlay": true,
-                    "maxWidthMobile": "max-w-[22.5rem]",
-                    "positionMobile": "justify-center items-center",
-                    "alignmentMobile": "text-center items-center",
-                    "maxWidthDesktop": "md:max-w-[30rem] lg:max-w-[38rem]",
-                    "positionDesktop": "md:justify-center md:items-center",
-                    "alignmentDesktop": "md:text-center md:items-center"
+                    "button": {
+                      "buttons": [],
+                      "clickableSlide": false,
+                      "hideButtonsMobile": false,
+                      "hideButtonsDesktop": false
+                    },
+                    "content": {
+                      "darkOverlay": true,
+                      "maxWidthMobile": "max-w-[22.5rem]",
+                      "positionMobile": "justify-center items-center",
+                      "alignmentMobile": "text-center items-center",
+                      "maxWidthDesktop": "md:max-w-[30rem] lg:max-w-[38rem]",
+                      "positionDesktop": "md:justify-center md:items-center",
+                      "alignmentDesktop": "md:text-center md:items-center"
+                    }
                   }
-                }
-              ],
-              "section": {
-                "mobile": {
-                  "heightType": "static",
-                  "staticHeight": "max-md:h-[12.5rem]"
+                ],
+                "section": {
+                  "mobile": {
+                    "heightType": "static",
+                    "staticHeight": "max-md:h-[12.5rem]"
+                  },
+                  "desktop": {
+                    "heightType": "static",
+                    "staticHeight": "md:h-[12.5rem]"
+                  },
+                  "fullBleed": true,
+                  "fullWidth": true,
+                  "aboveTheFold": true
                 },
-                "desktop": {
-                  "heightType": "static",
-                  "staticHeight": "md:h-[12.5rem]"
-                },
-                "fullBleed": true,
-                "fullWidth": true,
-                "aboveTheFold": true
-              },
-              "_template": "hero",
-              "id": "default-blog-hero-data",
-              "sectionName": "Blog Blog Hero",
-              "sectionType": "local",
-              "resourceType": "blog",
-              "sectionVisibility": "visible"
+                "_template": "hero",
+                "id": "default-blog-hero-data",
+                "sectionName": "Blog Blog Hero",
+                "sectionType": "local",
+                "resourceType": "blog",
+                "sectionVisibility": "visible"
+              }
+            },
+            {
+              "data": {
+                "_template": "blog-categories",
+                "id": "default-blog-categories-data",
+                "categories": ["News"],
+                "sectionName": "Blog Blog Blog Categories",
+                "sectionType": "local",
+                "resourceType": "blog",
+                "hasReferences": false,
+                "parentContentType": "blog",
+                "sectionVisibility": "visible"
+              }
+            },
+            {
+              "data": {
+                "_template": "blog-grid",
+                "id": "default-blog-grid-data",
+                "sectionName": "Blog Blog Blog Grid",
+                "sectionType": "local",
+                "resourceType": "blog",
+                "hasReferences": false,
+                "parentContentType": "blog",
+                "sectionVisibility": "visible"
+              }
             }
-          },
-          {
-            "data": {
-              "_template": "blog-categories",
-              "id": "default-blog-categories-data",
-              "categories": ["News"],
-              "sectionName": "Blog Blog Blog Categories",
-              "sectionType": "local",
-              "resourceType": "blog",
-              "hasReferences": false,
-              "parentContentType": "blog",
-              "sectionVisibility": "visible"
-            }
-          },
-          {
-            "data": {
-              "_template": "blog-grid",
-              "id": "default-blog-grid-data",
-              "sectionName": "Blog Blog Blog Grid",
-              "sectionType": "local",
-              "resourceType": "blog",
-              "hasReferences": false,
-              "parentContentType": "blog",
-              "sectionVisibility": "visible"
-            }
+          ],
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": ""
           }
-        ]
+        }
       }
     }
   }
