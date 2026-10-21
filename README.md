@@ -167,7 +167,7 @@ Want a quick demo of Pack? Check out this <a href="https://hydrogen.packdigital.
 
 ### Requirements
 
-- Node.js version 16.14.0 or higher
+- Node.js version 22.12.0 or higher
 
 Once you have your project cloned start off by installing your node packages
 
@@ -178,6 +178,8 @@ npm install
 ### Environment Variables
 
 To run your application locally, you can use Shopify's mock.shop API to simulate a Shopify storefront. You can set the `PUBLIC_STORE_DOMAIN` environment variable to `mock.shop` to use the mock.shop API.
+
+With mock.shop you don't need a Pack account: leave the `PACK_*` variables unset and the storefront renders the demo content bundled in `app/config/default-theme-data.json`. Customer account pages need a real Shopify store, so they don't work with mock.shop.
 
 ```dotenv
 SESSION_SECRET="foobar"
@@ -212,7 +214,7 @@ npm run build
 
 ### Building for local development
 
-This command will start a server locally on your machine at http://localhost:3000.
+This command will start a server locally on your machine at http://localhost:8080.
 
 ```bash
 npm run dev
