@@ -27,14 +27,18 @@ export function Hero({cms}: {cms: HeroCms}) {
         )}
 
         {slides?.length === 1 && (
-          <HeroSlide
-            aboveTheFold={section?.aboveTheFold}
-            index={0}
-            isActiveSlide
-            isFirstSlide
-            sectionId={sectionId}
-            slide={slides[0]}
-          />
+          // Absolute fill so the slide resolves against the aspect-ratio
+          // container's used height in Safari (see HeroSlider for the why).
+          <div className="absolute inset-0">
+            <HeroSlide
+              aboveTheFold={section?.aboveTheFold}
+              index={0}
+              isActiveSlide
+              isFirstSlide
+              sectionId={sectionId}
+              slide={slides[0]}
+            />
+          </div>
         )}
       </HeroContainer>
     </Container>
