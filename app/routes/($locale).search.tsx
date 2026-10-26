@@ -3,7 +3,6 @@ import {
   Analytics,
   AnalyticsPageType,
   getPaginationVariables,
-  getSeoMeta,
 } from '@shopify/hydrogen';
 import type {
   Collection as CollectionType,
@@ -11,6 +10,7 @@ import type {
   SearchSortKeys,
 } from '@shopify/hydrogen/storefront-api-types';
 
+import {getRouteSeoMeta} from '~/lib/utils';
 import {Collection} from '~/components/Collection';
 import {PRODUCTS_SEARCH_QUERY} from '~/data/graphql/storefront/search';
 import {getFilters} from '~/lib/server-utils/collection.server';
@@ -138,10 +138,8 @@ export async function loader({request, context}: Route.LoaderArgs) {
   };
 }
 
-export const meta: Route.MetaFunction = ({matches}) => {
-  return (
-    getSeoMeta(...matches.map((match) => (match?.loaderData as any).seo)) || []
-  );
+export const meta: Route.MetaFunction = ({matches, error}) => {
+  return getRouteSeoMeta({matches, error});
 };
 
 export default function SearchRoute() {

@@ -1,7 +1,8 @@
 import {useLoaderData} from 'react-router';
-import {AnalyticsPageType, getSeoMeta} from '@shopify/hydrogen';
+import {AnalyticsPageType} from '@shopify/hydrogen';
 import {RenderSections} from '@pack/react';
 
+import {getRouteSeoMeta} from '~/lib/utils';
 import {getPage} from '~/lib/server-utils/pack.server';
 import {getShop, getSiteSettings} from '~/lib/server-utils/settings.server';
 import {seoPayload} from '~/lib/server-utils/seo.server';
@@ -53,10 +54,8 @@ export async function loader({context, params, request}: Route.LoaderArgs) {
   };
 }
 
-export const meta: Route.MetaFunction = ({matches}) => {
-  return (
-    getSeoMeta(...matches.map((match) => (match?.loaderData as any).seo)) || []
-  );
+export const meta: Route.MetaFunction = ({matches, error}) => {
+  return getRouteSeoMeta({matches, error});
 };
 
 export default function Index() {

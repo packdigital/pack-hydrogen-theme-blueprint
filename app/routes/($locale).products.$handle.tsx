@@ -3,13 +3,12 @@ import {ProductProvider} from '@shopify/hydrogen-react';
 import {
   Analytics,
   AnalyticsPageType,
-  getSeoMeta,
   storefrontRedirect,
 } from '@shopify/hydrogen';
 import {RenderSections} from '@pack/react';
 import type {ShopifyAnalyticsProduct} from '@shopify/hydrogen';
 
-import {normalizeAdminProduct} from '~/lib/utils';
+import {getRouteSeoMeta, normalizeAdminProduct} from '~/lib/utils';
 import {getPage, getProductGroupings} from '~/lib/server-utils/pack.server';
 import {getShop, getSiteSettings} from '~/lib/server-utils/settings.server';
 import {
@@ -159,10 +158,8 @@ export async function loader({params, context, request}: Route.LoaderArgs) {
   };
 }
 
-export const meta: Route.MetaFunction = ({matches}) => {
-  return (
-    getSeoMeta(...matches.map((match) => (match?.loaderData as any).seo)) || []
-  );
+export const meta: Route.MetaFunction = ({matches, error}) => {
+  return getRouteSeoMeta({matches, error});
 };
 
 export default function ProductRoute() {

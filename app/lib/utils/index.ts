@@ -4,3 +4,4 @@ export * from './locale.utils';
 export * from './metafields.utils';
 export * from './pack.utils';
 export * from './product.utils';
+export * from './seo.utils';
