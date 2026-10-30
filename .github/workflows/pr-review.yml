@@ -2,155 +2,102 @@ name: Claude Code Review
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
-
-concurrency:
-  group: pr-review-${{ github.event.pull_request.number }}
-  cancel-in-progress: true
+    types: [opened, synchronize, ready_for_review, reopened]
 
 jobs:
   review:
+    # Drafts are skipped; marking one ready fires `ready_for_review`. Every push
+    # to a ready PR re-runs the review, and a newer push cancels an older run.
     if: >
       github.event.pull_request.draft == false &&
       github.actor != 'dependabot[bot]'
+    concurrency:
+      group: pr-review-${{ github.event.pull_request.number }}
+      cancel-in-progress: true
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     permissions:
       contents: read
       pull-requests: write
+      checks: read
+      actions: read
       id-token: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 1
 
       - uses: anthropics/claude-code-action@v1
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-          use_sticky_comment: true
-          claude_args: --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr:*),Read,Glob,Grep"
+          # The Claude App token from the OIDC exchange only carries these scopes
+          # if requested here AND granted in the job-level permissions block above.
+          additional_permissions: |
+            checks: read
+            actions: read
           prompt: |
-            You are a senior engineer reviewing a pull request for a Pack Digital Hydrogen storefront.
+            REPO: ${{ github.repository }}
+            PR NUMBER: ${{ github.event.pull_request.number }}
 
-            ## Step 1 — Gather context
+            Follow CLAUDE.md, including its repository invariants for Hydrogen,
+            React Router, and Pack CMS sections. Review the complete PR diff with
+            `gh pr diff`. Inspect surrounding code, call sites, and every usage of
+            a changed shared component or hook in the checkout before judging each
+            changed path. Use `gh pr view` for stated intent and `gh pr checks` for
+            CI and deployment status. Skip lockfiles, generated files
+            (`storefrontapi.generated.d.ts`, `*.tsbuildinfo`), and build output.
 
-            1. gh pr view ${{ github.event.pull_request.number }} --json title,body,headRefName,additions,deletions,changedFiles
-            2. gh pr diff ${{ github.event.pull_request.number }}
-            3. Read CLAUDE.md at the repo root if it exists — it contains the section inventory, architecture notes, and repo-specific gotchas.
+            Report every discrete, actionable issue introduced by this PR that
+            could cause incorrect behavior, a security vulnerability, a material
+            performance regression (uncached queries, extra client-side requests,
+            layout shift, hydration mismatches), an accessibility failure against
+            WCAG 2.1 AA, a Customizer crash from a schema change, or a clear
+            violation of a CLAUDE.md invariant. Check desktop and mobile paths for
+            UI changes. Include low-severity bugs and continue through the entire
+            diff. Omit pre-existing problems, speculative concerns without a
+            demonstrable affected path, intentional behavior changes, and pure
+            style or naming preferences.
 
-            ## Step 2 — Scope control (skip these entirely, no comments)
+            Where code parses, transforms, or reconstructs data (CMS content,
+            Storefront API responses, cart lines, URL params), work out what the
+            output drops that callers need and what it keeps that it must not,
+            then trace one maximally-featured input through the new path
+            (optional fields, empty CMS groups, missing images, many variants,
+            a non-default locale). Where a change repeats across call sites or
+            requires a companion edit elsewhere (section registration, schema
+            defaults, types, both desktop and mobile variants), enumerate the full
+            set and look for the one left behind.
 
-            Do NOT review or comment on:
-            - package-lock.json, yarn.lock, pnpm-lock.yaml
-            - Any file under node_modules/
-            - Generated files: *.tsbuildinfo, codegen output, *.generated.ts, storefrontapi.generated.ts
-            - Audit reports, CSVs, PDFs in audits/ or similar directories
-            - .gitignore, .prettierrc, .eslintrc changes unless they introduce a security risk
-            - Pure whitespace or formatting-only changes with no logic impact
-            - dist/, .cache/, .react-router/ build artifacts
+            For each finding, state the triggering scenario, impact, and fix
+            direction in one concise paragraph, citing the code that proves it.
 
-            ## Step 3 — Calibrate effort to PR size
+            Post one inline comment per issue with
+            `mcp__github_inline_comment__create_inline_comment`, `confirmed: true`,
+            and the smallest changed line range that shows the problem. Prefix it
+            with `[P0]` for a release blocker, `[P1]` for a high-impact issue that
+            should be fixed before merge, `[P2]` for an ordinary defect, or `[P3]`
+            for a low-impact but concrete defect.
 
-            Count the changed files and net lines (additions + deletions) from step 1.
+            This runs on every push. Before posting, list existing inline comments
+            with
+            `gh api repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/comments`
+            and check `gh pr view --comments` for an earlier Claude summary. If a
+            previous Claude review exists, this is a re-review: focus on code
+            changed since that review, never re-post an issue already raised, and
+            post only new `[P0]` and `[P1]` findings. Mention a fixed issue only in
+            the summary count, not inline.
 
-            **Small PR (≤5 files, ≤100 lines):**
-            - Full review of every changed file
-            - Inline comments on specific lines for any finding, positive or negative
+            Finally, post exactly one short top-level summary with
+            `gh pr comment --edit-last --create-if-none`: give finding counts by
+            priority and identify any cart or checkout, customer account or auth,
+            analytics or tracking, Pack schema, SEO or routing, third-party script,
+            or environment variable changes that require careful human review. If
+            there are no findings or risk areas, say only
+            `No actionable issues found.` Do not repeat inline findings, add praise
+            or checklists, approve or block the PR, or modify files. Only GitHub
+            comments are visible to the user.
 
-            **Medium PR (6–20 files, 101–500 lines):**
-            - Full review of all logic files (components, hooks, schemas, routes)
-            - Skim-only for test files, style changes, and minor config tweaks
-            - Inline comments only for blocking issues and meaningful non-blocking suggestions; skip affirming comments unless something is genuinely non-obvious
-
-            **Large PR (>20 files or >500 lines):**
-            - Focus on the highest-risk files: security-relevant code, shared components, schema changes, route handlers, and anything touching auth or payment
-            - Skip line-level comments on low-risk files (pure UI layout, copy changes, minor refactors)
-            - Note in the summary which areas were given full review vs. skimmed
-
-            ## Step 4 — Security (highest priority — flag blocking for any violation)
-
-            These are always blocking issues regardless of PR size:
-            - Secrets, tokens, API keys, or credentials anywhere in the diff — even in comments or test fixtures
-            - dangerouslySetInnerHTML with unsanitized user input (XSS vector)
-            - User-controlled values passed directly to eval(), new Function(), or dynamic imports
-            - SQL/NoSQL injection: string interpolation into queries without parameterization
-            - Path traversal: user input used in file paths without sanitization (e.g. path.join with req.params)
-            - Server-side code (loaders, actions, API routes) that trusts client-supplied values without validation
-            - CORS or CSP headers weakened to wildcard (*) without explicit justification
-            - Authentication/session logic that can be bypassed (e.g. missing auth check in a new route)
-            - target="_blank" links missing rel="noopener noreferrer" (reverse tabnapping)
-            - New environment variables that default to permissive values in production
-
-            For security findings: state the attack vector explicitly ("An attacker could…"), the blast radius, and the exact fix.
-
-            ## Step 5 — Hydrogen & Pack pattern drift
-
-            Flag drift from Shopify Hydrogen conventions and Pack patterns. These are non-blocking unless they break functionality:
-
-            **Hydrogen conventions:**
-            - Loaders should use `json()` / `defer()` for data responses, not raw objects
-            - `useLoaderData()` / `useRouteLoaderData()` for loader data — not prop drilling from root
-            - Cart mutations should go through the cart action handler, not direct fetch calls
-            - SEO metadata set via `export const meta` in route files, not in component JSX
-            - Images should use Shopify's `<Image>` component from `@shopify/hydrogen` for CDN optimization, not raw `<img>`
-            - `CacheLong()` / `CacheShort()` / `CacheNone()` strategies on Pack/Storefront queries — missing cache strategies means uncached SSR on every request
-            - New routes must follow the `($locale)` prefix pattern or they will 404 in international markets
-
-            **Pack patterns:**
-            - Schema `component: 'group'` fields MUST have a group-level `defaultValue` — without it, the Customizer crashes with "Oops, something went wrong" when the group has no saved CMS data
-            - Date fields in schemas: never default to `''` or `null` — use a valid ISO date string (e.g. `'2026-12-31T00:00:00.000Z'`) or the Customizer's date component throws a RangeError
-            - New sections must be registered in `app/sections/index.tsx`
-            - Pack CMS queries should use `sections(first: 100)` — lower limits silently truncate sections on content-heavy pages
-            - Section data comes from the `cms` prop; site settings come from `useSettings()` — don't mix them
-
-            ## Step 6 — Standard review dimensions
-
-            **Correctness** — Does the change do what the PR description says? Edge cases not handled? Root cause vs. symptom?
-
-            **Completeness** — Related files that should also be updated? If a type changed, do all consumers handle the new shape? If a shared component changed, does the fix apply to all usages?
-
-            **Side effects & regressions** — Does this break existing behavior? Mobile AND desktop coverage for UI changes?
-
-            **Code quality** — Follows conventions in the file? Unnecessarily complex? Simpler approach available? Don't flag personal style preferences (ternary vs if/else, variable naming conventions) unless they introduce a real readability problem.
-
-            **Accessibility (WCAG 2.1 AA)** — Interactive elements use semantic HTML (`button`, `a`) not `div`/`span`? Missing `aria-label` or `aria-labelledby`? State communicated to AT (`aria-expanded`, `aria-pressed`, `aria-selected`, `aria-current`)? Dialog patterns: `role="dialog"`, `aria-modal`, focus management?
-
-            ## Step 7 — Post inline comments
-
-            Use mcp__github_inline_comment__create_inline_comment (confirmed: true) for line-level findings.
-
-            **Comment format:**
-            - Affirming (small PRs only, genuinely non-obvious): "Good [fix/catch/decision] — [explain why this is correct and what it prevents]."
-            - Non-blocking: "Minor suggestion: [description].\n\n```tsx\n// suggested alternative\n```\n\nNon-blocking — the current code works correctly."
-            - Blocking: "[Describe the problem.] This will [break X / cause Y / allow attack Z].\n\n```tsx\n// fix\n```"
-            - Security blocking: "**Security:** [Attack vector]. An attacker could [describe impact]. [Fix]."
-
-            Only post a comment when you have something substantive to add. Do not comment on trivially correct or self-evident code.
-
-            ## Step 8 — Post summary
-
-            gh pr comment ${{ github.event.pull_request.number }} --body "SUMMARY_TEXT"
-
-            **Summary structure:**
-            ### Summary
-
-            [1-2 sentence overall assessment. For large PRs, note the review scope.]
-
-            ### Security
-
-            [Only include this section if security findings exist. List each finding with severity.]
-
-            ### Key Changes Reviewed
-
-            **`path/to/file`** — [What changed, why correct or not, notable tradeoffs. 2-4 sentences. Reference actual code elements. For large PRs, note if this file was skimmed.]
-
-            [Repeat for each meaningfully reviewed file. Skip files with trivial changes.]
-
-            ### Hydrogen / Pack Drift
-
-            [Only include if drift was found. List each pattern deviation and whether it's blocking.]
-
-            ### Overall Assessment
-
-            [One sentence: no blocking issues / N blocking issues found / observations only.]
-
-            **Tone:** Technical and precise — explain the WHY. Lead with security. Positive when things are done well. Non-blocking suggestions clearly labeled. Educational. Concise — no filler. Never condescending.
+          claude_args: |
+            --model claude-opus-5-5
+            --effort high
+            --allowedTools "Read,Grep,Glob,LS,mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr checks:*),Bash(gh run view:*),Bash(gh api repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/comments)"

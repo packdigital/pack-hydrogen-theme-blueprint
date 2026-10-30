@@ -11,10 +11,12 @@
 | File | Purpose |
 |------|---------|
 | `app/components/Document/PlaybookSDK.tsx` | SDK loader + anti-flicker script |
+| `app/components/Document/PlaybookCartBridge.tsx` | Lets Playbook's "Add to cart" use this store's cart |
 | `app/routes/apps.playbook.$.tsx` | Reverse proxy route (first-party API calls) |
 | `app/routes/($locale).cart.$lines.tsx` | Direct checkout route with Playbook attribution |
 | `app/root.tsx` | Root loader detects Playbook URL params |
 | `app/components/Document/Document.tsx` | Renders `<PlaybookSDK>` in `<head>` |
+| `app/contexts/ContextsProvider.tsx` | Mounts `<PlaybookCartBridge>` inside the cart + menu providers |
 | `env.d.ts` | TypeScript types for Playbook env vars |
 
 ---
@@ -156,7 +158,33 @@ The SDK reads `apiEndpoint` from the `data-pb-config` attribute and routes all A
 
 ---
 
-## Step 5: Environment Variables
+## Step 5: Cart Bridge (Add to cart)
+
+Playbook's collection grid can put a product straight in the cart. On a Liquid theme it does that through Shopify's AJAX Cart API; **Hydrogen has no equivalent**, so without this bridge the button falls back to opening the product page.
+
+Playbook deliberately does *not* write the line itself through the Storefront API. It could — but this cart's UI renders from React state no third-party script can reach, so the line would land in Shopify while the cart icon still read zero and the drawer never opened. The shopper would click again. An honest product-page link beats a correct write that looks broken.
+
+`PlaybookCartBridge` gives Playbook the missing piece: a way to ask *this app* to do the write.
+
+```tsx
+// app/contexts/ContextsProvider.tsx — inside CartProvider AND MenuProvider
+<AnalyticsProvider>
+  <PlaybookCartBridge />
+  {children}
+</AnalyticsProvider>
+```
+
+It must sit inside both providers: the cart does the write, the menu opens the drawer afterwards. `PlaybookSDK` can't host it — that renders in `<Document>`, outside every context.
+
+**One thing to preserve if you adapt it.** `linesAdd` does not throw. A failed request resolves to `null`, and a rejected line resolves with `userErrors` populated — which is why `useAddToCart` inspects the payload instead of using `try`/`catch`. Playbook's contract is the opposite (resolve = added, throw = failed), so the bridge checks both and throws. Drop that and a shopper sees "Added" for a line that never landed.
+
+Nothing happens if Playbook isn't installed — the global it registers is simply never called. There is no env var: the bridge is inert until Playbook calls it.
+
+**Requires `@pack/react` with `usePlaybookCart`.**
+
+---
+
+## Step 6: Environment Variables
 
 ### Required
 
@@ -192,7 +220,7 @@ PLAYBOOK_PLATFORM_URL?: string;
 
 ---
 
-## Step 6: Content Security Policy (CSP)
+## Step 7: Content Security Policy (CSP)
 
 If your store enforces a CSP (in `entry.server.tsx`), add these directives:
 
@@ -231,7 +259,7 @@ Leave the flag **unset** on stores with no CMP — there's nothing to wait for, 
 
 ---
 
-## Step 7: Cart Attribution for Direct Checkout Routes
+## Step 8: Cart Attribution for Direct Checkout Routes
 
 The Playbook SDK automatically injects cart attributes on standard add-to-cart flows. However, **server-side routes that create a cart and redirect straight to checkout bypass the SDK entirely** — the page never renders client-side, so the SDK's attribution never runs.
 
@@ -338,7 +366,7 @@ After setup, verify:
 | Hero doesn't render | Test not on this environment | Verify `PLAYBOOK_PLATFORM_URL` points to the correct Playbook deployment |
 | Page flashes before experience | Anti-flicker not working | Ensure `PlaybookSDK` is in `<head>` and `hasPlaybookParams` is from root loader (not `useLocation`) |
 | Cart attribution missing | Env vars not exposed | Verify `PUBLIC_STOREFRONT_API_TOKEN` and `PUBLIC_STORE_DOMAIN` are in `window.ENV` |
-| Direct checkout attribution missing | Server-side route not reading cookies | Add Playbook cookie reading to `cart.$lines.tsx` (see Step 7) |
+| Direct checkout attribution missing | Server-side route not reading cookies | Add Playbook cookie reading to `cart.$lines.tsx` (see Step 8) |
 | CSP errors in console | Missing directives | Add `cdn.heyplaybook.com` to `script-src` and `heyplaybook.com` to `connect-src` |
 | Tracking still fires after a shopper declines | `PUBLIC_PLAYBOOK_CONSENT_REQUIRED` not set, or the CMP isn't writing to Shopify's Customer Privacy API | Set `PUBLIC_PLAYBOOK_CONSENT_REQUIRED=true`; confirm the CMP calls `Shopify.customerPrivacy.setTrackingConsent(...)`. See [Cookie consent](#cookie-consent-cmp) |
 | Nothing is ever tracked, even after accepting | Consent flag set but `Shopify.customerPrivacy` never loads on the page | Ensure Shopify's Customer Privacy API is initialized (Hydrogen customer-privacy setup / the store's CMP); the SDK fails closed while it waits |
