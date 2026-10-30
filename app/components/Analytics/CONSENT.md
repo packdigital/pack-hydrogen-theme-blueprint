@@ -5,15 +5,17 @@ wiring a new analytics integration.
 
 ## Triage
 
-| Symptom                                                                | Likely cause                                                                                                              |
-| ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| **No analytics at all** — every vendor silent, including Shopify's own | [Hydrogen's analytics deadlock](#hydrogens-own-analytics-deadlock). Check `withPrivacyBanner`.                            |
-| One vendor's library never loads                                       | That integration derives consent solely from `onVisitorConsentCollected` — [fail open, not closed](#fail-open-not-closed) |
-| One vendor loads but sends nothing                                     | Its `ready()` is gated on a third-party script that's blocked — [third rule](#three-further-rules)                        |
-| Console spams `Visitor consent collected` ~1x/sec                      | `undefined` vs `false` flapping across the round-trip — [third rule](#three-further-rules)                                |
+| Symptom                                                                  | Likely cause                                                                                           |
+| ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ |
+| **Banner doesn't show** for a first-time visitor in a banner region      | Something saved consent before it loaded — [never write consent on load](#never-write-consent-on-load) |
+| Banner shows on some fresh loads but not others                          | A second `useCustomerPrivacy()` mount — [one API instance](#one-api-instance)                          |
+| **No analytics at all** — every vendor silent, including Shopify's own   | Hydrogen's queue is held: an unready register — [the queue](#hydrogens-analytics-queue)                |
+| A vendor treats a banner-region visitor as consenting before they answer | It read the API's placeholder — [read via `readConsent()`](#read-consent-via-readconsent)              |
+| One vendor loads but sends nothing                                       | Its `ready()` is gated on a third-party script that's blocked — [further rules](#three-further-rules)  |
+| Console spams `Visitor consent collected` ~1x/sec                        | `undefined` vs `false` flapping across the round-trip — [further rules](#three-further-rules)          |
 
-The first row is the one that wastes the most time, because every obvious signal
-reads healthy. Start there if nothing is reporting.
+Test every consent change from a **clean browser, first visit, in a banner
+region** (e.g. a California or EU IP). A build passing says nothing about it.
 
 ## The model
 
@@ -35,84 +37,84 @@ const consent = {
 };
 ```
 
-## Hydrogen's own analytics deadlock
+The helpers live in `app/lib/consent.ts`.
 
-**This one bites every storefront with `withPrivacyBanner: true`, and it kills
-_all_ analytics — not just one vendor.**
+## Never write consent on load
+
+**This is the most expensive mistake, because it is silent and looks like a
+fix.**
+
+On a first visit the Customer Privacy API answers with a **placeholder** until
+it has loaded the visitor's consent: no region, `shouldShowBanner()` false,
+and every `*Allowed()` getter true. `consentStatus` is not `'loaded'` yet.
+
+Calling `setTrackingConsent` with those values — for example "commit the
+resolved consent when no banner is shown" — saves "everything allowed" as the
+visitor's answer. In a region that requires a banner, the visitor is recorded
+as consenting without clicking anything, and the banner never shows.
+
+The only write this blueprint makes is `useSaleOfDataOptOut()`: it waits for
+`consentStatus === 'loaded'`, and writes `sale_of_data: false` alone.
+
+## Hydrogen's analytics queue
 
 Hydrogen's `<ShopifyAnalytics>` registers a consumer you don't control,
 `Internal_Shopify_Analytics`, and only reports it ready once its internal
-`privacyReady` flips. That has exactly two sources:
+`privacyReady` flips. With `withPrivacyBanner: true` that happens only on
+`visitorConsentCollected`. Until then `areRegistersReady()` is false and
+Hydrogen parks **every** event in `waitForReadyQueue` — Shopify's own analytics
+included.
 
-```js
-onReady: () => !consent.withPrivacyBanner && setPrivacyReady(true),
-onVisitorConsentCollected: (c) => { ...; setPrivacyReady(true); }
-```
+Shopify's banner script dispatches `visitorConsentCollected` once the consent
+loads, **in every region**, banner or not. So the queue releases on its own and
+nothing needs to save consent to unstick it. If every vendor _and_ Shopify's own
+analytics are silent, check that the banner script loads (blocked domain, CSP)
+and that every `register()` call reaches `ready()` — not consent writes.
 
-With `withPrivacyBanner: true` the first is disabled. The second is
-`visitorConsentCollected` — the event Shopify never dispatches in a region with
-no cookie banner. So that register never readies, `areRegistersReady()` is
-permanently false, and Hydrogen parks **every** event in `waitForReadyQueue`.
+## One API instance
 
-The symptom is maximally confusing: vendor libraries load fine, subscriptions
-report ready, `analyticsProcessingAllowed()` returns `true`, `shop` resolves —
-and nothing is ever published. Shopify's own analytics is equally silent, which
-is the tell that it isn't a vendor integration problem.
+Hydrogen's `Analytics.Provider` already mounts `useCustomerPrivacy()`. Don't
+mount a second one. Each instance installs `Object.defineProperty` watchers on
+`window.Shopify` and `window.privacyBanner`; the second overwrites the first,
+and the instance that loses never calls `loadBanner()` — so the banner fails to
+render on some fresh loads, with no retry.
 
-`useConsentBridge()` fixes it by committing the resolved consent, which makes
-Shopify dispatch the event and releases the queue.
+`useAnalytics().customerPrivacy` doesn't help either: it stays null until
+`privacyReady` flips. Read `window.Shopify.customerPrivacy` and listen for
+`CONSENT_EVENTS`, as `app/lib/consent.ts` does.
 
-Note `withPrivacyBanner: false` (or omitted — Hydrogen defaults it to `false`)
-is immune, because `!consent.withPrivacyBanner` is then `true` and `privacyReady`
-flips as soon as the API is ready.
+## Read consent via `readConsent()`
 
-## Fail open, not closed
-
-**This is the part integrations get wrong.**
-
-Shopify dispatches `visitorConsentCollected` **only when consent is actually
-collected or changed** — a banner interaction, or a `setTrackingConsent` call.
-On load, Hydrogen dispatches `shopifyCustomerPrivacyApiLoaded`, which is a
-_different_ event.
-
-In a region with no cookie banner — the US, in most Shopify configurations —
-nothing ever collects consent, so `visitorConsentCollected` **never fires at
-all**. Hydrogen additionally suppresses the callback pre-interaction when a
-banner _is_ shown but hasn't been answered.
-
-So an integration that derives its consent state solely from
-`onVisitorConsentCollected` will sit at "no consent" forever for most traffic:
+An integration needs two things: a value it can trust, and to hear about
+changes.
 
 ```ts
-// WRONG — never resolves for a visitor who never sees or answers a banner
-const [consent, setConsent] = useState(null);
-useCustomerPrivacy({
-  ...props,
-  onVisitorConsentCollected: (collected) => setConsent(collected),
-});
-if (!consent) return null; // blocks the integration permanently
-```
-
-Read the **resolved** permission off the API instead. These getters account for
-the region defaults that apply when no banner is shown:
-
-```ts
-// RIGHT — resolves on load, banner or not
+// WRONG — reads the placeholder: "everything allowed" in a banner region
 const {customerPrivacy} = useCustomerPrivacy({...props});
-
 useEffect(() => {
   if (!customerPrivacy) return;
   setConsent({
-    marketing: Boolean(customerPrivacy.marketingAllowed?.()),
-    analytics: Boolean(customerPrivacy.analyticsProcessingAllowed?.()),
-    preferences: Boolean(customerPrivacy.preferencesProcessingAllowed?.()),
-    sale_of_data: Boolean(customerPrivacy.saleOfDataAllowed?.()),
+    marketing: Boolean(customerPrivacy.marketingAllowed?.()) /* ... */,
   });
 }, [customerPrivacy]);
 ```
 
-Keep the `onVisitorConsentCollected` handler as well — it's how you learn about
-_changes_. It just can't be the only source.
+```ts
+// RIGHT — null until Shopify has the visitor's consent, then re-read on change
+useEffect(() => {
+  const sync = () => {
+    const next = readConsent();
+    if (next) setConsent(next);
+  };
+  sync();
+  return subscribeToConsentEvents(sync);
+}, []);
+```
+
+`readConsent()` denies every purpose while a banner is due and unanswered, and
+otherwise allows a purpose when the visitor didn't say `'no'` and the API
+allows it. Decide what your integration does while it returns null; for
+anything that sets marketing cookies, wait.
 
 ### Three further rules
 
@@ -169,21 +171,27 @@ back through `setTrackingConsent` sends them as booleans. Comparing raw values
 across that boundary flaps `undefined` <-> `false` forever, which re-renders the
 integration on a loop (~1x/sec in the wild).
 
-## Global Privacy Control
+## Global Privacy Control and Decline
 
 Hydrogen has **no** GPC handling — no references to `globalPrivacyControl` or
-`Sec-GPC` anywhere in `@shopify/hydrogen` or `@shopify/hydrogen-react`.
+`Sec-GPC` anywhere in `@shopify/hydrogen` or `@shopify/hydrogen-react` — and
+Shopify's API applies GPC only from the second full page load.
 
-`useConsentBridge()` (called from `Analytics.tsx`) reads the signal and
-pushes `sale_of_data: false` through `setTrackingConsent`, so the opt-out reaches
-every downstream consumer rather than living in one hook.
+`useSaleOfDataOptOut()` (called from `Analytics.tsx`) saves
+`sale_of_data: false` once per page, after the consent has loaded, when:
 
-**GPC is an opt-out of sale/sharing only.** The other three categories are
-carried through at their resolved values. Seeding the push from
-`currentVisitorConsent()` instead would be a bug: in a non-banner region those
-fields are `undefined` while resolved permissions are `true`, so coercing them
-would silently revoke analytics and first-party marketing the visitor never
-objected to.
+- the browser sends GPC in a sale-of-data region and the visitor hasn't opted
+  out yet, or
+- a banner is required and the visitor declined: Shopify's Decline answers
+  marketing, analytics and preferences but leaves sale_of_data blank, which
+  reads as allowed. **This is a policy choice** — Shopify's banner doesn't do
+  it by default. Confirm it per store.
+
+**GPC is an opt-out of sale/sharing only.** The write carries `sale_of_data`
+and nothing else, so the visitor's other answers are untouched.
+
+Known side effect: after a Decline, "Accept all" in Shopify's preference dialog
+can't turn sale of data back on (the dialog has no toggle for it).
 
 ## The opt-out control
 

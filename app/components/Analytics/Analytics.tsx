@@ -5,9 +5,9 @@ import {
   useCart,
   useCustomer,
   useGlobal,
-  useConsentBridge,
   usePathStorage,
   useRootLoaderData,
+  useSaleOfDataOptOut,
 } from '~/hooks';
 
 import {AnalyticsEvent} from './constants';
@@ -45,9 +45,9 @@ const DEBUG =
 export const Analytics = memo(() => {
   const {ENV} = useRootLoaderData();
 
-  // Release Hydrogen's analytics queue and honor GPC before any pixel makes a
-  // tracking decision. See useConsentBridge for why both are one write.
-  useConsentBridge();
+  // Record a banner Decline or GPC as a sale-of-data opt-out in Shopify. Never
+  // writes consent on load; see app/components/Analytics/CONSENT.md.
+  useSaleOfDataOptOut();
   const {register, subscribe} = useAnalytics();
   const {isCartReady} = useGlobal();
   const cart = useCart();
