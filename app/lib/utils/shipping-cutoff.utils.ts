@@ -102,16 +102,16 @@ export const getActiveShippingCutoff = ({
 };
 
 /**
- * "2d 4h", "4h 23m" or "23m". Floors to the minute so the countdown never
- * reads more time than is left.
+ * "2d 4h", "4h 23m" or "23m", dropping a zero second unit ("6d", "4h").
+ * Floors to the minute so the countdown never reads more time than is left.
  */
 export const formatCutoffCountdown = (ms: number) => {
   const totalMinutes = Math.max(0, Math.floor(ms / 60000));
   const days = Math.floor(totalMinutes / 1440);
   const hours = Math.floor((totalMinutes % 1440) / 60);
   const minutes = totalMinutes % 60;
-  if (days > 0) return `${days}d ${hours}h`;
-  if (hours > 0) return `${hours}h ${minutes}m`;
+  if (days > 0) return hours ? `${days}d ${hours}h` : `${days}d`;
+  if (hours > 0) return minutes ? `${hours}h ${minutes}m` : `${hours}h`;
   return `${minutes}m`;
 };
 
