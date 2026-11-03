@@ -3,6 +3,7 @@ import {memo} from 'react';
 import {Image} from '~/components/Image';
 import {Link} from '~/components/Link';
 import {QuantitySelector} from '~/components/QuantitySelector';
+import {ShippingCutoffMessage} from '~/components/ShippingCutoffMessage';
 import {Svg} from '~/components/Svg';
 import {PRODUCT_IMAGE_ASPECT_RATIO} from '~/lib/constants';
 
@@ -78,6 +79,14 @@ export const CartLine = memo(({closeCart, line}: CartLineProps) => {
             <p className="mt-0.5 text-sm text-neutralMedium">
               Estimated ship date: {preOrderShippingDate}
             </p>
+          )}
+
+          {/* Pre-order lines ship later, so a cutoff would overpromise */}
+          {!preOrderShippingDate && (
+            <ShippingCutoffMessage
+              className="mt-0.5 !text-xs"
+              placement="cartLine"
+            />
           )}
 
           <button

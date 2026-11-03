@@ -2,6 +2,7 @@ import {forwardRef, useMemo} from 'react';
 import {useProduct} from '@shopify/hydrogen-react';
 import sanitizeHtml from 'sanitize-html';
 
+import {ShippingCutoffMessage} from '~/components/ShippingCutoffMessage';
 import {useColorSwatches} from '~/hooks';
 
 import {ProductAddToCart} from './ProductAddToCart';
@@ -63,6 +64,8 @@ export const ProductDetails = forwardRef(
             selectedVariant={selectedVariant}
             setQuantity={setQuantity}
           />
+
+          <ShippingCutoffMessage className="mt-3 text-center" placement="pdp" />
         </div>
 
         <div

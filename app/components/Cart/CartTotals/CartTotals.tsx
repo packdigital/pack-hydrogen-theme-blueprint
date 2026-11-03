@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import type {CartCodeDiscountAllocation} from '@shopify/hydrogen/storefront-api-types';
 
 import {prefixNonUsdDollar} from '~/hooks/product/useVariantPrices';
+import {ShippingCutoffMessage} from '~/components/ShippingCutoffMessage';
 import {useCart, useCustomer, useLocale} from '~/hooks';
 
 import type {CartTotalsProps} from '../Cart.types';
@@ -126,6 +127,8 @@ export const CartTotals = memo(({settings}: CartTotalsProps) => {
 
         {subtext && <p className="text-xs">{subtext}</p>}
       </div>
+
+      <ShippingCutoffMessage className="text-center" placement="cartTotals" />
 
       <button
         aria-label={checkoutText}
