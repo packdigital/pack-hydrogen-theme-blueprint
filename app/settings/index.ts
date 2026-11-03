@@ -11,6 +11,7 @@ import notFound from './not-found';
 import localization from './localization';
 import product from './product';
 import search from './search';
+import shippingCutoff from './shipping-cutoff';
 import type {AccountSettings} from './account';
 import type {AnalyticsSettings} from './analytics';
 import type {CartSettings} from './cart';
@@ -21,6 +22,7 @@ import type {LocalizationSettings} from './localization';
 import type {NotFoundSettings} from './not-found';
 import type {ProductSettings} from './product';
 import type {SearchSettings} from './search';
+import type {ShippingCutoffSettings} from './shipping-cutoff';
 
 export function registerStorefrontSettings() {
   registerStorefrontSettingsSchema([
@@ -34,6 +36,7 @@ export function registerStorefrontSettings() {
     notFound as SiteSetting,
     product as SiteSetting,
     search as SiteSetting,
+    shippingCutoff as SiteSetting,
   ]);
 }
 
@@ -48,4 +51,5 @@ export interface Settings {
   notFound: NotFoundSettings;
   product: ProductSettings;
   search: SearchSettings;
+  shippingCutoff: ShippingCutoffSettings;
 }
