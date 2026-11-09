@@ -12,8 +12,10 @@
 - [Major Features](#major-features)
 - [Pack Features](#pack-features)
 - [Get Started](#get-started)
-  - [Environment Variables](#environment-variables)
+  - [Try a demo](#try-a-demo)
+  - [Start a new project](#start-a-new-project)
   - [Requirements](#requirements)
+  - [Environment Variables](#environment-variables)
   - [Building for production](#building-for-production)
   - [Building for local development](#building-for-local-development)
 - [Pack Customizer Content](#pack-customizer-content)
@@ -155,52 +157,61 @@ Note: Pack is free if you’re only looking to spin up a few landing pages, with
 
 ## Get started
 
-Use our CLI tool to get started quickly.
+### Try a demo
 
+The fastest way to see Blueprint running is the demo mode of our CLI. It clones this theme, provisions a temporary Pack demo store connected to a sample Shopify catalog, and writes your `.env` for you:
+
+```bash
+npx create-pack-app@latest --demo
 ```
+
+Then `cd` into the new project and run `npm run dev`.
+
+### Start a new project
+
+To create a project connected to your own Shopify store and Pack account, use our CLI and follow its prompts:
+
+```bash
 npx @pack/create-hydrogen@latest
 ```
 
-You can also create a free Pack account, or check out our documentation.
-
-Want a quick demo of Pack? Check out this <a href="https://hydrogen.packdigital.com/pages/demo" target="_blank">video overview</a> (7 min).
+You can also create a free Pack account, or check out our [documentation](https://docs.packdigital.com).
 
 ### Requirements
 
-- Node.js version 16.14.0 or higher
+- Node.js 22.12.0 or higher (see `.nvmrc`)
 
-Once you have your project cloned start off by installing your node packages
+Once you have your project cloned, install your node packages:
 
-```
+```bash
 npm install
 ```
 
 ### Environment Variables
 
-To run your application locally, you can use Shopify's mock.shop API to simulate a Shopify storefront. You can set the `PUBLIC_STORE_DOMAIN` environment variable to `mock.shop` to use the mock.shop API.
+Copy `.env.example` to `.env` and fill in your values. The example file documents every variable the theme reads, grouped into required and optional.
 
-```dotenv
-SESSION_SECRET="foobar"
-PUBLIC_STORE_DOMAIN="mock.shop"
-PUBLIC_STOREFRONT_API_TOKEN="foobar"
+```bash
+cp .env.example .env
 ```
 
-You can automate pull in your Shopify environment variables directly from your Shopify Hydrogen storefront using the Hydrogen CLI. Run the command below and follow its prompts.
-
-```
-npx shopify hydrogen env pull
-```
-
-Alternatively, you can create a `.env` file and manually copy these values from your Shopify Hydrogen storefront. You can find the variables by going to the Hydrogen storefront > Storefront Settings > Environments & Variables. These are the required variables needed:
+These are required. The server throws on startup if `SESSION_SECRET` or `PACK_SECRET_TOKEN` is missing:
 
 ```dotenv
 SESSION_SECRET="XXX"
-PUBLIC_STOREFRONT_API_TOKEN="XXX"
 PUBLIC_STORE_DOMAIN="XXX"
-PACK_PUBLIC_TOKEN="XXX"
+PUBLIC_STOREFRONT_API_TOKEN="XXX"
 PACK_SECRET_TOKEN="XXX"
 PACK_STOREFRONT_ID="XXX"
 ```
+
+If your storefront is deployed to Shopify Oxygen, you can pull its Shopify variables with the Hydrogen CLI:
+
+```bash
+npx shopify hydrogen env pull
+```
+
+You'll still need to add the Pack variables yourself.
 
 ### Building for production
 
@@ -212,7 +223,7 @@ npm run build
 
 ### Building for local development
 
-This command will start a server locally on your machine at http://localhost:3000.
+This command will start a server locally on your machine at http://localhost:8080.
 
 ```bash
 npm run dev
@@ -256,50 +267,16 @@ See [Section Schema API](https://docs.packdigital.com/section-schema-api).
 
 ### Caching
 
-Pack is leveraging the same Caching Strategy available with the Hydrogen framework. For an example of this, see `app/lib/pack/create-pack-client.ts`
-
-**NOTE:** In the future, the `lib/pack` library will be moved into it's own NPM package provided by Pack.
+Pack queries use the same caching strategies as the Hydrogen framework. The Pack client is created in `server.ts` with `createPackClient` from [`@pack/hydrogen`](https://www.npmjs.com/package/@pack/hydrogen), which reuses Hydrogen's cache. Pass a cache strategy with each query:
 
 ```tsx
-export function createPackClient(options: CreatePackClientOptions): Pack {
-  const {apiUrl, cache, waitUntil, preview, contentEnvironment} = options;
-  const previewEnabled = !!preview?.session.get('enabled');
-  const previewEnvironment = preview?.session.get('environment');
-
-  return {
-    preview,
-    isPreviewModeEnabled: () => previewEnabled,
-    async query<T = any>(
-      query: string,
-      {variables, cache: strategy = CacheLong()}: QueryOptions = {},
-    ) {
-      const queryHash = await hashQuery(query, variables);
-      const withCache = createWithCache<QueryResponse<T>>({
-        cache,
-        waitUntil,
-      });
-
-      // The preview environment takes precedence over the content environment
-      // provided when creating the client
-      const environment =
-        previewEnvironment || contentEnvironment || PRODUCTION_ENVIRONMENT;
-      const fetchOptions = {
-        apiUrl,
-        query,
-        variables,
-        token: options.token,
-        previewEnabled,
-        contentEnvironment: environment,
-      };
-
-      // Preview mode always bypasses the cache
-      if (previewEnabled) return packFetch<T>(fetchOptions);
-
-      return withCache(queryHash, strategy, () => packFetch<T>(fetchOptions));
-    },
-  };
-}
+const {data} = await context.pack.query(PRODUCT_PAGE_QUERY, {
+  variables: {handle},
+  cache: context.storefront.CacheLong(),
+});
 ```
+
+Preview mode in the Pack Customizer always bypasses the cache.
 
 ## Data Layer
 
