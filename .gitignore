@@ -17,3 +17,7 @@ tsconfig.tsbuildinfo
 
 # IntelliJ
 .idea
+
+# Local tooling output
+.playwright-mcp/
+test-results/
