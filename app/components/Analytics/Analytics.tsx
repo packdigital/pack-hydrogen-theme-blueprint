@@ -7,6 +7,7 @@ import {
   useGlobal,
   usePathStorage,
   useRootLoaderData,
+  useSaleOfDataOptOut,
 } from '~/hooks';
 
 import {AnalyticsEvent} from './constants';
@@ -43,6 +44,10 @@ const DEBUG =
 
 export const Analytics = memo(() => {
   const {ENV} = useRootLoaderData();
+
+  // Record a banner Decline or GPC as a sale-of-data opt-out in Shopify. Never
+  // writes consent on load; see app/components/Analytics/CONSENT.md.
+  useSaleOfDataOptOut();
   const {register, subscribe} = useAnalytics();
   const {isCartReady} = useGlobal();
   const cart = useCart();
