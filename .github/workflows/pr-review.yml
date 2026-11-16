@@ -1,21 +1,46 @@
+# Claude code review with the P0–P3 convention.
+#
+# Reviews incrementally: each summary comment starts with
+# `<!-- claude-review-sha: <sha> -->`, and the next run uses that marker to
+# pick full / incremental / rereview / noop / skip mode. Repo-specific review
+# rules live in the `## Code Review` section of CLAUDE.md, not here.
+#
+# Manual re-review: gh workflow run pr-review.yml -f pr_number=<num>
+# Add -f full_review=true to ignore earlier reviews and review the whole PR.
+
 name: Claude Code Review
 
 on:
   pull_request:
-    types: [opened, synchronize, ready_for_review, reopened]
+    types: [opened, ready_for_review, reopened, synchronize]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: PR number to review
+        required: true
+        type: string
+      full_review:
+        description: Ignore earlier reviews and review the whole PR
+        type: boolean
+        default: false
 
 jobs:
   review:
-    # Drafts are skipped; marking one ready fires `ready_for_review`. Every push
-    # to a ready PR re-runs the review, and a newer push cancels an older run.
+    # Skip drafts (`opened` and `synchronize` on a draft both carry
+    # draft == true) and dependabot. A manual run always proceeds.
     if: >
-      github.event.pull_request.draft == false &&
-      github.actor != 'dependabot[bot]'
-    concurrency:
-      group: pr-review-${{ github.event.pull_request.number }}
-      cancel-in-progress: true
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.pull_request.draft == false &&
+       github.actor != 'dependabot[bot]')
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    # Not cancel-in-progress: a review cancelled after posting inline comments
+    # but before its summary leaves no baseline marker, so the next run would
+    # post the same findings again. GitHub still replaces any pending run with
+    # the newest one, so at most one review runs and one waits.
+    concurrency:
+      group: pr-review-${{ inputs.pr_number || github.event.pull_request.number }}
+      cancel-in-progress: false
     permissions:
       contents: read
       pull-requests: write
@@ -23,11 +48,205 @@ jobs:
       actions: read
       id-token: write
     steps:
+      # Resolve PR number and head SHA for both trigger types. pull_request
+      # payloads carry them; a manual run starts from the default branch, so
+      # look up the PR's current head via the API instead.
+      - name: Resolve PR head
+        id: pr
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MANUAL_PR: ${{ inputs.pr_number }}
+          EVENT_PR: ${{ github.event.pull_request.number }}
+          EVENT_SHA: ${{ github.event.pull_request.head.sha }}
+          REPO: ${{ github.repository }}
+        run: |
+          if [ -n "$MANUAL_PR" ]; then
+            NUM="$MANUAL_PR"
+            SHA=$(gh pr view "$NUM" --repo "$REPO" --json headRefOid -q .headRefOid)
+          else
+            NUM="$EVENT_PR"
+            SHA="$EVENT_SHA"
+          fi
+          # NUM lands in the prompt and the allowed-tools list below, so only
+          # a plain PR number gets through.
+          if ! [[ "$NUM" =~ ^[0-9]+$ ]]; then
+            echo "::error::PR number '$NUM' is not a number"; exit 1
+          fi
+          echo "number=$NUM" >> "$GITHUB_OUTPUT"
+          echo "sha=$SHA" >> "$GITHUB_OUTPUT"
+
+          # The action takes the PR number for its inline-comment tool from
+          # the event payload only, so on a manual run that tool has no PR and
+          # every call is refused. Manual runs post inline comments through
+          # the REST API instead, limited to this one PR.
+          if [ -n "$MANUAL_PR" ]; then
+            echo "inline=gh-api" >> "$GITHUB_OUTPUT"
+            echo "extra_tools=,Bash(gh api --method POST repos/$REPO/pulls/$NUM/comments:*)" >> "$GITHUB_OUTPUT"
+          else
+            echo "inline=tool" >> "$GITHUB_OUTPUT"
+            echo "extra_tools=" >> "$GITHUB_OUTPUT"
+          fi
+
       - uses: actions/checkout@v6
         with:
-          fetch-depth: 1
+          ref: ${{ steps.pr.outputs.sha }}
+          # Deep enough for `git diff` against a prior review's baseline SHA on
+          # any realistic PR. If the baseline is deeper (or was rebased away),
+          # the next step falls back to a full review.
+          fetch-depth: 50
 
-      - uses: anthropics/claude-code-action@v1
+      # The newest summary marker is the baseline for the next round:
+      # - full_review → `full` (ignore any prior review).
+      # - manual run with a prior review → `rereview`, a full review that
+      #   knows the earlier findings; without one → `full`.
+      # - no marker → `full`, the first review.
+      # - more than MAX_AUTO_FOLLOW_UPS automatic follow-ups already → `skip`.
+      #   Findings that keep coming back after a few rounds call for
+      #   rethinking the approach, not another round.
+      # - baseline unreachable (rebase or force-push) → `full`.
+      # - HEAD == baseline → `noop`.
+      # - otherwise → `incremental`, a review of the commits since then.
+      - name: Choose review mode
+        id: prior
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MANUAL_PR: ${{ inputs.pr_number }}
+          NUM: ${{ steps.pr.outputs.number }}
+          REPO: ${{ github.repository }}
+          HEAD: ${{ steps.pr.outputs.sha }}
+          FORCE_FULL: ${{ inputs.full_review }}
+          MAX_AUTO_FOLLOW_UPS: 3
+        run: |
+          set -o pipefail
+          mkdir -p .review-context
+
+          # The review agent cannot read inline comments, so hand it the
+          # finding threads it needs, with their replies. `all` is every
+          # finding this bot has posted on the PR; `acted` is only those a
+          # human resolved or replied to, which is how a follow-up learns a
+          # finding was fixed or declined instead of re-raising it. GraphQL
+          # reports the bot as `claude`, not `claude[bot]`. A failed lookup
+          # only loses that context, so it does not fail the review.
+          # shellcheck disable=SC2016  # $owner etc. are GraphQL variables
+          THREADS_QUERY='query($owner: String!, $repo: String!, $num: Int!, $endCursor: String) {
+            repository(owner: $owner, name: $repo) {
+              pullRequest(number: $num) {
+                reviewThreads(first: 100, after: $endCursor) {
+                  pageInfo { hasNextPage endCursor }
+                  nodes {
+                    isResolved
+                    isOutdated
+                    path
+                    line
+                    originalLine
+                    comments(first: 30) { nodes { author { login } body } }
+                  }
+                }
+              }
+            }
+          }'
+          fetch_finding_threads() {
+            gh api graphql --paginate -f query="$THREADS_QUERY" \
+              -f owner="${REPO%/*}" -f repo="${REPO#*/}" -F num="$NUM" \
+              | jq -r --arg which "$1" '.data.repository.pullRequest.reviewThreads.nodes[]
+                | select(.comments.nodes[0].author.login == "claude")
+                | select(.comments.nodes[0].body | test("^\\[P[0-3]\\]"))
+                | select($which == "all" or .isResolved
+                    or ([.comments.nodes[1:][] | select(.author.login != "claude")] | length > 0))
+                | "### \(.path):\(.line // .originalLine)"
+                  + (if .isResolved then " (resolved)" else "" end)
+                  + (if .isOutdated then " (outdated)" else "" end)
+                  + "\n\n"
+                  + ([.comments.nodes[] | "**\(.author.login):** \(.body)"] | join("\n\n"))
+                  + "\n"' \
+              > .review-context/finding-threads.md \
+              || echo "Could not load review threads." > .review-context/finding-threads.md
+          }
+
+          if [ "$FORCE_FULL" = "true" ]; then
+            echo "mode=full" >> "$GITHUB_OUTPUT"
+            echo "full_review requested → full"
+            exit 0
+          fi
+
+          # Paginated: a long-running PR passes 100 comments, and the first
+          # page alone holds the oldest ones, not the newest summary.
+          COMMENTS=$(gh api --paginate "repos/${REPO}/issues/${NUM}/comments?per_page=100" \
+            | jq -s 'add // []')
+          SUMMARIES=$(echo "$COMMENTS" | jq '[.[]
+            | select(.user.login == "claude[bot]")
+            | select(.body | test("<!-- claude-review-sha: [a-f0-9]{40} -->"))
+          ] | reverse')
+          ROUNDS=$(echo "$SUMMARIES" | jq 'length')
+          LAST_SHA=$(echo "$SUMMARIES" | jq -r '
+            (.[0].body // "" | capture("<!-- claude-review-sha: (?<sha>[a-f0-9]{40}) -->")? | .sha) // ""')
+
+          if [ -n "$MANUAL_PR" ]; then
+            if [ "$ROUNDS" -gt 0 ]; then
+              fetch_finding_threads all
+              echo "mode=rereview" >> "$GITHUB_OUTPUT"
+              echo "manual run with prior reviews → rereview"
+            else
+              echo "mode=full" >> "$GITHUB_OUTPUT"
+              echo "manual run, no prior reviews → full"
+            fi
+            exit 0
+          fi
+
+          if [ -z "$LAST_SHA" ]; then
+            echo "mode=full" >> "$GITHUB_OUTPUT"
+            echo "no prior review found → full"
+            exit 0
+          fi
+
+          # ROUNDS counts the first review too, so follow-ups = ROUNDS - 1.
+          # The notice is posted once; later pushes skip without a comment.
+          if [ "$ROUNDS" -gt "$MAX_AUTO_FOLLOW_UPS" ]; then
+            echo "mode=skip" >> "$GITHUB_OUTPUT"
+            echo "${ROUNDS} reviews already → automatic follow-ups stopped"
+            if ! echo "$COMMENTS" | jq -e 'any(.[]; .body | contains("<!-- claude-review-capped -->"))' > /dev/null; then
+              notice=$(printf '%s\n' \
+                '<!-- claude-review-capped -->' \
+                "Automatic follow-up reviews stop after ${MAX_AUTO_FOLLOW_UPS} rounds. If findings keep coming back, the approach may need rethinking more than another fix. To request a full review of the whole PR:" \
+                '' \
+                '```' \
+                "gh workflow run pr-review.yml -f pr_number=${NUM}" \
+                '```')
+              gh pr comment "$NUM" --repo "$REPO" --body "$notice"
+            fi
+            exit 0
+          fi
+
+          if ! git cat-file -e "${LAST_SHA}^{commit}" 2>/dev/null; then
+            echo "mode=full" >> "$GITHUB_OUTPUT"
+            echo "prior sha ${LAST_SHA} not reachable from HEAD → full"
+            exit 0
+          fi
+
+          if [ "$LAST_SHA" = "$HEAD" ]; then
+            echo "mode=noop" >> "$GITHUB_OUTPUT"
+            echo "head == baseline; nothing new"
+            exit 0
+          fi
+
+          echo "mode=incremental" >> "$GITHUB_OUTPUT"
+          echo "baseline_sha=$LAST_SHA" >> "$GITHUB_OUTPUT"
+
+          # The prior summary's "Open findings" list is what this round
+          # re-checks; the incremental diff is pre-computed so the agent
+          # reviews exactly the new commits.
+          echo "$SUMMARIES" | jq -r '.[0].body' > .review-context/prior-summary.md
+          git diff "$LAST_SHA" "$HEAD" > .review-context/incremental.diff
+
+          fetch_finding_threads acted
+          [ -s .review-context/finding-threads.md ] \
+            || echo "No finding has been resolved or replied to." > .review-context/finding-threads.md
+          echo "baseline: $LAST_SHA → HEAD: $HEAD"
+          echo "delta files: $(git diff --name-only "$LAST_SHA" "$HEAD" | wc -l)"
+
+      - name: Claude Code Review
+        if: steps.prior.outputs.mode != 'skip'
+        uses: anthropics/claude-code-action@v1
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           # The Claude App token from the OIDC exchange only carries these scopes
@@ -37,67 +256,199 @@ jobs:
             actions: read
           prompt: |
             REPO: ${{ github.repository }}
-            PR NUMBER: ${{ github.event.pull_request.number }}
+            PR NUMBER: ${{ steps.pr.outputs.number }}
+            HEAD SHA: ${{ steps.pr.outputs.sha }}
+            REVIEW MODE: ${{ steps.prior.outputs.mode }}
+            BASELINE SHA: ${{ steps.prior.outputs.baseline_sha }}
+            INLINE COMMENTS VIA: ${{ steps.pr.outputs.inline }}
 
-            Follow CLAUDE.md, including its repository invariants for Hydrogen,
-            React Router, and Pack CMS sections. Review the complete PR diff with
-            `gh pr diff`. Inspect surrounding code, call sites, and every usage of
-            a changed shared component or hook in the checkout before judging each
-            changed path. Use `gh pr view` for stated intent and `gh pr checks` for
-            CI and deployment status. Skip lockfiles, generated files
+            ## Review mode
+
+            The `REVIEW MODE` value above tells you what to do:
+
+            - `full` — first review of this PR, a forced full review, or the
+              previous baseline was rebased away. Read the complete PR diff via
+              `gh pr diff` and review it end to end.
+
+            - `incremental` — this PR has been reviewed before at BASELINE SHA.
+              The prior top-level summary is at `.review-context/prior-summary.md`,
+              every finding thread a human has resolved or replied to is at
+              `.review-context/finding-threads.md`, and the diff from BASELINE
+              to HEAD is at `.review-context/incremental.diff`. Do both of the
+              following:
+
+                1. Take the findings in the prior summary's `Open findings`
+                   list. If it has no such list (it predates this format), use
+                   its still-outstanding items and the unresolved threads in
+                   `finding-threads.md` instead. Give each one a status:
+                   - `Closed` — its thread is resolved.
+                   - `Declined` — an author reply explains why they are keeping
+                     the behavior. Do not argue it again unless the delta
+                     changes that reasoning.
+                   - `Addressed`, `Still present`, or `No longer applicable`
+                     — judged from the code at HEAD.
+                   Statuses go in the summary only. Do not post inline comments
+                   for them: the original thread already marks the line.
+
+                2. Review only `.review-context/incremental.diff` for net-new
+                   issues introduced by these commits. Don't re-review lines
+                   the delta doesn't touch. Post inline comments for net-new
+                   `[P0]`–`[P2]` findings. Don't post `[P3]` findings in this
+                   mode: count them in the summary instead, so a follow-up
+                   round stays about what matters.
+
+            - `rereview` — someone requested a review of a PR that has been
+              reviewed before. Review the complete PR diff via `gh pr diff`
+              as in `full`, `[P3]` findings included. First read
+              `.review-context/finding-threads.md`: every finding this bot has
+              posted on the PR, with its replies and whether it is resolved.
+              Give each one a status as in `incremental` step 1, and post
+              inline comments only for issues none of those threads raised.
+
+            - `noop` — HEAD equals BASELINE. Post the summary described below
+              with the body `No new commits since last review.` and stop.
+
+            ## Standard review guidance (all modes)
+
+            Follow CLAUDE.md, including its `## Code Review` section. Inspect
+            surrounding code, call sites, and every usage of a changed shared
+            component or hook in the checkout before judging each changed
+            path. Use `gh pr view` for stated intent and `gh pr checks` for CI
+            and deployment status. Skip lockfiles, generated files
             (`storefrontapi.generated.d.ts`, `*.tsbuildinfo`), and build output.
 
-            Report every discrete, actionable issue introduced by this PR that
-            could cause incorrect behavior, a security vulnerability, a material
-            performance regression (uncached queries, extra client-side requests,
-            layout shift, hydration mismatches), an accessibility failure against
-            WCAG 2.1 AA, a Customizer crash from a schema change, or a clear
-            violation of a CLAUDE.md invariant. Check desktop and mobile paths for
-            UI changes. Include low-severity bugs and continue through the entire
-            diff. Omit pre-existing problems, speculative concerns without a
-            demonstrable affected path, intentional behavior changes, and pure
-            style or naming preferences.
+            Report every discrete, actionable issue introduced by this diff
+            that could cause incorrect behavior, a security vulnerability, a
+            material performance regression (uncached queries, extra
+            client-side requests, layout shift, hydration mismatches), an
+            accessibility failure against WCAG 2.1 AA, a Customizer crash from
+            a schema change, or a clear violation of a documented repository
+            invariant. Check desktop and mobile paths for UI changes. Include
+            low-severity bugs and continue through the entire diff. Omit
+            pre-existing problems, speculative concerns without a demonstrable
+            affected path, intentional behavior changes, and pure style or
+            naming preferences.
 
             Where code parses, transforms, or reconstructs data (CMS content,
-            Storefront API responses, cart lines, URL params), work out what the
-            output drops that callers need and what it keeps that it must not,
-            then trace one maximally-featured input through the new path
+            Storefront API responses, cart lines, URL params), work out what
+            the output drops that callers need and what it keeps that it must
+            not, then trace one maximally-featured input through the new path
             (optional fields, empty CMS groups, missing images, many variants,
             a non-default locale). Where a change repeats across call sites or
             requires a companion edit elsewhere (section registration, schema
-            defaults, types, both desktop and mobile variants), enumerate the full
-            set and look for the one left behind.
+            defaults, types, both desktop and mobile variants), enumerate the
+            full set and look for the one left behind.
+
+            Do not state as fact anything you have not read. Cite the
+            `file:line` a claim about behavior rests on; a name or a type is
+            not evidence of what code does. `node_modules` is not installed in
+            this checkout, so all you can know of a dependency's API is what
+            the repo shows (`package.json`, `package-lock.json`, how the code
+            calls it). Where a finding depends on dependency behavior you
+            could not read, say so in the finding instead of asserting it.
 
             For each finding, state the triggering scenario, impact, and fix
-            direction in one concise paragraph, citing the code that proves it.
+            direction in one concise paragraph.
 
             Post one inline comment per issue with
-            `mcp__github_inline_comment__create_inline_comment`, `confirmed: true`,
-            and the smallest changed line range that shows the problem. Prefix it
-            with `[P0]` for a release blocker, `[P1]` for a high-impact issue that
-            should be fixed before merge, `[P2]` for an ordinary defect, or `[P3]`
-            for a low-impact but concrete defect.
+            `mcp__github_inline_comment__create_inline_comment`, `confirmed:
+            true`, and the smallest changed line range that shows the problem.
+            Priority prefixes: `[P0]` release blocker, `[P1]` high-impact
+            issue that should be fixed before merge, `[P2]` ordinary defect,
+            `[P3]` low-impact but concrete defect. Use `[P0]` only when you
+            can state the concrete failing scenario.
 
-            This runs on every push. Before posting, list existing inline comments
-            with
-            `gh api repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/comments`
-            and check `gh pr view --comments` for an earlier Claude summary. If a
-            previous Claude review exists, this is a re-review: focus on code
-            changed since that review, never re-post an issue already raised, and
-            post only new `[P0]` and `[P1]` findings. Mention a fixed issue only in
-            the summary count, not inline.
+            If `INLINE COMMENTS VIA` above is `gh-api`, the inline comment tool
+            is not available on this run. Post each inline comment with exactly
+            this command instead, one call per comment, keeping the same body
+            text and line range rules:
 
-            Finally, post exactly one short top-level summary with
-            `gh pr comment --edit-last --create-if-none`: give finding counts by
-            priority and identify any cart or checkout, customer account or auth,
-            analytics or tracking, Pack schema, SEO or routing, third-party script,
-            or environment variable changes that require careful human review. If
-            there are no findings or risk areas, say only
-            `No actionable issues found.` Do not repeat inline findings, add praise
-            or checklists, approve or block the PR, or modify files. Only GitHub
-            comments are visible to the user.
+              gh api --method POST repos/${{ github.repository }}/pulls/${{ steps.pr.outputs.number }}/comments -f commit_id=${{ steps.pr.outputs.sha }} -f path='<file path>' -F line=<last line> -f side=RIGHT -f body='<comment>'
 
+            For a multi-line range, add `-F start_line=<first line> -f
+            start_side=RIGHT`. Wrap `path` and `body` in single quotes, and
+            write each apostrophe inside them as '\''. Do not use any other
+            `gh api` command.
+
+            ## Top-level summary
+
+            Post exactly one short top-level summary with `gh pr comment`. It
+            must begin with this marker on its very first line so future runs
+            can locate the baseline SHA; do not omit, alter, or rename it:
+
+              <!-- claude-review-sha: ${{ steps.pr.outputs.sha }} -->
+
+            After the marker:
+
+            - `full` mode: finding counts by priority (e.g. `2 × P1, 1 × P2`)
+              and any cart or checkout, customer account or auth, analytics or
+              tracking, Pack schema, SEO or locale routing, third-party script,
+              or environment variable changes that require careful human
+              review. If nothing to report, write `No actionable issues found.`
+              after the marker.
+
+            - `incremental` mode: a one-line ledger for prior findings (e.g.
+              `Prior findings: 2 Addressed, 1 Declined, 1 Still present`), then
+              a one-line count of net-new findings from the delta, with the
+              held-back P3s (e.g. `Net-new: 1 × P2; 2 × P3 found and not
+              posted`). Name a human-review area only if the delta introduces
+              one the prior summary did not already name. If nothing is still
+              open and nothing is net-new, write `No prior items still open;
+              no net-new findings.` after the marker.
+
+            - `rereview` mode: the prior-findings ledger line from
+              `incremental`, then the `full` mode content for the issues
+              raised this round.
+
+            - `noop` mode: after the marker, write only `No new commits since
+              last review.`
+
+            In `full`, `incremental`, and `rereview` mode, end with an `Open
+            findings` list whenever any finding is still open: every finding
+            posted this round plus every Still-present one, one line each, as
+            `- [P2] path/to/file.ts:123 — what is wrong, in a few words`.
+            Leave out Closed, Declined, Addressed, and No-longer-applicable
+            findings, and P3s found and not posted. The next round re-checks
+            exactly this list, so a finding missing from it is never checked
+            again.
+
+            Apart from that list, do not repeat inline findings in the summary
+            body. Do not add praise or checklists, approve or block the PR, or
+            modify files. Only GitHub comments are visible to the user.
+
+          # Read-only tools, no script execution: this repo is public.
           claude_args: |
             --model claude-opus-5-5
             --effort high
-            --allowedTools "Read,Grep,Glob,LS,mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr checks:*),Bash(gh run view:*),Bash(gh api repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/comments)"
+            --allowedTools "Read,Grep,Glob,LS,mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr checks:*),Bash(gh run view:*),Bash(git diff:*),Bash(git log:*),Bash(git show:*),Bash(git status:*),Bash(git blame:*),Bash(git grep:*)${{ steps.pr.outputs.extra_tools }}"
+
+      # No summary for this commit FAILS the check. claude-code-action skips
+      # itself, and still reports success, when this workflow file differs
+      # from the default branch's copy, so a silent skip would otherwise look
+      # like a clean review. The one expected skip is a PR that edits this
+      # workflow itself: that warns instead. `skip` and `noop` modes are
+      # expected too.
+      - name: Verify a review was posted
+        if: always() && steps.prior.outputs.mode != 'skip' && steps.prior.outputs.mode != 'noop'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          NUM: ${{ steps.pr.outputs.number }}
+          SHA: ${{ steps.pr.outputs.sha }}
+          CALLER_REF: ${{ github.workflow_ref }}
+        run: |
+          summary=$(gh api "repos/$REPO/issues/$NUM/comments?per_page=100" --paginate \
+            --jq "[.[] | select(.user.login == \"claude[bot]\" and (.body | startswith(\"<!-- claude-review-sha: $SHA -->\")))] | length" \
+            | awk '{n += $1} END {print n + 0}')
+          if [ "$summary" = "0" ]; then
+            # CALLER_REF is "<owner>/<repo>/<path>@<ref>"; keep the path.
+            caller=${CALLER_REF#"$REPO"/}
+            caller=${caller%%@*}
+            if gh pr diff "$NUM" --repo "$REPO" --name-only | grep -qxF "$caller"; then
+              echo "::warning::No review for $SHA: this PR changes $caller, and the review action skips PRs that edit their own workflow. Reviews resume on the next PR after merge."
+              exit 0
+            fi
+            echo "::error::No review was posted for $SHA. If $caller on this PR's target branch differs from the default branch's copy, the review action skipped itself; make the two identical. Otherwise, check the 'Claude Code Review' step log."
+            exit 1
+          fi
+          echo "Review posted for $SHA"
