@@ -21,6 +21,8 @@ import {getShop, getSiteSettings} from './settings.server';
 
 type SeoMedia = SeoConfig['media'];
 
+const UNSUPPORTED_SEO_IMAGE_REGEX = /\.(gif|mp4|mov|webm)(\?|#|$)/i;
+
 export const getAccountSeo = async (
   context: AppLoadContext,
   accountTitle: string,
@@ -106,10 +108,24 @@ const getMeta = ({
   const description = truncate(
     pageDescription || seoSiteDescription || shop?.description || '',
   );
-  const media: SeoMedia = {
-    type: 'image',
-    url: page?.seo?.image || resource?.seo?.image || '',
-  };
+  // Link-preview scrapers (Slack, iMessage, social) drop animated or video
+  // files, so skip those and fall back to the resource's static image
+  const seoImage = [page?.seo?.image, resource?.seo?.image].find(
+    (image) => image && !UNSUPPORTED_SEO_IMAGE_REGEX.test(image),
+  );
+  const resourceImage = resource?.featuredImage || resource?.image;
+  // Leave media undefined when empty so the root site image isn't overridden
+  const media: SeoMedia = seoImage
+    ? {type: 'image', url: seoImage}
+    : resourceImage?.url
+      ? {
+          type: 'image',
+          url: resourceImage.url,
+          width: resourceImage.width,
+          height: resourceImage.height,
+          altText: resourceImage.altText,
+        }
+      : undefined;
   const robots = {
     noIndex: !!page?.seo?.noIndex,
     noFollow: !!page?.seo?.noFollow,
