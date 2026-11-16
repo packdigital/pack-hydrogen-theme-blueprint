@@ -10,9 +10,9 @@ Pack Hydrogen theme blueprint: a Shopify Hydrogen storefront (React Router 7, Re
 - `npm run lint` / `npm run format:check`
 - `npm run codegen` — regenerate Storefront API types after changing GraphQL
 
-## Repository invariants
+## Code Review
 
-These hold across the codebase; a change that breaks one is a bug even when it builds.
+Repository invariants. These hold across the codebase; a change that breaks one is a bug even when it builds. The PR review bot treats a violation as a finding.
 
 ### Hydrogen and React Router
 
