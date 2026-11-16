@@ -3,6 +3,7 @@ import {useAnalytics} from '@shopify/hydrogen';
 import type {ProductVariant} from '@shopify/hydrogen/storefront-api-types';
 
 import {AnalyticsEvent} from '~/components/Analytics/constants';
+import type {ProductWithGrouping} from '~/lib/types';
 
 import {ProductOptionValues} from './ProductOptionValues';
 import type {OnSelect, ProductOptionsProps} from './ProductOptions.types';
@@ -44,9 +45,12 @@ export function ProductOptions({
     [isShoppableProductCard, publish, product.handle],
   );
 
+  const productWithGrouping = product as unknown as ProductWithGrouping;
+  const options = productWithGrouping.grouping?.options ?? product.options;
+
   return (
     <div className="flex flex-col">
-      {product.options?.map((option, index) => {
+      {options?.map((option, index) => {
         return (
           <div
             key={index}
