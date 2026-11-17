@@ -94,7 +94,12 @@ export function useAddToCart({
   const cartIsUpdating = status === 'creating' || status === 'updating';
 
   const handleAddToCart = useCallback(async () => {
-    if (!selectedVariant?.id || isAdding || cartIsUpdating) return;
+    if (!selectedVariant?.id || isAdding) return;
+    // Don't drop the click while the cart is being created or updated: server
+    // cart mutations are serialized (see `useCart`), so this add runs as soon as
+    // the in-flight one settles. The editor preview's client-side cart has no
+    // such queue and ignores adds while busy, so it keeps the guard.
+    if (isPreviewModeEnabled && cartIsUpdating) return;
     setIsAdding(true);
     setFailed(false);
 
@@ -128,7 +133,9 @@ export function useAddToCart({
     }
   }, [
     attributes,
+    cartIsUpdating,
     isAdding,
+    isPreviewModeEnabled,
     linesAdd,
     preOrderOverride?.shippingDateText,
     quantity,
