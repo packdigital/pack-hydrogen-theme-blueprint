@@ -36,14 +36,9 @@ export function CartPage() {
           )}
         >
           <div className="md:row-span-2">
-            <ul
-              className={clsx(
-                'relative border-y border-border',
-                !hasCartLines && 'min-h-80 py-12 md:min-h-[30rem]',
-              )}
-            >
-              {hasCartLines ? (
-                cartLines.map((line) => {
+            {hasCartLines ? (
+              <ul className="relative border-y border-border">
+                {cartLines.map((line) => {
                   return (
                     <li
                       key={line.id}
@@ -52,11 +47,13 @@ export function CartPage() {
                       <CartLine line={line} />
                     </li>
                   );
-                })
-              ) : (
+                })}
+              </ul>
+            ) : (
+              <div className="relative min-h-80 border-y border-border py-12 md:min-h-[30rem]">
                 <CartEmpty settings={cartSettings} />
-              )}
-            </ul>
+              </div>
+            )}
           </div>
 
           {hasCartLines && (
