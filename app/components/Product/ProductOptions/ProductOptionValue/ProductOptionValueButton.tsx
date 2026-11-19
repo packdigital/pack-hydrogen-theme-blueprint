@@ -17,6 +17,7 @@ export function ProductOptionValueButton({
   return (
     <button
       aria-label={optionValue.name}
+      aria-pressed={isSelected}
       className="group"
       disabled={isDisabled}
       onClick={() => {

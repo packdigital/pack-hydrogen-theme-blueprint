@@ -2,7 +2,7 @@ import {useCallback, useEffect, useMemo, useState} from 'react';
 import clsx from 'clsx';
 
 import {LoadingDots} from '~/components/Animations';
-import {useCart, useMenu} from '~/hooks';
+import {useCart, useMenu, useRootLoaderData} from '~/hooks';
 
 import type {BYOBAddToCartProps} from './BuildYourOwnBundle.types';
 
@@ -13,6 +13,7 @@ export function BYOBAddToCart({
 }: BYOBAddToCartProps) {
   const {error, linesAdd, id: cartId, status} = useCart();
   const {openCart} = useMenu();
+  const {isPreviewModeEnabled} = useRootLoaderData();
 
   const [isAdding, setIsAdding] = useState(false);
   const [isAdded, setIsAdded] = useState(false);
@@ -46,30 +47,46 @@ export function BYOBAddToCart({
     );
   }, [bundle?.length]);
 
-  const handleAddToCart = useCallback(() => {
-    if (!addToCartUnlocked || isAdding || cartIsUpdating) return;
+  const handleAddToCart = useCallback(async () => {
+    if (!addToCartUnlocked || isAdding) return;
+    // Don't drop the click while the cart is being created or updated: server
+    // cart mutations are serialized (see `useCart`), so this add runs as soon as
+    // the in-flight one settles. The editor preview's client-side cart has no
+    // such queue and ignores adds while busy, so it keeps the guard.
+    if (isPreviewModeEnabled && cartIsUpdating) return;
     setIsAdding(true);
 
     const items = Object.values(linesToAddByVariantId);
 
-    linesAdd(items);
+    const data = await linesAdd(items);
+    // The editor preview's client-side cart resolves nothing; the effect below
+    // settles that case from the cart status instead.
+    if (isPreviewModeEnabled) return;
+    setIsAdding(false);
+    if (!data || data.userErrors?.length) return;
+    setIsAdded(true);
+    openCart();
+    setTimeout(() => setIsAdded(false), 1000);
   }, [
     bundle,
     addToCartUnlocked,
+    cartIsUpdating,
     isAdding,
+    isPreviewModeEnabled,
     linesAdd,
     linesToAddByVariantId,
     status,
   ]);
 
   useEffect(() => {
+    if (!isPreviewModeEnabled) return;
     if (isAdding && status === 'idle') {
       setIsAdding(false);
       setIsAdded(true);
       openCart();
       setTimeout(() => setIsAdded(false), 1000);
     }
-  }, [cartId, status, linesToAddByVariantId, isAdding]);
+  }, [cartId, status, linesToAddByVariantId, isAdding, isPreviewModeEnabled]);
 
   useEffect(() => {
     if (!error) return;

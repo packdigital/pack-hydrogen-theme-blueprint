@@ -2,6 +2,7 @@ import {Fragment} from 'react';
 import {
   Dialog,
   DialogPanel,
+  DialogTitle,
   Transition,
   TransitionChild,
 } from '@headlessui/react';
@@ -11,7 +12,8 @@ import {Svg} from '~/components/Svg';
 
 /**
  * Drawer component that opens on user click.
- * @param ariaName - name of drawer for aria-label
+ * @param ariaName - name of drawer for aria-label. Also names the dialog when
+ * `heading` isn't a string (a string heading names the dialog itself).
  * @param children - react children node.
  * @param heading - string. Shown at the top of the drawer.
  * @param onClose - function should set the open state.
@@ -53,6 +55,7 @@ export function Drawer({
     <Transition appear show={open} as={Fragment} unmount={unmount}>
       <Dialog
         as="div"
+        aria-label={typeof heading === 'string' ? undefined : ariaName}
         className={clsx('relative z-50', className)}
         unmount={unmount}
         onClose={onClose}
@@ -111,7 +114,9 @@ export function Drawer({
                     </button>
 
                     {typeof heading === 'string' ? (
-                      <h3 className="text-center text-lg">{heading}</h3>
+                      <DialogTitle as="h3" className="text-center text-lg">
+                        {heading}
+                      </DialogTitle>
                     ) : (
                       heading
                     )}

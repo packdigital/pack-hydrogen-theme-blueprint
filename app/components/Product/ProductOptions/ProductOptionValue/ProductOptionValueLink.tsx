@@ -180,6 +180,7 @@ function ProductOptionValueLinkComponent({
 }: ProductOptionValueLinkComponentProps) {
   return (
     <Link
+      aria-current={isVisiblySelected ? 'true' : undefined}
       aria-label={optionValue.name}
       className="group"
       preventScrollReset
